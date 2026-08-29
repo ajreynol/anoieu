@@ -1,0 +1,9 @@
+; expect: EO0051
+(declare-const Int Type)
+(declare-const not (-> Bool Bool))
+(program $p ((F Bool) (G Bool))
+  :signature (Bool) Bool
+  (
+    (($p (not F) G) F)
+  )
+)

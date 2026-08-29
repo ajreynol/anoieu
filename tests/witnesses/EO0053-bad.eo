@@ -1,0 +1,11 @@
+; expect: EO0053
+; `$contains` walks an or-list and never says what to do with the `false` that
+; ends it, so it gets stuck on the last step.
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(program $contains ((l Bool) (x Bool) (xs Bool :list))
+  :signature (Bool Bool) Bool
+  (
+    (($contains (or l xs) l) true)
+    (($contains (or x xs) l) ($contains xs l))
+  )
+)

@@ -1,0 +1,6 @@
+; expect: EO0042
+; A chain of four arguments needs a three-way conjunction, which a binary `and`
+; cannot build.
+(declare-const Int Type)
+(declare-const and (-> Bool Bool Bool))
+(declare-const >= (-> Int Int Bool) :chainable and)

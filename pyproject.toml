@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anoieu"
+version = "0.1.0"
+description = "A static analyzer for Eunoia signatures (.eo) and semantic configuration sets (.eos)"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+anoieu = "anoieu.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["anoieu*"]

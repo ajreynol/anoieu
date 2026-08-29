@@ -1,0 +1,12 @@
+; expect: EO0054
+; The manual's own worked "incorrect version": xs is not marked :list, so
+; (or l xs) matches an or of exactly two children.
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(program $contains ((l Bool) (x Bool) (xs Bool))
+  :signature (Bool Bool) Bool
+  (
+    (($contains false l)     false)
+    (($contains (or l xs) l) true)
+    (($contains (or x xs) l) ($contains xs l))
+  )
+)

@@ -1,0 +1,3 @@
+; expect: EO0060
+(declare-const Int Type)
+(program $unreachable_helper ((x Int)) :signature (Int) Int ( (($unreachable_helper x) x) ))

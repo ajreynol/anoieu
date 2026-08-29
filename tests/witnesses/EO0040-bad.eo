@@ -1,0 +1,5 @@
+; expect: EO0040
+; The return type of a right-associative operator has to be its second argument
+; type: the fold puts its own result back where that argument stood.
+(declare-const Int Type)
+(declare-const bad (-> Bool Bool Int) :right-assoc)

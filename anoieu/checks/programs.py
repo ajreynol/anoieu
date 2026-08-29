@@ -1,0 +1,443 @@
+"""Checks on programs and on the patterns rules and programs match with.
+
+Matching in ethos binds a parameter to whatever stands in its place --
+`TypeChecker::match` says so in a comment, "note that we do not ensure the types
+match here" -- so a case whose arguments are all parameters matches everything,
+and every case after it is dead. The `:list` checks are the other half: a
+parameter that is a *tail* of an n-ary application has to say so, and one that
+says so in the wrong place makes the pattern illegal.
+"""
+
+from __future__ import annotations
+
+from typing import Iterator
+
+from ..diagnostics import Diagnostic, Severity
+from ..model import NIL_ATTRS, Param, ProgramDecl, Signature
+from ..resolve import canonical_head, resolve_decl, resolve_name
+from ..syntax.parser import Node
+from . import Context, check
+
+_RIGHT_NIL = {":right-assoc-nil", ":right-assoc-non-singleton-nil"}
+_LEFT_NIL = {":left-assoc-nil", ":left-assoc-non-singleton-nil"}
+
+
+def _nil_attr(sig: Signature, head: str | None):
+    if head is None:
+        return None
+    d = resolve_decl(head, sig)
+    if d is None:
+        return None
+    for a in d.attrs:
+        if a.key in NIL_ATTRS:
+            return (d, a)
+    return None
+
+
+def _param_map(params: list[Param]) -> dict[str, Param]:
+    return {p.name: p for p in params}
+
+
+def _walk_pattern(
+    node: Node, params: dict[str, Param], sig: Signature, where: str
+) -> Iterator[Diagnostic]:
+    """Findings about one pattern: a program case's left-hand side, a rule's
+    premise or argument pattern."""
+    if not node.is_list or not node.children:
+        return
+    for child in node.children[1:]:
+        yield from _walk_pattern(child, params, sig, where)
+    found = _nil_attr(sig, node.head)
+    if found is None:
+        return
+    decl, attr = found
+    args = node.children[1:]
+    if len(args) < 2:
+        return
+    right = attr.key in _RIGHT_NIL
+    tail_index = len(args) - 1 if right else 0
+
+    for i, arg in enumerate(args):
+        p = params.get(arg.text) if arg.is_atom else None
+        if p is None or not p.has(":list"):
+            continue
+        if i != tail_index:
+            yield Diagnostic(
+                code="EO0055",
+                severity=Severity.ERROR,
+                message=f"`{p.name}` is marked `:list` in a position that makes this "
+                f"pattern illegal",
+                span=arg.span,
+                label="desugars to an `eo::list_concat`",
+                notes=[
+                    f"`{decl.name}` is `{attr.key}`, so a `:list` argument anywhere but "
+                    f"{'last' if right else 'first'} is folded in with eo::list_concat",
+                    "ethos reports this as `Cannot match on evaluatable subterm`",
+                ],
+                help=f"a pattern may hold one `:list` parameter, "
+                f"{'as its last argument' if right else 'as its first argument'}",
+            )
+
+    tail = args[tail_index]
+    if tail.is_atom and tail.text in params and not params[tail.text].has(":list"):
+        p = params[tail.text]
+        yield Diagnostic(
+            code="EO0054",
+            severity=Severity.HINT,
+            message=f"this pattern matches an `{decl.name}` of exactly "
+            f"{len(args)} element(s)",
+            span=tail.span,
+            label=f"`{p.name}` is one element, not the tail",
+            notes=[
+                f"`{decl.name}` is `{attr.key}`, so this pattern is "
+                f"{node} with the nil inserted, and matches an "
+                f"{decl.name}-list of exactly {len(args)} elements",
+                f"in {where}",
+            ],
+            help=f"mark `{p.name}` with `:list` in the parameter list to match the tail",
+        )
+
+
+@check(
+    "EO0054",
+    "a pattern matches a fixed number of elements of an n-ary operator",
+    page="""
+For an operator with a nil terminator, `(or l xs)` is sugar for
+`(or l (or xs false))`: it matches an `or` of *exactly two* elements. Marking
+`xs` with `:list` in the enclosing parameter list is what makes it match the
+tail. The manual gives this as its own worked "incorrect version": the program
+works on two-element lists and silently fails to evaluate on longer ones, which
+in a proof surfaces as a checking failure with no indication of the cause.
+
+A pattern that really does mean "exactly two elements" is legal and common, so
+this is a hint: it says what the pattern matches, and leaves the question of
+whether that was the intention to the reader.
+""",
+)
+def list_annotation(ctx: Context) -> Iterator[Diagnostic]:
+    sig = ctx.signature
+    for prog in sig.programs:
+        params = _param_map(prog.params)
+        for lhs, _rhs in prog.cases:
+            for arg in lhs.children[1:]:
+                yield from _walk_pattern(arg, params, sig, f"program `{prog.name}`")
+    for rule in sig.rules:
+        params = _param_map(rule.params)
+        pats = list(rule.premises) + list(rule.args)
+        if rule.assumption is not None:
+            pats.append(rule.assumption)
+        for pat in pats:
+            yield from _walk_pattern(pat, params, sig, f"rule `{rule.name}`")
+
+
+@check("EO0055", "a `:list` parameter stands where the pattern cannot match", page="""
+See EO0054. A `:list` parameter anywhere but the tail position of an n-ary
+application desugars to `eo::list_concat`, and a pattern may not hold an
+evaluatable subterm, so the case can never be read.
+""")
+def list_position(ctx: Context) -> Iterator[Diagnostic]:
+    return iter(())  # reported by EO0054's traversal
+
+
+@check(
+    "EO0051",
+    "a program case does not match the program's signature",
+    page="""
+A program declares its arity with `:signature`, and every case has to match it.
+A case of the wrong arity can never fire.
+""",
+)
+def case_arity(ctx: Context) -> Iterator[Diagnostic]:
+    for prog in ctx.signature.programs:
+        if not prog.cases or not prog.sig_args:
+            continue
+        want = len(prog.sig_args)
+        for lhs, _rhs in prog.cases:
+            if not lhs.is_list:
+                continue
+            got = len(lhs.children) - 1
+            if got != want:
+                yield Diagnostic(
+                    code="EO0051",
+                    severity=Severity.ERROR,
+                    message=f"this case of `{prog.name}` takes {got} argument(s), "
+                    f"but its signature declares {want}",
+                    span=lhs.span,
+                    help="every case matches an application of the program to all its arguments",
+                )
+
+
+@check(
+    "EO0052",
+    "a program case can never be reached",
+    page="""
+A program is an *ordered* list of rewrite rules, first match wins, and matching
+does not check types -- `TypeChecker::match` binds a parameter to whatever term
+stands in its place. So a case whose arguments are all distinct parameters
+matches every application, and every case written after it is dead.
+""",
+)
+def unreachable_case(ctx: Context) -> Iterator[Diagnostic]:
+    for prog in ctx.signature.programs:
+        params = _param_map(prog.params)
+        catch_all: Node | None = None
+        for lhs, _rhs in prog.cases:
+            if catch_all is not None:
+                yield Diagnostic(
+                    code="EO0052",
+                    severity=Severity.WARNING,
+                    message=f"this case of `{prog.name}` can never be reached",
+                    span=lhs.span,
+                    label="shadowed",
+                    notes=[
+                        f"the case at line {catch_all.line} matches every application, "
+                        "since its arguments are all parameters, and a program takes "
+                        "the first case that matches"
+                    ],
+                )
+                continue
+            args = lhs.children[1:] if lhs.is_list else []
+            names = [a.text for a in args if a.is_atom and a.text in params]
+            if args and len(names) == len(args) and len(set(names)) == len(names):
+                catch_all = lhs
+
+
+@check(
+    "EO0053",
+    "a program walks a list and has no case for its end",
+    page="""
+A program that matches `(f x xs)` with `xs` marked `:list` and then calls itself
+on `xs` is walking an f-list, and needs a case for the nil that ends it --
+`(($p false) ...)` for an `or`-list, `(($p true) ...)` for an `and`-list -- or a
+parameter that catches it. Without one the last step does not evaluate, and what
+a proof reports is that a step failed to check, not that a case was missing.
+
+The recursive call is what identifies a walk. A program that merely *matches* an
+application of an n-ary operator -- to say what its unit is, say -- is not
+walking anything and is not reported.
+""",
+)
+def missing_nil_case(ctx: Context) -> Iterator[Diagnostic]:
+    sig = ctx.signature
+    for prog in sig.programs:
+        if not prog.cases:
+            continue
+        params = _param_map(prog.params)
+        arity = max((len(lhs.children) - 1) for lhs, _ in prog.cases if lhs.is_list)
+        for i in range(arity):
+            walkers: dict[str, tuple] = {}
+            shapes: list[Node] = []
+            covered = False
+            for lhs, rhs in prog.cases:
+                arg = lhs.at(i + 1)
+                if arg is None:
+                    continue
+                shapes.append(arg)
+                if arg.is_atom and arg.text in params:
+                    # at a program's own argument position a parameter matches
+                    # anything, `:list` or not: the annotation only says how it
+                    # behaves as a child of an n-ary application.
+                    covered = True
+                    break
+                if not arg.is_list or len(arg.children) < 3:
+                    continue
+                found = _nil_attr(sig, arg.head)
+                if found is None:
+                    continue
+                decl, attr = found
+                tail = arg.children[-1] if attr.key in _RIGHT_NIL else arg.children[1]
+                if not (tail.is_atom and tail.text in params and params[tail.text].has(":list")):
+                    continue
+                if _recurses_on(rhs, prog.name, i, tail.text or ""):
+                    walkers.setdefault(decl.name, (decl, attr, arg))
+            if covered:
+                continue
+            for name, (decl, attr, arg) in walkers.items():
+                if attr.value is None or any(_is_same_term(s, attr.value, sig) for s in shapes):
+                    continue
+                if any(_stops_before_nil(s, name, attr, params, sig) for s in shapes):
+                    # a case matching a fixed number of elements -- `(re.inter c1)`,
+                    # one element and the nil -- ends the walk one step early, so
+                    # the nil itself is never reached.
+                    continue
+                if not _is_ground_nil(attr.value, decl):
+                    # a nil that depends on the instantiation -- `(seq.empty T)`,
+                    # `(eo::to_bin m 0)` -- is spelt differently in each base case
+                    # a program writes, e.g. `""` for the string instance, so
+                    # whether a case covers it is not decidable here.
+                    continue
+                yield Diagnostic(
+                    code="EO0053",
+                    severity=Severity.WARNING,
+                    message=f"`{prog.name}` walks an `{name}`-list and has no case for "
+                    f"its nil `{attr.value}`",
+                    span=arg.span,
+                    label=f"this case takes the head and recurses on the tail",
+                    notes=[
+                        f"`{name}` is `{attr.key}`, so a list of it ends in {attr.value}",
+                        "the last step of the recursion does not evaluate",
+                    ],
+                    help=f"add a case matching `{attr.value}` in this position, "
+                    "or a parameter that catches it",
+                )
+
+
+def _recurses_on(rhs: Node, prog: str, index: int, tail: str) -> bool:
+    """Whether the body calls the program again with `tail` in the same place,
+    unguarded.
+
+    A call under an `eo::ite` or `eo::requires` whose condition mentions the
+    tail is guarded -- `(eo::ite (eo::eq r1 re.none) n ($p r1))` stops at the nil
+    without ever applying the program to it -- so it is not a walk that needs a
+    base case.
+    """
+    return _find_call(rhs, prog, index, tail, guarded=False)
+
+
+def _find_call(node: Node, prog: str, index: int, tail: str, guarded: bool) -> bool:
+    if not node.is_list:
+        return False
+    head = node.head
+    if head in ("eo::ite", "eo::requires") and len(node.children) >= 3:
+        cond = node.children[1:3] if head == "eo::requires" else node.children[1:2]
+        mentions = any(
+            any(s.text == tail for s in c.symbols()) for c in cond
+        )
+        rest_guarded = guarded or mentions
+        for child in node.children[1:]:
+            if _find_call(child, prog, index, tail, rest_guarded):
+                return True
+        return False
+    if head == prog and not guarded:
+        arg = node.at(index + 1)
+        if arg is not None and arg.is_atom and arg.text == tail:
+            return True
+    for child in node.children:
+        if _find_call(child, prog, index, tail, guarded):
+            return True
+    return False
+
+
+def _stops_before_nil(
+    shape: Node, opname: str, attr, params: dict[str, Param], sig: Signature
+) -> bool:
+    """Whether a case matches a list of the same operator of fixed length."""
+    if not shape.is_list or resolve_name(shape.head, sig) != opname:
+        return False
+    args = shape.children[1:]
+    if not args:
+        return False
+    tail = args[-1] if attr.key in _RIGHT_NIL else args[0]
+    return not (tail.is_atom and tail.text in params and params[tail.text].has(":list"))
+
+
+def _is_ground_nil(nil: Node, decl) -> bool:
+    """Whether a nil terminator is one term rather than a family of them."""
+    params = {p.name for p in decl.params}
+    for nd in nil.walk():
+        if not nd.is_atom:
+            continue
+        text = nd.text or ""
+        if text in params:
+            return False
+        if text.startswith("eo::") or text.startswith("$"):
+            return False
+    return True
+
+
+def _is_same_term(a: Node, b: Node, sig: Signature) -> bool:
+    """Whether two terms could be the same term, modulo `define` aliases.
+
+    A signature spells one constructor several ways -- `@list.nil` for
+    `eo::List::nil`, `@re.empty` for `(str.to_re "")` -- so a case covers a nil
+    when the two agree once the aliases are expanded. Comparison is by head,
+    which is deliberately generous: this decides whether to stay quiet.
+    """
+    ha, hb = canonical_head(a, sig), canonical_head(b, sig)
+    return ha is not None and ha == hb
+
+
+@check(
+    "EO0057",
+    "a program is declared and never defined",
+    page="""
+`program` with no body is a forward declaration, to be defined later. One that
+never is reaches the backends as a name with no meaning: under SMT-LIB a free
+uninterpreted function the solver may read as it likes, under Lean a name that
+was never written. Ethos itself simply never evaluates it.
+""",
+)
+def forward_declared(ctx: Context) -> Iterator[Diagnostic]:
+    defined: set[str] = {p.name for p in ctx.signature.programs if p.cases}
+    reported: set[str] = set()
+    for prog in ctx.signature.programs:
+        if prog.cases or prog.name in defined or prog.name in reported:
+            continue
+        reported.add(prog.name)
+        yield Diagnostic(
+            code="EO0057",
+            severity=Severity.WARNING,
+            message=f"`{prog.name}` is declared with no cases and never defined",
+            span=prog.span,
+            help="give it a body, or drop the declaration",
+        )
+
+
+@check(
+    "EO0060",
+    "a program nothing reaches",
+    page="""
+A program no rule, program or definition names is dead: it is compiled, trimmed
+and published for nothing, and if it was meant to be used, the rule that meant
+to use it does not.
+""",
+    default_on=False,
+)
+def dead_program(ctx: Context) -> Iterator[Diagnostic]:
+    sig = ctx.signature
+    used: set[str] = set()
+
+    def note(node: Node | None, skip: str = "") -> None:
+        if node is None:
+            return
+        for nd in node.symbols():
+            if nd.text != skip:
+                used.add(nd.text or "")
+
+    for prog in sig.programs:
+        for lhs, rhs in prog.cases:
+            note(rhs, prog.name)
+            for arg in lhs.children[1:]:
+                note(arg)
+        for a in prog.sig_args:
+            note(a)
+        note(prog.sig_ret)
+    for rule in sig.rules:
+        for pat in list(rule.premises) + list(rule.args):
+            note(pat)
+        note(rule.conclusion)
+        note(rule.assumption)
+        for a, b in rule.requires:
+            note(a)
+            note(b)
+    for d in sig.defines:
+        note(d.body)
+        for p in d.params:
+            note(p.type)
+    for decl in sig.decls:
+        # a program is reached from a declaration too: a type rule that calls
+        # one, a nil terminator built by one
+        note(decl.type)
+        for p in decl.params:
+            note(p.type)
+        for a in decl.attrs:
+            note(a.value)
+
+    for prog in sig.programs:
+        if prog.name not in used:
+            yield Diagnostic(
+                code="EO0060",
+                severity=Severity.HINT,
+                message=f"nothing reaches `{prog.name}`",
+                span=prog.span,
+            )

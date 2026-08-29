@@ -1,0 +1,4 @@
+; expect: EO0020
+; A misspelled attribute is accepted by ethos with a warning and then ignored,
+; so `or` is not variadic and every application of it means something else.
+(declare-const or (-> Bool Bool Bool) :right-assoc-nill false)

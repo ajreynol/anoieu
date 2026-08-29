@@ -1,0 +1,11 @@
+; expect: EO0052
+; Matching does not check types -- TypeChecker::match binds a parameter to
+; whatever stands in its place -- so the first case matches everything.
+(declare-const not (-> Bool Bool))
+(program $p ((F Bool))
+  :signature (Bool) Bool
+  (
+    (($p F)       true)
+    (($p (not F)) F)
+  )
+)

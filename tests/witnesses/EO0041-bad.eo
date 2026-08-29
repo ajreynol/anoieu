@@ -1,0 +1,6 @@
+; expect: EO0041
+; ethos accepts this, and a term built with `or` only fails when something asks
+; for its type.
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)

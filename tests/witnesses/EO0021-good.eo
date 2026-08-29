@@ -1,0 +1,8 @@
+; expect:
+(declare-const Int Type)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(declare-rule refl ((T Type) (t T))
+  :premises ()
+  :args (t)
+  :conclusion (= t t)
+)

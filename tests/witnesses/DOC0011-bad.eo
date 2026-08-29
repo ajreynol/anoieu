@@ -1,0 +1,13 @@
+; expect: DOC0011
+(declare-const Int Type)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+
+; rule: symm
+; premises:
+; - eq: An equality.
+; - other: A premise this rule does not take.
+; conclusion: The equality, flipped.
+(declare-rule symm ((T Type) (t T) (s T))
+  :premises ((= t s))
+  :conclusion (= s t)
+)

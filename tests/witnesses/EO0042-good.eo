@@ -1,0 +1,4 @@
+; expect:
+(declare-const Int Type)
+(declare-const and (-> Bool Bool Bool) :right-assoc-nil true)
+(declare-const >= (-> Int Int Bool) :chainable and)

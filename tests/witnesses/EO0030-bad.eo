@@ -1,0 +1,3 @@
+; expect: EO0030
+(declare-const Int Type)
+(declare-const $eo_nil Int)

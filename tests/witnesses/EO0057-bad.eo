@@ -1,0 +1,3 @@
+; expect: EO0057
+(declare-const Int Type)
+(program $never_defined ((x Int)) :signature (Int) Int)

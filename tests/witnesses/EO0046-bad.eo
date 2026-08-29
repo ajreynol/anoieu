@@ -1,0 +1,3 @@
+; expect: EO0046
+(declare-const Int Type)
+(declare-parameterized-const bad ((x Int) (y Int :opaque)) Int)

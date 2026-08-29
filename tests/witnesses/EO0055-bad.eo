@@ -1,0 +1,12 @@
+; expect: EO0055
+; Two :list parameters under one n-ary application desugar to an
+; eo::list_concat, and a pattern may not hold one.
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(program $contains ((l Bool) (x Bool :list) (xs Bool :list))
+  :signature (Bool Bool) Bool
+  (
+    (($contains false l)     false)
+    (($contains (or l xs) l) true)
+    (($contains (or x xs) l) ($contains xs l))
+  )
+)

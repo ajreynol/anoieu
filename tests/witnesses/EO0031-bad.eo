@@ -1,0 +1,4 @@
+; expect: EO0031
+(declare-const Int Type)
+(declare-const f (-> Int Int))
+(declare-const f (-> Int Int))
