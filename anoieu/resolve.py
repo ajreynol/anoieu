@@ -96,3 +96,41 @@ def canonical_head(node: Node, sig: Signature) -> str | None:
     if expanded.is_atom:
         return resolve_name(expanded.text, sig)
     return resolve_name(expanded.head, sig)
+
+
+def is_type_constructor(name: str | None, sig: Signature) -> bool:
+    """Whether a name is a type of the signature rather than a type variable.
+
+    A type written in a declaration is either a constructor the signature
+    declared -- `Int`, `Seq`, `BitVec` -- or a parameter standing for a type,
+    and telling them apart is what keeps a check from reading `T` as a type it
+    can compare. A name is a constructor when it is declared with kind `Type`,
+    or as a function into `Type`, or as a datatype or sort.
+    """
+    if not name:
+        return False
+    decl = resolve_decl(name, sig)
+    if decl is None:
+        return False
+    if decl.kind in ("datatype", "sort"):
+        return True
+    if decl.type is None:
+        return False
+    from .shape import arrow_parts
+
+    parts = arrow_parts(decl.type)
+    tail = parts[-1] if parts else decl.type
+    return tail.is_atom and tail.text == "Type"
+
+
+def canonical_type_head(node, sig, strip=True):
+    """The type constructor at the head of a type, with aliases expanded."""
+    from .shape import strip_requires, type_head
+
+    if node is None:
+        return None
+    node = strip_requires(node) if strip else node
+    if node is None:
+        return None
+    expanded = expand_alias(node, sig)
+    return type_head(expanded)

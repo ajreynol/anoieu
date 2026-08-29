@@ -17,7 +17,8 @@ ETHOS=<ethos>/build/src/ethos python3 tests/run.py --oracle
 
 | tree | files read | crashes | findings |
 | --- | --- | --- | --- |
-| CPC (`Cpc.eo` and its include graph) | 35 | 0 | 32 (18 warnings, 14 hints) |
+| CPC (`Cpc.eo` and its include graph) | 35 | 0 | 35 (3 errors, 18 warnings, 14 hints) |
+| CPC expert (`expert/CpcExpert.eo`) | 21 | 0 | 6 warnings |
 | `ethos/tests`, `logos/install/defs`, `eudaimonia/examples` | 193 | 0 | 42 |
 | the whole of `logos` and `eudaimonia`, generated files and templates included | ~500 | 0 | — |
 
@@ -41,6 +42,110 @@ annotation nor the parameter.
 The fourteen are the case for the tool.
 [`what-ethos-misses.md`](what-ethos-misses.md) says why each of them gets past
 ethos.
+
+## Real bugs in CPC
+
+Three, so far. Each was confirmed by constructing the smallest signature that
+reproduces it and running ethos on it.
+
+### `$is_seq_const` and `$is_seq_const_rec` declare the wrong return type
+
+`programs/Strings.eo:42` and `:55`:
+
+```lisp
+(program $is_seq_const_rec ((T Type) (e T) (ss (Seq T) :list))
+  :signature ((Seq T)) Int          ; <- Int
+  (
+  (($is_seq_const_rec (seq.++ (seq.unit e) ss))   ($is_seq_const_rec ss))
+  (($is_seq_const_rec (as seq.empty (Seq T)))     true)      ; <- Bool
+  (($is_seq_const_rec ss)                         false)     ; <- Bool
+  )
+)
+```
+
+Every case returns a Boolean, the docstring says *"return: true if s is a
+sequence constant"*, and the signature says `Int`. Program bodies are not type
+checked, so ethos accepts it.
+
+Whether it bites depends entirely on where the program is called. Both are called
+only from inside `eo::requires` today -- `(eo::requires ($is_seq_const t) true ...)`
+in `rules/Strings.eo` and `programs/Strings.eo:75` -- and `eo::requires` compares
+by evaluation without asking for a type, so the calculus works. Put the same call
+anywhere a `Bool` is expected and it is a hard error:
+
+```text
+$ ethos t.eo          ; (and ($is_const x) true)
+Error: Type checking failed: Checking application of and
+  Term: ($is_const x)   Has type: Int   Expected type: Bool
+```
+
+So this is a latent error with a trip-wire: the first person to use either
+program outside `eo::requires` gets a type error naming neither the program nor
+its declaration. It also reaches the downstream pipeline unchanged -- the same
+three findings appear in `logos/install/defs/Cpc.eo` and `Cpc.cached.eo`, the
+flattened copies the Lean development is built from.
+
+Reported by **EO0064**.
+
+### Four skolem declarations are duplicated verbatim in the expert signature
+
+`expert/theories/ArithExt.eo`, lines 17-20 and again at 26-29, comment included:
+
+```lisp
+; skolems for virtual term substitution
+(declare-const @arith_vts_delta Real)
+(declare-const @arith_vts_delta_free Real)
+(declare-parameterized-const @arith_vts_infinity ((T Type)) T)
+(declare-parameterized-const @arith_vts_infinity_free ((T Type)) T)
+```
+
+Ethos treats a repeated declaration as an overload, and two declarations of one
+name with one type are two *distinct symbols that print identically*. Nothing is
+wrong today, because the second copy shadows the first before any term is built
+from it -- but the failure mode it sets up is the worst one available:
+
+```text
+$ ethos c1.eo         ; a term built before the second copy, compared with one after
+Error: Unexpected conclusion for rule refl:
+    Proves: (_ (= d) d)
+  Expected: (_ (= d) d)
+```
+
+A proof failure whose two sides are the same text. Anything later that builds a
+term with one of these symbols between the two blocks -- a nil terminator, a
+`define`, a rule -- turns the duplication into that.
+
+Reported by **EO0031**.
+
+### `<` is declared `:right-assoc` with a `Bool` return -- `ethos/tests/match-simple.eo:11`
+
+```lisp
+(declare-const < (-> Int Int Bool) :right-assoc)
+```
+
+A right-associative operator folds its result back into its second argument, so
+its type must be `(-> T1 T2 T2)`. This one returns `Bool` where it takes an
+`Int`, so every application of three or more arguments is ill-typed:
+
+```text
+Error: Type checking failed: (_ (< 1) (_ (< 2) 3))
+       Checking application of (< 1): unexpected type of child #1
+```
+
+The test only ever applies `<` to two arguments, so the attribute has been inert
+since it was written.
+
+Reported by **EO0040**.
+
+### One that is only a bug from the wrong entry point
+
+`$evaluate_list` is forward-declared in `programs/Utils.eo:70` and defined in
+`Cpc.eo:347`, so a run whose entry point is `expert/CpcExpert.eo` alone has it
+declared and never defined. In practice cvc5's regression runner writes
+`(include ".../Cpc.eo")` before `(include ".../expert/CpcExpert.eo")`
+(`test/regress/cli/run_regression.py:372`), so the pair is always loaded
+together and the gap never opens. Reported by **EO0057**, which now says "under
+this entry point" for exactly this reason.
 
 ## Findings worth reading
 
@@ -109,6 +214,9 @@ recorded because it is a statement about the language:
 | ... and `$str_fixed_len_re` recurses on a union tail with no base case | the call stands under `(eo::ite (eo::eq r1 re.none) ...)`, which never reaches the nil | a call guarded by a test on the tail is not a walk |
 | ... and `$str_re_consume_inter` has no case for `re.all` | its first case matches `(re.inter c1)`, a list of exactly one element, which ends the recursion a step early | a fixed-length case of the same operator ends the walk |
 | a nil that is not covered is a finding | most nils in CPC are non-ground -- `($seq_empty (Seq T))`, `(eo::to_bin m 0)` -- and each instance spells its base case differently (`""` for strings) | say nothing when the nil is non-ground |
+| a symbol's return type is what its declaration says | `ite : (-> Bool A A A)` returns `A`, which says nothing until the arguments say what `A` is | bind a callee's type parameters from the arguments, and answer `None` if any stays unbound |
+| a type is what it is written as | `String` is a `define` for `(Seq Char)`, `@List` for `eo::List` | expand aliases before comparing two types |
+| any two different type heads disagree | `T`, `U`, `S` are type variables, and a head that is not a declared type constructor cannot be compared at all | compare only heads that resolve to a declared type constructor |
 | a name in the `$eo_` namespace collides with the compiler | `ethos/tests/eo-definitions.eo` defines the whole of `eo::` that way, deliberately | `$eo_` is reported only under `--pedantic`; the generated prefixes always |
 | `declare-fun` is not a Eunoia command | true of a signature, false of a file named by `reference` | the loader tracks the role a file was read under |
 

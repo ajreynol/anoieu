@@ -377,9 +377,15 @@ def forward_declared(ctx: Context) -> Iterator[Diagnostic]:
         yield Diagnostic(
             code="EO0057",
             severity=Severity.WARNING,
-            message=f"`{prog.name}` is declared with no cases and never defined",
+            message=f"`{prog.name}` is declared with no cases and never defined "
+            f"under this entry point",
             span=prog.span,
-            help="give it a body, or drop the declaration",
+            notes=[
+                "a forward declaration is defined by some later file; whether it is "
+                "depends on which file the run started from"
+            ],
+            help="give it a body, or check that the entry point includes the file "
+            "that does",
         )
 
 

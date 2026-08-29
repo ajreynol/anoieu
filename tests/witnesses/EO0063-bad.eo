@@ -1,0 +1,8 @@
+; expect: EO0063
+(declare-const Int Type)
+(declare-const + (-> Int Int Int))
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(declare-rule bad-prem ((x Int) (y Int))
+  :premises ((+ x y))
+  :conclusion (= x x)
+)

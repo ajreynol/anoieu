@@ -450,7 +450,7 @@ questions become `anoieu query` rather than a code change, and the reports in
 | **M0** ✅ | parser + CST + include graph, `check` with Tier-0 findings only | reads every `.eo` in ethos, cvc5, logos and eudaimonia without falling over; the corpus is established |
 | **M1** ✅ | resolution, attribute contracts, dead code, docstring lint, `stats` | 30 checks, a witness apiece, and real findings on CPC and on `ethos/tests` -- see [`findings.md`](findings.md) |
 | **M2** | desugaring + `explain`/`desugar` commands, validated against the desugar stage | the surface↔core map, and the conformance harness |
-| **M3** | type checker → rule conclusions, program cases, `define` bodies, overload ambiguity | the flagship checks; the reason the tool exists |
+| **M3** ◐ | type checker → rule conclusions, program cases, `define` bodies, overload ambiguity | the flagship checks; the reason the tool exists. The *shallow* half is written -- the type of a term where its head settles it, with a callee's type parameters bound from the arguments (`anoieu/typing.py`) -- which is what found the CPC return-type bug. What it still cannot do: type a term whose head is a parameter, follow `eo::` evaluation, or check a `define` body against a use site |
 | **M4** | `.eos` front end + triple checks, baselines, JSON/SARIF | the `is-list-nil` diff, exclusion closure, coverage matrix; CI-ready |
 | **M5** | LSP, doc generation, opt-in solver obligations | the daily-driver interface |
 

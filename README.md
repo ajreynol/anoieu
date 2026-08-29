@@ -5,8 +5,9 @@ configuration files (`*.eos`) — the languages of the
 [ethos](https://github.com/cvc5/ethos) proof checker and of `ethos-eoc`, the
 Eunoia compiler on the `ethosEoc3` branch.
 
-*Status: the front end and the checks that need no type checker are written and
-run on CPC. See [`docs/design.md`](docs/design.md) for where this is going,
+*Status: the front end, the checks that need no type checker, and a shallow
+typing pass are written and run on CPC -- where they have found three real bugs,
+see [`docs/findings.md`](docs/findings.md). See [`docs/design.md`](docs/design.md) for where this is going,
 [`docs/checks.md`](docs/checks.md) for what it reports today,
 [`docs/findings.md`](docs/findings.md) for what it found on the first run,
 [`docs/what-ethos-misses.md`](docs/what-ethos-misses.md) for why ethos does not

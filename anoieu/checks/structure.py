@@ -80,9 +80,21 @@ def compiler_namespace(ctx: Context) -> Iterator[Diagnostic]:
     page="""
 Overloading is resolved by the type of the application: ethos takes the most
 recently declared symbol of that name whose application type checks. Two
-declarations of one name with the *same* type are therefore indistinguishable --
-the earlier one can never be selected -- and ethos says nothing, by design, so
-that a signature may order declarations by precedence.
+declarations of one name with the *same* type are therefore indistinguishable,
+and ethos says nothing, by design, so that a signature may order declarations by
+precedence.
+
+The consequence is worse than a dead declaration. The two are *distinct
+symbols*, so a term built between them is not equal to a term built after them,
+and the two print the same:
+
+    Error: Unexpected conclusion for rule refl:
+        Proves: (_ (= d) d)
+      Expected: (_ (= d) d)
+
+A duplicated `declare-const` -- the copy-paste kind -- is therefore a proof
+failure waiting for the first term that is built before the second copy, with a
+diagnostic that shows nothing.
 """,
 )
 def indistinguishable_overload(ctx: Context) -> Iterator[Diagnostic]:
@@ -104,7 +116,11 @@ def indistinguishable_overload(ctx: Context) -> Iterator[Diagnostic]:
                 message=f"`{name}` is declared twice with the type {tstr}",
                 span=first.span,
                 label="this declaration can never be selected",
-                notes=[f"the later declaration stands at {_where(later.span)}"],
+                notes=[
+                    f"the later declaration stands at {_where(later.span)}",
+                    "the two are distinct symbols that print the same, so a term built "
+                    "between them will not equal one built after them",
+                ],
             )
 
 

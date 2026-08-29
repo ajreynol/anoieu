@@ -1,0 +1,13 @@
+; expect: EO0064
+; The declared return type says Int and every case returns a Bool. Ethos accepts
+; it, and every use inside eo::requires works, until someone writes a use where
+; a Bool is expected.
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(program $is_const ((x Int))
+  :signature (Int) Int
+  (
+    (($is_const 0) true)
+    (($is_const x) false)
+  )
+)

@@ -41,6 +41,11 @@ written, and `--pedantic` turns them on.
 | [EO0056](#eo0056) | a parameter nothing uses | off |
 | [EO0057](#eo0057) | a program is declared and never defined | on |
 | [EO0060](#eo0060) | a program nothing reaches | off |
+| [EO0062](#eo0062) | a rule concludes a term that is not a Bool | on |
+| [EO0063](#eo0063) | a rule takes a premise that is not a Bool | on |
+| [EO0064](#eo0064) | a program case returns a type the program does not declare | on |
+| [EO0065](#eo0065) | a symbol is applied to more arguments than it takes | on |
+| [EO0066](#eo0066) | a program is applied to the wrong number of arguments | on |
 
 ## DOC0001
 
@@ -188,9 +193,21 @@ generated file holds two declarations of one name.
 
 Overloading is resolved by the type of the application: ethos takes the most
 recently declared symbol of that name whose application type checks. Two
-declarations of one name with the *same* type are therefore indistinguishable --
-the earlier one can never be selected -- and ethos says nothing, by design, so
-that a signature may order declarations by precedence.
+declarations of one name with the *same* type are therefore indistinguishable,
+and ethos says nothing, by design, so that a signature may order declarations by
+precedence.
+
+The consequence is worse than a dead declaration. The two are *distinct
+symbols*, so a term built between them is not equal to a term built after them,
+and the two print the same:
+
+    Error: Unexpected conclusion for rule refl:
+        Proves: (_ (= d) d)
+      Expected: (_ (= d) d)
+
+A duplicated `declare-const` -- the copy-paste kind -- is therefore a proof
+failure waiting for the first term that is built before the second copy, with a
+diagnostic that shows nothing.
 
 ## EO0040
 
@@ -324,3 +341,75 @@ was never written. Ethos itself simply never evaluates it.
 A program no rule, program or definition names is dead: it is compiled, trimmed
 and published for nothing, and if it was meant to be used, the rule that meant
 to use it does not.
+
+## EO0062
+
+**a rule concludes a term that is not a Bool**
+
+A proof step wraps what its rule proves in `(eo::pf F)`, which requires `F` to be
+a `Bool`. Ethos never checks the conclusion when the rule is *declared*: the
+program a rule desugars to is given return type `Bool` outright, and the
+conclusion term is not compared with it. So
+
+    (declare-rule bad ((x Int)) :args (x) :conclusion (+ x 1))
+
+is accepted, and the first step that applies it fails with
+
+    Expression of unexpected type: (_ (+ a) 1)  Type: Int  Expected: Bool
+
+The rule can never be applied successfully, and nothing says so until someone
+writes the proof that finds out.
+
+## EO0063
+
+**a rule takes a premise that is not a Bool**
+
+A premise pattern is matched against what a premise proof proves, which is
+always a `Bool`. A pattern of another type matches nothing, so the rule cannot
+be applied.
+
+## EO0064
+
+**a program case returns a type the program does not declare**
+
+"Terms in program bodies are not statically type checked" -- the user manual
+says so, and `typeCheckProgramPair` checks only that the right-hand side binds
+nothing new and that no pattern holds an evaluatable subterm. So a case that
+returns the wrong type is accepted, and it fails only when a proof reaches that
+case:
+
+    (program $mk ((x Int) (F Bool)) :signature (Bool) Bool
+      ( (($mk (not F)) F)
+        (($mk F)       (+ 1 1)) ))    ; Int where Bool was declared
+
+A proof that takes the first case checks `correct`. One that takes the second
+fails, in a step that names neither the program nor the case.
+
+Compared by type constructor, so a dependent return type -- `(BitVec n)` against
+`(BitVec (eo::add n m))` -- agrees.
+
+## EO0065
+
+**a symbol is applied to more arguments than it takes**
+
+An application of a symbol to more arguments than its type has is ill-typed, and
+inside a program body or a rule nothing asks, so it sits there:
+
+    (program $p ((F Bool)) :signature (Bool) Bool
+      ( (($p F) (not F F)) ))          ; `not` is unary -- accepted, "correct"
+
+Variadic symbols are exempt, since that is what their attribute is for, and a
+symbol applied to *fewer* arguments than it takes is an ordinary partial
+application.
+
+## EO0066
+
+**a program is applied to the wrong number of arguments**
+
+A program declares its arity with `:signature`, and an application of another
+arity never evaluates. Ethos notices at parse time and prints
+
+    Wrong number of arguments when applying program $q, 3 arguments expected, got 2
+
+without a file or a line, and the run still ends in `correct` with exit 0. This
+says the same thing, where it happened.

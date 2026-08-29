@@ -1,0 +1,9 @@
+; expect: EO0062
+; The rule declares fine and fails at the first step that applies it.
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-const + (-> Int Int Int))
+(declare-rule bad-conc ((x Int))
+  :args (x)
+  :conclusion (+ x 1)
+)

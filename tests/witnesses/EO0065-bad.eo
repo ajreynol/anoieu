@@ -1,0 +1,6 @@
+; expect: EO0065
+(declare-const not (-> Bool Bool))
+(program $p ((F Bool))
+  :signature (Bool) Bool
+  ( (($p F) (not F F)) )
+)

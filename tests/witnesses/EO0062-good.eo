@@ -1,0 +1,9 @@
+; expect:
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-const + (-> Int Int Int))
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(declare-rule fine ((x Int))
+  :args (x)
+  :conclusion (= (+ x 1) (+ 1 x))
+)
