@@ -52,6 +52,10 @@ the tool. The current division:
 | `model-smt` stage | every declared symbol has a semantics block |
 | Lean / cvc5 | everything the compiler declined to check, one full regeneration later |
 
+[`what-ethos-misses.md`](what-ethos-misses.md) sets out the same division by
+mechanism -- why ethos does not report what it does not report -- with the
+verified examples behind each.
+
 The gaps `ethos/docs/README.md` names itself — the `:is-list-nil` diff,
 exclusion closure, forward declarations never defined, a checkable unit smaller
 than a whole configuration set — are all in anoieu's territory, and §4.4/§5.2

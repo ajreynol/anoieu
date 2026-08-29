@@ -8,7 +8,9 @@ Eunoia compiler on the `ethosEoc3` branch.
 *Status: the front end and the checks that need no type checker are written and
 run on CPC. See [`docs/design.md`](docs/design.md) for where this is going,
 [`docs/checks.md`](docs/checks.md) for what it reports today,
-[`docs/findings.md`](docs/findings.md) for what it found on the first run, and
+[`docs/findings.md`](docs/findings.md) for what it found on the first run,
+[`docs/what-ethos-misses.md`](docs/what-ethos-misses.md) for why ethos does not
+report these itself, and
 [`docs/language-notes.md`](docs/language-notes.md) for what we have established
 about the two languages.*
 
@@ -49,6 +51,9 @@ anoieu is the eager counterpart. It reports, without running a proof:
   program's declared return type, a case that no input can reach;
 - consistency across the *triple* — signature, calculus semantics, SMT semantics
   — which today is checked, when it is checked at all, several tools downstream.
+
+What ethos misses and why is set out by mechanism in
+[`docs/what-ethos-misses.md`](docs/what-ethos-misses.md).
 
 It does **not** look for soundness bugs. Whether a rule is *valid* is what the
 verification conditions `ethos-eoc` emits are for. anoieu's question is the one

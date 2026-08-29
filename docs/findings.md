@@ -39,6 +39,8 @@ instance, as `Cannot match on evaluatable subterm`, which names neither the
 annotation nor the parameter.
 
 The fourteen are the case for the tool.
+[`what-ethos-misses.md`](what-ethos-misses.md) says why each of them gets past
+ethos.
 
 ## Findings worth reading
 
