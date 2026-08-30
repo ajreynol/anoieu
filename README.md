@@ -14,18 +14,61 @@ repository by repository, and how much of it exists today. Then
 [`docs/usage.md`](docs/usage.md) to run it, [`docs/findings.md`](docs/findings.md)
 for what it has found, and [`docs/ci.md`](docs/ci.md) for putting it in CI.
 
+## Two things this repository is
+
+**A tool**, first: an analyzer you run over a signature, in an editor or in CI,
+that reports what ethos accepts and should not. That is the primary purpose and
+everything else follows from it.
+
+**And a reporting system.** Almost nothing anoieu finds is about anoieu. A
+finding is about *someone else's* file — a program in cvc5's calculus, a test
+signature in ethos, a semantics set in logos, a gap in the language itself — so
+the findings have to be published somewhere their owners will read them, argued
+where they can be disagreed with, and tracked until they are resolved or
+declined. This repository is that somewhere.
+
+### If you own a tool in the Eunoia ecosystem, look here
+
+**[`docs/README.md`](docs/README.md)** is the page. It carries every ask anoieu
+makes of anyone, each with an id, a state, and the reasoning underneath it:
+
+| you own | waiting for you | jump to |
+| --- | --- | --- |
+| **cvc5** — the CPC signature | 4 fixes, 1 CI adoption | [cvc5](docs/README.md#cvc5--the-calculus-everything-downstream-is-built-from) |
+| **ethos** — the proof checker | 1 confirmed defect, 3 diagnostics worth improving, 1 CI adoption | [ethos](docs/README.md#ethos--the-proof-checker-and-its-own-signatures) |
+| **ethos-eoc** — the Eunoia compiler | 3 integrations, including the `is_list_nil` diff its own docs ask for | [ethos-eoc](docs/README.md#ethos-eoc--the-eunoia-compiler) |
+| **logos** — the Lean development | 1 fix inherited from cvc5, 1 CI adoption | [logos](docs/README.md#logos--the-lean-development) |
+| **eudaimonia** — the calculus template | 1 preflight integration | [eudaimonia](docs/README.md#eudaimonia--the-template-for-other-calculi) |
+| **Eunoia** — the language and its manual | 7 proposed changes, from what writing the analyzer turned up | [Eunoia](docs/README.md#eunoia-itself--the-language-and-its-manual) |
+
+### What we promise about a finding
+
+- **It was confirmed before it was filed.** Every defect in that table was
+  reproduced in the smallest signature that shows it, and run through ethos, and
+  the output is quoted. [`findings.md`](docs/findings.md) has the workings.
+- **A false positive is our bug, not yours.** Every check that fired wrongly on
+  CPC was narrowed until it stopped, and each narrowing is recorded as what it
+  was: a fact about Eunoia we had got wrong. anoieu's own CI runs it over pinned
+  checkouts of cvc5 and ethos, so a change that invents a false positive fails
+  *this* build before it reaches yours.
+- **Nothing is filed twice.** The table is the single record; a report written
+  for a wider audience, like the [CPC audit](docs/report/cpc-audit.html), is
+  rendered from the same findings rather than restating them.
+- **Declining is an outcome.** A row can end in "won't fix" with a reason, and
+  the check that produced it gets a suppression comment in your file or a
+  `disable` in your config. Both are better than an argument repeated monthly.
+
 ## The name
 
 **Eunoia** is *Eu·noi·a*. Read its syllables backwards and you get *a·noi·eu*,
 which is spelled **anoieu** and pronounced **"annoy you"** (/əˈnɔɪ.juː/).
 
 The joke doubles as the description. εὔνοια is Greek for *beautiful thinking*, and
-for the goodwill a speaker extends to an audience; it is the shortest English word
-containing all five vowels. `anoieu` is the same six letters read the other way,
-and the same goodwill pointed the other way: a tool whose whole job is to annoy
-you now, in your editor, about the thing that would otherwise annoy you in an
-hour — in Lean, or in cvc5, or in a proof-checking failure on a benchmark that
-exercises the one program case nobody typed.
+for the goodwill a speaker extends to an audience. `anoieu` is the same six letters
+read the other way, and the same goodwill pointed the other way: a tool whose whole
+job is to annoy you now, in your editor, about the thing that would otherwise annoy
+you in an hour — in Lean, or in cvc5, or in a proof-checking failure on a benchmark
+that exercises the one program case nobody typed.
 
 Reversal is the technically accurate description too. Ethos reads a signature
 *forwards*: it takes what a proof exercises and checks that far, and no further.

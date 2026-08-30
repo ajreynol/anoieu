@@ -37,6 +37,17 @@ list.
 run. `--baseline` freezes today's findings so a team can adopt one check at a
 time without a flag day.
 
+**Findings are addressed to someone else.** Almost nothing this tool reports is
+about this tool: a finding is about a file in cvc5, ethos, logos or the language
+itself, and it will be read by the person who wrote that file, who did not ask
+for it. Three design consequences follow, and they are why the first four
+commitments are worth their cost: a finding must carry its own reproduction,
+because the reader has no reason to trust us; the record of what a check gets
+*wrong* has to be public, because that is what makes what it gets right
+believable; and every ask has to live in one place with a state on it, or it
+becomes an argument repeated monthly. That place is
+[`README.md`](README.md) -- the register of what anoieu is asking of whom.
+
 ---
 
 ## 2. What is already checked, and by whom

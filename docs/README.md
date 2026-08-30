@@ -24,6 +24,39 @@ anyone. [`findings.md`](findings.md) says how each defect was confirmed;
 - ◐ **partial** — the useful half exists and the limit is stated
 - ○ **sketched** — designed in [`design.md`](design.md), not written
 
+### If you own one of these tools
+
+Read your section. It is short, it says what anoieu found in your files and what
+it would like you to do, and every claim in it was reproduced against ethos
+before it was written down.
+
+| you own | your section | read first |
+| --- | --- | --- |
+| cvc5's CPC signature | [cvc5](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5-1: two programs declare `Int` and return `Bool` |
+| ethos, the proof checker | [ethos](#ethos--the-proof-checker-and-its-own-signatures) | ethos-1: a test signature declares an operator that cannot fold |
+| ethos-eoc, the compiler | [ethos-eoc](#ethos-eoc--the-eunoia-compiler) | eoc-3: the `is_list_nil` diff your own docs ask for |
+| logos | [logos](#logos--the-lean-development) | logos-1: the flattened copies carry cvc5-1 |
+| eudaimonia | [eudaimonia](#eudaimonia--the-template-for-other-calculi) | eud-1: preflight a calculus against the signature contract |
+| Eunoia itself | [Eunoia](#eunoia-itself--the-language-and-its-manual) | eunoia-1: an identical re-declaration makes two symbols that print the same |
+
+### How a row moves
+
+The **state** column is the whole tracker; there is no second one elsewhere.
+
+| state | means |
+| --- | --- |
+| `open` | a defect, reproduced, not yet fixed |
+| `proposed` | a change or an adoption we recommend and nobody has ruled on |
+| `open question` | we do not think we know the right answer |
+| `blocked on X` | waiting on another row |
+| `needs M4` | waiting on a milestone here, not on you |
+| `filed <link>` | raised upstream; the link is the issue or pull request |
+| `fixed` / `adopted` / `declined` | ended, and kept in the table with the reason |
+
+A row that is **declined** is a good outcome and stays visible: the check that
+produced it then gets a suppression comment in your file or a `disable` in your
+configuration, so the same argument is not had twice.
+
 ---
 
 ## Action items
