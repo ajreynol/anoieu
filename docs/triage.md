@@ -57,6 +57,10 @@ there by hand and stays.
 - **Do not add a row by hand.** Generation does that, and a hand-written row has
   no fingerprint anybody can reproduce. Writing in the notes column of a row
   that is already there is the intended way to annotate one.
+- **Never touch an issue tracker.** Not here, not anywhere: no opening, no
+  commenting, no closing, no labelling, on this repository or on anybody's. An
+  agent working under these conventions edits files and stops. Everything that
+  reaches a person who did not ask for it is sent by a person.
 - **A finding that is no longer reported is not thereby closed.** It may only
   have moved, or a check may have been narrowed. Closing is a judgement about
   what happened, and it needs evidence — which is what the write-up is for.

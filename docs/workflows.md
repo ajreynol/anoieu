@@ -178,3 +178,36 @@ Neither prompt gives anybody a way to say that a file is clean — not the proje
 replying to us, and not the agent writing up what happened. The top-level README
 explains why we do not accept that as a result, including from somebody offering
 it in good faith.
+
+## Medium term: issues, on our own repository
+
+A table in a file is a poor place to hold a conversation. It has no threads, no
+notifications, and no way for somebody who has not cloned the repository to
+reply — so today a finding is discussed wherever the person carrying it happens
+to be, and the write-up is the only durable trace. The intended fix is to give
+each finding a GitHub issue.
+
+Three constraints on that, worth writing down before anything is built:
+
+**The issues live here, never on the project the finding is about.** An issue
+filed in somebody else's tracker puts our claim in their queue, under our name,
+where they have to dispose of it — and a wrong one is expensive for them to get
+rid of. On our own tracker the same text is an invitation: they can ignore it,
+argue with it, or link it from their own issue if they think it deserves one.
+The asymmetry is the point, and it is the same reason nothing here files
+anything anywhere today.
+
+**A person posts, always.** The step from a file to a notification in somebody's
+inbox is outward-facing and effectively irreversible, and it is not a step an
+agent should take on its own judgement — nor one it should hold the credential
+for. What we would build is a script a maintainer runs against a write-up whose
+`HUMAN RESPONSE:` is already filled in, which posts that as an issue here and
+records the number against the row. One command, after the review, by the person
+whose name is on it.
+
+**Not yet.** Machinery that speaks on someone's behalf has to be right the first
+time, and we are not at the point where the report changes often enough to need
+it. The conventions above are deliberately designed to survive the change: a
+write-up is already the body of an issue, `HUMAN RESPONSE:` is already the part
+a person signs, and the id is already the key an issue would be recorded
+against. Until then, the file is the record.
