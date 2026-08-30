@@ -243,9 +243,10 @@
       each of them something ethos reads, accepts, and answers <code>correct</code> to.</p>
     <div class="meta">
       <span><b>Date</b> 30 Aug 2026</span>
+      <span><b>Since</b> findings 1 and 2 fixed upstream; the dead-code note declined</span>
       <span><b>Target</b> cvc5 <code>proofs/eo/cpc</code></span>
       <span><b>Checker</b> ethos <code>ethosEoc3</code> @ 2118635d</span>
-      <span><b>Tool</b> anoieu 0.1.0, 35 checks</span>
+      <span><b>Tool</b> anoieu 0.2.0, 56 checks</span>
     </div>
   </header>
 
@@ -253,7 +254,7 @@
     <div class="stat"><span class="n crit">3</span><span class="l">real bugs</span></div>
     <div class="stat"><span class="n">258</span><span class="l">file reads</span></div>
     <div class="stat"><span class="n">0</span><span class="l">crashes</span></div>
-    <div class="stat"><span class="n">19/23</span><span class="l">ethos calls correct</span></div>
+    <div class="stat"><span class="n">32/37</span><span class="l">ethos calls correct</span></div>
   </div>
 
   <section>
@@ -263,10 +264,11 @@
       the first audit it has run. Everything below was confirmed by building the smallest signature
       that reproduces it and running ethos on that.</p>
     <div class="callout">
-      <p>Of the 23 witness files in the tool's own suite — each one holding a single, deliberate
-        mistake — <strong>ethos accepts 19 and answers <code>correct</code></strong>. It refuses four:
+      <p>Of the 37 witness files in the tool's own suite — each one holding a single, deliberate
+        mistake — <strong>ethos accepts 32 and answers <code>correct</code></strong>. It refuses five:
         a <code>declare-rule</code> field out of order, an opaque argument after an ordinary one, a
-        program case of the wrong arity, and a pattern with two <code>:list</code> parameters.</p>
+        program case of the wrong arity, a pattern with two <code>:list</code> parameters, and a
+        builtin applied to the wrong number of arguments.</p>
     </div>
   </section>
 
@@ -317,7 +319,10 @@ Error: Type checking failed: Checking application of and
       <p>The error names neither the program nor its declaration. The defect also travels downstream
         unchanged: the same three findings appear in <code>logos/install/defs/Cpc.eo</code> and
         <code>Cpc.cached.eo</code>, the flattened copies the Lean development is built from.</p>
-      <p><strong>Fix:</strong> <code>:signature ((Seq T)) Bool</code> on both programs.</p>
+      <p><strong>Fix:</strong> <code>:signature ((Seq T)) Bool</code> on both programs.
+        <em>Since accepted and fixed upstream — and the impact claim above was overstated:
+        both programs are total, so ethos evaluates the application before consulting the
+        declared type, and the mismatch surfaces only where an application stays stuck.</em></p>
     </div>
 
     <div class="finding">
@@ -338,7 +343,8 @@ Error: Type checking failed: Checking application of and
   Expected: (_ (= d) d)</code></pre>
       <p>— a proof failure whose two sides are the same text. Anything later that builds a term with
         one of these symbols between the two blocks turns the duplication into that.</p>
-      <p><strong>Fix:</strong> delete the second block.</p>
+      <p><strong>Fix:</strong> delete the second block. <em>Since accepted and fixed
+        upstream.</em></p>
     </div>
 
     <div class="finding">
@@ -379,14 +385,13 @@ Error: Type checking failed: Checking application of and
           <tr><td>DOC0011</td><td class="num">14</td><td>a docstring documents a different number of premises or arguments than the declaration takes — <code>symm</code> documents its premise under <code>; args:</code>, <code>string_decompose</code> takes two premises and documents one</td></tr>
           <tr><td>DOC0012</td><td class="num">4</td><td>a docstring documents a field the rule does not have</td></tr>
           <tr><td>EO0054</td><td class="num">14</td><td>a pattern matches an n-ary operator of exactly two elements — legal and often intended, so a hint; the interesting one is <code>$str_arith_entail_is_approx</code>, which marks the <code>+</code> tail <code>:list</code> and the <code>*</code> tail not, in adjacent cases</td></tr>
-          <tr><td>EO0060</td><td class="num">1</td><td><code>$is_app</code> is declared, documented, and reached by nothing</td></tr>
+          <tr><td>EO0060</td><td class="num">1</td><td><code>$is_app</code> is declared, documented, and reached by nothing — <em>declined: it is used by the expert signature's <code>lambda-elim</code> rule, and reachability is now asked per ordered profile</em></td></tr>
           <tr><td>EO0057</td><td class="num">1</td><td>the forward declaration above</td></tr>
         </tbody>
       </table>
     </div>
-    <p>That is the whole list, across 190 declarations, 241 programs and 593 rules — which is the
-      more important half of this report. The signature is in good shape, and the findings are
-      specific enough to act on one at a time.</p>
+    <p>That is what these checks reported, across 190 declarations, 241 programs and 593
+      rules. It is not a statement about the rest — see below.</p>
   </section>
 
   <section>
@@ -417,6 +422,19 @@ python3 tools/sweep.py &lt;ethos&gt;/tests &lt;logos&gt;/install/defs &lt;eudaim
 ETHOS=&lt;ethos&gt;/build/src/ethos python3 tests/run.py --oracle</code></pre>
     <p>The last command is the one that says whether a finding is news: it runs ethos over every
       witness in the suite and prints its verdict beside anoieu's.</p>
+  </section>
+
+  <section>
+    <h2>What this report does not say</h2>
+    <div class="callout">
+      <p>It reports defects and nothing else. Where a check found nothing, that is a fact
+        about the check: every one of them is partial by construction, whole classes of
+        error have no check at all, and each has been narrowed until it stopped reporting
+        things that were not defects. <strong>A quiet result here is not a clean bill of
+        health</strong>, and should not be read as one — by a person, or by whatever
+        analysis is built next. A false sense of security is much harder to withdraw than
+        a wrong finding.</p>
+    </div>
   </section>
 
   <footer>

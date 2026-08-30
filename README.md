@@ -201,3 +201,21 @@ repository; a human maintainer directs the work, reviews it, and decides what is
 committed and what is filed elsewhere. Nothing reaches another project's issue
 tracker without that review.
 
+## What we do not publish
+
+**No clean bills of health.** anoieu publishes defects. It does not publish
+assurances about anyone's files — no "this signature is sound", no coverage
+score, no "the triple is consistent", no ranking of one tool against another.
+Where a check reports nothing, the most that is ever said is that *those checks
+reported nothing*.
+
+The reason is that our silence is weak evidence and reads as strong. Every check
+here is partial by construction: the type analysis is shallow, whole classes of
+error have no check at all, and each check has been narrowed until it stopped
+reporting things that were not defects. A reader who takes a quiet run for a
+sound artifact has been misled by us, and the next analysis effort that inherits
+that impression is worse off than if we had published nothing. A false sense of
+security is much harder to withdraw than a wrong finding.
+
+The one exception is discussion of the ecosystem as a whole, where the subject
+is the arrangement and its trade-offs rather than an audit of anyone's artifact.

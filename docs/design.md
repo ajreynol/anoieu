@@ -37,6 +37,16 @@ list.
 run. `--baseline` freezes today's findings so a team can adopt one check at a
 time without a flag day.
 
+**Defects out, assurances never.** The tool reports what is wrong and says
+nothing about what is right. A check that finds nothing means only that it found
+nothing: the analysis is partial by design, every check has been narrowed until
+it stopped over-reporting, and whole classes of error are outside it. Publishing
+a clean result as a property of the artifact would hand the next reader — or the
+next analysis tool built on this one — a confidence we cannot support, and that
+is harder to take back than a false positive. It also shapes the output format:
+there is no score, no coverage percentage, and no summary that reads as a
+verdict.
+
 **Findings are addressed to someone else.** Almost nothing this tool reports is
 about this tool: a finding is about a file in cvc5, ethos, logos or the language
 itself, and it will be read by the person who wrote that file, who did not ask

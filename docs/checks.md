@@ -713,10 +713,11 @@ conditions are for. Agreement at the *sort* is decidable: the signature says
 `Int` too.
 
 Reading the semantics' answer means following what it is written as — macros
-expanded, the branches of an `ite` taken where they agree, a shared type
-program read with the call's own arguments — and answering nothing wherever the
-trail does not end at a declared sort. On CPC that resolves 51 of its symbols
-and agrees on all of them; the other 77 say nothing rather than guess.
+expanded, the branches of an `ite` taken where they agree, a shared type program
+read with the call's own arguments — and answering nothing wherever the trail
+does not end at a declared sort, which on a real signature is most of the time.
+Where the check is quiet it has not compared anything and is not saying the two
+type rules agree.
 
 ## TRI0007
 
@@ -751,6 +752,6 @@ deliberately simple -- recursion on a rebuilt term, or on an argument that
 shrinks in a way this does not model, reads the same as recursion that does not
 shrink at all.
 
-On CPC it names seven programs, two of which carry a clause already. A clause
-may also exist for reasons that have nothing to do with termination, so its
-*absence* here is a question rather than a finding.
+A clause may also exist for reasons that have nothing to do with termination, so
+its absence here is a question rather than a finding, and its silence about a
+program is not a claim that Lean will accept that program.

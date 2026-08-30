@@ -568,6 +568,13 @@ in [`ci.md`](ci.md).
   that record is the reason to believe the ones that remain.
 - **Not a style tool.** The checks that are matters of taste on a signature that
   is already written are off by default.
+- **Not a clean bill of health.** We publish defects and never assurances. A
+  check that reports nothing is recorded as *that check reported nothing*, never
+  as a statement that a signature, a semantics or a triple is correct,
+  consistent or complete. The checks are partial by construction and narrowed on
+  purpose, so a quiet run is evidence about the checks and not about the
+  artifact — and a false sense of security, once handed to another analysis
+  effort, is far harder to withdraw than a wrong finding.
 
 ## Open questions we are tracking
 
