@@ -3,6 +3,10 @@
 The long-term goal is for ethos, logos and cvc5 to run this on every push. This
 is how that should be arranged, and what has to be true before each step.
 
+Two audiences, in that order: everything up to *Our own side of it* is for a
+repository deciding to switch anoieu on, and what follows it is how this
+repository generates the report in the first place.
+
 ## The model: one tool, three thin integrations
 
 anoieu stays one repository and ships as one versioned package. Each repository
@@ -145,6 +149,43 @@ For GitHub code scanning instead of inline annotations:
         with: { sarif_file: anoieu.sarif }
 ```
 
+## Costs
+
+A whole-of-CPC run reads 51 files and finishes in well under a second, with no
+build, no solver and no proof. There is nothing to cache and nothing to
+parallelize; the job is dominated by fetching the sources, which is itself
+about six megabytes across four shallow, sparse clones and a few seconds. A
+repository checking its own signatures pays even less, because it has them
+checked out already and fetches nothing.
+
+## The order to do this in
+
+1. **ethos first.** It is the smallest surface, its maintainers are the audience
+   for the language findings, and its own test suite already holds one.
+2. **cvc5 next, report-only**, so the three real findings get triaged with no
+   pressure on the build.
+3. **cvc5 blocking, with a baseline**, once those are resolved.
+4. **logos last**, and after the triple checks land — which is the point at which
+   anoieu says something logos cannot get anywhere else: whether the signature,
+   the calculus semantics and the SMT semantics agree.
+
+## One open question, worth deciding early
+
+The triple checks (M4) need a signature *and* its `.eos` semantics, and those
+live in different repositories: CPC's signature is in cvc5, its official
+semantics in logos. Whichever repository runs that job needs both checked out.
+logos already vendors ethos and consumes cvc5's signature, so it is the natural
+home — which means the most valuable check anoieu will have runs in the
+repository furthest from where its findings are usually fixed. Worth agreeing on
+before it is built: either logos runs it and files issues against cvc5, or cvc5
+grows a job that checks out logos for its semantics.
+
+## Our own side of it
+
+Everything above is for a repository adopting anoieu. The rest of this page is
+how *this* repository produces the report those findings come from — separate
+machinery, separate audience, and nothing an adopting repository has to run.
+
 ## The run
 
 One command does the whole cycle:
@@ -241,34 +282,3 @@ finding, and it is **additive**:
 The hand-written register in [`README.md`](README.md) is the first pass at all of
 this and is kept as the worked example of a curated report. The generated file is
 where the mechanical half now lives.
-
-## Costs
-
-A whole-of-CPC run reads 51 files and finishes in well under a second, with no
-build, no solver and no proof. There is nothing to cache and nothing to
-parallelize; the job is dominated by fetching the sources, which is itself
-about six megabytes across four shallow, sparse clones and a few seconds. A
-downstream repository pays even less, because it checks its own signatures out
-anyway and needs no `deps/` at all.
-
-## The order to do this in
-
-1. **ethos first.** It is the smallest surface, its maintainers are the audience
-   for the language findings, and its own test suite already holds one.
-2. **cvc5 next, report-only**, so the three real findings get triaged with no
-   pressure on the build.
-3. **cvc5 blocking, with a baseline**, once those are resolved.
-4. **logos last**, and after the triple checks land — which is the point at which
-   anoieu says something logos cannot get anywhere else: whether the signature,
-   the calculus semantics and the SMT semantics agree.
-
-## One open question, worth deciding early
-
-The triple checks (M4) need a signature *and* its `.eos` semantics, and those
-live in different repositories: CPC's signature is in cvc5, its official
-semantics in logos. Whichever repository runs that job needs both checked out.
-logos already vendors ethos and consumes cvc5's signature, so it is the natural
-home — which means the most valuable check anoieu will have runs in the
-repository furthest from where its findings are usually fixed. Worth agreeing on
-before it is built: either logos runs it and files issues against cvc5, or cvc5
-grows a job that checks out logos for its semantics.

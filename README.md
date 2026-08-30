@@ -12,7 +12,9 @@ push — where they have found three real bugs.*
 **Start here:** [`docs/README.md`](docs/README.md) — what anoieu is for,
 repository by repository, and how much of it exists today. Then
 [`docs/usage.md`](docs/usage.md) to run it, [`docs/findings.md`](docs/findings.md)
-for what it has found, and [`docs/ci.md`](docs/ci.md) for putting it in CI.
+for what it has found, [`docs/ci.md`](docs/ci.md) for putting it in CI, and
+[**a suggested AI workflow for using anoieu**](docs/workflows.md) for working a
+finding with an assistant.
 
 ## Two things this repository is
 
@@ -27,7 +29,104 @@ the findings have to be published somewhere their owners will read them, argued
 where they can be disagreed with, and tracked until they are resolved or
 declined. This repository is that somewhere.
 
-### The reporting system has two faces
+Where those findings live, what we promise about each, and which of them are
+waiting for you is [below](#where-the-findings-live).
+
+### And the thing we will not tell you
+
+> **A successful pass is not a clean bill of health.**
+>
+> When anoieu reports nothing, that is a fact about the checks it ran, not about
+> your signature. The analysis is partial by construction — whole classes of
+> error have no check at all, the type reasoning is shallow, and every check has
+> been narrowed until it stopped reporting things that were not defects. A green
+> run here, or in your CI, or at the end of a report, is not evidence that a
+> signature, a semantics or a triple is sound, and nothing downstream should
+> treat it as such.
+>
+> We publish defects and never assurances, deliberately: a false sense of
+> security is much harder to withdraw than a wrong finding. See
+> [What we do not publish](#what-we-do-not-publish).
+
+## What it finds
+
+anoieu reads a signature without running a proof, and reports:
+
+- **syntax and structure errors** — all of them at once, rather than the first;
+- **invariants the manual states and no tool enforces**: a nil terminator of the
+  wrong type, a chainable operator with a non-variadic combiner;
+- **typing facts one level deeper**: a proof rule that can conclude a well-typed
+  non-`Bool` term, a program case whose right-hand side does not have the
+  program's declared return type, a case that no input can reach;
+- **disagreements across the triple** — signature, calculus semantics, SMT
+  semantics — which today surface, if at all, several tools downstream.
+
+It does **not** look for soundness bugs. Whether a rule is *valid* is what the
+verification conditions `ethos-eoc` emits are for. anoieu's question is the one
+below that: whether a signature and its semantics say something coherent at all.
+
+### Why these are not caught already
+
+Ethos is a proof checker, and it is lazy by design: a `define` body with no
+`:type` is never type checked, a program case is type checked only when a proof
+reaches it, and a rule whose conclusion is not a `Bool` is a legal declaration
+until somebody writes the step that fails. That is the right trade for a checker
+— it is what makes checking fast — and it means a signature can carry a latent
+error for as long as no proof happens to exercise it.
+
+anoieu is the eager counterpart: it asks what a signature could ever be asked to
+do, rather than what one proof asked of it. What ethos misses, and by which
+mechanism, is set out in
+[`docs/what-ethos-misses.md`](docs/what-ethos-misses.md).
+
+## The triple
+
+The unit of analysis is not a file but a triple:
+
+| leg | file | says |
+| --- | --- | --- |
+| **signature** | `Cpc.eo` | the calculus: sorts, symbols, their type rules, programs, proof rules |
+| **calculus semantics** | `Cpc.eos` | what each symbol of the calculus becomes in the SMT embedding |
+| **SMT semantics** | `smt.eos` | what each SMT-LIB symbol means to a model — its type, its value |
+
+Each leg is checkable on its own, and the interesting findings are between legs:
+a symbol the signature declares and the semantics never mentions, a transform
+whose target does not exist in the SMT semantics, an `:is-list-nil` predicate
+that is required and missing (or present and dead), an `:exclude` list that is
+not closed under what it excludes.
+
+## Using it
+
+No dependencies; Python 3.10 or later. Full interface reference in
+[`docs/usage.md`](docs/usage.md).
+
+```bash
+python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo     # check a signature
+python3 -m anoieu check Cpc.eo --pedantic               # ... and the quieter checks
+python3 -m anoieu check Cpc.eo --format json            # or github, for CI
+python3 -m anoieu desugar Cpc.eo --term '(or a b c)'    # what the parser builds from a term
+python3 -m anoieu symbol str.++ Cpc.eo                 # one symbol: type, sugar, who names it
+python3 -m anoieu explain EO0041                       # the manual page of a check
+python3 -m anoieu list-checks                           # every check and what it says
+python3 -m anoieu stats Cpc.eo                          # what a signature holds
+```
+
+A finding looks like this:
+
+```text
+theories/Bools.eo:4:22: error[EO0041]: the nil terminator of `or` has the wrong type
+  |
+4 | (declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)
+  |                                                        ^ this has type Int
+  = note: `or` is marked `:right-assoc-nil`, so its nil must have type Bool
+  = help: ethos accepts the declaration; the mismatch appears at the first
+          application of the operator whose type is asked for
+```
+
+## Where the findings live
+
+A finding is only worth anything where its owner will see it, so the record is
+kept three ways, with different jobs:
 
 | | where | what it is |
 | --- | --- | --- |
@@ -78,22 +177,6 @@ until the branch it names says what happened.
   the check that produced it gets a suppression comment in your file or a
   `disable` in your config. Both are better than an argument repeated monthly.
 
-### And the thing we will not tell you
-
-> **A successful pass is not a clean bill of health.**
->
-> When anoieu reports nothing, that is a fact about the checks it ran, not about
-> your signature. The analysis is partial by construction — whole classes of
-> error have no check at all, the type reasoning is shallow, and every check has
-> been narrowed until it stopped reporting things that were not defects. A green
-> run here, or in your CI, or at the end of a report, is not evidence that a
-> signature, a semantics or a triple is sound, and nothing downstream should
-> treat it as such.
->
-> We publish defects and never assurances, deliberately: a false sense of
-> security is much harder to withdraw than a wrong finding. See
-> [What we do not publish](#what-we-do-not-publish).
-
 ## The name
 
 **Eunoia** is *Eu·noi·a*. Read its syllables backwards and you get *a·noi·eu*,
@@ -111,51 +194,7 @@ Reversal is the technically accurate description too. Ethos reads a signature
 anoieu reads the same signature *backwards*: it asks what the signature could
 ever be asked to do, and checks all of it, with no proof in hand.
 
-## What it is for
-
-Ethos is a proof checker, and it is lazy by design: a `define` body with no
-`:type` is never type checked, a program case is type checked only when a proof
-reaches it, and a proof rule whose conclusion is not a `Bool` is a perfectly
-legal declaration until somebody writes the step that fails. That laziness is
-right for a checker — it is what makes checking fast — and it means a signature
-can carry latent errors indefinitely.
-
-anoieu is the eager counterpart. It reports, without running a proof:
-
-- syntax and structure errors, all of them at once rather than the first;
-- the invariants the manual states and no tool enforces (a nil terminator of the
-  wrong type, a chainable operator with a non-variadic combiner);
-- typing facts one level deeper: **a proof rule that can conclude a well-typed
-  non-`Bool` term**, a program case whose right-hand side does not have the
-  program's declared return type, a case that no input can reach;
-- consistency across the *triple* — signature, calculus semantics, SMT semantics
-  — which today is checked, when it is checked at all, several tools downstream.
-
-What ethos misses and why is set out by mechanism in
-[`docs/what-ethos-misses.md`](docs/what-ethos-misses.md).
-
-It does **not** look for soundness bugs. Whether a rule is *valid* is what the
-verification conditions `ethos-eoc` emits are for. anoieu's question is the one
-below that: whether the signature and its semantics say something coherent at
-all.
-
-## The triple
-
-The unit of analysis is not a file but a triple:
-
-| leg | file | says |
-| --- | --- | --- |
-| **signature** | `Cpc.eo` | the calculus: sorts, symbols, their type rules, programs, proof rules |
-| **calculus semantics** | `Cpc.eos` | what each symbol of the calculus becomes in the SMT embedding |
-| **SMT semantics** | `smt.eos` | what each SMT-LIB symbol means to a model — its type, its value |
-
-Each leg is checkable on its own, and the interesting findings are between legs:
-a symbol the signature declares and the semantics never mentions, a transform
-whose target does not exist in the SMT semantics, an `:is-list-nil` predicate
-that is required and missing (or present and dead), an `:exclude` list that is
-not closed under what it excludes.
-
-## The second goal
+## The second goal: writing the languages down
 
 The `.eos` language is new and specified mostly by prose and by the compiler
 that reads it. Every check anoieu implements is a statement about what these
@@ -164,35 +203,6 @@ check catalogue with a minimal witness per rule *is* an executable spec, and
 disagreements between anoieu and ethos are bugs in exactly one of them, which is
 how a second implementation earns its keep. See
 [`docs/language-notes.md`](docs/language-notes.md).
-
-
-## Using it
-
-No dependencies; Python 3.10 or later. Full interface reference in
-[`docs/usage.md`](docs/usage.md).
-
-```bash
-python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo     # check a signature
-python3 -m anoieu check Cpc.eo --pedantic               # ... and the quieter checks
-python3 -m anoieu check Cpc.eo --format json            # or github, for CI
-python3 -m anoieu desugar Cpc.eo --term '(or a b c)'    # what the parser builds from a term
-python3 -m anoieu symbol str.++ Cpc.eo                 # one symbol: type, sugar, who names it
-python3 -m anoieu explain EO0041                       # the manual page of a check
-python3 -m anoieu list-checks                           # every check and what it says
-python3 -m anoieu stats Cpc.eo                          # what a signature holds
-```
-
-A finding looks like this:
-
-```text
-theories/Bools.eo:4:22: error[EO0041]: the nil terminator of `or` has the wrong type
-  |
-4 | (declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)
-  |                                                        ^ this has type Int
-  = note: `or` is marked `:right-assoc-nil`, so its nil must have type Bool
-  = help: ethos accepts the declaration; the mismatch appears at the first
-          application of the operator whose type is asked for
-```
 
 ## In CI
 

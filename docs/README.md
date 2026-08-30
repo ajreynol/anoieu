@@ -18,7 +18,9 @@ act on, it is written down here:
 
 So this is the page to open when you want to know what anoieu is asking of
 anyone. [`findings.md`](findings.md) says how each defect was confirmed;
-[`ci.md`](ci.md) says how the adoption works. Neither asks anything; this does.
+[`ci.md`](ci.md) says how the adoption works; [`workflows.md`](workflows.md)
+suggests how to work one of these with an assistant, and what we do with the
+reply. None of those asks anything; this does.
 
 - ✅ **live** — written, tested, and run over the corpus
 - ◐ **partial** — the useful half exists and the limit is stated
@@ -433,7 +435,7 @@ question somebody has to answer. This section is those questions.
 
 A "must" that nothing enforces is a "should" in practice, and each of these is a
 local property of one declaration — the check is a few lines wherever it goes.
-That is [eunoia-3](#action-items).
+That is [eunoia-3](#eunoia-itself--the-language-and-its-manual).
 
 ### Where the definition is silent, and we had to find out
 

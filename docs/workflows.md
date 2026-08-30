@@ -1,9 +1,12 @@
-# Working a finding
+# A suggested AI workflow for using anoieu
 
-Guidelines, not machinery. Nothing in this repository files anything anywhere:
-a finding travels because a person carries it, and comes back because a person
-sends it. What follows is what we suggest that person do, and one prompt worth
-keeping around.
+How to work a single finding with an assistant, from the report to whoever can
+fix it and back.
+
+**Guidelines, not machinery.** Nothing in this repository files anything
+anywhere: a finding travels because a person carries it, and comes back because
+a person sends it. What follows is what we suggest that person do, and one
+prompt worth keeping around.
 
 It assumes an expert — somebody who knows the calculus being looked at. Nothing
 here is a substitute for that.
