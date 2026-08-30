@@ -81,6 +81,7 @@ configuration, so the same argument is not had twice.
 | [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerate once it is fixed upstream | blocked on cvc5-1 |
 | [logos-2](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed, needs M4 |
 | [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | preflight a candidate calculus against the signature contract before generating a checker | proposed, needs M4 |
+| [eud-2](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | settle the calculus profile's two *declared* answers against the signature instead of recording them on trust | proposed, needs M4 |
 | [eunoia-1](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | refuse a re-declaration whose type is identical to an earlier one | proposed |
 | [eunoia-2](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | an unknown attribute should be an error, not a dropped annotation | proposed |
 | [eunoia-3](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | enforce the attribute contracts the manual states as "must", at the declaration | proposed |
@@ -370,6 +371,15 @@ already runs.
 **eud-1 (B)** — a `check` step in the generation script that reads the contract
 out of the template's configuration and refuses a calculus that does not meet
 it, before a checker is generated. Needs the triple front end and nothing else.
+
+**eud-2 (B)** — the calculus profile asks seven questions about a calculus and
+answers five of them from what the compiler emitted; `binders` and
+`value-ordering` are recorded on trust, because nothing in the *output*
+distinguishes the answers. Both are properties of the signature and its
+semantics, which is what anoieu reads: it can answer them from the input rather
+than from the artifact, which is also the right place to answer them from.
+eudaimonia's own note that `value-ordering` being declared "is a finding" is the
+argument for doing it.
 
 ## Eunoia itself — the language and its manual
 

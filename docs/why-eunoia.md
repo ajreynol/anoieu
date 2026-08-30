@@ -172,12 +172,106 @@ available at this end of the spectrum.
 
 ---
 
-# The case for doing it in Lean
+# The case for doing it in Lean — but *which* tool?
 
-Stated as strongly as we can put it, because these are the arguments that would
-actually move the decision.
+"Do it in Lean" is not one proposal. The ecosystem is five artifacts, and each
+could move independently; separating them is most of the argument, because the
+reasons above defend some of them and say nothing about the others.
 
-## A. The type system gives most of the check catalogue for nothing
+| artifact | today | "in Lean" would mean | separable? |
+| --- | --- | --- | --- |
+| the **signature** (`.eo`) | SMT-LIB-shaped text, maintained by solver developers | the calculus defined as Lean inductives and rule schemas | yes |
+| the **semantics** (`.eos`) | a second bespoke language, its own compiler | Lean definitions over a fixed SMT-LIB model | yes |
+| the **compiler** (`ethos-eoc`) | C++ plugins + a Python driver splicing text into `$MARKER$` templates | a Lean metaprogram elaborating definitions | mostly, after the semantics |
+| the **checker** (`ethos`) | C++, fast, unverified | ship the generated Lean checker instead | yes |
+| the **proof format** (CPC files) | s-expression steps over SMT terms | Lean terms over a fixed embedding | yes |
+
+## T1. The semantics (`.eos`) as Lean definitions — the strongest candidate
+
+Today the meaning of a symbol is written in a language that exists only to say
+it: two configuration sets, four levels of vocabulary that are never written
+down in a term, a compiler (`sem_compile.py`) that renders them into a
+signature written in a deep embedding, an aggregate table declaring which
+generated program each case is spliced into, directives passed between stages as
+head comments in generated files, and one obligation — `is_list_nil` — that is
+hand-written per operator and compared with nothing.
+
+In Lean, the SMT-LIB model is already a development (logos's `SmtEval`,
+`SmtModel`), and a calculus's semantics would be a function from its term
+language into that model. The four levels become types. The aggregate table
+becomes pattern matching. `sem_compile.py` disappears. The `is_list_nil`
+obligation becomes something with a type — a field, or a lemma — rather than a
+predicate nothing checks.
+
+**What it costs.** The fast checker's model-smt stage consumes the deep
+embedding, and the SMT-LIB and SyGuS backends consume it too, so this needs
+either extraction from Lean into those, or an admission that verification
+conditions come from the Lean side by another route. And writing a calculus's
+semantics would demand Lean fluency where it currently demands `.eos` fluency —
+which is not obviously the harder of the two, but is a different population.
+
+**It does not touch argument 1.** The signature stays `.eo`, SMT-shaped, owned
+by solver developers. This is the one proposal where the case above offers no
+defence, which is why we think it is the strongest.
+
+## T2. The compiler (`ethos-eoc`) as a Lean metaprogram
+
+The compiler's architecture is text: eleven templates with holes, blocks emitted
+in an order constrained by what names what, and a side channel of `$eoc-`
+comments that a Python regex reads back out. A metaprogram that elaborated
+definitions instead would have none of those problems, and its output would be
+type-checked as it was produced rather than when Lean next runs.
+
+It would still need to read `.eo` — logos already parses the proof format, so a
+signature parser is not far-fetched — and the SMT-LIB and SyGuS backends still
+emit text either way. Mostly a follow-on to T1: the compiler's main job is
+compiling the semantics, so moving the semantics moves most of the compiler.
+
+## T3. Retire `ethos` and ship the generated checker
+
+One implementation instead of two, soundness by construction, and no seams
+between a C++ checker and a Lean one to keep in step.
+
+**What it costs, and one cost we had not counted.** Performance, which nobody
+has measured. The `.smt2` reference check, which would have to move too — and
+which is argument 1's sharpest point. And an asset we only noticed by reading
+eudaimonia: it builds ethos *alongside* the compiler and cross-checks its
+regression proofs against the generated checker. Two independent implementations
+disagreeing is a bug report; one implementation is a bug report nobody files.
+Retiring ethos deletes that.
+
+## T4. The signature (`.eo`) itself
+
+The maximal proposal, and the one arguments 1 and 2 actually answer. It would
+give this analyzer's whole catalogue for free, and it would move the artifact
+solver developers maintain out of the notation they think in, put the reference
+seam back behind an unverified translator, and re-target cvc5's emitter.
+
+Worth being precise about, because the SMT-abstraction argument gets used to
+defend the *whole* status quo when what it defends is T4 and T5. It says nothing
+about T1, T2 or T3.
+
+## T5. The proof format
+
+Separable from everything above: one could keep `.eo` and `.eos` and still have
+cvc5 emit Lean over a fixed embedding, or keep CPC proofs and move the entire
+toolchain. This is the question the document opened with, and it is the *last*
+of the five to be settled, not the first.
+
+## A note on this analyzer
+
+Under T1, T2, T3 and T5, anoieu is unaffected: it reads signatures. Under T4,
+most of it stops being necessary. That is a useful way to sort the proposals —
+and a reason to distrust our enthusiasm about exactly one of them.
+
+---
+
+# The general objections
+
+These are about the fragment rather than about any one tool, and are numbered
+`O` so as not to collide with the arrangements lettered below.
+
+## O1. The type system gives most of the check catalogue for nothing
 
 Program bodies untyped, matching untyped, `define` bodies never typed, a
 program's declared return type unverified, arity unchecked inside a body: every
@@ -186,7 +280,7 @@ typed functional language. We wrote three thousand lines to recover a fraction
 of what Lean would have given by construction. That is not an argument about
 taste; it is a measured cost, and we paid it.
 
-## B. The `.eos` layer is the tell
+## O2. The `.eos` layer is the tell
 
 The fragment cannot express its own meaning, so a *second* bespoke language
 exists to say what its symbols mean — with four levels of vocabulary that are
@@ -196,14 +290,14 @@ arrangement the semantics would be ordinary definitions, the four levels would
 be types, and the compiler would be unnecessary. When a design needs a second
 language to explain the first, that is evidence about the first.
 
-## C. Termination is the language's job, and here it is nobody's
+## O3. Termination is the language's job, and here it is nobody's
 
 A Eunoia program may not terminate and nothing checks it; the Lean backend needs
 hand-written measures supplied as literal Lean text inside `.eos` files, and a
 missing one surfaces when Lean runs, a full regeneration later. Lean checks
 termination as a matter of course.
 
-## D. The narrowness argument cuts both ways
+## O4. The narrowness argument cuts both ways
 
 What makes CPC proofs tractable is not that Lean *can* express more; it is that
 the emitter does not. An emitter targeting a fixed deep embedding in Lean is
@@ -213,14 +307,14 @@ Lean, where writing the linter is easier) would enforce the same fragment. The
 honest version of reason 2 is therefore narrower than it sounds: what we want is
 a *fixed* language for proofs, not necessarily a *separate* one.
 
-## E. So does the interchange argument
+## O5. So does the interchange argument
 
 Proof terms over a fixed embedding are data too: serialisable, diffable,
 checkable by anything that implements the embedding. And the portability we
 claim is worth what its consumers make it worth — today CPC has one producer,
 and its consumers are ethos and a checker generated from the same source.
 
-## F. Two implementations is a choice, not a consequence
+## O6. Two implementations is a choice, not a consequence
 
 A checker, a compiler, a generated checker, and a semantics relating them, all
 kept in step by hand at the seams. None of that exists in the native
@@ -228,13 +322,143 @@ arrangement. The `is_list_nil` predicate — hand-written per operator, required
 exactly when the desugar stage forward-declares one, compared with nothing — is
 what this cost looks like in practice.
 
-## G. "A fragment we understand well" is doing a lot of work
+## O7. "A fragment we understand well" is doing a lot of work
 
 We understand it well *now*, partly because this project spent a week finding
 out what it means: that matching does not check types, that `eo::define` binds in
 parallel, that a `:list` annotation is inert under a plain associative operator.
 None of those were written down. Lean's semantics are also documented, also
 stable, and maintained by a much larger community with much more at stake.
+
+---
+
+# Six ways to arrange the ecosystem
+
+Each is a coherent whole, not a wish. "Compatible with argument 1" means the
+artifact a solver developer writes stays SMT-shaped.
+
+| | authoritative | generated | production checkers | semantics lives in | biggest cost | arg. 1? |
+| --- | --- | --- | --- | --- | --- | --- |
+| **A** as it stands | `.eo` + `.eos` | Lean development, VCs | ethos | `.eos` | two languages, unchecked seams | yes |
+| **B** semantics in Lean | `.eo` | Lean development, VCs, the SMT model for ethos | ethos | Lean | extraction back to the SMT/SyGuS backends | yes |
+| **C** compile from Lean | Lean | `.eo`, the fast checker | ethos | Lean | the artifact leaves the solver developers' notation | partly |
+| **D** one checker | `.eo` + `.eos` | Lean checker | the generated Lean checker | `.eos` | performance; loses the reference check and the cross-check | yes |
+| **E** kernel + elaborator | a tiny core calculus | expansions of the big rules | a small kernel | wherever the kernel's is | proof size; every derived rule needs an expansion | yes |
+| **F** no calculus | Lean | — | Lean | Lean | an unverified `.smt2` frontend; no SMT-level artifact | no |
+
+**A, as it stands.** The virtue is that every piece exists and works. The costs
+are the ones this document lists: two bespoke languages, a compiler made of text
+templates, and obligations passed between tools that nothing compares.
+
+**B, semantics in Lean.** T1 alone. The signature stays where solver developers
+can read it; the part that needs types gets them. The open engineering question
+is whether the SMT-LIB and SyGuS verification conditions can be extracted from
+the Lean semantics as cleanly as they are currently generated from `.eos`.
+
+**C, compile from Lean.** Invert the direction of generation: define the
+calculus in Lean and emit the `.eo` signature for ethos. Keeps a fast checker
+and an SMT-level artifact — but the *maintained* one is Lean, and the SMT-shaped
+one is a build product, which is the opposite of where the expertise sits.
+Argument 1 is only partly satisfied: solver developers can read the generated
+signature but do not edit it.
+
+**D, one checker.** Retire ethos from production and ship what logos proves. The
+cleanest story about trust, blocked on a measurement nobody has taken, and it
+gives up the two-implementation cross-check that eudaimonia currently relies on.
+
+**E, kernel and elaborator.** The LFSC-shaped alternative: a minimal core with a
+handful of rules, and CPC's rules as macro expansions checked against it, with
+an untrusted elaborator doing the expansion. The trusted base becomes very
+small, and the Lean development only has to be about the kernel. What it costs
+is exactly what CPC's side conditions were designed to avoid: a computation that
+a program decides in one step becomes a derivation, and proofs grow accordingly.
+Worth stating as a considered option rather than an unconsidered one — the
+ecosystem moved away from it, and the reasons should be written down.
+
+**F, no calculus.** The native arrangement, done with discipline: a fixed deep
+embedding, an emitter restricted to it, and a Lean-side linter enforcing the
+fragment. Everything in the case above about narrowness survives — what does not
+survive is the SMT-level artifact and the reference seam, which now depend on a
+translator from `.smt2` into the embedding.
+
+**B and D compose**, and their composition is the arrangement we would bet on if
+the measurement in T3 came out well: the signature stays the SMT-facing
+interface and the proof format, and the entire verification stack — semantics,
+soundness, checker — is Lean. Ethos survives as the fast unverified checker used
+in the edit loop and as the independent cross-check, which is what it is best at
+and what nothing else provides.
+
+---
+
+# What eudaimonia says about all this
+
+[eudaimonia](https://github.com/cvc5/eudaimonia) is the arrangement with the
+calculus taken out: bring a signature and a semantics, get a Lake project with a
+checker, its proofs, its regression suite and its documentation. It is the
+falsification test for the claim `ethos-eoc` makes about itself — *a second
+calculus is a second pair of files, not a change to the tool* — and its status
+is the most informative thing in this document, because it says which half of
+that claim is currently earned.
+
+**What is done** (per its `TODO.md`, which is more current than its README's
+status paragraph): fetching and building the compiler, driving it over a
+signature and installing what it publishes, preserving hand-written per-rule
+proofs across a regeneration, a `--check` mode that installs into a throwaway
+copy and diffs, signature caching, a signature-independent parser library
+vendored into each generated project and wired to the correctness statement, a
+calculus profile, and ethos built alongside as a reference checker whose verdicts
+are cross-checked against the generated one.
+
+**What is not**: the correctness development itself. The core checker proof
+(~3,000 lines in Logos), the side conditions (~257), the soundness theorem
+(~1,063), the per-rule proofs (591 files), and the shared rule-support lemmas
+are all generated as *stubs describing what belongs in them*. So the mechanical
+pipeline generalizes and the proofs do not — yet.
+
+**Three things it buys the argument.**
+
+*It makes the signature a reusable input format.* The artifact that gets reused
+across calculi is the SMT-level description, not the Lean. That is the
+structural case for keeping the `.eo` layer, and it is stronger than any
+aesthetic argument about notation: something already depends on it in a way that
+a second calculus exercises.
+
+*It gives the format a second consumer* — partially. Not a second producer, but a
+second thing that reads a signature and does something non-trivial with it,
+which is the weaker half of the interchange claim in reason 3.
+
+*It preserves two implementations on purpose.* Its section 4d builds ethos next
+to the compiler and cross-checks the regression proofs, and records the one
+asymmetry (ethos has no SMT-LIB semantics, so there are questions it cannot
+answer). This is the concrete asset arrangement D would delete.
+
+**And two things it reveals about the cost.**
+
+*The signature contract is unchecked.* Its README specifies what a calculus must
+provide — an `and` declared `:right-assoc-nil true` and translated to
+`SmtTerm.and`, `true`/`false` literals — and says outright that a signature which
+translated `and` elsewhere "would break soundness silently: nothing downstream
+re-checks that seam". A contract stated in prose and enforced by nothing is
+precisely the shape of thing a type system would have carried, and is
+[eud-1](README.md#eudaimonia--the-template-for-other-calculi) here.
+
+*Its calculus profile has answers that are declared rather than verified.* Seven
+questions; five checked against what the compiler emitted, two recorded on
+trust — and its own note that `value-ordering` is declared "and that is a
+finding", because `SmtValueOrder.lean` is identical between `Cpc` and `CpcMini`,
+so the compiler emits the same ordering whatever the signature says. A related
+measurement: `examples/hello` declares three constants and one rule, and 370 of
+its 2,395 generated lines — 15% — are datatype and literal machinery it cannot
+use. Both are the same underlying fact: pieces of the "template" are fixed where
+the claim says they are derived.
+
+**What it points at.** Its own blocker for generalizing the proofs is to
+*"stabilize the SMT-LIB model as a fixed base that signatures extend"* and to
+*"extract the invariant core"* — separating what is calculus-independent from
+what a signature contributes. That is the same seam arrangement **B** addresses,
+approached from the other end. Two independent efforts arriving at one boundary
+is the best evidence in this document that the boundary is real and currently in
+the wrong place.
 
 ---
 
@@ -259,11 +483,13 @@ generated**:
 
 Which suggests the productive question is not *whether* to have a calculus, but
 **where its definition should live and which direction the generation runs** —
-and, separately, whether `.eos` in its current form is the right way to say what
-a symbol means, or whether that half specifically belongs in Lean while the
-signature stays as the SMT-facing interface.
+arrangement **C** against arrangements **A**, **B** and **D** — and, separately,
+whether `.eos` in its current form is the right way to say what a symbol means,
+or whether that half specifically belongs in Lean while the signature stays as
+the SMT-facing interface, which is arrangement **B**.
 
-That last one seems, to us, the most likely place a real improvement is hiding.
+That last one seems, to us, the most likely place a real improvement is hiding,
+and eudaimonia's roadmap arrives at the same seam from the other side.
 
 ---
 
@@ -279,27 +505,35 @@ language that checks itself *if the analysis actually exists*. Every check in
 
 # Open questions
 
-1. **Direction of generation.** Signature → Lean, or Lean → signature? logos is
-   already a generated deep embedding; the question is which end is the source.
+1. **Direction of generation.** Signature → Lean (**A**, **B**, **D**) or
+   Lean → signature (**C**)? logos is already a generated deep embedding; the
+   question is which end is the source.
 2. **Could the `.smt2` → Lean translation be eliminated or verified?** If it
    could, argument 1's sharpest point — the reference seam — loses much of its
    force, and the native arrangement gets a lot more attractive.
 3. **Should `.eos` be Lean?** Keep the signature as the SMT-facing artifact,
    write the semantics as Lean definitions, generate what the SMT backend needs
-   from those. Would that keep argument 1 and dissolve objection B?
+   from those. Would that keep argument 1 and dissolve objection O2? It is arrangement **B**.
 4. **Where is the line between a rule and a side condition?** Every computation
    moved into a program is work not proved, and work whose meaning must be
    modelled somewhere.
 5. **How much does the fast checker actually buy?** Nobody here has measured
    ethos against the generated Lean checker on the same proofs. Until somebody
-   does, reason 4 is folklore.
-6. **What is a well-formed signature?** Unanswered in the language itself, and
+   does, reason 4 is folklore and arrangement **D** cannot be argued either way.
+6. **Was the kernel-and-elaborator arrangement (E) rejected, or just left
+   behind?** The ecosystem came from LFSC; the reasons for moving away from a
+   tiny kernel with expandable rules are worth writing down while people still
+   remember them.
+7. **Where is the line between the invariant core and what a signature
+   contributes?** eudaimonia's blocker and arrangement **B**'s design question
+   are the same question, and whoever answers it answers both.
+8. **What is a well-formed signature?** Unanswered in the language itself, and
    the answer decides whether the weak checking is a bug or a deliberate trade.
-7. **Would a second producer change the calculus?** CPC is shaped by cvc5. A
+9. **Would a second producer change the calculus?** CPC is shaped by cvc5. A
    second one would show how much of it is *the* calculus and how much is one
    solver's habits.
-8. **Is the ceiling real?** What reasoning has cvc5 wanted to emit and been
-   unable to express as rules?
+10. **Is the ceiling real?** What reasoning has cvc5 wanted to emit and been
+    unable to express as rules?
 
 # What would change our minds
 
@@ -313,7 +547,7 @@ language that checks itself *if the analysis actually exists*. Every check in
   well as the soundness development, without losing readability for the people
   who maintain the signature. Reason 6 inverts.
 - **Evidence that signature authors trip over the fragment's subtleties more
-  often than Lean users trip over Lean's.** Objections A and G would outweigh
+  often than Lean users trip over Lean's.** Objections O1 and O7 would outweigh
   the case.
 - **A calculus growing without bound** to keep up with the solver. The ceiling
   becomes the deciding cost.
