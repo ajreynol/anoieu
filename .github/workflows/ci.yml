@@ -71,10 +71,22 @@ jobs:
           repository: cvc5/ethos
           ref: ethosEoc3
           path: corpus/ethos
+      - name: which ethos this is
+        id: ethos
+        run: echo "sha=$(git -C corpus/ethos rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      # the build is the slow part of this job and depends on nothing but the
+      # commit, so it is kept between runs
+      - name: cached build
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: corpus/ethos/build
+          key: ethos-${{ runner.os }}-${{ steps.ethos.outputs.sha }}
       - name: build ethos
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          cmake -S corpus/ethos -B corpus/ethos/build -DCMAKE_BUILD_TYPE=Production
-          cmake --build corpus/ethos/build -j4
+          cmake -S corpus/ethos -B corpus/ethos/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build corpus/ethos/build -j"$(nproc)"
       - name: the desugarer agrees with the parser
         run: |
           ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle
