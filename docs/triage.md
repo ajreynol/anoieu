@@ -2,8 +2,7 @@
 
 Static conventions, so the prompts in [`workflows.md`](workflows.md) can stay
 short. Two things are fixed here: what an agent following up a response may do
-to the findings report, and the shape everything written by hand takes — in both
-directions, going out and coming back.
+to the findings report, and the shape a reply takes coming back.
 
 Neither is enforced by any tool, and both are expected to be followed exactly —
 the whole purpose is that a maintainer can read a hundred of these without
@@ -63,30 +62,13 @@ there by hand and stays.
   reaches a person who did not ask for it is sent by a person.
 - **A finding that is no longer reported is not thereby closed.** It may only
   have moved, or a check may have been narrowed. Closing is a judgement about
-  what happened, and it needs evidence — which is what the write-up is for.
+  what happened, and it needs evidence: the branch, and what the ledger records
+  of it.
 
-## The shape
+## The shape of a reply
 
-Both directions use the same frame, and the frame is two labels:
-
-```text
-TRIAGE: ...
-
-HUMAN RESPONSE:
-```
-
-**`TRIAGE:`** is what an assistant concluded. **`HUMAN RESPONSE:`** is what a
-person decided. Keeping them apart is the entire point: a triage is a reading
-made quickly, on somebody else's word, and a decision is not. When the two are
-run together, a record ends up saying that something was settled when what
-actually happened is that something was suggested.
-
-`HUMAN RESPONSE:` comes last, always, so that reading a block top to bottom
-arrives at the question rather than at an answer.
-
-### A reply to a finding
-
-What a project sends back uses the frame as it stands, one block per finding:
+What a project sends back has two labels, and the distinction between them is
+the only formality anywhere in this workflow:
 
 ```text
 ## <id> — <check> — <path>:<line>
@@ -97,60 +79,62 @@ pending review. What was changed, or why nothing was.
 HUMAN RESPONSE:
 ```
 
-### A follow-up write-up
+**`TRIAGE:`** is what an assistant concluded — a reading made quickly, on
+somebody else's word, sometimes without knowing what the file was for.
+**`HUMAN RESPONSE:`** is what a person decided. Keeping them apart is the entire
+point: when the two run together, a record ends up saying that something was
+settled when what actually happened is that something was suggested.
 
-What an agent here writes after reading a reply uses the same frame with two
-more labels inside it, because it is reporting on work of its own:
-
-```text
-## <id> — <check> — <path>:<line>
-
-TRIAGE: what came back, and from whom. Distinguish the assistant's draft from
-the maintainer's own words wherever they differ, because they are worth
-different amounts.
-
-FOUND: what you established yourself. The re-check at the recorded version,
-what the branch did in the end — merged, reworked, reverted, still open — and
-anything you could not settle, named as unsettled rather than rounded off.
-
-REPORT: what you changed in the report for this row, in one line. If you
-changed nothing, say that.
-
-HUMAN RESPONSE:
-```
-
-`TRIAGE`, `FOUND` and `REPORT` are claims of three different kinds: what
-somebody else said, what you checked, what you did. Keep them apart. Most of
-what goes wrong in a follow-up is one of the three quietly wearing another's
-clothes.
-
-One file per reply. It exists so a maintainer can rule on what an agent
-concluded without re-reading the trail themselves, and so that ruling has an
-obvious place to go. Nothing reads these files, so name one for the reply it is
-about and put it where the review will find it. The only thing that has to be
-consistent is what is inside.
+`HUMAN RESPONSE:` comes last so that reading a block top to bottom arrives at
+the question rather than at an answer, and a reply that carries only a triage is
+a proposal rather than a result.
 
 ### When the human defers the field
 
-The default is that an agent leaves `HUMAN RESPONSE:` empty. But the person in
-the session may hand it over — *you write it* — and an agent should take that
-rather than refuse it. What it must not do is let its own wording become
+The default is that an assistant leaves `HUMAN RESPONSE:` empty. But the person
+in the session may hand it over — *you write it* — and an assistant should take
+that rather than refuse it. What it must not do is let its own wording become
 somebody's decision without them seeing it. So, having written it:
 
 - **Quote the field back exactly.** The text itself, character for character,
   not a description of it and not a paraphrase. "I recorded that the fix was
-  accepted" is not a confirmation; the four lines you actually wrote are.
+  accepted" is not a confirmation; the lines you actually wrote are.
 - **Say whose words they now are.** You are writing in their place and it will
   be read under their name.
 - **Iterate until it is theirs.** Offer to change it, change it as often as
-  asked, and quote it back each time. The field is finished when the person
-  says it says what they mean, not when it reads well.
+  asked, and quote it back each time. The field is finished when the person says
+  it says what they mean, not when it reads well.
 
-An agent that writes the field and summarizes it has done the one thing the
-frame exists to prevent.
+An assistant that writes the field and summarises it back has done the one thing
+the shape exists to prevent.
 
-## What happens to it
+## The follow-up
 
-The maintainer fills in each `HUMAN RESPONSE:`, and what they write is what goes
-into the ledger — where a finding's history is readable end to end. The write-up
-is the draft of that entry, not a second record to keep in step with it.
+An agent reading a reply *here* leaves three things and no more: the change to
+the findings report, an entry in the ledger, and a reply in the session saying
+what it did.
+
+There is deliberately no write-up file and no field for a maintainer to sign.
+The staged diff is already the review — every row moved, every note written,
+every check narrowed is in it, beside the reasoning in the ledger — and a
+document restating that would be a second record to keep in step with the first.
+What the agent owes the session is the decisive action it took and why, not a
+summary of the reply it read.
+
+It should come back to the person it is working with in two cases only:
+
+- **it disagrees with how the reply classified the resolution** — the reply says
+  *fixed* and the branch does not bear that out, or says *not a defect* for a
+  reason that does not hold;
+- **it cannot tell whether the finding is resolved** — the branch is unmerged,
+  the change does not touch what the row is about, or the trail runs out.
+
+Both leave the row open, because both are the same fact: nobody knows yet. What
+those cases need from a person is a decision, not a review, and asking for one
+is cheaper than recording a guess.
+
+## What happens to a decision
+
+`HUMAN RESPONSE:` is what goes into the ledger — where a finding's history is
+readable end to end. The reply is the draft of that entry, not a second record
+to keep in step with it.

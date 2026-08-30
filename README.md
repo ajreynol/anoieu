@@ -277,6 +277,6 @@ Guidance rather than machinery, at
 [**`docs/workflows.md`**](docs/workflows.md): who runs each part, what a reply
 from a project does and does not settle, and two prompts — one for the project
 that owns a finding, one for the follow-up here. The conventions they rest on,
-including the shape every write-up takes, are in
-[`docs/triage.md`](docs/triage.md), and are written so another analyzer can
-adopt them.
+including the shape a reply takes and what an agent may change on the strength
+of one, are in [`docs/triage.md`](docs/triage.md), and are written so another
+analyzer can adopt them.

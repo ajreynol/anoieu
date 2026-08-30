@@ -127,55 +127,61 @@ the only thing that changes between uses is a link.
 The link can be to the branch, the pull request, or wherever the triage was
 written down. It is a pointer to where the answer will be, not the answer.
 
-Assume it is part assistant and part human. Prompt one deliberately ends by
-handing its draft to a maintainer, who reviews it, edits it, and sends it — so
-what arrives carries somebody's judgement on top of an assistant's reading, and
-those are worth different amounts.
-
-The agent's job here ends the same way, one step further along: it cleans up
-**only the rows this trail is about**, and writes what it did into a file for
-our own maintainer to rule on. What it may change and what that file looks like
-are set out once, in [`triage.md`](triage.md), rather than restated in the
-prompt — including the shape every write-up takes, down to the four labels and
-the empty `HUMAN RESPONSE:` at the end of each block. No tooling enforces any of
-it, and none should: a convention read a hundred times is worth more than a
-schema nothing validates.
+What arrives is part assistant and part human — prompt one ends by handing its
+draft to a maintainer, who reviews it, edits it and sends it — and telling those
+apart is the one thing the prompt below spends words on. The rest of the job is
+small on purpose: read the reply, work out what actually
+happened, clean up **only the rows it is about**, and say what was done. There
+is no write-up file and no second sign-off — the staged diff is the review, and
+an agent that has moved three rows and narrowed a check has already shown its
+work. What it may change, and the two cases where it should stop and ask, are in
+[`triage.md`](triage.md) rather than in the prompt.
 
 ```text
-A project we reported a finding to has been through it, and left a trail:
+A project we reported a finding to has responded:
 
   LINK
 
-Expect it to be part assistant and part human: an assistant drafted the triage,
-and a maintainer reviewed it, edited it and sent it. Where the two differ, the
-human's words are the ones that count.
+Read it as two things. What follows TRIAGE: is an assistant's reading, made
+quickly and on our word. What follows HUMAN RESPONSE: is a maintainer's
+decision. Where the two differ the decision is what counts, and a reply
+carrying only a triage is a proposal rather than a result.
 
-It is a triage, and not the status of the finding. Working in the anoieu
-repository, establish what actually happened, and record it.
+Working in the anoieu repository:
 
-1. Find the row or rows it refers to in docs/open-findings.md -- by id where it
-   names one, by file and line otherwise.
-2. Check the claim yourself, at the commit the report was measured against:
-   `python3 tools/run.py --pinned` restores it. Do this when the trail agrees
-   with us as much as when it does not.
-3. Follow the branch to its end -- merged, reworked, reverted, or still open.
-   That outcome is what counts, not what the triage claimed it would be.
-4. Then read docs/triage.md and follow it exactly. It governs what you may
-   change in the findings table, what you must leave alone, and the shape of
-   the write-up you leave behind -- including what to do if the person you are
-   working with asks you to fill in the HUMAN RESPONSE: field yourself.
-5. If the trail shows our analysis was wrong, the check is what needs changing
-   rather than the row, and this is the case that matters most. Narrow it until
-   it stops reporting this, add a witness under tests/witnesses/ that would
-   have caught the mistake, and record in docs/findings.md what the check had
-   wrongly assumed -- in the terms the project used, not in kinder ones.
+1. Find the row or rows in docs/open-findings.md that the reply is about.
+2. Establish what actually happened: re-check at the version the report was
+   measured against with `python3 tools/run.py --pinned`, and follow the branch
+   to its end -- merged, reworked, reverted, or still open. That outcome counts,
+   not what the triage predicted.
+3. Clean up the table as docs/triage.md says, for those rows and no others.
+4. If our analysis was wrong, the check is what needs changing rather than the
+   row: narrow it, add a witness under tests/witnesses/ that would have caught
+   the mistake, and record in docs/findings.md what it had wrongly assumed.
+5. Write what happened in docs/upstream.md.
 
-Do not state anywhere that a file is clean. Leave everything staged for review
-rather than committing it.
+Leave everything staged, and say what you decided and why -- the action you
+took, not a summary of what you read. Come back to me only if you disagree with
+how the reply classified the resolution, or you cannot tell whether the finding
+is resolved; leave the row open and say what you would need to know.
 ```
 
+### Keeping the two in step
+
+The first prompt's output is the second prompt's input, so they are one contract
+seen from two sides. If the reply's shape changes in one it has to change in the
+other, and in [`triage.md`](triage.md), which is where the shape is actually
+defined — all three or none.
+
+The failure is quiet, which is why it is worth saying: an agent asked to read a
+format nobody produces any more will not stop, it will improvise. It will find
+something in the trail that looks close enough, act on it, and report having
+done so. Nothing errors, and the first sign of trouble is a row closed on a
+misreading. Changing one prompt and not the other is the cheapest way to break
+this workflow.
+
 Neither prompt gives anybody a way to say that a file is clean — not the project
-replying to us, and not the agent writing up what happened. The top-level README
+replying to us, and not the agent recording what came of it. The top-level README
 explains why we do not accept that as a result, including from somebody offering
 it in good faith.
 
@@ -184,8 +190,9 @@ it in good faith.
 A table in a file is a poor place to hold a conversation. It has no threads, no
 notifications, and no way for somebody who has not cloned the repository to
 reply — so today a finding is discussed wherever the person carrying it happens
-to be, and the write-up is the only durable trace. The intended fix is to give
-each finding a GitHub issue.
+to be, and the ledger entry is written afterwards from whatever survived. The
+intended fix is to give a finding a GitHub issue, and let the reply be a comment
+on it.
 
 Three constraints on that, worth writing down before anything is built:
 
@@ -198,16 +205,18 @@ The asymmetry is the point, and it is the same reason nothing here files
 anything anywhere today.
 
 **A person posts, always.** The step from a file to a notification in somebody's
-inbox is outward-facing and effectively irreversible, and it is not a step an
-agent should take on its own judgement — nor one it should hold the credential
-for. What we would build is a script a maintainer runs against a write-up whose
-`HUMAN RESPONSE:` is already filled in, which posts that as an issue here and
-records the number against the row. One command, after the review, by the person
-whose name is on it.
+inbox is outward-facing and effectively irreversible, and it is not one an agent
+should take on its own judgement — nor one it should hold the credential for.
+What we would build is a script a maintainer runs over rows they have picked,
+which opens an issue here for each and records its number against the row. One
+command, deliberately, by the person whose name is on it. Reading the resulting
+thread stays an agent's job; writing to it does not.
 
 **Not yet.** Machinery that speaks on someone's behalf has to be right the first
 time, and we are not at the point where the report changes often enough to need
-it. The conventions above are deliberately designed to survive the change: a
-write-up is already the body of an issue, `HUMAN RESPONSE:` is already the part
-a person signs, and the id is already the key an issue would be recorded
-against. Until then, the file is the record.
+it. The conventions above are built to survive the change rather than to be
+replaced by it: a row is already the body of an issue, its id is already the key
+an issue would be recorded against, and a reply is already shaped like the
+comment that would answer one — `TRIAGE:` from an assistant, `HUMAN RESPONSE:`
+from a person, in a thread instead of an email. Until then, the file is the
+record.
