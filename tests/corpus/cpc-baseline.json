@@ -203,6 +203,14 @@
       "message": "rule `quant_var_reordering` has no premises, and its docstring documents one"
     },
     {
+      "id": "c77ed67e499366ea",
+      "code": "EO0083",
+      "severity": "warning",
+      "file": "cpc/rules/Rewrites.eo",
+      "line": 94,
+      "message": "rule `arith-eq-elim-int` matches exactly what `arith-eq-elim-real` matches"
+    },
+    {
       "id": "43ace50804b15d16",
       "code": "EO0054",
       "severity": "hint",

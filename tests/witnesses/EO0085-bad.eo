@@ -1,0 +1,8 @@
+; expect: EO0085
+(declare-const Int Type)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(declare-rule always ((t Int))
+  :args (t)
+  :requires ((t t))
+  :conclusion (= t t)
+)

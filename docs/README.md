@@ -81,7 +81,7 @@ either direction, and lands in the log: **[`upstream.md`](upstream.md)**.
 
 | # | tool | kind | what | state |
 | --- | --- | --- | --- | --- |
-| [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5 |
+| [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5; may belong to [dokimasia](https://github.com/ajreynol/dokimasia) instead, see [`design.md`](design.md#8-a-neighbouring-tool) |
 | [cvc5-7](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | keep a reproducer with every claim about first use, and derive severity from whether a call can stay stuck | requested by cvc5 |
 | [ethos-1](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/match-simple.eo:11` declares `<` `:right-assoc` with a `Bool` return | open |
 | [ethos-2](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | an unknown attribute warns and is dropped, silently changing what a term means; make it an error, or at least carry the location | proposed |
@@ -122,9 +122,9 @@ program case is checked when a proof gets there, and a proof rule that can only
 ever fail is a legal declaration until someone writes the step that finds out.
 
 anoieu is the eager reader of the same files. It asks about every declaration,
-with no proof in hand, no build, and no solver, in under a second. Of the 37
+with no proof in hand, no build, and no solver, in under a second. Of the 49
 witness files in its suite — each holding one deliberate mistake — **ethos
-accepts 32 and answers `correct`**. That number is the whole argument.
+accepts 43 and answers `correct`**. That number is the whole argument.
 
 The second thing it is for is slower and possibly worth more: every check is a
 statement about what Eunoia means, so the check catalogue, its witnesses, and

@@ -207,3 +207,140 @@ def hash_reachable(ctx: Context) -> Iterator[Diagnostic]:
                 "backend refuses to print the program that calls it",
             ],
         )
+
+
+def _shape(node: Node, params: set[str], seen: dict[str, str]) -> str:
+    """A term with its parameters renamed by first appearance.
+
+    Two rules that differ only in what they call their parameters are the same
+    rule, so comparing them means comparing something that does not carry the
+    names.
+    """
+    if node.is_atom:
+        text = node.text or ""
+        if text in params:
+            return seen.setdefault(text, f"#{len(seen)}")
+        return text
+    return "(" + " ".join(_shape(c, params, seen) for c in node.children) + ")"
+
+
+@check(
+    "EO0083",
+    "two rules that are the same rule",
+    page="""
+A calculus of several hundred rules can gain one twice: the same premises, the
+same arguments and the same conclusion, differing only in the names its
+parameter list gives them. Both are then declared, both are compiled, both get a
+verification condition and a Lean lemma, and a proof may cite either.
+
+Compared after renaming each rule's parameters by first appearance, so that a
+rule is not reported as a duplicate of itself under other names -- and only where
+*everything* agrees: premises, arguments, requirements, assumption, premise-list
+operator and whether the conclusion is explicit. The requirements matter most:
+CPC has nineteen rules whose premises and conclusion are `(= a b)` and which
+differ only in what they require of it.
+""",
+)
+def duplicate_rules(ctx: Context) -> Iterator[Diagnostic]:
+    by_shape: dict[str, str] = {}
+    for rule in ctx.signature.rules:
+        if rule.conclusion is None:
+            continue
+        params = {p.name for p in rule.params}
+        seen: dict[str, str] = {}
+        # everything that makes a rule the rule it is: what it takes, what it
+        # demands of what it took, and what it gives back. Leaving the
+        # requirements out of this made every rule of the shape
+        # `:args ((= a b)) :requires (...) :conclusion (= a b)` look like every
+        # other one -- which on CPC is nineteen rules that differ only there.
+        nodes = list(rule.premises) + list(rule.args) + [rule.conclusion]
+        nodes += [n for pair in rule.requires for n in pair]
+        if rule.assumption is not None:
+            nodes.append(rule.assumption)
+        if rule.premise_list is not None:
+            nodes.append(rule.premise_list[1])
+        parts = [_shape(n, params, seen) for n in nodes]
+        key = "|".join(parts) + (
+            f"|{len(rule.premises)}|{len(rule.args)}|{len(rule.requires)}"
+            f"|{rule.assumption is not None}|{rule.premise_list is not None}"
+            f"|{rule.conclusion_explicit}"
+        )
+        first = by_shape.setdefault(key, rule)
+        if first is rule:
+            continue
+        types = [str(p.type) for p in rule.params]
+        first_types = [str(p.type) for p in first.params]
+        notes = [
+            f"`{first.name}` is declared at {first.span.path.rsplit('/', 1)[-1]}:"
+            f"{first.span.line}",
+            "both are compiled, both get a verification condition, and a proof may "
+            "cite either",
+        ]
+        if types != first_types:
+            notes.insert(
+                1,
+                f"their parameters are declared at different types -- {first_types} "
+                f"against {types} -- but matching does not check a parameter's type, "
+                "so the same applications match both",
+            )
+        yield Diagnostic(
+            code="EO0083",
+            severity=Severity.WARNING,
+            message=f"rule `{rule.name}` matches exactly what `{first.name}` matches",
+            span=rule.span,
+            label="same premises, arguments, requirements and conclusion",
+            notes=notes,
+        )
+
+
+@check(
+    "EO0084",
+    "a rule whose conclusion is one of its premises",
+    page="""
+A rule that concludes exactly what it was given proves nothing: applying it
+leaves the proof where it was. Sometimes that is deliberate -- a rule that exists
+to re-label a step, or a placeholder -- and sometimes it is a conclusion that was
+edited into the wrong shape.
+""",
+)
+def identity_rule(ctx: Context) -> Iterator[Diagnostic]:
+    for rule in ctx.signature.rules:
+        if rule.conclusion is None or rule.premise_list is not None:
+            continue
+        for premise in rule.premises:
+            if str(premise) != str(rule.conclusion):
+                continue
+            yield Diagnostic(
+                code="EO0084",
+                severity=Severity.WARNING,
+                message=f"rule `{rule.name}` concludes one of its own premises",
+                span=rule.conclusion.span,
+                label="this is premise text, unchanged",
+                notes=["an application of it leaves the proof where it was"],
+            )
+            break
+
+
+@check(
+    "EO0085",
+    "a requirement that always holds",
+    page="""
+`:requires ((a b))` is satisfied when the two sides evaluate to the same term. A
+pair whose two sides are written identically is satisfied by every substitution,
+so it constrains nothing -- the opposite of `EO0067`, and usually a requirement
+that was half-edited.
+""",
+)
+def trivial_requirement(ctx: Context) -> Iterator[Diagnostic]:
+    for rule in ctx.signature.rules:
+        for a, b in rule.requires:
+            if str(a) != str(b):
+                continue
+            yield Diagnostic(
+                code="EO0085",
+                severity=Severity.WARNING,
+                message=f"rule `{rule.name}` requires {a} to equal itself",
+                span=a.span,
+                label="satisfied by everything",
+                notes=["the requirement constrains no application of the rule"],
+            )

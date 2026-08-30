@@ -31,8 +31,8 @@ rather than falling over.
 Every check owns a witness under `tests/witnesses`, and `tests/run.py --oracle`
 runs ethos on each one:
 
-**Of the 37 witnesses that hold the mistake, ethos accepts 32 and answers
-`correct`.** It refuses five: a `declare-rule` field out of order, an opaque
+**Of the 49 witnesses that hold the mistake, ethos accepts 43 and answers
+`correct`.** It refuses six: a `declare-rule` field out of order, an opaque
 argument after an ordinary one, a program case of the wrong arity, a pattern
 with two `:list` parameters, and a builtin applied to the wrong number of
 arguments. For those five anoieu's contribution is the message and the location
@@ -40,7 +40,7 @@ rather than the detection -- ethos reports the pattern one, for instance, as
 `Cannot match on evaluatable subterm`, which names neither the annotation nor
 the parameter.
 
-The thirty-two are the case for the tool.
+The forty-three are the case for the tool.
 [`what-ethos-misses.md`](what-ethos-misses.md) says why each of them gets past
 ethos.
 
@@ -209,6 +209,29 @@ narrowed until it stopped over-reporting, and nothing here licenses a conclusion
 that the signature, the semantics and the target agree. See *What we do not
 publish* in the top-level README.
 
+### Two rules that match the same applications
+
+`rules/Rewrites.eo:90` and `:94`:
+
+```lisp
+(declare-rule arith-eq-elim-real ((t1 Real) (s1 Real))
+  :args (t1 s1) :conclusion (= (= t1 s1) (and (>= t1 s1) (<= t1 s1))))
+(declare-rule arith-eq-elim-int ((t1 Int) (s1 Int))
+  :args (t1 s1) :conclusion (= (= t1 s1) (and (>= t1 s1) (<= t1 s1))))
+```
+
+Identical premises, arguments, requirements and conclusion; the parameters are
+declared at different types. That distinction has no effect on which
+applications match, because matching does not check a parameter's type -- so the
+two rules accept exactly the same steps, are both compiled, both get a
+verification condition and a Lean lemma, and a proof may cite either for either
+sort. Reported by `EO0083`.
+
+Whether that is a defect is for whoever maintains the generated rewrite rules;
+what is certain is that the type annotation is not doing the work it looks like
+it is doing, which is [eunoia-5](README.md#eunoia-itself--the-language-and-its-manual)
+again.
+
 ### An inventory, not a defect: the rules a calculus admits
 
 `EO0077` reports every rule marked `:sorry`. Both hits in the corpus are
@@ -301,6 +324,7 @@ recorded because it is a statement about the language:
 | a literal needs a declared category wherever it stands | `(eo::add 1 1)` evaluates in a signature that declares no numerals: ethos distinguishes a numeral *value* independently of its type | report only literals standing where a type is asked for, which meant modelling which positions those are |
 | a term that cannot evaluate is a finding wherever it stands | `(eo::is_ok X)` *asks* whether X evaluates, and ethos's own operator tests are full of `(eo::is_ok (eo::pow 2 -1))` | say nothing beneath an `eo::is_ok` |
 | an `eo::` name is a computational operator | `eo::List::cons` and `eo::List::nil` are constructors of the builtin list, and patterns match them constantly | test membership of the operator table, never the `eo::` prefix — a mistake made twice, in two checks, before the table was reused |
+| two rules with the same premises and conclusion are the same rule | nineteen CPC rules share that shape and differ only in what they *require* of it | the identity of a rule includes its requirements, its assumption, its premise-list operator and whether its conclusion is explicit |
 | a parameter shadowing a declared symbol is a hazard | it is idiomatic: a program parameterised by an operator names its parameter `cons`, `nil` or `f`, and ethos's own tests do it 150 times | the check was written, measured, and deleted |
 | a name in the `$eo_` namespace collides with the compiler | `ethos/tests/eo-definitions.eo` defines the whole of `eo::` that way, deliberately | `$eo_` is reported only under `--pedantic`; the generated prefixes always |
 | `declare-fun` is not a Eunoia command | true of a signature, false of a file named by `reference` | the loader tracks the role a file was read under |

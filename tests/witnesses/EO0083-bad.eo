@@ -1,0 +1,6 @@
+; expect: EO0083
+(declare-const Int Type)
+(declare-const Real Type)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(declare-rule elim-real ((t Real) (s Real)) :args (t s) :conclusion (= t s))
+(declare-rule elim-int  ((t Int)  (s Int))  :args (t s) :conclusion (= t s))

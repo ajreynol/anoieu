@@ -1,0 +1,6 @@
+; expect: EO0087
+(declare-const Int Type)
+(declare-const + (-> Int Int Int))
+(program $p ((x Int) (y Int)) :signature (Int) Int
+  ( (($p x) (eo::define ((y (+ x x))) y)) )
+)

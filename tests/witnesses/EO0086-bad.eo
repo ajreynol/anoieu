@@ -1,0 +1,5 @@
+; expect: EO0086
+(declare-const Int Type)
+(declare-const Real Type)
+(declare-consts <numeral> Int)
+(declare-consts <numeral> Real)

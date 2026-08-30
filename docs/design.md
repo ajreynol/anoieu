@@ -490,7 +490,32 @@ with its witness pair in the corpus.
 
 ---
 
-## 8. Open questions
+## 8. A neighbouring tool
+
+[**dokimasia**](https://github.com/ajreynol/dokimasia) analyses cvc5's
+proof-production code — the C++ — and asks a completeness question about it:
+not *is this proof step valid* but *is there a path through the solver that
+reaches an inference no proof step covers*, particularly under
+`--safe-mode=safe`, where cvc5 promises that anything it solves it can prove. It
+reads eight stages of the pipeline, from configuration through elaboration to
+the Eunoia serialiser, and says it models itself on this tool.
+
+**The two barely overlap, and it is worth being clear why.** anoieu reads
+`.eo` and `.eos` files and asks whether a *signature and its semantics* are
+coherent; dokimasia reads C++ and asks whether the *solver* can justify what it
+decides. Different inputs, different question, no shared code, and neither
+depends on the other.
+
+They meet at exactly one seam: `src/proof/eo/`, where cvc5 turns an internal
+proof into Eunoia. A rule that cvc5 emits but CPC does not declare, or declares
+with different arguments, is invisible to both halves in isolation and visible
+from either side of that seam — which is what
+[`cvc5-6`](README.md#cvc5--the-calculus-everything-downstream-is-built-from)
+asks for. That check may well belong there rather than here: dokimasia already
+reads the emitter, and we only read the signature. Worth settling before either
+of us builds it twice.
+
+## 9. Open questions
 
 For the record, and because several of them are places where the languages are
 genuinely unsettled rather than merely undocumented — see

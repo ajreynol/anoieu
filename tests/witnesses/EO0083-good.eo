@@ -1,0 +1,6 @@
+; expect:
+; the same shape, distinguished by what each requires of it
+(declare-const Int Type)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(declare-rule one ((t Int) (s Int)) :args (t s) :requires ((t s)) :conclusion (= t s))
+(declare-rule two ((t Int) (s Int)) :args (t s) :conclusion (= t s))

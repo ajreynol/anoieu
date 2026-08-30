@@ -260,3 +260,83 @@ def uninferable_parameter(ctx: Context) -> Iterator[Diagnostic]:
                 notes=[f"in the declaration of `{d.name}`"],
                 help="drop it, or use it in the type it was meant to abstract",
             )
+
+
+@check(
+    "EO0086",
+    "a literal category given a type twice",
+    page="""
+`declare-consts` associates a syntactic category with a type, and a second one
+for the same category silently replaces the first: every literal of that
+category then has the later type, including the ones written above the second
+declaration. Both are accepted, and nothing says which one is in force.
+""",
+)
+def duplicate_literal_type(ctx: Context) -> Iterator[Diagnostic]:
+    seen: dict[str, object] = {}
+    for lit in ctx.signature.literals:
+        first = seen.setdefault(lit.category, lit)
+        if first is lit:
+            continue
+        yield Diagnostic(
+            code="EO0086",
+            severity=Severity.WARNING,
+            message=f"`{lit.category}` is given a type twice",
+            span=lit.span,
+            label=f"this one wins: {lit.type}",
+            notes=[
+                f"the first stands at {_where(first.span)} and says {first.type}",
+                "every literal of the category takes the later type, wherever it was "
+                "written",
+            ],
+        )
+
+
+@check(
+    "EO0087",
+    "an `eo::define` that shadows a parameter",
+    page="""
+`eo::define` binds a name while the body is read. Binding one that the enclosing
+declaration already uses as a parameter hides it: inside that body the name is
+the local one, and a reader who expects the parameter is reading a different
+term. Nothing is wrong with the definition -- it just does not say what it looks
+like it says.
+""",
+    default_on=False,
+)
+def binding_shadows_parameter(ctx: Context) -> Iterator[Diagnostic]:
+    from ..model import Param
+
+    def scan(nodes: list[Node], params: set[str], where: str) -> Iterator[Diagnostic]:
+        for node in nodes:
+            if node is None:
+                continue
+            for nd in node.walk():
+                if not (nd.is_list and nd.head == "eo::define" and len(nd.children) == 3):
+                    continue
+                for pair in nd.children[1].children if nd.children[1].is_list else []:
+                    if not (pair.is_list and pair.children and pair.children[0].is_atom):
+                        continue
+                    name = pair.children[0].text or ""
+                    if name not in params:
+                        continue
+                    yield Diagnostic(
+                        code="EO0087",
+                        severity=Severity.HINT,
+                        message=f"`{name}` is bound here and is already a parameter of "
+                        f"{where}",
+                        span=pair.children[0].span,
+                        label="the binding wins inside this body",
+                    )
+
+    sig = ctx.signature
+    for prog in sig.programs:
+        params = {p.name for p in prog.params}
+        yield from scan(
+            [n for case in prog.cases for n in case], params, f"program `{prog.name}`"
+        )
+    for rule in sig.rules:
+        params = {p.name for p in rule.params}
+        nodes = [rule.conclusion, rule.assumption, *rule.premises, *rule.args]
+        nodes += [n for pair in rule.requires for n in pair]
+        yield from scan(nodes, params, f"rule `{rule.name}`")

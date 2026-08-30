@@ -59,6 +59,11 @@ written, and `--pedantic` turns them on.
 | [EO0079](#eo0079) | a program is passed to a program, which never invokes it | on |
 | [EO0080](#eo0080) | an implicit parameter nothing can bind | on |
 | [EO0082](#eo0082) | an `eo::define` binding the body never uses | off |
+| [EO0083](#eo0083) | two rules that are the same rule | on |
+| [EO0084](#eo0084) | a rule whose conclusion is one of its premises | on |
+| [EO0085](#eo0085) | a requirement that always holds | on |
+| [EO0086](#eo0086) | a literal category given a type twice | on |
+| [EO0087](#eo0087) | an `eo::define` that shadows a parameter | off |
 | [TRI0001](#tri0001) | a declared symbol the calculus semantics says nothing about | on |
 | [TRI0002](#tri0002) | a semantics entry for a symbol nothing declares | on |
 | [TRI0003](#tri0003) | the `:is-list-nil` obligations do not match the signature | on |
@@ -620,6 +625,61 @@ usually the trace of a type that was edited around it.
 `eo::define` names a term so the body can say it twice. A binding the body never
 mentions names nothing: the value is still computed where it stands only because
 the binding is inlined, and the name is a leftover from an edit.
+
+## EO0083
+
+**two rules that are the same rule**
+
+A calculus of several hundred rules can gain one twice: the same premises, the
+same arguments and the same conclusion, differing only in the names its
+parameter list gives them. Both are then declared, both are compiled, both get a
+verification condition and a Lean lemma, and a proof may cite either.
+
+Compared after renaming each rule's parameters by first appearance, so that a
+rule is not reported as a duplicate of itself under other names -- and only where
+*everything* agrees: premises, arguments, requirements, assumption, premise-list
+operator and whether the conclusion is explicit. The requirements matter most:
+CPC has nineteen rules whose premises and conclusion are `(= a b)` and which
+differ only in what they require of it.
+
+## EO0084
+
+**a rule whose conclusion is one of its premises**
+
+A rule that concludes exactly what it was given proves nothing: applying it
+leaves the proof where it was. Sometimes that is deliberate -- a rule that exists
+to re-label a step, or a placeholder -- and sometimes it is a conclusion that was
+edited into the wrong shape.
+
+## EO0085
+
+**a requirement that always holds**
+
+`:requires ((a b))` is satisfied when the two sides evaluate to the same term. A
+pair whose two sides are written identically is satisfied by every substitution,
+so it constrains nothing -- the opposite of `EO0067`, and usually a requirement
+that was half-edited.
+
+## EO0086
+
+**a literal category given a type twice**
+
+`declare-consts` associates a syntactic category with a type, and a second one
+for the same category silently replaces the first: every literal of that
+category then has the later type, including the ones written above the second
+declaration. Both are accepted, and nothing says which one is in force.
+
+## EO0087
+
+**an `eo::define` that shadows a parameter**
+
+*Off by default; run with `--pedantic` or `--only EO0087`.*
+
+`eo::define` binds a name while the body is read. Binding one that the enclosing
+declaration already uses as a parameter hides it: inside that body the name is
+the local one, and a reader who expects the parameter is reading a different
+term. Nothing is wrong with the definition -- it just does not say what it looks
+like it says.
 
 ## TRI0001
 

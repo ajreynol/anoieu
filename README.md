@@ -207,7 +207,7 @@ python3 tools/gen_checks_doc.py         # rewrite docs/checks.md from the regist
 Every check owns a witness: a file that must be reported, and where the
 distinction is interesting, one that must not be. `--oracle` runs ethos on the
 same files, which is what says whether a finding is something ethos already
-catches. Today it does not catch 32 of the 37.
+catches. Today it does not catch 43 of the 49.
 
 ## How this repository is maintained
 
