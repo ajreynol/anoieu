@@ -178,4 +178,13 @@ python3 tools/gen_checks_doc.py         # rewrite docs/checks.md from the regist
 Every check owns a witness: a file that must be reported, and where the
 distinction is interesting, one that must not be. `--oracle` runs ethos on the
 same files, which is what says whether a finding is something ethos already
-catches. Today it does not catch 14 of the 18.
+catches. Today it does not catch 32 of the 37.
+
+## How this repository is maintained
+
+**Written by an AI agent, under light human supervision.** The code, the checks, the
+witnesses and the documents here were drafted by an agent working in this
+repository; a human maintainer directs the work, reviews it, and decides what is
+committed and what is filed elsewhere. Nothing reaches another project's issue
+tracker without that review.
+

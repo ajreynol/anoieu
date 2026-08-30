@@ -137,7 +137,8 @@ to be clever on human-written input, does not specialise in.
 
 We have no measurements of our own here, and would want some before leaning on
 this hard. It is the historical reason the arrangement exists, and the claim
-most worth testing.
+most worth testing — and Pathos, below, is an attempt to make it moot by
+building a checker that is fast *and* verified.
 
 ## 5. Computation is expressible without being proved
 
@@ -365,6 +366,8 @@ signature but do not edit it.
 **D, one checker.** Retire ethos from production and ship what logos proves. The
 cleanest story about trust, blocked on a measurement nobody has taken, and it
 gives up the two-implementation cross-check that eudaimonia currently relies on.
+Pathos is the project that would unblock it — not by taking the measurement but
+by removing the trade-off it measures.
 
 **E, kernel and elaborator.** The LFSC-shaped alternative: a minimal core with a
 handful of rules, and CPC's rules as macro expansions checked against it, with
@@ -387,6 +390,139 @@ interface and the proof format, and the entire verification stack — semantics,
 soundness, checker — is Lean. Ethos survives as the fast unverified checker used
 in the edit loop and as the independent cross-check, which is what it is best at
 and what nothing else provides.
+
+---
+
+# Two projects that do not exist yet, and change the picture
+
+Neither has a repository or a line of code: both are future work, named here
+because the costs and open questions above are stated relative to what exists
+today, and each of these would move a different one. Writing down what they
+*would* change is also the cheapest way to notice which of today's arguments are
+about the arrangement and which are merely about its current state.
+
+## Pathos — an efficient verified proof checker
+
+The ecosystem currently offers a choice between two half-answers: ethos is fast
+and unverified, and the generated Lean checker is verified and unmeasured. A
+checker that is both would not be a compromise between them; it would remove the
+question.
+
+**What it settles.** Reason 4 — machine-generated proofs are enormous, and the
+fragment is what makes checking them cheap — is the load-bearing argument for
+keeping a separate C++ checker in production, and open question 5 admits that
+nobody has measured it. Pathos is an attempt to *dissolve* that trade-off rather
+than to measure it. If it lands:
+
+- arrangement **D** becomes viable, since its only stated blocker is the
+  measurement;
+- T3's cost list shrinks to the reference check and the cross-check, both of
+  which are addressable on their own;
+- the trusted base becomes the Lean kernel, the parser and the statement, rather
+  than a C++ program about which nothing is proved.
+
+**What it does not settle.** A verified checker still checks *a calculus*, so the
+signature and its semantics remain its inputs, and argument 1, the reference
+seam and the `.eos` question are all untouched. Pathos is orthogonal to
+arrangements **B** and **C** — which is worth saying, because "we are building a
+verified checker" is easily heard as "the rest is settled", and it is not.
+
+**Where the difficulty sits.** Efficiency in a verified setting comes from the
+data structures whose invariants are the hard part of the proof: hash consing,
+term sharing, mutable state, and the tricks that make matching cheap. That is
+the reason "efficient" and "verified" have historically been alternatives, and
+it is where the work would go.
+
+**And a consequence for this argument.** A verified checker is an expensive
+artifact, and expensive artifacts want a stable interface to be built against.
+That is a point *for* the calculus as a fixed input — reason 3, restated with
+something concrete at stake.
+
+## Native correspondence — from the embedded semantics to Lean's own logic
+
+Logos proves things about a deep embedding. Its guarantee today reads
+
+```lean
+theorem correct___logos_state_is_refutation (assums : List Term) (cmds : CCmdList)
+    (h : logos_state_is_refutation (logos_run assums cmds) = true) :
+    eo_satisfiability (logos_assumption_term assums) false
+```
+
+— the conjunction of a list of *embedded* `Term`s is unsatisfiable under the
+*embedded* SMT-LIB semantics. That is true, checkable, and about the encoding. A
+Lean user who wants to conclude something about Lean's own `Int`, `BitVec` or
+`String` has to bridge the gap themselves, and there is no bridge.
+
+The second project is that bridge: a correspondence between the SMT-LIB
+semantics Logos carries and Lean's native logic, symbol by symbol and sort by
+sort, so that what a proof establishes can be *restated* as an ordinary Lean
+proposition.
+
+**What it changes, and it is more than it looks.**
+
+*The ecosystem acquires a second audience.* Today every consumer of a CPC proof
+is a checker. With a correspondence, a consumer can be a **proof**: a Lean
+development calls a solver, gets a refutation, and ends up with a theorem in its
+own terms. That is the strongest available answer to objection O5 — the
+interchange argument is worth what its consumers make it worth — because it adds
+a kind of consumer the arrangement does not have at all.
+
+*It answers open question 2 from the other end.* The sharpest argument for the
+calculus is the reference seam: a Lean pipeline needs a trusted, unverified
+translator from `.smt2` into its embedding, and that is where a statement can
+drift from the problem. A correspondence does not verify that translator; it
+makes it unnecessary in one direction. The problem stays in SMT-LIB, where ethos
+can check the proof against the actual file, and the *verdict* is what travels
+into Lean.
+
+*It changes what the generated Lean development is for.* Reason 6 says the Lean
+side is generated rather than chosen. Today what is generated is a soundness
+argument that a person reads and trusts. With a correspondence it becomes a
+component that a person *uses*, which is a different order of usefulness for the
+same generation machinery.
+
+**Why the compiler is the natural place to set it up.** A correspondence is a
+per-symbol obligation — `Int` to `Int`, `bvadd` to a bit-vector operation,
+`str.++` to an append — stated against the same semantics that already produces
+one artifact per symbol. That is exactly `ethos-eoc`'s shape: it compiles a
+symbol's meaning into a constructor, a type rule, an evaluator case and a
+verification condition, and a correspondence lemma is one more thing in that
+list. If it works, the compiler earns its keep by generating something no
+hand-written development would keep in step — which is a real answer to
+objection O2, and a reason to be slower about T2 than that objection suggests.
+
+Read the other way, it is also the strongest argument yet for arrangement **B**:
+a correspondence between two *Lean* definitions is a far easier thing to state,
+prove and maintain than one between a Lean definition and a term rendered out of
+`.eos` text by a compiler written in C++ and Python.
+
+**Where the difficulty sits.** Choosing what corresponds to what, and what to do
+where the two disagree. SMT-LIB's operations are total; Lean's native ones are
+total in a different way or not at all — division by zero, an out-of-range
+`str.substr`, a bit-vector of width zero. CPC already carries the evidence that
+this is the hard part: it declares `div_total`, `mod_total`, `/_total` and the
+`@div_by_zero` family precisely because the standard's totality has to be said
+somewhere. A correspondence has to say where each of those lands in Lean, and
+the answer is a design decision, not a lemma.
+
+## What both mean for the argument above
+
+Two of the cost columns are dated rather than wrong. Arrangement **D** is
+blocked on a measurement that Pathos would replace with an artifact, and reason
+4's folklore status matters much less if the trade-off it rests on is dissolved
+instead of settled.
+
+They also pull in different directions, which is worth being explicit about:
+Pathos improves the *checker* without touching the semantics question, while a
+correspondence makes the semantics question more consequential — and is easier
+the more of the semantics lives in Lean. A team with effort for one of them is
+choosing between "make the current arrangement's weakest artifact strong" and
+"make the current arrangement's strongest artifact reach further".
+
+What they share is that both are expensive things built *against* the signature
+and the proof format. Each one that gets built raises the cost of moving them,
+which is an argument for settling questions 1 and 3 — where the calculus is
+defined, and whether `.eos` should be Lean — before rather than after.
 
 ---
 
@@ -530,7 +666,9 @@ language that checks itself *if the analysis actually exists*. Every check in
    modelled somewhere.
 5. **How much does the fast checker actually buy?** Nobody here has measured
    ethos against the generated Lean checker on the same proofs. Until somebody
-   does, reason 4 is folklore and arrangement **D** cannot be argued either way.
+   does, reason 4 is folklore and arrangement **D** cannot be argued either way —
+   and if Pathos succeeds the question becomes "did the third checker work"
+   rather than "which of the two do we keep".
 6. **Was the kernel-and-elaborator arrangement (E) rejected, or just left
    behind?** The ecosystem came from LFSC; the reasons for moving away from a
    tiny kernel with expandable rules are worth writing down while people still
@@ -549,8 +687,13 @@ language that checks itself *if the analysis actually exists*. Every check in
 # What would change our minds
 
 - **A measurement** showing the generated Lean checker is fast enough on
-  solver-scale proofs. Reason 4 goes, and with it much of the case for a
-  separate C++ checker.
+  solver-scale proofs, or **a verified checker that is fast by construction**
+  (Pathos). Reason 4 goes, and with it much of the case for a separate C++
+  checker.
+- **A correspondence between the embedded semantics and Lean's own logic.** The
+  arrangement would then have a consumer that is a proof rather than a checker,
+  which is a kind of consumer it has never had, and objection O5 would need
+  rewriting.
 - **A verified or eliminated `.smt2` frontend for the Lean side.** The strongest
   concrete argument in column one is the reference seam; close it and the
   balance shifts.
