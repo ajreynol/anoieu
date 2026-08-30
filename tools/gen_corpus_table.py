@@ -132,11 +132,10 @@ def render(rows: list[tuple[str, collections.Counter, int, bool]]) -> str:
 Every number here is a count of *findings*, at the severities that are on by
 default.
 
-**This is not a score, and not a comparison between repositories.** A corpus
-with fewer findings has not been shown to be better — only to have tripped fewer
-of the checks that happen to exist, each of which is partial and has been
-narrowed until it stopped over-reporting. See *What we do not publish* in the
-top-level README.
+**This is not a score, and not a comparison between repositories.** These
+numbers say which of our checks tripped, not how much of a subject is sound, so
+a corpus with fewer findings has not been shown to be better. See *measure the
+subject, never our own coverage* in [`philosophy.md`](philosophy.md).
 
 """]
     out.append("| corpus | files | errors | warnings | hints |")

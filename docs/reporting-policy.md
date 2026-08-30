@@ -328,6 +328,10 @@ seen from two sides. If the reply's shape changes in one it has to change in the
 other, and in [`reporting-policy.md`](reporting-policy.md#the-conventions), which is where the shape is actually
 defined — all three or none.
 
+This now spans repositories rather than files: another tool that adopts these
+conventions has its own pair of prompts, and the shape they agree on is the same
+shape. All of them move together or none does.
+
 The failure is quiet, which is why it is worth saying: an agent asked to read a
 format nobody produces any more will not stop, it will improvise. It will find
 something in the trail that looks close enough, act on it, and report having
