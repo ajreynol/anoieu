@@ -99,10 +99,22 @@ your triage and not a resolution -- you are proposing a change that has not
 been reviewed, and what actually happened will be settled by this branch: by
 whether it is merged, and by the commits that follow it. Draft it as
 
-  anoieu ID: triaged as <fixed | not a defect | cannot tell> on branch BRANCH,
-  pending review -- <one sentence>
+  ## ID -- <check> -- <path>:<line>
+
+  TRIAGE: triaged as fixed | not a defect | cannot tell, on branch BRANCH,
+  pending review. <What you changed, or why you changed nothing.>
+
+  HUMAN RESPONSE:
 
 and leave the sending to them.
+
+Leave HUMAN RESPONSE: empty. It is the maintainer's, and the two labels exist
+to keep what you concluded apart from what a person decided. If they ask you to
+write it instead, do -- but then quote the field back to them exactly, the text
+itself and not a description of it, say plainly that you are writing in their
+place and it will be read under their name, and change it as many times as they
+ask until they say it says what they mean. Writing that field and summarising
+it back is the one thing this shape exists to prevent.
 ```
 
 ## Prompt two: the follow-up, here
@@ -150,7 +162,8 @@ repository, establish what actually happened, and record it.
    That outcome is what counts, not what the triage claimed it would be.
 4. Then read docs/triage.md and follow it exactly. It governs what you may
    change in the findings table, what you must leave alone, and the shape of
-   the write-up you leave behind.
+   the write-up you leave behind -- including what to do if the person you are
+   working with asks you to fill in the HUMAN RESPONSE: field yourself.
 5. If the trail shows our analysis was wrong, the check is what needs changing
    rather than the row, and this is the case that matters most. Narrow it until
    it stops reporting this, add a witness under tests/witnesses/ that would

@@ -2,7 +2,8 @@
 
 Static conventions, so the prompts in [`workflows.md`](workflows.md) can stay
 short. Two things are fixed here: what an agent following up a response may do
-to the findings report, and the shape of the write-up it leaves behind.
+to the findings report, and the shape everything written by hand takes — in both
+directions, going out and coming back.
 
 Neither is enforced by any tool, and both are expected to be followed exactly —
 the whole purpose is that a maintainer can read a hundred of these without
@@ -22,6 +23,7 @@ filling the same slots with its own files:
 | **re-measuring** | one command that restores the exact versions the report was measured against | `python3 tools/run.py --pinned` |
 | **the regression** | where a case goes that would have prevented a wrong finding | `tests/witnesses/` |
 | **the ledger** | the prose history of what was reported and what came of it | [`upstream.md`](upstream.md) |
+| **the frame** | two labels separating what an assistant concluded from what a person decided | `TRIAGE:` and `HUMAN RESPONSE:`, below |
 
 An analyzer missing one of those has a gap to close before the rest of this
 means much. The two that carry the most weight are *the id*, because a decision
@@ -59,13 +61,42 @@ there by hand and stays.
   have moved, or a check may have been narrowed. Closing is a judgement about
   what happened, and it needs evidence — which is what the write-up is for.
 
-## The write-up
+## The shape
 
-One file per response. It exists so a maintainer can rule on what an agent
-concluded without re-reading the trail themselves, and so that ruling has an
-obvious place to go.
+Both directions use the same frame, and the frame is two labels:
 
-**One block per row, always these four labels, always in this order:**
+```text
+TRIAGE: ...
+
+HUMAN RESPONSE:
+```
+
+**`TRIAGE:`** is what an assistant concluded. **`HUMAN RESPONSE:`** is what a
+person decided. Keeping them apart is the entire point: a triage is a reading
+made quickly, on somebody else's word, and a decision is not. When the two are
+run together, a record ends up saying that something was settled when what
+actually happened is that something was suggested.
+
+`HUMAN RESPONSE:` comes last, always, so that reading a block top to bottom
+arrives at the question rather than at an answer.
+
+### A reply to a finding
+
+What a project sends back uses the frame as it stands, one block per finding:
+
+```text
+## <id> — <check> — <path>:<line>
+
+TRIAGE: triaged as fixed | not a defect | cannot tell, on branch <branch>,
+pending review. What was changed, or why nothing was.
+
+HUMAN RESPONSE:
+```
+
+### A follow-up write-up
+
+What an agent here writes after reading a reply uses the same frame with two
+more labels inside it, because it is reporting on work of its own:
 
 ```text
 ## <id> — <check> — <path>:<line>
@@ -84,18 +115,35 @@ changed nothing, say that.
 HUMAN RESPONSE:
 ```
 
-`HUMAN RESPONSE:` is left **empty**. It is the space for the maintainer's
-decision, and an agent filling it in — even with a suggestion — defeats the one
-thing the file is for. It comes last so that reading a block top to bottom
-arrives at the question rather than at an answer.
+`TRIAGE`, `FOUND` and `REPORT` are claims of three different kinds: what
+somebody else said, what you checked, what you did. Keep them apart. Most of
+what goes wrong in a follow-up is one of the three quietly wearing another's
+clothes.
 
-The three above it are claims of different kinds: what somebody else said, what
-you checked, what you did. Keep them apart. Most of what goes wrong in a
-follow-up is one of the three quietly wearing another's clothes.
+One file per reply. It exists so a maintainer can rule on what an agent
+concluded without re-reading the trail themselves, and so that ruling has an
+obvious place to go. Nothing reads these files, so name one for the reply it is
+about and put it where the review will find it. The only thing that has to be
+consistent is what is inside.
 
-Nothing reads these files, so name the file for the response and put it where
-the review will find it. The only thing that has to be consistent is what is
-inside.
+### When the human defers the field
+
+The default is that an agent leaves `HUMAN RESPONSE:` empty. But the person in
+the session may hand it over — *you write it* — and an agent should take that
+rather than refuse it. What it must not do is let its own wording become
+somebody's decision without them seeing it. So, having written it:
+
+- **Quote the field back exactly.** The text itself, character for character,
+  not a description of it and not a paraphrase. "I recorded that the fix was
+  accepted" is not a confirmation; the four lines you actually wrote are.
+- **Say whose words they now are.** You are writing in their place and it will
+  be read under their name.
+- **Iterate until it is theirs.** Offer to change it, change it as often as
+  asked, and quote it back each time. The field is finished when the person
+  says it says what they mean, not when it reads well.
+
+An agent that writes the field and summarizes it has done the one thing the
+frame exists to prevent.
 
 ## What happens to it
 

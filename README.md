@@ -12,9 +12,7 @@ push — where they have found three real bugs.*
 **Start here:** [`docs/README.md`](docs/README.md) — what anoieu is for,
 repository by repository, and how much of it exists today. Then
 [`docs/usage.md`](docs/usage.md) to run it, [`docs/findings.md`](docs/findings.md)
-for what it has found, [`docs/ci.md`](docs/ci.md) for putting it in CI, and
-[**a suggested AI workflow for using anoieu**](docs/workflows.md) for working a
-finding with an assistant.
+for what it has found, and [`docs/ci.md`](docs/ci.md) for putting it in CI.
 
 ## Two things this repository is
 
@@ -210,10 +208,6 @@ The long-term goal is for ethos, logos and cvc5 to run this on every push:
 [`docs/ci.md`](docs/ci.md) sets out the arrangement — one versioned tool, a
 policy file and a baseline owned by each repository, and a corpus job here that
 fails *this* build when a change would invent a false positive in theirs.
-[`docs/workflows.md`](docs/workflows.md) is the other half, and is guidance
-rather than machinery: who runs each part, what a reply from a project does and
-does not settle, and the two prompts — one for the project that owns a finding,
-one for the follow-up here.
 
 ## Running the report
 
@@ -276,3 +270,13 @@ security is much harder to withdraw than a wrong finding.
 
 The one exception is discussion of the ecosystem as a whole, where the subject
 is the arrangement and its trade-offs rather than an audit of anyone's artifact.
+
+## A suggested AI workflow for using anoieu
+
+Guidance rather than machinery, at
+[**`docs/workflows.md`**](docs/workflows.md): who runs each part, what a reply
+from a project does and does not settle, and two prompts — one for the project
+that owns a finding, one for the follow-up here. The conventions they rest on,
+including the shape every write-up takes, are in
+[`docs/triage.md`](docs/triage.md), and are written so another analyzer can
+adopt them.
