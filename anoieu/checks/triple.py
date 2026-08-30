@@ -334,3 +334,184 @@ def transform_target(ctx: Context) -> Iterator[Diagnostic]:
                         label="no such symbol in the target",
                         notes=[f"the target is {os.path.basename(target.path)}"],
                     )
+
+
+@check(
+    "TRI0006",
+    "the two type rules of a symbol disagree about its sort",
+    page="""
+A symbol has its type declared twice: once in the signature, as the type rule
+ethos checks proofs with, and once in the SMT-LIB semantics, as the `:typeof`
+case a model is built from. Nothing compares them, and where they disagree the
+consequence arrives as a verification condition that cannot be proved — about a
+rule, in SMT-LIB, some distance from the declaration that caused it.
+
+Full agreement between the two is a theorem, and that is what the verification
+conditions are for. Agreement at the *sort* is decidable: the signature says
+`str.len` returns `Int`, and the semantics' type rule for it had better answer
+`Int` too.
+
+Reading the semantics' answer means following what it is written as — macros
+expanded, the branches of an `ite` taken where they agree, a shared type
+program read with the call's own arguments — and answering nothing wherever the
+trail does not end at a declared sort. On CPC that resolves 51 of its symbols
+and agrees on all of them; the other 77 say nothing rather than guess.
+""",
+)
+def type_rule_sorts(ctx: Context) -> Iterator[Diagnostic]:
+    from ..semantics import declared_sorts, resolve_type_head
+    from ..shape import arrow_parts, strip_requires, type_head
+
+    target = ctx.smt_semantics
+    if target is None:
+        return
+    sorts = declared_sorts(target)
+    sig = ctx.signature
+    sig_sorts = {
+        d.name for d in sig.decls if d.type is not None and str(d.type) == "Type"
+    } | {"Bool"}
+    by_name = target.by_name
+
+    for decl in sig.decls:
+        if decl.kind not in ("const", "parameterized-const") or decl.type is None:
+            continue
+        entry = by_name.get(decl.name)
+        attr = entry.attr(":typeof") if entry is not None else None
+        if attr is None or attr.value is None:
+            continue
+        parts = arrow_parts(decl.type)
+        declared = type_head(strip_requires(parts[-1] if parts else decl.type))
+        if declared not in sig_sorts:
+            continue
+        answered = resolve_type_head(attr.values[-1], target, sorts)
+        if answered is None or answered == declared:
+            continue
+        yield Diagnostic(
+            code="TRI0006",
+            severity=Severity.ERROR,
+            message=f"`{decl.name}` is declared to return {declared} and its SMT "
+            f"type rule answers {answered}",
+            span=decl.span,
+            label=f"the signature says {declared}",
+            notes=[
+                f"{os.path.basename(target.path)} has `:typeof {attr.values[-1]}`, "
+                f"which resolves to {answered}",
+                "a disagreement here surfaces later as a verification condition that "
+                "cannot be proved",
+            ],
+        )
+
+
+@check(
+    "TRI0007",
+    "a termination clause for a program that does not exist",
+    page="""
+`:lean` carries the Lean text the lean-meta stage appends to a program's
+generated definition -- why its recursion terminates, and anything that has to
+be proved once about it. The stage appends it by name, so a clause naming a
+program that no longer exists is appended to nothing: the rename or the deletion
+happened on one side only, and the program that lost its measure will be
+rejected by Lean instead, a regeneration later.
+
+Needs `--embedding`, since a clause may legitimately name a program of the deep
+embedding rather than one of the signature or the set.
+""",
+)
+def dead_termination_clause(ctx: Context) -> Iterator[Diagnostic]:
+    if not ctx.embedding_names:
+        return
+    sig = ctx.signature
+    for sem in (ctx.semantics, ctx.smt_semantics):
+        if sem is None:
+            continue
+        # what a clause may name: a program of the signature, one the set writes
+        # out, or one of the embedding. Not an entry of the set -- the entry *is*
+        # the clause, so counting it would make every clause name something.
+        known = (
+            set(sig.programs_by_name)
+            | {p.name for p in sem.programs}
+            | ctx.embedding_names
+            | set(sem.macros)
+        )
+        for e in sem.entries:
+            clause = e.attr(":lean")
+            if clause is None or e.name in known:
+                continue
+            yield Diagnostic(
+                code="TRI0007",
+                severity=Severity.WARNING,
+                message=f"`{e.name}` has a termination clause and no such program "
+                f"exists",
+                span=e.span,
+                label="appended to nothing",
+                notes=[
+                    f"in {os.path.basename(sem.path)}",
+                    "the lean-meta stage appends a clause by name, so this one reaches "
+                    "no definition",
+                ],
+            )
+
+
+@check(
+    "TRI0008",
+    "a program whose recursion Lean may not see terminating",
+    page="""
+Lean checks structural recursion for itself and needs to be told about anything
+else. The compiler cannot guess a measure, so one is written by hand as `:lean`
+text in the semantics -- and which programs need one is discovered today by
+generating a Lean package and reading what Lean rejects.
+
+This is that list, computed from the signature: a program is *not obviously
+structural* when some self-call passes, in every argument position, something
+that is not a proper subterm of what the pattern matched there. It is an audit
+rather than a defect report, and off by default, because the analysis is
+deliberately simple -- recursion on a rebuilt term, or on an argument that
+shrinks in a way this does not model, reads the same as recursion that does not
+shrink at all.
+
+On CPC it names seven programs, two of which carry a clause already. A clause
+may also exist for reasons that have nothing to do with termination, so its
+*absence* here is a question rather than a finding.
+""",
+    default_on=False,
+)
+def termination_clause_needed(ctx: Context) -> Iterator[Diagnostic]:
+    sem = ctx.semantics
+    has_clause = {e.name for e in sem.entries if e.has(":lean")} if sem else set()
+
+    for prog in ctx.signature.programs:
+        if not prog.cases or prog.name in has_clause:
+            continue
+        calls = decreasing = 0
+        for lhs, rhs in prog.cases:
+            pats = lhs.children[1:] if lhs.is_list else []
+            for nd in rhs.walk():
+                if not (nd.is_list and nd.head == prog.name):
+                    continue
+                calls += 1
+                args = nd.children[1:]
+                if any(
+                    a.is_atom
+                    and any(
+                        s is not pats[i] and s.is_atom and s.text == a.text
+                        for s in pats[i].walk()
+                    )
+                    for i, a in enumerate(args)
+                    if i < len(pats)
+                ):
+                    decreasing += 1
+        if calls == 0 or decreasing == calls:
+            continue
+        yield Diagnostic(
+            code="TRI0008",
+            severity=Severity.HINT,
+            message=f"`{prog.name}` recurses {calls} time(s), and {calls - decreasing} "
+            f"of those do not obviously shrink an argument",
+            span=prog.span,
+            label="may need a `:lean` measure",
+            notes=[
+                "Lean checks structural recursion itself and has to be told about "
+                "anything else",
+                "the semantics has no `:lean` clause for it",
+            ],
+        )

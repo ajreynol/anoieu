@@ -22,6 +22,22 @@ NIL_BAD = """(declare-const Int Type)
 (declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)
 """
 
+# The shape of cvc5's expert signature: a base file declaring a helper, and a
+# second file whose rule uses it *without including it*. The consumer loads both,
+# in order, into one symbol table.
+BASE = """(declare-const Int Type)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(program $helper ((x Int)) :signature (Int) Int ( (($helper x) x) ))
+"""
+
+EXPERT = """(declare-const b Int)
+(declare-rule uses-helper ((x Int))
+  :args (x)
+  :requires ((($helper x) x))
+  :conclusion (= x x)
+)
+"""
+
 NIL_SUPPRESSED = """(declare-const Int Type)
 (declare-consts <numeral> Int)
 ; anoieu: allow EO0041  the Int nil is what this test is about
@@ -110,6 +126,40 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
 
     rc, o, _ = run("check", os.path.join(sub, "nil.eo"), "--format", "json")
     case("a config is found from the entry point", codes(o) == [], str(codes(o)))
+
+    # cvc5-4: `$is_app` was reported dead because the base and expert signatures
+    # were analysed as separate worlds. They are not: the consumer includes them
+    # in order into one symbol table.
+    prof = os.path.join(d, "prof")
+    os.makedirs(prof, exist_ok=True)
+    base = write(prof, "base.eo", BASE)
+    expert = write(prof, "expert.eo", EXPERT)
+    rc, o, _ = run("check", base, "--pedantic", "--only", "EO0060", "--format", "json")
+    case("a helper unused by its own file reads as dead", codes(o) == ["EO0060"], str(codes(o)))
+    rc, o, _ = run("check", base, expert, "--pedantic", "--only", "EO0060", "--format", "json")
+    case(
+        "several files are one ordered profile, so the user is seen",
+        codes(o) == [],
+        str(codes(o)),
+    )
+    pcfg = os.path.join(prof, "anoieu.json")
+    with open(pcfg, "w") as f:
+        json.dump(
+            {
+                "profiles": [
+                    {"name": "safe", "includes": ["base.eo"]},
+                    {"name": "expert", "includes": ["base.eo", "expert.eo"]},
+                ]
+            },
+            f,
+        )
+    rc, o, _ = run("check", "--config", pcfg, "--pedantic", "--only", "EO0060",
+                   "--format", "json")
+    case(
+        "a reachability claim must hold in every profile that reads the file",
+        codes(o) == [],
+        str(codes(o)),
+    )
 
     rc, o, _ = run("check", bad, "--format", "sarif")
     try:

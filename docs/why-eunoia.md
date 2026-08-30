@@ -395,13 +395,18 @@ and what nothing else provides.
 
 # Two projects that do not exist yet, and change the picture
 
-Neither has a repository or a line of code: both are future work, named here
+**Pathos** and **hermeneia** are code names. Neither has a repository or a line
+of code: both are future work, named here
 because the costs and open questions above are stated relative to what exists
 today, and each of these would move a different one. Writing down what they
 *would* change is also the cheapest way to notice which of today's arguments are
 about the arrangement and which are merely about its current state.
 
 ## Pathos — an efficient verified proof checker
+
+*A code name, for work not yet started; there is no repository and no code.*
+It continues the line the ecosystem names itself along — ethos and logos are two
+of Aristotle's three modes of persuasion, and pathos is the third.
 
 The ecosystem currently offers a choice between two half-answers: ethos is fast
 and unverified, and the generated Lean checker is verified and unmeasured. A
@@ -438,7 +443,13 @@ artifact, and expensive artifacts want a stable interface to be built against.
 That is a point *for* the calculus as a fixed input — reason 3, restated with
 something concrete at stake.
 
-## Native correspondence — from the embedded semantics to Lean's own logic
+## Hermeneia — from the embedded semantics to Lean's own logic
+
+*Also a code name, and also work not yet started.* ἑρμηνεία is interpretation —
+the carrying of meaning from one account into another, and the title of
+Aristotle's *De Interpretatione* — which is exactly what the project does:
+carry what a proof establishes about an encoding into a statement in Lean's own
+terms.
 
 Logos proves things about a deep embedding. Its guarantee today reads
 
@@ -513,8 +524,8 @@ blocked on a measurement that Pathos would replace with an artifact, and reason
 instead of settled.
 
 They also pull in different directions, which is worth being explicit about:
-Pathos improves the *checker* without touching the semantics question, while a
-correspondence makes the semantics question more consequential — and is easier
+Pathos improves the *checker* without touching the semantics question, while
+hermeneia makes the semantics question more consequential — and is easier
 the more of the semantics lives in Lean. A team with effort for one of them is
 choosing between "make the current arrangement's weakest artifact strong" and
 "make the current arrangement's strongest artifact reach further".
@@ -690,7 +701,8 @@ language that checks itself *if the analysis actually exists*. Every check in
   solver-scale proofs, or **a verified checker that is fast by construction**
   (Pathos). Reason 4 goes, and with it much of the case for a separate C++
   checker.
-- **A correspondence between the embedded semantics and Lean's own logic.** The
+- **Hermeneia: a correspondence between the embedded semantics and Lean's own
+  logic.** The
   arrangement would then have a consumer that is a proof rather than a checker,
   which is a kind of consumer it has never had, and objection O5 would need
   rewriting.

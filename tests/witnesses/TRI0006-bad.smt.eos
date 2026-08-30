@@ -1,0 +1,4 @@
+(define-sort Int ())
+(define-sort Bool ())
+; the signature says `f` returns Bool; this type rule answers Int
+(define-symbol f (x) :typeof Int)

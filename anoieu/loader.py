@@ -96,6 +96,7 @@ class LoadResult:
     diagnostics: list[Diagnostic] = field(default_factory=list)
     sources: SourceMap = field(default_factory=SourceMap)
     include_edges: list[tuple[str, str]] = field(default_factory=list)
+    profile: str = ""
 
 
 def _attrs_from(nodes: list[Node], out: list[Diagnostic], where: str) -> list[Attribute]:
@@ -341,9 +342,21 @@ def _datatype_decls(name: str, dt: Node, out: list[Diagnostic], sig: Signature) 
                 )
 
 
-def load(path: str, include_dirs: list[str] | None = None) -> LoadResult:
-    root = os.path.dirname(os.path.abspath(path))
-    sig = Signature(root=os.path.abspath(path))
+def load(
+    path: str | list[str], include_dirs: list[str] | None = None, profile: str = ""
+) -> LoadResult:
+    """Read a signature, or an ordered *profile* of them.
+
+    A consumer does not always name one file. cvc5 checks an expert proof by
+    including `Cpc.eo` and then `expert/CpcExpert.eo`, in that order, into one
+    symbol table -- so a rule of the expert signature may name a program of the
+    base one, and a question like "does anything reach this program" has an
+    answer only relative to the profile it is asked in. Passing several paths
+    reads them in order into one signature, the way the consumer does.
+    """
+    paths = [path] if isinstance(path, str) else list(path)
+    root = os.path.dirname(os.path.abspath(paths[0]))
+    sig = Signature(root=os.path.abspath(paths[0]))
     res = LoadResult(signature=sig)
     seen: set[str] = set()
 
@@ -527,7 +540,9 @@ def load(path: str, include_dirs: list[str] | None = None) -> LoadResult:
                     )
                 )
 
-    read(os.path.abspath(path), None)
+    for p in paths:
+        read(os.path.abspath(p), None)
     for d in include_dirs or []:
         read(os.path.abspath(d), None)
+    res.profile = profile
     return res

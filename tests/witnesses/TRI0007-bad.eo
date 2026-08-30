@@ -1,0 +1,3 @@
+; expect: TRI0007
+(declare-const Int Type)
+(declare-const f (-> Int Int))

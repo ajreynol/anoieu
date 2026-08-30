@@ -39,6 +39,13 @@ before it was written down.
 | eudaimonia | [eudaimonia](#eudaimonia--the-template-for-other-calculi) | eud-1: preflight a calculus against the signature contract |
 | Eunoia itself | [Eunoia](#eunoia-itself--the-language-and-its-manual) | eunoia-1: an identical re-declaration makes two symbols that print the same |
 
+### What came back
+
+Two findings landed in cvc5, one was declined because our analysis was wrong,
+and one was overstated. [`upstream.md`](upstream.md) is that record — what was
+reported, what happened to it, and what the analyzer does differently as a
+result. It is the more honest half of this page.
+
 ### How a row moves
 
 The **state** column is the whole tracker; there is no second one elsewhere.
@@ -63,11 +70,13 @@ configuration, so the same argument is not had twice.
 
 | # | tool | kind | what | state |
 | --- | --- | --- | --- | --- |
-| [cvc5-1](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `$is_seq_const_rec` and `$is_seq_const` declare `Int` and return `Bool` — `:signature ((Seq T)) Bool` on both | open |
-| [cvc5-2](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | four skolem declarations duplicated verbatim in `expert/theories/ArithExt.eo` — delete lines 26–29 | open |
-| [cvc5-3](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | 18 docstrings no longer describe their rule | open |
-| [cvc5-4](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `$is_app` in `programs/Utils.eo` is reached by nothing | open |
-| [cvc5-5](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | run report-only on `Cpc.eo` and `CpcExpert.eo`, then baseline and block | proposed |
+| [cvc5-1](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `$is_seq_const_rec` and `$is_seq_const` declare `Int` and return `Bool` | **fixed** — see [`upstream.md`](upstream.md) |
+| [cvc5-2](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | four skolem declarations duplicated verbatim in `expert/theories/ArithExt.eo` | **fixed** |
+| [cvc5-3](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | 18 docstrings no longer describe their rule | **deferred** — needs a documented convention for pattern variables first |
+| [cvc5-4](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `$is_app` in `programs/Utils.eo` is reached by nothing | **declined — our analysis was wrong**; the fix is in the analyzer, see [`upstream.md`](upstream.md) |
+| [cvc5-5](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | run report-only over the `safe` and `expert` profiles, then baseline and block | **not yet** — after a pinned release and the diagnostic work below |
+| [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5 |
+| [cvc5-7](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | keep a reproducer with every claim about first use, and derive severity from whether a call can stay stuck | requested by cvc5 |
 | [ethos-1](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/match-simple.eo:11` declares `<` `:right-assoc` with a `Bool` return | open |
 | [ethos-2](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | an unknown attribute warns and is dropped, silently changing what a term means; make it an error, or at least carry the location | proposed |
 | [ethos-3](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | a misordered `declare-rule` field reports as `Expected conclusion`, several lines from the cause | proposed |
@@ -557,6 +566,7 @@ in [`ci.md`](ci.md).
 | file | what it is |
 | --- | --- |
 | [`usage.md`](usage.md) | the interface: inputs, commands, options, exit codes |
+| [`upstream.md`](upstream.md) | what has been reported to another repository, and what happened to it |
 | [`ci.md`](ci.md) | running this in ethos, ethos-eoc, logos and cvc5 |
 | [`checks.md`](checks.md) | every check and its manual page, generated from the registry |
 | [`findings.md`](findings.md) | what the first runs found, and every false positive that had to be shed first |

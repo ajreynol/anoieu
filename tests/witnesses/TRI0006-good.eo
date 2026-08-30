@@ -1,0 +1,3 @@
+; expect:
+(declare-const Int Type)
+(declare-const f (-> Int Bool))

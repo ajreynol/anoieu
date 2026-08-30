@@ -24,6 +24,7 @@ class Context:
     sources: SourceMap
     root: str = ""
     pedantic: bool = False
+    profile: str = ""
     include_edges: list[tuple[str, str]] = field(default_factory=list)
     # the other two legs of the triple, where a run named them
     semantics: SemSet | None = None

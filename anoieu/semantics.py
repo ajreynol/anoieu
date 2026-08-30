@@ -114,7 +114,9 @@ class SemSet:
     path: str
     entries: list[SemEntry] = field(default_factory=list)
     programs: list[SemProgram] = field(default_factory=list)
-    macros: dict[str, Node] = field(default_factory=dict)
+    # name -> (parameters, body). A macro is expanded before anything else sees
+    # it, so a reader that means to follow a body has to expand them too.
+    macros: dict[str, tuple[list[str], Node]] = field(default_factory=dict)
     sections: list[tuple[str, Span]] = field(default_factory=list)
     diagnostics: list[Diagnostic] = field(default_factory=list)
     text: str = ""
@@ -208,10 +210,14 @@ def load_set(path: str) -> SemSet:
             out.sections.append((arg.string_value() if arg else "", form.span))
             continue
         if head == "define-macro":
-            name = form.at(1)
-            body = form.at(3)
+            name, plist, body = form.at(1), form.at(2), form.at(3)
             if name is not None and name.is_atom and body is not None:
-                out.macros[name.text or "?"] = body
+                params = [
+                    c.text or ""
+                    for c in (plist.children if plist is not None and plist.is_list else [])
+                    if c.is_atom
+                ]
+                out.macros[name.text or "?"] = (params, body)
             continue
         if head == "program":
             name = form.at(1)
@@ -289,3 +295,94 @@ def load_set(path: str) -> SemSet:
                 )
             )
     return out
+
+
+# ---------------------------------------------------------------- reading a body
+
+def head_text(node: Node) -> str | None:
+    """The head of a term, with a quoted native read as the name it is."""
+    if node.is_atom:
+        return node.string_value() if node.is_string else node.text
+    op = node.children[0] if node.children else None
+    if op is None:
+        return None
+    return op.string_value() if op.is_string else op.text
+
+
+def _substitute(node: Node, binding: dict[str, Node]) -> Node:
+    if node.is_atom:
+        return binding.get(node.text or "", node)
+    out = Node(node.path, node.line, node.col, node.end_line, node.end_col, items=[], kind="list")
+    out.items = [_substitute(c, binding) for c in node.children]
+    return out
+
+
+def expand_macros(node: Node, sem: SemSet, depth: int = 8) -> Node:
+    """A body with the set's macros expanded, which is what the compiler sees.
+
+    A macro is expanded before anything else looks at a body, so a reader that
+    means to follow one has to do the same: `of2` is not a program, it is three
+    characters standing for a nest of `ite`s.
+    """
+    if depth <= 0:
+        return node
+    if node.is_atom:
+        m = sem.macros.get(node.text or "")
+        return expand_macros(m[1], sem, depth - 1) if m and not m[0] else node
+    kids = [expand_macros(c, sem, depth - 1) for c in node.children]
+    m = sem.macros.get(head_text(node) or "")
+    if m and len(m[0]) == len(kids) - 1:
+        return expand_macros(_substitute(m[1], dict(zip(m[0], kids[1:]))), sem, depth - 1)
+    out = Node(node.path, node.line, node.col, node.end_line, node.end_col, items=[], kind="list")
+    out.items = kids
+    return out
+
+
+def resolve_type_head(node: Node, sem: SemSet, sorts: set[str], depth: int = 5) -> str | None:
+    """The type constructor a `:typeof` body answers with, where it answers one.
+
+    A type rule of the target is rarely written as a type: it is a macro over
+    `ite`s, or a call to a program written once and named by every symbol that
+    shares the rule. Following it means expanding the macros, taking the
+    branches of an `ite` where they agree, and reading a program's cases with
+    the call's own arguments put for its parameters -- which is what makes
+    `($smtx_typeof_seq_op_1_ret s Int)` answer `Int`.
+
+    Answers `None` wherever the trail does not end at a declared sort, which is
+    most of the time and is the point: a check built on this reports only where
+    the answer was read rather than guessed.
+    """
+    from .shape import strip_requires
+
+    if depth <= 0:
+        return None
+    node = strip_requires(expand_macros(node, sem))
+    if node is None:
+        return None
+    head = head_text(node)
+    if node.is_atom:
+        return head if head in sorts else None
+    if head in ("eo::ite", "ite") and len(node.children) == 4:
+        answers = {
+            resolve_type_head(c, sem, sorts, depth - 1) for c in node.children[2:4]
+        } - {None, "none"}
+        return next(iter(answers)) if len(answers) == 1 else None
+    prog = next((p for p in sem.programs if p.name == head), None)
+    if prog is None:
+        return head if head in sorts else None
+    answers = set()
+    for lhs, rhs in prog.cases:
+        formals = lhs.children[1:] if lhs.is_list else []
+        binding = {
+            f.text: a for f, a in zip(formals, node.children[1:]) if f.is_atom
+        }
+        body = binding.get(rhs.text, rhs) if rhs.is_atom else rhs
+        answer = resolve_type_head(body, sem, sorts, depth - 1)
+        if answer not in (None, "none"):
+            answers.add(answer)
+    return next(iter(answers)) if len(answers) == 1 else None
+
+
+def declared_sorts(sem: SemSet) -> set[str]:
+    """The type constructors a target set declares, plus the builtin Bool."""
+    return {e.name for e in sem.entries if e.kind == "define-sort"} | {"Bool", "none"}

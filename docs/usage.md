@@ -18,6 +18,23 @@ Both spellings are the same program; the examples below use the first.
 
 ## The input
 
+**Profiles.** A consumer does not always name one file: cvc5 checks an expert
+proof by including `Cpc.eo` and *then* `expert/CpcExpert.eo`, in that order, into
+one symbol table. Several files given on the command line are read that way —
+one ordered profile, one signature — and a repository with more than one
+configuration writes them down:
+
+```json
+{"profiles": [
+  {"name": "safe",   "includes": ["cpc/Cpc.eo"]},
+  {"name": "expert", "includes": ["cpc/Cpc.eo", "cpc/expert/CpcExpert.eo"]}]}
+```
+
+`--profile NAME` runs one of them. Findings carry the profile they were found
+in, and a reachability finding is reported only where it holds in every profile
+that read the file its subject stands in — so "nothing reaches this" is never a
+claim about a world nobody runs.
+
 **Entry points, and their include graphs.** You name one or more signature
 files, and anoieu reads each, follows every `(include "...")` and
 `(reference "...")` from there, and analyses what those closures declare. A file
@@ -70,6 +87,7 @@ Reads the signature, runs every check that is on, and prints what it found.
 | --- | --- |
 | `--pedantic` | also run the checks that are off by default (see below) |
 | `--config FILE` | use this `anoieu.json` instead of the discovered one |
+| `--profile NAME` | analyse only this profile; repeatable |
 | `--baseline FILE` | hold back the findings the baseline records |
 | `--update-baseline` | rewrite the baseline from this run |
 | `--no-suppress` | ignore `; anoieu: allow` comments in the signature |

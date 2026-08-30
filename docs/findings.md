@@ -68,11 +68,12 @@ Every case returns a Boolean, the docstring says *"return: true if s is a
 sequence constant"*, and the signature says `Int`. Program bodies are not type
 checked, so ethos accepts it.
 
-Whether it bites depends entirely on where the program is called. Both are called
-only from inside `eo::requires` today -- `(eo::requires ($is_seq_const t) true ...)`
-in `rules/Strings.eo` and `programs/Strings.eo:75` -- and `eo::requires` compares
-by evaluation without asking for a type, so the calculus works. Put the same call
-anywhere a `Bool` is expected and it is a hard error:
+**Corrected, after cvc5 assessed it.** The finding was right and both signatures
+now return `Bool` -- but our claim about *when* it bites was too strong, and the
+correction is worth more than the finding.
+
+We wrote that a use where a `Bool` is expected is a type error, from this
+reproduction:
 
 ```text
 $ ethos t.eo          ; (and ($is_const x) true)
@@ -80,9 +81,17 @@ Error: Type checking failed: Checking application of and
   Term: ($is_const x)   Has type: Int   Expected type: Bool
 ```
 
-So this is a latent error with a trip-wire: the first person to use either
-program outside `eo::requires` gets a type error naming neither the program nor
-its declaration. It also reaches the downstream pipeline unchanged -- the same
+That program's application *cannot evaluate* -- its argument is a parameter --
+so the declared return type is what a caller sees. `$is_seq_const` is total over
+its argument, and ethos evaluates the application before consulting the declared
+type, so cvc5 found that a direct typed use checks as `correct`. The declared
+`Int` surfaces only where an application stays stuck.
+
+So this was an internal inconsistency and a hazard for static tools and future
+consumers, not a demonstrated failure of a current proof. Three claims we now
+keep apart, in cvc5's words: a declaration that disagrees with its cases; an
+application that may remain stuck and expose the declared return type; and a
+concrete term that current ethos rejects. It also reaches the downstream pipeline unchanged -- the same
 three findings appear in `logos/install/defs/Cpc.eo` and `Cpc.cached.eo`, the
 flattened copies the Lean development is built from.
 

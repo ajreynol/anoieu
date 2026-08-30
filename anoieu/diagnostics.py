@@ -53,6 +53,8 @@ class Diagnostic:
     label: str = ""
     notes: list[str] = field(default_factory=list)
     help: str = ""
+    # the analysis profile this was found in, where a run has more than one
+    profile: str = ""
 
     def key(self) -> tuple:
         return (self.span.path, self.span.line, self.span.col, self.code)
@@ -109,6 +111,8 @@ def render_text(
             caret = " " * (d.span.col - 1) + paint("^" * width, hue[d.severity])
             tail = f" {paint(d.label, hue[d.severity])}" if d.label else ""
             out.append(f"{pad} {paint('|', 'dim')} {caret}{tail}")
+        if d.profile:
+            out.append(f"  {paint('= profile:', 'dim')} {d.profile}")
         for n in d.notes:
             out.append(f"  {paint('= note:', 'dim')} {n}")
         if d.help:
@@ -131,6 +135,7 @@ def render_json(diags: Iterable[Diagnostic], root: str) -> str:
             "label": d.label,
             "notes": d.notes,
             "help": d.help,
+            "profile": d.profile,
         }
         for d in diags
     ]

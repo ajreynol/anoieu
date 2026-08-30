@@ -1,0 +1,5 @@
+(define-sort Int ())
+(define-sort Bool ())
+(define-macro of1 (T1 R a) ("ite" ("Teq" a T1) R none))
+; written the way a real type rule is: through a macro, and it still says Bool
+(define-symbol f (x) :typeof (of1 Int Bool x))

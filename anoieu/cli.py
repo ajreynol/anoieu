@@ -60,12 +60,34 @@ def _expand(paths: list[str]) -> list[str]:
     return out
 
 
-def _entry_points(args, cfg) -> list[str]:
+def _profiles(args, cfg) -> list[tuple[str, list[str]]]:
+    """What to analyse, as ordered profiles.
+
+    A profile is a list of signatures loaded *in order into one symbol table*,
+    which is how a consumer loads them: cvc5 checks an expert proof by including
+    `Cpc.eo` and then `expert/CpcExpert.eo`. Analysing the two apart makes a rule
+    of the second unable to see a program of the first, and asks "does anything
+    reach this" in a world that nobody runs.
+    """
     if args.file:
-        return _expand([os.path.abspath(f) for f in args.file])
+        return [("", _expand([os.path.abspath(f) for f in args.file]))]
+    out: list[tuple[str, list[str]]] = []
+    for p in cfg.profiles:
+        name = str(p.get("name", "")) or "profile"
+        includes = [os.path.abspath(cfg.resolve(i)) for i in p.get("includes", [])]
+        if includes and (not args.profile or name in args.profile):
+            out.append((name, _expand(includes)))
+    if out:
+        return out
     if cfg.entry_points:
-        return _expand([os.path.abspath(cfg.resolve(e)) for e in cfg.entry_points])
+        return [("", _expand([os.path.abspath(cfg.resolve(e)) for e in cfg.entry_points]))]
     return []
+
+
+# Codes whose subject is *reachability*, which has an answer only relative to a
+# profile: a program unreached in one profile may be named by a rule of another.
+# A run over several profiles reports one only where it holds in all of them.
+PROFILE_SCOPED = {"EO0060", "EO0057"}
 
 
 def _common_root(paths: list[str], cfg) -> str:
@@ -108,18 +130,20 @@ def _show(path: str, root: str) -> str:
 def cmd_check(args: argparse.Namespace) -> int:
     load_checks()
     cfg = discover(args.file[0] if args.file else os.getcwd(), args.config)
-    entries = _entry_points(args, cfg)
-    if not entries:
+    profiles = _profiles(args, cfg)
+    if not profiles:
         print(
-            "error: name a signature to check, or list `entry_points` in anoieu.json",
+            "error: name a signature to check, or list `profiles` or `entry_points` "
+            "in anoieu.json",
             file=sys.stderr,
         )
         return 2
-    missing = [e for e in entries if not os.path.isfile(e)]
+    missing = [e for _n, es in profiles for e in es if not os.path.isfile(e)]
     if missing:
         for m in missing:
             print(f"error: no such file: {m}", file=sys.stderr)
         return 2
+    entries = [e for _n, es in profiles for e in es]
 
     enabled = None
     if args.only:
@@ -159,8 +183,10 @@ def cmd_check(args: argparse.Namespace) -> int:
     read = 0
     counts = {"decls": 0, "programs": 0, "rules": 0}
 
-    for entry in entries:
-        result = load(entry)
+    per_profile: dict[str, list[Diagnostic]] = {}
+    profile_files: dict[str, set[str]] = {}
+    for pname, includes in profiles:
+        result = load(includes, profile=pname)
         ctx = Context(
             signature=result.signature,
             files=result.files,
@@ -168,6 +194,7 @@ def cmd_check(args: argparse.Namespace) -> int:
             root=root,
             pedantic=pedantic,
             include_edges=result.include_edges,
+            profile=pname,
             semantics=semantics,
             smt_semantics=smt_semantics,
             embedding_names=embedding_names,
@@ -177,7 +204,13 @@ def cmd_check(args: argparse.Namespace) -> int:
                 files[path] = parsed
                 sources.add(path, parsed.text)
                 read += 1
-        diags += list(result.diagnostics) + run_all(ctx, enabled)
+        found = list(result.diagnostics) + run_all(ctx, enabled)
+        for d in found:
+            if not d.profile:
+                d.profile = pname
+        per_profile[pname] = found
+        profile_files[pname] = set(result.files)
+        diags += found
         for sem in (semantics, smt_semantics):
             if sem is not None and sem.path not in files:
                 sources.add(sem.path, sem.text)
@@ -187,6 +220,27 @@ def cmd_check(args: argparse.Namespace) -> int:
         counts["programs"] += len(result.signature.programs)
         counts["rules"] += len(result.signature.rules)
 
+    # A reachability claim holds only where it holds in every profile the answer
+    # could differ in -- that is, every profile that loaded the file the subject
+    # stands in. A profile that never read the file is not evidence either way,
+    # which is what keeps a finding about an expert-only program from being
+    # dropped because the safe profile never saw it.
+    if len(per_profile) > 1:
+        keys = {
+            name: {(d.code, d.span.path, d.message) for d in found if d.code in PROFILE_SCOPED}
+            for name, found in per_profile.items()
+        }
+        kept: list[Diagnostic] = []
+        for d in diags:
+            if d.code not in PROFILE_SCOPED:
+                kept.append(d)
+                continue
+            key = (d.code, d.span.path, d.message)
+            relevant = [n for n, files in profile_files.items() if d.span.path in files]
+            if all(key in keys[n] for n in relevant):
+                d.profile = ", ".join(relevant)
+                kept.append(d)
+        diags = kept
     if enabled is not None:
         diags = [d for d in diags if d.code in enabled]
     if cfg.disable and not args.only:
@@ -228,7 +282,8 @@ def cmd_check(args: argparse.Namespace) -> int:
         if diags:
             print(render_text(diags, sources, root, color=color), end="")
         print(
-            f"-- checked {read} file(s) under {len(entries)} entry point(s): "
+            f"-- checked {read} file(s) under "
+            f"{len(profiles)} profile(s): "
             f"{counts['decls']} declarations, {counts['programs']} programs, "
             f"{counts['rules']} rules"
         )
@@ -409,6 +464,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     c.add_argument("--format", choices=["text", "json", "github", "sarif"], default="text")
     c.add_argument("--config", help="an anoieu.json to use instead of the discovered one")
+    c.add_argument("--profile", action="append",
+                   help="analyse only this profile of anoieu.json; repeatable")
     c.add_argument("--embedding", help="the .eo file declaring the deep embedding, "
                    "e.g. plugins/model_smt/model_smt.eo")
     c.add_argument("--baseline", help="a baseline file: findings it holds are not reported")

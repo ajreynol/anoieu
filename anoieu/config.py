@@ -6,7 +6,11 @@ properties of the repository, so they are written down in it. The file is
 `anoieu.json`, beside the signatures or at the root above them:
 
     {
-      "entry_points": ["proofs/eo/cpc/Cpc.eo", "proofs/eo/cpc/expert/CpcExpert.eo"],
+      "profiles": [
+        {"name": "safe",   "includes": ["proofs/eo/cpc/Cpc.eo"]},
+        {"name": "expert", "includes": ["proofs/eo/cpc/Cpc.eo",
+                                        "proofs/eo/cpc/expert/CpcExpert.eo"]}
+      ],
       "baseline": "proofs/eo/anoieu-baseline.json",
       "disable": ["DOC0011"],
       "severity": {"EO0054": "hint"},
@@ -32,6 +36,9 @@ class Config:
     path: str | None = None
     root: str = ""
     entry_points: list[str] = field(default_factory=list)
+    # ordered profiles: each is loaded into one signature, in include order,
+    # the way a consumer loads them
+    profiles: list[dict] = field(default_factory=list)
     baseline: str | None = None
     enable: list[str] = field(default_factory=list)
     disable: list[str] = field(default_factory=list)
@@ -71,6 +78,7 @@ def load(path: str) -> Config:
         path=os.path.abspath(path),
         root=os.path.dirname(os.path.abspath(path)),
         entry_points=list(data.get("entry_points", [])),
+        profiles=[dict(p) for p in data.get("profiles", [])],
         baseline=data.get("baseline"),
         enable=[c.upper() for c in data.get("enable", [])],
         disable=[c.upper() for c in data.get("disable", [])],

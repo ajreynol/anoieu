@@ -64,6 +64,9 @@ written, and `--pedantic` turns them on.
 | [TRI0003](#tri0003) | the `:is-list-nil` obligations do not match the signature | on |
 | [TRI0004](#tri0004) | an exclusion that names nothing, or that is not closed | on |
 | [TRI0005](#tri0005) | a transformation whose target the SMT semantics does not define | on |
+| [TRI0006](#tri0006) | the two type rules of a symbol disagree about its sort | on |
+| [TRI0007](#tri0007) | a termination clause for a program that does not exist | on |
+| [TRI0008](#tri0008) | a program whose recursion Lean may not see terminating | off |
 
 ## DOC0001
 
@@ -372,6 +375,13 @@ was never written. Ethos itself simply never evaluates it.
 A program no rule, program or definition names is dead: it is compiled, trimmed
 and published for nothing, and if it was meant to be used, the rule that meant
 to use it does not.
+
+**Reachability is relative to a profile**, and this check was wrong about that
+once: cvc5 declined a finding that `$is_app` was dead, because the rule using it
+is in the expert signature and cvc5 loads the base and expert files in order
+into one symbol table. Several files given to a run are now one ordered profile,
+and where a run has more than one profile a finding is reported only if it holds
+in every profile that read the file. See `docs/upstream.md`.
 
 ## EO0062
 
@@ -686,3 +696,61 @@ The check needs `--embedding`, the `.eo` file that declares what the deep
 embedding *is* (`plugins/model_smt/model_smt.eo`): its constructors and types are
 named by no configuration set, so without them every term of the embedding would
 read as a missing target. Given no embedding, this check says nothing.
+
+## TRI0006
+
+**the two type rules of a symbol disagree about its sort**
+
+A symbol has its type declared twice: once in the signature, as the type rule
+ethos checks proofs with, and once in the SMT-LIB semantics, as the `:typeof`
+case a model is built from. Nothing compares them, and where they disagree the
+consequence arrives as a verification condition that cannot be proved — about a
+rule, in SMT-LIB, some distance from the declaration that caused it.
+
+Full agreement between the two is a theorem, and that is what the verification
+conditions are for. Agreement at the *sort* is decidable: the signature says
+`str.len` returns `Int`, and the semantics' type rule for it had better answer
+`Int` too.
+
+Reading the semantics' answer means following what it is written as — macros
+expanded, the branches of an `ite` taken where they agree, a shared type
+program read with the call's own arguments — and answering nothing wherever the
+trail does not end at a declared sort. On CPC that resolves 51 of its symbols
+and agrees on all of them; the other 77 say nothing rather than guess.
+
+## TRI0007
+
+**a termination clause for a program that does not exist**
+
+`:lean` carries the Lean text the lean-meta stage appends to a program's
+generated definition -- why its recursion terminates, and anything that has to
+be proved once about it. The stage appends it by name, so a clause naming a
+program that no longer exists is appended to nothing: the rename or the deletion
+happened on one side only, and the program that lost its measure will be
+rejected by Lean instead, a regeneration later.
+
+Needs `--embedding`, since a clause may legitimately name a program of the deep
+embedding rather than one of the signature or the set.
+
+## TRI0008
+
+**a program whose recursion Lean may not see terminating**
+
+*Off by default; run with `--pedantic` or `--only TRI0008`.*
+
+Lean checks structural recursion for itself and needs to be told about anything
+else. The compiler cannot guess a measure, so one is written by hand as `:lean`
+text in the semantics -- and which programs need one is discovered today by
+generating a Lean package and reading what Lean rejects.
+
+This is that list, computed from the signature: a program is *not obviously
+structural* when some self-call passes, in every argument position, something
+that is not a proper subterm of what the pattern matched there. It is an audit
+rather than a defect report, and off by default, because the analysis is
+deliberately simple -- recursion on a rebuilt term, or on an argument that
+shrinks in a way this does not model, reads the same as recursion that does not
+shrink at all.
+
+On CPC it names seven programs, two of which carry a clause already. A clause
+may also exist for reasons that have nothing to do with termination, so its
+*absence* here is a question rather than a finding.
