@@ -160,7 +160,7 @@ rests on are set out separately, in [`reporting-policy.md`](reporting-policy.md#
 analyzer that reports findings against somebody else's files can adopt them by
 substituting its own, and the position they implement is stated once, for both
 tools, in [`philosophy.md`](philosophy.md). What is anoieu-specific here is
-confined to the two prompts — the tool's name, the report's URL, and a handful of paths and
+confined to the prompts — the tool's name, the report's URL, and a handful of paths and
 commands — and to the right-hand column of the table on that page.
 
 **Guidelines, not machinery.** Nothing in this repository files anything
@@ -309,11 +309,13 @@ Working in the anoieu repository:
    measured against with `python3 tools/run.py --pinned`, and follow the branch
    to its end -- merged, reworked, reverted, or still open. That outcome counts,
    not what the triage predicted.
-3. Clean up the table as docs/triage.md says, for those rows and no others.
+3. Clean up the table as the conventions in docs/reporting-policy.md say, for
+   those rows and no others.
 4. If our analysis was wrong, the check is what needs changing rather than the
    row: narrow it, add a witness under tests/witnesses/ that would have caught
-   the mistake, and record in docs/findings.md what it had wrongly assumed.
-5. Write what happened in docs/upstream.md.
+   the mistake, and record what it had wrongly assumed in docs/reports.md,
+   under the workings.
+5. Write what happened in docs/reports.md, under the log.
 
 Leave everything staged, and say what you decided and why -- the action you
 took, not a summary of what you read. Come back to me only if you disagree with
@@ -321,10 +323,85 @@ how the reply classified the resolution, or you cannot tell whether the finding
 is resolved; leave the row open and say what you would need to know.
 ```
 
-#### Keeping the two in step
+### Prompt three: the sweep
 
-The first prompt's output is the second prompt's input, so they are one contract
-seen from two sides. If the reply's shape changes in one it has to change in the
+The two prompts above each handle one finding. This one handles all of them: a
+pass over every open row in [`open-findings.md`](open-findings.md), across every
+project the manifest tracks, working out what has become of each. Run it rarely —
+after a large upstream move, or before publishing a report — and expect it to
+take a while.
+
+Three things make it slow, and none of them can be skipped. It re-measures
+against the *tips* rather than the recorded commits, so it moves what the report
+is measured against. Establishing what became of a row usually means reading
+history, and the clones are shallow, so history has to be fetched for whichever
+project is being worked on. And the judgement is per row: fifty-odd of them, each
+needing an answer that is not "it stopped being reported".
+
+That last point is the whole risk. A sweep is where bulk-closing is tempting, and
+where being wrong is cheapest to do and most expensive to discover — so the
+prompt is built around refusing it. It is also written to be interrupted: rows
+are handled one at a time and the record is left consistent after each, so
+stopping halfway is safe and the next run picks up whatever is left.
+
+```text
+Bring the whole report up to date. This is a sweep over every open row in
+docs/open-findings.md, across every project tools/deps.json tracks. It will take
+a while. Work one row at a time and leave the record consistent after each, so
+that stopping partway is safe.
+
+Start by measuring the projects as they are now:
+
+  python3 tools/run.py
+
+That moves every clone to the tip of its ref and appends anything newly
+reported. Rows it adds are new findings and are not this sweep's business. Rows
+already listed that the checks no longer report are.
+
+For each of those, work out what became of it. The clones are shallow, so fetch
+history for the project you are looking at when you need it -- deepen it in
+steps rather than fetching the whole thing. The answer is one of:
+
+- the code changed. Find the commit that changed the line the row names and
+  read it. If it fixed the finding, close the row with that commit as the
+  verdict. If the construct simply went away for unrelated reasons, close it
+  saying that instead -- those are different outcomes and only one of them is
+  somebody having agreed with us.
+- the finding moved. The same defect now sits at a different line or in a
+  different file, and has been re-reported under a new id. Close the old row by
+  pointing at the new one, and say they are the same finding.
+- a check of ours changed -- narrowed, disabled or deleted. That is our doing,
+  not theirs; close the row saying so. Then check the narrowing was deliberate:
+  a check that quietly stopped reporting a real defect is a regression here, and
+  matters more than any row in the table.
+- you cannot tell. Leave the row open and note what you looked at. This is the
+  expected answer for some of them, and an open row costs nothing.
+
+Never close a row merely because it stopped being reported. That is not
+evidence that anything was fixed, and a sweep is exactly where that mistake
+gets made at scale.
+
+Rows the checks still report need nothing unless something around them has gone
+stale -- a file renamed, an owner now wrong. Fix those in place and leave the
+rest alone.
+
+When you finish, or when you stop:
+
+- say how many rows you closed, how many you left open, and how many you could
+  not settle;
+- write it up in docs/reports.md, under the log, as one entry per project
+  rather than one per row: a sweep is a single event and reads better as one;
+- leave everything staged.
+
+Come back to me if a check has stopped reporting something it should still
+report, or if a project's entry in the manifest now points somewhere that no
+longer exists.
+```
+
+#### Keeping the pair in step
+
+The first two prompts are one contract seen from two sides: the first one's
+output is the second one's input. If the reply's shape changes in one it has to change in the
 other, and in [`reporting-policy.md`](reporting-policy.md#the-conventions), which is where the shape is actually
 defined — all three or none.
 

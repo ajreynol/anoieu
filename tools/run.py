@@ -125,7 +125,7 @@ def main() -> int:
     ap.add_argument(
         "--pinned",
         action="store_true",
-        help="re-measure the commits docs/versions.md records, not each tip",
+        help="re-measure the commits docs/corpus.md records, not each tip",
     )
     args = ap.parse_args()
 
