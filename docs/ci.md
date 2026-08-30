@@ -274,7 +274,8 @@ finding, and it is **additive**:
   [`upstream.md`](upstream.md), which is the prose half of the same ledger. Which
   rows are ready for that is [`workflows.md`](workflows.md)'s subject: a reply
   from a project is its triage, and the branch it names — not the reply — is
-  what closes a row.
+  what closes a row. What that review may change, and how it writes down what it
+  did, is [`triage.md`](triage.md).
 - **A finding that stops being reported is not evidence it was addressed.** It
   may have moved, or a check may have been narrowed. That is the whole reason
   the generator cannot delete.

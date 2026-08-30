@@ -212,7 +212,8 @@ policy file and a baseline owned by each repository, and a corpus job here that
 fails *this* build when a change would invent a false positive in theirs.
 [`docs/workflows.md`](docs/workflows.md) is the other half, and is guidance
 rather than machinery: who runs each part, what a reply from a project does and
-does not settle, and a suggested prompt for working one finding.
+does not settle, and the two prompts — one for the project that owns a finding,
+one for the follow-up here.
 
 ## Running the report
 
