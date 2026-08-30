@@ -1,0 +1,433 @@
+<title>CPC Signature Audit</title>
+<style>
+  /* Light is the base palette; every colour is a token, so both themes resolve
+     as a set. Neutrals carry a faint cyan cast, from the teal accent. */
+  :root {
+    --ground: #f6f8f8;
+    --surface: #ffffff;
+    --panel: #eef3f3;
+    --ink: #16232a;
+    --ink-quiet: #5c7078;
+    --rule: #d8e1e2;
+    --rule-strong: #b9c8ca;
+    --accent: #0e6b72;
+    --accent-quiet: #e3f0f0;
+    --error: #a93b3b;
+    --warning: #8a6410;
+    --hint: #5c7078;
+    --shadow: 0 1px 0 rgba(22, 35, 42, .04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0d1417;
+      --surface: #131d21;
+      --panel: #172429;
+      --ink: #e2ecec;
+      --ink-quiet: #94a9af;
+      --rule: #22333a;
+      --rule-strong: #33484f;
+      --accent: #57bcc0;
+      --accent-quiet: #12292c;
+      --error: #e4776f;
+      --warning: #d3a44a;
+      --hint: #94a9af;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0d1417;
+    --surface: #131d21;
+    --panel: #172429;
+    --ink: #e2ecec;
+    --ink-quiet: #94a9af;
+    --rule: #22333a;
+    --rule-strong: #33484f;
+    --accent: #57bcc0;
+    --accent-quiet: #12292c;
+    --error: #e4776f;
+    --warning: #d3a44a;
+    --hint: #94a9af;
+    --shadow: none;
+  }
+
+  :root {
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.62;
+    margin: 0;
+    padding: clamp(1.5rem, 5vw, 4.5rem) clamp(1.1rem, 5vw, 2rem) 5rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 43rem; margin: 0 auto; display: flex; flex-direction: column; gap: 2.75rem; }
+
+  /* ---- front matter ---- */
+  header { display: flex; flex-direction: column; gap: .9rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5.5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -.012em;
+    text-wrap: balance;
+    margin: 0;
+  }
+  .dek {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--ink-quiet);
+    margin: 0;
+    max-width: 34rem;
+  }
+  .meta {
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--ink-quiet);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: .8rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: .45rem 1.5rem;
+  }
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  /* ---- stats ---- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .stat { padding: 1rem 1.1rem; border-right: 1px solid var(--rule); }
+  .stat:last-child { border-right: 0; }
+  .stat .n {
+    font-family: var(--serif);
+    font-size: 2rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    display: block;
+  }
+  .stat .n.crit { color: var(--error); }
+  .stat .l {
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+    display: block;
+    margin-top: .5rem;
+  }
+
+  /* ---- sections ---- */
+  section { display: flex; flex-direction: column; gap: 1rem; }
+  h2 {
+    font-family: var(--serif);
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -.008em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: .6rem 0 0;
+  }
+  p { margin: 0; max-width: 38rem; }
+  a { color: var(--accent); text-underline-offset: .18em; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  strong { font-weight: 650; }
+
+  .finding { border-top: 1px solid var(--rule-strong); padding-top: 1.15rem; display: flex; flex-direction: column; gap: .95rem; }
+  .flag {
+    font-family: var(--mono);
+    font-size: .74rem;
+    letter-spacing: .04em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem;
+    align-items: center;
+    color: var(--ink-quiet);
+  }
+  .sev {
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .12rem .42rem;
+    border: 1px solid currentColor;
+  }
+  .sev.error { color: var(--error); }
+  .sev.warning { color: var(--warning); }
+  .sev.hint { color: var(--hint); }
+  .flag .where { color: var(--ink); }
+
+  pre {
+    font-family: var(--mono);
+    font-size: .8rem;
+    line-height: 1.55;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    padding: .85rem 1rem;
+    margin: 0;
+    overflow-x: auto;
+  }
+  code { font-family: var(--mono); font-size: .88em; }
+  p code, li code, td code { background: var(--accent-quiet); padding: .05em .3em; }
+
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-quiet);
+    padding: .8rem 1rem;
+    font-size: .95rem;
+  }
+  .callout p { max-width: none; }
+
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .scroll { overflow-x: auto; }
+  th, td { text-align: left; padding: .5rem .7rem .5rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th {
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+    font-weight: 600;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; padding-right: 1.2rem; white-space: nowrap; }
+  th.num { text-align: right; padding-right: 1.2rem; }
+
+  ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .4rem; max-width: 38rem; }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.1rem;
+    font-size: .88rem;
+    color: var(--ink-quiet);
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+  }
+  footer p { max-width: none; }
+</style>
+
+<div class="page">
+
+  <header>
+    <p class="eyebrow">anoieu · static analysis of Eunoia signatures</p>
+    <h1>CPC Signature Audit</h1>
+    <p class="dek">Three real defects in the Cooperating Proof Calculus and its expert extension —
+      each of them something ethos reads, accepts, and answers <code>correct</code> to.</p>
+    <div class="meta">
+      <span><b>Date</b> 30 Aug 2026</span>
+      <span><b>Target</b> cvc5 <code>proofs/eo/cpc</code></span>
+      <span><b>Checker</b> ethos <code>ethosEoc3</code> @ 2118635d</span>
+      <span><b>Tool</b> anoieu 0.1.0, 35 checks</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="n crit">3</span><span class="l">real bugs</span></div>
+    <div class="stat"><span class="n">258</span><span class="l">file reads</span></div>
+    <div class="stat"><span class="n">0</span><span class="l">crashes</span></div>
+    <div class="stat"><span class="n">19/23</span><span class="l">ethos calls correct</span></div>
+  </div>
+
+  <section>
+    <h2>What this is</h2>
+    <p>anoieu reads a Eunoia signature the way ethos does not: eagerly, without a proof in hand, and
+      asking about every declaration rather than only the ones a proof happens to exercise. This is
+      the first audit it has run. Everything below was confirmed by building the smallest signature
+      that reproduces it and running ethos on that.</p>
+    <div class="callout">
+      <p>Of the 23 witness files in the tool's own suite — each one holding a single, deliberate
+        mistake — <strong>ethos accepts 19 and answers <code>correct</code></strong>. It refuses four:
+        a <code>declare-rule</code> field out of order, an opaque argument after an ordinary one, a
+        program case of the wrong arity, and a pattern with two <code>:list</code> parameters.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Coverage</h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Tree</th><th class="num">Files</th><th class="num">Errors</th><th class="num">Warnings</th><th class="num">Hints</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Cpc.eo</code> and its include graph</td><td class="num">35</td><td class="num">3</td><td class="num">18</td><td class="num">14</td></tr>
+          <tr><td><code>expert/CpcExpert.eo</code></td><td class="num">30</td><td class="num">0</td><td class="num">6</td><td class="num">0</td></tr>
+          <tr><td><code>ethos/tests</code>, <code>logos/install/defs</code>, eudaimonia examples</td><td class="num">193</td><td class="num">7</td><td class="num">10</td><td class="num">31</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>No file failed to parse, including the compiler's own <code>$MARKER$</code> templates, which
+      report what they should: a template is not a signature until the markers are filled.</p>
+  </section>
+
+  <section>
+    <h2>Findings</h2>
+
+    <div class="finding">
+      <p class="flag"><span class="sev error">Error</span><span>Finding 1</span><span>·</span>
+        <span class="where">programs/Strings.eo:42, :55</span><span>·</span><span>EO0064</span></p>
+      <h3>Two programs declare a return type their cases never produce</h3>
+      <pre><code>(program $is_seq_const_rec ((T Type) (e T) (ss (Seq T) :list))
+  :signature ((Seq T)) Int                                  ; declares Int
+  (
+  (($is_seq_const_rec (seq.++ (seq.unit e) ss))  ($is_seq_const_rec ss))
+  (($is_seq_const_rec (as seq.empty (Seq T)))    true)      ; returns Bool
+  (($is_seq_const_rec ss)                        false)     ; returns Bool
+  )
+)</code></pre>
+      <p>Every case returns a Boolean. The docstring above it says <em>“return: true if s is a
+        sequence constant.”</em> The signature says <code>Int</code>. <code>$is_seq_const</code>,
+        immediately below, repeats the mistake. Program bodies are not type checked — the user manual
+        says so outright — so ethos accepts both.</p>
+      <p>Whether this bites depends entirely on where the programs are called, and today every call
+        is inside an <code>eo::requires</code>, which compares by evaluation and never asks for a
+        type. The calculus works. The trip-wire is the first call anywhere a <code>Bool</code> is
+        expected:</p>
+      <pre><code>$ ethos t.eo          ; (and ($is_const x) true)
+Error: Type checking failed: Checking application of and
+  Term: ($is_const x)   Has type: Int   Expected type: Bool</code></pre>
+      <p>The error names neither the program nor its declaration. The defect also travels downstream
+        unchanged: the same three findings appear in <code>logos/install/defs/Cpc.eo</code> and
+        <code>Cpc.cached.eo</code>, the flattened copies the Lean development is built from.</p>
+      <p><strong>Fix:</strong> <code>:signature ((Seq T)) Bool</code> on both programs.</p>
+    </div>
+
+    <div class="finding">
+      <p class="flag"><span class="sev warning">Warning</span><span>Finding 2</span><span>·</span>
+        <span class="where">expert/theories/ArithExt.eo:17–20, 26–29</span><span>·</span><span>EO0031</span></p>
+      <h3>Four skolem declarations are duplicated verbatim</h3>
+      <pre><code>; skolems for virtual term substitution
+(declare-const @arith_vts_delta Real)
+(declare-const @arith_vts_delta_free Real)
+(declare-parameterized-const @arith_vts_infinity ((T Type)) T)
+(declare-parameterized-const @arith_vts_infinity_free ((T Type)) T)</code></pre>
+      <p>The block appears twice, nine lines apart, comment included. Ethos reads a repeated
+        declaration as an overload, so these are <strong>two distinct symbols that print
+        identically</strong>. Nothing is wrong today: the second copy shadows the first before any
+        term is built from it. What the duplication sets up is the worst diagnostic available —</p>
+      <pre><code>Error: Unexpected conclusion for rule refl:
+    Proves: (_ (= d) d)
+  Expected: (_ (= d) d)</code></pre>
+      <p>— a proof failure whose two sides are the same text. Anything later that builds a term with
+        one of these symbols between the two blocks turns the duplication into that.</p>
+      <p><strong>Fix:</strong> delete the second block.</p>
+    </div>
+
+    <div class="finding">
+      <p class="flag"><span class="sev error">Error</span><span>Finding 3</span><span>·</span>
+        <span class="where">ethos/tests/match-simple.eo:11</span><span>·</span><span>EO0040</span></p>
+      <h3>A right-associative operator that cannot fold</h3>
+      <pre><code>(declare-const &lt; (-&gt; Int Int Bool) :right-assoc)</code></pre>
+      <p>A right-associative operator puts its own result back where its second argument stood, so
+        its type has to be <code>(-&gt; T1 T2 T2)</code>. This one takes an <code>Int</code> and
+        returns a <code>Bool</code>, which makes every application of three or more arguments
+        ill-typed:</p>
+      <pre><code>Error: Type checking failed: (_ (&lt; 1) (_ (&lt; 2) 3))
+       Checking application of (&lt; 1): unexpected type of child #1</code></pre>
+      <p>The test only ever applies <code>&lt;</code> to two arguments, so the attribute has been
+        inert since the file was written. This one is in the ethos tree rather than in CPC, but it is
+        the same family: an attribute whose contract nothing checks.</p>
+      <p><strong>Fix:</strong> drop the attribute, or give the operator a foldable type.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>One that is only a bug from the wrong entry point</h2>
+    <p><code>$evaluate_list</code> is forward-declared in <code>programs/Utils.eo:70</code> and
+      defined in <code>Cpc.eo:347</code>, so a run whose entry point is
+      <code>expert/CpcExpert.eo</code> alone has it declared and never defined — under SMT-LIB a free
+      uninterpreted function, under Lean a name that was never written. In practice cvc5's regression
+      runner writes the two includes in order (<code>test/regress/cli/run_regression.py:372</code>),
+      so the pair always loads together and the gap never opens. The check now says “under this entry
+      point” for exactly this reason.</p>
+  </section>
+
+  <section>
+    <h2>The rest of what CPC reports</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Check</th><th class="num">Count</th><th>What it says</th></tr></thead>
+        <tbody>
+          <tr><td>DOC0011</td><td class="num">14</td><td>a docstring documents a different number of premises or arguments than the declaration takes — <code>symm</code> documents its premise under <code>; args:</code>, <code>string_decompose</code> takes two premises and documents one</td></tr>
+          <tr><td>DOC0012</td><td class="num">4</td><td>a docstring documents a field the rule does not have</td></tr>
+          <tr><td>EO0054</td><td class="num">14</td><td>a pattern matches an n-ary operator of exactly two elements — legal and often intended, so a hint; the interesting one is <code>$str_arith_entail_is_approx</code>, which marks the <code>+</code> tail <code>:list</code> and the <code>*</code> tail not, in adjacent cases</td></tr>
+          <tr><td>EO0060</td><td class="num">1</td><td><code>$is_app</code> is declared, documented, and reached by nothing</td></tr>
+          <tr><td>EO0057</td><td class="num">1</td><td>the forward declaration above</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>That is the whole list, across 190 declarations, 241 programs and 593 rules — which is the
+      more important half of this report. The signature is in good shape, and the findings are
+      specific enough to act on one at a time.</p>
+  </section>
+
+  <section>
+    <h2>How much of this survived scrutiny</h2>
+    <p>Every check reported false positives on CPC when it was first written, and each fix was a
+      statement about what Eunoia means rather than about the code. The record matters more than the
+      count, because it is what makes the surviving findings worth reading.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>The check first assumed</th><th>CPC's answer</th></tr></thead>
+        <tbody>
+          <tr><td>a right-associative operator's return type equals its second argument type</td><td><code>concat : (-&gt; (BitVec n) (BitVec m) (BitVec (eo::add n m)))</code> is fine — compare type <em>constructors</em>, not terms</td></tr>
+          <tr><td>a type is what it is written as</td><td><code>String</code> is a <code>define</code> for <code>(Seq Char)</code>, <code>@re.empty</code> for <code>(str.to_re "")</code> — expand aliases first</td></tr>
+          <tr><td>a symbol's return type is what its declaration says</td><td><code>ite : (-&gt; Bool A A A)</code> says nothing until the arguments say what <code>A</code> is — bind the callee's type parameters, and stay quiet if any is left unbound</td></tr>
+          <tr><td>any two different type heads disagree</td><td><code>T</code>, <code>U</code>, <code>S</code> are variables — compare only heads that resolve to a declared type constructor</td></tr>
+          <tr><td>a program matching an n-ary application needs a case for the nil</td><td><code>$get_zero</code> matches <code>(or b1 b2)</code> to say what <code>or</code>'s unit is, and walks nothing — require a recursive call on the tail, unguarded</td></tr>
+          <tr><td>an uncovered nil is a finding</td><td>most nils in CPC are non-ground, and each instance spells its base case differently — say nothing when the nil is non-ground</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Reproducing this</h2>
+    <pre><code>python3 -m anoieu check &lt;cvc5&gt;/proofs/eo/cpc/Cpc.eo
+python3 -m anoieu check &lt;cvc5&gt;/proofs/eo/cpc/expert/CpcExpert.eo
+python3 tools/sweep.py &lt;ethos&gt;/tests &lt;logos&gt;/install/defs &lt;eudaimonia&gt;/examples
+ETHOS=&lt;ethos&gt;/build/src/ethos python3 tests/run.py --oracle</code></pre>
+    <p>The last command is the one that says whether a finding is news: it runs ethos over every
+      witness in the suite and prints its verdict beside anoieu's.</p>
+  </section>
+
+  <footer>
+    <p>anoieu is a static analyzer for Eunoia signatures (<code>*.eo</code>) and semantic
+      configuration sets (<code>*.eos</code>). It does not look for soundness bugs — whether a rule is
+      <em>valid</em> is what the verification conditions <code>ethos-eoc</code> emits are for. Its
+      question is the one below that: whether a signature and its semantics say something coherent at
+      all.</p>
+    <p>Not yet built: the full type checker (a rule that <em>may</em> conclude a non-<code>Bool</code>
+      term through a program's cases), and the triple — signature against calculus semantics against
+      SMT semantics — which is where the <code>:is-list-nil</code> and exclusion-closure gaps live.</p>
+  </footer>
+
+</div>

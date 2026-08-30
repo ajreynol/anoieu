@@ -40,7 +40,27 @@ def cmd_check(args: argparse.Namespace) -> int:
         pedantic=args.pedantic,
         include_edges=result.include_edges,
     )
-    enabled = set(args.only) if args.only else None
+    enabled = None
+    if args.only:
+        enabled = {c.upper() for c in args.only}
+        unknown = sorted(enabled - set(REGISTRY))
+        if unknown:
+            print(
+                f"error: no check called {', '.join(unknown)}; "
+                f"`anoieu list-checks` prints every code",
+                file=sys.stderr,
+            )
+            return 2
+    for opt, what in (
+        (args.semantics, "--semantics"),
+        (args.smt_semantics, "--smt-semantics"),
+    ):
+        if opt:
+            print(
+                f"warning: {what} is accepted but not read yet; the checks over a "
+                f"triple are not written (see docs/design.md, M4)",
+                file=sys.stderr,
+            )
     diags = list(result.diagnostics)
     if enabled is not None:
         diags = [d for d in diags if d.code in enabled]
@@ -120,8 +140,10 @@ def main(argv: list[str] | None = None) -> int:
 
     c = sub.add_parser("check", help="check a signature")
     c.add_argument("file")
-    c.add_argument("--semantics", help="the calculus semantics (.eos) [not yet read]")
-    c.add_argument("--smt-semantics", help="the SMT-LIB semantics (.eos) [not yet read]")
+    c.add_argument("--semantics", help="the calculus semantics (.eos) [accepted, not read yet]")
+    c.add_argument(
+        "--smt-semantics", help="the SMT-LIB semantics (.eos) [accepted, not read yet]"
+    )
     c.add_argument("--format", choices=["text", "json", "github"], default="text")
     c.add_argument("--only", action="append", help="run only this check code")
     c.add_argument("--pedantic", action="store_true", help="also run the checks that are off by default")

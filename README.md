@@ -90,7 +90,8 @@ how a second implementation earns its keep. See
 
 ## Using it
 
-No dependencies; Python 3.10 or later.
+No dependencies; Python 3.10 or later. Full interface reference in
+[`docs/usage.md`](docs/usage.md).
 
 ```bash
 python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo     # check a signature
