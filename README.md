@@ -14,8 +14,7 @@ push — where they have found three real bugs.*
 **A tool**, first: an analyzer you run over a signature, in an editor or in CI,
 that reports what ethos accepts and should not.
 
-**And a reporting system.** Almost nothing anoieu finds is about anoieu. A
-finding is about *someone else's* file — a program in cvc5's calculus, a test
+**And a reporting system.** A finding is about *someone else's* file — a program in cvc5's calculus, a test
 signature in ethos, a semantics set in logos, a gap in the language itself — so
 it has to be published where its owner will read it, argued where they can
 disagree with it, and tracked until it is resolved or declined. This repository
@@ -79,10 +78,20 @@ anyone, each with an id, a state, and the reasoning underneath it:
 | **eudaimonia** — the calculus template | [2 preflight integrations](docs/reports.md#eudaimonia--the-template-for-other-calculi) |
 | **Eunoia** — the language and its manual | [7 proposed changes, from what writing the analyzer turned up](docs/reports.md#eunoia-itself--the-language-and-its-manual) |
 
-Two things we promise about each. **It was confirmed before it was filed** —
-reproduced in the smallest signature that shows it, run through ethos, output
-quoted. **A false positive is our bug, not yours** — the check gets narrowed,
-and the narrowing is recorded as what it was: a fact about Eunoia we had wrong.
+We would rather show you what is checked than promise anything. Every push runs:
+
+| what is checked | the evidence |
+| --- | --- |
+| each check reports the minimal signature written for it, and stays silent on the one it should not | [`tests/witnesses/`](tests/witnesses) — one file per case, readable in a minute. The suite also prints which checks have no witness yet |
+| what **ethos** says about every one of those files, unchanged since a real run recorded it | [`tests/oracle.json`](tests/oracle.json) — written by running ethos, never by hand. This is what backs "ethos accepts this and should not" |
+| CPC reports exactly what a committed baseline says, warnings denied | [`tests/corpus/cpc-baseline.json`](tests/corpus/cpc-baseline.json) — a change that invents a false positive fails *this* build before it reaches yours |
+| the report matches the commits it says it was measured against | [`docs/corpus.md`](docs/corpus.md) and `tools/deps.lock`, re-measured on every push |
+
+Anything else we say about how we will behave — narrowing a check that fired
+wrongly, filing nothing twice — is an intention rather than a guarantee. Those
+are written down in [`docs/philosophy.md`](docs/philosophy.md), and worth
+whatever our record of keeping them is worth; that record is the log in
+[`docs/reports.md`](docs/reports.md).
 
 Working one of these with an assistant is routine enough that we keep a prompt
 for it. What comes back is your triage rather than a verdict, and we treat it

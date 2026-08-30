@@ -14,7 +14,9 @@ writing witnesses rather than assertions.
 from __future__ import annotations
 
 import argparse
+import json
 import os
+import re
 import subprocess
 import sys
 
@@ -28,6 +30,32 @@ from anoieu.semantics import load_set  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WITNESSES = os.path.join(HERE, "witnesses")
+
+
+ORACLE = os.path.join(HERE, "oracle.json")
+
+
+def ethos_verdict(binary: str, path: str) -> dict:
+    """What ethos says about one witness, reduced to what is stable across
+    machines: whether it accepted the file, and the first line of any complaint
+    with absolute paths stripped out."""
+    try:
+        p = subprocess.run([binary, path], capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        return {"verdict": "not run", "detail": str(e)[:80]}
+    text = (p.stdout + p.stderr).strip()
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    if p.returncode == 0 and "correct" in text:
+        note = lines[0] if len(lines) > 1 else ""
+        return {"verdict": "accepted", "detail": _portable(note)}
+    err = next((l for l in lines if l.startswith("Error:")), lines[0] if lines else "")
+    return {"verdict": "refused", "detail": _portable(err)}
+
+
+def _portable(line: str) -> str:
+    """Drop anything that is about this machine rather than about the file."""
+    line = re.sub(r"(/[^\s:]+)+/(?=[\w.-]+\.eo)", "", line)
+    return line[:120]
 
 
 def expected(path: str) -> set[str]:
@@ -65,6 +93,27 @@ def run_one(path: str, want: set[str]) -> set[str]:
     # says it is for one of them
     off = {code for code, chk in REGISTRY.items() if not chk.default_on}
     return {c for c in got if c not in off or c in want}
+
+
+def witness_coverage() -> None:
+    """Which checks own a witness, and which do not.
+
+    Printed rather than enforced: a check without one is a gap to fill, not a
+    regression, and a suite that fails on it would be red for as long as the gap
+    exists — which is how a number stops being read. Saying it every run is what
+    keeps it from drifting quietly.
+    """
+    from anoieu.checks import REGISTRY  # noqa: PLC0415
+
+    load_checks()
+    covered: set[str] = set()
+    for name in os.listdir(WITNESSES):
+        if name.endswith(".eo"):
+            covered |= expected(os.path.join(WITNESSES, name))
+    missing = sorted(set(REGISTRY) - covered)
+    print(f"-- {len(REGISTRY) - len(missing)} of {len(REGISTRY)} checks own a witness")
+    if missing:
+        print(f"   without one: {' '.join(missing)}")
 
 
 def manifest_agrees() -> int:
@@ -108,9 +157,16 @@ def main() -> int:
     ap.add_argument("--oracle", action="store_true",
                     help="also ask ethos about each witness, and run the desugaring battery")
     ap.add_argument("--ethos", default=os.environ.get("ETHOS", "ethos"))
+    ap.add_argument(
+        "--record",
+        action="store_true",
+        help="write tests/oracle.json from this run instead of checking against it",
+    )
     args = ap.parse_args()
 
     failures = 0
+    recorded = json.load(open(ORACLE)) if os.path.isfile(ORACLE) else {}
+    seen: dict[str, dict] = {}
     for name in sorted(os.listdir(WITNESSES)):
         if not name.endswith(".eo") or name.endswith(".embed.eo"):
             continue  # an embedding is a companion of a witness, not one itself
@@ -127,23 +183,37 @@ def main() -> int:
             line += f"  also reported {extra}"
         print(line)
         if args.oracle:
-            try:
-                p = subprocess.run(
-                    [args.ethos, path], capture_output=True, text=True, timeout=30
-                )
-                text = (p.stdout + p.stderr).strip()
-                lines = text.splitlines()
-                if p.returncode == 0 and "correct" in text:
-                    verdict = "correct" + (
-                        f"  (with a warning: {lines[0][:60]})" if len(lines) > 1 else ""
-                    )
-                else:
-                    err = next((l for l in lines if l.startswith("Error:")), lines[0] if lines else "")
-                    verdict = f"refused -- {err[:90]}"
-            except (OSError, subprocess.TimeoutExpired) as e:
-                verdict = f"(not run: {e})"
-            print(f"     ethos: {verdict}")
+            got = ethos_verdict(args.ethos, path)
+            seen[name] = got
+            want_v = recorded.get(name)
+            mark = ""
+            if want_v and want_v != got:
+                mark = f"  CHANGED (was {want_v['verdict']}: {want_v['detail'][:50]})"
+                failures += 1
+            elif not want_v and recorded:
+                mark = "  (not recorded)"
+            print(f"     ethos: {got['verdict']}"
+                  + (f" -- {got['detail'][:70]}" if got["detail"] else "") + mark)
+    if args.oracle:
+        if args.record:
+            with open(ORACLE, "w") as f:
+                json.dump(seen, f, indent=1, sort_keys=True)
+            print(f"-- recorded what ethos said about {len(seen)} witness(es)")
+            failures = 0
+        elif not recorded:
+            print("-- no tests/oracle.json; run with --record to create it")
+        else:
+            missing = sorted(set(recorded) - set(seen))
+            for name in missing:
+                print(f"FAIL {name}: recorded, but no such witness now")
+            failures += len(missing)
+            print(f"-- ethos said what tests/oracle.json records, "
+                  f"for {len(seen)} witness(es)")
+
     print(f"-- witnesses: {failures} failure(s)")
+
+    print()
+    witness_coverage()
 
     print()
     failures += manifest_agrees()

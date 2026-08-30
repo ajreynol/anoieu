@@ -285,12 +285,22 @@ and `help`. `--format sarif` writes SARIF 2.1.0 for GitHub code scanning.
 ```bash
 python3 tests/run.py                       # every check against its witnesses
 ETHOS=<ethos>/build/src/ethos \
-  python3 tests/run.py --oracle            # ... and what ethos says about each
+  python3 tests/run.py --oracle            # ... and assert what ethos says about each
+ETHOS=<ethos>/build/src/ethos \
+  python3 tests/run.py --oracle --record   # ... and re-record it after a change
 python3 tools/sweep.py <dir>...            # run over a corpus: crashes and counts
 python3 tools/gen_checks_doc.py            # rewrite docs/checks.md from the registry
 ETHOS=<ethos>/build/src/ethos \
   python3 tools/oracle_desugar.py          # the desugarer against ethos, case by case
 ```
+
+`--oracle` compares what ethos says about each witness against
+`tests/oracle.json`, which is written only by `--record` from a real run and
+never by hand. It is what lets a claim like *ethos accepts this and should not*
+be checked rather than asserted — and it earns its keep: it caught a "good"
+witness that ethos was refusing, because the file used `Int` without declaring
+it. Re-record when a witness changes, and read the diff: a verdict that moves
+without a witness moving is ethos having changed under us.
 
 `oracle_desugar.py` is the harness that keeps the desugarer honest. Ethos has no
 command that prints a desugared term, so each case is compiled into a definition

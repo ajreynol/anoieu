@@ -228,6 +228,9 @@ signature parser is not far-fetched — and the SMT-LIB and SyGuS backends still
 emit text either way. Mostly a follow-on to T1: the compiler's main job is
 compiling the semantics, so moving the semantics moves most of the compiler.
 
+T1 and T2 together, with a theorem relating what the compiler emits to what the
+definitions say, is Noesis, below.
+
 ## T3. Retire `ethos` and ship the generated checker
 
 One implementation instead of two, soundness by construction, and no seams
@@ -261,9 +264,11 @@ of the five to be settled, not the first.
 
 ## A note on this analyzer
 
-Under T1, T2, T3 and T5, anoieu is unaffected: it reads signatures. Under T4,
-most of it stops being necessary. That is a useful way to sort the proposals —
-and a reason to distrust our enthusiasm about exactly one of them.
+Under T3 and T5, anoieu is unaffected: it reads signatures. Under T1 and T2 the
+eight `TRI` checks go — they compare the legs of the triple, and there would be
+no legs to compare — and everything that reads `.eo` stays. Under T4, most of it
+stops being necessary. That is a useful way to sort the proposals — and a reason
+to distrust our enthusiasm about exactly one of them.
 
 ---
 
@@ -355,6 +360,8 @@ templates, and obligations passed between tools that nothing compares.
 can read it; the part that needs types gets them. The open engineering question
 is whether the SMT-LIB and SyGuS verification conditions can be extracted from
 the Lean semantics as cleanly as they are currently generated from `.eos`.
+Noesis is the project that would build it, and settle the question by answering
+it in code.
 
 **C, compile from Lean.** Invert the direction of generation: define the
 calculus in Lean and emit the `.eo` signature for ethos. Keeps a fast checker
@@ -393,10 +400,10 @@ and what nothing else provides.
 
 ---
 
-# Two projects that do not exist yet, and change the picture
+# Three projects that do not exist yet, and change the picture
 
-**Pathos** and **hermeneia** are code names. Neither has a repository or a line
-of code: both are future work, named here
+**Pathos**, **hermeneia** and **noesis** are code names. None has a repository
+or a line of code: all three are future work, named here
 because the costs and open questions above are stated relative to what exists
 today, and each of these would move a different one. Writing down what they
 *would* change is also the cheapest way to notice which of today's arguments are
@@ -516,7 +523,86 @@ this is the hard part: it declares `div_total`, `mod_total`, `/_total` and the
 somewhere. A correspondence has to say where each of those lands in Lean, and
 the answer is a design decision, not a lemma.
 
-## What both mean for the argument above
+## Noesis — the semantics and the compiler, defined in Lean
+
+*A code name, and also work not yet started.* νόησις is the top of Plato's
+divided line: the grasp of a principle that rests on no hypothesis, as against
+διάνοια, which reasons correctly *from* hypotheses it never examines. The name
+says what the project is for. Today `ethos-eoc` is the hypothesis — what a
+`.eos` file means is what the compiler makes of it, and the deep embedding,
+logos's soundness lemmas, the verification conditions and this analyzer's model
+of the language all reason from that and none of them can examine it. Noesis is
+a definition to reason from instead. (It shares its root with Eunoia, and with
+the anagram this repository is named after.)
+
+Concretely it is T1 and T2 taken together and proved: the `.eos` semantics
+written as Lean definitions over the SMT-LIB model logos already carries, the
+compiler as a Lean metaprogram over those definitions, and a theorem relating
+what it emits to what they say. Arrangement **B** is the shape; noesis is the
+artifact.
+
+**What it settles.**
+
+- Objection **O2** — the `.eos` layer is the tell — stops being something to
+  answer in prose. T1 lists what goes: the four vocabulary levels become types,
+  the aggregate table becomes pattern matching, `sem_compile.py` disappears,
+  and `is_list_nil` becomes an obligation with something behind it.
+- Objection **O6** — a checker, a compiler, a generated checker and a semantics
+  kept in step by hand at the seams — gets a statement where it currently has a
+  convention.
+- Objection **O3** — termination is nobody's job — moves from a measure written
+  as literal Lean text inside a `.eos` file, whose absence surfaces a full
+  regeneration later, to Lean's own well-founded recursion, checked where the
+  definition is written. Somebody still supplies the measure. Nobody has to
+  route it through a language that cannot typecheck it.
+- **Open question 3** is answered by building it. **Open question 7** — where
+  the line falls between the invariant core and what a signature contributes —
+  has to be answered *first*, because a compiler's correctness theorem
+  quantifies over signatures and cannot be stated without it. That is
+  eudaimonia's own blocker, and this is the version of it that cannot be
+  deferred.
+- And the case for it is already made above, in hermeneia's argument for
+  arrangement **B**: a correspondence between two *Lean* definitions is a far
+  easier thing to state, prove and maintain than one between a Lean definition
+  and a term rendered out of `.eos` text by a compiler written in C++ and
+  Python. Noesis is what makes hermeneia cheap.
+
+**What it does not settle.** Argument 1, deliberately: the signature stays
+`.eo`, SMT-shaped, maintained by the people who maintain the solver, and the
+reference check against the `.smt2` file stays exactly where it is. Nor
+performance — ethos remains the fast unverified checker and arrangement **D**
+stays blocked on the measurement, or on Pathos. And the population question T1
+raises is untouched: writing a calculus's semantics would demand Lean fluency
+where it now demands `.eos` fluency, which trades one small expert community for
+another rather than removing the requirement.
+
+**Why it is not Pathos under another name**, which is worth saying because the
+two descriptions sound alike. A compiler that emits a checker *and* a proof of
+its soundness is, read one way, a verified checker generator. But the hard parts
+barely overlap: Pathos's is efficiency under verification — hash consing,
+sharing, mutable state — and noesis's is the statement, what "this compiler is
+correct" asserts and against what. They compose, and either can be built first.
+
+**Where the difficulty sits.** Not in the target language, where a proof
+assistant is by construction good at this, but in the source. A
+compiler-correctness theorem needs a semantics of *Eunoia*, and there is not
+one: what matching does and does not check, how a `:list` annotation desugars
+under each operator attribute, what `eo::define` binds and in what order, when a
+program case is reachable, what a literal evaluates to. Objection O7 is the same
+observation from the other side — none of that was written down, and this
+project would have to write all of it down, exactly, before the theorem it wants
+can be stated. This repository's desugarer is a partial and informal answer to
+one corner of that question, validated case by case against the real parser, and
+the size of that corner is a fair guide to the size of the rest.
+
+**And what it would cost this repository**, since we should say so where we say
+it about T4. The eight `TRI` checks exist because nothing else compares the legs
+of the triple; under noesis there are no legs, and they go. The `.eo` checks
+stay, because the signature stays. A smaller loss than T4 and a real one, and
+the same reason to distrust our enthusiasm — this time about a proposal we are
+recommending rather than resisting.
+
+## What the three mean for the argument above
 
 Two of the cost columns are dated rather than wrong. Arrangement **D** is
 blocked on a measurement that Pathos would replace with an artifact, and reason
@@ -524,16 +610,19 @@ blocked on a measurement that Pathos would replace with an artifact, and reason
 instead of settled.
 
 They also pull in different directions, which is worth being explicit about:
-Pathos improves the *checker* without touching the semantics question, while
-hermeneia makes the semantics question more consequential — and is easier
-the more of the semantics lives in Lean. A team with effort for one of them is
-choosing between "make the current arrangement's weakest artifact strong" and
-"make the current arrangement's strongest artifact reach further".
+Pathos improves the *checker* without touching the semantics question,
+hermeneia makes the semantics question more consequential — and is easier the
+more of the semantics lives in Lean — and noesis is the one that answers it. A
+team with effort for a single project is choosing between making the current
+arrangement's weakest artifact strong, making its strongest artifact reach
+further, and moving the artifact nobody in either column defends.
 
-What they share is that both are expensive things built *against* the signature
-and the proof format. Each one that gets built raises the cost of moving them,
-which is an argument for settling questions 1 and 3 — where the calculus is
-defined, and whether `.eos` should be Lean — before rather than after.
+What all three share is that they are expensive things built *against* the
+signature and the proof format, and each one that gets built raises the cost of
+moving those. That is an argument for settling questions 1 and 3 — where the
+calculus is defined, and whether `.eos` should be Lean — before rather than
+after. Noesis is the only one of the three that settles one of them rather than
+accruing against it, which is the argument for doing it first.
 
 ---
 
@@ -671,7 +760,9 @@ language that checks itself *if the analysis actually exists*. Every check in
    force, and the native arrangement gets a lot more attractive.
 3. **Should `.eos` be Lean?** Keep the signature as the SMT-facing artifact,
    write the semantics as Lean definitions, generate what the SMT backend needs
-   from those. Would that keep argument 1 and dissolve objection O2? It is arrangement **B**.
+   from those. Would that keep argument 1 and dissolve objection O2? It is
+   arrangement **B**, and Noesis is the project that would answer it by
+   building it.
 4. **Where is the line between a rule and a side condition?** Every computation
    moved into a program is work not proved, and work whose meaning must be
    modelled somewhere.
@@ -706,6 +797,10 @@ language that checks itself *if the analysis actually exists*. Every check in
   arrangement would then have a consumer that is a proof rather than a checker,
   which is a kind of consumer it has never had, and objection O5 would need
   rewriting.
+- **Noesis: the semantics and the compiler in Lean, with the signature left
+  alone.** Objections O2, O3 and O6 would be answered by moving rather than by
+  defending, and if that half moves cleanly the case for keeping the other half
+  has to stand on argument 1 by itself.
 - **A verified or eliminated `.smt2` frontend for the Lean side.** The strongest
   concrete argument in column one is the reference seam; close it and the
   balance shifts.

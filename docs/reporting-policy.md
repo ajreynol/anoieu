@@ -185,8 +185,8 @@ somebody signs. The generator cannot delete a row, so it can never be the thing
 that closes one.
 
 We do not control who runs the tool — it is public and reads whatever it is
-handed. What we control is what is published *here* as a report, which is the
-thing the promises in the top-level README are about.
+handed. What we control is what is published *here* as a report, and the
+top-level README says what CI checks about it rather than promising anything.
 
 ### A reply is somebody's triage, not the status
 

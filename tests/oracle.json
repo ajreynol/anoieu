@@ -1,0 +1,246 @@
+{
+ "DOC0010-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "DOC0011-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0020-bad.eo": {
+  "detail": "EO0020-bad.eo:4.62: Unhandled attribute NONE",
+  "verdict": "accepted"
+ },
+ "EO0020-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0021-bad.eo": {
+  "detail": "Error: EO0021-bad.eo:6.3: Expected conclusion in declare-rule",
+  "verdict": "refused"
+ },
+ "EO0021-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0030-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0031-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0040-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0041-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0041-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0042-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0042-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0046-bad.eo": {
+  "detail": "Error: EO0046-bad.eo:3.63: Opaque arguments must be a prefix of arguments.",
+  "verdict": "refused"
+ },
+ "EO0051-bad.eo": {
+  "detail": "Error: EO0051-bad.eo:8.3: Wrong arity for pattern",
+  "verdict": "refused"
+ },
+ "EO0052-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0052-subsumed-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0053-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0053-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0054-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0055-bad.eo": {
+  "detail": "Error: EO0055-bad.eo:11.3: Cannot match on evaluatable subterm (eo::list_concat or x xs)",
+  "verdict": "refused"
+ },
+ "EO0056-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0057-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0060-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0062-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0062-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0063-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0064-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0065-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0066-bad.eo": {
+  "detail": "correct",
+  "verdict": "accepted"
+ },
+ "EO0067-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0069-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0070-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0071-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0071-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0072-bad.eo": {
+  "detail": "Error: EO0072-bad.eo:3.44: Could not find symbol Int",
+  "verdict": "refused"
+ },
+ "EO0073-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0073-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0074-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0076-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0077-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0078-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0079-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0079-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0080-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0082-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0083-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0083-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0084-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0085-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0086-bad.eo": {
+  "detail": "Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at /home/andrew-reynol",
+  "verdict": "refused"
+ },
+ "EO0087-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0001-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0002-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0003-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0003-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0004-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0005-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0006-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0006-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "TRI0007-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ }
+}
