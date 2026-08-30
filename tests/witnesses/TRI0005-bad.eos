@@ -1,0 +1,2 @@
+; `f` becomes an application of `g`, which the SMT semantics does not define
+(define-symbol f (x) :term (g x))

@@ -1,0 +1,10 @@
+; expect: TRI0003
+; bvor's nil depends on the width, so the desugar stage forward-declares its nil
+; predicate and the semantics has to define one.
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-const BitVec (-> Int Type))
+(declare-consts <binary> (BitVec (eo::len eo::self)))
+(define bvzero ((m Int)) (eo::to_bin m 0))
+(declare-parameterized-const bvor ((m Int :implicit))
+  (-> (BitVec m) (BitVec m) (BitVec m)) :right-assoc-nil (bvzero m))

@@ -1,0 +1,3 @@
+(define-symbol f (x))
+; excludes a name the signature does not declare, so it excludes nothing
+(define-symbol lamda () :exclude)

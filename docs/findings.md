@@ -175,6 +175,36 @@ so matching binds it once and checks the second occurrence agrees -- which is
 exactly what the second case matches. Reported by `EO0052`, whose subsumption
 test is what sees it.
 
+### The first run over a whole triple
+
+cvc5's `Cpc.eo`, logos's `Cpc.eos`, ethos's `smt.eos` and the embedding they are
+written against, checked together:
+
+```bash
+python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo \
+  --semantics <logos>/install/defs/Cpc.eos \
+  --smt-semantics <ethos>/tools/eoc/semantics/smt.eos \
+  --embedding <ethos>/plugins/model_smt/model_smt.eo
+```
+
+| check | asks | result |
+| --- | --- | --- |
+| `TRI0001` | does every declared symbol have a meaning | complete |
+| `TRI0003` | do the `:is-list-nil` obligations match the signature | consistent |
+| `TRI0004` | are the exclusions real, and closed | closed |
+| `TRI0005` | does every transformation name a symbol the target defines | all present |
+| `TRI0002` | is any entry configuration nothing reaches | **one** |
+
+The one: `Cpc.eos:546` has `(define-symbol str.indexof_re_split (s r q))`, and
+CPC declares no such operator — it declares `str.indexof_re`. The name is real on
+the *target* side (`smt.eos:1639` defines it) and another entry transforms into
+it at line 584, which is legitimate; what is dead is the input-side entry, which
+no compilation reaches.
+
+Three of those four "clean" answers are checks the compiler's own documentation
+asks for and does not have, so a clean answer is the useful kind of answer: it
+says the seam is currently in step, from the two files, in under a second.
+
 ### An inventory, not a defect: the rules a calculus admits
 
 `EO0077` reports every rule marked `:sorry`. Both hits in the corpus are

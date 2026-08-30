@@ -1,0 +1,2 @@
+; expect:
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)

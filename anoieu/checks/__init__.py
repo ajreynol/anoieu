@@ -13,6 +13,7 @@ from typing import Callable, Iterator
 
 from ..diagnostics import Diagnostic, SourceMap
 from ..model import Signature
+from ..semantics import SemSet
 from ..syntax.parser import ParsedFile
 
 
@@ -24,6 +25,11 @@ class Context:
     root: str = ""
     pedantic: bool = False
     include_edges: list[tuple[str, str]] = field(default_factory=list)
+    # the other two legs of the triple, where a run named them
+    semantics: SemSet | None = None
+    smt_semantics: SemSet | None = None
+    # names the deep embedding declares for itself, from `--embedding`
+    embedding_names: set[str] = field(default_factory=set)
 
 
 @dataclass
@@ -82,5 +88,6 @@ def load_checks() -> None:
         rules,
         structure,
         terms,
+        triple,
         typing,
     )

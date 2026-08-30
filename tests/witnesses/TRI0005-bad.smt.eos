@@ -1,0 +1,3 @@
+(define-symbol h (x)
+  :typeof Int)
+(define-sort Int ())

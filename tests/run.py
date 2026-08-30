@@ -22,7 +22,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from anoieu.checks import REGISTRY, Context, load_checks, run_all  # noqa: E402
+from anoieu.cli import _embedding_vocabulary  # noqa: E402
 from anoieu.loader import load  # noqa: E402
+from anoieu.semantics import load_set  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WITNESSES = os.path.join(HERE, "witnesses")
@@ -37,8 +39,16 @@ def expected(path: str) -> set[str]:
 
 
 def run_one(path: str, want: set[str]) -> set[str]:
+    """A witness is a signature, and — for the checks over a triple — whichever
+    of its companions exist: `X.eos` is its semantics, `X.smt.eos` the SMT
+    semantics it is written against, `X.embed.eo` the deep embedding."""
     load_checks()
     res = load(path)
+    stem = path[: -len(".eo")]
+    companion = lambda suffix: stem + suffix if os.path.isfile(stem + suffix) else None
+    sem = companion(".eos")
+    smt = companion(".smt.eos")
+    embed = companion(".embed.eo")
     ctx = Context(
         signature=res.signature,
         files=res.files,
@@ -46,6 +56,9 @@ def run_one(path: str, want: set[str]) -> set[str]:
         root=os.path.dirname(path),
         pedantic=True,
         include_edges=res.include_edges,
+        semantics=load_set(sem) if sem else None,
+        smt_semantics=load_set(smt) if smt else None,
+        embedding_names=_embedding_vocabulary(embed) if embed else set(),
     )
     got = {d.code for d in list(res.diagnostics) + run_all(ctx)}
     # the checks that are off by default are only asked about when a witness
@@ -63,8 +76,8 @@ def main() -> int:
 
     failures = 0
     for name in sorted(os.listdir(WITNESSES)):
-        if not name.endswith(".eo"):
-            continue
+        if not name.endswith(".eo") or name.endswith(".embed.eo"):
+            continue  # an embedding is a companion of a witness, not one itself
         path = os.path.join(WITNESSES, name)
         want = expected(path)
         got = run_one(path, want)

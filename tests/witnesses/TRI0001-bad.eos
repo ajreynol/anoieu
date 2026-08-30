@@ -1,0 +1,2 @@
+; the semantics of the signature beside this file: it says nothing about `f`
+(define-symbol g (x))

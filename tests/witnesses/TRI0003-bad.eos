@@ -1,0 +1,3 @@
+; no :is-list-nil for bvor, whose nil depends on the type
+(define-symbol bvor (x y))
+(define-symbol BitVec (n))

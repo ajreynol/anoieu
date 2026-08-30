@@ -1,0 +1,2 @@
+; an entry for a symbol the signature does not declare
+(define-symbol g (x))

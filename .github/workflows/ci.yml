@@ -48,6 +48,11 @@ jobs:
           path: corpus/ethos
       - name: every signature is read
         run: python3 tools/sweep.py corpus/cvc5/proofs/eo corpus/ethos/tests
+      - name: check out logos
+        uses: actions/checkout@v4
+        with:
+          repository: cvc5/logos
+          path: corpus/logos
       - name: CPC reports what the baseline says it reports
         run: |
           python3 -m anoieu check \
@@ -55,6 +60,15 @@ jobs:
             corpus/cvc5/proofs/eo/cpc/expert/CpcExpert.eo \
             --baseline tests/corpus/cpc-baseline.json \
             --deny-warnings
+      # the whole triple: cvc5's signature, logos's semantics of it, and the
+      # SMT-LIB semantics and embedding those are written against
+      - name: the CPC triple agrees with itself
+        run: |
+          python3 -m anoieu check corpus/cvc5/proofs/eo/cpc/Cpc.eo \
+            --semantics corpus/logos/install/defs/Cpc.eos \
+            --smt-semantics corpus/ethos/tools/eoc/semantics/smt.eos \
+            --embedding corpus/ethos/plugins/model_smt/model_smt.eo \
+            --baseline tests/corpus/triple-baseline.json
 
   # The differential half: ethos is the authority on what a term desugars to, so
   # the battery is run against a real build of it.

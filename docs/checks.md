@@ -59,6 +59,11 @@ written, and `--pedantic` turns them on.
 | [EO0079](#eo0079) | a program is passed to a program, which never invokes it | on |
 | [EO0080](#eo0080) | an implicit parameter nothing can bind | on |
 | [EO0082](#eo0082) | an `eo::define` binding the body never uses | off |
+| [TRI0001](#tri0001) | a declared symbol the calculus semantics says nothing about | on |
+| [TRI0002](#tri0002) | a semantics entry for a symbol nothing declares | on |
+| [TRI0003](#tri0003) | the `:is-list-nil` obligations do not match the signature | on |
+| [TRI0004](#tri0004) | an exclusion that names nothing, or that is not closed | on |
+| [TRI0005](#tri0005) | a transformation whose target the SMT semantics does not define | on |
 
 ## DOC0001
 
@@ -605,3 +610,79 @@ usually the trace of a type that was edited around it.
 `eo::define` names a term so the body can say it twice. A binding the body never
 mentions names nothing: the value is still computed where it stands only because
 the binding is inlined, and the name is a leftover from an edit.
+
+## TRI0001
+
+**a declared symbol the calculus semantics says nothing about**
+
+Every symbol a signature declares needs a meaning, or the model-smt stage stops
+with `no model semantics found for <name>` — by design, since a symbol with no
+meaning is a symbol a model would silently say nothing about. That check runs at
+stage six of the compiler, after the semantics have been compiled, the signature
+desugared and trimmed. This one runs before any of it, from the two files.
+
+Names beginning `$` or `@@` are exempt, being a signature's own helpers and what
+the desugar stage introduces, and so is anything the semantics excludes.
+
+## TRI0002
+
+**a semantics entry for a symbol nothing declares**
+
+The other direction, which nothing reports today: an entry whose symbol the
+signature does not declare is configuration that no compilation reaches. It is
+either a symbol that was renamed or removed on the signature side, or a
+misspelling that has been quietly doing nothing.
+
+## TRI0003
+
+**the `:is-list-nil` obligations do not match the signature**
+
+The compiler's own worst seam, and the check its documentation asks for by name
+(`ethos/docs/README.md`, direction #2).
+
+An n-ary operator whose nil terminator depends on the type — `str.++`, whose nil
+is `""` at strings and `(seq.empty T)` at sequences — gets a *forward
+declaration* from the desugar stage and no body, because that stage declines to
+call `eo::typeof`. The body is supplied by hand, as an `:is-list-nil` attribute
+in the semantics. The desugar stage decides whether to declare one by looking at
+the signature; a human decides whether to define one by typing an attribute; and
+nothing compares the two decisions.
+
+Forgetting one leaves an undefined program reaching the backends: under SMT-LIB
+a free uninterpreted function the solver may read as it likes, under Lean a name
+that was never written. Writing one for an operator whose nil is ground is a
+definition nothing uses.
+
+Both directions are decidable from the signature alone, because whether a nil is
+ground is syntactic — so this needs no stage to run.
+
+## TRI0004
+
+**an exclusion that names nothing, or that is not closed**
+
+`:exclude` says the compilation has no place for what it is written on, and the
+names are matched literally: the compiler "neither checks that a name exists nor
+computes a dependency closure", so a misspelled exclusion excludes nothing,
+silently, and an exclusion that leaves its dependents behind leaves a later stage
+naming something that was dropped. `ethos/docs/README.md` direction #5 asks for
+both halves of this.
+
+## TRI0005
+
+**a transformation whose target the SMT semantics does not define**
+
+An entry of a calculus's semantics says what a symbol *becomes*: a term over the
+SMT-LIB signature. A bare name at term level is a symbol of that signature, so
+the target set has to define it. One it does not define is a name the model-smt
+stage will not find, reported here against the two configuration files rather
+than against the generated one.
+
+Only the heads of applications are checked, and only where the name is not a
+macro of the set, a program it writes, something the case's own pattern bound, a
+quoted native, or a `$`-name of the embedding — which is the vocabulary the
+compiler itself resolves.
+
+The check needs `--embedding`, the `.eo` file that declares what the deep
+embedding *is* (`plugins/model_smt/model_smt.eo`): its constructors and types are
+named by no configuration set, so without them every term of the embedding would
+read as a missing target. Given no embedding, this check says nothing.

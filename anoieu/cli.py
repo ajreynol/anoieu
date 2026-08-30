@@ -27,6 +27,7 @@ from .diagnostics import (
     render_text,
 )
 from .loader import _params_from, load
+from .semantics import load_set
 from .model import NIL_ATTRS
 from .resolve import resolve_decl
 from .suppress import apply as suppress_apply
@@ -74,6 +75,26 @@ def _common_root(paths: list[str], cfg) -> str:
     return os.path.commonpath(dirs) if len(dirs) > 1 else (dirs[0] if dirs else os.getcwd())
 
 
+# How the embedding spells a name it declares. A configuration set writes the
+# bare name; the embedding declares it under one of these.
+_EMBED_PREFIXES = (
+    "$emb_sm.", "$emb_tsm.", "$emb_vsm.", "$emb_msm.", "$emb_ssm.",
+    "$sm_", "$tsm_", "$vsm_", "$msm_", "$ssm_", "$smt_", "$smtx_", "$native_",
+)
+
+
+def _embedding_vocabulary(path: str) -> set[str]:
+    """The bare names the deep embedding declares, however it spells them."""
+    result = load(path)
+    out: set[str] = set()
+    for name in result.signature.all_named():
+        out.add(name)
+        for prefix in _EMBED_PREFIXES:
+            if name.startswith(prefix):
+                out.add(name[len(prefix):])
+    return out
+
+
 def _show(path: str, root: str) -> str:
     """A path as a log should carry it: relative where that is shorter to read,
     and as it stands where relative would climb out of the tree."""
@@ -114,13 +135,21 @@ def cmd_check(args: argparse.Namespace) -> int:
                 file=sys.stderr,
             )
             return 2
+    semantics = smt_semantics = None
     for opt, what in ((args.semantics, "--semantics"), (args.smt_semantics, "--smt-semantics")):
-        if opt:
-            print(
-                f"warning: {what} is accepted but not read yet; the checks over a "
-                f"triple are not written (see docs/design.md, M4)",
-                file=sys.stderr,
-            )
+        if opt and not os.path.isfile(opt):
+            print(f"error: no such file: {opt}", file=sys.stderr)
+            return 2
+    if args.semantics:
+        semantics = load_set(args.semantics)
+    if args.smt_semantics:
+        smt_semantics = load_set(args.smt_semantics)
+    embedding_names: set[str] = set()
+    if args.embedding:
+        if not os.path.isfile(args.embedding):
+            print(f"error: no such file: {args.embedding}", file=sys.stderr)
+            return 2
+        embedding_names = _embedding_vocabulary(args.embedding)
 
     root = _common_root(entries, cfg)
     pedantic = args.pedantic or cfg.pedantic
@@ -139,6 +168,9 @@ def cmd_check(args: argparse.Namespace) -> int:
             root=root,
             pedantic=pedantic,
             include_edges=result.include_edges,
+            semantics=semantics,
+            smt_semantics=smt_semantics,
+            embedding_names=embedding_names,
         )
         for path, parsed in result.files.items():
             if path not in files:
@@ -146,6 +178,11 @@ def cmd_check(args: argparse.Namespace) -> int:
                 sources.add(path, parsed.text)
                 read += 1
         diags += list(result.diagnostics) + run_all(ctx, enabled)
+        for sem in (semantics, smt_semantics):
+            if sem is not None and sem.path not in files:
+                sources.add(sem.path, sem.text)
+                read += 1
+                diags += sem.diagnostics
         counts["decls"] += len(result.signature.decls)
         counts["programs"] += len(result.signature.programs)
         counts["rules"] += len(result.signature.rules)
@@ -372,6 +409,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     c.add_argument("--format", choices=["text", "json", "github", "sarif"], default="text")
     c.add_argument("--config", help="an anoieu.json to use instead of the discovered one")
+    c.add_argument("--embedding", help="the .eo file declaring the deep embedding, "
+                   "e.g. plugins/model_smt/model_smt.eo")
     c.add_argument("--baseline", help="a baseline file: findings it holds are not reported")
     c.add_argument("--update-baseline", action="store_true", help="rewrite the baseline")
     c.add_argument("--no-suppress", action="store_true",

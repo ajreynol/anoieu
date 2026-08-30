@@ -42,9 +42,19 @@ Three things follow from that.
   `declare-fun` and `assert` in a `.smt2` are ordinary there and an error in a
   signature.
 
-`--semantics` and `--smt-semantics` name the two `.eos` sets of a triple. They
-are accepted, and a run that passes one says on stderr that it is not read yet:
-the checks over a triple are M4, see [`design.md`](design.md).
+**The other two legs.** `--semantics` names a calculus's semantics and
+`--smt-semantics` the SMT-LIB semantics it is written against; `--embedding`
+names the `.eo` file that declares what the deep embedding *is*
+(`plugins/model_smt/model_smt.eo`). Each check over the triple runs only when it
+was given the legs it needs and says nothing otherwise, so a run with one leg
+answers what one leg can answer:
+
+```bash
+python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo \
+  --semantics <logos>/install/defs/Cpc.eos \
+  --smt-semantics <ethos>/tools/eoc/semantics/smt.eos \
+  --embedding <ethos>/plugins/model_smt/model_smt.eo
+```
 
 ## The commands
 
@@ -67,7 +77,9 @@ Reads the signature, runs every check that is on, and prints what it found.
 | `--format text\|json\|github\|sarif` | how to print; `text` is the default |
 | `--deny-warnings` | exit non-zero on warnings too, not only on errors |
 | `--no-color` | plain text, which is also the default when stdout is not a terminal |
-| `--semantics FILE`, `--smt-semantics FILE` | the other two legs of the triple; accepted, not read yet |
+| `--semantics FILE` | the calculus semantics (`.eos`) |
+| `--smt-semantics FILE` | the SMT-LIB semantics it is written against |
+| `--embedding FILE` | the `.eo` declaring the deep embedding, which `TRI0005` needs |
 
 Exit codes: **0** nothing worse than a warning, **1** at least one error (or a
 warning under `--deny-warnings`), **2** the command itself was wrong.

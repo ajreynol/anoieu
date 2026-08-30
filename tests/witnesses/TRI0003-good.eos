@@ -1,0 +1,2 @@
+; `or`'s nil is ground, so no :is-list-nil is needed and none is written
+(define-symbol or (x y))
