@@ -71,6 +71,22 @@ it; anything already ruled on is in the log instead:
   the check that produced it gets a suppression comment in your file or a
   `disable` in your config. Both are better than an argument repeated monthly.
 
+### And the thing we will not tell you
+
+> **A successful pass is not a clean bill of health.**
+>
+> When anoieu reports nothing, that is a fact about the checks it ran, not about
+> your signature. The analysis is partial by construction — whole classes of
+> error have no check at all, the type reasoning is shallow, and every check has
+> been narrowed until it stopped reporting things that were not defects. A green
+> run here, or in your CI, or at the end of a report, is not evidence that a
+> signature, a semantics or a triple is sound, and nothing downstream should
+> treat it as such.
+>
+> We publish defects and never assurances, deliberately: a false sense of
+> security is much harder to withdraw than a wrong finding. See
+> [What we do not publish](#what-we-do-not-publish).
+
 ## The name
 
 **Eunoia** is *Eu·noi·a*. Read its syllables backwards and you get *a·noi·eu*,
