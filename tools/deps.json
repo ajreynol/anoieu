@@ -1,0 +1,36 @@
+{
+  "_comment": [
+    "The projects a report is generated from. Each is cloned into deps/ by",
+    "tools/deps.py, shallow and sparse: only the paths named below are checked",
+    "out, and no history is fetched, because the analysis reads text and never",
+    "builds anything.",
+    "",
+    "A `ref` is a choice, not a fact. It says which branch a finding is about,",
+    "and changing one changes what the report is a report of -- so it is data",
+    "here rather than a flag somewhere."
+  ],
+  "cvc5": {
+    "url": "https://github.com/cvc5/cvc5.git",
+    "ref": "main",
+    "paths": ["proofs/eo"],
+    "reads": "the CPC signature and the expert extension; the solver's own proof machinery is dokimasia's subject, not ours"
+  },
+  "ethos": {
+    "url": "https://github.com/cvc5/ethos.git",
+    "ref": "ethosEoc3",
+    "paths": ["tests", "tools/eoc", "plugins"],
+    "reads": "the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool"
+  },
+  "logos": {
+    "url": "https://github.com/ajreynol/logos.git",
+    "ref": "updateCompiler",
+    "paths": ["install/defs"],
+    "reads": "the installed signature and the CPC semantics logos owns"
+  },
+  "eudaimonia": {
+    "url": "https://github.com/ajreynol/eudaimonia.git",
+    "ref": "main",
+    "paths": ["examples/hello"],
+    "reads": "its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read"
+  }
+}

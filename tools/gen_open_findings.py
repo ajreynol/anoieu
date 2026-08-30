@@ -10,7 +10,7 @@ without someone saying why.
 
     python3 tools/gen_open_findings.py             # add anything new
     python3 tools/gen_open_findings.py --check     # exit 1 if something is unlisted
-    python3 tools/gen_open_findings.py --roots corpus
+    python3 tools/gen_open_findings.py --roots elsewhere
 
 `--check` fails only when a finding is *missing* from the file. Extra rows —
 findings no longer reported — are never an error here, because deciding they are
@@ -166,7 +166,7 @@ def existing(path: str) -> tuple[list[str], list[str], set[str]]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--roots", help="a directory holding cvc5/, ethos/ and logos/")
+    ap.add_argument("--roots", help="a directory of clones; defaults to deps/")
     ap.add_argument("--check", action="store_true", help="exit 1 if a finding is unlisted")
     args = ap.parse_args()
 

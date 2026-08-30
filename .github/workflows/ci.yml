@@ -3,6 +3,9 @@ name: ci
 on:
   push:
   pull_request:
+  schedule:
+    - cron: "0 6 * * 1"   # Mondays: has upstream moved under the report?
+  workflow_dispatch:
 
 jobs:
   # What the tool says about its own witnesses, and what a run does with those
@@ -26,6 +29,8 @@ jobs:
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a
   # change that invents a false positive fails *this* build rather than theirs.
+  # The sources are cloned by the run itself, from tools/deps.json — shallow and
+  # sparse, and never built, because the analysis reads text.
   corpus:
     runs-on: ubuntu-latest
     steps:
@@ -33,53 +38,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: check out cvc5
-        uses: actions/checkout@v4
-        with:
-          repository: cvc5/cvc5
-          ref: main
-          path: corpus/cvc5
-          sparse-checkout: proofs/eo
-      - name: check out ethos
-        uses: actions/checkout@v4
-        with:
-          repository: cvc5/ethos
-          ref: ethosEoc3
-          path: corpus/ethos
-      - name: every signature is read
-        run: python3 tools/sweep.py corpus/cvc5/proofs/eo corpus/ethos/tests
-      - name: check out logos
-        uses: actions/checkout@v4
-        with:
-          repository: cvc5/logos
-          path: corpus/logos
-      - name: CPC reports what the baseline says it reports
-        run: |
-          python3 -m anoieu check \
-            corpus/cvc5/proofs/eo/cpc/Cpc.eo \
-            corpus/cvc5/proofs/eo/cpc/expert/CpcExpert.eo \
-            --baseline tests/corpus/cpc-baseline.json \
-            --deny-warnings
-      # the whole triple: cvc5's signature, logos's semantics of it, and the
-      # SMT-LIB semantics and embedding those are written against
-      # a stale table means upstream moved or a check changed what it reports;
-      # the diff says which, and neither is an error in itself
-      # The counts must be current, and every finding must be listed. The report
+      # The counts must be current and every finding must be listed. The report
       # is *additive*: this fails when the checks report something the file does
       # not list, and never when the file lists something they no longer report.
       # Closing a finding is a judgement made by a review step, not by a diff —
-      # see "How this file is maintained" in docs/open-findings.md. The
-      # medium-term arrangement is that generation adds, and an AI review under
-      # human supervision moves a row to the Closed table with a verdict and
-      # writes what happened into docs/upstream.md.
-      - name: the report is current
-        run: python3 tools/run.py --check --roots corpus
+      # see "How this file is maintained" in docs/open-findings.md.
+      # --pinned restores the commits tools/deps.lock records rather than each
+      # branch tip, so this job depends on nothing but this repository: it goes
+      # red when a check changes what it reports, never because somebody
+      # upstream pushed. Moving to the tips is the refresh job below.
+      - name: the report is current for the recorded versions
+        run: python3 tools/run.py --pinned --check
+      - name: every signature is read without falling over
+        run: python3 tools/sweep.py deps/cvc5/proofs/eo deps/ethos/tests
+      - name: CPC reports what the baseline says it reports
+        run: |
+          python3 -m anoieu check \
+            deps/cvc5/proofs/eo/cpc/Cpc.eo \
+            deps/cvc5/proofs/eo/cpc/expert/CpcExpert.eo \
+            --baseline tests/corpus/cpc-baseline.json \
+            --deny-warnings
       - name: the CPC triple agrees with itself
         run: |
-          python3 -m anoieu check corpus/cvc5/proofs/eo/cpc/Cpc.eo \
-            --semantics corpus/logos/install/defs/Cpc.eos \
-            --smt-semantics corpus/ethos/tools/eoc/semantics/smt.eos \
-            --embedding corpus/ethos/plugins/model_smt/model_smt.eo \
+          python3 -m anoieu check deps/cvc5/proofs/eo/cpc/Cpc.eo \
+            --semantics deps/logos/install/defs/Cpc.eos \
+            --smt-semantics deps/ethos/tools/eoc/semantics/smt.eos \
+            --embedding deps/ethos/plugins/model_smt/model_smt.eo \
             --baseline tests/corpus/triple-baseline.json
 
   # The differential half: ethos is the authority on what a term desugars to, so
@@ -116,3 +100,38 @@ jobs:
       - name: the desugarer agrees with the parser
         run: |
           ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle
+
+  # The other question: what do the checks say about upstream *now*? This moves
+  # every clone to its tip and regenerates, so a failure here is news rather
+  # than a regression — new findings to triage, or counts to re-record. It is
+  # deliberately not on push: nobody's pull request should go red because cvc5
+  # merged something.
+  refresh:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: what the checks say about the current tips
+        run: |
+          python3 tools/run.py
+          git --no-pager diff --stat
+      - name: the regenerated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: |
+            docs/versions.md
+            docs/corpus.md
+            docs/open-findings.md
+            tools/deps.lock
+      - name: say whether upstream moved
+        run: |
+          if git diff --quiet; then
+            echo "the tips report exactly what the recorded versions do"
+          else
+            echo "::warning::upstream moved; run tools/run.py and commit the result"
+            git --no-pager diff -- docs/open-findings.md | head -60
+          fi

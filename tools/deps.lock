@@ -1,0 +1,23 @@
+{
+  "_comment": "Written by tools/run.py. The commits docs/versions.md reports on, in full, so `tools/run.py --pinned` can fetch exactly them. Edited by a run, not by hand.",
+  "cvc5": {
+    "ref": "main",
+    "commit": "aee874240419269019507d47d687f01d871587f5",
+    "date": "2026-08-29"
+  },
+  "ethos": {
+    "ref": "ethosEoc3",
+    "commit": "3cf1c03fdfd01720b4ec7614f475a75b31c3b483",
+    "date": "2026-08-30"
+  },
+  "logos": {
+    "ref": "updateCompiler",
+    "commit": "47f29bfac93e4364c6452e733e2d944c267a9b2c",
+    "date": "2026-08-30"
+  },
+  "eudaimonia": {
+    "ref": "main",
+    "commit": "45e34e0d6c2dc3b7799fe4fbaac260d017f458c5",
+    "date": "2026-08-30"
+  }
+}

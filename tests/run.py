@@ -67,6 +67,42 @@ def run_one(path: str, want: set[str]) -> set[str]:
     return {c for c in got if c not in off or c in want}
 
 
+def manifest_agrees() -> int:
+    """The sources the report is generated from are named in three places —
+    `tools/deps.json`, the targets in `tools/gen_corpus_table.py`, and the lock
+    a run writes. A name that appears in one and not the others makes a corpus
+    silently unmeasured, which reads exactly like a corpus with no findings. So
+    check it here, where no network is needed."""
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "tools"))
+    import deps  # noqa: PLC0415
+    import gen_corpus_table as corpus  # noqa: PLC0415
+
+    failures = 0
+    named = {d.name for d in deps.manifest()}
+    for label, repo, rels, triple in corpus.TARGETS:
+        wanted = {repo} | ({r for r, _ in triple.values()} if triple else set())
+        missing = wanted - named
+        if missing:
+            print(f"FAIL {label}: no such project in deps.json: {sorted(missing)}")
+            failures += 1
+    for d in deps.manifest():
+        if not d.paths:
+            print(f"FAIL {d.name}: no paths, so a clone of it would be empty")
+            failures += 1
+        if any(os.path.splitext(p)[1] for p in d.paths):
+            # cone-mode sparse-checkout takes directories; a file is rejected at
+            # clone time, which is a long way from here to find out.
+            print(f"FAIL {d.name}: sparse-checkout takes directories, not {d.paths}")
+            failures += 1
+    locked = deps.read_lock()
+    for name in named:
+        if name not in locked:
+            print(f"FAIL {name}: no commit in deps.lock; run tools/run.py")
+            failures += 1
+    print(f"-- the manifest, the targets and the lock agree: {failures} failure(s)")
+    return failures
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--oracle", action="store_true",
@@ -108,6 +144,9 @@ def main() -> int:
                 verdict = f"(not run: {e})"
             print(f"     ethos: {verdict}")
     print(f"-- witnesses: {failures} failure(s)")
+
+    print()
+    failures += manifest_agrees()
 
     sys.stdout.flush()
     print()

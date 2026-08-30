@@ -147,35 +147,62 @@ For GitHub code scanning instead of inline annotations:
 
 ## The run
 
-One command does the whole cycle, and it is the command to use:
+One command does the whole cycle:
 
 ```bash
-python3 tools/run.py            # fetch, report what has moved, measure, append
-python3 tools/run.py --bump     # ... and fast-forward what can safely be moved
-python3 tools/run.py --check    # verify without writing; what CI runs
+python3 tools/run.py                   # move to each tip, then measure
+python3 tools/run.py --pinned --check  # re-measure the recorded commits
+python3 tools/run.py --offline         # measure whatever deps/ already holds
 ```
 
-Four steps, in order, each printing what it did:
+Four steps, each printing what it did:
 
-1. **Bump.** The tools we find bugs in move, and yesterday's commit is not what
-   anyone is running. Each watched checkout is fetched; with `--bump` it is also
-   fast-forwarded onto its upstream. Nothing is ever forced — a tree with
-   uncommitted work, without an upstream, or that would need a merge is left
-   alone and says so, because these are trees other people work in.
-2. **Versions.** [`versions.md`](versions.md) records what was read: branch,
-   commit and date per repository, and whether the tree was dirty. A finding is
-   only true of a version, and the rows carry none of their own.
+1. **Sync.** Every project a report is about is cloned into `deps/` and moved to
+   a commit. **Nothing reads a checkout anybody owns**, so a report is a
+   property of named commits rather than of the machine that produced it.
+2. **Versions.** [`versions.md`](versions.md) records the ref, commit and date of
+   each, and [`../tools/deps.lock`](../tools/deps.lock) records the same commits
+   in full, for a machine. A finding is only true of a version, and the rows in
+   the report carry none of their own.
 3. **Counts.** [`corpus.md`](corpus.md), rewritten whole.
 4. **Findings.** [`open-findings.md`](open-findings.md), appended to.
 
-What is watched, and what is deliberately not:
+### Two different questions
 
-| repository | what we read | what we do not |
-| --- | --- | --- |
-| **cvc5** | `proofs/eo` — the CPC signature and the expert extension | the solver, its build system and its proof-production code: whether cvc5 can *justify* what it decides is [dokimasia](https://github.com/ajreynol/dokimasia)'s question, not ours |
-| **ethos** | the test signatures, and — as the triple's other legs — `tools/eoc/semantics` and the embedding | the C++ of the checker and the compiler |
-| **logos** | `install/defs`: the installed signature and the CPC semantics it owns | the Lean development |
-| **eudaimonia** | `examples/hello`, its own example calculus | `examples/cpc`, a vendored copy of cvc5's signature — checking it would report cvc5's findings under eudaimonia's name |
+Without `--pinned` a run asks **what is true of these projects now**. It moves
+every clone to the tip of its ref, so it can turn up findings nobody has seen and
+can change the counts. That is what produces a new report, and CI does it on a
+schedule rather than on a push.
+
+With `--pinned` it asks **do the recorded versions still report what the report
+says**. It restores the commits in `deps.lock` exactly, so it depends on nothing
+outside this repository: it goes red when a check changes what it reports, and
+never because somebody upstream pushed. That is the one a push runs, and it is
+what makes the corpus job a regression test rather than a news feed.
+
+The distinction matters because the two failures deserve opposite responses. A
+pinned failure is a bug in this tool, to be fixed before merging. An unpinned
+failure is upstream moving — a diff to read and, quite possibly, findings to
+file.
+
+**Nothing is built.** The analysis reads signatures, semantics and configuration
+as text, so the clones are shallow and sparse — one commit, and only the paths
+each project's entry names — and need no toolchain. The whole of `deps/` is
+about six megabytes and takes a few seconds to create. The one thing that does
+need a built ethos is the differential oracle (`tests/run.py --oracle`), which is
+a separate job.
+
+What is read, and what is deliberately not, is [`tools/deps.json`](../tools/deps.json):
+
+| project | ref | what we read | what we do not |
+| --- | --- | --- | --- |
+| **cvc5** | `main` | `proofs/eo` — the CPC signature and the expert extension | the solver, its build system, its proof-production code: whether cvc5 can *justify* what it decides is [dokimasia](https://github.com/ajreynol/dokimasia)'s question |
+| **ethos** | `ethosEoc3` | the test signatures, `tools/eoc/semantics`, and the deep embedding | the C++ of the checker and the compiler |
+| **logos** | `updateCompiler` | `install/defs` — the installed signature and the CPC semantics | the Lean development |
+| **eudaimonia** | `main` | `examples/hello`, its own example calculus | `examples/cpc`, a vendored copy of cvc5's signature: reading it would report cvc5's findings under eudaimonia's name |
+
+A ref in that file is a choice rather than a fact — it says which branch the
+findings are about, and changing one changes what the report is a report of.
 
 ## Maintaining the report
 
@@ -216,7 +243,10 @@ where the mechanical half now lives.
 
 A whole-of-CPC run reads 51 files and finishes in well under a second, with no
 build, no solver and no proof. There is nothing to cache and nothing to
-parallelize; the job is dominated by checking out the repository.
+parallelize; the job is dominated by fetching the sources, which is itself
+about six megabytes across four shallow, sparse clones and a few seconds. A
+downstream repository pays even less, because it checks its own signatures out
+anyway and needs no `deps/` at all.
 
 ## The order to do this in
 

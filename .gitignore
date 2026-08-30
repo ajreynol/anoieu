@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 .venv/
+
+# the sources a report is generated from: a cache, rebuilt by tools/deps.py
+deps/

@@ -1,20 +1,21 @@
 # What the report was measured against
 
-Written by `tools/run.py`. A finding is only ever true of a version: the
-rows in [`open-findings.md`](open-findings.md) carry none of their own, and
-this is what they are relative to. A row that outlives the commit it was
-found in is a row worth re-checking.
+Written by `tools/run.py`. Every project below is a clone this repository
+manages under `deps/`, updated before the run that produced this file — not
+a checkout on anyone's machine. A finding is only ever true of a version,
+and the rows in [`open-findings.md`](open-findings.md) carry none of their
+own, so this is what they are relative to.
 
-| tool | what it holds | branch | commit | dated |
+| project | ref | commit | dated | what is read |
 | --- | --- | --- | --- | --- |
-| **anoieu** | this analyzer | `main` | `caf13e5d8054` *(uncommitted changes)* | 2026-08-30 |
-| **cvc5** | `proofs/eo`: the CPC signature and the expert extension | `main` | `aee874240419` | 2026-08-29 |
-| **ethos** | three of the tools at once: the checker, `ethos-eoc`, and `user_manual.md`, which is where Eunoia is defined | `ethosEoc3` | `52bba6712ad0` *(uncommitted changes)* | 2026-08-30 |
-| **logos** | the Lean development, and the CPC semantics it owns | `updateCompiler` | `47f29bfac93e` *(uncommitted changes)* | 2026-08-30 |
-| **eudaimonia** | the template, and the example calculi we read | `main` | `d212079dd32c` *(uncommitted changes)* | 2026-08-30 |
+| **cvc5** | `main` | `aee874240419` | 2026-08-29 | the CPC signature and the expert extension; the solver's own proof machinery is dokimasia's subject, not ours |
+| **ethos** | `ethosEoc3` | `3cf1c03fdfd0` | 2026-08-30 | the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool |
+| **logos** | `updateCompiler` | `47f29bfac93e` | 2026-08-30 | the installed signature and the CPC semantics logos owns |
+| **eudaimonia** | `main` | `45e34e0d6c2d` | 2026-08-30 | its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read |
 
-The analyzer reports its own version as `0.2.0`; the commit above is
-what actually ran.
+Produced by anoieu `0.2.0`. Which commit of anoieu produced it is
+the commit this file is committed in, and is deliberately not written here:
+recording it would make the file stale the moment it was committed.
 
-A repository shown with uncommitted changes measured a working tree rather
-than a commit, so its findings are not reproducible from the commit alone.
+The clones are shallow and sparse: only the paths `tools/deps.json` names
+are checked out, and nothing is built, because the analysis reads text.

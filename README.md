@@ -198,14 +198,22 @@ fails *this* build when a change would invent a false positive in theirs.
 ## Running the report
 
 ```bash
-python3 tools/run.py --bump     # refresh what we analyse, then measure it
+python3 tools/run.py                   # move to each tip, then measure
+python3 tools/run.py --pinned --check  # re-measure the recorded commits
 ```
 
-Fetches each watched checkout and fast-forwards what safely can be, records what
-was read in [`docs/versions.md`](docs/versions.md), rewrites the counts in
+Clones every project the report is about into `deps/` and updates it — shallow,
+sparse, and never built, because the analysis reads text. Nothing reads a
+checkout on your machine, so a report is a property of named commits rather than
+of where it was produced. It then records what was read in
+[`docs/versions.md`](docs/versions.md), rewrites the counts in
 [`docs/corpus.md`](docs/corpus.md), and appends anything new to
 [`docs/open-findings.md`](docs/open-findings.md) — which is additive: the
-generator never removes a row. `docs/ci.md` has the whole arrangement.
+generator never removes a row. [`tools/deps.json`](tools/deps.json) says which
+projects and which refs, and `tools/deps.lock` records the exact commits a
+report was measured against — `--pinned` restores those, so the report can be
+reproduced from nothing but this repository. `docs/ci.md` has the whole
+arrangement.
 
 ## Testing it
 

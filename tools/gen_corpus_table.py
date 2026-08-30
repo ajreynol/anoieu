@@ -11,7 +11,7 @@ diff says which.
 
     python3 tools/gen_corpus_table.py            # rewrite docs/corpus.md
     python3 tools/gen_corpus_table.py --check    # exit 1 if it is stale
-    python3 tools/gen_corpus_table.py --roots corpus   # the CI layout
+    python3 tools/gen_corpus_table.py --roots elsewhere   # another set of clones
 
 The table counts findings. It is not a score and not a comparison between
 repositories: a corpus with fewer findings has not been shown to be better, only
@@ -27,6 +27,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from anoieu.checks import Context, load_checks, run_all  # noqa: E402
 from anoieu.cli import _embedding_vocabulary  # noqa: E402
@@ -64,12 +65,11 @@ TARGETS = [
     ),
 ]
 
-DEFAULT_ROOTS = {
-    "cvc5": os.path.expanduser("~/cvc5"),
-    "ethos": os.path.expanduser("~/ethos"),
-    "logos": os.path.expanduser("~/logos"),
-    "eudaimonia": os.path.expanduser("~/eudiamonia"),
-}
+# Where the sources live: clones this project manages, never a checkout somebody
+# else owns. See tools/deps.py.
+from deps import roots as _dep_roots  # noqa: E402
+
+DEFAULT_ROOTS = _dep_roots()
 
 
 def signatures(paths: list[str]) -> list[list[str]]:
@@ -173,7 +173,7 @@ top-level README.
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--roots", help="a directory holding cvc5/, ethos/ and logos/")
+    ap.add_argument("--roots", help="a directory of clones; defaults to deps/")
     ap.add_argument("--check", action="store_true", help="exit 1 if docs/corpus.md is stale")
     args = ap.parse_args()
 
