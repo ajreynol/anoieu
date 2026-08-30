@@ -56,9 +56,10 @@ it; anything already ruled on is in the log instead:
 | **Eunoia** — the language and its manual | 7 proposed changes, from what writing the analyzer turned up | [Eunoia](docs/README.md#eunoia-itself--the-language-and-its-manual) |
 
 Working through one of those with an assistant is a routine enough job that we
-keep a fixed prompt for it, and a fixed one-line reply to send back:
-[`docs/workflows.md`](docs/workflows.md). Nothing on our side files anything in
-your repository — a finding travels because a person carries it.
+keep a suggested prompt for it: [`docs/workflows.md`](docs/workflows.md). What
+comes back is your triage rather than a verdict, and we treat it that way —
+nothing on our side files anything in your repository, and no reply closes a row
+until the branch it names says what happened.
 
 ### What we promise about a finding
 
@@ -199,9 +200,9 @@ The long-term goal is for ethos, logos and cvc5 to run this on every push:
 [`docs/ci.md`](docs/ci.md) sets out the arrangement — one versioned tool, a
 policy file and a baseline owned by each repository, and a corpus job here that
 fails *this* build when a change would invent a false positive in theirs.
-[`docs/workflows.md`](docs/workflows.md) is the other half: who runs each part,
-what is deliberately left to a person, and the two prompts that carry a finding
-out and a response back.
+[`docs/workflows.md`](docs/workflows.md) is the other half, and is guidance
+rather than machinery: who runs each part, what a reply from a project does and
+does not settle, and a suggested prompt for working one finding.
 
 ## Running the report
 

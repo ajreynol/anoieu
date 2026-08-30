@@ -15,10 +15,6 @@ without someone saying why.
 `--check` fails only when a finding is *missing* from the file. Extra rows —
 findings no longer reported — are never an error here, because deciding they are
 closed is a judgement, not a diff.
-
-The one thing it does change about a row it keeps is the code's link to
-`checks.md`, so every row points at the page describing what the check assumes.
-Ids, notes and verdicts pass through untouched.
 """
 
 from __future__ import annotations
@@ -79,10 +75,6 @@ the point:
    narrowed — which is why the generator cannot delete and why every closure
    leaves both a row and a line in the log.
 
-The prompts for both halves — carrying a finding out, and reading a response
-back in — are fixed text in [`workflows.md`](workflows.md), which also says who
-runs what and what is deliberately left to a person.
-
 The hand-written register in [`README.md`](README.md) is the first pass at this,
 kept as the worked example of what a curated report looks like; this file is
 where the mechanical half now lives.
@@ -100,23 +92,6 @@ reasoning belongs in [`upstream.md`](upstream.md); this table is the ledger.
 | id | owner | code | where | what | verdict |
 | --- | --- | --- | --- | --- | --- |"""
 _ROW = re.compile(r"^\| `([0-9a-f]{6,})` \|")
-_CODE = re.compile(
-    r"^(\| `[0-9a-f]{6,}` \| [^|]*\| )\[?([A-Z]{2,4}[0-9]{4})\]?(?:\([^)]*\))?( \|)"
-)
-
-
-def link_codes(row: str) -> str:
-    """Point a row's code at the page that says what the check assumes.
-
-    Whoever receives a finding needs that page more than they need the row: it
-    is where a check says what it takes for granted, and therefore how it can be
-    wrong. This is the one edit the generator makes to a row it keeps — the
-    id, the notes and any verdict pass through untouched.
-    """
-    return _CODE.sub(
-        lambda m: f"{m.group(1)}[{m.group(2)}](checks.md#{m.group(2).lower()}){m.group(3)}",
-        row,
-    )
 
 
 def owner_of(path: str, roots: dict) -> str:
@@ -220,16 +195,15 @@ def main() -> int:
         return 1
 
     added = [
-        f"| `{k}` | {v['owner']} | [{v['code']}](checks.md#{v['code'].lower()}) "
-        f"| `{v['where']}` | {v['what']} |  |"
+        f"| `{k}` | {v['owner']} | {v['code']} | `{v['where']}` | {v['what']} |  |"
         for k, v in sorted(missing.items(), key=lambda kv: (kv[1]["owner"], kv[1]["where"]))
     ]
     body = (
         [HEADER.rstrip(), "", "## Open", "", COLUMNS, DIVIDER]
-        + [link_codes(r) for r in kept]
+        + kept
         + added
         + ["", CLOSED]
-        + [link_codes(r) for r in closed]
+        + closed
     )
     with open(OUT, "w") as f:
         f.write("\n".join(body).rstrip() + "\n")
