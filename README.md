@@ -195,6 +195,18 @@ The long-term goal is for ethos, logos and cvc5 to run this on every push:
 policy file and a baseline owned by each repository, and a corpus job here that
 fails *this* build when a change would invent a false positive in theirs.
 
+## Running the report
+
+```bash
+python3 tools/run.py --bump     # refresh what we analyse, then measure it
+```
+
+Fetches each watched checkout and fast-forwards what safely can be, records what
+was read in [`docs/versions.md`](docs/versions.md), rewrites the counts in
+[`docs/corpus.md`](docs/corpus.md), and appends anything new to
+[`docs/open-findings.md`](docs/open-findings.md) — which is additive: the
+generator never removes a row. `docs/ci.md` has the whole arrangement.
+
 ## Testing it
 
 ```bash

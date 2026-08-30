@@ -49,6 +49,9 @@ TARGETS = [
     ),
     ("ethos test signatures", "ethos", ["tests"], None),
     ("logos installed definitions", "logos", ["install/defs"], None),
+    # `examples/hello` only: `examples/cpc` is a vendored copy of cvc5's
+    # signature, so checking it reports cvc5's findings under eudaimonia's name.
+    ("eudaimonia examples", "eudaimonia", ["examples/hello"], None),
     (
         "the CPC triple",
         "cvc5",
@@ -65,6 +68,7 @@ DEFAULT_ROOTS = {
     "cvc5": os.path.expanduser("~/cvc5"),
     "ethos": os.path.expanduser("~/ethos"),
     "logos": os.path.expanduser("~/logos"),
+    "eudaimonia": os.path.expanduser("~/eudiamonia"),
 }
 
 

@@ -17,6 +17,7 @@ top-level README.
 | CPC with the expert signature | 51 | 3 | 23 | 15 |
 | ethos test signatures | 202 | 7 | 6 | 4 |
 | logos installed definitions | 1 | 3 | 1 | 15 |
+| eudaimonia examples | 1 | 0 | 0 | 0 |
 | the CPC triple | 35 | 3 | 20 | 15 |
 
 ## By check
@@ -65,6 +66,10 @@ top-level README.
 | EO0064 | error | 3 |
 | EO0077 | hint | 1 |
 | EO0083 | warning | 1 |
+
+**eudaimonia examples**
+
+Nothing reported by the checks that are on by default.
 
 **the CPC triple**
 

@@ -145,6 +145,38 @@ For GitHub code scanning instead of inline annotations:
         with: { sarif_file: anoieu.sarif }
 ```
 
+## The run
+
+One command does the whole cycle, and it is the command to use:
+
+```bash
+python3 tools/run.py            # fetch, report what has moved, measure, append
+python3 tools/run.py --bump     # ... and fast-forward what can safely be moved
+python3 tools/run.py --check    # verify without writing; what CI runs
+```
+
+Four steps, in order, each printing what it did:
+
+1. **Bump.** The tools we find bugs in move, and yesterday's commit is not what
+   anyone is running. Each watched checkout is fetched; with `--bump` it is also
+   fast-forwarded onto its upstream. Nothing is ever forced — a tree with
+   uncommitted work, without an upstream, or that would need a merge is left
+   alone and says so, because these are trees other people work in.
+2. **Versions.** [`versions.md`](versions.md) records what was read: branch,
+   commit and date per repository, and whether the tree was dirty. A finding is
+   only true of a version, and the rows carry none of their own.
+3. **Counts.** [`corpus.md`](corpus.md), rewritten whole.
+4. **Findings.** [`open-findings.md`](open-findings.md), appended to.
+
+What is watched, and what is deliberately not:
+
+| repository | what we read | what we do not |
+| --- | --- | --- |
+| **cvc5** | `proofs/eo` — the CPC signature and the expert extension | the solver, its build system and its proof-production code: whether cvc5 can *justify* what it decides is [dokimasia](https://github.com/ajreynol/dokimasia)'s question, not ours |
+| **ethos** | the test signatures, and — as the triple's other legs — `tools/eoc/semantics` and the embedding | the C++ of the checker and the compiler |
+| **logos** | `install/defs`: the installed signature and the CPC semantics it owns | the Lean development |
+| **eudaimonia** | `examples/hello`, its own example calculus | `examples/cpc`, a vendored copy of cvc5's signature — checking it would report cvc5's findings under eudaimonia's name |
+
 ## Maintaining the report
 
 Two files in `docs/` are generated, and the way they are maintained is the
