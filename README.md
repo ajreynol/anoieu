@@ -55,6 +55,11 @@ it; anything already ruled on is in the log instead:
 | **eudaimonia** — the calculus template | 2 preflight integrations | [eudaimonia](docs/README.md#eudaimonia--the-template-for-other-calculi) |
 | **Eunoia** — the language and its manual | 7 proposed changes, from what writing the analyzer turned up | [Eunoia](docs/README.md#eunoia-itself--the-language-and-its-manual) |
 
+Working through one of those with an assistant is a routine enough job that we
+keep a fixed prompt for it, and a fixed one-line reply to send back:
+[`docs/workflows.md`](docs/workflows.md). Nothing on our side files anything in
+your repository — a finding travels because a person carries it.
+
 ### What we promise about a finding
 
 - **It was confirmed before it was filed.** Every defect in that table was
@@ -194,6 +199,9 @@ The long-term goal is for ethos, logos and cvc5 to run this on every push:
 [`docs/ci.md`](docs/ci.md) sets out the arrangement — one versioned tool, a
 policy file and a baseline owned by each repository, and a corpus job here that
 fails *this* build when a change would invent a false positive in theirs.
+[`docs/workflows.md`](docs/workflows.md) is the other half: who runs each part,
+what is deliberately left to a person, and the two prompts that carry a finding
+out and a response back.
 
 ## Running the report
 

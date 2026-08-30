@@ -230,7 +230,9 @@ finding, and it is **additive**:
 - **For now the review is an AI process under human supervision.** It takes a
   row, reads the current state of the file it is about, and either leaves it or
   moves it with a verdict — writing the reasoning into
-  [`upstream.md`](upstream.md), which is the prose half of the same ledger.
+  [`upstream.md`](upstream.md), which is the prose half of the same ledger. The
+  prompt that does it is fixed text, in [`workflows.md`](workflows.md), together
+  with the one that carries a finding out to whoever can fix it.
 - **A finding that stops being reported is not evidence it was addressed.** It
   may have moved, or a check may have been narrowed. That is the whole reason
   the generator cannot delete.

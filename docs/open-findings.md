@@ -35,6 +35,10 @@ the point:
    narrowed — which is why the generator cannot delete and why every closure
    leaves both a row and a line in the log.
 
+The prompts for both halves — carrying a finding out, and reading a response
+back in — are fixed text in [`workflows.md`](workflows.md), which also says who
+runs what and what is deliberately left to a person.
+
 The hand-written register in [`README.md`](README.md) is the first pass at this,
 kept as the worked example of what a curated report looks like; this file is
 where the mechanical half now lives.
@@ -43,62 +47,62 @@ where the mechanical half now lives.
 
 | id | owner | code | where | what | notes |
 | --- | --- | --- | --- | --- | --- |
-| `deb8a1dbc6c6f079` | cvc5 | EO0031 | `proofs/eo/cpc/expert/theories/ArithExt.eo:17` | `@arith_vts_delta` is declared twice with the type Real |  |
-| `79166e01d3bec111` | cvc5 | EO0031 | `proofs/eo/cpc/expert/theories/ArithExt.eo:18` | `@arith_vts_delta_free` is declared twice with the type Real |  |
-| `2c740cb62dfc51b3` | cvc5 | EO0031 | `proofs/eo/cpc/expert/theories/ArithExt.eo:19` | `@arith_vts_infinity` is declared twice with the type T |  |
-| `852ee57154bcf6c4` | cvc5 | EO0031 | `proofs/eo/cpc/expert/theories/ArithExt.eo:20` | `@arith_vts_infinity_free` is declared twice with the type T |  |
-| `15dd9f5611325be2` | cvc5 | DOC0011 | `proofs/eo/cpc/programs/Quantifiers.eo:95` | program `$substitute_simul_rec` takes 5 argument(s), and its docstring lists 4 |  |
-| `946705a0916b7d39` | cvc5 | DOC0011 | `proofs/eo/cpc/programs/Strings.eo:1233` | program `$re_rev_map_rev` takes 2 argument(s), and its docstring lists 1 |  |
-| `97e03d281eade336` | cvc5 | DOC0011 | `proofs/eo/cpc/programs/Strings.eo:202` | program `$re_ac_merge` takes 3 argument(s), and its docstring lists 5 |  |
-| `dcd58a15ade5a630` | cvc5 | DOC0011 | `proofs/eo/cpc/programs/Strings.eo:224` | program `$re_concat_merge` takes 2 argument(s), and its docstring lists 4 |  |
-| `49f2e4bd2c23568d` | cvc5 | DOC0011 | `proofs/eo/cpc/programs/Strings.eo:244` | program `$derivative` takes 2 argument(s), and its docstring lists 5 |  |
-| `749c0a9f4fcfa766` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/Arith.eo:509` | rule `arith_poly_norm` takes 1 argument(s), and its docstring lists 2 |  |
-| `6d8e3eb5cafc93d4` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/ArithBvConv.eo:9` | program `$abconv_ubv_to_int_elim` takes 3 argument(s), and its docstring lists 4 |  |
-| `734366e4de4d1648` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/BitVectors.eo:240` | rule `bv_poly_norm` takes 1 argument(s), and its docstring lists 2 |  |
-| `fbc033a960a2aaa5` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/Booleans.eo:363` | rule `not_implies_elim2` takes 0 argument(s), and its docstring lists 1 |  |
-| `981948de279f158b` | cvc5 | DOC0012 | `proofs/eo/cpc/rules/Booleans.eo:363` | rule `not_implies_elim2` has no args, and its docstring documents one |  |
-| `52912b691212cf81` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/Booleans.eo:463` | rule `ite_elim2` takes 0 argument(s), and its docstring lists 1 |  |
-| `97999aad8798ca45` | cvc5 | DOC0012 | `proofs/eo/cpc/rules/Booleans.eo:463` | rule `ite_elim2` has no args, and its docstring documents one |  |
-| `9810bf3bebb29000` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/Datatypes.eo:360` | program `$mk_dt_updater_elim_rhs` takes 3 argument(s), and its docstring lists 2 |  |
-| `f7d30b3481235f49` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/Quantifiers.eo:148` | rule `quant_var_reordering` takes 0 premise(s), and its docstring lists 1 |  |
-| `a1918d88fa051f11` | cvc5 | DOC0012 | `proofs/eo/cpc/rules/Quantifiers.eo:148` | rule `quant_var_reordering` has no premises, and its docstring documents one |  |
-| `7ca5c014646b8984` | cvc5 | EO0083 | `proofs/eo/cpc/rules/Rewrites.eo:94` | rule `arith-eq-elim-int` matches exactly what `arith-eq-elim-real` matches |  |
-| `5b163f93e5077b90` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/Strings.eo:191` | rule `string_decompose` takes 2 premise(s), and its docstring lists 1 |  |
-| `abb6c825566b9322` | cvc5 | DOC0011 | `proofs/eo/cpc/rules/Uf.eo:31` | rule `symm` takes 0 argument(s), and its docstring lists 1 |  |
-| `639aa3c1ad36dd73` | cvc5 | DOC0012 | `proofs/eo/cpc/rules/Uf.eo:31` | rule `symm` has no args, and its docstring documents one |  |
-| `52b5ae926f12d4c9` | ethos | EO0084 | `tests/Builtin-rules.eo:61` | rule `identity` concludes one of its own premises |  |
-| `dcfaf1e214126aa3` | ethos | EO0054 | `tests/Nary.eo:157` | this pattern matches an `cons` of exactly 2 element(s) |  |
-| `f52484ca50c98a65` | ethos | EO0054 | `tests/Nary.eo:90` | this pattern matches an `cons` of exactly 2 element(s) |  |
-| `b742c6d3a4fa9d74` | ethos | DOC0011 | `tests/Uf-rules.eo:25` | rule `symm` takes 0 argument(s), and its docstring lists 1 |  |
-| `d0b325c24c13892a` | ethos | DOC0012 | `tests/Uf-rules.eo:25` | rule `symm` has no args, and its docstring documents one |  |
-| `7f3eb81581c1f0a1` | ethos | EO0084 | `tests/binder-ex.eo:10` | rule `id` concludes one of its own premises |  |
-| `74c6f064da7c2464` | ethos | EO0084 | `tests/binder-subterm-share.eo:8` | rule `id` concludes one of its own premises |  |
-| `516184abdc82d1df` | ethos | EO0054 | `tests/conclusion-spec.eo:8` | this pattern matches an `or` of exactly 2 element(s) |  |
-| `42d486abefc2fc62` | ethos | EO0071 | `tests/eo-definitions.eo:190` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
-| `70fa22c05a9635d8` | ethos | EO0071 | `tests/eo-definitions.eo:229` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
-| `8dbf440aca48da0c` | ethos | EO0071 | `tests/eo-definitions.eo:252` | `-1` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
-| `6b2263f824b28bd0` | ethos | EO0071 | `tests/eo-definitions.eo:263` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
-| `b4b49bbcd0bffd3a` | ethos | EO0040 | `tests/match-simple.eo:11` | `<` is marked `:right-assoc`, so its second argument and its return type must agree |  |
-| `5c38f46b13406872` | ethos | EO0052 | `tests/naive-nary.eo:182` | this case of `isPermutation` can never be reached |  |
-| `59e8abdd4478092d` | ethos | EO0071 | `tests/right-assoc-variants.eo:48` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
-| `584eda1d79a64b2c` | ethos | EO0071 | `tests/right-assoc-variants.eo:62` | `""` is a <string> literal, and this signature has no `declare-consts <string>` |  |
-| `dd90590c7cc85916` | logos | EO0064 | `install/defs/Cpc.cached.eo:2252` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int |  |
-| `af3e2426c03378f8` | logos | EO0064 | `install/defs/Cpc.cached.eo:2253` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int |  |
-| `db3bebb3d118f2bd` | logos | EO0064 | `install/defs/Cpc.cached.eo:2259` | this case of `$is_seq_const` returns Bool, and the program declares Int |  |
-| `5ae3d0404b0f5258` | logos | EO0054 | `install/defs/Cpc.cached.eo:3102` | this pattern matches an `*` of exactly 2 element(s) |  |
-| `2df8343d1a4b70b5` | logos | EO0054 | `install/defs/Cpc.cached.eo:3492` | this pattern matches an `str.++` of exactly 3 element(s) |  |
-| `2e32230f53cd937e` | logos | EO0083 | `install/defs/Cpc.cached.eo:4444` | rule `arith-eq-elim-int` matches exactly what `arith-eq-elim-real` matches |  |
-| `b27d3def22beb16e` | logos | EO0054 | `install/defs/Cpc.cached.eo:4749` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `2074c9351e4496a1` | logos | EO0054 | `install/defs/Cpc.cached.eo:4890` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `4309c49e54760e9c` | logos | EO0054 | `install/defs/Cpc.cached.eo:5082` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `9b576113aedf61f4` | logos | EO0054 | `install/defs/Cpc.cached.eo:5293` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `e621f59502bd9c65` | logos | EO0054 | `install/defs/Cpc.cached.eo:5298` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `b2ccb7c697fadccf` | logos | EO0054 | `install/defs/Cpc.cached.eo:5516` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `5e085563326ca740` | logos | EO0054 | `install/defs/Cpc.cached.eo:5595` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `80da672a81fa0705` | logos | EO0054 | `install/defs/Cpc.cached.eo:5600` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `890491ff8a770b03` | logos | EO0054 | `install/defs/Cpc.cached.eo:5605` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `9210e4d67854e3dd` | logos | EO0054 | `install/defs/Cpc.cached.eo:6096` | this pattern matches an `+` of exactly 2 element(s) |  |
-| `eac7ccd4d5fb0953` | logos | TRI0002 | `install/defs/Cpc.eos:542` | the semantics has an entry for `str.indexof_re_split`, which the signature does not declare |  |
+| `deb8a1dbc6c6f079` | cvc5 | [EO0031](checks.md#eo0031) | `proofs/eo/cpc/expert/theories/ArithExt.eo:17` | `@arith_vts_delta` is declared twice with the type Real |  |
+| `79166e01d3bec111` | cvc5 | [EO0031](checks.md#eo0031) | `proofs/eo/cpc/expert/theories/ArithExt.eo:18` | `@arith_vts_delta_free` is declared twice with the type Real |  |
+| `2c740cb62dfc51b3` | cvc5 | [EO0031](checks.md#eo0031) | `proofs/eo/cpc/expert/theories/ArithExt.eo:19` | `@arith_vts_infinity` is declared twice with the type T |  |
+| `852ee57154bcf6c4` | cvc5 | [EO0031](checks.md#eo0031) | `proofs/eo/cpc/expert/theories/ArithExt.eo:20` | `@arith_vts_infinity_free` is declared twice with the type T |  |
+| `15dd9f5611325be2` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/programs/Quantifiers.eo:95` | program `$substitute_simul_rec` takes 5 argument(s), and its docstring lists 4 |  |
+| `946705a0916b7d39` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/programs/Strings.eo:1233` | program `$re_rev_map_rev` takes 2 argument(s), and its docstring lists 1 |  |
+| `97e03d281eade336` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/programs/Strings.eo:202` | program `$re_ac_merge` takes 3 argument(s), and its docstring lists 5 |  |
+| `dcd58a15ade5a630` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/programs/Strings.eo:224` | program `$re_concat_merge` takes 2 argument(s), and its docstring lists 4 |  |
+| `49f2e4bd2c23568d` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/programs/Strings.eo:244` | program `$derivative` takes 2 argument(s), and its docstring lists 5 |  |
+| `749c0a9f4fcfa766` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/Arith.eo:509` | rule `arith_poly_norm` takes 1 argument(s), and its docstring lists 2 |  |
+| `6d8e3eb5cafc93d4` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/ArithBvConv.eo:9` | program `$abconv_ubv_to_int_elim` takes 3 argument(s), and its docstring lists 4 |  |
+| `734366e4de4d1648` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/BitVectors.eo:240` | rule `bv_poly_norm` takes 1 argument(s), and its docstring lists 2 |  |
+| `fbc033a960a2aaa5` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/Booleans.eo:363` | rule `not_implies_elim2` takes 0 argument(s), and its docstring lists 1 |  |
+| `981948de279f158b` | cvc5 | [DOC0012](checks.md#doc0012) | `proofs/eo/cpc/rules/Booleans.eo:363` | rule `not_implies_elim2` has no args, and its docstring documents one |  |
+| `52912b691212cf81` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/Booleans.eo:463` | rule `ite_elim2` takes 0 argument(s), and its docstring lists 1 |  |
+| `97999aad8798ca45` | cvc5 | [DOC0012](checks.md#doc0012) | `proofs/eo/cpc/rules/Booleans.eo:463` | rule `ite_elim2` has no args, and its docstring documents one |  |
+| `9810bf3bebb29000` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/Datatypes.eo:360` | program `$mk_dt_updater_elim_rhs` takes 3 argument(s), and its docstring lists 2 |  |
+| `f7d30b3481235f49` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/Quantifiers.eo:148` | rule `quant_var_reordering` takes 0 premise(s), and its docstring lists 1 |  |
+| `a1918d88fa051f11` | cvc5 | [DOC0012](checks.md#doc0012) | `proofs/eo/cpc/rules/Quantifiers.eo:148` | rule `quant_var_reordering` has no premises, and its docstring documents one |  |
+| `7ca5c014646b8984` | cvc5 | [EO0083](checks.md#eo0083) | `proofs/eo/cpc/rules/Rewrites.eo:94` | rule `arith-eq-elim-int` matches exactly what `arith-eq-elim-real` matches |  |
+| `5b163f93e5077b90` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/Strings.eo:191` | rule `string_decompose` takes 2 premise(s), and its docstring lists 1 |  |
+| `abb6c825566b9322` | cvc5 | [DOC0011](checks.md#doc0011) | `proofs/eo/cpc/rules/Uf.eo:31` | rule `symm` takes 0 argument(s), and its docstring lists 1 |  |
+| `639aa3c1ad36dd73` | cvc5 | [DOC0012](checks.md#doc0012) | `proofs/eo/cpc/rules/Uf.eo:31` | rule `symm` has no args, and its docstring documents one |  |
+| `52b5ae926f12d4c9` | ethos | [EO0084](checks.md#eo0084) | `tests/Builtin-rules.eo:61` | rule `identity` concludes one of its own premises |  |
+| `dcfaf1e214126aa3` | ethos | [EO0054](checks.md#eo0054) | `tests/Nary.eo:157` | this pattern matches an `cons` of exactly 2 element(s) |  |
+| `f52484ca50c98a65` | ethos | [EO0054](checks.md#eo0054) | `tests/Nary.eo:90` | this pattern matches an `cons` of exactly 2 element(s) |  |
+| `b742c6d3a4fa9d74` | ethos | [DOC0011](checks.md#doc0011) | `tests/Uf-rules.eo:25` | rule `symm` takes 0 argument(s), and its docstring lists 1 |  |
+| `d0b325c24c13892a` | ethos | [DOC0012](checks.md#doc0012) | `tests/Uf-rules.eo:25` | rule `symm` has no args, and its docstring documents one |  |
+| `7f3eb81581c1f0a1` | ethos | [EO0084](checks.md#eo0084) | `tests/binder-ex.eo:10` | rule `id` concludes one of its own premises |  |
+| `74c6f064da7c2464` | ethos | [EO0084](checks.md#eo0084) | `tests/binder-subterm-share.eo:8` | rule `id` concludes one of its own premises |  |
+| `516184abdc82d1df` | ethos | [EO0054](checks.md#eo0054) | `tests/conclusion-spec.eo:8` | this pattern matches an `or` of exactly 2 element(s) |  |
+| `42d486abefc2fc62` | ethos | [EO0071](checks.md#eo0071) | `tests/eo-definitions.eo:190` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
+| `70fa22c05a9635d8` | ethos | [EO0071](checks.md#eo0071) | `tests/eo-definitions.eo:229` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
+| `8dbf440aca48da0c` | ethos | [EO0071](checks.md#eo0071) | `tests/eo-definitions.eo:252` | `-1` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
+| `6b2263f824b28bd0` | ethos | [EO0071](checks.md#eo0071) | `tests/eo-definitions.eo:263` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
+| `b4b49bbcd0bffd3a` | ethos | [EO0040](checks.md#eo0040) | `tests/match-simple.eo:11` | `<` is marked `:right-assoc`, so its second argument and its return type must agree |  |
+| `5c38f46b13406872` | ethos | [EO0052](checks.md#eo0052) | `tests/naive-nary.eo:182` | this case of `isPermutation` can never be reached |  |
+| `59e8abdd4478092d` | ethos | [EO0071](checks.md#eo0071) | `tests/right-assoc-variants.eo:48` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` |  |
+| `584eda1d79a64b2c` | ethos | [EO0071](checks.md#eo0071) | `tests/right-assoc-variants.eo:62` | `""` is a <string> literal, and this signature has no `declare-consts <string>` |  |
+| `dd90590c7cc85916` | logos | [EO0064](checks.md#eo0064) | `install/defs/Cpc.cached.eo:2252` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int |  |
+| `af3e2426c03378f8` | logos | [EO0064](checks.md#eo0064) | `install/defs/Cpc.cached.eo:2253` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int |  |
+| `db3bebb3d118f2bd` | logos | [EO0064](checks.md#eo0064) | `install/defs/Cpc.cached.eo:2259` | this case of `$is_seq_const` returns Bool, and the program declares Int |  |
+| `5ae3d0404b0f5258` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:3102` | this pattern matches an `*` of exactly 2 element(s) |  |
+| `2df8343d1a4b70b5` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:3492` | this pattern matches an `str.++` of exactly 3 element(s) |  |
+| `2e32230f53cd937e` | logos | [EO0083](checks.md#eo0083) | `install/defs/Cpc.cached.eo:4444` | rule `arith-eq-elim-int` matches exactly what `arith-eq-elim-real` matches |  |
+| `b27d3def22beb16e` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:4749` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `2074c9351e4496a1` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:4890` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `4309c49e54760e9c` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:5082` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `9b576113aedf61f4` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:5293` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `e621f59502bd9c65` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:5298` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `b2ccb7c697fadccf` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:5516` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `5e085563326ca740` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:5595` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `80da672a81fa0705` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:5600` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `890491ff8a770b03` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:5605` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `9210e4d67854e3dd` | logos | [EO0054](checks.md#eo0054) | `install/defs/Cpc.cached.eo:6096` | this pattern matches an `+` of exactly 2 element(s) |  |
+| `eac7ccd4d5fb0953` | logos | [TRI0002](checks.md#tri0002) | `install/defs/Cpc.eos:542` | the semantics has an entry for `str.indexof_re_split`, which the signature does not declare |  |
 
 ## Closed
 
@@ -108,21 +112,21 @@ reasoning belongs in [`upstream.md`](upstream.md); this table is the ledger.
 
 | id | owner | code | where | what | verdict |
 | --- | --- | --- | --- | --- | --- |
-| `ece08559e3edd79c` | cvc5 | EO0054 | `proofs/eo/cpc/programs/Strings.eo:1749` | this pattern matches an `*` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `1d977d28576d3693` | cvc5 | EO0064 | `proofs/eo/cpc/programs/Strings.eo:46` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |
-| `878038145dca690c` | cvc5 | EO0064 | `proofs/eo/cpc/programs/Strings.eo:47` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |
-| `6cc91770c5491971` | cvc5 | EO0064 | `proofs/eo/cpc/programs/Strings.eo:58` | this case of `$is_seq_const` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |
-| `cab3113f257de9c1` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:1166` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `129a0fcb766be9f6` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:1245` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `9913cf82395ba38e` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:1250` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `abcbd61aac94dc78` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:1255` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `90a380b8bdf7cb18` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:1746` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `c9887e6df81fcdb6` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:399` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `0a12b85457baceb9` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:540` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `b450c58122dec907` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:732` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `92bcba9c5a9aff47` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:943` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `246cda4bed0fcdf4` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Rewrites.eo:948` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `3061a2d9ac0d7ab8` | cvc5 | EO0054 | `proofs/eo/cpc/rules/Strings.eo:306` | this pattern matches an `str.++` of exactly 3 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
-| `a3e3ef689c03095f` | ethos | EO0077 | `tests/sorry.eo:4` | rule `trust` is admitted: it is marked `:sorry` | intentional — cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete |
-| `befab5e954ae823b` | logos | EO0077 | `install/defs/Cpc.cached.eo:6636` | rule `trust` is admitted: it is marked `:sorry` | intentional — cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete |
-| `bf7a06476186d7c5` | cvc5 | EO0077 | `proofs/eo/cpc/Cpc.eo:555` | rule `trust` is admitted: it is marked `:sorry` | intentional — cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete |
+| `ece08559e3edd79c` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/programs/Strings.eo:1749` | this pattern matches an `*` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `1d977d28576d3693` | cvc5 | [EO0064](checks.md#eo0064) | `proofs/eo/cpc/programs/Strings.eo:46` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |
+| `878038145dca690c` | cvc5 | [EO0064](checks.md#eo0064) | `proofs/eo/cpc/programs/Strings.eo:47` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |
+| `6cc91770c5491971` | cvc5 | [EO0064](checks.md#eo0064) | `proofs/eo/cpc/programs/Strings.eo:58` | this case of `$is_seq_const` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |
+| `cab3113f257de9c1` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:1166` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `129a0fcb766be9f6` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:1245` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `9913cf82395ba38e` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:1250` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `abcbd61aac94dc78` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:1255` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `90a380b8bdf7cb18` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:1746` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `c9887e6df81fcdb6` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:399` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `0a12b85457baceb9` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:540` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `b450c58122dec907` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:732` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `92bcba9c5a9aff47` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:943` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `246cda4bed0fcdf4` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Rewrites.eo:948` | this pattern matches an `+` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `3061a2d9ac0d7ab8` | cvc5 | [EO0054](checks.md#eo0054) | `proofs/eo/cpc/rules/Strings.eo:306` | this pattern matches an `str.++` of exactly 3 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
+| `a3e3ef689c03095f` | ethos | [EO0077](checks.md#eo0077) | `tests/sorry.eo:4` | rule `trust` is admitted: it is marked `:sorry` | intentional — cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete |
+| `befab5e954ae823b` | logos | [EO0077](checks.md#eo0077) | `install/defs/Cpc.cached.eo:6636` | rule `trust` is admitted: it is marked `:sorry` | intentional — cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete |
+| `bf7a06476186d7c5` | cvc5 | [EO0077](checks.md#eo0077) | `proofs/eo/cpc/Cpc.eo:555` | rule `trust` is admitted: it is marked `:sorry` | intentional — cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete |
