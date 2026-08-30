@@ -27,18 +27,31 @@ the findings have to be published somewhere their owners will read them, argued
 where they can be disagreed with, and tracked until they are resolved or
 declined. This repository is that somewhere.
 
+### The reporting system has two faces
+
+| | where | what it is |
+| --- | --- | --- |
+| **Open findings** | [`docs/README.md`](docs/README.md) | what anoieu currently believes and nobody has ruled on — *hypotheses*, each reproduced before it was written down, each still able to be wrong |
+| **The log** | [`docs/upstream.md`](docs/upstream.md) | what was reported and what came back — accepted, declined, deferred, and what the analyzer changed when a finding turned out to be wrong |
+
+So far: **two findings fixed upstream in cvc5**, one declined because our
+analysis was wrong, one impact claim overstated and corrected. The declined one
+produced the most useful change in the tool — reachability is now asked per
+*ordered profile*, the way a consumer actually loads a signature.
+
 ### If you own a tool in the Eunoia ecosystem, look here
 
-**[`docs/README.md`](docs/README.md)** is the page. It carries every ask anoieu
-makes of anyone, each with an id, a state, and the reasoning underneath it:
+**[`docs/README.md`](docs/README.md)** is the page. It carries every open ask
+anoieu makes of anyone, each with an id, a state, and the reasoning underneath
+it; anything already ruled on is in the log instead:
 
 | you own | waiting for you | jump to |
 | --- | --- | --- |
-| **cvc5** — the CPC signature | 4 fixes, 1 CI adoption | [cvc5](docs/README.md#cvc5--the-calculus-everything-downstream-is-built-from) |
+| **cvc5** — the CPC signature | 2 requests they made of us; 2 findings already fixed | [cvc5](docs/README.md#cvc5--the-calculus-everything-downstream-is-built-from) |
 | **ethos** — the proof checker | 3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption | [ethos](docs/README.md#ethos--the-proof-checker-and-its-own-signatures) |
 | **ethos-eoc** — the Eunoia compiler | 3 integrations, including the `is_list_nil` diff its own docs ask for | [ethos-eoc](docs/README.md#ethos-eoc--the-eunoia-compiler) |
-| **logos** — the Lean development | 1 fix inherited from cvc5, 1 CI adoption | [logos](docs/README.md#logos--the-lean-development) |
-| **eudaimonia** — the calculus template | 1 preflight integration | [eudaimonia](docs/README.md#eudaimonia--the-template-for-other-calculi) |
+| **logos** — the Lean development | 1 dead entry, 1 regeneration, 1 CI adoption | [logos](docs/README.md#logos--the-lean-development) |
+| **eudaimonia** — the calculus template | 2 preflight integrations | [eudaimonia](docs/README.md#eudaimonia--the-template-for-other-calculi) |
 | **Eunoia** — the language and its manual | 7 proposed changes, from what writing the analyzer turned up | [Eunoia](docs/README.md#eunoia-itself--the-language-and-its-manual) |
 
 ### What we promise about a finding

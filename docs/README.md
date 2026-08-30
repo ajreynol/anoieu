@@ -32,23 +32,28 @@ before it was written down.
 
 | you own | your section | read first |
 | --- | --- | --- |
-| cvc5's CPC signature | [cvc5](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5-1: two programs declare `Int` and return `Bool` |
+| cvc5's CPC signature | [cvc5](#cvc5--the-calculus-everything-downstream-is-built-from) | the log first: two findings fixed, one declined ([`upstream.md`](upstream.md)) |
 | ethos, the proof checker | [ethos](#ethos--the-proof-checker-and-its-own-signatures) | ethos-1: a test signature declares an operator that cannot fold |
 | ethos-eoc, the compiler | [ethos-eoc](#ethos-eoc--the-eunoia-compiler) | eoc-3: the `is_list_nil` diff your own docs ask for |
-| logos | [logos](#logos--the-lean-development) | logos-1: the flattened copies carry cvc5-1 |
+| logos | [logos](#logos--the-lean-development) | logos-2: a semantics entry for an operator CPC does not declare |
 | eudaimonia | [eudaimonia](#eudaimonia--the-template-for-other-calculi) | eud-1: preflight a calculus against the signature contract |
 | Eunoia itself | [Eunoia](#eunoia-itself--the-language-and-its-manual) | eunoia-1: an identical re-declaration makes two symbols that print the same |
 
-### What came back
+### Two faces, two documents
 
-Two findings landed in cvc5, one was declined because our analysis was wrong,
-and one was overstated. [`upstream.md`](upstream.md) is that record — what was
-reported, what happened to it, and what the analyzer does differently as a
-result. It is the more honest half of this page.
+| | where | what it holds |
+| --- | --- | --- |
+| **Open findings** | this page, below | what anoieu believes and nobody has ruled on: hypotheses, each reproduced, each still able to be wrong |
+| **The log** | [`upstream.md`](upstream.md) | what was reported and what came back: accepted, declined, deferred — and what the analyzer changed when a finding was wrong |
+
+Two findings have landed in cvc5, one was declined because our analysis was
+wrong, and one was overstated. The log is the more honest half of the pair, and
+the one to read first if you are deciding how much weight to give the other.
 
 ### How a row moves
 
-The **state** column is the whole tracker; there is no second one elsewhere.
+The **state** column is the whole tracker; there is no second one elsewhere. A
+row that gets a verdict leaves this table and is written up in the log.
 
 | state | means |
 | --- | --- |
@@ -58,7 +63,7 @@ The **state** column is the whole tracker; there is no second one elsewhere.
 | `blocked on X` | waiting on another row |
 | `needs M4` | waiting on a milestone here, not on you |
 | `filed <link>` | raised upstream; the link is the issue or pull request |
-| `fixed` / `adopted` / `declined` | ended, and kept in the table with the reason |
+| `fixed` / `adopted` / `declined` | ruled on: the row moves to [`upstream.md`](upstream.md) with the reasoning |
 
 A row that is **declined** is a good outcome and stays visible: the check that
 produced it then gets a suppression comment in your file or a `disable` in your
@@ -66,15 +71,16 @@ configuration, so the same argument is not had twice.
 
 ---
 
-## Action items
+## Open findings
+
+**Hypotheses, not verdicts.** Everything below is something anoieu believes and
+nobody who owns the file has ruled on yet. Each was reproduced before it was
+written down — see [`findings.md`](findings.md) — and each can still turn out to
+be wrong, as `cvc5-4` did. A row leaves this table the moment it is ruled on, in
+either direction, and lands in the log: **[`upstream.md`](upstream.md)**.
 
 | # | tool | kind | what | state |
 | --- | --- | --- | --- | --- |
-| [cvc5-1](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `$is_seq_const_rec` and `$is_seq_const` declare `Int` and return `Bool` | **fixed** — see [`upstream.md`](upstream.md) |
-| [cvc5-2](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | four skolem declarations duplicated verbatim in `expert/theories/ArithExt.eo` | **fixed** |
-| [cvc5-3](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | 18 docstrings no longer describe their rule | **deferred** — needs a documented convention for pattern variables first |
-| [cvc5-4](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `$is_app` in `programs/Utils.eo` is reached by nothing | **declined — our analysis was wrong**; the fix is in the analyzer, see [`upstream.md`](upstream.md) |
-| [cvc5-5](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | run report-only over the `safe` and `expert` profiles, then baseline and block | **not yet** — after a pinned release and the diagnostic work below |
 | [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5 |
 | [cvc5-7](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | keep a reproducer with every claim about first use, and derive severity from whether a call can stay stuck | requested by cvc5 |
 | [ethos-1](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/match-simple.eo:11` declares `<` `:right-assoc` with a `Bool` return | open |
@@ -84,13 +90,14 @@ configuration, so the same argument is not had twice.
 | [ethos-5](#ethos--the-proof-checker-and-its-own-signatures) | ethos | B | run over `tests/*.eo`, `DOC*` disabled | proposed |
 | [ethos-6](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | two test signatures use literals whose category they never declare, so `+` gets an untyped nil | open |
 | [ethos-7](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/naive-nary.eo:182` — a case of `isPermutation` that can never be reached | open |
-| [eoc-1](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | preflight: have `driver.py` run anoieu over the triple before stage 1, so a missing semantics block is refused at launch rather than at stage 6 | proposed, needs M4 |
-| [eoc-2](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | run over `semantics/*.eos` and the signatures the tests compile | proposed, needs M4 |
-| [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote, which nothing compares today | proposed, needs M4 |
-| [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerate once it is fixed upstream | blocked on cvc5-1 |
-| [logos-2](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed, needs M4 |
-| [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed, needs M4 |
-| [eud-2](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | settle the calculus profile's two *declared* answers against the signature instead of recording them on trust | proposed, needs M4 |
+| [eoc-1](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | preflight: have `driver.py` run anoieu over the triple before stage 1, so a missing semantics block is refused at launch rather than at stage 6 | proposed |
+| [eoc-2](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | run over `semantics/*.eos` and the signatures the tests compile | proposed |
+| [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote | proposed |
+| [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerate now that it is fixed upstream | ready |
+| [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:546` has an entry for `str.indexof_re_split`, which CPC does not declare | open |
+| [logos-3](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed |
+| [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed |
+| [eud-2](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | settle the calculus profile's two *declared* answers against the signature instead of recording them on trust | proposed |
 | [eunoia-1](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | refuse a re-declaration whose type is identical to an earlier one | proposed |
 | [eunoia-2](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | an unknown attribute should be an error, not a dropped annotation | proposed |
 | [eunoia-3](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | enforce the attribute contracts the manual states as "must", at the declaration | proposed |
@@ -99,7 +106,11 @@ configuration, so the same argument is not had twice.
 | [eunoia-6](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | settle `eo::define` in the grammar: several bindings, bound in parallel | proposed |
 | [eunoia-7](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | say what `eo::hash` guarantees, or mark it as the one thing a model cannot follow | open question |
 
-Nothing in this table is filed anywhere yet; it is what we would file.
+**Settled, and not repeated here:** `cvc5-1` and `cvc5-2` are fixed upstream,
+`cvc5-3` is deferred, `cvc5-4` was declined because our analysis was wrong, and
+`cvc5-5` waits on a pinned release. All five, with the reasoning and with what
+the analyzer does differently as a result, are in
+[`upstream.md`](upstream.md).
 
 ## The claim
 
@@ -356,12 +367,20 @@ programs will need a hand-written `:lean` termination clause.
 
 ### Actions
 
-**logos-1 (A)** — `install/defs/Cpc.eo` and `Cpc.cached.eo` carry cvc5-1.
-Regenerate once it is fixed upstream; nothing to do in logos itself.
+**logos-1 (A)** — `install/defs/Cpc.eo` and `Cpc.cached.eo` carry cvc5-1, which
+is now fixed upstream. Regenerating picks it up; nothing to change in logos
+itself.
 
-**logos-2 (B)** — run the triple, once it exists. logos already vendors ethos
-and consumes cvc5's signature, so it is the natural place for the job — see the
-open question below.
+**logos-2 (A)** — `Cpc.eos:546` has `(define-symbol str.indexof_re_split (s r q))`
+and CPC declares no such operator: it declares `str.indexof_re`. The name is real
+on the *target* side, and another entry transforms into it at line 584, which is
+legitimate; the input-side entry is what no compilation reaches. Found by the
+first run over the whole triple, and cvc5's response notes correctly that it
+belongs to whoever owns the semantics rather than to cvc5. Reported by `TRI0002`.
+
+**logos-3 (B)** — run the triple in CI. logos already vendors ethos and consumes
+cvc5's signature, so it is the natural place for the job — see the open question
+below.
 
 ## eudaimonia — the template for other calculi
 

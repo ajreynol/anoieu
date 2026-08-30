@@ -1,12 +1,34 @@
-# What has been reported, and what happened to it
+# The log: what was reported, and what came back
 
-The record of anoieu findings that reached another repository: what was
-accepted, what was declined, and — where a finding was wrong — what the analyzer
-does differently now.
+Every anoieu finding that has reached another repository and been ruled on.
+[`README.md`](README.md) holds the other half — the open findings, which are
+hypotheses nobody has judged yet. A row moves from there to here the moment it
+gets a verdict, in either direction.
 
-A finding that turns out to be wrong is the most useful thing on this page. The
-register in [`README.md`](README.md) says what we are *asking* for; this says
-what came back.
+A finding that turns out to be wrong is the most useful thing on this page, so
+those are written up at length: what we claimed, why it was wrong, and what the
+analyzer does differently now.
+
+## Where it stands
+
+| verdict | count | which |
+| --- | --- | --- |
+| **fixed upstream** | 2 | `cvc5-1`, `cvc5-2` |
+| **declined — our error** | 1 | `cvc5-4` |
+| **overstated — claim corrected** | 1 | `cvc5-1`'s impact |
+| **deferred** | 1 | `cvc5-3`, pending a documented convention |
+| **not yet** | 1 | `cvc5-5`, pending a pinned release |
+
+Changes the analyzer made as a result:
+
+- **ordered profiles**, so reachability is asked in a world someone runs
+  (`cvc5-4`);
+- **profile-scoped findings**, so a local answer is never a repository-wide
+  claim (`cvc5-4`);
+- **three levels of impact kept apart** for a declaration that disagrees with
+  its cases (`cvc5-1`);
+- a regression case in `tests/cli_cases.py` for the arrangement that produced
+  the wrong finding.
 
 ---
 
