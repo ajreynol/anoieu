@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The run: refresh the sources, measure them, and append anything new.
 
-Four steps, in order:
+Three steps, in order:
 
 1. **Sync.** Every project a report is about is cloned into `deps/` and updated
    from its remote — shallow, sparse, and managed by us. Nothing reads a
@@ -9,10 +9,12 @@ Four steps, in order:
    rather than of the machine it was generated on. `tools/deps.json` says which
    projects, which refs, and which paths of each; changing a ref there changes
    what the report is a report of.
-2. **Versions.** What was read is pinned in `docs/versions.md`.
-3. **Counts.** `docs/corpus.md`, rewritten whole.
-4. **Findings.** `docs/open-findings.md`, appended to and never trimmed — a row
-   leaves it only through the review step described in `docs/ci.md`.
+2. **Measure.** `docs/corpus.md`, rewritten whole: the commits that were read,
+   and what the checks report on them. A count and the version it was taken from
+   belong in one file.
+3. **Findings.** `docs/open-findings.md`, appended to and never trimmed — a row
+   leaves it only through the review step described in
+   `docs/reporting-policy.md`.
 
     python3 tools/run.py                 # move to each tip, then measure
     python3 tools/run.py --pinned --check # re-measure the recorded commits
@@ -42,12 +44,13 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-VERSIONS = os.path.join(ROOT, "docs", "versions.md")
+CORPUS = os.path.join(ROOT, "docs", "corpus.md")
 
 sys.path.insert(0, ROOT)
 sys.path.insert(0, HERE)
 
 import deps as deps_mod  # noqa: E402
+import gen_corpus_table as corpus_mod  # noqa: E402
 
 from anoieu import __version__  # noqa: E402
 
@@ -62,15 +65,23 @@ def git(root: str, *args: str) -> str:
         return ""
 
 
-def render_versions(synced: list) -> str:
+def render_corpus(synced: list, rows: list) -> str:
+    """`docs/corpus.md`: the versions a run read, and what the checks said about
+    them. One file, because a count is only meaningful next to the commit it was
+    taken from."""
     out = [
-        "# What the report was measured against",
+        "# The corpus: what was measured, and what the checks report",
         "",
-        "Written by `tools/run.py`. Every project below is a clone this repository",
-        "manages under `deps/`, updated before the run that produced this file — not",
+        "Written by `tools/run.py`. Nothing here is typed by hand, and anything",
+        "that is will be lost on the next run.",
+        "",
+        "## The versions",
+        "",
+        "Every project below is a clone this repository manages under `deps/`,",
+        "restored to the commit named before the run that produced this file — not",
         "a checkout on anyone's machine. A finding is only ever true of a version,",
         "and the rows in [`open-findings.md`](open-findings.md) carry none of their",
-        "own, so this is what they are relative to.",
+        "own, so these are what they are relative to.",
         "",
         "| project | ref | commit | dated | what is read |",
         "| --- | --- | --- | --- | --- |",
@@ -86,8 +97,10 @@ def render_versions(synced: list) -> str:
         "",
         "The clones are shallow and sparse: only the paths `tools/deps.json` names",
         "are checked out, and nothing is built, because the analysis reads text.",
+        "",
+        corpus_mod.render(rows),
     ]
-    return "\n".join(out) + "\n"
+    return "\n".join(out)
 
 
 def step(msg: str) -> None:
@@ -139,15 +152,25 @@ def main() -> int:
     if astray:
         item(f"could not restore: {', '.join(astray)} — the comparison below is not pinned")
 
-    step("Recording what this run reads")
+    step("Measuring what the checks report")
+    roots = corpus_mod.roots_for(deps_dir) if args.roots else corpus_mod.DEFAULT_ROOTS
+    rows = corpus_mod.measure_all(roots)
+    measured = sum(1 for *_x, ok in rows if ok)
+    item(f"{measured} of {len(rows)} corpora measured")
     written = [
-        (VERSIONS, "docs/versions.md", render_versions(synced)),
+        (CORPUS, "docs/corpus.md", render_corpus(synced, rows)),
         (deps_mod.LOCK, "tools/deps.lock", deps_mod.render_lock(synced)),
     ]
     for path, label, text in written:
         current = open(path).read() if os.path.isfile(path) else ""
         if args.check:
-            item(f"{label} is current" if current == text else f"{label} is stale")
+            stale = current != text
+            item(f"{label} is stale" if stale else f"{label} is current")
+            # Under --pinned the commits are restored exactly, so a difference
+            # here is a check of ours reporting something new -- worth failing
+            # on. Unpinned it means upstream moved, which is news rather than a
+            # fault, and that run is not the one CI does.
+            failures += 1 if stale else 0
         elif current != text:
             with open(path, "w") as f:
                 f.write(text)
@@ -156,7 +179,6 @@ def main() -> int:
             item(f"{label} unchanged")
 
     for title, script in (
-        ("Counting what the checks report", "gen_corpus_table.py"),
         ("Appending anything new to the report", "gen_open_findings.py"),
     ):
         step(title)

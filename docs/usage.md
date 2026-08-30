@@ -1,9 +1,10 @@
 # Using anoieu
 
 What the tool takes, what it does with it, and what every option means. Written
-against 0.1.0, which is the front end, the checks that need no type checker, and
-a shallow typing pass; the `.eos` side is accepted on the command line and not
-read yet.
+against 0.2.0: the front end, the checks that need no type checker, a shallow
+typing pass, and the triple — a signature read together with its calculus
+semantics and the SMT semantics, each `.eos` file read rather than merely
+accepted.
 
 ## Installing
 
@@ -213,7 +214,7 @@ unused-parameter check, the dead-program check. `--pedantic` turns those on.
 ## Configuration, baselines and suppression
 
 A repository writes down what it checks and what it has agreed to live with, so
-that its CI job is one line. See [`ci.md`](ci.md) for the whole arrangement; the
+that its CI job is one line. See [`reporting-policy.md`](reporting-policy.md#running-it-in-ci) for the whole arrangement; the
 short version:
 
 ```json

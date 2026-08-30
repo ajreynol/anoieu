@@ -1,5 +1,5 @@
 {
-  "_comment": "Written by tools/run.py. The commits docs/versions.md reports on, in full, so `tools/run.py --pinned` can fetch exactly them. Edited by a run, not by hand.",
+  "_comment": "Written by tools/run.py. The commits docs/corpus.md reports on, in full, so `tools/run.py --pinned` can fetch exactly them. Edited by a run, not by hand.",
   "cvc5": {
     "ref": "main",
     "commit": "aee874240419269019507d47d687f01d871587f5",

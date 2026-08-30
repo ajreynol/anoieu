@@ -123,7 +123,6 @@ jobs:
         with:
           name: report
           path: |
-            docs/versions.md
             docs/corpus.md
             docs/open-findings.md
             tools/deps.lock

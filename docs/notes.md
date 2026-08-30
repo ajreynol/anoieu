@@ -1,13 +1,438 @@
-# anoieu — design notes
+# Notes
+
+The miscellany: why the tool can find what it finds, what we had to establish
+about the languages in order to write it, and what is built, rejected or still
+open. Working notes rather than a specification — the nearest thing to a
+specification is the check catalogue in [`checks.md`](checks.md), where every
+page is written beside the code it describes.
+
+Anything that does not belong in the other five documents belongs here.
+
+## What ethos misses, and why
+
+This is the argument for the tool, written by *mechanism* rather than by check.
+Six things about how ethos works account for nearly everything anoieu can find,
+and knowing which is which is how you tell where the next check will come from.
+
+Every claim here was run against `ethos` built from `ethosEoc3` at commit
+`2118635d`; source references are to that tree. The witnesses under
+`tests/witnesses` hold each example, and `tests/run.py --oracle` re-runs ethos
+over all of them:
+
+```bash
+ETHOS=<ethos>/build/src/ethos python3 tests/run.py --oracle
+```
+
+**Of the 49 witnesses that hold the mistake, ethos accepts 43 and answers
+`correct`.**
+
+---
+
+### 1. Ethos is demand-driven: it types a term only when something asks
+
+Ethos is a proof checker, and its speed comes from computing a type on demand.
+A signature is not a thing it validates; it is the vocabulary a proof is checked
+against. Three consequences.
+
+#### A `define` body is never type checked without `:type`
+
+```lisp
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)
+(declare-const a Bool) (declare-const b Bool)
+(define P () (or a b))              ; accepted: "correct"
+(define P () (or a b) :type Bool)   ; the same body: type error on the nil
+```
+
+The term is built and stored. Nothing asks its type, so nothing notices it has
+none. `:type` is optional, so most bodies in a signature are never typed at all.
+
+#### Program bodies are not type checked, at all
+
+The user manual says so (`user_manual.md:1727`):
+
+> Terms in program bodies are not statically type checked. Evaluating a program
+> may introduce non-well-typed terms if the program body is malformed.
+
+`ExprParser::typeCheckProgramPair` (`src/expr_parser.cpp:1256`) is the whole of
+what a case is checked for: that the right-hand side binds nothing the left-hand
+side did not, and that no pattern holds an evaluatable subterm. No types
+anywhere. So this stands in a signature indefinitely:
+
+```lisp
+(program $mk ((x Int) (F Bool)) :signature (Bool) Bool
+  ( (($mk (not F)) F)
+    (($mk F)       (+ 1 1)) ))     ; Int where Bool was declared
+```
+
+A proof that exercises the first case checks `correct`. A proof that exercises
+the second fails with `Expected: Bool`. Nothing in between says the signature was
+already wrong.
+
+#### A rule's conclusion is typed at the first `step`, not at the declaration
+
+`declare-rule` desugars to a program over premises and arguments, and its return
+type is *set* to `Bool` (`src/cmd_parser.cpp:491`, in the `DECLARE_RULE` case at
+line 382) rather than checked against the conclusion:
+
+```lisp
+(declare-rule bad-conc ((x Int)) :args (x) :conclusion (+ x 1))   ; accepted
+(step @p0 (+ a 1) :rule bad-conc :args (a))
+;; Error: Expression of unexpected type: (_ (+ a) 1)  Type: Int  Expected: Bool
+```
+
+**The class is latent errors.** Ethos's verdict on a signature depends on which
+proof you happen to run; anoieu's does not. The deepest version of it is a rule
+whose conclusion is `($mk F)` where `$mk` is *declared* to return `Bool` and has
+cases that return other types: ethos can only ever see the branch a given proof
+took, and deciding "this rule may conclude a well-typed non-`Bool` term" means
+looking through the program at every case. That needs the type checker, and is
+M3.
+
+---
+
+### 2. Ethos checks terms; it never checks a declaration's contract
+
+An attribute is parse-time metadata. Nothing compares it with the type it is
+written on, so a broken contract fails later, elsewhere, in a term the reader
+never wrote.
+
+| written | what the manual requires | when it fails | check |
+| --- | --- | --- | --- |
+| `(declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)` | the nil has the operator's tail type | at the first `or` term whose type is asked for | EO0041 |
+| `(declare-const < (-> Int Int Bool) :right-assoc)` | type `(-> T1 T2 T2)` | at the first application of three or more arguments | EO0040 |
+| `(declare-const >= (-> Int Int Bool) :chainable and)`, `and` binary | the combiner is variadic | at four arguments (`Non-function ... as head of APPLY`) and at one (`Incorrect arity`) | EO0042 |
+| an opaque argument after an ordinary one | opaque arguments come first | at *every* application, all of which are ill-typed | EO0046 |
+
+The second is in the ethos tree today, at `tests/match-simple.eo:11`. It has
+never fired because that test only ever applies `<` to two arguments.
+
+Each of these is decidable from the declaration alone, with no type checker,
+which is why they are in M1.
+
+---
+
+### 3. Ethos ignores what it does not understand
+
+A misspelled attribute is not an error. `ExprParser` looks the keyword up, does
+not find it, warns, and stores a dummy (`src/expr_parser.cpp:1014`):
+
+```text
+$ ethos t.eo
+Unsupported attribute :right-assoc-nill
+t.eo:1.62: Unhandled attribute NONE
+correct
+```
+
+Exit code 0. The declaration keeps its meaning *minus the annotation*: `or` is
+no longer variadic, so every application of it now builds a different term, and
+nothing downstream mentions it again. That is why EO0020 is an error rather than
+a warning.
+
+---
+
+### 4. Matching is untyped and first-match-wins, so nothing is ever "dead"
+
+`TypeChecker::match` binds a parameter to whatever stands in its place, and says
+so in its own comment (`src/type_checker.cpp:494`):
+
+```cpp
+// note that we do not ensure the types match here
+```
+
+So a case whose arguments are all parameters matches every application whatever
+their declared types, and every case written after it is unreachable. Ethos has
+no reason to notice: it simply never gets there (EO0052).
+
+The same blindness covers a family of questions about a signature *as a whole*,
+which a checker that evaluates one term at a time never asks:
+
+- a program declared with no body and never defined, which reaches the SMT
+  backend as a free uninterpreted function and Lean as a name that was never
+  written (EO0057);
+- a program nothing reaches -- `$is_app` in CPC's `programs/Utils.eo` is
+  declared, documented, and named by nothing (EO0060);
+- a parameter no case mentions (EO0056);
+- a program that walks an n-ary list and has no case for the nil that ends it:
+  the last step of the recursion does not evaluate, and what a proof reports is
+  that a step failed to check (EO0053);
+- a pattern that matches an n-ary operator of exactly two elements because a
+  tail parameter is not marked `:list` -- the manual's own worked "incorrect
+  version", where the program works on short lists and silently fails on long
+  ones (EO0054).
+
+---
+
+### 5. Ethos stops at the first error, and reports where it noticed
+
+Two differences even for what ethos does catch.
+
+**One diagnostic per run.** A parse error is a `Fatal failure` and the process
+aborts, so a file with three mistakes takes three runs. anoieu recovers and
+reports the file.
+
+**The location is the symptom, not the cause.** Write `:args` before `:premises`
+in a `declare-rule` and ethos answers `Expected conclusion in declare-rule`,
+pointing at the end of the command and naming a field that is not the problem;
+the fields are read positionally, so the parser stops where it expected the
+conclusion. anoieu points at the misordered keyword and states the order
+(EO0021). Likewise two `:list` parameters in one pattern: ethos says `Cannot
+match on evaluatable subterm`, naming neither the annotation nor the parameter,
+because by then the pattern has already been desugared into an
+`eo::list_concat` (EO0055).
+
+---
+
+### 6. Ethos reads one file role, and never reads comments
+
+- **Documentation.** CPC documents 166 of its 593 rules in a structured comment
+  convention that nothing parses, so nothing keeps it true. Real drift: `symm`
+  documents its premise under `; args:`; `string_decompose` takes two premises
+  and documents one; `quant_var_reordering` documents a premise it does not
+  have. Ethos cannot have an opinion here -- they are comments (DOC0010-0012).
+- **The pipeline past ethos.** A signature declaring `$sm_foo` or `$eoc_bar` is
+  fine under ethos and collides with what `ethos-eoc` generates (EO0030).
+- **The triple.** Ethos knows nothing of `.eos`. Every cross-file question is
+  invisible to it by construction: a declared symbol with no semantics block, a
+  block for a symbol nothing declares, a transform whose target does not exist
+  in the SMT semantics, an `:is-list-nil` that is required and missing (or
+  present and dead), an `:exclude` list that is not closed under what it
+  excludes. That is M4, and `ethos/docs/README.md` asks for most of it by name.
+
+---
+
+### Where the line honestly falls
+
+Ethos is the ground truth for typing and evaluation, and it refuses six of the
+forty-nine witnesses: a `declare-rule` field out of order, an opaque argument
+after an ordinary one, a program case of the wrong arity, a pattern with two
+`:list` parameters, and a builtin operator applied to the wrong number of
+arguments. For those, anoieu contributes the message, the location, and
+the fact that it reports them *alongside* everything else rather than instead of
+everything else.
+
+The discipline runs the other way too. M1 is deliberately type-free, so it stays
+silent wherever a judgement would need the type checker. Every check had false
+positives on CPC in its first form, and each fix narrowed it: a dependent return
+type agrees with its argument at the *constructor*, `eo::requires` wraps a type
+without changing it, a guarded recursive call is not a walk, a `define` alias and
+the term behind it are one term. Those narrowings are recorded in
+[`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed), because each is a statement about what the language
+means.
+
+### The classes, and where each stands
+
+| class | the mechanism it exploits | status |
+| --- | --- | --- |
+| attribute contracts | §2, declarations unvalidated | live: EO0040, EO0041, EO0042, EO0046 |
+| dead, unreachable, stuck | §4, untyped first-match | live: EO0052, EO0053, EO0056, EO0057, EO0060 |
+| silently ignored input | §3 | live: EO0020 |
+| the builtin layer — arity, impossible evaluations, untyped literals, list operators over non-n-ary symbols | §1, nothing asks for the value | live: EO0071–EO0074 |
+| documentation drift | §6 | live: DOC0010, DOC0011, DOC0012 |
+| better location, whole-file reports | §5 | live, in every check |
+| compiler-namespace collisions | §6 | live: EO0030 |
+| a rule that may conclude a non-`Bool`; program case return types; `define` bodies | §1, demand-driven typing | M3, needs the type checker |
+| the triple: coverage, transform targets, `:is-list-nil`, exclusion closure | §6, one file role | M4 |
+
+
+## What we have established about `.eo` and `.eos`
+
+Working notes, kept because the second goal of this project is to make both
+languages better understood. Sources: `ethos/user_manual.md` (2,362 lines, the
+`.eo` reference), `ethos/tools/eoc/semantics/README.md` (1,252 lines, the `.eos`
+reference), `ethos/tools/eoc/README.md`, `ethos/docs/README.md`, and experiments
+against `ethos` built from `ethosEoc3`.
+
+---
+
+### 1. `.eo` — the shape of the language
+
+Eunoia is a logical framework in SMT-LIB 3.0 clothing. Terms, types and kinds
+share one grammar; all functions are unary and all applications curried
+(`(f a b)` is `(_ (_ f a) b)`); `Type`, `->`, `_`, `Bool`, `true`, `false` are
+the only builtin constants, and every theory is a signature rather than a
+builtin.
+
+Five things carry most of the language's weight, and every one of them is a
+place a signature can go wrong quietly.
+
+**Declarations.** `declare-const`, `declare-parameterized-const` (named,
+possibly `:implicit`, possibly `:opaque` arguments, dependent return types),
+`declare-consts` (a literal category has a type, possibly computed from
+`eo::self`), `declare-datatype(s)`, `define` (a *macro*, expanded at parse
+time, with an optional `:type` that is the only thing that makes it type
+checked).
+
+**Sugar on applications.** `:right-assoc`, `:left-assoc`, the `-nil` variants,
+`:right-assoc-non-singleton-nil`, `:chainable`, `:pairwise`, `:arg-list`,
+`:binder`, and the `:list` annotation on parameters that says a parameter is a
+*tail* rather than an element. The desugaring is precisely specified in the
+manual and is where the language's characteristic bugs live: `(or l xs)` with an
+unmarked `xs` matches an `or` of exactly two children, and two adjacent `:list`
+parameters desugar to an `eo::list_concat` that is then illegal as a pattern.
+
+**Computation.** ~50 `eo::` operators over the literal categories (numeral,
+decimal, rational, binary, hexadecimal, string) plus 18 list operators over
+`f`-lists, all with the same discipline: they evaluate on values of the right
+category and are *left unevaluated* otherwise. No mixed arithmetic. `eo::eq` and
+`eo::is_eq` are syntactic. `eo::hash` is deliberately underconstrained, which is
+why the Lean backend refuses to model it.
+
+**Programs.** An ordered list of rewrite rules, first match wins, with a
+declared `:signature` and optional `eo::quote` for dependent argument binding.
+Crucially: *program bodies are not statically type checked* — the manual says
+so — and cases are checked only for free parameters and for evaluatable
+subterms in patterns.
+
+**Proof rules.** `declare-rule` desugars to a program over premises and
+arguments returning the proven formula; `assume` to a `declare-const` of
+`(Proof f)`; `step` to a `define` with `:type (Proof f)`. Proof checking *is*
+type checking, in a type system with `Proof` and `Quote` types the user cannot
+name. Ethos additionally requires every well-typed term's type to be either
+non-ground or fully reduced.
+
+### 2. `.eos` — the shape of the language
+
+Newer, smaller, and specified by one README plus the compiler that reads it. A
+**set** is one file of s-expressions, and there are nine forms and no others:
+`section`, `define-macro`, `program`, `define-symbol`, `define-sort`,
+`define-value`, `define-literal`, `define-method`, `define-rule` (plus
+`declare-native` and `define-native-method` in the native-layer sets, and
+`declare-aggregate-method` in the aggregate table). Anything else is refused —
+a set says what a theory *does*, never what the embedding *is*.
+
+Four ideas are doing the work:
+
+**Roles.** A set is a *target* (`smt.eos` — what an SMT-LIB symbol means to a
+model) or an *input* (`Cpc.eos` — what a calculus symbol becomes in the
+embedding). Which forms are legal depends on the role, and the role is given by
+the command-line option that names the file, not by anything in it.
+
+**Aggregates.** Each symbol contributes one *case* to each of a set of big
+programs — `$smtx_typeof`, `$smtx_model_eval`, `$eo_to_smt`, and so on — and
+which aggregates exist is itself configuration
+(`plugins/model_smt/model_smt.eos`), read by the stage out of the head of the
+generated file. This is the extensible axis, and it works: adding an attribute a
+symbol may carry is three edits and no rebuild.
+
+**Levels.** A term is written at one of four levels — native, value, term, type
+— and *which one is never written down*: it is read off the type of the place
+the term stands in. A bare `f` compiles to `$native_f`, `$smtx_model_eval_f`,
+`$sm_f` or `$tsm_f` accordingly. Elegant, and the single hardest thing about
+writing a block.
+
+**Macros and layer prefixes.** `smt.` names the SMT-LIB layer, `eo.` the input
+as the desugar stage embeds it; both are ordinary `define-macro`s in an
+`embedding.eo`, expanded before anything else sees them, legal in patterns as
+well as in terms.
+
+### 3. What ethos does not check — verified
+
+Each of these was run against `ethos` (`ethosEoc3`). They are the empirical core
+of the case for this tool.
+
+**A rule may conclude a non-`Bool` term.** The declaration is accepted; the
+first `step` using it fails.
+
+```lisp
+(declare-rule bad-conc ((x Int)) :args (x) :conclusion (+ x 1))   ; accepted
+(step @p0 (+ a 1) :rule bad-conc :args (a))
+;; Error: Expression of unexpected type: (_ (+ a) 1)  Type: Int  Expected: Bool
+```
+
+**A program case may have the wrong return type, and lie dormant.** The case
+below is only reached by a proof that takes the second branch:
+
+```lisp
+(program $mk ((x Int) (F Bool)) :signature (Bool) Bool
+  ( (($mk (not F)) F)
+    (($mk F)       (+ 1 1)) ))     ; Int where Bool was declared -- accepted
+```
+
+A proof exercising the first case checks `correct`; one exercising the second
+fails with `Expected: Bool`. Nothing between the two says the signature was
+already wrong.
+
+**A `define` body is never type checked without `:type`.**
+
+```lisp
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)
+(declare-const a Bool) (declare-const b Bool)
+(define P () (or a b))              ; accepted: "correct"
+(define P () (or a b) :type Bool)   ; the same body: type error on the nil
+```
+
+**A nil terminator of the wrong type is accepted at declaration.** The `0`
+above is an `Int` nil for a `Bool` operator; the manual requires it to have the
+operator's tail type. Nothing complains until a term is built *and* its type is
+asked for.
+
+**A `:chainable` operator with a non-variadic combiner is accepted.**
+`(declare-const >= (-> Int Int Bool) :chainable and)` with a binary `and`
+declares fine, works for two- and three-argument chains, and fails for four
+(`Non-function ... as head of APPLY`) and for one (`Incorrect arity for and`).
+
+**Unreachable program cases are accepted silently.** A general pattern before a
+specific one makes the specific one dead; nothing says so.
+
+The pattern behind all six: **ethos is lazy on purpose.** It checks what a proof
+asks it to check, which is what makes it a fast proof checker, and it means the
+well-formedness of a *signature* — as opposed to the validity of a *proof* — is
+currently nobody's job.
+
+### 4. Where the languages are unsettled
+
+Not documentation gaps: places where there is a real question and the current
+answer is whatever the implementation does.
+
+- **What does "well-formed signature" mean?** Ethos has no such notion. If
+  every `define` body and every program case had to type check, several
+  signatures in the wild would need changes; if they do not, then a signature is
+  well-formed exactly when the proofs people happen to write against it check.
+- **Are overlapping program cases legal?** First-match-wins makes shadowing
+  well-defined, so unreachability is a smell, not a violation — unless the
+  language intends coverage/disjointness, which nothing states.
+- **What is the status of the attribute contracts?** The manual says a nil
+  terminator "must" have type `T2` and a chainable combiner "should" be
+  variadic. Ethos enforces neither. Both readings are defensible; only one can
+  be the specification.
+- **What is a well-formed `.eos` set independent of its role?** Today the role
+  decides which forms are legal and the role is a command-line option, so the
+  same file is well-formed or not depending on how it is named.
+- **What is the exact contract of `:is-list-nil`?** Its meaning is written down
+  — `($eo_is_list_nil f x)` ≡ `(eo::eq (eo::nil f (eo::typeof x)) x)` — but it is
+  hand-written per operator, required when the nil is non-ground, and compared
+  with nothing. `ethos/docs/README.md` §10 is a full account of why.
+- **`eo::typeof` in desugared output is an approximation** (monomorphised per
+  partial application) and nothing in the output marks which parts are exact.
+- **How much of SMT-LIB is assumed?** `smt.eos` is one reading of the standard,
+  written for one target. Whether a signature's `+` is *SMT-LIB's* `+` is a
+  question no tool asks, and CPC's own header lists the places cvc5 deliberately
+  differs (mixed arithmetic, variadic operators with nil, strings as sequences).
+
+### 5. Corpus
+
+What exists to test against, all present locally:
+
+| tree | content |
+| --- | --- |
+| `ethos/tests` | 204 files, small and adversarial — the closest thing to a language test suite |
+| `cvc5/proofs/eo/cpc` | CPC: ~11,700 lines across `Cpc.eo`, 11 theories, 12 rule files, 11 program files; ~160 rule docstrings |
+| `ethos/tools/eoc/semantics` | `smt.eos` (1,837 lines, 132 symbols, 9 sorts, 14 values, 5 literals, 67 programs) and `development-cpc.eos` (1,123 lines, 182 symbols) |
+| `ethos/plugins/*/*.eos` | the native layers and the aggregate table — four more dialects of the same language |
+| `logos/install/defs` | `Cpc.eos`, the official CPC semantics |
+| `eudiamonia` | a template for other calculi — the second and third triples that will exist |
+
+
+## The design
 
 A brainstorm, not a plan. Everything here is a candidate; the ordering within
 each section is rough value-to-cost. Claims about what ethos does and does not
 check were verified against `ethos` built from `ethosEoc3` (see
-[`language-notes.md`](language-notes.md) for the experiments).
+[`notes.md`](notes.md#what-we-have-established-about-eo-and-eos) for the experiments).
 
 ---
 
-## 1. Posture
+### 1. Posture
 
 Five commitments that decide most of the smaller questions.
 
@@ -56,11 +481,11 @@ because the reader has no reason to trust us; the record of what a check gets
 *wrong* has to be public, because that is what makes what it gets right
 believable; and every ask has to live in one place with a state on it, or it
 becomes an argument repeated monthly. That place is
-[`README.md`](README.md) -- the register of what anoieu is asking of whom.
+[`reports.md`](reports.md#the-register-what-anoieu-is-asking-and-of-whom) -- the register of what anoieu is asking of whom.
 
 ---
 
-## 2. What is already checked, and by whom
+### 2. What is already checked, and by whom
 
 Duplicating an existing check is worse than useless — it trains people to ignore
 the tool. The current division:
@@ -73,7 +498,7 @@ the tool. The current division:
 | `model-smt` stage | every declared symbol has a semantics block |
 | Lean / cvc5 | everything the compiler declined to check, one full regeneration later |
 
-[`what-ethos-misses.md`](what-ethos-misses.md) sets out the same division by
+[`notes.md`](notes.md#what-ethos-misses-and-why) sets out the same division by
 mechanism -- why ethos does not report what it does not report -- with the
 verified examples behind each.
 
@@ -84,7 +509,7 @@ below are the response to them.
 
 ---
 
-## 3. Two altitudes
+### 3. Two altitudes
 
 A signature can be read at two heights, and different checks want different
 ones.
@@ -104,13 +529,13 @@ conformance test of anoieu's own front end (§6, M2).
 
 ---
 
-## 4. The check catalogue
+### 4. The check catalogue
 
 Codes are sketched as `EO` (signature), `EOS` (semantics set), `TRI`
 (cross-file), `DOC` (documentation). Every code gets a manual page — see §5.1,
 because the manual pages are half the specification deliverable.
 
-### 4.1 Tier 0 — syntax and structure
+#### 4.1 Tier 0 — syntax and structure
 
 No name resolution, no types. Cheap, unglamorous, immediately useful in an
 editor.
@@ -136,7 +561,7 @@ editor.
 - `declare-consts` for a literal category twice, or for a category the signature
   never uses.
 
-### 4.2 Tier 1 — typing
+#### 4.2 Tier 1 — typing
 
 The flagship tier. It needs a type checker for Eunoia — the real cost of this
 project, and the thing that makes the rest possible.
@@ -187,7 +612,7 @@ project, and the thing that makes the rest possible.
 - **Programs applied to programs, builtins or oracles** are never invoked — the
   application is silently left unevaluated. Anything relying on that is a bug.
 
-### 4.3 Tier 2 — behaviour of programs and rules
+#### 4.3 Tier 2 — behaviour of programs and rules
 
 Still no solver; these are pattern-level analyses over the desugared form.
 
@@ -220,7 +645,7 @@ Still no solver; these are pattern-level analyses over the desugared form.
 - **Dead code**: programs no rule reaches, helper symbols nothing uses,
   parameters a declaration binds and never mentions.
 
-### 4.4 Tier 3 — the triple
+#### 4.4 Tier 3 — the triple
 
 The reason the unit of analysis is three files. Most of these are today either
 unchecked or checked two tools downstream.
@@ -262,7 +687,7 @@ unchecked or checked two tools downstream.
   exists; a clause naming the native layer (refused by the stage); a program
   that needs one and has none (from §4.3's termination analysis).
 
-### 4.5 Tier 4 — documentation
+#### 4.5 Tier 4 — documentation
 
 CPC's signature carries ~160 rule docstrings and ~80 program docstrings in a
 consistent YAML-ish comment convention (`; rule:`, `; args:`, `; premises:`,
@@ -278,7 +703,7 @@ consistent YAML-ish comment convention (`; rule:`, `; args:`, `; premises:`,
   signature (§5.4). A doc generator is the reason to keep the docstrings honest,
   and the honesty check is the reason to trust the generated docs.
 
-### 4.6 Tier 5 — opt-in, deeper
+#### 4.6 Tier 5 — opt-in, deeper
 
 - **Discharge small obligations with cvc5.** `ethos/docs/README.md` direction #3
   proposes one VC per `:is-list-nil` block, since the intended meaning is
@@ -296,9 +721,9 @@ consistent YAML-ish comment convention (`; rule:`, `; args:`, `; premises:`,
 
 ---
 
-## 5. User interfaces
+### 5. User interfaces
 
-### 5.1 The CLI, and the diagnostic format
+#### 5.1 The CLI, and the diagnostic format
 
 ```
 anoieu check Cpc.eo                              # signature alone
@@ -333,7 +758,7 @@ of the manual or the `.eos` README it comes from. **These pages are the
 specification deliverable.** Writing the check and writing the page are the same
 task.
 
-### 5.2 `explain` — the checkable unit smaller than a file
+#### 5.2 `explain` — the checkable unit smaller than a file
 
 `ethos/docs/README.md` direction #4 asks for a way to ask about one symbol
 without compiling a set. That is a natural anoieu command, and it is the same
@@ -352,7 +777,7 @@ triple obligations it carries (`:is-list-nil` required? termination clause?).
 the other half of the edit loop — *what did my sugar become* — which today is
 answered by reading 660 lines of template or by running a stage.
 
-### 5.3 Editor: LSP
+#### 5.3 Editor: LSP
 
 The highest-value interface for the people writing these files daily, and the
 reason error recovery is a requirement rather than a nicety.
@@ -370,7 +795,7 @@ reason error recovery is a requirement rather than a nicety.
 
 VS Code first; the protocol gets Emacs and Vim for free.
 
-### 5.4 Reports
+#### 5.4 Reports
 
 - **Triple coverage matrix.** Symbols down the side; declared / has semantics /
   target exists / `:is-list-nil` / termination clause / documented across the
@@ -381,7 +806,7 @@ VS Code first; the protocol gets Emacs and Vim for free.
   docstrings (§4.5). "Doxygen for Eunoia" is a deliverable people would use
   even if it checked nothing.
 
-### 5.5 Fixes
+#### 5.5 Fixes
 
 Where a finding has one obvious repair, offer it — as `--fix`, and as an LSP
 code action:
@@ -394,7 +819,7 @@ code action:
   violation; nothing fixes it);
 - normalize a rule's field order.
 
-### 5.6 CI and the loop
+#### 5.6 CI and the loop
 
 `anoieu check --format=github` in cvc5's and ethos's CI; a pre-commit hook; and
 a `--watch` mode that re-runs on save, which is the direct answer to the
@@ -402,9 +827,9 @@ feedback-loop complaint in `ethos/docs/README.md` §5.
 
 ---
 
-## 6. Architecture
+### 6. Architecture
 
-### The choice
+#### The choice
 
 **(A) Standalone front end.** anoieu parses `.eo`/`.eos` itself, models
 desugaring, and implements its own type checker.
@@ -436,7 +861,7 @@ maintainers can read and extend it, `pygls` gives the LSP cheaply, and nothing
 here is compute-bound. The parser and core IR should be written so a port is
 possible if that changes.
 
-### Shape
+#### Shape
 
 ```
 anoieu/
@@ -464,15 +889,15 @@ questions become `anoieu query` rather than a code change, and the reports in
 
 ---
 
-## 7. Roadmap
+### 7. Roadmap
 
 | | milestone | delivers |
 | --- | --- | --- |
 | **M0** ✅ | parser + CST + include graph, `check` with Tier-0 findings only | reads every `.eo` in ethos, cvc5, logos and eudaimonia without falling over; the corpus is established |
-| **M1** ✅ | resolution, attribute contracts, dead code, docstring lint, `stats` | 30 checks, a witness apiece, and real findings on CPC and on `ethos/tests` -- see [`findings.md`](findings.md) |
+| **M1** ✅ | resolution, attribute contracts, dead code, docstring lint, `stats` | 30 checks, a witness apiece, and real findings on CPC and on `ethos/tests` -- see [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) |
 | **M2** ✅ | desugaring + `desugar`/`symbol` commands, validated against ethos | the surface↔core map, and the conformance harness: 34 cases, one per policy, agreeing with ethos term for term |
 | **M3** ◐ | type checker → rule conclusions, program cases, `define` bodies, overload ambiguity | the flagship checks; the reason the tool exists. The *shallow* half is written -- the type of a term where its head settles it, with a callee's type parameters bound from the arguments (`anoieu/typing.py`) -- which is what found the CPC return-type bug. What it still cannot do: type a term whose head is a parameter, follow `eo::` evaluation, or check a `define` body against a use site |
-| **M4** ✅ | `.eos` front end + triple checks, baselines, JSON/SARIF | the CI plumbing (see [`ci.md`](ci.md)) and the `.eos` reader, which is vocabulary-agnostic by design because the language is moving: five checks over the triple, including the `is-list-nil` diff and exclusion closure the compiler's own documentation asks for. The first run over the real CPC triple -- cvc5's signature, logos's semantics, ethos's SMT semantics -- reported one dead entry and nothing else |
+| **M4** ✅ | `.eos` front end + triple checks, baselines, JSON/SARIF | the CI plumbing (see [`reporting-policy.md`](reporting-policy.md#running-it-in-ci)) and the `.eos` reader, which is vocabulary-agnostic by design because the language is moving: five checks over the triple, including the `is-list-nil` diff and exclusion closure the compiler's own documentation asks for. The first run over the real CPC triple -- cvc5's signature, logos's semantics, ethos's SMT semantics -- reported one dead entry and nothing else |
 | **M5** | LSP, doc generation, opt-in solver obligations | the daily-driver interface |
 
 What M1 taught, which was not in the plan: **the corpus is the design tool.**
@@ -481,7 +906,7 @@ statement about the language rather than about the code -- that a dependent
 return type agrees with its argument at the constructor, that `eo::requires`
 wraps a type without changing it, that a guarded recursive call is not a walk,
 that a `define` alias and the term behind it are one term. The table at the end
-of [`findings.md`](findings.md) is that record, and it is the part of M1 that
+of [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) is that record, and it is the part of M1 that
 was specification work.
 
 Running alongside all of it, not after it: `docs/eo-spec.md` and
@@ -490,7 +915,7 @@ with its witness pair in the corpus.
 
 ---
 
-## 8. A neighbouring tool
+### 8. A neighbouring tool
 
 [**dokimasia**](https://github.com/ajreynol/dokimasia) analyses cvc5's
 proof-production code — the C++ — and asks a completeness question about it:
@@ -515,16 +940,16 @@ They meet at exactly one seam: `src/proof/eo/`, where cvc5 turns an internal
 proof into Eunoia. A rule that cvc5 emits but CPC does not declare, or declares
 with different arguments, is invisible to both halves in isolation and visible
 from either side of that seam — which is what
-[`cvc5-6`](README.md#cvc5--the-calculus-everything-downstream-is-built-from)
+[`cvc5-6`](reports.md#cvc5--the-calculus-everything-downstream-is-built-from)
 asks for. That check may well belong there rather than here: dokimasia already
 reads the emitter, and we only read the signature. Worth settling before either
 of us builds it twice.
 
-## 9. Open questions
+### 9. Open questions
 
 For the record, and because several of them are places where the languages are
 genuinely unsettled rather than merely undocumented — see
-[`language-notes.md`](language-notes.md) §4.
+[`notes.md`](notes.md#what-we-have-established-about-eo-and-eos) §4.
 
 1. Is an ill-typed `define` body an error in the language, or merely a term no
    one asked about? Ethos's answer today is the latter. anoieu's answer decides

@@ -120,15 +120,34 @@ they are public and read whatever they are handed. What these positions bind is
 what *we* publish, under our own name — which is the part that was ours to
 decide.
 
-**And on how they are maintained:** largely by AI agents under human
+**And on how they are maintained:** largely by AI agents under light human
 supervision, which is stated wherever the output is published rather than left
 to be discovered. Work is left staged for a person to review; the agent's part
 and the person's part stay distinguishable in the record for the same reason
 they do in a reply.
 
+It is worth being exact about what *light* covers, because it is less than a
+reader might assume. A human directs the work, reads what is published, and
+decides what is filed — the findings, the claims, this page. **Nobody vets the
+internal design.** How a check is implemented, why it was narrowed the way it
+was, what the front end does with a construct nobody has written down: none of
+that has had an independent reviewer, and a defect there looks exactly like a
+defect in the subject until somebody who knows the subject looks.
+
+Which is why the intended audience is experts, and why nothing here is offered
+as a service to people who are not. Somebody who knows the calculus can read a
+finding, decide in a minute whether it is real, and throw it out if it is not —
+and when they throw it out they have told us something that improves the tool.
+Somebody who cannot do that is exposed twice over: to a wrong finding they
+cannot refute, and to a quiet run they cannot interpret. These are also still
+being built, in the ordinary sense that checks are added, narrowed and sometimes
+deleted from one week to the next, so what they cover is whatever the last
+stretch of work happened to reach rather than a considered frontier. Ten readers
+who can argue with us are worth more than a hundred who cannot.
+
 ---
 
 How each tool puts these into practice differs. anoieu's mechanics are in
-[`triage.md`](triage.md) — the report, the ids, the shape of a reply — and the
-workflow around them in [`workflows.md`](workflows.md); both are written so
+[`reporting-policy.md`](reporting-policy.md#the-conventions) — the report, the ids, the shape of a reply — and the
+workflow around them in [`reporting-policy.md`](reporting-policy.md#the-workflow); both are written so
 another tool can adopt them by substituting its own files.

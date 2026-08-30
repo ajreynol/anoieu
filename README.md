@@ -9,10 +9,13 @@ Eunoia compiler on the `ethosEoc3` branch.
 pass, the desugarer and the CI plumbing are written, and run over CPC on every
 push — where they have found three real bugs.*
 
-**Start here:** [`docs/README.md`](docs/README.md) — what anoieu is for,
-repository by repository, and how much of it exists today. Then
-[`docs/usage.md`](docs/usage.md) to run it, [`docs/findings.md`](docs/findings.md)
-for what it has found, and [`docs/ci.md`](docs/ci.md) for putting it in CI.
+**Start here:** [`docs/reports.md`](docs/reports.md) — what anoieu is asking of
+whom, how each finding was confirmed, and what came back. Then
+[`docs/usage.md`](docs/usage.md) to run it,
+[`docs/reporting-policy.md`](docs/reporting-policy.md) for how findings are
+handled and how another repository adopts the checks, and
+[`docs/philosophy.md`](docs/philosophy.md) for what we will and will not say
+about anybody's code. [`docs/README.md`](docs/README.md) indexes all six.
 
 ## Two things this repository is
 
@@ -76,7 +79,7 @@ error for as long as no proof happens to exercise it.
 anoieu is the eager counterpart: it asks what a signature could ever be asked to
 do, rather than what one proof asked of it. What ethos misses, and by which
 mechanism, is set out in
-[`docs/what-ethos-misses.md`](docs/what-ethos-misses.md).
+[`docs/notes.md`](docs/notes.md#what-ethos-misses-and-why).
 
 ## The triple
 
@@ -130,8 +133,8 @@ kept three ways, with different jobs:
 | | where | what it is |
 | --- | --- | --- |
 | **Open findings** | [`docs/open-findings.md`](docs/open-findings.md) | every finding the checks report, one row each, generated and **additive** — the generator adds and never removes, and closing a row is a judgement made by review |
-| **The curated register** | [`docs/README.md`](docs/README.md) | the first pass at the above, hand-written and argued, kept as the worked example of what a report should say |
-| **The log** | [`docs/upstream.md`](docs/upstream.md) | what was reported and what came back — accepted, declined, deferred, and what the analyzer changed when a finding turned out to be wrong |
+| **The curated register** | [`docs/reports.md`](docs/reports.md#the-register-what-anoieu-is-asking-and-of-whom) | the first pass at the above, hand-written and argued, kept as the worked example of what a report should say |
+| **The log** | [`docs/reports.md`](docs/reports.md#the-log-what-was-reported-and-what-came-back) | what was reported and what came back — accepted, declined, deferred, and what the analyzer changed when a finding turned out to be wrong |
 
 So far: **two findings fixed upstream in cvc5**, one declined because our
 analysis was wrong, one impact claim overstated and corrected. The declined one
@@ -140,21 +143,21 @@ produced the most useful change in the tool — reachability is now asked per
 
 ### If you own a tool in the Eunoia ecosystem, look here
 
-**[`docs/README.md`](docs/README.md)** is the page. It carries every open ask
+**[`docs/reports.md`](docs/reports.md#the-register-what-anoieu-is-asking-and-of-whom)** is the page. It carries every open ask
 anoieu makes of anyone, each with an id, a state, and the reasoning underneath
 it; anything already ruled on is in the log instead:
 
 | you own | waiting for you | jump to |
 | --- | --- | --- |
-| **cvc5** — the CPC signature | 2 requests they made of us; 2 findings already fixed | [cvc5](docs/README.md#cvc5--the-calculus-everything-downstream-is-built-from) |
-| **ethos** — the proof checker | 3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption | [ethos](docs/README.md#ethos--the-proof-checker-and-its-own-signatures) |
-| **ethos-eoc** — the Eunoia compiler | 3 integrations, including the `is_list_nil` diff its own docs ask for | [ethos-eoc](docs/README.md#ethos-eoc--the-eunoia-compiler) |
-| **logos** — the Lean development | 1 dead entry, 1 regeneration, 1 CI adoption | [logos](docs/README.md#logos--the-lean-development) |
-| **eudaimonia** — the calculus template | 2 preflight integrations | [eudaimonia](docs/README.md#eudaimonia--the-template-for-other-calculi) |
-| **Eunoia** — the language and its manual | 7 proposed changes, from what writing the analyzer turned up | [Eunoia](docs/README.md#eunoia-itself--the-language-and-its-manual) |
+| **cvc5** — the CPC signature | 2 requests they made of us; 2 findings already fixed | [cvc5](docs/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
+| **ethos** — the proof checker | 3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption | [ethos](docs/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
+| **ethos-eoc** — the Eunoia compiler | 3 integrations, including the `is_list_nil` diff its own docs ask for | [ethos-eoc](docs/reports.md#ethos-eoc--the-eunoia-compiler) |
+| **logos** — the Lean development | 1 dead entry, 1 regeneration, 1 CI adoption | [logos](docs/reports.md#logos--the-lean-development) |
+| **eudaimonia** — the calculus template | 2 preflight integrations | [eudaimonia](docs/reports.md#eudaimonia--the-template-for-other-calculi) |
+| **Eunoia** — the language and its manual | 7 proposed changes, from what writing the analyzer turned up | [Eunoia](docs/reports.md#eunoia-itself--the-language-and-its-manual) |
 
 Working through one of those with an assistant is a routine enough job that we
-keep a suggested prompt for it: [`docs/workflows.md`](docs/workflows.md). What
+keep a suggested prompt for it: [`docs/reporting-policy.md`](docs/reporting-policy.md). What
 comes back is your triage rather than a verdict, and we treat it that way —
 nothing on our side files anything in your repository, and no reply closes a row
 until the branch it names says what happened.
@@ -163,7 +166,7 @@ until the branch it names says what happened.
 
 - **It was confirmed before it was filed.** Every defect in that table was
   reproduced in the smallest signature that shows it, and run through ethos, and
-  the output is quoted. [`findings.md`](docs/findings.md) has the workings.
+  the output is quoted. [`findings.md`](docs/reports.md#the-workings-how-each-finding-was-confirmed) has the workings.
 - **A false positive is our bug, not yours.** Every check that fired wrongly on
   CPC was narrowed until it stopped, and each narrowing is recorded as what it
   was: a fact about Eunoia we had got wrong. anoieu's own CI runs it over pinned
@@ -201,12 +204,12 @@ languages mean, so the analyzer and the specification are written together: a
 check catalogue with a minimal witness per rule *is* an executable spec, and
 disagreements between anoieu and ethos are bugs in exactly one of them, which is
 how a second implementation earns its keep. See
-[`docs/language-notes.md`](docs/language-notes.md).
+[`docs/notes.md`](docs/notes.md#what-we-have-established-about-eo-and-eos).
 
 ## In CI
 
 The long-term goal is for ethos, logos and cvc5 to run this on every push:
-[`docs/ci.md`](docs/ci.md) sets out the arrangement — one versioned tool, a
+[`docs/reporting-policy.md`](docs/reporting-policy.md#running-it-in-ci) sets out the arrangement — one versioned tool, a
 policy file and a baseline owned by each repository, and a corpus job here that
 fails *this* build when a change would invent a false positive in theirs.
 
@@ -220,14 +223,14 @@ python3 tools/run.py --pinned --check  # re-measure the recorded commits
 Clones every project the report is about into `deps/` and updates it — shallow,
 sparse, and never built, because the analysis reads text. Nothing reads a
 checkout on your machine, so a report is a property of named commits rather than
-of where it was produced. It then records what was read in
-[`docs/versions.md`](docs/versions.md), rewrites the counts in
-[`docs/corpus.md`](docs/corpus.md), and appends anything new to
+of where it was produced. It then rewrites
+[`docs/corpus.md`](docs/corpus.md) — the commits that were read and the counts
+taken from them — and appends anything new to
 [`docs/open-findings.md`](docs/open-findings.md) — which is additive: the
 generator never removes a row. [`tools/deps.json`](tools/deps.json) says which
 projects and which refs, and `tools/deps.lock` records the exact commits a
 report was measured against — `--pinned` restores those, so the report can be
-reproduced from nothing but this repository. `docs/ci.md` has the whole
+reproduced from nothing but this repository. `docs/reporting-policy.md` has the whole
 arrangement.
 
 ## Testing it
@@ -279,11 +282,11 @@ is the arrangement and its trade-offs rather than an audit of anyone's artifact.
 ## A suggested AI workflow for using anoieu
 
 Guidance rather than machinery, at
-[**`docs/workflows.md`**](docs/workflows.md): who runs each part, what a reply
+[**`docs/reporting-policy.md`**](docs/reporting-policy.md): who runs each part, what a reply
 from a project does and does not settle, and two prompts — one for the project
 that owns a finding, one for the follow-up here. The conventions they rest on,
 including the shape a reply takes and what an agent may change on the strength
-of one, are in [`docs/triage.md`](docs/triage.md), and are written so another
+of one, are in [`docs/reporting-policy.md`](docs/reporting-policy.md), and are written so another
 analyzer can adopt them. The reasoning underneath all of it — shared with
 [dokimasia](https://github.com/ajreynol/dokimasia), which references this
 repository for it rather than restating it — is
