@@ -5,15 +5,14 @@ configuration files (`*.eos`) — the languages of the
 [ethos](https://github.com/cvc5/ethos) proof checker and of `ethos-eoc`, the
 Eunoia compiler on the `ethosEoc3` branch.
 
-*Status: the front end, the checks that need no type checker, and a shallow
-typing pass are written and run on CPC -- where they have found three real bugs,
-see [`docs/findings.md`](docs/findings.md). See [`docs/design.md`](docs/design.md) for where this is going,
-[`docs/checks.md`](docs/checks.md) for what it reports today,
-[`docs/findings.md`](docs/findings.md) for what it found on the first run,
-[`docs/what-ethos-misses.md`](docs/what-ethos-misses.md) for why ethos does not
-report these itself, and
-[`docs/language-notes.md`](docs/language-notes.md) for what we have established
-about the two languages.*
+*Status: the front end, the checks that need no type checker, a shallow typing
+pass, the desugarer and the CI plumbing are written, and run over CPC on every
+push — where they have found three real bugs.*
+
+**Start here:** [`docs/README.md`](docs/README.md) — what anoieu is for,
+repository by repository, and how much of it exists today. Then
+[`docs/usage.md`](docs/usage.md) to run it, [`docs/findings.md`](docs/findings.md)
+for what it has found, and [`docs/ci.md`](docs/ci.md) for putting it in CI.
 
 ## The name
 
