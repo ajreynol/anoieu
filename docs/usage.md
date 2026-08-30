@@ -18,12 +18,16 @@ Both spellings are the same program; the examples below use the first.
 
 ## The input
 
-**One entry point, and its include graph.** You name a signature file, and
-anoieu reads it, follows every `(include "...")` and `(reference "...")` from
-there, and analyses what that closure declares:
+**Entry points, and their include graphs.** You name one or more signature
+files, and anoieu reads each, follows every `(include "...")` and
+`(reference "...")` from there, and analyses what those closures declare. A file
+read under two entry points is read once, and a finding reported twice is
+reported once:
 
 ```bash
 python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo
+python3 -m anoieu check <cvc5>/proofs/eo/cpc/{Cpc.eo,expert/CpcExpert.eo}
+python3 -m anoieu check          # the entry points a nearby anoieu.json names
 ```
 
 Three things follow from that.
@@ -55,8 +59,12 @@ Reads the signature, runs every check that is on, and prints what it found.
 | option | what it does |
 | --- | --- |
 | `--pedantic` | also run the checks that are off by default (see below) |
+| `--config FILE` | use this `anoieu.json` instead of the discovered one |
+| `--baseline FILE` | hold back the findings the baseline records |
+| `--update-baseline` | rewrite the baseline from this run |
+| `--no-suppress` | ignore `; anoieu: allow` comments in the signature |
 | `--only CODE` | run only this check; repeatable, and an unknown code is an error rather than silence |
-| `--format text\|json\|github` | how to print; `text` is the default |
+| `--format text\|json\|github\|sarif` | how to print; `text` is the default |
 | `--deny-warnings` | exit non-zero on warnings too, not only on errors |
 | `--no-color` | plain text, which is also the default when stdout is not a terminal |
 | `--semantics FILE`, `--smt-semantics FILE` | the other two legs of the triple; accepted, not read yet |
@@ -169,6 +177,43 @@ than guess.
 taste on a signature that is already written — the missing-docstring check, the
 unused-parameter check, the dead-program check. `--pedantic` turns those on.
 
+## Configuration, baselines and suppression
+
+A repository writes down what it checks and what it has agreed to live with, so
+that its CI job is one line. See [`ci.md`](ci.md) for the whole arrangement; the
+short version:
+
+```json
+{
+  "entry_points": ["proofs/eo/cpc/Cpc.eo", "proofs/eo/cpc/expert/CpcExpert.eo"],
+  "baseline": "proofs/eo/anoieu-baseline.json",
+  "disable": ["DOC0011"],
+  "severity": {"EO0054": "hint"},
+  "pedantic": false
+}
+```
+
+`anoieu.json` is discovered by walking up from the first entry point, and every
+field can be overridden on the command line, because someone debugging one
+finding should not have to edit the repository's policy to do it.
+
+A **baseline** records today's findings so a run can fail on tomorrow's.
+`--update-baseline` writes it; a finding is remembered by its code, its file and
+the text of the line it points at, so it survives edits elsewhere in the file. A
+run says how many findings the baseline held, and how many entries the baseline
+remembers that nothing reports any more.
+
+A **suppression comment** is the other way to keep a finding, and the better one
+where the decision is local:
+
+```lisp
+; anoieu: allow EO0054  matching exactly two children is what this rule is about
+(($contains (or l xs) l) true)
+```
+
+It governs the line beneath it, or the line it trails; `allow-file` governs the
+file. A run reports how many it silenced, so they stay countable.
+
 ## In a pipeline
 
 ```bash
@@ -178,9 +223,7 @@ python3 -m anoieu check Cpc.eo --format json | jq '.[] | select(.severity=="erro
 
 The JSON is a flat list, one object per finding, with `code`, `severity`,
 `message`, `file`, `line`, `column`, `endLine`, `endColumn`, `label`, `notes`
-and `help`. A CI job that wants to fail only on new findings has no baseline
-file yet — that is on the roadmap and is the thing to build before turning this
-on over a large existing calculus.
+and `help`. `--format sarif` writes SARIF 2.1.0 for GitHub code scanning.
 
 ## Developing on it
 

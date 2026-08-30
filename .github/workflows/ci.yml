@@ -1,0 +1,80 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  # What the tool says about its own witnesses, and what a run does with those
+  # findings: suppression, baselines, configuration, the machine formats.
+  suites:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python3 tests/run.py
+      - name: the check catalogue is current
+        run: |
+          python3 tools/gen_checks_doc.py
+          git diff --exit-code docs/checks.md
+
+  # The half that protects the repositories anoieu runs in: every signature we
+  # can find is read, and CPC is checked against a baseline committed here, so a
+  # change that invents a false positive fails *this* build rather than theirs.
+  corpus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: check out cvc5
+        uses: actions/checkout@v4
+        with:
+          repository: cvc5/cvc5
+          ref: main
+          path: corpus/cvc5
+          sparse-checkout: proofs/eo
+      - name: check out ethos
+        uses: actions/checkout@v4
+        with:
+          repository: cvc5/ethos
+          ref: ethosEoc3
+          path: corpus/ethos
+      - name: every signature is read
+        run: python3 tools/sweep.py corpus/cvc5/proofs/eo corpus/ethos/tests
+      - name: CPC reports what the baseline says it reports
+        run: |
+          python3 -m anoieu check \
+            corpus/cvc5/proofs/eo/cpc/Cpc.eo \
+            corpus/cvc5/proofs/eo/cpc/expert/CpcExpert.eo \
+            --baseline tests/corpus/cpc-baseline.json \
+            --deny-warnings
+
+  # The differential half: ethos is the authority on what a term desugars to, so
+  # the battery is run against a real build of it.
+  oracle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: check out ethos
+        uses: actions/checkout@v4
+        with:
+          repository: cvc5/ethos
+          ref: ethosEoc3
+          path: corpus/ethos
+      - name: build ethos
+        run: |
+          cmake -S corpus/ethos -B corpus/ethos/build -DCMAKE_BUILD_TYPE=Production
+          cmake --build corpus/ethos/build -j4
+      - name: the desugarer agrees with the parser
+        run: |
+          ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle

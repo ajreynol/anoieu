@@ -1,0 +1,326 @@
+{
+  "version": 1,
+  "note": "written by `anoieu check --update-baseline`; each entry is a finding this repository has agreed to live with",
+  "findings": [
+    {
+      "id": "7e28d326aa6a9471",
+      "code": "EO0031",
+      "severity": "warning",
+      "file": "expert/theories/ArithExt.eo",
+      "line": 17,
+      "message": "`@arith_vts_delta` is declared twice with the type Real"
+    },
+    {
+      "id": "c4051090b04ca722",
+      "code": "EO0031",
+      "severity": "warning",
+      "file": "expert/theories/ArithExt.eo",
+      "line": 18,
+      "message": "`@arith_vts_delta_free` is declared twice with the type Real"
+    },
+    {
+      "id": "2f4e095451dc57b0",
+      "code": "EO0031",
+      "severity": "warning",
+      "file": "expert/theories/ArithExt.eo",
+      "line": 19,
+      "message": "`@arith_vts_infinity` is declared twice with the type T"
+    },
+    {
+      "id": "65ab88822a825705",
+      "code": "EO0031",
+      "severity": "warning",
+      "file": "expert/theories/ArithExt.eo",
+      "line": 20,
+      "message": "`@arith_vts_infinity_free` is declared twice with the type T"
+    },
+    {
+      "id": "cb17064b4653ec8f",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "programs/Quantifiers.eo",
+      "line": 95,
+      "message": "program `$substitute_simul_rec` takes 5 argument(s), and its docstring lists 4"
+    },
+    {
+      "id": "f8d6e39295c39583",
+      "code": "EO0064",
+      "severity": "error",
+      "file": "programs/Strings.eo",
+      "line": 46,
+      "message": "this case of `$is_seq_const_rec` returns Bool, and the program declares Int"
+    },
+    {
+      "id": "fc6eb46dfd579c7c",
+      "code": "EO0064",
+      "severity": "error",
+      "file": "programs/Strings.eo",
+      "line": 47,
+      "message": "this case of `$is_seq_const_rec` returns Bool, and the program declares Int"
+    },
+    {
+      "id": "fcc67f35382534ad",
+      "code": "EO0064",
+      "severity": "error",
+      "file": "programs/Strings.eo",
+      "line": 58,
+      "message": "this case of `$is_seq_const` returns Bool, and the program declares Int"
+    },
+    {
+      "id": "167b3ddb1005a58d",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "programs/Strings.eo",
+      "line": 202,
+      "message": "program `$re_ac_merge` takes 3 argument(s), and its docstring lists 5"
+    },
+    {
+      "id": "0d4dcbad834a04bf",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "programs/Strings.eo",
+      "line": 224,
+      "message": "program `$re_concat_merge` takes 2 argument(s), and its docstring lists 4"
+    },
+    {
+      "id": "ab0ac2497ced8c22",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "programs/Strings.eo",
+      "line": 244,
+      "message": "program `$derivative` takes 2 argument(s), and its docstring lists 5"
+    },
+    {
+      "id": "695a48f9461ac310",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "programs/Strings.eo",
+      "line": 1233,
+      "message": "program `$re_rev_map_rev` takes 2 argument(s), and its docstring lists 1"
+    },
+    {
+      "id": "0ea4a6640a2216de",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "programs/Strings.eo",
+      "line": 1749,
+      "message": "this pattern matches an `*` of exactly 2 element(s)"
+    },
+    {
+      "id": "0ea4a6640a2216de",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "programs/Strings.eo",
+      "line": 1749,
+      "message": "this pattern matches an `*` of exactly 2 element(s)"
+    },
+    {
+      "id": "022f7b431e9a9218",
+      "code": "EO0057",
+      "severity": "warning",
+      "file": "programs/Utils.eo",
+      "line": 70,
+      "message": "`$evaluate_list` is declared with no cases and never defined under this entry point"
+    },
+    {
+      "id": "038359d7f2c22e28",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/Arith.eo",
+      "line": 509,
+      "message": "rule `arith_poly_norm` takes 1 argument(s), and its docstring lists 2"
+    },
+    {
+      "id": "9d01ca1c79190d87",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/ArithBvConv.eo",
+      "line": 9,
+      "message": "program `$abconv_ubv_to_int_elim` takes 3 argument(s), and its docstring lists 4"
+    },
+    {
+      "id": "636f824fec86645c",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/BitVectors.eo",
+      "line": 240,
+      "message": "rule `bv_poly_norm` takes 1 argument(s), and its docstring lists 2"
+    },
+    {
+      "id": "a076ec861542dce3",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/Booleans.eo",
+      "line": 363,
+      "message": "rule `not_implies_elim2` takes 0 argument(s), and its docstring lists 1"
+    },
+    {
+      "id": "4a86b75e67fa5009",
+      "code": "DOC0012",
+      "severity": "warning",
+      "file": "rules/Booleans.eo",
+      "line": 363,
+      "message": "rule `not_implies_elim2` has no args, and its docstring documents one"
+    },
+    {
+      "id": "be7f3ffc4f5d7808",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/Booleans.eo",
+      "line": 463,
+      "message": "rule `ite_elim2` takes 0 argument(s), and its docstring lists 1"
+    },
+    {
+      "id": "efef140368688ccd",
+      "code": "DOC0012",
+      "severity": "warning",
+      "file": "rules/Booleans.eo",
+      "line": 463,
+      "message": "rule `ite_elim2` has no args, and its docstring documents one"
+    },
+    {
+      "id": "49dfc18fe97812d7",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/Datatypes.eo",
+      "line": 360,
+      "message": "program `$mk_dt_updater_elim_rhs` takes 3 argument(s), and its docstring lists 2"
+    },
+    {
+      "id": "e2b7d3156c34a597",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/Quantifiers.eo",
+      "line": 148,
+      "message": "rule `quant_var_reordering` takes 0 premise(s), and its docstring lists 1"
+    },
+    {
+      "id": "7fe9bb689e21c687",
+      "code": "DOC0012",
+      "severity": "warning",
+      "file": "rules/Quantifiers.eo",
+      "line": 148,
+      "message": "rule `quant_var_reordering` has no premises, and its docstring documents one"
+    },
+    {
+      "id": "ce548e7fb2508bb2",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 399,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "ce548e7fb2508bb2",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 399,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "d6988d2db50dbf69",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 540,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "bb4f43810dade74a",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 732,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "133092493fc3e323",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 943,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "0090ff9c83a4c2c5",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 948,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "ebb33dd8495fb978",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 1166,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "38cc593e17c6d7f6",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 1245,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "23455e8f990ea28b",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 1250,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "c15272774e1e8dc4",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 1255,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "f40f1e54aa9f9bfa",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Rewrites.eo",
+      "line": 1746,
+      "message": "this pattern matches an `+` of exactly 2 element(s)"
+    },
+    {
+      "id": "0cb34ca40b32d4ca",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/Strings.eo",
+      "line": 191,
+      "message": "rule `string_decompose` takes 2 premise(s), and its docstring lists 1"
+    },
+    {
+      "id": "6c8b161255307c58",
+      "code": "EO0054",
+      "severity": "hint",
+      "file": "rules/Strings.eo",
+      "line": 306,
+      "message": "this pattern matches an `str.++` of exactly 3 element(s)"
+    },
+    {
+      "id": "6c6e352f3dabe043",
+      "code": "DOC0011",
+      "severity": "warning",
+      "file": "rules/Uf.eo",
+      "line": 31,
+      "message": "rule `symm` takes 0 argument(s), and its docstring lists 1"
+    },
+    {
+      "id": "529bda8c40c514b4",
+      "code": "DOC0012",
+      "severity": "warning",
+      "file": "rules/Uf.eo",
+      "line": 31,
+      "message": "rule `symm` has no args, and its docstring documents one"
+    }
+  ]
+}

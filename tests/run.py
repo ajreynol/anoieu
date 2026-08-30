@@ -19,6 +19,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from anoieu.checks import REGISTRY, Context, load_checks, run_all  # noqa: E402
 from anoieu.loader import load  # noqa: E402
@@ -55,7 +56,8 @@ def run_one(path: str, want: set[str]) -> set[str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--oracle", action="store_true", help="also run ethos on each witness")
+    ap.add_argument("--oracle", action="store_true",
+                    help="also ask ethos about each witness, and run the desugaring battery")
     ap.add_argument("--ethos", default=os.environ.get("ETHOS", "ethos"))
     args = ap.parse_args()
 
@@ -92,7 +94,23 @@ def main() -> int:
             except (OSError, subprocess.TimeoutExpired) as e:
                 verdict = f"(not run: {e})"
             print(f"     ethos: {verdict}")
-    print(f"-- {failures} failure(s)")
+    print(f"-- witnesses: {failures} failure(s)")
+
+    sys.stdout.flush()
+    print()
+    import cli_cases  # noqa: PLC0415
+
+    failures += cli_cases.main()
+
+    if args.oracle:
+        print()
+        sys.stdout.flush()
+        import subprocess as sp  # noqa: PLC0415
+
+        oracle = os.path.join(os.path.dirname(HERE), "tools", "oracle_desugar.py")
+        p = sp.run([sys.executable, oracle, "--ethos", args.ethos], text=True)
+        failures += 1 if p.returncode else 0
+
     return 1 if failures else 0
 
 

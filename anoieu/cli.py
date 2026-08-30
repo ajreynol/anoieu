@@ -12,12 +12,25 @@ import argparse
 import os
 import sys
 
+from . import __version__
+from .baseline import Baseline
 from .checks import REGISTRY, Context, load_checks, run_all
+from .config import discover
 from .desugar import Scope, curry, desugar
-from .diagnostics import Diagnostic, Severity, render_github, render_json, render_text
+from .diagnostics import (
+    Diagnostic,
+    Severity,
+    SourceMap,
+    render_github,
+    render_json,
+    render_sarif,
+    render_text,
+)
 from .loader import _params_from, load
 from .model import NIL_ATTRS
 from .resolve import resolve_decl
+from .suppress import apply as suppress_apply
+from .suppress import collect as suppress_collect
 from .syntax.parser import parse
 
 
@@ -33,20 +46,53 @@ def _sorted(diags: list[Diagnostic]) -> list[Diagnostic]:
     return out
 
 
+def _entry_points(args, cfg) -> list[str]:
+    if args.file:
+        return [os.path.abspath(f) for f in args.file]
+    if cfg.entry_points:
+        return [os.path.abspath(cfg.resolve(e)) for e in cfg.entry_points]
+    return []
+
+
+def _common_root(paths: list[str], cfg) -> str:
+    if cfg.found:
+        return cfg.root
+    dirs = [os.path.dirname(p) for p in paths]
+    return os.path.commonpath(dirs) if len(dirs) > 1 else (dirs[0] if dirs else os.getcwd())
+
+
+def _show(path: str, root: str) -> str:
+    """A path as a log should carry it: relative where that is shorter to read,
+    and as it stands where relative would climb out of the tree."""
+    try:
+        rel = os.path.relpath(path, root)
+    except ValueError:
+        return path
+    return path if rel.startswith("..") else rel
+
+
 def cmd_check(args: argparse.Namespace) -> int:
     load_checks()
-    result = load(args.file)
-    ctx = Context(
-        signature=result.signature,
-        files=result.files,
-        sources=result.sources,
-        root=os.path.dirname(os.path.abspath(args.file)),
-        pedantic=args.pedantic,
-        include_edges=result.include_edges,
-    )
+    cfg = discover(args.file[0] if args.file else os.getcwd(), args.config)
+    entries = _entry_points(args, cfg)
+    if not entries:
+        print(
+            "error: name a signature to check, or list `entry_points` in anoieu.json",
+            file=sys.stderr,
+        )
+        return 2
+    missing = [e for e in entries if not os.path.isfile(e)]
+    if missing:
+        for m in missing:
+            print(f"error: no such file: {m}", file=sys.stderr)
+        return 2
+
     enabled = None
     if args.only:
         enabled = {c.upper() for c in args.only}
+    elif cfg.enable:
+        enabled = set(cfg.enable)
+    if enabled is not None:
         unknown = sorted(enabled - set(REGISTRY))
         if unknown:
             print(
@@ -55,42 +101,101 @@ def cmd_check(args: argparse.Namespace) -> int:
                 file=sys.stderr,
             )
             return 2
-    for opt, what in (
-        (args.semantics, "--semantics"),
-        (args.smt_semantics, "--smt-semantics"),
-    ):
+    for opt, what in ((args.semantics, "--semantics"), (args.smt_semantics, "--smt-semantics")):
         if opt:
             print(
                 f"warning: {what} is accepted but not read yet; the checks over a "
                 f"triple are not written (see docs/design.md, M4)",
                 file=sys.stderr,
             )
-    diags = list(result.diagnostics)
+
+    root = _common_root(entries, cfg)
+    pedantic = args.pedantic or cfg.pedantic
+    diags: list[Diagnostic] = []
+    sources = SourceMap()
+    files: dict = {}
+    read = 0
+    counts = {"decls": 0, "programs": 0, "rules": 0}
+
+    for entry in entries:
+        result = load(entry)
+        ctx = Context(
+            signature=result.signature,
+            files=result.files,
+            sources=result.sources,
+            root=root,
+            pedantic=pedantic,
+            include_edges=result.include_edges,
+        )
+        for path, parsed in result.files.items():
+            if path not in files:
+                files[path] = parsed
+                sources.add(path, parsed.text)
+                read += 1
+        diags += list(result.diagnostics) + run_all(ctx, enabled)
+        counts["decls"] += len(result.signature.decls)
+        counts["programs"] += len(result.signature.programs)
+        counts["rules"] += len(result.signature.rules)
+
     if enabled is not None:
         diags = [d for d in diags if d.code in enabled]
-    diags += run_all(ctx, enabled)
+    if cfg.disable and not args.only:
+        diags = [d for d in diags if d.code not in set(cfg.disable)]
+    for d in diags:
+        override = cfg.severity.get(d.code)
+        if override in {s.value for s in Severity}:
+            d.severity = Severity(override)
     diags = _sorted(diags)
 
+    silenced: list = []
+    if not args.no_suppress:
+        diags, silenced = suppress_apply(diags, suppress_collect(files))
+
+    baseline_path = args.baseline or (cfg.resolve(cfg.baseline) if cfg.baseline else None)
+    held, stale = 0, []
+    if args.update_baseline:
+        if baseline_path is None:
+            print(
+                "error: --update-baseline needs --baseline PATH, or `baseline` in "
+                "anoieu.json",
+                file=sys.stderr,
+            )
+            return 2
+        written = Baseline(baseline_path).write(diags, sources, root)
+        print(f"-- wrote {_show(baseline_path, root)}: {written} finding(s) baselined")
+        return 0
+    if baseline_path is not None:
+        diags, held, stale = Baseline.load(baseline_path).filter(diags, sources, root)
+
     if args.format == "json":
-        print(render_json(diags, ctx.root))
+        print(render_json(diags, root))
     elif args.format == "github":
-        print(render_github(diags, ctx.root))
+        print(render_github(diags, root))
+    elif args.format == "sarif":
+        print(render_sarif(diags, root))
     else:
         color = sys.stdout.isatty() and not args.no_color
         if diags:
-            print(render_text(diags, result.sources, ctx.root, color=color), end="")
-        counts = {s: sum(1 for d in diags if d.severity is s) for s in Severity}
-        parts = [
-            f"{counts[s]} {s.value}{'s' if counts[s] != 1 else ''}"
-            for s in Severity
-            if counts[s]
-        ]
-        sig = result.signature
+            print(render_text(diags, sources, root, color=color), end="")
         print(
-            f"-- checked {len(sig.files)} file(s): {len(sig.decls)} declarations, "
-            f"{len(sig.programs)} programs, {len(sig.rules)} rules"
+            f"-- checked {read} file(s) under {len(entries)} entry point(s): "
+            f"{counts['decls']} declarations, {counts['programs']} programs, "
+            f"{counts['rules']} rules"
         )
+        tally = {s: sum(1 for d in diags if d.severity is s) for s in Severity}
+        parts = [
+            f"{tally[s]} {s.value}{'s' if tally[s] != 1 else ''}" for s in Severity if tally[s]
+        ]
         print("-- " + (", ".join(parts) if parts else "nothing to report"))
+        if silenced:
+            print(f"--   {len(silenced)} silenced by comments in the signature")
+        if held:
+            print(f"--   {held} held by {_show(baseline_path, root)}")
+        if stale:
+            print(
+                f"--   {len(stale)} baseline entr{'y' if len(stale) == 1 else 'ies'} "
+                f"no longer reported; run --update-baseline to prune"
+            )
 
     worst = min((d.severity.rank for d in diags), default=9)
     if worst == 0:
@@ -243,15 +348,21 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="anoieu", description="a static analyzer for Eunoia")
+    ap.add_argument("--version", action="version", version=f"anoieu {__version__}")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     c = sub.add_parser("check", help="check a signature")
-    c.add_argument("file")
+    c.add_argument("file", nargs="*", help="entry points; defaults to anoieu.json")
     c.add_argument("--semantics", help="the calculus semantics (.eos) [accepted, not read yet]")
     c.add_argument(
         "--smt-semantics", help="the SMT-LIB semantics (.eos) [accepted, not read yet]"
     )
-    c.add_argument("--format", choices=["text", "json", "github"], default="text")
+    c.add_argument("--format", choices=["text", "json", "github", "sarif"], default="text")
+    c.add_argument("--config", help="an anoieu.json to use instead of the discovered one")
+    c.add_argument("--baseline", help="a baseline file: findings it holds are not reported")
+    c.add_argument("--update-baseline", action="store_true", help="rewrite the baseline")
+    c.add_argument("--no-suppress", action="store_true",
+                   help="ignore `; anoieu: allow` comments")
     c.add_argument("--only", action="append", help="run only this check code")
     c.add_argument("--pedantic", action="store_true", help="also run the checks that are off by default")
     c.add_argument("--deny-warnings", action="store_true")

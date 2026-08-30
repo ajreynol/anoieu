@@ -116,6 +116,13 @@ theories/Bools.eo:4:22: error[EO0041]: the nil terminator of `or` has the wrong 
           application of the operator whose type is asked for
 ```
 
+## In CI
+
+The long-term goal is for ethos, logos and cvc5 to run this on every push:
+[`docs/ci.md`](docs/ci.md) sets out the arrangement — one versioned tool, a
+policy file and a baseline owned by each repository, and a corpus job here that
+fails *this* build when a change would invent a false positive in theirs.
+
 ## Testing it
 
 ```bash

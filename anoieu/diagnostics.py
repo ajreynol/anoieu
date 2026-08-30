@@ -147,3 +147,56 @@ def render_github(diags: Iterable[Diagnostic], root: str) -> str:
             f"line={d.span.line},col={d.span.col},title={d.code}::{msg}"
         )
     return "\n".join(out)
+
+
+def render_sarif(diags: Iterable[Diagnostic], root: str) -> str:
+    """SARIF 2.1.0, which is what GitHub code scanning reads."""
+    level = {Severity.ERROR: "error", Severity.WARNING: "warning", Severity.HINT: "note"}
+    diags = list(diags)
+    rules = {}
+    results = []
+    for d in diags:
+        rules.setdefault(
+            d.code,
+            {
+                "id": d.code,
+                "shortDescription": {"text": d.message},
+                "helpUri": "https://github.com/cvc5/anoieu/blob/main/docs/checks.md#"
+                + d.code.lower(),
+            },
+        )
+        results.append(
+            {
+                "ruleId": d.code,
+                "level": level[d.severity],
+                "message": {"text": " ".join([d.message] + d.notes)},
+                "locations": [
+                    {
+                        "physicalLocation": {
+                            "artifactLocation": {"uri": _rel(d.span.path, root)},
+                            "region": {
+                                "startLine": max(1, d.span.line),
+                                "startColumn": max(1, d.span.col),
+                            },
+                        }
+                    }
+                ],
+            }
+        )
+    doc = {
+        "version": "2.1.0",
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "runs": [
+            {
+                "tool": {
+                    "driver": {
+                        "name": "anoieu",
+                        "informationUri": "https://github.com/cvc5/anoieu",
+                        "rules": list(rules.values()),
+                    }
+                },
+                "results": results,
+            }
+        ],
+    }
+    return json.dumps(doc, indent=2)
