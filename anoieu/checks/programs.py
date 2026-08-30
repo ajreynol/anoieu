@@ -13,7 +13,8 @@ from __future__ import annotations
 from typing import Iterator
 
 from ..diagnostics import Diagnostic, Severity
-from ..model import NIL_ATTRS, Param, ProgramDecl, Signature
+from ..model import EO_OPERATORS, NIL_ATTRS, Param, ProgramDecl, Signature
+from ..desugar import Scope, desugar
 from ..resolve import canonical_head, resolve_decl, resolve_name
 from ..syntax.parser import Node
 from . import Context, check
@@ -57,27 +58,6 @@ def _walk_pattern(
     right = attr.key in _RIGHT_NIL
     tail_index = len(args) - 1 if right else 0
 
-    for i, arg in enumerate(args):
-        p = params.get(arg.text) if arg.is_atom else None
-        if p is None or not p.has(":list"):
-            continue
-        if i != tail_index:
-            yield Diagnostic(
-                code="EO0055",
-                severity=Severity.ERROR,
-                message=f"`{p.name}` is marked `:list` in a position that makes this "
-                f"pattern illegal",
-                span=arg.span,
-                label="desugars to an `eo::list_concat`",
-                notes=[
-                    f"`{decl.name}` is `{attr.key}`, so a `:list` argument anywhere but "
-                    f"{'last' if right else 'first'} is folded in with eo::list_concat",
-                    "ethos reports this as `Cannot match on evaluatable subterm`",
-                ],
-                help=f"a pattern may hold one `:list` parameter, "
-                f"{'as its last argument' if right else 'as its first argument'}",
-            )
-
     tail = args[tail_index]
     if tail.is_atom and tail.text in params and not params[tail.text].has(":list"):
         p = params[tail.text]
@@ -89,8 +69,8 @@ def _walk_pattern(
             span=tail.span,
             label=f"`{p.name}` is one element, not the tail",
             notes=[
-                f"`{decl.name}` is `{attr.key}`, so this pattern is "
-                f"{node} with the nil inserted, and matches an "
+                f"`{decl.name}` is `{attr.key}`, so the parser builds "
+                f"{desugar(node, Scope(sig, params))} from this, which matches an "
                 f"{decl.name}-list of exactly {len(args)} elements",
                 f"in {where}",
             ],
@@ -130,13 +110,85 @@ def list_annotation(ctx: Context) -> Iterator[Diagnostic]:
             yield from _walk_pattern(pat, params, sig, f"rule `{rule.name}`")
 
 
-@check("EO0055", "a `:list` parameter stands where the pattern cannot match", page="""
-See EO0054. A `:list` parameter anywhere but the tail position of an n-ary
-application desugars to `eo::list_concat`, and a pattern may not hold an
-evaluatable subterm, so the case can never be read.
-""")
-def list_position(ctx: Context) -> Iterator[Diagnostic]:
-    return iter(())  # reported by EO0054's traversal
+@check(
+    "EO0055",
+    "a pattern desugars to something that cannot be matched on",
+    page="""
+A pattern is matched, not evaluated, so it may not hold a term the evaluator
+would rewrite. The sugar is what usually puts one there: a `:list` parameter
+anywhere but the tail of an n-ary application is folded in with
+`eo::list_concat`, and an operator with a type-dependent nil inserts an
+`eo::nil` where the pattern ends.
+
+anoieu desugars the pattern and looks at the result, which is the same rule
+ethos applies -- it answers `Cannot match on evaluatable subterm`, naming the
+built term rather than the annotation that produced it. `anoieu desugar --term`
+prints the same form.
+""",
+)
+def unmatchable_pattern(ctx: Context) -> Iterator[Diagnostic]:
+    sig = ctx.signature
+
+    def evaluatable(node: Node, params: dict[str, Param]) -> Node | None:
+        """The first subterm ethos would rewrite, which a pattern may not hold."""
+        from ..typing import infer
+
+        stack = [node]
+        while stack:
+            nd = stack.pop()
+            if not nd.is_list:
+                continue
+            if nd.head not in EO_OPERATORS:
+                stack.extend(nd.children)
+                continue
+            if nd.head == "eo::nil" and len(nd.children) == 3:
+                # `(eo::nil f (eo::typeof x))` is the placeholder the parser
+                # inserts for a nil that depends on the type. Where x's type is
+                # ground it resolves to a term, and the pattern is fine; where it
+                # is not, it stays, and ethos refuses the case.
+                arg = nd.children[2]
+                subject = arg.children[1] if arg.is_list and len(arg.children) == 2 else None
+                if subject is not None:
+                    t = infer(subject, params, sig)
+                    if t is not None and not any(
+                        x.is_atom and x.text in params for x in t.walk()
+                    ):
+                        continue  # resolved by evaluation, subtree and all
+            return nd
+        return None
+
+    def scan(pattern: Node, params: dict[str, Param], where: str) -> Iterator[Diagnostic]:
+        built = desugar(pattern, Scope(sig, params))
+        bad = evaluatable(built, params)
+        if bad is None:
+            return
+        yield Diagnostic(
+            code="EO0055",
+            severity=Severity.ERROR,
+            message=f"this pattern cannot be matched on: the parser builds "
+            f"{bad.head} into it",
+            span=pattern.span,
+            label=f"becomes {built}",
+            notes=[
+                f"in {where}",
+                "a pattern is matched rather than evaluated, so it may hold no "
+                "application the evaluator would rewrite",
+                "ethos reports this as `Cannot match on evaluatable subterm`",
+            ],
+        )
+
+    for prog in sig.programs:
+        params = _param_map(prog.params)
+        for lhs, _rhs in prog.cases:
+            for arg in lhs.children[1:]:
+                yield from scan(arg, params, f"program `{prog.name}`")
+    for rule in sig.rules:
+        params = _param_map(rule.params)
+        pats = list(rule.premises) + list(rule.args)
+        if rule.assumption is not None:
+            pats.append(rule.assumption)
+        for pat in pats:
+            yield from scan(pat, params, f"rule `{rule.name}`")
 
 
 @check(

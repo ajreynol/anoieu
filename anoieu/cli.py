@@ -13,8 +13,12 @@ import os
 import sys
 
 from .checks import REGISTRY, Context, load_checks, run_all
+from .desugar import Scope, curry, desugar
 from .diagnostics import Diagnostic, Severity, render_github, render_json, render_text
-from .loader import load
+from .loader import _params_from, load
+from .model import NIL_ATTRS
+from .resolve import resolve_decl
+from .syntax.parser import parse
 
 
 def _sorted(diags: list[Diagnostic]) -> list[Diagnostic]:
@@ -118,6 +122,109 @@ def cmd_list(args: argparse.Namespace) -> int:
     return 0
 
 
+def _scope(sig, params_src: str | None):
+    params = []
+    if params_src:
+        forms = parse("<params>", params_src).forms
+        if forms:
+            params = _params_from(forms[0], [])
+    return Scope(sig, {p.name: p for p in params}), params
+
+
+def cmd_desugar(args: argparse.Namespace) -> int:
+    """What the parser builds from a term written in this signature's scope."""
+    result = load(args.file)
+    scope, _params = _scope(result.signature, args.params)
+    parsed = parse("<term>", args.term)
+    if not parsed.forms:
+        print("error: could not read the term", file=sys.stderr)
+        return 2
+    term = parsed.forms[0]
+    out = desugar(term, scope)
+    print(f"-- in the scope of {os.path.basename(args.file)}")
+    if args.params:
+        print(f"   parameters {args.params}")
+    print(f"   written    {term}")
+    print(f"   desugared  {out}")
+    if args.curried:
+        print(f"   curried    {curry(out)}")
+    if str(out) == str(term):
+        print("   (no sugar in this term)")
+    return 0
+
+
+def cmd_symbol(args: argparse.Namespace) -> int:
+    """One symbol, and everything a run knows about it."""
+    result = load(args.file)
+    sig = result.signature
+    name = args.name
+    decls = sig.by_name.get(name, [])
+    prog = sig.programs_by_name.get(name)
+    define = sig.defines_by_name.get(name)
+    if not decls and prog is None and define is None:
+        print(f"error: {os.path.basename(args.file)} declares no `{name}`", file=sys.stderr)
+        return 2
+
+    root = os.path.dirname(os.path.abspath(args.file))
+    print(f"-- {name}")
+    for d in decls:
+        where = os.path.relpath(d.span.path, root)
+        print(f"   declared   {where}:{d.span.line}  ({d.kind})")
+        if d.type is not None:
+            print(f"   type       {d.type}")
+        for p in d.params:
+            marks = " ".join(a.key for a in p.attrs)
+            print(f"   parameter  {p.name} {p.type}{'  ' + marks if marks else ''}")
+        for a in d.attrs:
+            print(f"   attribute  {a.key}{' ' + str(a.value) if a.value is not None else ''}")
+    if prog is not None:
+        print(f"   program    :signature ({' '.join(str(s) for s in prog.sig_args)}) "
+              f"{prog.sig_ret}, {len(prog.cases)} case(s)")
+    if define is not None:
+        print(f"   defined as {define.body}")
+
+    decl = decls[-1] if decls else None
+    if decl is not None and decl.constructor_attr is not None:
+        scope, _ = _scope(sig, args.params)
+        binder = decl.constructor_attr.key == ":binder"
+        print("   applied")
+        forms = (
+            [f"({name} ((x T)) t1)", f"({name} ((x T) (y T)) t1)"]
+            if binder
+            else [f"({name} {' '.join(f't{j}' for j in range(1, k + 1))})" for k in (1, 2, 3)]
+        )
+        for written in forms:
+            form = parse("<t>", written).forms[0]
+            print(f"     {written:28} ->  {desugar(form, scope)}")
+        nil = decl.nil
+        if nil is not None:
+            from .desugar import is_ground
+
+            ground = is_ground(nil, decl)
+            print(f"   nil        {nil}  ({'ground' if ground else 'depends on the type'})")
+            if not ground:
+                print("   obligation this operator needs an `:is-list-nil` case in the "
+                      "calculus semantics (see docs/design.md, M4)")
+
+    users = []
+    for p in sig.programs:
+        for lhs, rhs in p.cases:
+            if any(s.text == name for node in (lhs, rhs) for s in node.symbols()):
+                users.append(f"program {p.name}")
+                break
+    for r in sig.rules:
+        nodes = [r.conclusion, r.assumption, *r.premises, *r.args]
+        if any(s.text == name for n in nodes if n is not None for s in n.symbols()):
+            users.append(f"rule {r.name}")
+    if users:
+        shown = ", ".join(users[:6])
+        more = f", and {len(users) - 6} more" if len(users) > 6 else ""
+        print(f"   named by   {len(users)}: {shown}{more}")
+    else:
+        print("   named by   nothing in this signature")
+    return 0
+
+
 def cmd_stats(args: argparse.Namespace) -> int:
     result = load(args.file)
     sig = result.signature
@@ -154,6 +261,20 @@ def main(argv: list[str] | None = None) -> int:
     e = sub.add_parser("explain", help="the manual page of a check")
     e.add_argument("code")
     e.set_defaults(fn=cmd_explain)
+
+    d = sub.add_parser("desugar", help="what the parser builds from a term")
+    d.add_argument("file")
+    d.add_argument("--term", required=True, help="the term to desugar, in quotes")
+    d.add_argument("--params", help="a parameter list the term is read under, e.g. "
+                   "'((x Bool) (xs Bool :list))'")
+    d.add_argument("--curried", action="store_true", help="also print the core form")
+    d.set_defaults(fn=cmd_desugar)
+
+    y = sub.add_parser("symbol", help="one symbol: declaration, sugar, and who names it")
+    y.add_argument("name")
+    y.add_argument("file")
+    y.add_argument("--params", help="a parameter list to read applications under")
+    y.set_defaults(fn=cmd_symbol)
 
     s = sub.add_parser("stats", help="what a signature holds")
     s.add_argument("file")

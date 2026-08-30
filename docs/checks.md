@@ -37,7 +37,7 @@ written, and `--pedantic` turns them on.
 | [EO0052](#eo0052) | a program case can never be reached | on |
 | [EO0053](#eo0053) | a program walks a list and has no case for its end | on |
 | [EO0054](#eo0054) | a pattern matches a fixed number of elements of an n-ary operator | on |
-| [EO0055](#eo0055) | a `:list` parameter stands where the pattern cannot match | on |
+| [EO0055](#eo0055) | a pattern desugars to something that cannot be matched on | on |
 | [EO0056](#eo0056) | a parameter nothing uses | off |
 | [EO0057](#eo0057) | a program is declared and never defined | on |
 | [EO0060](#eo0060) | a program nothing reaches | off |
@@ -307,11 +307,18 @@ whether that was the intention to the reader.
 
 ## EO0055
 
-**a `:list` parameter stands where the pattern cannot match**
+**a pattern desugars to something that cannot be matched on**
 
-See EO0054. A `:list` parameter anywhere but the tail position of an n-ary
-application desugars to `eo::list_concat`, and a pattern may not hold an
-evaluatable subterm, so the case can never be read.
+A pattern is matched, not evaluated, so it may not hold a term the evaluator
+would rewrite. The sugar is what usually puts one there: a `:list` parameter
+anywhere but the tail of an n-ary application is folded in with
+`eo::list_concat`, and an operator with a type-dependent nil inserts an
+`eo::nil` where the pattern ends.
+
+anoieu desugars the pattern and looks at the result, which is the same rule
+ethos applies -- it answers `Cannot match on evaluatable subterm`, naming the
+built term rather than the annotation that produced it. `anoieu desugar --term`
+prints the same form.
 
 ## EO0056
 

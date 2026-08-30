@@ -1,0 +1,35 @@
+; The context every desugaring case is read in: one declaration per policy the
+; parser implements, so that a case can name the shape it is about.
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-const Real Type)
+
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(declare-const and (-> Bool Bool Bool) :left-assoc-nil true)
+(declare-const => (-> Bool Bool Bool) :right-assoc)
+(declare-const xor (-> Bool Bool Bool) :left-assoc)
+(declare-const orns (-> Bool Bool Bool) :right-assoc-non-singleton-nil false)
+
+(declare-const >= (-> Int Int Bool) :chainable and)
+(declare-parameterized-const distinct ((T Type :implicit)) (-> T T Bool) :pairwise and)
+
+(declare-const @List Type)
+(declare-const @nil @List)
+(declare-parameterized-const @cons ((T Type :implicit)) (-> T @List @List)
+  :right-assoc-nil @nil)
+(declare-parameterized-const distinctL ((xs @List)) Bool :arg-list @cons)
+(declare-const forall (-> @List Bool Bool) :binder @cons)
+
+(declare-const BitVec (-> Int Type))
+(declare-consts <binary> (BitVec (eo::len eo::self)))
+(define bvzero ((m Int)) (eo::to_bin m 0))
+(declare-parameterized-const bvor ((m Int :implicit))
+  (-> (BitVec m) (BitVec m) (BitVec m)) :right-assoc-nil (bvzero m))
+
+(declare-const Set (-> Type Type))
+(declare-parameterized-const set.empty ((T Type :implicit)) (Set T))
+
+(declare-const a Bool)
+(declare-const b Bool)
+(declare-const c Bool)
+(declare-const P (-> Int Bool))

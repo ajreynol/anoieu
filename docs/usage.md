@@ -83,6 +83,47 @@ python3 -m anoieu list-checks
 
 Every code, one line each, marked when it is off by default.
 
+### `desugar` — what the parser builds
+
+```bash
+python3 -m anoieu desugar Cpc.eo --term '(or a b c)' --curried
+python3 -m anoieu desugar Cpc.eo --term '(or x xs)' --params '((x Bool) (xs Bool :list))'
+```
+
+```text
+-- in the scope of context.eo
+   written    (or a b c)
+   desugared  (or a (or b (or c false)))
+   curried    (_ (or a) (_ (or b) (_ (or c) false)))
+```
+
+The term is read in the signature's scope, so every attribute that shapes an
+application applies: nil terminators, `:list` parameters folded in with
+`eo::list_concat`, chains expanded through their combining operator, binders
+turned into variable lists, `eo::define` inlined. `--params` gives the term a
+parameter list to be read under, which is what a `:list` annotation needs;
+`--curried` also prints the core form, the one ethos prints in its errors.
+
+### `symbol` — one symbol, and everything a run knows about it
+
+```bash
+python3 -m anoieu symbol str.++ Cpc.eo
+```
+
+```text
+-- str.++
+   declared   theories/Strings.eo:68  (parameterized-const)
+   type       (-> (Seq T) (Seq T) (Seq T))
+   parameter  T Type  :implicit
+   attribute  :right-assoc-nil ($seq_empty (Seq T))
+   applied
+     (str.++ t1)                  ->  (str.++ t1 (eo::nil str.++ (eo::typeof t1)))
+     (str.++ t1 t2)               ->  (str.++ t1 (str.++ t2 (eo::nil str.++ (eo::typeof t1))))
+   nil        ($seq_empty (Seq T))  (depends on the type)
+   obligation this operator needs an `:is-list-nil` case in the calculus semantics
+   named by   60: program $str_eval_str_in_re_rec, ... and 54 more
+```
+
 ### `stats` — what a signature holds
 
 ```bash
@@ -149,7 +190,17 @@ ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle            # ... and what ethos says about each
 python3 tools/sweep.py <dir>...            # run over a corpus: crashes and counts
 python3 tools/gen_checks_doc.py            # rewrite docs/checks.md from the registry
+ETHOS=<ethos>/build/src/ethos \
+  python3 tools/oracle_desugar.py          # the desugarer against ethos, case by case
 ```
+
+`oracle_desugar.py` is the harness that keeps the desugarer honest. Ethos has no
+command that prints a desugared term, so each case is compiled into a definition
+whose `:type` cannot hold, and the term is read back out of the error message;
+both sides are then un-curried and compared as terms. The battery lives in
+`tests/desugar/cases.txt`, one line per case, and the context they are read in is
+`tests/desugar/context.eo` — one declaration per policy the parser implements.
+Adding a case is adding a line.
 
 **Adding a check** is one function and one witness pair:
 

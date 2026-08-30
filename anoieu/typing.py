@@ -119,6 +119,12 @@ def infer(
     head = node.head
     if head is None:
         return None
+    # a nullary definition is another name for what it names: `seq.indexof` is
+    # `str.indexof`, and an application of one is an application of the other
+    alias = sig.defines_by_name.get(head)
+    while alias is not None and not alias.params and alias.body is not None and alias.body.is_atom:
+        head = alias.body.text or head
+        alias = sig.defines_by_name.get(head)
     if head in _PASSTHROUGH:
         idx = _PASSTHROUGH[head]
         child = node.at(idx)
@@ -131,7 +137,7 @@ def infer(
         return a if type_head(strip_requires(a)) == type_head(strip_requires(b)) else None
     if head.startswith("eo::") or head == "_":
         return None
-    prog = sig.programs_by_name.get(head)
+    prog = sig.programs_by_name.get(head)  # noqa: E501
     if prog is not None:
         if not prog.sig_args or len(node.children) - 1 != len(prog.sig_args):
             return None

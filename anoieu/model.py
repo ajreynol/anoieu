@@ -63,6 +63,24 @@ NIL_ATTRS = {
 # carry at most one.
 CONSTRUCTOR_ATTRS = NARY_ATTRS | {":binder", ":let-binder"}
 
+# The computational operators: what ethos evaluates, and therefore what a
+# pattern may not hold. `eo::var`, `eo::List`, `eo::List::cons`, `eo::List::nil`
+# and `eo::self` are terms rather than operators, and are legal in a pattern.
+EO_OPERATORS = {
+    "eo::is_ok", "eo::ite", "eo::eq", "eo::is_eq", "eo::requires", "eo::hash",
+    "eo::typeof", "eo::nameof", "eo::cmp", "eo::is_z", "eo::is_q", "eo::is_bin",
+    "eo::is_str", "eo::is_bool", "eo::is_var", "eo::and", "eo::or", "eo::xor",
+    "eo::not", "eo::add", "eo::mul", "eo::pow", "eo::log", "eo::neg", "eo::qdiv",
+    "eo::zdiv", "eo::zmod", "eo::is_neg", "eo::gt", "eo::len", "eo::concat",
+    "eo::extract", "eo::find", "eo::to_z", "eo::to_q", "eo::to_bin", "eo::to_str",
+    "eo::dt_constructors", "eo::dt_selectors", "eo::nil", "eo::cons",
+    "eo::list_len", "eo::list_concat", "eo::list_nth", "eo::list_find",
+    "eo::list_rev", "eo::list_erase", "eo::list_erase_all", "eo::list_setof",
+    "eo::list_minclude", "eo::list_meq", "eo::list_diff", "eo::list_inter",
+    "eo::list_singleton_elim", "eo::list_singleton_intro", "eo::list_repeat",
+    "eo::define", "eo::as",
+}
+
 LITERAL_CATEGORIES = {
     "<boolean>",
     "<numeral>",

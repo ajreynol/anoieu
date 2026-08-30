@@ -97,7 +97,9 @@ No dependencies; Python 3.10 or later. Full interface reference in
 python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo     # check a signature
 python3 -m anoieu check Cpc.eo --pedantic               # ... and the quieter checks
 python3 -m anoieu check Cpc.eo --format json            # or github, for CI
-python3 -m anoieu explain EO0041                        # the manual page of a check
+python3 -m anoieu desugar Cpc.eo --term '(or a b c)'    # what the parser builds from a term
+python3 -m anoieu symbol str.++ Cpc.eo                 # one symbol: type, sugar, who names it
+python3 -m anoieu explain EO0041                       # the manual page of a check
 python3 -m anoieu list-checks                           # every check and what it says
 python3 -m anoieu stats Cpc.eo                          # what a signature holds
 ```
