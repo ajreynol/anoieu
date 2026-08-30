@@ -91,6 +91,9 @@ Reads the signature, runs every check that is on, and prints what it found.
 | `--baseline FILE` | hold back the findings the baseline records |
 | `--update-baseline` | rewrite the baseline from this run |
 | `--no-suppress` | ignore `; anoieu: allow` comments in the signature |
+| `--max-per-check N` | hold back a check reporting more than this (default 25) |
+| `--max-findings N` | hold back a run reporting more than this (default 200) |
+| `--no-limits` | report everything, however much there is |
 | `--only CODE` | run only this check; repeatable, and an unknown code is an error rather than silence |
 | `--format text\|json\|github\|sarif` | how to print; `text` is the default |
 | `--deny-warnings` | exit non-zero on warnings too, not only on errors |
@@ -243,6 +246,27 @@ where the decision is local:
 
 It governs the line beneath it, or the line it trails; `allow-file` governs the
 file. A run reports how many it silenced, so they stay countable.
+
+## When a run reports too much
+
+A check that reports two hundred findings has almost certainly broken rather
+than found two hundred defects — it happened here, when a change to how a
+directory is read merged 191 unrelated test signatures into one symbol table and
+three checks produced 253 findings that were artefacts of the merge. Nothing
+failed; the run simply printed them.
+
+So a run bounds what it reports. A check over `--max-per-check` (25) is held
+back: three of its findings are kept as evidence and the rest are replaced by an
+`ANO0001` **error** saying how many were not printed and how to see them
+(`--only CODE --no-limits`). A run over `--max-findings` (200) is truncated the
+same way, with `ANO0002`. Both are errors, so a flood fails a CI job instead of
+filling it with annotations, and nothing is ever dropped silently.
+
+Raise them in `anoieu.json` where the volume is real:
+
+```json
+{"limits": {"per_check": 60, "total": 400}}
+```
 
 ## In a pipeline
 

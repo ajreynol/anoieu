@@ -43,6 +43,9 @@ class Config:
     enable: list[str] = field(default_factory=list)
     disable: list[str] = field(default_factory=list)
     severity: dict[str, str] = field(default_factory=dict)
+    # {"per_check": N, "total": N} -- how much a run will report before it
+    # treats the volume as a defect in the analyzer
+    limits: dict[str, int] = field(default_factory=dict)
     pedantic: bool = False
 
     @property
@@ -83,5 +86,6 @@ def load(path: str) -> Config:
         enable=[c.upper() for c in data.get("enable", [])],
         disable=[c.upper() for c in data.get("disable", [])],
         severity={k.upper(): v for k, v in data.get("severity", {}).items()},
+        limits={k: int(v) for k, v in data.get("limits", {}).items()},
         pedantic=bool(data.get("pedantic", False)),
     )

@@ -145,6 +145,41 @@ For GitHub code scanning instead of inline annotations:
         with: { sarif_file: anoieu.sarif }
 ```
 
+## Maintaining the report
+
+Two files in `docs/` are generated, and the way they are maintained is the
+medium-term plan rather than a stopgap.
+
+[`corpus.md`](corpus.md) is counts, rewritten whole by
+`tools/gen_corpus_table.py`; `--check` says whether it is current and CI runs
+that. A failure means upstream moved or a check changed what it reports, and the
+diff says which.
+
+[`open-findings.md`](open-findings.md) is the report itself, one row per
+finding, and it is **additive**:
+
+- **`tools/gen_open_findings.py` adds and never removes.** A row is keyed by the
+  same fingerprint a baseline uses — the code, the file, and the text of the
+  line — so it survives edits elsewhere in the file. CI runs `--check`, which
+  fails when a finding is unlisted and never when a row is extra.
+- **Closing is a separate step, and it is a judgement.** A finding leaves the
+  open table when it is fixed upstream, declined, or shown to be our error. The
+  row *moves* to the Closed table with a verdict rather than being deleted:
+  deletion would not stick, because the finding is still there to be found and
+  the next generation would list it again. The Closed table is what makes the
+  verdict durable.
+- **For now the review is an AI process under human supervision.** It takes a
+  row, reads the current state of the file it is about, and either leaves it or
+  moves it with a verdict — writing the reasoning into
+  [`upstream.md`](upstream.md), which is the prose half of the same ledger.
+- **A finding that stops being reported is not evidence it was addressed.** It
+  may have moved, or a check may have been narrowed. That is the whole reason
+  the generator cannot delete.
+
+The hand-written register in [`README.md`](README.md) is the first pass at all of
+this and is kept as the worked example of a curated report. The generated file is
+where the mechanical half now lives.
+
 ## Costs
 
 A whole-of-CPC run reads 51 files and finishes in well under a second, with no

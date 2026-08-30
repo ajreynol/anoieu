@@ -11,6 +11,8 @@ written, and `--pedantic` turns them on.
 
 | code | says | default |
 | --- | --- | --- |
+| [ANO0001](#ano0001) | a check reported more than a run will print | on |
+| [ANO0002](#ano0002) | a run reported more than it will print | on |
 | [DOC0001](#doc0001) | a rule or program with no docstring | off |
 | [DOC0010](#doc0010) | a docstring names something other than what it documents | on |
 | [DOC0011](#doc0011) | a docstring documents a different number of premises or arguments | on |
@@ -72,6 +74,28 @@ written, and `--pedantic` turns them on.
 | [TRI0006](#tri0006) | the two type rules of a symbol disagree about its sort | on |
 | [TRI0007](#tri0007) | a termination clause for a program that does not exist | on |
 | [TRI0008](#tri0008) | a program whose recursion Lean may not see terminating | off |
+
+## ANO0001
+
+**a check reported more than a run will print**
+
+Not a finding about a signature: a finding about this tool. A check that reports
+dozens of things has usually broken rather than found dozens of defects — it
+happened here when a change to how a directory is read merged 191 unrelated test
+signatures into one symbol table, and three checks produced 253 findings that
+were all artefacts of the merge.
+
+So a run holds a flooding check back, keeps three of its findings as evidence,
+and says how many it did not print. Raise `limits.per_check` in `anoieu.json` if
+the findings are real, or pass `--no-limits` to see them once.
+
+## ANO0002
+
+**a run reported more than it will print**
+
+The same guard, for the total rather than for one check. A run loud enough to
+hit it is a run nobody reads, and is more often this tool's fault than the
+signature's. Nothing is dropped silently: the count is always reported.
 
 ## DOC0001
 

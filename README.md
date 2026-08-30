@@ -31,7 +31,8 @@ declined. This repository is that somewhere.
 
 | | where | what it is |
 | --- | --- | --- |
-| **Open findings** | [`docs/README.md`](docs/README.md) | what anoieu currently believes and nobody has ruled on — *hypotheses*, each reproduced before it was written down, each still able to be wrong |
+| **Open findings** | [`docs/open-findings.md`](docs/open-findings.md) | every finding the checks report, one row each, generated and **additive** — the generator adds and never removes, and closing a row is a judgement made by review |
+| **The curated register** | [`docs/README.md`](docs/README.md) | the first pass at the above, hand-written and argued, kept as the worked example of what a report should say |
 | **The log** | [`docs/upstream.md`](docs/upstream.md) | what was reported and what came back — accepted, declined, deferred, and what the analyzer changed when a finding turned out to be wrong |
 
 So far: **two findings fixed upstream in cvc5**, one declined because our

@@ -62,6 +62,20 @@ jobs:
             --deny-warnings
       # the whole triple: cvc5's signature, logos's semantics of it, and the
       # SMT-LIB semantics and embedding those are written against
+      # a stale table means upstream moved or a check changed what it reports;
+      # the diff says which, and neither is an error in itself
+      - name: the corpus table is current
+        run: python3 tools/gen_corpus_table.py --check --roots corpus
+      # The report of open findings is *additive*: this step fails when the
+      # checks report something the file does not list, and never when the file
+      # lists something the checks no longer report. Closing a finding is a
+      # judgement, made by a review step rather than by a diff — see
+      # "How this file is maintained" in docs/open-findings.md. The medium-term
+      # arrangement is that generation adds, and an AI review under human
+      # supervision moves a row to the Closed table with a verdict and writes
+      # what happened into docs/upstream.md.
+      - name: every finding is listed in the report
+        run: python3 tools/gen_open_findings.py --check --roots corpus
       - name: the CPC triple agrees with itself
         run: |
           python3 -m anoieu check corpus/cvc5/proofs/eo/cpc/Cpc.eo \

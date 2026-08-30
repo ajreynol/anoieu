@@ -595,6 +595,7 @@ in [`ci.md`](ci.md).
 | [`upstream.md`](upstream.md) | what has been reported to another repository, and what happened to it |
 | [`ci.md`](ci.md) | running this in ethos, ethos-eoc, logos and cvc5 |
 | [`checks.md`](checks.md) | every check and its manual page, generated from the registry |
+| [`corpus.md`](corpus.md) | what the checks report on every signature we can find, generated and checked in CI |
 | [`findings.md`](findings.md) | what the first runs found, and every false positive that had to be shed first |
 | [`what-ethos-misses.md`](what-ethos-misses.md) | why ethos does not report these itself, by mechanism |
 | [`language-notes.md`](language-notes.md) | what we have established about `.eo` and `.eos`, and where they are unsettled |

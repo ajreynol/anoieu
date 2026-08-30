@@ -9,6 +9,7 @@ case is the command a repository would actually run.
 
 from __future__ import annotations
 
+import collections
 import json
 import os
 import subprocess
@@ -160,6 +161,29 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
         codes(o) == [],
         str(codes(o)),
     )
+
+    # a directory holds signatures that have nothing to do with each other, so
+    # each is its own profile; merging them into one made every repeated
+    # declaration across unrelated test files look like a duplicate
+    many = os.path.join(d, "many")
+    os.makedirs(many, exist_ok=True)
+    write(many, "one.eo", NIL_BAD)
+    write(many, "two.eo", NIL_BAD)
+    rc, o, _ = run("check", many, "--format", "json")
+    case("a directory is one profile per file", codes(o) == ["EO0041", "EO0041"], str(codes(o)))
+
+    # a flood is the analyzer's bug, not the signature's: held back, and said
+    flood = write(d, "flood.eo", "(declare-const Int Type)\n(declare-consts <numeral> Int)\n"
+                  + "".join(f"(declare-const or{i} (-> Bool Bool Bool) :right-assoc-nil 0)\n"
+                            for i in range(30)))
+    rc, o, _ = run("check", flood, "--format", "json")
+    got = collections.Counter(codes(o))
+    case("a flooding check is held back", got["EO0041"] == 3 and got["ANO0001"] == 1, str(dict(got)))
+    case("and holding it back fails the run", rc == 1, f"exit {rc}")
+    rc, o, _ = run("check", flood, "--no-limits", "--format", "json")
+    got = collections.Counter(codes(o))
+    case("--no-limits reports all of them", got["EO0041"] == 30 and not got["ANO0001"],
+         str(dict(got)))
 
     rc, o, _ = run("check", bad, "--format", "sarif")
     try:

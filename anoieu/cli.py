@@ -26,6 +26,8 @@ from .diagnostics import (
     render_sarif,
     render_text,
 )
+from .limits import DEFAULT_PER_CHECK, DEFAULT_TOTAL, Limits
+from .limits import apply as apply_limits
 from .loader import _params_from, load
 from .semantics import load_set
 from .model import NIL_ATTRS
@@ -47,17 +49,25 @@ def _sorted(diags: list[Diagnostic]) -> list[Diagnostic]:
     return out
 
 
-def _expand(paths: list[str]) -> list[str]:
-    """A directory names every signature under it, which is how a repository
-    points at a tree of them rather than listing forty files."""
-    out: list[str] = []
+def _expand(paths: list[str]) -> list[list[str]]:
+    """What a run was pointed at, as profiles.
+
+    A *directory* names many signatures that have nothing to do with each other,
+    so each becomes a profile of its own. *Files* named together are one ordered
+    profile, because naming two files is how a caller says "these are loaded in
+    this order", which is what cvc5 does with its base and expert signatures.
+    """
+    out: list[list[str]] = []
+    files: list[str] = []
     for path in paths:
         if os.path.isdir(path):
             for root, _dirs, names in os.walk(path):
-                out += [os.path.join(root, n) for n in sorted(names) if n.endswith(".eo")]
+                out += [
+                    [os.path.join(root, n)] for n in sorted(names) if n.endswith(".eo")
+                ]
         else:
-            out.append(path)
-    return out
+            files.append(path)
+    return ([files] if files else []) + out
 
 
 def _profiles(args, cfg) -> list[tuple[str, list[str]]]:
@@ -70,17 +80,24 @@ def _profiles(args, cfg) -> list[tuple[str, list[str]]]:
     reach this" in a world that nobody runs.
     """
     if args.file:
-        return [("", _expand([os.path.abspath(f) for f in args.file]))]
+        groups = _expand([os.path.abspath(f) for f in args.file])
+        return [
+            ("" if len(groups) == 1 else os.path.basename(g[0]), g) for g in groups
+        ]
     out: list[tuple[str, list[str]]] = []
     for p in cfg.profiles:
         name = str(p.get("name", "")) or "profile"
         includes = [os.path.abspath(cfg.resolve(i)) for i in p.get("includes", [])]
         if includes and (not args.profile or name in args.profile):
-            out.append((name, _expand(includes)))
+            for group in _expand(includes):
+                out.append((name, group))
     if out:
         return out
     if cfg.entry_points:
-        return [("", _expand([os.path.abspath(cfg.resolve(e)) for e in cfg.entry_points]))]
+        groups = _expand([os.path.abspath(cfg.resolve(e)) for e in cfg.entry_points])
+        return [
+            ("" if len(groups) == 1 else os.path.basename(g[0]), g) for g in groups
+        ]
     return []
 
 
@@ -250,6 +267,14 @@ def cmd_check(args: argparse.Namespace) -> int:
         if override in {s.value for s in Severity}:
             d.severity = Severity(override)
     diags = _sorted(diags)
+    diags = apply_limits(
+        diags,
+        Limits(
+            per_check=args.max_per_check or cfg.limits.get("per_check", DEFAULT_PER_CHECK),
+            total=args.max_findings or cfg.limits.get("total", DEFAULT_TOTAL),
+            enabled=not args.no_limits,
+        ),
+    )
 
     silenced: list = []
     if not args.no_suppress:
@@ -472,6 +497,14 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--update-baseline", action="store_true", help="rewrite the baseline")
     c.add_argument("--no-suppress", action="store_true",
                    help="ignore `; anoieu: allow` comments")
+    c.add_argument("--max-per-check", type=int,
+                   help=f"hold back a check reporting more than this (default "
+                        f"{DEFAULT_PER_CHECK})")
+    c.add_argument("--max-findings", type=int,
+                   help=f"hold back a run reporting more than this (default "
+                        f"{DEFAULT_TOTAL})")
+    c.add_argument("--no-limits", action="store_true",
+                   help="report everything, however much there is")
     c.add_argument("--only", action="append", help="run only this check code")
     c.add_argument("--pedantic", action="store_true", help="also run the checks that are off by default")
     c.add_argument("--deny-warnings", action="store_true")
