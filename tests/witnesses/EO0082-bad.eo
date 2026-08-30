@@ -1,0 +1,5 @@
+; expect: EO0082
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-const + (-> Int Int Int))
+(define d ((x Int)) (eo::define ((unused (+ x x))) x))

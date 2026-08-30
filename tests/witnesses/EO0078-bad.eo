@@ -1,0 +1,10 @@
+; expect: EO0078
+; A rule that reasons through eo::hash cannot be compiled to a Lean checker.
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(program $ident ((x Bool)) :signature (Bool) Int ( (($ident x) (eo::hash x)) ))
+(declare-rule hashed ((F Bool))
+  :args (F)
+  :conclusion (= ($ident F) ($ident F))
+)

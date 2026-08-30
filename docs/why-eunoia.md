@@ -434,13 +434,24 @@ answer). This is the concrete asset arrangement D would delete.
 
 **And two things it reveals about the cost.**
 
-*The signature contract is unchecked.* Its README specifies what a calculus must
-provide — an `and` declared `:right-assoc-nil true` and translated to
-`SmtTerm.and`, `true`/`false` literals — and says outright that a signature which
-translated `and` elsewhere "would break soundness silently: nothing downstream
-re-checks that seam". A contract stated in prose and enforced by nothing is
-precisely the shape of thing a type system would have carried, and is
-[eud-1](README.md#eudaimonia--the-template-for-other-calculi) here.
+*The signature contract is checked late, and against the artifact.* Its README
+specifies what a calculus must provide: a binary `and`, `and` translated to
+`SmtTerm.and` by the semantics, and the Bool literals — plus, *only for calculi
+whose rules gather `:list` premises with `and`*, that `and` be declared
+`:right-assoc-nil true`. That last one is explicitly not a core requirement, and
+a calculus without such rules needs no nil at all; `examples/hello` is one. (An
+earlier draft of this document quoted it as universal. It is not, and the
+correction is the point: a requirement stated in prose is a requirement that
+drifts.)
+
+`install/install-<calc>.sh` does check all of it — against **what the compiler
+emitted**, because "the name an operator compiles to need not be its spelling,
+and the attribute is only visible in what it generates". So the gap is not that
+nothing checks it; it is that the check runs after a checker has been generated,
+reads the output rather than the input, and can therefore only report what a
+signature *became*. Answering the same questions from the signature and its
+semantics — before anything is generated, in terms the author wrote — is
+[eud-1](README.md#eudaimonia--the-template-for-other-calculi).
 
 *Its calculus profile has answers that are declared rather than verified.* Seven
 questions; five checked against what the compiler emitted, two recorded on

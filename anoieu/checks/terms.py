@@ -13,7 +13,7 @@ from typing import Iterator
 
 from ..builtins import ARITHMETIC, BITWISE, EO_ARITY, SAME_CATEGORY
 from ..diagnostics import Diagnostic, Severity
-from ..model import Param
+from ..model import EO_OPERATORS, Param
 from ..syntax.parser import Node
 from . import Context, check
 
@@ -383,3 +383,79 @@ def inert_list_annotation(ctx: Context) -> Iterator[Diagnostic]:
         for p in rule.params:
             if p.has(":list"):
                 yield from scan(p.name, p.span, nodes, f"rule `{rule.name}`")
+
+
+@check(
+    "EO0079",
+    "a program is passed to a program, which never invokes it",
+    page="""
+The manual is explicit: a program is not invoked when it is applied to another
+program, to a builtin `eo::` operator, or to an oracle. The application is left
+as it stands. So a higher-order side condition written this way silently does
+nothing -- it returns an application of itself, and whatever asked for a value
+gets a term.
+
+Passing an ordinary declared symbol is fine, and is how a signature parameterises
+a program by an operator: `(eo::list_concat or x y)`, `($rel_sum < <= a b)`.
+""",
+)
+def program_as_argument(ctx: Context) -> Iterator[Diagnostic]:
+    sig = ctx.signature
+    for term, where, params in _terms(ctx):
+        for nd in term.walk():
+            if not nd.is_list or nd.head not in sig.programs_by_name:
+                continue
+            for arg in nd.children[1:]:
+                if not arg.is_atom or arg.text in params:
+                    continue
+                name = arg.text or ""
+                # `eo::List::nil` and `eo::List::cons` are constructors of the
+                # builtin list, not operators: passing one is passing a term
+                kind = (
+                    "a program"
+                    if name in sig.programs_by_name
+                    else ("a builtin operator" if name in EO_OPERATORS else None)
+                )
+                if kind is None:
+                    continue
+                yield Diagnostic(
+                    code="EO0079",
+                    severity=Severity.ERROR,
+                    message=f"`{nd.head}` is applied to {kind}, `{name}`, so it is "
+                    f"never invoked",
+                    span=arg.span,
+                    label="the application is left as it stands",
+                    notes=[f"in {where}"],
+                )
+
+
+@check(
+    "EO0082",
+    "an `eo::define` binding the body never uses",
+    page="""
+`eo::define` names a term so the body can say it twice. A binding the body never
+mentions names nothing: the value is still computed where it stands only because
+the binding is inlined, and the name is a leftover from an edit.
+""",
+    default_on=False,
+)
+def unused_binding(ctx: Context) -> Iterator[Diagnostic]:
+    for term, where, _params in _terms(ctx):
+        for nd in term.walk():
+            if not (nd.is_list and nd.head == "eo::define" and len(nd.children) == 3):
+                continue
+            bindings, body = nd.children[1], nd.children[2]
+            used = {s.text for s in body.symbols()}
+            for pair in bindings.children if bindings.is_list else []:
+                if not (pair.is_list and len(pair.children) == 2 and pair.children[0].is_atom):
+                    continue
+                name = pair.children[0].text or ""
+                if name in used:
+                    continue
+                yield Diagnostic(
+                    code="EO0082",
+                    severity=Severity.HINT,
+                    message=f"`{name}` is bound here and never used in the body",
+                    span=pair.children[0].span,
+                    notes=[f"in {where}"],
+                )

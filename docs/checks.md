@@ -54,6 +54,11 @@ written, and `--pedantic` turns them on.
 | [EO0073](#eo0073) | an evaluation the language says cannot happen | on |
 | [EO0074](#eo0074) | a list operator applied to something that is not an n-ary operator | on |
 | [EO0076](#eo0076) | a `:list` annotation that does nothing | off |
+| [EO0077](#eo0077) | the rules a calculus admits without justification | on |
+| [EO0078](#eo0078) | a rule reaches `eo::hash`, which no generated checker can model | on |
+| [EO0079](#eo0079) | a program is passed to a program, which never invokes it | on |
+| [EO0080](#eo0080) | an implicit parameter nothing can bind | on |
+| [EO0082](#eo0082) | an `eo::define` binding the body never uses | off |
 
 ## DOC0001
 
@@ -538,3 +543,65 @@ parameter that never stands in one is annotated for nothing -- which is either a
 leftover, or a misunderstanding of what the annotation does, and the second is
 worth knowing about because the same misunderstanding is what leaves it *off*
 where it was needed.
+
+## EO0077
+
+**the rules a calculus admits without justification**
+
+`:sorry` marks a rule that has no formal justification, and it is a legitimate
+thing to write: CPC's `trust` rule carries every inference cvc5 has not
+formalised, and says so in its own docstring. What it changes is what a run
+means -- ethos answers `incomplete` rather than `correct` for any proof that
+uses one, and the compiler has nothing to verify about it.
+
+So this is an inventory rather than a defect report, and a hint rather than a
+warning: it puts the admitted rules of a calculus in one place, because "which
+rules is this proof's verdict resting on" is a question worth being able to ask
+without grep.
+
+## EO0078
+
+**a rule reaches `eo::hash`, which no generated checker can model**
+
+`eo::hash` returns "a numeral unique to" a value and nothing further: the
+language deliberately leaves it underconstrained. That is enough for a signature
+to reason through and not enough for a model to follow, so the Lean backend
+refuses to print the program that would call it, and a calculus that reasons
+through hash is one no generated Lean checker can be built for.
+
+Ethos itself is unaffected -- it computes a hash and carries on -- which is why
+this is worth saying at the signature: the consequence lands in another tool, on
+another day.
+
+## EO0079
+
+**a program is passed to a program, which never invokes it**
+
+The manual is explicit: a program is not invoked when it is applied to another
+program, to a builtin `eo::` operator, or to an oracle. The application is left
+as it stands. So a higher-order side condition written this way silently does
+nothing -- it returns an application of itself, and whatever asked for a value
+gets a term.
+
+Passing an ordinary declared symbol is fine, and is how a signature parameterises
+a program by an operator: `(eo::list_concat or x y)`, `($rel_sum < <= a b)`.
+
+## EO0080
+
+**an implicit parameter nothing can bind**
+
+An implicit parameter is inferred from the arguments an application is given, so
+it has to occur somewhere an argument can determine it: in the declared type, in
+the type of another parameter, or in a term the declaration writes. One that
+occurs nowhere can never be bound by anything -- it is a name with no job, and
+usually the trace of a type that was edited around it.
+
+## EO0082
+
+**an `eo::define` binding the body never uses**
+
+*Off by default; run with `--pedantic` or `--only EO0082`.*
+
+`eo::define` names a term so the body can say it twice. A binding the body never
+mentions names nothing: the value is still computed where it stands only because
+the binding is inlined, and the name is a leftover from an edit.

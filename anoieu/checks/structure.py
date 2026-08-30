@@ -218,3 +218,45 @@ def unused_parameter(ctx: Context) -> Iterator[Diagnostic]:
                     message=f"`{p.name}` is declared by rule `{rule.name}` and never used",
                     span=p.span,
                 )
+
+
+@check(
+    "EO0080",
+    "an implicit parameter nothing can bind",
+    page="""
+An implicit parameter is inferred from the arguments an application is given, so
+it has to occur somewhere an argument can determine it: in the declared type, in
+the type of another parameter, or in a term the declaration writes. One that
+occurs nowhere can never be bound by anything -- it is a name with no job, and
+usually the trace of a type that was edited around it.
+""",
+)
+def uninferable_parameter(ctx: Context) -> Iterator[Diagnostic]:
+    for d in ctx.signature.decls:
+        if not d.params:
+            continue
+        elsewhere: set[str] = set()
+        for node in [d.type] + [p.type for p in d.params] + [a.value for a in d.attrs]:
+            if node is not None:
+                elsewhere |= {s.text or "" for s in node.symbols()}
+        for p in d.params:
+            if not p.has(":implicit"):
+                continue
+            # its own type does not count: `(T Type :implicit)` says what T is,
+            # not where it is bound from
+            own = {s.text or "" for s in p.type.symbols()} if p.type is not None else set()
+            if p.name in (elsewhere - own) or any(
+                p.name in {s.text or "" for s in q.type.symbols()}
+                for q in d.params
+                if q is not p and q.type is not None
+            ):
+                continue
+            yield Diagnostic(
+                code="EO0080",
+                severity=Severity.WARNING,
+                message=f"`{p.name}` is implicit and occurs nowhere an argument could "
+                f"bind it",
+                span=p.span,
+                notes=[f"in the declaration of `{d.name}`"],
+                help="drop it, or use it in the type it was meant to abstract",
+            )

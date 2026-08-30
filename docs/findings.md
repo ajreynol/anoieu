@@ -31,7 +31,7 @@ rather than falling over.
 Every check owns a witness under `tests/witnesses`, and `tests/run.py --oracle`
 runs ethos on each one:
 
-**Of the 32 witnesses that hold the mistake, ethos accepts 27 and answers
+**Of the 37 witnesses that hold the mistake, ethos accepts 32 and answers
 `correct`.** It refuses five: a `declare-rule` field out of order, an opaque
 argument after an ordinary one, a program case of the wrong arity, a pattern
 with two `:list` parameters, and a builtin applied to the wrong number of
@@ -40,7 +40,7 @@ rather than the detection -- ethos reports the pattern one, for instance, as
 `Cannot match on evaluatable subterm`, which names neither the annotation nor
 the parameter.
 
-The twenty-seven are the case for the tool.
+The thirty-two are the case for the tool.
 [`what-ethos-misses.md`](what-ethos-misses.md) says why each of them gets past
 ethos.
 
@@ -175,6 +175,15 @@ so matching binds it once and checks the second occurrence agrees -- which is
 exactly what the second case matches. Reported by `EO0052`, whose subsumption
 test is what sees it.
 
+### An inventory, not a defect: the rules a calculus admits
+
+`EO0077` reports every rule marked `:sorry`. Both hits in the corpus are
+intentional — CPC's `trust` rule, which carries every inference cvc5 has not
+formalised and says so in its own docstring, and `ethos/tests/sorry.eo`, which
+tests the feature. The check stays as a hint: it answers "which rules is this
+proof's verdict resting on" without grep, and a calculus where the answer grows
+is a calculus worth asking about.
+
 ### One that is only a bug from the wrong entry point
 
 `$evaluate_list` is forward-declared in `programs/Utils.eo:70` and defined in
@@ -255,6 +264,10 @@ recorded because it is a statement about the language:
 | a symbol's return type is what its declaration says | `ite : (-> Bool A A A)` returns `A`, which says nothing until the arguments say what `A` is | bind a callee's type parameters from the arguments, and answer `None` if any stays unbound |
 | a type is what it is written as | `String` is a `define` for `(Seq Char)`, `@List` for `eo::List` | expand aliases before comparing two types |
 | any two different type heads disagree | `T`, `U`, `S` are type variables, and a head that is not a declared type constructor cannot be compared at all | compare only heads that resolve to a declared type constructor |
+| a literal needs a declared category wherever it stands | `(eo::add 1 1)` evaluates in a signature that declares no numerals: ethos distinguishes a numeral *value* independently of its type | report only literals standing where a type is asked for, which meant modelling which positions those are |
+| a term that cannot evaluate is a finding wherever it stands | `(eo::is_ok X)` *asks* whether X evaluates, and ethos's own operator tests are full of `(eo::is_ok (eo::pow 2 -1))` | say nothing beneath an `eo::is_ok` |
+| an `eo::` name is a computational operator | `eo::List::cons` and `eo::List::nil` are constructors of the builtin list, and patterns match them constantly | test membership of the operator table, never the `eo::` prefix — a mistake made twice, in two checks, before the table was reused |
+| a parameter shadowing a declared symbol is a hazard | it is idiomatic: a program parameterised by an operator names its parameter `cons`, `nil` or `f`, and ethos's own tests do it 150 times | the check was written, measured, and deleted |
 | a name in the `$eo_` namespace collides with the compiler | `ethos/tests/eo-definitions.eo` defines the whole of `eo::` that way, deliberately | `$eo_` is reported only under `--pedantic`; the generated prefixes always |
 | `declare-fun` is not a Eunoia command | true of a signature, false of a file named by `reference` | the loader tracks the role a file was read under |
 

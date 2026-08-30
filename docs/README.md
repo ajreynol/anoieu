@@ -80,7 +80,7 @@ configuration, so the same argument is not had twice.
 | [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote, which nothing compares today | proposed, needs M4 |
 | [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerate once it is fixed upstream | blocked on cvc5-1 |
 | [logos-2](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed, needs M4 |
-| [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | preflight a candidate calculus against the signature contract before generating a checker | proposed, needs M4 |
+| [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed, needs M4 |
 | [eud-2](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | settle the calculus profile's two *declared* answers against the signature instead of recording them on trust | proposed, needs M4 |
 | [eunoia-1](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | refuse a re-declaration whose type is identical to an earlier one | proposed |
 | [eunoia-2](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | an unknown attribute should be an error, not a dropped annotation | proposed |
@@ -102,9 +102,9 @@ program case is checked when a proof gets there, and a proof rule that can only
 ever fail is a legal declaration until someone writes the step that finds out.
 
 anoieu is the eager reader of the same files. It asks about every declaration,
-with no proof in hand, no build, and no solver, in under a second. Of the 32
+with no proof in hand, no build, and no solver, in under a second. Of the 37
 witness files in its suite — each holding one deliberate mistake — **ethos
-accepts 27 and answers `correct`**. That number is the whole argument.
+accepts 32 and answers `correct`**. That number is the whole argument.
 
 The second thing it is for is slower and possibly worth more: every check is a
 statement about what Eunoia means, so the check catalogue, its witnesses, and
@@ -359,18 +359,22 @@ open question below.
 **Today.** Nothing beyond what any signature gets.
 
 **What it is for.** eudaimonia's promise is that you bring a calculus and get a
-checker. Its README specifies a *signature contract* — an `and` declared
-`:right-assoc-nil true` and translated to `SmtTerm.and`, the `true`/`false`
-literals — and says outright that a signature which declares `and` and
-translates it elsewhere "would break soundness silently: nothing downstream
-re-checks that seam." That is a preflight check, and it is the shape anoieu
-already runs.
+checker. Its README specifies a *signature contract*: a binary `and` translated
+to `SmtTerm.and` by the semantics, the Bool literals, and — only where rules
+gather `:list` premises with `and` — a nil terminator on `and`. Its installer
+checks all of it, against what the compiler emitted, because an operator's
+compiled name need not be its spelling. The remaining gap is one of *timing and
+subject*: the check reads the artifact after a checker has been generated, where
+the same questions could be answered from the signature and semantics
+beforehand, in the terms their author wrote.
 
 ### Actions
 
-**eud-1 (B)** — a `check` step in the generation script that reads the contract
-out of the template's configuration and refuses a calculus that does not meet
-it, before a checker is generated. Needs the triple front end and nothing else.
+**eud-1 (B)** — a preflight: answer the contract's questions from the signature
+and its semantics before generating anything, so that a calculus that cannot
+meet the framework is refused in its author's own terms rather than in the
+compiler's output. The installer's check stays as the backstop it is; this one
+moves the first answer earlier. Needs the triple front end and nothing else.
 
 **eud-2 (B)** — the calculus profile asks seven questions about a calculus and
 answers five of them from what the compiler emitted; `binders` and

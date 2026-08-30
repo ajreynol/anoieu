@@ -1,0 +1,8 @@
+; expect:
+; Passing a declared operator is how a program is parameterised by one.
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(declare-const a Bool)
+(program $len ((f (-> Bool Bool Bool)) (x Bool)) :signature ((-> Bool Bool Bool) Bool) Int
+  ( (($len f x) (eo::list_len f x)) )
+)
+(define n () ($len or (or a a)))

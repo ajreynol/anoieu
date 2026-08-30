@@ -1,0 +1,7 @@
+; expect: EO0079
+(declare-const Int Type)
+(program $twice ((x Int)) :signature (Int) Int ( (($twice x) x) ))
+(program $apply ((x Int)) :signature (Int Int) Int
+  ( (($apply x x) ($twice x)) )
+)
+(define bad ((x Int)) ($apply $twice x))     ; a program passed to a program

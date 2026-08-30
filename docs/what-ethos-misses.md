@@ -13,7 +13,7 @@ over all of them:
 ETHOS=<ethos>/build/src/ethos python3 tests/run.py --oracle
 ```
 
-**Of the 32 witnesses that hold the mistake, ethos accepts 27 and answers
+**Of the 37 witnesses that hold the mistake, ethos accepts 32 and answers
 `correct`.**
 
 ---
@@ -193,7 +193,7 @@ because by then the pattern has already been desugared into an
 ## Where the line honestly falls
 
 Ethos is the ground truth for typing and evaluation, and it refuses five of the
-thirty-two witnesses: a `declare-rule` field out of order, an opaque argument
+thirty-seven witnesses: a `declare-rule` field out of order, an opaque argument
 after an ordinary one, a program case of the wrong arity, a pattern with two
 `:list` parameters, and a builtin operator applied to the wrong number of
 arguments. For those, anoieu contributes the message, the location, and

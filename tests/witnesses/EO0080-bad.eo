@@ -1,0 +1,4 @@
+; expect: EO0080
+; U is implicit and occurs nowhere, so no argument can ever bind it.
+(declare-const Int Type)
+(declare-parameterized-const f ((T Type :implicit) (U Type :implicit)) (-> T T Bool))

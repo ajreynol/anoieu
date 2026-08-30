@@ -3,6 +3,14 @@
   "note": "written by `anoieu check --update-baseline`; each entry is a finding this repository has agreed to live with",
   "findings": [
     {
+      "id": "9e46f6ef0048daf3",
+      "code": "EO0077",
+      "severity": "hint",
+      "file": "Cpc.eo",
+      "line": 555,
+      "message": "rule `trust` is admitted: it is marked `:sorry`"
+    },
+    {
       "id": "7e28d326aa6a9471",
       "code": "EO0031",
       "severity": "warning",
