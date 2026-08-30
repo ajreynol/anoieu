@@ -500,7 +500,12 @@ reaches an inference no proof step covers*, particularly under
 reads eight stages of the pipeline, from configuration through elaboration to
 the Eunoia serialiser, and says it models itself on this tool.
 
-**The two barely overlap, and it is worth being clear why.** anoieu reads
+**They do share a position**, if not a line of code: what may be published about
+somebody else's work, what a finding is worth, and why nothing crosses a
+repository boundary on its own. That is written down once, here, in
+[`philosophy.md`](philosophy.md), and referenced from there.
+
+**Technically the two barely overlap, and it is worth being clear why.** anoieu reads
 `.eo` and `.eos` files and asks whether a *signature and its semantics* are
 coherent; dokimasia reads C++ and asks whether the *solver* can justify what it
 decides. Different inputs, different question, no shared code, and neither

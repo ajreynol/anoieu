@@ -44,7 +44,8 @@ waiting for you is [below](#where-the-findings-live).
 >
 > We publish defects and never assurances, deliberately: a false sense of
 > security is much harder to withdraw than a wrong finding. See
-> [What we do not publish](#what-we-do-not-publish).
+> [What we do not publish](#what-we-do-not-publish), and
+> [`docs/philosophy.md`](docs/philosophy.md) for the position in full.
 
 ## What it finds
 
@@ -254,6 +255,10 @@ tracker without that review.
 
 ## What we do not publish
 
+*This is the anoieu-facing half of a position shared with
+[dokimasia](https://github.com/ajreynol/dokimasia), set out in full in
+[`docs/philosophy.md`](docs/philosophy.md).*
+
 **No clean bills of health.** anoieu publishes defects. It does not publish
 assurances about anyone's files — no "this signature is sound", no coverage
 score, no "the triple is consistent", no ranking of one tool against another.
@@ -279,4 +284,7 @@ from a project does and does not settle, and two prompts — one for the project
 that owns a finding, one for the follow-up here. The conventions they rest on,
 including the shape a reply takes and what an agent may change on the strength
 of one, are in [`docs/triage.md`](docs/triage.md), and are written so another
-analyzer can adopt them.
+analyzer can adopt them. The reasoning underneath all of it — shared with
+[dokimasia](https://github.com/ajreynol/dokimasia), which references this
+repository for it rather than restating it — is
+[`docs/philosophy.md`](docs/philosophy.md).

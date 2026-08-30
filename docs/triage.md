@@ -10,9 +10,10 @@ learning a new layout each time.
 
 **This is written to transfer.** Nothing below is really about anoieu: it is
 about any analyzer that publishes findings against somebody else's files and has
-to keep track of what came back. A sibling tool — [dokimasia](https://github.com/ajreynol/dokimasia),
-say, which asks a different question about cvc5 — can adopt these conventions by
-filling the same slots with its own files:
+to keep track of what came back. These are the mechanics;
+[`philosophy.md`](philosophy.md) is the position they implement, and is shared
+with [dokimasia](https://github.com/ajreynol/dokimasia) outright. A sibling tool
+can adopt the conventions below by filling the same slots with its own files:
 
 | the slot | what it is for | anoieu's |
 | --- | --- | --- |

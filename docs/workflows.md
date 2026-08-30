@@ -4,8 +4,9 @@ How to work a single finding with an assistant, from the report to whoever can
 fix it and back. The arrangement is not specific to anoieu — the conventions it
 rests on are set out separately, in [`triage.md`](triage.md), so that another
 analyzer that reports findings against somebody else's files can adopt them by
-substituting its own. What is anoieu-specific here is confined to the two
-prompts — the tool's name, the report's URL, and a handful of paths and
+substituting its own, and the position they implement is stated once, for both
+tools, in [`philosophy.md`](philosophy.md). What is anoieu-specific here is
+confined to the two prompts — the tool's name, the report's URL, and a handful of paths and
 commands — and to the right-hand column of the table on that page.
 
 **Guidelines, not machinery.** Nothing in this repository files anything
