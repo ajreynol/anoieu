@@ -73,6 +73,8 @@ configuration, so the same argument is not had twice.
 | [ethos-3](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | a misordered `declare-rule` field reports as `Expected conclusion`, several lines from the cause | proposed |
 | [ethos-4](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | a program applied to the wrong arity prints without a file or line, and the run still exits `correct` | proposed |
 | [ethos-5](#ethos--the-proof-checker-and-its-own-signatures) | ethos | B | run over `tests/*.eo`, `DOC*` disabled | proposed |
+| [ethos-6](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | two test signatures use literals whose category they never declare, so `+` gets an untyped nil | open |
+| [ethos-7](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/naive-nary.eo:182` — a case of `isPermutation` that can never be reached | open |
 | [eoc-1](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | preflight: have `driver.py` run anoieu over the triple before stage 1, so a missing semantics block is refused at launch rather than at stage 6 | proposed, needs M4 |
 | [eoc-2](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | run over `semantics/*.eos` and the signatures the tests compile | proposed, needs M4 |
 | [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote, which nothing compares today | proposed, needs M4 |
@@ -99,9 +101,9 @@ program case is checked when a proof gets there, and a proof rule that can only
 ever fail is a legal declaration until someone writes the step that finds out.
 
 anoieu is the eager reader of the same files. It asks about every declaration,
-with no proof in hand, no build, and no solver, in under a second. Of the 23
+with no proof in hand, no build, and no solver, in under a second. Of the 32
 witness files in its suite — each holding one deliberate mistake — **ethos
-accepts 19 and answers `correct`**. That number is the whole argument.
+accepts 27 and answers `correct`**. That number is the whole argument.
 
 The second thing it is for is slower and possibly worth more: every check is a
 statement about what Eunoia means, so the check catalogue, its witnesses, and
@@ -119,6 +121,7 @@ that reads it. See [`language-notes.md`](language-notes.md).
 | dead and unreachable code | which case can never fire, which program nothing reaches, which forward declaration was never defined | ✅ |
 | shallow typing | is a rule's conclusion a `Bool`, does a program case return what it declares, is a symbol over-applied | ◐ — where the head settles it; a term whose head is a parameter, or that needs `eo::` evaluation, is not answered |
 | desugaring | what does the parser build from what I wrote | ✅ — 34 cases agreeing with ethos term for term |
+| the builtin layer | is an `eo::` operator applied to the right number of arguments, is this evaluation one the manual says cannot happen, does this literal have a type, is this list operator about an n-ary operator | ✅ |
 | documentation | does the docstring still describe the rule | ✅ |
 | CI plumbing | baselines, suppression comments, config files, SARIF, many entry points | ✅ |
 | full type checking | which rules *may* conclude a non-`Bool` through a program's cases | ○ — [M3](design.md#7-roadmap) |
@@ -239,11 +242,24 @@ end of the command, naming a field that is not the problem. Reported by
 with no file and no line, and the run still exits `correct`. Reported by
 `EO0066`, with the location.
 
+**ethos-6 (A)** — two test signatures use literals whose category they never
+declare, so those terms have no type. `right-assoc-variants.eo:48` gives `+` the
+nil terminator `0` with no `(declare-consts <numeral> …)` anywhere in its
+closure: the file passes ethos alone, and the first use of `+` produces
+`(arith_typeunion_nary Int2 (arith_typeunion_nary Int2 eo::?))` — the `eo::?` is
+the untyped nil. `:62` is the same for `""`, and `eo-definitions.eo` has four.
+Reported by `EO0071`.
+
+**ethos-7 (A)** — `tests/naive-nary.eo:182`. `isPermutation`'s first case
+matches any pair of identical arguments, so its second case, which matches a
+pair of identical `or`-terms, can never be reached. Reported by `EO0052`.
+
 **ethos-5 (B)** — run over the test signatures. `anoieu check tests` reads 202
-files under 191 entry points and reports **one error, two warnings and three
-hints** in total: ethos-1, the `symm` docstring drift, and three patterns that
-match exactly two elements. That is a job that could be blocking on the day it
-is turned on. Its tests are not written to the docstring convention, so:
+files under 191 entry points and reports **seven errors, three warnings and
+three hints** in total — ethos-1, ethos-6, ethos-7, the `symm` docstring drift,
+and three patterns that match exactly two elements. That is a job that could be
+blocking on the day it is turned on. Its tests are not written to the docstring
+convention, so:
 
 ```json
 { "entry_points": ["tests"], "disable": ["DOC0010", "DOC0011", "DOC0012"] }

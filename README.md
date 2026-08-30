@@ -35,7 +35,7 @@ makes of anyone, each with an id, a state, and the reasoning underneath it:
 | you own | waiting for you | jump to |
 | --- | --- | --- |
 | **cvc5** — the CPC signature | 4 fixes, 1 CI adoption | [cvc5](docs/README.md#cvc5--the-calculus-everything-downstream-is-built-from) |
-| **ethos** — the proof checker | 1 confirmed defect, 3 diagnostics worth improving, 1 CI adoption | [ethos](docs/README.md#ethos--the-proof-checker-and-its-own-signatures) |
+| **ethos** — the proof checker | 3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption | [ethos](docs/README.md#ethos--the-proof-checker-and-its-own-signatures) |
 | **ethos-eoc** — the Eunoia compiler | 3 integrations, including the `is_list_nil` diff its own docs ask for | [ethos-eoc](docs/README.md#ethos-eoc--the-eunoia-compiler) |
 | **logos** — the Lean development | 1 fix inherited from cvc5, 1 CI adoption | [logos](docs/README.md#logos--the-lean-development) |
 | **eudaimonia** — the calculus template | 1 preflight integration | [eudaimonia](docs/README.md#eudaimonia--the-template-for-other-calculi) |

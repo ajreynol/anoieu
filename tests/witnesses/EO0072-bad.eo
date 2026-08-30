@@ -1,0 +1,5 @@
+; expect: EO0072
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(program $len ((x Bool)) :signature (Bool) Int
+  ( (($len x) (eo::list_concat or x)) )      ; list_concat takes three arguments
+)

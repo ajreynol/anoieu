@@ -1,0 +1,10 @@
+; expect: EO0052
+; The first case matches any pair of identical arguments, so the second is dead.
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(program $perm ((l1 Bool) (l2 Bool))
+  :signature (Bool Bool) Bool
+  (
+    (($perm l1 l1) true)
+    (($perm (or l1 l2) (or l1 l2)) true)
+  )
+)

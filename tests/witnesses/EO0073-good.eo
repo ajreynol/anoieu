@@ -1,0 +1,5 @@
+; expect:
+; (eo::is_ok X) asks whether X evaluates, so X is being tested, not relied on.
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(define test () (eo::is_ok (eo::pow 2 -1)))

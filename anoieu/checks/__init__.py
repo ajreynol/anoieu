@@ -74,4 +74,13 @@ def run_all(ctx: Context, enabled: set[str] | None = None) -> list[Diagnostic]:
 
 
 def load_checks() -> None:
-    from . import attributes, docs, parse, programs, structure, typing  # noqa: F401
+    from . import (  # noqa: F401
+        attributes,
+        docs,
+        parse,
+        programs,
+        rules,
+        structure,
+        terms,
+        typing,
+    )

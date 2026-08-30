@@ -1,0 +1,5 @@
+; expect: EO0071
+; No (declare-consts <numeral> ...), so the nil terminator has no type, and
+; every application of `+` carries an untyped term.
+(declare-const Int Type)
+(declare-const + (-> Int Int Int) :right-assoc-nil 0)

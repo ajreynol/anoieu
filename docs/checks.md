@@ -46,6 +46,14 @@ written, and `--pedantic` turns them on.
 | [EO0064](#eo0064) | a program case returns a type the program does not declare | on |
 | [EO0065](#eo0065) | a symbol is applied to more arguments than it takes | on |
 | [EO0066](#eo0066) | a program is applied to the wrong number of arguments | on |
+| [EO0067](#eo0067) | a requirement that can never hold | on |
+| [EO0069](#eo0069) | a premise list gathered by an operator that is not variadic | on |
+| [EO0070](#eo0070) | a program case that calls itself with the arguments it just matched | on |
+| [EO0071](#eo0071) | a literal whose category the signature never gave a type | on |
+| [EO0072](#eo0072) | a builtin operator is applied to the wrong number of arguments | on |
+| [EO0073](#eo0073) | an evaluation the language says cannot happen | on |
+| [EO0074](#eo0074) | a list operator applied to something that is not an n-ary operator | on |
+| [EO0076](#eo0076) | a `:list` annotation that does nothing | off |
 
 ## DOC0001
 
@@ -273,8 +281,14 @@ A case of the wrong arity can never fire.
 
 A program is an *ordered* list of rewrite rules, first match wins, and matching
 does not check types -- `TypeChecker::match` binds a parameter to whatever term
-stands in its place. So a case whose arguments are all distinct parameters
-matches every application, and every case written after it is dead.
+stands in its place. So an earlier case shadows a later one whenever its pattern
+is the more general of the two: a case whose arguments are all parameters
+matches every application, and `(($p (or x xs) l) ...)` matches everything
+`(($p (or a xs) l) ...)` does.
+
+Patterns are compared after desugaring, since that is what matching sees: a
+`:list` parameter in a tail position stands for a list of any length, and one
+that is not stands for a list of exactly the length written.
 
 ## EO0053
 
@@ -420,3 +434,107 @@ arity never evaluates. Ethos notices at parse time and prints
 
 without a file or a line, and the run still ends in `correct` with exit 0. This
 says the same thing, where it happened.
+
+## EO0067
+
+**a requirement that can never hold**
+
+`:requires ((a b))` is satisfied when the two sides evaluate to the same term.
+Where both sides are values written out and they are different values, no
+substitution can make them equal, so the rule can never be applied -- and
+nothing says so until someone tries.
+
+The same holds for an `eo::requires` written into a conclusion by hand, which
+is what the attribute is sugar for.
+
+## EO0069
+
+**a premise list gathered by an operator that is not variadic**
+
+`:premise-list F op` collects the formulas its premises prove and builds one
+term from them with `op`, so `op` has to accept any number of arguments: the
+manual asks for one marked `:right-assoc`, `:left-assoc`, a `-nil` variant, or
+`:chainable`. With a binary operator, a rule applied to three premises builds an
+application that does not type check, and one applied to none has nothing to
+build.
+
+## EO0070
+
+**a program case that calls itself with the arguments it just matched**
+
+A case whose whole right-hand side is the program applied to exactly what its
+pattern matched does not compute anything: evaluating it evaluates it again,
+with the same arguments, for as long as the checker is willing to keep going.
+This is the shape a case takes when an argument was meant to shrink and does
+not -- a tail that was written as the list, an index that was meant to be
+decremented.
+
+## EO0071
+
+**a literal whose category the signature never gave a type**
+
+`declare-consts` is what associates a syntactic category with a type: without
+`(declare-consts <numeral> Int)` a numeral in a term has no type, and the term
+holding it is ill-typed the moment anything asks. Signature files do no
+normalisation, so a hexadecimal literal needs `<hexadecimal>` even where
+`<binary>` is declared -- the normalisation of one into the other applies to
+proof and reference files only.
+
+`<boolean>` is exempt: `true` and `false` are builtin, and so is a literal that
+stands only under a computational operator: ethos distinguishes a numeral value
+independently of its type, so `(eo::add 1 1)` evaluates in a signature that
+declares no numerals at all. What is reported is a literal standing where its
+type is asked for.
+
+## EO0072
+
+**a builtin operator is applied to the wrong number of arguments**
+
+Every `eo::` operator has the arity the user manual gives it, and an application
+of another arity is a term that never evaluates -- ethos leaves it as it stands
+rather than refusing it, so a rule written around one simply fails to fire, and
+a program returns an application of itself.
+
+The list operators are the easy ones to get wrong, because each takes the
+operator it is about as its first argument: `eo::list_concat` takes three
+arguments, not two, and `eo::nil` takes the operator and, where the nil depends
+on it, a type.
+
+## EO0073
+
+**an evaluation the language says cannot happen**
+
+The computational operators evaluate on values of one category -- "no mixed
+arithmetic", as the manual puts it -- and on arguments in range. Where both
+arguments are literals, whether the application evaluates is decided at the
+point it is written:
+
+    (eo::add 2 1/3)     stays as it is: a numeral and a rational
+    (eo::zdiv 7 0)      stays as it is: division by zero
+    (eo::pow 2 -1)      stays as it is: the exponent is negative
+
+A term that does not evaluate is not an error to ethos; it is simply a term, and
+the rule or program built around it does not do what it was written to do.
+
+## EO0074
+
+**a list operator applied to something that is not an n-ary operator**
+
+Every list operator is *about* an operator, which it takes as its first
+argument: `(eo::list_concat or x y)` concatenates two `or`-lists. The manual is
+explicit that these evaluate only where that argument is an associative operator
+with a nil terminator, so applying one to a symbol that was never marked
+variadic gives a term that stays as it is -- and a program returning it looks,
+to whatever called it, like a program that failed.
+
+## EO0076
+
+**a `:list` annotation that does nothing**
+
+*Off by default; run with `--pedantic` or `--only EO0076`.*
+
+`:list` says how a parameter behaves as a child of an n-ary application. A
+parameter that never stands in one is annotated for nothing -- which is either a
+leftover, or a misunderstanding of what the annotation does, and the second is
+worth knowing about because the same misunderstanding is what leaves it *off*
+where it was needed.

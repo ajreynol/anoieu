@@ -225,33 +225,69 @@ def case_arity(ctx: Context) -> Iterator[Diagnostic]:
     page="""
 A program is an *ordered* list of rewrite rules, first match wins, and matching
 does not check types -- `TypeChecker::match` binds a parameter to whatever term
-stands in its place. So a case whose arguments are all distinct parameters
-matches every application, and every case written after it is dead.
+stands in its place. So an earlier case shadows a later one whenever its pattern
+is the more general of the two: a case whose arguments are all parameters
+matches every application, and `(($p (or x xs) l) ...)` matches everything
+`(($p (or a xs) l) ...)` does.
+
+Patterns are compared after desugaring, since that is what matching sees: a
+`:list` parameter in a tail position stands for a list of any length, and one
+that is not stands for a list of exactly the length written.
 """,
 )
 def unreachable_case(ctx: Context) -> Iterator[Diagnostic]:
+    sig = ctx.signature
     for prog in ctx.signature.programs:
         params = _param_map(prog.params)
-        catch_all: Node | None = None
-        for lhs, _rhs in prog.cases:
-            if catch_all is not None:
+        scope = Scope(sig, params)
+        built = [(lhs, desugar(lhs, scope)) for lhs, _rhs in prog.cases]
+        for j in range(1, len(built)):
+            for i in range(j):
+                if not _subsumes(built[i][1], built[j][1], params):
+                    continue
+                earlier = built[i][0]
+                general = all(
+                    a.is_atom and a.text in params
+                    for a in (earlier.children[1:] if earlier.is_list else [])
+                )
+                why = (
+                    "matches every application, since its arguments are all parameters"
+                    if general
+                    else "matches everything this one matches"
+                )
                 yield Diagnostic(
                     code="EO0052",
                     severity=Severity.WARNING,
                     message=f"this case of `{prog.name}` can never be reached",
-                    span=lhs.span,
+                    span=built[j][0].span,
                     label="shadowed",
                     notes=[
-                        f"the case at line {catch_all.line} matches every application, "
-                        "since its arguments are all parameters, and a program takes "
+                        f"the case at line {earlier.line} {why}, and a program takes "
                         "the first case that matches"
                     ],
                 )
-                continue
-            args = lhs.children[1:] if lhs.is_list else []
-            names = [a.text for a in args if a.is_atom and a.text in params]
-            if args and len(names) == len(args) and len(set(names)) == len(names):
-                catch_all = lhs
+                break
+
+
+def _subsumes(general: Node, special: Node, params: dict[str, Param]) -> bool:
+    """Whether every application the second pattern matches, the first matches.
+
+    One-way matching: a parameter of the *general* pattern stands for anything,
+    consistently, and everything in the special one is rigid.
+    """
+    binding: dict[str, str] = {}
+
+    def walk(g: Node, s: Node) -> bool:
+        if g.is_atom and g.text in params:
+            prev = binding.setdefault(g.text or "", str(s))
+            return prev == str(s)
+        if g.is_atom or s.is_atom:
+            return g.is_atom and s.is_atom and g.text == s.text
+        if len(g.children) != len(s.children):
+            return False
+        return all(walk(a, b) for a, b in zip(g.children, s.children))
+
+    return walk(general, special)
 
 
 @check(
@@ -498,4 +534,36 @@ def dead_program(ctx: Context) -> Iterator[Diagnostic]:
                 severity=Severity.HINT,
                 message=f"nothing reaches `{prog.name}`",
                 span=prog.span,
+            )
+
+
+@check(
+    "EO0070",
+    "a program case that calls itself with the arguments it just matched",
+    page="""
+A case whose whole right-hand side is the program applied to exactly what its
+pattern matched does not compute anything: evaluating it evaluates it again,
+with the same arguments, for as long as the checker is willing to keep going.
+This is the shape a case takes when an argument was meant to shrink and does
+not -- a tail that was written as the list, an index that was meant to be
+decremented.
+""",
+)
+def self_recursion(ctx: Context) -> Iterator[Diagnostic]:
+    for prog in ctx.signature.programs:
+        for lhs, rhs in prog.cases:
+            if not (rhs.is_list and rhs.head == prog.name and lhs.is_list):
+                continue
+            if len(rhs.children) != len(lhs.children):
+                continue
+            if any(str(a) != str(b) for a, b in zip(rhs.children[1:], lhs.children[1:])):
+                continue
+            yield Diagnostic(
+                code="EO0070",
+                severity=Severity.ERROR,
+                message=f"this case of `{prog.name}` returns the same application it "
+                f"matched",
+                span=rhs.span,
+                label="evaluating this evaluates it again",
+                notes=["nothing in the arguments changes, so the recursion does not end"],
             )

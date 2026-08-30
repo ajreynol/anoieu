@@ -1,0 +1,6 @@
+; expect: EO0076
+(declare-const Int Type)
+(declare-const f (-> Int Int Int))           ; no associativity attribute
+(program $p ((x Int) (xs Int :list)) :signature (Int) Int
+  ( (($p (f x xs)) x) )
+)

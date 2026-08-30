@@ -1,0 +1,8 @@
+; expect: EO0070
+(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)
+(program $spin ((x Bool) (xs Bool :list))
+  :signature (Bool) Bool
+  (
+    (($spin (or x xs)) ($spin (or x xs)))
+  )
+)

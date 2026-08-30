@@ -1,0 +1,6 @@
+; expect: EO0069
+(declare-const and (-> Bool Bool Bool))    ; not variadic
+(declare-rule and-intro ((F Bool))
+  :premise-list F and
+  :conclusion F
+)

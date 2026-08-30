@@ -1,0 +1,5 @@
+; expect: EO0074
+(declare-const Int Type)
+(declare-const and (-> Bool Bool Bool))      ; not variadic: no list of it exists
+(declare-const a Bool)
+(define n () (eo::nil and Bool))

@@ -1,0 +1,5 @@
+; expect:
+; A literal under a computational operator needs no declared category: ethos
+; distinguishes a numeral value independently of its type.
+(declare-const Int Type)
+(program $two ((x Int)) :signature (Int) Int ( (($two x) (eo::add 1 1)) ))

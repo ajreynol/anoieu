@@ -31,15 +31,16 @@ rather than falling over.
 Every check owns a witness under `tests/witnesses`, and `tests/run.py --oracle`
 runs ethos on each one:
 
-**Of the 18 witnesses that hold the mistake, ethos accepts 14 and answers
-`correct`.** It refuses four: a `declare-rule` field out of order, an opaque
-argument after an ordinary one, a program case of the wrong arity, and a pattern
-with two `:list` parameters. For those four anoieu's contribution is the message
-and the location rather than the detection -- ethos reports the pattern one, for
-instance, as `Cannot match on evaluatable subterm`, which names neither the
-annotation nor the parameter.
+**Of the 32 witnesses that hold the mistake, ethos accepts 27 and answers
+`correct`.** It refuses five: a `declare-rule` field out of order, an opaque
+argument after an ordinary one, a program case of the wrong arity, a pattern
+with two `:list` parameters, and a builtin applied to the wrong number of
+arguments. For those five anoieu's contribution is the message and the location
+rather than the detection -- ethos reports the pattern one, for instance, as
+`Cannot match on evaluatable subterm`, which names neither the annotation nor
+the parameter.
 
-The fourteen are the case for the tool.
+The twenty-seven are the case for the tool.
 [`what-ethos-misses.md`](what-ethos-misses.md) says why each of them gets past
 ethos.
 
@@ -136,6 +137,43 @@ The test only ever applies `<` to two arguments, so the attribute has been inert
 since it was written.
 
 Reported by **EO0040**.
+
+### Three more, in ethos's own test signatures
+
+Found by the checks over the builtin layer, added after the first audit.
+
+**A nil terminator with no type.** `ethos/tests/right-assoc-variants.eo:48`
+declares `+` with `:right-assoc-nil 0`, and the file -- which includes nothing --
+never says what a numeral is. The signature passes ethos alone, because nothing
+asks; the first use of `+` shows what it built:
+
+```text
+Error: Expression of unexpected type:
+Expression: (eo::define ((_v0 (+ q))) (_ _v0 (_ _v0 0)))
+      Type: (arith_typeunion_nary Int2 (arith_typeunion_nary Int2 eo::?))
+  Expected: Int2
+```
+
+`eo::?` is the untyped nil. Line 62 is the same for `""`, and
+`tests/eo-definitions.eo` -- the manual's own derived-operator signature -- has
+four numerals in typed positions with no `<numeral>` declared. Reported by
+`EO0071`.
+
+**A case that can never be reached.** `ethos/tests/naive-nary.eo:182`:
+
+```lisp
+(program isPermutation ((l1 Bool) (l2 Bool) (ls Bool) (ls2 Bool))
+    :signature (Bool Bool) Bool
+    (
+        ((isPermutation l1 l1) true)
+        ((isPermutation (or l1 l2) (or l1 l2)) true)     ; <- dead
+        ...
+```
+
+The first case matches any pair of *identical* arguments -- one parameter twice,
+so matching binds it once and checks the second occurrence agrees -- which is
+exactly what the second case matches. Reported by `EO0052`, whose subsumption
+test is what sees it.
 
 ### One that is only a bug from the wrong entry point
 

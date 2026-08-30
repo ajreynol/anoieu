@@ -13,7 +13,7 @@ over all of them:
 ETHOS=<ethos>/build/src/ethos python3 tests/run.py --oracle
 ```
 
-**Of the 18 witnesses that hold the mistake, ethos accepts 14 and answers
+**Of the 32 witnesses that hold the mistake, ethos accepts 27 and answers
 `correct`.**
 
 ---
@@ -192,10 +192,11 @@ because by then the pattern has already been desugared into an
 
 ## Where the line honestly falls
 
-Ethos is the ground truth for typing and evaluation, and it refuses four of the
-eighteen witnesses: a `declare-rule` field out of order, an opaque argument
-after an ordinary one, a program case of the wrong arity, and a pattern with two
-`:list` parameters. For those, anoieu contributes the message, the location, and
+Ethos is the ground truth for typing and evaluation, and it refuses five of the
+thirty-two witnesses: a `declare-rule` field out of order, an opaque argument
+after an ordinary one, a program case of the wrong arity, a pattern with two
+`:list` parameters, and a builtin operator applied to the wrong number of
+arguments. For those, anoieu contributes the message, the location, and
 the fact that it reports them *alongside* everything else rather than instead of
 everything else.
 
@@ -215,6 +216,7 @@ means.
 | attribute contracts | §2, declarations unvalidated | live: EO0040, EO0041, EO0042, EO0046 |
 | dead, unreachable, stuck | §4, untyped first-match | live: EO0052, EO0053, EO0056, EO0057, EO0060 |
 | silently ignored input | §3 | live: EO0020 |
+| the builtin layer — arity, impossible evaluations, untyped literals, list operators over non-n-ary symbols | §1, nothing asks for the value | live: EO0071–EO0074 |
 | documentation drift | §6 | live: DOC0010, DOC0011, DOC0012 |
 | better location, whole-file reports | §5 | live, in every check |
 | compiler-namespace collisions | §6 | live: EO0030 |

@@ -1,0 +1,8 @@
+; expect: EO0073
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-const Real Type)
+(declare-consts <rational> Real)
+(program $mixed ((x Int)) :signature (Int) Int
+  ( (($mixed x) (eo::add 2 1/3)) )           ; no mixed arithmetic
+)
