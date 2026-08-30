@@ -46,11 +46,24 @@ def _sorted(diags: list[Diagnostic]) -> list[Diagnostic]:
     return out
 
 
+def _expand(paths: list[str]) -> list[str]:
+    """A directory names every signature under it, which is how a repository
+    points at a tree of them rather than listing forty files."""
+    out: list[str] = []
+    for path in paths:
+        if os.path.isdir(path):
+            for root, _dirs, names in os.walk(path):
+                out += [os.path.join(root, n) for n in sorted(names) if n.endswith(".eo")]
+        else:
+            out.append(path)
+    return out
+
+
 def _entry_points(args, cfg) -> list[str]:
     if args.file:
-        return [os.path.abspath(f) for f in args.file]
+        return _expand([os.path.abspath(f) for f in args.file])
     if cfg.entry_points:
-        return [os.path.abspath(cfg.resolve(e)) for e in cfg.entry_points]
+        return _expand([os.path.abspath(cfg.resolve(e)) for e in cfg.entry_points])
     return []
 
 

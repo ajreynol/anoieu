@@ -31,7 +31,8 @@
 - | (as set.empty (Set Int))
 - | (or (as set.empty (Set Int)) a)
 - | (eo::define ((v (or a b))) (or v c))
-# ethos binds one name per eo::define, and a second binding cannot see the
-# first: `(eo::define ((v a) (w (or v b))) ...)` answers `Could not find symbol v`.
+# eo::define binds in parallel, like `let` and not `let*`: two bindings are fine,
+# and a binding that names an earlier one answers `Could not find symbol v`.
+- | (eo::define ((v (or a b)) (w c)) (or v w))
 ((x Bool) (xs Bool :list)) | (eo::define ((v (or x xs))) (or v))
 - | (or (@cons 1 @nil) a)
