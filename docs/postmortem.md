@@ -9,9 +9,9 @@ rewritten. Newest first.
 **This is not where a finding is written up.** That is
 [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back), which
 carries the reasoning, the commits and the evidence at whatever length they
-need. An entry here is at most three paragraphs and points there. The two files
-answer different questions: *what happened to this finding* is the log in
-`reports.md`; *what this finding taught us about working findings* is here.
+need. Entries here are short and point there. The two files answer different
+questions: *what happened to this finding* is the log in `reports.md`; *what
+this run taught us about working findings* is here.
 
 ## The procedure
 
@@ -32,20 +32,22 @@ an entry that says nothing happened.
 recording, or when you want the reasoning captured whatever the agent concludes.
 Without it the agent applies the test above and says which way it went.
 
-**The shape of an entry.** One heading per **iteration of anoieu** — one run of
-the loop, one reply worked — not one per bug. A run usually settles several
-findings; they are listed under the same heading, each with its own fields.
+**The shape of an entry.** One heading per **run of anoieu** — one project, one
+reply worked — and **one** `Tool:` / `Summary:` / `Resolution:` block under it,
+describing the run. A run usually settles several findings; those are sections
+beneath, and they carry detail rather than fields of their own.
 
 ```text
-## <date> — <project>: <what this round was>
+## <date> — <project>: <what this run was>
 
-<One or two sentences: what was asked, what came back, what moved.>
+**Tool:** the project the findings were reported to. This is the repository name
+passed to `scripts/process_anoieu`, so it is never a judgement call.
+**Summary:** what was reported and what came back. **Two sentences, 250
+characters at most**, in plain language a reader outside the project can follow.
+Not technical, and not a list — the detail is below and in `Resolution:`.
+**Resolution:** what was decided across the run, and what changed here.
 
-### <finding id, or a phrase for a group of them>
-
-**Tool:** which project, and ours too when a tool of ours was at fault.
-**Summary:** what was reported, in one sentence.
-**Resolution:** what was decided, and what changed here.
+### <finding id, or a phrase for a group of them> — <what it was>
 
 <What happened — only enough to make the resolution make sense.>
 
@@ -53,12 +55,14 @@ findings; they are listed under the same heading, each with its own fields.
 than to this one.>
 ```
 
+`tests/run.py` enforces the shape: one field block per run, none on the sections
+beneath it, and a summary inside the limit.
+
 Keep only text that makes clear **what happened** and **what the workflow
 learned**. Everything else — the commits, the reproduction, the argument — goes
 in [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) and is
-linked from the entry. A finding that was settled on its merits with nothing
-changed here does not need its own section; say so in the round's opening
-sentences.
+linked. A finding settled on its merits with nothing changed here does not need
+a section; say so in the run's `Resolution:`.
 
 ## Standing rules this log has produced
 
@@ -120,26 +124,22 @@ is kept honest.
 
 ## 2026-08-31 — logos: the first full sweep
 
-Twenty open rows were put to logos and answered one at a time; nineteen came
-back. Sixteen were one fact about a generated file, restated sixteen times.
-Three were substantive: one fixed but not landed, two declined with reasons that
-hold. One row we withdrew as our own error, and one verdict of ours — against a
-third project — turned out never to have been true. Two of the four sections
-below are about tools of ours rather than about logos.
+**Tool:** logos
+**Summary:** We sent logos twenty findings; they fixed one, declined two with
+good reasons, and caught two mistakes of ours. Sixteen were about a file logos
+only vendors.
+**Resolution:** One fix accepted but [not yet landed](#eac7ccd4d5fb0953--a-fix-that-had-not-landed); two
+declines that hold; one of our reports [withdrawn as our own
+error](#3e271ee47343e758--a-reproducer-we-damaged-ourselves); three rows [reopened against
+cvc5](#1d977d28576d3693-878038145dca690c-6cc91770c5491971--a-verdict-that-was-never-true); and
+[sixteen](#sixteen-rows-against-a-file-logos-does-not-write) left closed where they
+already were. What changed here: the fuzzer no longer damages the files it
+borrows, the settled verdicts moved out of the report into their own file, both
+prompts were rewritten, and this log began. The two declines —
+`adc98aa79b4861bb` and `4de9bb965fa0c04b` — changed nothing here and are written
+up in [`reports.md`](reports.md#logos--the-parser-and-the-semantics).
 
-The two clean declines are not written up here: `adc98aa79b4861bb`
-(`declare-fun` in a proof file) and `4de9bb965fa0c04b` (an `assume` after the
-first `step`) were both confirmed, both declined for reasons that hold, and
-neither changed anything in this repository. They are in
-[`reports.md`](reports.md#logos--the-parser-and-the-semantics).
-
-### `3e271ee47343e758`
-
-**Tool:** logos, and our own fuzzer.
-**Summary:** A `FUZ0001` disagreement — logos accepted a proof ethos refused —
-reported against a reproducer we had damaged ourselves.
-**Resolution:** logos fixed a real parser bug; we withdrew the row, deleted the
-reproducer, and stopped the shrinker editing seeds.
+### `3e271ee47343e758` — a reproducer we damaged ourselves
 
 The case was one of logos's own regression tests, `test-indexed-op.cpc`, run as
 a seed *as it stands*. logos accepted it, ethos refused it, and it was promoted
@@ -159,11 +159,7 @@ next reader nearly took it as given. And bucketing strips line numbers, which is
 right for deciding whether two findings are one and wrong for what a reader is
 shown: the stripped `N.N` is exactly what hid which line failed.
 
-### `1d977d28576d3693`, `878038145dca690c`, `6cc91770c5491971`
-
-**Tool:** cvc5.
-**Summary:** Three `EO0064` rows closed as *fixed upstream* had never been fixed.
-**Resolution:** Reopened, with the register and the log corrected.
+### `1d977d28576d3693`, `878038145dca690c`, `6cc91770c5491971` — a verdict that was never true
 
 Nothing of ours found this. The assistant at the far end, checking whether the
 copy it maintains would pick up a fix at the next bump, read what the copy is a
@@ -181,15 +177,11 @@ wrong verdict and a live finding can coexist indefinitely with nothing red.
 *Fixed upstream* is the one verdict this repository can settle by itself, from
 `deps/`, and should never be recorded without doing so.
 
-### Sixteen rows against `install/defs/Cpc.cached.eo`
+### Sixteen rows against a file logos does not write
 
-**Tool:** logos (the file), cvc5 (the content).
-**Summary:** Sixteen rows filed against the project that vendored a generated
-signature rather than the one that wrote it.
-**Resolution:** Already closed here as *not audited*; the prompt and the report's
-header were fixed instead.
-
-The rows cost nothing here and a great deal at the far end: it read the file's
+`install/defs/Cpc.cached.eo` is a byte-exact copy of cvc5's signature, and our
+checks filed what they found in it against logos. The rows cost nothing here and
+a great deal at the far end: it read the file's
 header, fetched cvc5 three times, matched premise text line by line, and only
 then found that twelve of the sixteen were **already ruled on, against cvc5,
 twenty lines further down the same document** — then wrote sixteen
@@ -201,15 +193,11 @@ closed: intentional)* was already computable here. The prompt also asserted the
 rows were unrelated; sixteen of twenty shared one cause. It now says rows may
 share a cause and to say so. The mechanical cross-reference is still not built.
 
-### `eac7ccd4d5fb0953`
+### `eac7ccd4d5fb0953` — a fix that had not landed
 
-**Tool:** logos.
-**Summary:** `TRI0002` — the semantics declares an entry for a symbol CPC does
-not declare.
-**Resolution:** Confirmed and fixed at the far end; **row left open**, because
-nothing landed.
-
-The entry was a target-vocabulary symbol given an input-side entry by mistake,
+`TRI0002` reported that logos's semantics declares an entry for a symbol CPC
+does not declare. It was real: a target-vocabulary symbol given an input-side
+entry by mistake,
 and they proved it dead rather than merely unused by showing the generated Lean
 byte-identical without it. The branch named in the reply was `main` with no
 commits of its own, and the deletion was an uncommitted edit in one working

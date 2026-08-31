@@ -157,6 +157,58 @@ def manifest_agrees() -> int:
     return failures
 
 
+def postmortem_shape() -> int:
+    """The log's own conventions, since a convention nothing checks is a wish.
+
+    One `Tool:`/`Summary:`/`Resolution:` block per run, none on the sections
+    beneath it, and a summary short enough to stay a summary. The shape is
+    written out in docs/postmortem.md itself; this is the half a reader cannot
+    enforce by reading.
+    """
+    LIMIT, SENTENCES = 250, 2
+    path = os.path.join(os.path.dirname(HERE), "docs", "postmortem.md")
+    text = re.sub(r"```.*?```", "", open(path).read(), flags=re.S)  # not the template
+
+    # a run section is a level-2 heading that starts with a date
+    runs = re.split(r"^## (?=\d{4}-\d{2}-\d{2} )", text, flags=re.M)[1:]
+    failures = 0
+    if not runs:
+        print("FAIL docs/postmortem.md has no run sections")
+        return 1
+
+    for run in runs:
+        title = run.splitlines()[0].strip()
+        head, _, rest = run.partition("\n### ")
+        for field in ("Tool:", "Summary:", "Resolution:"):
+            n = len(re.findall(rf"^\*\*{field}\*\*", head, re.M))
+            if n != 1:
+                print(f"FAIL postmortem {title!r}: {n} {field} lines above the "
+                      f"sections, expected 1")
+                failures += 1
+        stray = re.findall(r"^\*\*(Tool|Summary|Resolution):\*\*", rest, re.M)
+        if stray:
+            print(f"FAIL postmortem {title!r}: {sorted(set(stray))} on a section; "
+                  "those fields belong to the run, not to a finding")
+            failures += 1
+
+        m = re.search(r"^\*\*Summary:\*\* (.+?)(?=\n\*\*|\n\n|\Z)", head, re.S | re.M)
+        if not m:
+            continue
+        summary = " ".join(m.group(1).split())
+        if len(summary) > LIMIT:
+            print(f"FAIL postmortem {title!r}: summary is {len(summary)} "
+                  f"characters, at most {LIMIT}")
+            failures += 1
+        n = len(re.findall(r"[.!?](?:\s|$)", summary))
+        if n > SENTENCES:
+            print(f"FAIL postmortem {title!r}: summary is {n} sentences, "
+                  f"at most {SENTENCES}")
+            failures += 1
+
+    print(f"-- the postmortem log: {len(runs)} run(s), {failures} failure(s)")
+    return failures
+
+
 def prompts_agree() -> int:
     """The two scripts say what `docs/reporting-policy.md` says they say.
 
@@ -332,6 +384,7 @@ def main() -> int:
 
     print()
     failures += prompts_agree()
+    failures += postmortem_shape()
 
     sys.stdout.flush()
     print()
