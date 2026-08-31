@@ -655,12 +655,56 @@ documents are, what the front page will and will not claim, that there is a
 
 ### 2. Run the check
 
+Its own workflow file, `.github/workflows/anoieu.yml`, rather than a step inside
+one of yours:
+
 ```yaml
-      - name: this repository still matches the Eunoia policy
+name: anoieu
+
+on: [push, pull_request]
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: the policy, at the commit this repository pins
+        env:
+          # Replace with a commit. `--version` on any run prints the one you got.
+          ANOIEU_REV: 441b562
         run: |
-          git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
-          python3 /tmp/anoieu/tools/policy_check.py --root .
+          git clone --quiet https://github.com/ajreynol/anoieu /tmp/anoieu
+          git -C /tmp/anoieu checkout --quiet "$ANOIEU_REV"
+      - run: python3 /tmp/anoieu/tools/policy_check.py --root .
 ```
+
+**Pin it.** `ANOIEU_REV` is a commit you choose and move on your own schedule, and
+moving it is a commit in *your* repository. Without it your build becomes a
+function of a repository your maintainers do not own — which is bad in both
+directions, and the second is the one that is easy to miss: a build that can turn
+**green** without anybody committing cannot be used as evidence that a commit was
+good. The rest of this policy asks you to fetch and pin your dependencies and to
+let your build go red for its own reasons only; this is a dependency like any
+other, and it is the one every member has.
+
+Cloning the repository rather than downloading the one file is deliberate: it
+pins the checker and this page *together*, so the rules you are held to and the
+program that decides them are the same version.
+
+Tracking the tip — dropping the `env:` and the `checkout` line — is a reasonable
+choice for a repository that wants to find out about changes immediately and
+does not mind a red build arriving without a commit. It is not the default we
+recommend, and it should be a decision rather than what happens if you paste the
+short version.
+
+**The names are the point.** A check appears in your pull requests as
+*workflow / job*, so this one reads **`anoieu / policy`** — it says who is asking
+and what for. A red check named `policy / policy`, or one buried in a step of
+your own build, says neither, and the maintainer looking at it has to go and
+find out whose rule they have broken. It also leaves room: anything else we ever
+ask a repository to run becomes another job in the same file, grouped under one
+name that can be found, muted or deleted in one place without touching your own
+build.
 
 Nothing is installed and nothing is built: the checker reads text and needs only
 Python. It exits non-zero when the repository does not uphold what the
@@ -678,10 +722,30 @@ and a compliant tree that says nothing has not joined anything.
 is not asked about pinning, and one with no child projects is not asked about
 charters. The run prints what it skipped and why, so *passing* never reads as
 more coverage than it was. **Start with what you have**: the set is deliberately
-small and is expected to grow, so expect a future version to check more than
-this one, and expect that to be announced in
-[`docs/discussion.md`](discussion.md) before it lands rather than arriving as a
-red build.
+small and is expected to grow.
+
+### What we do not promise
+
+Said plainly, because a commitment we cannot keep is worse for you than one we
+never made.
+
+- **No release schedule and no versioning scheme.** A commit is the only
+  identifier we can promise is stable, which is why the pin is a commit.
+- **Checks will be added, and some will fail repositories that pass today.**
+  That is not a regression; it is why pinning exists. You adopt a change when you
+  move the pin, not when we push.
+- **No compatibility guarantee for the command line or the output format.** If
+  `--root` is ever renamed, a pinned repository is unaffected until it bumps —
+  which is the same answer to every question in this list.
+- **We intend to announce material changes** in [`discussion.md`](discussion.md)
+  before they land. That is an intention and nothing enforces it. Do not build
+  anything that depends on it; pin instead, because the pin works whether or not
+  anybody remembers.
+- **We do not maintain your bumping.** Moving a pin safely — fetch, check, refuse
+  to record a commit you do not pass at — is worth automating, and dokimasia's
+  `scripts/bump_anoieu` is a good starting point to copy. It is deliberately not
+  a standard: one script we maintained on everybody's behalf would be a
+  maintenance contract, and this repository is in no position to sign one.
 
 ### If you want an assistant to do it
 
@@ -699,7 +763,7 @@ Read it, then do what it says, here:
 
 1. Declare membership at the top of the README's "How this repository is
    maintained" section, creating that section if there is not one.
-2. Add the CI step the page gives.
+2. Add the CI workflow the page gives.
 3. Run the check and fix what it reports:
 
      git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu

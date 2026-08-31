@@ -3,35 +3,20 @@
 The tools in this ecosystem are mostly written by agents. This page is what that
 work should be aiming at.
 
-It is the sibling of [`policy.md`](policy.md), and the two divide the space
-between them: that page governs speculative work — a directory named after a
-tool that does not exist — and this one governs the real thing, a tool somebody
-is actually building. Both are written for **any repository in the Eunoia
-ecosystem**, not just this one. ethos, logos, eudaimonia, the compiler and
-anything downstream are all being built the same way, and a contributor who has
-read one repository's answer should recognise the next one's.
+It is the sibling of [`policy.md`](policy.md), and how the two divide the work is
+the section below — the most important thing on this page, and the one to read
+if you read nothing else. In short: if you want something to do, read the
+policy; if you want to know why, read this.
+
+Both are written for **any repository in the Eunoia ecosystem**, not just this
+one. ethos, logos, eudaimonia, the compiler and anything downstream are all
+being built the same way, and a contributor who has read one repository's answer
+should recognise the next one's.
 
 Cite a tenet by name rather than by number. Append; do not renumber. Retire a
 tenet in place, with a line saying why.
 
 ---
-
-## What changes when an agent does the work
-
-Writing the code stops being the constraint. A front end appears in an
-afternoon, a check catalogue by the end of the week, and a plausible-looking
-document about any of it in minutes. The scarce things move elsewhere: knowing
-which of the output is right, knowing when a thing is done, and getting the
-result in front of somebody who can judge it.
-
-That inversion is what the four tenets below are a response to. None of them
-would be worth writing down for one person working at a person's pace, because
-the natural brakes — fatigue, the cost of typing, the reluctance to rewrite
-something that works — do the job. An agent has none of those brakes, and will
-improve a tool indefinitely, competently, and without ever shipping it. What
-follows is the substitute. The last two are different in kind from the first
-four: those are about how to build, and these are about who the building is for,
-who gets to decide it counted, and how to say so out loud.
 
 ## Policy is checked; vision is argued
 
@@ -469,6 +454,39 @@ looking for. Four rules for that layer:
 *The test:* diff the README against its version from six months ago. The purpose
 paragraphs should be almost untouched and the results should be almost entirely
 rewritten. Either layer moving at the other's speed is the defect.
+
+## What advice to communicate when the agent does the work
+
+This section and the next are about what gets *said* rather than what gets
+built, and they exist because the far end of the conversation is increasingly
+not a person. What changes is the advice, not the development.
+
+**Advice to an agent-run project can be blunt, and has to be specific.** There is
+nobody to offend, which removes the reason to hedge — and nobody who will push
+back on a bad instruction, which removes the safety net that made hedging
+unnecessary. The sentence you send is the sentence that gets acted on. Name the
+file, name the change, and say what you expect to be true afterwards.
+
+**Bound it.** An agent does what was asked, immediately, everywhere. Advice a
+person would have applied once and then stopped applying becomes a sweep. Say
+where it stops — this file, this check, not the rest of the directory. The
+boundary is the thing a person supplies for free and an agent will not invent.
+
+**Send evidence, not standing.** A person weighs who is telling them. An agent
+cannot, so a claim with nothing behind it is either over-trusted or discarded,
+and neither is what you wanted. A file and a line number travel; a reputation
+does not.
+
+**Do not send taste.** A preference a person would have negotiated becomes a rule
+an agent enforces forever, including in the cases you would have made an
+exception for. If you cannot say what would falsify the advice, it is taste, and
+it belongs in a conversation rather than in a topic.
+
+**Watch what you say in a channel an agent reads.** A speculative aside is
+indistinguishable from an instruction once it is written down, and it will be
+acted on by something that cannot tell the difference. That is what the response
+gate on a discussion file is for: nothing acts on correspondence until a person
+names what to act on.
 
 ## How to talk about the tool
 

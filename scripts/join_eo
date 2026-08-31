@@ -57,7 +57,7 @@ Read it, then do what it says, here:
 
 1. Declare membership at the top of the README's "How this repository is
    maintained" section, creating that section if there is not one.
-2. Add the CI step the page gives.
+2. Add the CI workflow the page gives.
 3. Run the check and fix what it reports:
 
      git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu

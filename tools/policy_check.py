@@ -15,8 +15,10 @@ to a sentence somebody wrote. The run also prints every policy rule that has
 **no** automated check, because a checker that only lists its own passes reads
 as coverage it does not have.
 
-    python3 tools/policy_check.py            # check; exit 1 on any failure
-    python3 tools/policy_check.py --coverage # only print what is and is not checked
+    python3 tools/policy_check.py             # check; exit 1 on any failure
+    python3 tools/policy_check.py --root PATH # check somebody else's checkout
+    python3 tools/policy_check.py --coverage  # what is checked, and what is not
+    python3 tools/policy_check.py --version   # which commit of the policy this is
 """
 
 from __future__ import annotations
@@ -69,6 +71,14 @@ BANNER = [
     ("the disagreement rule", ["disagree"]),
     ("the human override", ["override"]),
 ]
+
+
+def version() -> str:
+    """The commit of *this checker*, so a build log records what it was checked
+    against. A member pins a commit; the run should say which one it got."""
+    out = subprocess.run(["git", "-C", HOME, "rev-parse", "--short", "HEAD"],
+                         capture_output=True, text=True)
+    return out.stdout.strip() or "unknown"
 
 
 def tracked(pattern: str) -> list[str]:
@@ -440,11 +450,14 @@ def main() -> int:
     global ROOT
     if "--root" in sys.argv:
         ROOT = os.path.abspath(sys.argv[sys.argv.index("--root") + 1])
+    if "--version" in sys.argv:
+        print(f"{POLICY_URL} {version()}")
+        return 0
     if "--coverage" in sys.argv:
         coverage()
         return 0
     if os.path.abspath(ROOT) != HOME:
-        print(f"-- checking {ROOT} against {POLICY_URL}'s docs/policy.md")
+        print(f"-- {POLICY_URL} {version()} checking {ROOT}")
     failures = skipped = 0
     for title, fn, applies in CHECKS:
         why = applies() if applies else None

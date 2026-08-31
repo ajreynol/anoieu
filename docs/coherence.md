@@ -122,6 +122,22 @@ here enforced as a build failure rather than by convention:
 `tools/policy_check.py` fails when the banner stating it is missing from the top
 of the file.
 
+**Promise nothing we cannot keep.** Every commitment this repository makes to
+another repository is a maintenance obligation that outlives the enthusiasm that
+made it — a release cadence, a versioning scheme, a compatibility guarantee, an
+undertaking to announce changes, a script maintained on somebody else's behalf.
+This is one repository written mostly by agents under light supervision, and the
+honest capacity is small.
+
+So prefer a **structural** answer to a promised one: a member that pins a commit
+needs no undertaking from us about when we change things, and a structural
+answer keeps working when nobody is paying attention. Where a promise is
+genuinely the only mechanism available, say in the same breath that it is an
+intention, that nothing enforces it, and that nobody should build on it — the
+same tiering [`reports/reporting-policy.md`](reports/reporting-policy.md) applies
+to its own positions. Withdrawing a commitment costs more than never making one,
+and most of that cost falls on somebody who is not us.
+
 **Work is left staged, not committed.** A person reviews the diff and commits.
 This is not a formality: it is the last place where a change to a document that
 binds another repository can be caught.
