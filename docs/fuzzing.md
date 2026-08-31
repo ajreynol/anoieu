@@ -276,6 +276,18 @@ provoked**, which is the marker that says where a row came from.
 the code in [`../anoieu_fuzz/codes.py`](../anoieu_fuzz/codes.py) so the two
 cannot drift. `list-codes` is the inventory.
 
+**One thing to know before judging any of these fixed: how a checker exits is
+not the finding.** Ethos reports every ordinary error by aborting, so a
+`SIGABRT`, an exit of -6, or a `Fatal failure within …` banner is what a correct
+refusal looks like too. What makes a row is the *absence of an explanation* --
+for `FUZ0002` nothing but a runtime's own words, for `FUZ0003` something said
+outside the `Error: <file>:<line>.<col>:` shape everything else uses. A fix
+lands when the message arrives in that shape, whether or not the process still
+aborts. `anoieu_fuzz/checkers.py:classify` is where the line is drawn, and it is
+drawn on what the checker said rather than on how it exited. ethos judged three
+rows against this sentence and said it was the one that decided what *fixed*
+meant; it was only in `codes.py`, two hops from the report.
+
 ### Where a finding is evidenced, and why it is different
 
 A check's finding is re-derived by running the check: the evidence is the code

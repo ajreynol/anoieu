@@ -262,7 +262,7 @@ def prompts_agree() -> int:
 
     one = body("### Prompt one", "### Prompt two")
     two = body("### Prompt two", "### Prompt three")
-    SWEEP, POSTM = "-- or, for the sweep form --", "-- or, with --postm --"
+    SWEEP, POSTM = "-- or, for the sweep form --", "-- or, with --no-postm --"
 
     # prompt two's opening differs by design -- the document says "paste a link",
     # the script has already resolved a checkout -- so compare from TRIAGE down,
@@ -294,9 +294,9 @@ def prompts_agree() -> int:
          ["bash", "scripts/process_anoieu", "--show-prompt", "--no-check", root],
          drop_scope(from_triage(resolve(two, POSTM, alt=False))),
          lambda s: drop_scope(from_triage(s))),
-        ("process_anoieu --postm",
+        ("process_anoieu --no-postm",
          ["bash", "scripts/process_anoieu", "--show-prompt", "--no-check",
-          "--postm", root],
+          "--no-postm", root],
          drop_scope(from_triage(resolve(two, POSTM, alt=True))),
          lambda s: drop_scope(from_triage(s))),
     ):

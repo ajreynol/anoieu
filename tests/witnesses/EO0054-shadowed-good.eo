@@ -1,0 +1,18 @@
+; expect:
+; The head of the pattern is the program's own parameter `cons`, which shadows
+; the `:right-assoc-nil` `cons` declared above it. No n-ary sugar applies to a
+; parameter application, so `(cons x nil)` is a plain binary term -- read as a
+; list it is the *one*-element list the case exists to match, not a two-element
+; one. Reported against ethos as dcfaf1e214126aa3 and f52484ca50c98a65, where
+; the declaration was not even in the same file as the program: it was made by
+; the file that includes it, after the include.
+(declare-const S Type)
+(declare-const nil S)
+(declare-const cons (-> S S S) :right-assoc-nil nil)
+(program nary.elim ((L Type) (cons (-> L L L)) (nil L) (x L) (xs L :list))
+  :signature ((-> L L L) L L) L
+  (
+    ((nary.elim cons nil (cons x nil)) x)
+    ((nary.elim cons nil (cons x xs))  (cons x xs))
+  )
+)

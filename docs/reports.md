@@ -278,6 +278,9 @@ folds its result back into its second argument, so its type must be
 `(-> T1 T2 T2)`; every application of three or more arguments here is ill-typed.
 Drop the attribute. Reported by `EO0040`.
 
+*Answered: accepted, the attribute is removed on `anoieu-findings`@`292201c2`.
+Nothing more is asked of ethos than merging it.*
+
 **ethos-2 (A)** — an attribute ethos does not know prints
 `Unsupported attribute :right-assoc-nill`, is dropped, and the run exits
 `correct`. The declaration then means something else — the operator is no longer
@@ -302,9 +305,19 @@ closure: the file passes ethos alone, and the first use of `+` produces
 the untyped nil. `:62` is the same for `""`, and `eo-definitions.eo` has four.
 Reported by `EO0071`.
 
+*Answered, and reduced. The four `eo-definitions.eo` rows are declined and the
+decline holds: that file is an include fragment whose includer declares
+`<numeral>`, so the word "signature" in the message is ours to fix, not ethos's
+— see the log. What remains asked is only the two `right-assoc-variants.eo`
+rows, and the maintainer has deliberately left those undecided: what a
+declaration-shape regression ought to declare is a question about that test.*
+
 **ethos-7 (A)** — `tests/naive-nary.eo:182`. `isPermutation`'s first case
 matches any pair of identical arguments, so its second case, which matches a
 pair of identical `or`-terms, can never be reached. Reported by `EO0052`.
+
+*Answered: accepted, the case is deleted on `anoieu-findings`@`292201c2`.
+Nothing more is asked of ethos than merging it.*
 
 **ethos-8 (A)** — `(declare-const f (->))` — a `->` type with no arguments —
 aborts ethos with `terminate called after throwing an instance of
@@ -313,6 +326,11 @@ uncaught C++ exception rather than a diagnostic, so nothing downstream can tell
 it from any other abnormal exit. Reproducer:
 `tests/fuzz/crash-ethos-terminate-called-after-throwing-an-instance--fd1900/`.
 Found by the fuzzer, `FUZ0002`.
+
+*Answered: accepted. `(->)` is refused in the parser before a term is built, so
+the message carries a position, on `anoieu-findings`@`292201c2` with a
+regression. Nothing more is asked than merging it. ethos noted that `(_)` is
+still a bare `Check failure` — not reported by any row, and not asked for.*
 
 **ethos-9 (A)** — three error paths abort with a message that does not go
 through the `Error: <file>:<line>.<col>:` convention the rest of ethos's
@@ -331,10 +349,16 @@ form everything else says it, because an editor, a CI annotation and this
 repository's own oracle all read that output by its shape. Reproducers for the
 first two are under `tests/fuzz/`. Found by the fuzzer, `FUZ0003`.
 
+*Answered: accepted for the two that had reproducers, both routed through the
+lexer's `parseError` on `anoieu-findings`@`292201c2` with regressions. The third,
+`(include "no-such-file.eo")`, was not in the report and is not ruled on.
+Nothing more is asked than merging what is there.*
+
 **ethos-5 (B)** — run over the test signatures. `anoieu check tests` reads 202
 files under 191 entry points and reports **seven errors, three warnings and
-three hints** in total — ethos-1, ethos-6, ethos-7, the `symm` docstring drift,
-and three patterns that match exactly two elements. That is a job that could be
+one hint** in total — ethos-1, ethos-6, ethos-7, the `symm` docstring drift,
+and one pattern that matches exactly two elements. It was three hints until two
+of them turned out to be ours: see the `Nary.eo` rows in the log. That is a job that could be
 blocking on the day it is turned on. Its tests are not written to the docstring
 convention, so:
 
@@ -1068,7 +1092,10 @@ analyzer does differently now.
 | **not audited** | 17 | every row against `logos/install/defs/Cpc.cached.eo` |
 | **declined, and the reason holds** | 2 | `logos-4`'s `declare-fun` case, `logos-5` |
 | **withdrawn — our error** | 1 | `logos-4`'s indexed-operator case |
-| **accepted, not landed** | 1 | `logos-2`, still open |
+| **accepted, not landed** | 8 | `logos-2`; ethos-1, ethos-7, ethos-8, ethos-9 and the `symm` docstring — seven ethos rows on one unmerged commit |
+| **declined, not yet confirmed** | 8 | the three ethos `EO0084` rows, `conclusion-spec.eo`, the four `eo-definitions.eo` rows |
+| **our error, not yet withdrawn** | 2 | the two ethos `Nary.eo` rows |
+| **undecided by the maintainer** | 2 | ethos-6's two `right-assoc-variants.eo` rows |
 
 Changes the analyzer made as a result:
 
@@ -1085,7 +1112,11 @@ Changes the analyzer made as a result:
   by a cut the reference had never looked at (`logos-4`);
 - **files a project did not author are not audited** (`NOT_AUDITED` in
   `tools/gen_corpus_table.py`), after seventeen rows were filed against logos
-  for a copy of somebody else's signature.
+  for a copy of somebody else's signature;
+- **a pattern's head is read in the scope that binds it** (`EO0054`), after two
+  rows against ethos resolved a program's own parameter against a
+  `:right-assoc-nil` declaration made by the file that includes it (`ethos`, the
+  `Nary.eo` rows).
 
 ---
 
@@ -1231,12 +1262,140 @@ would make the analyzer worth running. Tracked as items in
 
 ---
 
-### ethos
+### ethos — the checker and its test signatures
 
-Nothing filed yet. Four items stand in the register: the `<` declared
-`:right-assoc` in `tests/match-simple.eo`, two test signatures using literals
-whose category they never declare, a dead case in `naive-nary.eo`, and three
-diagnostics worth improving.
+Nineteen rows were put to ethos and answered one at a time, on branch
+`anoieu-findings`; the reply is reproduced in that repository as
+`anoieu-response.md`, and every block carries both a `TRIAGE:` and a
+`HUMAN RESPONSE:`. Seven were accepted and fixed, ten were declined as
+deliberate, and two the maintainer left undecided.
+
+| item | what we said | decision |
+| --- | --- | --- |
+| **ethos-1** | `<` is `:right-assoc` with a `Bool` return in `tests/match-simple.eo:11` | **accepted, fixed** — attribute removed. **Left open**: not landed |
+| **ethos-7** | `isPermutation`'s case at `naive-nary.eo:182` is shadowed by the one above it | **accepted, fixed** — line deleted. **Left open**: not landed |
+| the `symm` docstring | `tests/Uf-rules.eo:25` heads a premise `; args:` | **accepted, fixed** — one line, `; args:` to `; premises:`, settling both rows. **Left open**: not landed |
+| **ethos-8** | `(declare-const f (->))` aborts with an uncaught `std::length_error` | **accepted, fixed** — refused in the parser, with a position. **Left open**: not landed |
+| **ethos-9** | two error paths abort outside the `Error: <file>:<line>.<col>:` convention | **accepted, fixed** — both routed through the lexer's `parseError`. **Left open**: not landed |
+| the three `EO0084` rows | `identity` and `id` conclude one of their own premises | **declined** — deliberate no-op rules. Open; see below |
+| `conclusion-spec.eo:8` | the pattern matches an `or` of exactly two elements | **declined** — a split clause has exactly two disjuncts. Open; see below |
+| the two `Nary.eo` rows | the pattern matches a `cons` of exactly two elements | **our error.** The head is a program parameter. Check narrowed; open pending confirmation |
+| the four `eo-definitions.eo` rows | literals whose category the signature never declares | **declined** — the file is an include fragment, and the word *signature* is what is wrong. Open; see below |
+| **ethos-6**, `right-assoc-variants.eo` | `+`'s nil terminator `0`, and `""`, have no declared category | **undecided** — the trial edit was made and reverted. Open |
+
+**Nothing was closed this round**, for two unrelated reasons that are worth
+keeping apart.
+
+**The seven accepted fixes are real, and we checked them rather than took
+them.** They are one commit, `292201c2`, cut from `main`@`8709609e`. For the
+four signature rows we ran the checks over the fixed files and over the
+originals: each fix clears its row, and each original still reports it. For the
+three `FUZ` rows `anoieu_fuzz verify` moves every reproducer from `abnormal` to
+`reject`, and the `Error: <file>:<line>.<col>:` text each now prints is
+introduced by that commit and absent from `main` — so each stopped reproducing
+*for the reason on its row*, which is the distinction the follow-up is supposed
+to make and the one a bare "no longer reproduces" would have missed. What holds
+the rows open is that the branch is unmerged: `main` is still `8709609e`, and
+the ref the report is measured against, `ethosEoc3`@`3cf1c03f`, does not contain
+the commit. That is the verdict the ledger already calls *accepted, not landed*.
+
+Worth recording because it cuts the other way from the last round: the reply's
+own header states that *nothing is committed* and that the changes sit unstaged
+in the working tree. They do not — the branch carries `292201c2` and the tree is
+clean. The reply was written while that was true and was overtaken by the
+correction it describes. It cost nothing here because we read the branch instead
+of the sentence, which is exactly why the follow-up is told to.
+
+**The ten declines are open because of a change to how we work**, not because of
+anything ethos said. The maintainer's decisions are recorded and none of them is
+in doubt; what is in doubt is the process that produced them. Asked afterwards,
+he said he had not pushed back on the *won't fix* answers — an agent proposes
+"not a defect", the human does not object, and silence becomes a verdict. So no
+declined row is closed on this round's evidence, and the rule the reply is being
+read against has changed underneath it: see the postmortem, and the proposal to
+make prompt one ask for an explicit confirmation before it records a decline.
+
+#### The two `Nary.eo` rows: our error, and a worse one than it looked
+
+Both rows say `(cons x nil)` matches a `cons` of exactly two elements.
+`tests/Nary.eo:88` and `:154` declare `cons` and `nil` as *parameters* of the
+enclosing program — `(cons (-> L L L)) (nil L)` — so no n-ary sugar applies to
+the pattern at all, and read as a list `(cons x nil)` is the one-element list
+the case exists to match. ethos said so, and it is right.
+
+The interesting part is where the check got its `:right-assoc-nil` from, because
+it is not in `Nary.eo`. Checking `Nary.eo` on its own reports neither row. The
+rows come from `tests/examples-nary.eo`, which is `(include "Nary.eo")` on line
+1 and `(declare-const cons (-> S S S) :right-assoc-nil nil)` on line 7 — so the
+check reached into a program in an included file and resolved its parameter
+against a global declared in the *including* file, **after the include**, that
+the parameter shadows and that did not exist when the program was parsed.
+
+The wrong assumption is that a name means one thing per signature.
+`resolve_decl` reads `Signature.by_name`, one flat table with no notion of a
+local scope, and `_walk_pattern` had the enclosing parameter list in hand the
+whole time and never consulted it — the desugarer beside it does, but only to
+ask whether a parameter is `:list`. `EO0054` now returns as soon as the head of
+a pattern is a name the parameter list binds, with
+`tests/witnesses/EO0054-shadowed-good.eo` as the witness. `ethos test
+signatures` drops from three `EO0054` to one; the survivor is
+`conclusion-spec.eo:8`, where `or` really is declared `:right-assoc-nil` and is
+nobody's parameter, and no other project's count moves.
+
+Two things this does not fix, both recorded rather than done. The narrowing is
+per-check, and any other check that resolves a head through the flat table has
+the same hole. And a symbol declared after the `include` that reaches it is
+visible to us at a point ethos would not have it — a scoping question the loader
+answers by flattening, which is fine for most checks and wrong for this class.
+
+#### The four `eo-definitions.eo` rows: the finding is true and the sentence is not
+
+`EO0071` says "`0` is a `<numeral>` literal, and **this signature** has no
+`declare-consts <numeral>`". Both halves of that are true of
+`tests/eo-definitions.eo` read on its own, and the file is never read on its
+own: it declares no sorts, includes nothing, and uses `$eo_nil`, which the
+manual says cannot be given a static definition. ethos refuses it standalone at
+line 148, long before any numeral. Its includer,
+`tests/eo-definitions-test.eo`, declares `<numeral>` on line 3 and checks
+`correct`.
+
+We check it standalone because a corpus directory is *one profile per file* —
+every `.eo` under `tests/` is an entry point, whether or not it is one. So the
+check is not wrong about the file; the report is wrong about what the file is,
+and it says so in the one word a maintainer reads first. The check's own
+judgement was good throughout: its computational-operator exemption behaved
+exactly as its page describes on all seven `EO0071` rows, reporting only the
+four places a type is actually asked for.
+
+Not fixed here, because the honest fix is not a narrowing. Suppressing or
+rewording these needs to know that *something else in the corpus includes this
+file*, and that is a reverse edge no check can see: `ctx.include_edges` runs
+forward from the entry point, and profiles are independent by construction.
+Building a corpus-level include index is a change to the report generator and to
+what a profile means, and it is not one to make while writing up the rows it
+would have suppressed. The id survives a reword — a fingerprint is the code, the
+path and the text of the line, never the message — so nothing is lost by
+deciding this separately.
+
+#### `right-assoc-variants.eo`: undecided, and correctly so
+
+The two rows there are the only ones the maintainer declined to rule on, and the
+reasoning is worth keeping. The finding is true and has a demonstrable
+consequence — adding `(declare-consts <numeral> Int)` is the single difference
+between `(eo::typeof (+ x y))` answering "Parsed type has an unevalated term"
+and answering `Int` — but the consequence is only reachable from a file that
+does not exist. Nothing includes `right-assoc-variants.eo`, it applies no
+operator, and it checks `correct` either way; it exists to exercise the shapes
+of `:right-assoc-nil` declarations, and a terminator whose category has no type
+may be one of the shapes it is for. The trial edit was made and reverted, and is
+not on `292201c2`.
+
+That is the right answer to a row we could not have decided from here, and it is
+the one case where *cannot tell* survived contact with somebody who knows the
+file. ethos also noticed, and did not act on, that `str.++`'s nil terminator in
+that file would not carry the tail type if the operator could be applied — which
+the missing declaration currently hides, so adding it would expose a mismatch
+rather than fix one. Recorded, not filed: no row reports it.
 
 ### logos — the parser and the semantics
 

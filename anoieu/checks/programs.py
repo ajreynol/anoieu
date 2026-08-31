@@ -39,6 +39,19 @@ def _param_map(params: list[Param]) -> dict[str, Param]:
     return {p.name: p for p in params}
 
 
+def _article(name: str) -> str:
+    """`a cons`, not `an cons`. The name is an operator somebody chose, so the
+    test is on the letter and nothing cleverer."""
+    return "an" if name[:1].lower() in "aeiou" else "a"
+
+
+def _where(span) -> str:
+    """A span as a note reads it: the file's own name, not its path."""
+    import os
+
+    return f"{os.path.basename(span.path)}:{span.line}:{span.col}"
+
+
 def _walk_pattern(
     node: Node, params: dict[str, Param], sig: Signature, where: str
 ) -> Iterator[Diagnostic]:
@@ -48,6 +61,14 @@ def _walk_pattern(
         return
     for child in node.children[1:]:
         yield from _walk_pattern(child, params, sig, where)
+    # A head the enclosing parameter list binds is that parameter, not a symbol
+    # of the same name declared elsewhere. `resolve_decl` reads one flat table
+    # and has no notion of a local scope, so without this a program that takes
+    # its own `cons` is read against somebody else's `:right-assoc-nil` `cons`
+    # and told its pattern has a fixed length -- when no n-ary sugar applies to
+    # a parameter application at all.
+    if node.head in params:
+        return
     found = _nil_attr(sig, node.head)
     if found is None:
         return
@@ -64,14 +85,17 @@ def _walk_pattern(
         yield Diagnostic(
             code="EO0054",
             severity=Severity.HINT,
-            message=f"this pattern matches an `{decl.name}` of exactly "
-            f"{len(args)} element(s)",
+            message=f"this pattern matches {_article(decl.name)} `{decl.name}` "
+            f"of exactly {len(args)} element(s)",
             span=tail.span,
             label=f"`{p.name}` is one element, not the tail",
             notes=[
-                f"`{decl.name}` is `{attr.key}`, so the parser builds "
-                f"{desugar(node, Scope(sig, params))} from this, which matches an "
-                f"{decl.name}-list of exactly {len(args)} elements",
+                # which declaration the attribute was taken from: without it a
+                # reader cannot tell this from a name the pattern binds itself
+                f"`{decl.name}` is `{attr.key}`, declared at {_where(decl.span)}, "
+                f"so the parser builds {desugar(node, Scope(sig, params))} from "
+                f"this, which matches {_article(decl.name)} {decl.name}-list of "
+                f"exactly {len(args)} elements",
                 f"in {where}",
             ],
             help=f"mark `{p.name}` with `:list` in the parameter list to match the tail",

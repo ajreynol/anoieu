@@ -8,7 +8,7 @@
 #   process_anoieu logos                    # every reply in that repository
 #   process_anoieu ethos 147433b3e48ae9d6   # one finding, by its id
 #   process_anoieu --codex ~/src/cvc5       # ... with codex, and an explicit path
-#   process_anoieu --postm logos            # ... and require a postmortem entry
+#   process_anoieu --no-postm logos         # ... without requiring a postmortem entry
 #   process_anoieu --status logos           # what became of the branch; no agent
 #   process_anoieu --dry-run logos          # what this would do; no agent
 #
@@ -116,7 +116,7 @@ SHOW=0
 DRY=0
 STATUS=0
 CHECK=1
-POSTM=0
+POSTM=1
 BRANCH=""
 NAME=""
 ID=""
@@ -125,7 +125,7 @@ usage() {
 
   cat >&2 <<'USAGE'
 usage: process_anoieu [--status | --dry-run | --show-prompt]
-                     [--codex] [--print] [--postm] [--branch NAME] NAME [ID]
+                     [--codex] [--print] [--no-postm] [--branch NAME] NAME [ID]
 
   NAME            a directory, or a repo id: looked up in scripts/repos.local
                   (written on the first run), then under $ANOIEU_REPOS (default $HOME)
@@ -138,9 +138,9 @@ usage: process_anoieu [--status | --dry-run | --show-prompt]
                   project's checkout and no assistant anywhere
   --dry-run       say what would be done, and do none of it
   --no-check      skip the check that every path in repos.local is a checkout
-  --postm         require a docs/postmortem.md entry for this run. Without it the
-                  agent writes one only if handling the reply changed how anoieu
-                  works, which is the rule in docs/postmortem.md
+  --no-postm      let the agent decide whether this run earned a
+                  docs/postmortem.md entry -- the rule in docs/postmortem.md.
+                  By default an entry is written whatever it concludes
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
 USAGE
@@ -166,7 +166,7 @@ while [ $# -gt 0 ]; do
     --dry-run) DRY=1; shift ;;
     --status) STATUS=1; shift ;;
     --no-check) CHECK=0; shift ;;
-    --postm) POSTM=1; shift ;;
+    --no-postm) POSTM=0; shift ;;
     --branch) BRANCH="${2:-}"; [ -n "$BRANCH" ] || usage; shift 2 ;;
     -h|--help) usage ;;
     -*) echo "process_anoieu: unknown option $1" >&2; usage ;;
@@ -389,7 +389,7 @@ after each so that stopping partway is safe. Blocks may share a cause; each
 still gets its own answer."
 fi
 
-# The one part of the prompt --postm changes; both forms are in the document.
+# The one part of the prompt --no-postm changes; both forms are in the document.
 if [ "$POSTM" = 1 ]; then
   POSTM='7. Write a postmortem entry for this run, whether or not anything changed.'
 else

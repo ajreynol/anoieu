@@ -171,6 +171,17 @@ settled when what actually happened is that something was suggested.
 the question rather than at an answer, and a reply that carries only a triage is
 a proposal rather than a result.
 
+**A decline needs a signature, not an absence of objection.** The failure mode
+is specific to *not a defect*: an assistant proposes that nothing needs doing,
+nobody objects, and the silence is read back as agreement — where a proposed
+*fix* would have had to survive somebody reading a diff. So prompt one now
+requires the decline to be put to the maintainer in as many words and answered
+before it is recorded, and an unconfirmed decline is reported as *cannot tell*.
+On our side the consequence is the same either way: a row whose `HUMAN
+RESPONSE:` records no explicit confirmation is not closed. This came from the
+ethos maintainer, who noticed it about his own reply after sending it — ten
+declines that were all correct and none of which he had pushed back on.
+
 **`OBSERVED, NOT ACTED ON:`** is where a true thing goes that the row did not
 ask about. *Fix nothing else you notice* is the right rule and it leaves nothing
 to do with what you noticed; without a field, it either goes in prose or goes
@@ -406,6 +417,9 @@ On branch BRANCH, one row at a time, and only what the rows name:
    differently.
 3. If it is not, or you cannot tell: change nothing and say why. "I cannot tell"
    is the honest answer when you do not know what the file was meant to say.
+   Then put the decline to the maintainer in as many words and wait for an
+   answer -- not fixing something is a decision somebody signs, and silence is
+   not a signature. Unconfirmed, it is "cannot tell", never "not a defect".
 
 Fix nothing else you notice; each finding is reported separately. Do not
 summarise anoieu's other results: a check that reports nothing is not evidence
@@ -427,8 +441,7 @@ alone. One block per row:
   HUMAN RESPONSE:
 
 Commit your work to the branch: that, not the reply, is what settles this. Leave
-HUMAN RESPONSE empty -- it is the maintainer's decision and yours is a triage;
-the report page links what to do if they hand you the field anyway.
+HUMAN RESPONSE empty; the report page links what to do if they hand it to you.
 
 End with one section, FEEDBACK TO ANOIEU. It is asked for, and blunt is useful:
 where the time went and what would have made it fast; what a row should have
@@ -503,11 +516,11 @@ docs/reporting-policy.md is the authority on what you may change. The steps:
    says what it removes, and technical detail belongs in the docs a prompt links
    to rather than in the prompt.
 
+7. Write a postmortem entry for this run, whether or not anything changed.
+  -- or, with --no-postm --
 7. Decide whether this earned a postmortem entry. It did if handling it changed
    how anoieu works -- a check, the harness, the report, a prompt. If nothing
    here changed, say so and write nothing.
-  -- or, with --postm --
-7. Write a postmortem entry for this run, whether or not anything changed.
 
    Entries go at the top of docs/postmortem.md, in the shape that file sets out
    -- short, and only what happened and what the workflow learned; the reasoning

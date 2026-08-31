@@ -20,17 +20,18 @@ this run taught us about working findings* is here.
 what [`scripts/process_anoieu`](../scripts/process_anoieu) runs. Not the project
 that owns the finding: they send feedback, we decide what it changed here.
 
-**When.** An entry is earned when processing a bug report **changed how anoieu
-works**. A row confirmed and closed on its merits, with nothing here altered,
-does not get one. If nothing changed, say so in the session rather than writing
-an entry that says nothing happened.
+**When.** Every run, by default. The test an entry used to have to pass — did
+processing this reply **change how anoieu works** — turned out to be the wrong
+default: a round that changes nothing here is still a round whose *reasoning*
+about why it changed nothing is worth having, and the judgement call cost more
+than the entry.
 
-    scripts/process_anoieu <project> [ID]           # the agent decides
-    scripts/process_anoieu --postm <project> [ID]   # an entry is required
+    scripts/process_anoieu <project> [ID]              # an entry is written
+    scripts/process_anoieu --no-postm <project> [ID]   # the agent decides
 
-`--postm` makes it mandatory for that run — for a round you already know is worth
-recording, or when you want the reasoning captured whatever the agent concludes.
-Without it the agent applies the test above and says which way it went.
+`--no-postm` restores the older behaviour for a run: the agent applies the test
+above and says which way it went. A run that changed nothing here still writes
+its `Resolution:`, and simply has no sections beneath it.
 
 **The shape of an entry.** One heading per **run of anoieu** — one project, one
 reply worked — and **one** `Tool:` / `Summary:` / `Resolution:` block under it,
@@ -137,6 +138,106 @@ is kept honest.
 | 1 (2026-08-31) | 60 → 54 | 39 → 63 | prompt one lost the inlined explanation of what each code means and how each is confirmed, which moved to the header of [`open-findings.md`](open-findings.md) where it can be maintained. Prompt two grew, and that is the honest number: it gained the postmortem step and its `--postm` alternative, the branch check, the closed-row scope rule, and the caveat on a reproducer that stops reproducing. It is the one number in this table going the wrong way. Next round's candidate for removal is step 4, which is procedure that could be a link |
 
 ---
+
+---
+
+## 2026-08-31 — ethos: nineteen rows, seven fixes, and a decline nobody signed
+
+**Tool:** ethos
+
+**Summary:** Ethos aborted with a C++ runtime error on a malformed type, and
+three of its error paths reported without a file or a line. Its test signatures
+also carried a mis-declared operator, an unreachable program case and a
+docstring naming the wrong field.
+
+**Resolution:** 7 of the 19 were real and are fixed on one unmerged commit —
+[four in the signatures and three in the checker
+itself](reports.md#ethos--the-checker-and-its-test-signatures), the latter all
+the same shape: a message that never reached the `Error: <file>:<line>.<col>:`
+convention everything else uses. 2 were
+[ours](#the-two-naryeo-rows--a-name-that-meant-two-things), a check reading a
+program's parameter as somebody else's operator; the check is narrowed and has a
+witness. 8 were deliberate and declined, and 2 the maintainer deliberately left
+open. **Nothing was closed.** The fixes are real but unmerged, and the declines
+turned out to rest on
+[silence](#ten-declines-and-none-of-them-pushed-back-on) — which is what changed
+most here: prompt one now has to get a decline confirmed before it records one,
+`--postm` is on by default, and `EO0054` says which declaration it read an
+attribute from.
+
+### The two `Nary.eo` rows — a name that meant two things
+
+Two rows said a pattern matched a `cons` of exactly two elements. `cons` was a
+*parameter* of the enclosing program, and the `:right-assoc-nil` `cons` the
+check had resolved it against was declared in a different file — the one that
+`(include "Nary.eo")`s it, seven lines below the include, shadowed by the
+parameter and not yet in existence when the program was parsed. Checking
+`Nary.eo` on its own reports neither row.
+
+`resolve_decl` reads one flat table per signature and has no notion of a local
+scope; `_walk_pattern` had the parameter list in hand and never asked it. It now
+returns as soon as a pattern's head is a name the parameter list binds.
+
+**Learned:** a check that resolves a name must resolve it in the scope that
+binds it, and the flat symbol table makes the wrong answer the easy one. The
+same hole is open in any other check that resolves a head through
+`resolve_decl` — narrowing one call site is not fixing the class.
+
+### Ten declines, and none of them pushed back on
+
+Every declined row in this reply was correct on the merits. What was missing was
+anywhere for the maintainer to have *disagreed*: the assistant wrote "not a
+defect", nobody objected, and the block was sent with the objection-shaped hole
+still in it. Asked afterwards, he said he had not pushed back on any of them —
+so the ten verdicts are his answers to a question that was never really put.
+
+A proposed fix cannot fail this way, because somebody has to read a diff before
+it lands. A proposed *decline* asks for nothing and gets it.
+
+**Learned:** the two triage outcomes are not symmetric, and the process was
+built as though they were. "Nothing needs doing" is the cheapest thing an
+assistant can conclude and the hardest for a reviewer to notice they have
+accepted, so it is the one that needs an explicit signature. None of the ten
+rows is closed on this round's evidence.
+
+### The reply said nothing was committed, and something was
+
+The reply's header stated that its changes sat unstaged in the working tree. The
+branch carried a commit and the tree was clean — the header described a state
+the session had already moved past. It cost nothing, because the follow-up reads
+the branch rather than the sentence.
+
+**Learned:** the instruction to read the branch rather than the reply earned its
+place on a round where the reply was wrong about the branch in the *safe*
+direction. It will not always be the safe direction.
+
+### What was fixed here, from the feedback
+
+`EO0054` now names the declaration it took `:right-assoc-nil` from, which is the
+one line that would have made the `Nary.eo` mismatch visible without an
+experiment, and says "a `cons`" rather than "an `cons`".
+[`fuzzing.md`](fuzzing.md#the-codes) now carries the fact that decides what
+*fixed* means for every `FUZ` row — that ethos aborts on ordinary errors too, so
+how a checker exits is not the finding — which was in `codes.py`, two hops from
+the report, and which the maintainer called out as load-bearing for all three of
+his `FUZ` verdicts.
+
+**Learned:** the sentence that decides what "fixed" means belongs on the page a
+reader lands on, not one link further in.
+
+### What was not fixed, and why
+
+`EO0071` told four rows that "this signature has no `declare-consts <numeral>`"
+about a file that is an include fragment and is never checked on its own — we
+check it standalone only because a corpus directory is one profile per file. The
+check's judgement was right on all seven of its rows; the word *signature* was
+not. Suppressing it needs to know that something else in the corpus includes the
+file, and that reverse edge does not exist: `include_edges` runs forward from
+the entry point and profiles are independent by construction.
+
+**Learned:** a finding can be true of the file and false about what the file is,
+and the second is the half a maintainer reads first. Four of nineteen rows were
+that one word.
 
 ---
 
