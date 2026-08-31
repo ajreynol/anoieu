@@ -1,22 +1,162 @@
-# Research projects
+# Repository policy
 
-A **research project** is a subdirectory of `tools/` named after a tool that
-does not exist yet. It reads the ecosystem, writes only inside its own
-directory, and is not part of the thing this repository ships.
+How a repository in the Eunoia ecosystem is arranged: where things go, what the
+front page must say about who is writing it, and what may be kept in the tree
+that is not part of what the repository ships.
 
-This page is the policy governing them. It is written for **any repository in
-the Eunoia ecosystem**, not just this one — ethos, logos, eudaimonia, cvc5's
-calculus and anything downstream have the same problem, which is that
-speculative work and shipped work look identical in a git tree and are read very
-differently. Adopting the same shape in every repository means a reader who has
-seen one knows what the next one is, and how much weight to put on it.
+It is written for **any repository in the ecosystem**, not just this one —
+ethos, logos, eudaimonia, cvc5's calculus and anything downstream. The reason to
+converge is the same in every case. Someone who has found their way around one
+of these repositories should already know their way around the next, and should
+be able to tell at a glance which parts of it are load-bearing and which are
+somebody thinking out loud. Those two look identical in a git tree and are read
+very differently.
 
-Cite a rule by name rather than by number. Append; do not renumber. Retire a
-rule in place, with a line saying why.
+Its sibling is [`vision.md`](vision.md), which governs what the development is
+aiming at: this page is about the arrangement, that one about the point of it.
+
+Cite a rule or a convention by name rather than by number. Append; do not
+renumber. Retire either in place, with a line saying why.
 
 ---
 
-## What a research project is
+## The layout
+
+| path | what it holds |
+| --- | --- |
+| `README.md` | the front page, and the whole of what any other document may assume has been read |
+| `docs/` | every written document, indexed by `docs/README.md`, together with the documents a run generates |
+| `tools/` | the harness: generators, the runner, the dependency manifest, this page — and research projects |
+| `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
+| `scripts/` | executable versions of workflows the documents define |
+| `deps/` | other people's repositories, fetched by a run and never committed |
+| `.github/workflows/` | what runs on every push |
+| the package itself | at the top level, named after the tool |
+
+The conventions that go with it.
+
+**There is one entry point, and it is the front page.** `README.md` carries what
+the tool is, what it finds, what it refuses to claim, how to run it, and a route
+to everything else; every other document may assume it has been read. Nothing
+competes for that role — no second overview in `docs/`, no wiki, no
+`INTRODUCTION.md`. This is the same requirement as tenet 3 of
+[`vision.md`](vision.md), seen from the filesystem rather than from the work.
+
+**Every repository explains its own name.** A short section on the front page
+with the etymology and why the word fits, written so somebody could disagree
+with it. The ecosystem names along a convention — Greek, and from the vocabulary
+it already draws on — and a convention nobody explains decays into decoration
+within about two repositories.
+
+**`docs/` has an index, and the index is itself a document.** One row per
+document saying what that document is *for*, in a sentence, so that a question
+has one obvious place to be answered. Adding a document means adding a row, and
+a document not worth a row is not worth adding.
+
+**Written and generated documents are separated and labelled.** A generated
+document says at the top that it is generated and by what, and generators write
+nothing else — the files a person maintains are never machine-edited. Within the
+generated ones, say which of two disciplines applies: *rewritten whole*, where
+anything typed in is lost on the next run, or *additive*, where the generator
+may add rows and never remove or rewrite one, so hand-written verdicts survive.
+The asymmetry is deliberate and worth stating wherever it applies, because a
+generator that is allowed to delete can quietly delete a regression.
+
+**`tools/` is the harness, not the product.** Everything that produces, checks
+or measures the repository's own claims, and nothing a user of the tool ever
+invokes. Each generator states at the top of its own file what it writes and
+what it refuses to write, which is the cheapest available defence against a
+script quietly acquiring an opinion. This page and [`vision.md`](vision.md) live
+here for the same reason: they govern the development rather than the tool.
+
+**`tests/` holds the evidence, not only the tests.** The property to preserve is
+that a person can open one file and see in a minute what a claim rests on: one
+small case per check, the output of somebody else's program recorded from a real
+run rather than written from memory, a committed baseline that fails *this*
+repository's build when a change invents a false positive. Evidence that exists
+only as a passing assertion is evidence nobody can read, and every claim the
+front page makes should be traceable to a file somebody could open.
+
+**Dependencies are fetched and pinned, never vendored.** A manifest and a lock
+in `tools/`, restored by the run that needs them. Two consequences worth having:
+the repository stays small enough to read, and the build can go red for its own
+reasons only — with a separate scheduled job asking the different question of
+whether anything upstream has moved.
+
+**A workflow is defined in prose and implemented in `scripts/`.** Where a
+procedure is worth automating, the document stays the definition and the script
+is one way of running it; where both exist, CI checks that the script's copy of
+the text has not drifted from the document it came from.
+
+**Working space is untracked, and says so.** `scratch/` for anything transient,
+and the `*.local.md` suffix for a document that is deliberately not committed. A
+file kept out of git carries a line at the top saying so and why, so that a
+reader who finds it knows they are looking at an intention rather than an
+oversight.
+
+## The maintenance note
+
+**Every repository's README ends with a short section stating how the
+development is currently being run.** Not how it works, not what it has
+achieved — who is writing it, under what supervision, and what that supervision
+covers. anoieu's is the model, reproduced here for the phrasing rather than for
+the content:
+
+> ## How this repository is maintained
+>
+> **Written by AI agents, under light human supervision.** A human directs the
+> work, reads what is published and decides what is filed; nobody vets the
+> internal design, and nothing reaches another project's issue tracker without
+> review. [`docs/philosophy.md`](../docs/philosophy.md) says what that does and
+> does not cover, and why the intended audience is experts.
+
+Four properties, of which the third is the one that gets dropped and the fourth
+the one that gets violated.
+
+**It is last.** By the time a reader reaches it they have seen what the tool
+claims, and this is the note that tells them how to weigh all of it. At the top
+it would be a disclaimer to be got past; at the bottom it is what they leave
+with.
+
+**It is about the process, in the present tense.** Who does the work, who
+supervises, and what happens before anything is published or carried to another
+project. It describes the arrangement as it currently stands — not as it was
+when the repository started, and not as it is hoped to become.
+
+**It says what the supervision does not cover.** Readers are generous with the
+word *supervision* and will assume more of it than is there. Naming the gap
+plainly — *nobody vets the internal design* — is the entire value of the note,
+and it is also the sentence that gets softened first, because it is the one that
+costs something to write.
+
+**It carries no technical detail.** Not what CI runs, not the layout, not the
+check catalogue, not the current state of the work. All of that changes weekly
+and is covered elsewhere; the note describes the arrangement that produces it,
+and should be stable for months. A maintenance note that has to be updated
+alongside the code has stopped being one.
+
+**When it changes.** It changes when the policy changes and at no other time,
+which makes it the one place a reader can discover that the arrangement has
+moved. A human taking over the development of a tool — the ending
+[`vision.md`](vision.md) aims at — is exactly such a change, and rewriting this
+section is how that becomes visible to everybody who was not in the room. A note
+that has drifted from the truth is worse than no note at all, since the whole of
+its value is that it can be relied on without being checked.
+
+## Research projects
+
+A **research project** is a subdirectory of `tools/` named after a tool that
+does not exist yet. It reads the ecosystem, writes only inside its own
+directory, and is not part of the thing the repository ships. Speculative work
+and shipped work are the pair this repository is most often asked to keep apart,
+and the rest of this page is how.
+
+[`vision.md`](vision.md) calls these **child projects** and calls the repository
+that carries one the **parent project**; where this page says *host tool* or
+*host repository*, it means the parent. Same arrangement, two vocabularies, and
+the shorter one is winning.
+
+### What a research project is
 
 `tools/X/` where `X` is the name of a **potential tool** — an artifact that
 might one day be worth building, being investigated by writing it down first.
@@ -29,7 +169,7 @@ artifact, which the host tool is well positioned to ask because of what building
 it taught, and badly positioned to answer inside its own source tree because the
 answer would be read as the tool's position.
 
-## The rules
+### The rules
 
 **1. A human starts one.** A research project may only be initiated by a person,
 in an explicit instruction, and the same is true of ending one. No agent, no
@@ -117,7 +257,7 @@ why it stopped. What is not an ending is going quiet. A directory that has not
 moved in a long time is a claim nobody is standing behind, and the honest form of
 that is a retirement note, not silence.
 
-## Why this shape
+### Why this shape
 
 Three failures this is arranged against, in increasing order of how much they
 cost.
@@ -147,12 +287,14 @@ The policy is written to be copied. What another repository has to decide:
 
 | decision | here |
 | --- | --- |
+| how the tree is arranged | the table in *The layout* |
+| where the maintenance note goes | the last section of `README.md` |
 | where projects live | `tools/X/` |
 | who may start and end one | a human, explicitly (rule 1) |
 | what governs anything published | `docs/philosophy.md` |
 | what governs anything carried to another project | `docs/reporting-policy.md` |
 | what the ending states are | graduate, fold in, retire in place (rule 9) |
 
-Replace the last two rows with your own equivalents, keep the rules, and keep
-the names. A repository that adopts this and then advertises its research
+Replace the rows that name documents with your own equivalents, keep the rules,
+and keep the names. A repository that adopts this and then advertises its research
 projects has adopted the directory layout and none of the policy.
