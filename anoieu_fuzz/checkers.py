@@ -218,6 +218,19 @@ def _portable(line: str) -> str:
     line = re.sub(r"\b\d+\.\d+\b", "N.N", line)
     line = re.sub(r"\b\d+\b", "N", line)
     line = re.sub(r"`[^`]*`", "`_`", line)
+    # A checker that quotes the offending *term* back at you says something
+    # different about every instance of one defect, and a bucket per instance is
+    # the thing bucketing exists to prevent: logos's "assumption after the first
+    # proof step: (assume @p1 @t6)" was landing in a new directory each time.
+    # A parenthesised group with a space in it is a term; one without is a token
+    # class, and `(EOF)` and `(SYMBOL)` are exactly the distinction that must
+    # survive.
+    for _ in range(8):  # innermost first, then outward: (not (= x N)) -> (...)
+        collapsed = re.sub(r"\([^()]*\s[^()]*\)", "\x00", line)
+        if collapsed == line:
+            break
+        line = collapsed
+    line = line.replace("\x00", "(...)")
     return line[:160]
 
 

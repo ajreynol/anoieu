@@ -1,0 +1,30 @@
+{
+ "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92",
+ "code": "FUZ0001",
+ "commands": 1,
+ "kind": "overaccept",
+ "mode": "proof",
+ "note": "unmodified output of 'cvc5 --dump-proofs --proof-format=cpc' with the leading 'unsat' removed: the proof is wrapped in one outer ( ... ). ethos refuses it at the first paren; logos unwraps it and checks it. 12 of 14 proofs harvested from cvc5's own regressions behave this way",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "reject",
+   "detail": "Error: <path>:N.N: Expected Eunoia command, got `_` (LPAREN).",
+   "exit": -6,
+   "seconds": 0.089,
+   "status": "rejected"
+  },
+  {
+   "checker": "logos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.003,
+   "status": "correct"
+  }
+ ],
+ "owner": "ethos+logos",
+ "seed": "/tmp/claude-1000/-home-andrew-reynolds-anoieu/23132b47-a8d8-4e2a-8334-b32ecfa2ccf6/scratchpad/proofs/p19.cpc",
+ "source": "seed:p19.cpc",
+ "summary": "logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (LPAREN)."
+}

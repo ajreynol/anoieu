@@ -105,6 +105,12 @@ ETHOS=<ethos>/build/src/ethos \
     --seed-corpus <ethos>/tests --jobs 6
 ```
 
+`--extend` opens each generated case with `(include <signature>)` and writes
+against that signature's vocabulary — CPC's 190 declarations and 241 programs —
+instead of the eight-line builtin prelude. What follows is nonsense written in a
+language the checker knows well, which is what gives the type checker something
+to do; without it, a generated signature mostly exercises the front end.
+
 `--metamorphic` adds the one differential question a *single* checker can be
 asked: the same file, laid out differently — whitespace and comments, nothing
 else — must get the same answer. The rewrite is deliberately timid, and
@@ -124,6 +130,17 @@ symbol from the pool, truncate a term, insert a parenthesis, replace an atom
 with a literal. This is what reaches everything *past* the parser, because it
 starts from a file that already checks.
 
+**Learned.** A case that made a checker say something it had never said before
+is kept and mutated further. A checker's diagnostic is the cheapest available
+proxy for which path it took — `checkers._portable` has already stripped the
+paths and numbers that vary between two visits to the same one — so a new
+message means somewhere new, and the run explores outward from there rather
+than starting over each time. It is a proxy and not a measurement: two paths can
+share a message, and a checker that says little teaches little. It costs a set
+of strings, and it is the difference between a random walk and a hill climb —
+the same 1500 cases, same seed, found nothing with `--no-learn` and a bucket
+without it.
+
 `--seed-corpus` takes a file or a directory, repeatably. **Every seed is checked
 as it stands first**, before anything is generated or damaged — it is the
 cheapest finding there is, and the first real disagreement this fuzzer reported
@@ -131,7 +148,28 @@ came from exactly there: a regression test of the checker it was about.
 
 A seed's relative `include` and `reference` paths are rewritten to absolute
 ones as it is read, because a case is run from a temporary file and would
-otherwise be asking about a file that is not where it was.
+otherwise be asking about a file that is not where it was. A proof that arrives
+wrapped in one outer form — which is how `cvc5 --dump-proofs` writes one — is
+unwrapped for the mutator, so it has commands to work with rather than a single
+blob, and kept wrapped for the pass that checks it as it stands. Whether a
+checker reads that form is itself a question, and not one the two answer the
+same way.
+
+### Where real proofs come from
+
+The best findings have all come from damaging something real, and the only real
+proofs to hand were the thirteen in logos's regression suite.
+[`scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) writes as many as
+you have benchmarks:
+
+```bash
+scripts/harvest_cpc_proofs ~/cvc5/test/regress/cli/regress0 --limit 300 --out seeds/
+python3 -m anoieu_fuzz run --mode proof --seed-corpus seeds/ -n 2500
+```
+
+Three hundred benchmarks yield about a hundred proofs — most of a regression
+suite is not unsat, and a proof only exists for the ones that are. They are kept
+exactly as cvc5 writes them, minus the leading `unsat`.
 
 ## What comes out
 

@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# harvest_cpc_proofs -- real CPC proofs, to seed the fuzzer with.
+#
+# The fuzzer's best findings have all come from damaging something real rather
+# than from generating something new, and the only real proofs it had were the
+# thirteen in logos's regression suite. cvc5 will write as many as you have
+# benchmarks:
+#
+#   harvest_cpc_proofs ~/cvc5/test/regress/cli/regress0 --out seeds/
+#   anoieu-fuzz run --mode proof --seed-corpus seeds/ -n 5000
+#
+# Output is kept exactly as cvc5 writes it, minus the leading "unsat" line --
+# including the outer parentheses it wraps a proof in, because whether a checker
+# reads that form is itself a question the fuzzer has already answered wrongly
+# for one of them.
+#
+# $CVC5 overrides the binary, as $ETHOS and $LOGOS do elsewhere.
+
+set -euo pipefail
+
+CVC5="${CVC5:-cvc5}"
+OUT="cpc-proofs"
+LIMIT=0
+TIMEOUT=20
+JOBS=$(command -v nproc >/dev/null 2>&1 && nproc || echo 4)
+DIRS=()
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: harvest_cpc_proofs [--out DIR] [--limit N] [--timeout SEC] [--jobs N] DIR...
+
+  DIR...          directories to search for .smt2 benchmarks
+  --out DIR       where to write the proofs (default: cpc-proofs)
+  --limit N       stop after trying N benchmarks (default: all of them)
+  --timeout SEC   per benchmark (default 20)
+  --jobs N        benchmarks at once (default: nproc)
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --out) OUT="${2:-}"; [ -n "$OUT" ] || usage; shift 2 ;;
+    --limit) LIMIT="${2:-}"; shift 2 ;;
+    --timeout) TIMEOUT="${2:-}"; shift 2 ;;
+    --jobs) JOBS="${2:-}"; shift 2 ;;
+    -h|--help) usage ;;
+    -*) echo "harvest_cpc_proofs: unknown option $1" >&2; usage ;;
+    *) DIRS+=("$1"); shift ;;
+  esac
+done
+[ "${#DIRS[@]}" -gt 0 ] || usage
+
+command -v "$CVC5" >/dev/null 2>&1 || {
+  echo "harvest_cpc_proofs: $CVC5 is not on PATH; set \$CVC5" >&2; exit 127; }
+
+mkdir -p "$OUT"
+OUT=$(cd "$OUT" && pwd)
+
+# One benchmark. A proof only exists for an unsat answer, and most of what a
+# regression suite holds is not unsat, so a miss is the common case and not
+# worth a word about.
+harvest_one() {
+  local bench="$1" out name answer
+  name=$(printf '%s' "${bench#/}" | tr '/' '_')
+  name="${name%.smt2}.cpc"
+  out=$(timeout "$HARVEST_TIMEOUT" "$HARVEST_CVC5" --dump-proofs --proof-format=cpc \
+        "$bench" 2>/dev/null) || return 0
+  answer=$(printf '%s\n' "$out" | head -1)
+  [ "$answer" = "unsat" ] || return 0
+  printf '%s\n' "$out" | tail -n +2 > "$HARVEST_OUT/$name"
+  printf '.' >&2
+}
+export -f harvest_one
+export HARVEST_OUT="$OUT" HARVEST_CVC5="$CVC5" HARVEST_TIMEOUT="$TIMEOUT"
+
+echo "-- harvest_cpc_proofs: $CVC5 over ${DIRS[*]}" >&2
+
+# The list goes to a file rather than a variable: a regression suite is
+# thousands of paths, and holding them in one string only makes every later
+# line quoting-sensitive for no gain.
+LIST=$(mktemp)
+trap 'rm -f "$LIST"' EXIT
+find "${DIRS[@]}" -name '*.smt2' -type f 2>/dev/null | sort > "$LIST"
+TOTAL=$(wc -l < "$LIST")
+if [ "$LIMIT" -gt 0 ] && [ "$LIMIT" -lt "$TOTAL" ]; then
+  head -"$LIMIT" "$LIST" > "$LIST.cut" && mv "$LIST.cut" "$LIST"
+  echo "   $TOTAL benchmark(s) found, trying $LIMIT, $JOBS at a time" >&2
+else
+  echo "   $TOTAL benchmark(s), $JOBS at a time" >&2
+fi
+
+xargs -P "$JOBS" -I{} bash -c 'harvest_one "$@"' _ {} < "$LIST" || true
+echo "" >&2
+
+GOT=$(find "$OUT" -name '*.cpc' -type f | wc -l)
+echo "-- $GOT proof(s) in $OUT" >&2
+if [ "$GOT" -gt 0 ]; then
+  echo "   anoieu-fuzz run --mode proof --seed-corpus $OUT" >&2
+fi
+exit 0

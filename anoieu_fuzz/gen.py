@@ -175,6 +175,31 @@ def absolutize(commands: list[str], base: str) -> list[str]:
     return [_INCLUDE.sub(fix, c) for c in commands]
 
 
+def unwrap(commands: list[str]) -> list[str]:
+    """`( <command>* )` -> `<command>*`, which is how cvc5 emits a proof.
+
+    `cvc5 --dump-proofs --proof-format=cpc` prints `unsat` and then the whole
+    proof inside one outer pair of parentheses. Read literally that is a single
+    top-level form, so a mutator working at command granularity has exactly one
+    command to work with and a shrinker has nothing to remove.
+
+    Only the wrapper is removed, and only when what is inside it is a list of
+    forms -- the same rule logos's `unwrapProof` applies. The wrapped file is
+    still worth asking about as it stands, which is why this is applied to the
+    copy a run mutates and not to the copy it checks first.
+    """
+    if len(commands) != 1:
+        return commands
+    outer = commands[0].strip()
+    if not (outer.startswith("(") and outer.endswith(")")):
+        return commands
+    body = outer[1:-1].strip()
+    if not body.startswith("("):
+        return commands
+    inner = split_commands(body)
+    return inner if len(inner) > 1 else commands
+
+
 # -- the generator ------------------------------------------------------------
 
 

@@ -34,7 +34,7 @@ from . import __version__
 from . import report as reporting
 from .checkers import Checker, Outcome, from_config, load_config
 from .codes import CODES
-from .gen import Case, absolutize, generate, mutate, reformat, split_commands
+from .gen import Case, absolutize, generate, mutate, reformat, split_commands, unwrap
 from .triage import Corpus, Finding, judge, shrink
 from .vocab import Vocabulary, fallback
 
@@ -84,6 +84,7 @@ class Session:
         self.depth = args.depth
         self.metamorphic = getattr(args, "metamorphic", False)
         self.reference = getattr(args, "reference", "") or cfg.get("reference", "")
+        self.learn_cap = 0 if getattr(args, "no_learn", False) else getattr(args, "learn_cap", 400)
         self.note = ""
 
         self.extend = getattr(args, "extend", False) and bool(self.signature)
@@ -98,7 +99,10 @@ class Session:
             self.note += ("; cases extend it" if self.extend
                           else "cases stand alone on a builtin prelude")
 
-        self.seeds: list[Case] = []
+        self.seeds: list[Case] = []      # as they stand, for the first pass
+        self.mutable: list[Case] = []     # unwrapped, for the mutator to damage
+        self.learned: list[Case] = []     # cases that reached somewhere new
+        self.details: set[str] = set()
         self.pool: list[str] = []
         for path in _seed_files(getattr(args, "seed_corpus", []) or []):
             try:
@@ -110,8 +114,11 @@ class Session:
             if not commands:
                 continue
             suffix = ".eo" if path.endswith(".eo") else ".cpc"
-            self.seeds.append(Case(commands, self.mode, suffix, path, f"seed:{os.path.basename(path)}"))
-            self.pool += commands
+            name = f"seed:{os.path.basename(path)}"
+            self.seeds.append(Case(commands, self.mode, suffix, path, name))
+            body = unwrap(commands)
+            self.mutable.append(Case(body, self.mode, suffix, path, name))
+            self.pool += body
 
     # -- one case, start to finish
 
@@ -128,8 +135,9 @@ class Session:
             seed_case = self.seeds[index]
             return seed_case.replace(seed_case.commands)
         rng = random.Random("choose:" + seed)
-        if self.seeds and rng.random() < mutate_p:
-            return mutate(seed, rng.choice(self.seeds), self.pool)
+        stock = self.mutable + self.learned
+        if stock and rng.random() < mutate_p:
+            return mutate(seed, rng.choice(stock), self.pool)
         voc = self.voc if (self.mode == "proof" or self.extend) else fallback()
         return generate(seed, self.mode, voc, wild=self.wild, depth=self.depth,
                         include=self.signature if self.extend else "")
@@ -166,6 +174,33 @@ class Session:
         finally:
             os.unlink(path)
         return out
+
+    def learn(self, case: Case, outcomes: list[Outcome]) -> bool:
+        """Keep a case that made a checker say something it had not said before.
+
+        The cheapest coverage signal available without instrumenting anything:
+        a checker's diagnostic is a proxy for which path it took, and
+        `checkers._portable` has already stripped the paths and numbers that
+        vary between two visits to the same one. A case that produced a new
+        message reached somewhere new, so it goes into the pool the mutator
+        draws from and the run explores outward from it rather than starting
+        over each time.
+
+        It is a proxy and not a measurement. Two paths can share a message, one
+        path can have several, and a checker that says little is a checker this
+        learns little from. It costs a set of strings.
+        """
+        fresh = False
+        for got in outcomes:
+            detail = got.detail
+            if not detail or got.status in ("correct", "quiet", "skipped"):
+                continue
+            if detail not in self.details:
+                self.details.add(detail)
+                fresh = True
+        if fresh and len(self.learned) < self.learn_cap:
+            self.learned.append(case.replace(unwrap(case.commands)))
+        return fresh
 
     def probe(self, case: Case) -> Finding | None:
         return judge(case, self.ask(case), self.reference)
@@ -226,6 +261,7 @@ def cmd_run(args) -> int:
         finding = judge(case, outcomes, session.reference)
         with lock:
             done += 1
+            session.learn(case, outcomes)
             for o in outcomes:
                 tally.setdefault(o.checker, {})
                 tally[o.checker][o.status] = tally[o.checker].get(o.status, 0) + 1
@@ -269,6 +305,9 @@ def cmd_run(args) -> int:
     elapsed = time.monotonic() - started
     print(f"-- {done} case(s) in {elapsed:.0f}s; "
           f"{sum(corpus.counts.values())} finding(s) in {len(corpus.counts)} bucket(s)")
+    if session.learn_cap:
+        print(f"   {len(session.details)} distinct diagnostic(s) seen; "
+              f"{len(session.learned)} case(s) kept as seeds for reaching a new one")
     for name in sorted(tally):
         counts = ", ".join(f"{k} {v}" for k, v in sorted(tally[name].items()))
         print(f"   {name:22} {counts}")
@@ -485,6 +524,11 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--max-findings", type=int, default=0, help="stop after this many new buckets")
     r.add_argument("--time-limit", type=float, default=0.0, help="stop after this many seconds")
     r.add_argument("-v", "--verbose", action="store_true", help="a line per case")
+    r.add_argument("--no-learn", action="store_true",
+                   help="do not keep a case that provoked a diagnostic never seen "
+                        "before as a seed to mutate further")
+    r.add_argument("--learn-cap", type=int, default=400,
+                   help="how many such cases to keep (default 400)")
     r.add_argument("--format", choices=("text", "json", "github", "sarif"), default="text",
                    help="also print what was found in this shape, as diagnostics")
     r.set_defaults(fn=cmd_run)

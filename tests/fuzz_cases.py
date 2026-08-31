@@ -29,6 +29,7 @@ from anoieu_fuzz.checkers import classify, from_config, load_config  # noqa: E40
 from anoieu_fuzz.codes import CODES, KIND_TO_CODE  # noqa: E402
 from anoieu_fuzz.gen import (  # noqa: E402
     Case,
+    unwrap,
     absolutize,
     generate,
     reformat,
@@ -368,6 +369,41 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     rc, o, _ = run("checkers")
     case("`checkers` says what is configured", rc == 0 and "ethos" in o and "logos" in o,
          o[:80])
+
+    # -- what a real proof looks like, and what makes two findings one
+
+    wrapped = "(\n(declare-const x Bool)\n(assume @p0 x)\n(step @p1 :rule refl)\n)"
+    case(
+        "a proof cvc5 wrapped in one outer form unwraps into its commands",
+        len(unwrap(split_commands(wrapped))) == 3,
+        str(unwrap(split_commands(wrapped))),
+    )
+    case(
+        "and an ordinary command is left alone",
+        unwrap(["(declare-const x Int)"]) == ["(declare-const x Int)"],
+        str(unwrap(["(declare-const x Int)"])),
+    )
+    case(
+        "as is a wrapper around something that is not a command list",
+        unwrap(["(-> Bool Bool)"]) == ["(-> Bool Bool)"],
+        str(unwrap(["(-> Bool Bool)"])),
+    )
+
+    def detail(msg: str) -> str:
+        return classify("c", 1, "incorrect\n", msg + "\n", 0.0).detail
+
+    case(
+        "a checker that quotes the offending term back is still one finding",
+        detail("Error: assumption after the first step: (assume @p1 @t6)")
+        == detail("Error: assumption after the first step: (assume @p0 (not (= x 4)))"),
+        detail("Error: assumption after the first step: (assume @p1 @t6)"),
+    )
+    case(
+        "but two token classes are two findings",
+        detail("Error: /a.cpc:2.0: Expected command, got `` (EOF).")
+        != detail("Error: /a.cpc:2.0: Expected command, got `x` (SYMBOL)."),
+        detail("Error: /a.cpc:2.0: Expected command, got `` (EOF)."),
+    )
 
     # -- the reporting half: codes, the committed corpus, and the ledger
 
