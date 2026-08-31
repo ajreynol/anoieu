@@ -38,7 +38,14 @@ So: write it down, make the strongest case against it, and see which survives.
    work that would move each one. Some of those names have since been taken up
    as real projects, which is the closest thing this project has to a result.
 
-3. **Stretch: what would settle it.** An argument that cannot be lost is not
+3. **The names.** Naming work that does not exist is most of what goal 2
+   produces, so the register lives on its own page: what each reserved name was
+   reserved *for*, which are taken, and how to choose one that is not there.
+   [`names.md`](names.md). It is the page a brand new repository is pointed at,
+   and it is deliberately short — a repository choosing its name should not have
+   to read an argument about the ecosystem first.
+
+4. **Stretch: what would settle it.** An argument that cannot be lost is not
    worth having. The account carries what would change our minds and one
    experiment that would settle more than any further argument. Turning that into
    something somebody could actually run is the stretch goal, and it remains one.
@@ -71,7 +78,9 @@ The boundary matters more than the goals, so it is stated first.
 anybody who disagrees, which is the whole point of writing it and has not
 happened yet. It has produced no deliverable and so has earned no place in
 [`docs/vision.md`](../../docs/vision.md) — with one qualification: of the six projects it named, **euthyna** has since been started
-as a child project of eudaimonia. Whether that is this account's doing or
+as a child project of eudaimonia, and the register in
+[`names.md`](names.md) is now consulted by `scripts/init_eo` when a new
+repository picks a name. Whether that is this account's doing or
 convergence is not something this project can establish about itself.
 
 ## Layout
@@ -79,3 +88,4 @@ convergence is not something this project can establish about itself.
 | file | what it is |
 | --- | --- |
 | [`why-eunoia.md`](why-eunoia.md) | the account: the case, the case against, the objections, six arrangements, the projects that do not exist, and what would change our minds |
+| [`names.md`](names.md) | the register of names: taken, reserved, and how to pick one. Goal 3 |

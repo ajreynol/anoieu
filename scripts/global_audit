@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+# global_audit -- where does the whole ecosystem stand?
+#
+# Run it here, in anoieu. It takes the inventory in tools/ecosystem.json, runs
+# the policy checker over every member that is checked out on this machine, and
+# hands the results to an assistant to read across.
+#
+#   global_audit                 # audit everything checked out here
+#   global_audit --show-prompt   # print the prompt and exit
+#
+# **Fast on purpose.** The checker reads text and builds nothing, so a whole-
+# ecosystem pass is seconds. Nothing here runs the analyzer over a corpus,
+# builds a checker, fuzzes anything or reads a codebase: those are deep and they
+# have their own entry points. An audit that takes an afternoon is an audit
+# nobody runs, and the point of this one is that it can be run often enough to
+# notice drift.
+#
+# Checkouts resolve through scripts/repos.local, the same file process_anoieu
+# uses. A member with no checkout here is reported as unseen, not as failing.
+
+set -euo pipefail
+
+HERE=$(cd "$(dirname "$0")" && pwd)
+ROOT=$(cd "$HERE/.." && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+INVENTORY="$ROOT/tools/ecosystem.json"
+AGENT=claude
+PRINT=0
+SHOW=0
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: global_audit [--codex] [--print] [--show-prompt]
+
+  --codex         run codex instead of claude
+  --print         run non-interactively and print the result
+  --show-prompt   print the prompt and exit, running nothing
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --codex) AGENT=codex; shift ;;
+    --claude) AGENT=claude; shift ;;
+    --print) PRINT=1; shift ;;
+    --show-prompt) SHOW=1; shift ;;
+    -h|--help) usage ;;
+    *) echo "global_audit: unknown option $1" >&2; usage ;;
+  esac
+done
+
+# -- resolve one repo id the way the other scripts do: path, file, then scan.
+locate() {
+  local want="$1" line id path r
+  # Deliberately not "a path used as it stands": these ids come from the
+  # inventory, not from a person, and `anoieu` is also a directory in this tree.
+  if [ -f "$REPOS_FILE" ]; then
+    while IFS= read -r line; do
+      case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
+      id=${line%%[[:space:]]*}; path=${line#"$id"}
+      path=${path#"${path%%[![:space:]]*}"}
+      [ "$id" = "$want" ] || continue
+      case "$path" in "~"*) path="$HOME${path#\~}" ;; esac
+      [ -d "$path" ] && { (cd "$path" && pwd); return; }
+    done < "$REPOS_FILE"
+  fi
+  for r in ${ANOIEU_REPOS:-$HOME}; do
+    [ -d "$r/$want" ] && { (cd "$r/$want" && pwd); return; }
+  done
+  return 1
+}
+
+INVENTORY_TEXT=$(cat "$INVENTORY")
+
+REPORTS=""
+SEEN="|"
+while IFS=$'\t' read -r name status repo; do
+  [ -n "$name" ] || continue
+  case "$status" in child|served) REPORTS="$REPORTS
+=== $name ($status) -- not audited: $status entries are not asked to comply."; continue ;; esac
+  if ! path=$(locate "$repo" 2>/dev/null); then
+    REPORTS="$REPORTS
+=== $name ($status) -- no checkout on this machine, so unseen rather than failing."
+    continue
+  fi
+  case "$SEEN" in
+    *"|$path|"*)
+      REPORTS="$REPORTS
+=== $name ($status) at $path -- shares a tree with an entry checked above."
+      continue ;;
+  esac
+  SEEN="$SEEN$path|"
+  out=$(timeout 120 python3 "$ROOT/tools/policy_check.py" --root "$path" 2>&1 || true)
+  REPORTS="$REPORTS
+=== $name ($status) at $path
+$(printf '%s\n' "$out" | sed -n '/^ok\|^FAIL\|^skip\|^minor\|^ /p' | head -40)"
+done < <(python3 - "$INVENTORY" <<'PY'
+import json,sys
+d=json.load(open(sys.argv[1]))
+for k,v in d.items():
+    if k=="_comment": continue
+    print(f"{k}\t{v.get('status','?')}\t{v.get('repo',k)}")
+PY
+)
+
+read -r -d '' PROMPT <<PROMPT_END || true
+Audit the Eunoia ecosystem. Be quick: everything below has already been
+measured, and your job is to read across it, not to re-derive it. **Do not start
+a deep analysis** -- do not run the analyzer over a corpus, build a checker,
+fuzz anything, or read through anybody's source. If a question needs that, name
+it as a question and stop.
+
+The inventory, which is a list somebody maintains rather than one anything
+derives, is tools/ecosystem.json:
+
+$INVENTORY_TEXT
+
+The policy checker was run over every member with a checkout on this machine.
+Treat this as fact:
+$REPORTS
+
+Answer three things, shortest first.
+
+**1. Policy.** Who is a member, who is a candidate, and who is drifting. This
+half is decided by the checker and not by you: quote it, do not re-litigate it.
+Call out anything that declares membership while failing, which is the one state
+that matters, and anything whose status in the inventory looks wrong -- a
+candidate that now passes everything, a member that has stopped. Say it; do not
+edit tools/ecosystem.json, because a status is a decision a person makes.
+
+**2. Vision.** How the ecosystem is doing against docs/vision.md, as an
+observation and never as a score. There is no checker for this and there must
+not be: whether a tool is fruitful yet, or a claim oversold, is contestable and
+nobody here has the authority to settle it. Keep it to what you can point at --
+something that shipped, something that was consumed, something that has not
+moved. Do not produce a number, a grade, or a ranking.
+
+**3. Ours.** What of this is anoieu's fault: a check that fires on something
+that is not a problem, a policy that does not fit a legitimate repository, an
+instruction that misleads, a page that has gone stale. That is ours to fix
+rather than anybody else's to work around, and it is the part of an audit most
+easily skipped because it is the only part that makes work for us. Where the fix
+is small, make it here and stage it.
+
+Write the result to audit-response.md at this repository's root, appending and
+leaving anything already there. Stage it; commit nothing. Open no topic in
+docs/discussion.md about anybody's discussion file, and file nothing anywhere --
+an audit is something we read, not something anybody else receives.
+PROMPT_END
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+command -v "$AGENT" >/dev/null 2>&1 || {
+  echo "global_audit: $AGENT is not on PATH" >&2; exit 127; }
+
+echo "-- global_audit: $(python3 -c "import json;print(len(json.load(open('$INVENTORY')))-1)") entries, via $AGENT" >&2
+
+cd "$ROOT"
+if [ "$AGENT" = codex ]; then
+  if [ "$PRINT" = 1 ]; then exec codex exec "$PROMPT"; else exec codex "$PROMPT"; fi
+else
+  if [ "$PRINT" = 1 ]; then exec claude -p "$PROMPT"; else exec claude "$PROMPT"; fi
+fi

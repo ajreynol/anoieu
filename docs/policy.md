@@ -387,6 +387,23 @@ Where it acts, the work happens *here* and the reply is drafted here, in
 and an answer that turns out to be an argument rather than a sentence becomes a
 topic of Kind `answer` in our own file instead.
 
+### Auditing the whole of it
+
+[`scripts/global_audit`](../scripts/global_audit) runs the checker over every
+member listed in `tools/ecosystem.json` that is checked out on this machine, and
+reads across the results. The inventory is a list somebody maintains rather than
+one anything derives: **membership is a decision, not a fact about a tree**, so
+the audit may report that a status looks wrong and does not change one.
+
+It is fast by construction — the checker reads text and builds nothing — and it
+is told to start no deep analysis: no corpus run, no build, no fuzzing, no
+reading through anybody's source. An audit that takes an afternoon is an audit
+nobody runs, and this one exists to be run often enough to notice drift.
+
+It answers three things, and the third is the one that makes work for us: what
+the policy says, what the vision looks like as an observation rather than a
+score, and **what of it is our own defect**.
+
 ### Upholding it
 
 `tools/policy_check.py` reads this file, and splits it across the two tiers on
@@ -605,6 +622,13 @@ the ecosystem is built to support rather than built from.
 
 Two steps. The first is a sentence; the second is a CI job that checks the
 sentence is true.
+
+Before either of them, if the repository is brand new: nothing is required yet.
+[`scripts/init_eo`](../scripts/init_eo) gives a new tool a name and a README
+saying what it is for, and it is told explicitly not to comply with any of this —
+knowing what you are building is what makes the rest decidable, and that order
+is deliberate. Names come from the register the ecosystem keeps, which lists
+what is taken, what is reserved and what each reserved name was reserved for.
 
 ### 1. Declare it, at the top of your maintenance note
 

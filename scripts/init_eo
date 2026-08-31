@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+# init_eo -- start a brand new tool: give it a name and a README that says what
+# it is for.
+#
+# Run it in the new repository, which may be empty. It is the first of three and
+# the only one with nothing to comply with:
+#
+#   init_eo               # name it, and write the README
+#   join_eo               # later, when there is something to join with
+#   check_join_eo <id>    # run from anoieu, to see where it stands
+#
+#   init_eo --show-prompt
+#
+# Nothing here is required of the repository and nothing is checked. A new tool
+# with a clear purpose and no policy is worth more than a compliant one with
+# nothing to say, and the order matters: knowing what you are building is what
+# makes the rest of it decidable later.
+
+set -euo pipefail
+
+AGENT=claude
+PRINT=0
+SHOW=0
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: init_eo [--codex] [--print] [--show-prompt]
+
+  --codex         run codex instead of claude
+  --print         run non-interactively and print the result
+  --show-prompt   print the prompt and exit, running nothing
+
+Run this in the new repository, not in anoieu.
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --codex) AGENT=codex; shift ;;
+    --claude) AGENT=claude; shift ;;
+    --print) PRINT=1; shift ;;
+    --show-prompt) SHOW=1; shift ;;
+    -h|--help) usage ;;
+    *) echo "init_eo: unknown option $1" >&2; usage ;;
+  esac
+done
+
+read -r -d '' PROMPT <<'PROMPT_END' || true
+This is a brand new tool in the Eunoia ecosystem. Give it a name, and write a
+README that says what it is for. That is the whole of the job.
+
+**The name.** The ecosystem keeps a register of names — which are taken, which
+are reserved and what each was reserved for, and how to choose one that is not
+there:
+
+  https://github.com/ajreynol/anoieu/blob/main/tools/ynoia/names.md
+
+Read it first. If one of the reserved names describes what this tool is going to
+do, take it and say so — taking one commits you to the shape of its description
+or to changing it, and either is fine. If none fits, that is the more
+interesting case: pick a word for what the tool does to its subject, and write
+the etymology down in a sentence somebody could disagree with. A name that needs
+no explanation is not following the convention; a name whose explanation is a
+stretch means the scope is not decided yet.
+
+**The README.** One screen, and a reader who has never heard of any of this
+should finish it knowing:
+
+  - what the tool is, and what question it answers;
+  - the question it does *not* answer, which is usually the larger one somebody
+    will assume;
+  - what it would take to run it, even if that is "nothing works yet";
+  - the name, and why that word.
+
+Write what it is *for*, not what it will contain. A roadmap read as a promise is
+worse than no roadmap, so where something does not exist, say so plainly in the
+present tense.
+
+**Comply with nothing.** There is a shared repository policy, and this is not
+the moment for it: no maintenance note, no discussion file, no CI, no layout, no
+documentation index. `join_eo` does that later, when there is something to join
+with, and it will tell you exactly what to add. Do not add files in
+anticipation, and do not read the policy now — knowing what you are building is
+what makes the rest of it decidable, and that order is deliberate.
+
+Leave the work staged and not committed. Then say in two sentences what you
+named it and why, so a person can disagree with the name while it is still free.
+PROMPT_END
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+command -v "$AGENT" >/dev/null 2>&1 || {
+  echo "init_eo: $AGENT is not on PATH" >&2; exit 127; }
+
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+echo "-- init_eo: $(basename "$ROOT") ($ROOT), via $AGENT" >&2
+
+cd "$ROOT"
+if [ "$AGENT" = codex ]; then
+  if [ "$PRINT" = 1 ]; then exec codex exec "$PROMPT"; else exec codex "$PROMPT"; fi
+else
+  if [ "$PRINT" = 1 ]; then exec claude -p "$PROMPT"; else exec claude "$PROMPT"; fi
+fi

@@ -1,0 +1,77 @@
+{
+  "_comment": [
+    "Who is in the Eunoia ecosystem, and on what footing. Read by",
+    "scripts/global_audit, which resolves each `repo` through scripts/repos.local",
+    "the way the other scripts do, and by nothing else.",
+    "",
+    "This is a list somebody maintains, not one anything derives: membership is a",
+    "decision rather than a fact about a tree. `status` is the whole of what this",
+    "file asserts --",
+    "",
+    "  member     declares membership in its README and the check passes",
+    "  candidate  a tool the policy is addressed to, which has not joined",
+    "  served     outside the ecosystem, and the reason it exists. Not a",
+    "             candidate, and not to be asked -- see docs/policy.md",
+    "  child      a child project inside another repository here",
+    "",
+    "A status is changed by a person. scripts/global_audit may report that one",
+    "looks wrong; it does not edit this file on its own."
+  ],
+  "anoieu": {
+    "status": "member",
+    "repo": "anoieu",
+    "url": "https://github.com/ajreynol/anoieu",
+    "what": "the analyzer and the fuzzer; keeps the ecosystem's policy"
+  },
+  "cvc5": {
+    "status": "served",
+    "repo": "cvc5",
+    "url": "https://github.com/cvc5/cvc5",
+    "what": "the solver, and the owner of CPC. The ecosystem exists to serve it"
+  },
+  "ethos": {
+    "status": "candidate",
+    "repo": "ethos",
+    "url": "https://github.com/cvc5/ethos",
+    "what": "the proof checker, and the home of the Eunoia manual"
+  },
+  "ethos-eoc": {
+    "status": "candidate",
+    "repo": "ethos",
+    "url": "https://github.com/cvc5/ethos",
+    "what": "the Eunoia compiler: a second binary from the ethos tree, branch ethosEoc3"
+  },
+  "logos": {
+    "status": "candidate",
+    "repo": "logos",
+    "url": "https://github.com/ajreynol/logos",
+    "what": "the Lean development, and the owner of Cpc.eos"
+  },
+  "eudaimonia": {
+    "status": "candidate",
+    "repo": "eudaimonia",
+    "url": "https://github.com/ajreynol/eudaimonia",
+    "what": "the calculus template: bring a signature, get a checker and its proofs"
+  },
+  "dokimasia": {
+    "status": "candidate",
+    "repo": "dokimasia",
+    "url": "https://github.com/ajreynol/dokimasia",
+    "what": "reads cvc5's proof-production C++ and asks what no proof step covers"
+  },
+  "sapheneia": {
+    "status": "child",
+    "parent": "anoieu",
+    "what": "Eunoia described as a language definition rather than as a checker's manual"
+  },
+  "ynoia": {
+    "status": "child",
+    "parent": "anoieu",
+    "what": "whether the ecosystem's arrangement earns its machinery, and what it is missing"
+  },
+  "euthyna": {
+    "status": "child",
+    "parent": "eudaimonia",
+    "what": "what the proof in logos is made of, and where its weight sits"
+  }
+}
