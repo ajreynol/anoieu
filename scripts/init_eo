@@ -47,22 +47,20 @@ while [ $# -gt 0 ]; do
 done
 
 read -r -d '' PROMPT <<'PROMPT_END' || true
-This is a brand new tool in the Eunoia ecosystem. Give it a name, and write a
-README that says what it is for. That is the whole of the job.
+This is a brand new tool in the Eunoia ecosystem. Write the README that says
+what it is for. That is the whole of the job.
 
-**The name.** The ecosystem keeps a register of names — which are taken, which
-are reserved and what each was reserved for, and how to choose one that is not
-there:
+**The name is already decided.** You do not choose it, and you do not propose an
+alternative — it was settled before this repository existed, and it is recorded
+in the ecosystem's register:
 
   https://github.com/ajreynol/anoieu/blob/main/tools/ynoia/names.md
 
-Read it first. If one of the reserved names describes what this tool is going to
-do, take it and say so — taking one commits you to the shape of its description
-or to changing it, and either is fine. If none fits, that is the more
-interesting case: pick a word for what the tool does to its subject, and write
-the etymology down in a sentence somebody could disagree with. A name that needs
-no explanation is not following the convention; a name whose explanation is a
-stretch means the scope is not decided yet.
+Find the entry whose name matches this repository's. It carries the etymology and
+a line of scope, and it may point at a proposal with more. **If there is no
+entry, stop and say so** rather than inventing one: a name nobody registered
+means a step was skipped, and that is much cheaper to find out now than after a
+README argues for it.
 
 **The README.** One screen, and a reader who has never heard of any of this
 should finish it knowing:
@@ -71,7 +69,9 @@ should finish it knowing:
   - the question it does *not* answer, which is usually the larger one somebody
     will assume;
   - what it would take to run it, even if that is "nothing works yet";
-  - the name, and why that word.
+  - the name, and why that word — from the register's account of it, not one you
+    invent. You may say where you think the etymology is a stretch; the name
+    stands either way.
 
 Write what it is *for*, not what it will contain. A roadmap read as a promise is
 worse than no roadmap, so where something does not exist, say so plainly in the
@@ -92,8 +92,8 @@ that if this README turns out to be wrong, somebody can see what you were workin
 from instead of guessing — the register moves, and the version you read is the
 only thing that explains what you wrote.
 
-Leave the work staged and not committed. Then say in two sentences what you
-named it and why, so a person can disagree with the name while it is still free.
+Leave the work staged and not committed. Then say in two sentences what you took
+the scope to be, so a person can correct it before anything is built on it.
 PROMPT_END
 
 if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi

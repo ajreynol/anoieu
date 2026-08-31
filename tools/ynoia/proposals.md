@@ -113,7 +113,11 @@ and the code follows from that. The argument against is the honest one in the
 table: it is a name about *communication in general* attached to a tool about
 reporting in particular.
 
-Whoever builds it may reject all five. It is their repository.
+**The name is ours to decide, and it is decided before the repository exists.**
+It comes out of a shared register and a proposal argued here, so it is not a
+thing to hand to whoever picks the work up — a name chosen at build time is a
+name nobody else can plan around. What is *theirs* is everything after: the
+scope, the interface, the pace, and whether the tool ever joins this ecosystem.
 
 ### The proposal
 
@@ -159,7 +163,8 @@ leaves them free: we are saying we would use it, not that they owe it to us.
    name is claimed until it is done.
 2. **Its owner decides what it is.** `init_eo` is offered as a starting point —
    it takes a name and writes a README saying what the tool is for, and complies
-   with nothing else — but the scope is theirs. So is rejecting all five names.
+   with nothing else. The **scope is theirs**; the name is not, and `init_eo` is
+   written to take it from the register rather than invite one.
 3. **Joining this ecosystem is their choice, later or never.** `join_eo` exists
    when they want it. A tool we depend on is not thereby a member, and we can
    pin a commit of a repository that has never adopted a line of our policy.

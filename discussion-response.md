@@ -66,12 +66,13 @@ itself would be independent.** Its owner decides its scope, its name, and whethe
 it ever joins this ecosystem; we can pin a commit of a repository that has never
 adopted a line of our policy, and a tool we depend on is not thereby a member.
 
-**Five candidate names, none taken:** `koine` (κοινή, the common tongue — the
-shared dialect that let people who spoke differently understand each other) is
-the recommendation, with `angelia` (ἀγγελία, the message rather than the
-messenger) as the fallback, and `homologia`, `paradosis` and `typos` behind them.
-The audit gives the objection to each alongside the claim. Whoever builds it may
-reject all five.
+**Name: `koine`** — κοινή, the common tongue: the shared dialect that let people
+who spoke differently understand each other. Chosen from five candidates, each
+audited with its objection beside its claim; `angelia`, the message rather than
+the messenger, was the runner-up. The name is settled on our side and is not
+the builder's to pick — it comes from a shared register and has to be something
+others can plan around. The **scope** is theirs, as is whether the tool ever
+joins this ecosystem.
 
 The question went to **ynoia**, a child project here that audits whether an idea
 warrants a repository. Its audit is `tools/ynoia/proposals.md`, `P1`, and it
