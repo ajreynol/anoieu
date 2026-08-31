@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+# welcome_eo -- a new tool has appeared; read it and say something useful.
+#
+# Run it here, in anoieu, naming a repository that has just been created. The
+# checkout resolves from scripts/repos.local, as everywhere else.
+#
+#   welcome_eo koine
+#   welcome_eo --show-prompt koine
+#
+# It reads their tree and writes nothing to it. What it produces is one or more
+# topics for *our* docs/discussion.md, addressed to them, staged for a person to
+# carry.
+#
+# **This is a welcome, not an audit.** A new tool has joined nothing: joining is
+# its owner's choice and comes later, or never. The policy check is run and
+# quoted for context, and a failing line at this stage is a fact about what they
+# have not done yet -- most of which `init_eo` told them not to do.
+#
+# If they left a `ynoia-brief.local.md`, it is quoted too: that is the excerpt of
+# the register and the proposal they were actually working from, and when a new
+# README does not match what we asked for, the brief is the only thing that says
+# whether the fault is theirs or ours.
+
+set -euo pipefail
+
+HERE=$(cd "$(dirname "$0")" && pwd)
+ROOT=$(cd "$HERE/.." && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+AGENT=claude
+PRINT=0
+SHOW=0
+NAME=""
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: welcome_eo [--codex] [--print] [--show-prompt] NAME
+
+  NAME            a directory, or a repo id looked up in scripts/repos.local
+                  (shared with process_anoieu), then under $ANOIEU_REPOS.
+  --codex         run codex instead of claude
+  --print         run non-interactively and print the result
+  --show-prompt   print the prompt and exit, running nothing
+
+Run this in anoieu, naming the new repository.
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --codex) AGENT=codex; shift ;;
+    --claude) AGENT=claude; shift ;;
+    --print) PRINT=1; shift ;;
+    --show-prompt) SHOW=1; shift ;;
+    -h|--help) usage ;;
+    -*) echo "welcome_eo: unknown option $1" >&2; usage ;;
+    *) [ -z "$NAME" ] || { echo "welcome_eo: one repository at a time" >&2; usage; }
+       NAME="$1"; shift ;;
+  esac
+done
+[ -n "$NAME" ] || usage
+
+TARGET=""
+if [ -d "$NAME" ]; then
+  TARGET=$(cd "$NAME" && pwd)
+elif [ -f "$REPOS_FILE" ]; then
+  while IFS= read -r line; do
+    case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
+    id=${line%%[[:space:]]*}; path=${line#"$id"}
+    path=${path#"${path%%[![:space:]]*}"}
+    [ "$id" = "$NAME" ] || continue
+    case "$path" in "~"*) path="$HOME${path#\~}" ;; esac
+    [ -d "$path" ] && TARGET=$(cd "$path" && pwd)
+    break
+  done < "$REPOS_FILE"
+fi
+if [ -z "$TARGET" ]; then
+  for r in ${ANOIEU_REPOS:-$HOME}; do
+    [ -d "$r/$NAME" ] && { TARGET=$(cd "$r/$NAME" && pwd); break; }
+  done
+fi
+if [ -z "$TARGET" ]; then
+  echo "welcome_eo: nothing called '$NAME' -- give a path, or add an entry to" >&2
+  echo "            $REPOS_FILE" >&2
+  exit 2
+fi
+
+REPORT=$(python3 "$ROOT/tools/policy_check.py" --root "$TARGET" 2>&1 || true)
+
+BRIEF="They left no ynoia-brief.local.md, so what they read is not recorded."
+if [ -f "$TARGET/ynoia-brief.local.md" ]; then
+  BRIEF="This is what they were working from, copied out of the register and the
+proposal when the repository was initialised:
+
+$(cat "$TARGET/ynoia-brief.local.md")"
+fi
+
+read -r -d '' PROMPT <<PROMPT_END || true
+$NAME is a new tool in the Eunoia ecosystem, checked out at $TARGET. Read it and
+form a first view. **Read their tree; change nothing in it.**
+
+**This is a welcome, not an audit.** They have joined nothing, and joining is
+their owner's choice, later or never. The policy check was run for context only
+and its output is below; at this stage a failing line is a fact about what they
+have not done yet, and most of it is what \`init_eo\` explicitly told them not to
+do. Do not report it to them as a shortfall.
+
+$REPORT
+
+$BRIEF
+
+Read their README first, then whatever else they have. Three questions, in this
+order.
+
+**1. Is this the tool we asked for?** The scope came from ynoia's register and
+its proposal. Where what they wrote differs from what we described, the
+difference is the finding — and it points at us at least as often as at them. A
+proposal that described the wrong tool is our error, and the person who has just
+read it carefully in order to build from it is the best placed anyone will ever
+be to notice. If the brief above shows they were working from something we have
+since changed, that is entirely ours.
+
+**2. What can a reader not answer after one screen?** Judge it as somebody
+arriving with no context: what the tool is, what question it answers, the
+question it does *not* answer, and what running it would take. Be specific about
+the sentence that is missing rather than the section.
+
+**3. What would we want from it that they have not planned?** Say it as a
+request, labelled as one, and say plainly that we would be the ones gaining.
+
+Then draft topics for **our** docs/discussion.md, addressed to $NAME by name, in
+the format docs/policy.md sets out — To, Kind, Status, Opened, Settles when.
+**One topic per thing genuinely worth their time, and none for anything else.** A
+welcome that arrives with four topics attached is not a welcome; if only one of
+the three questions produced something, send one.
+
+Do not tell them to join, and do not attach the joining instructions unless they
+have asked for them. They know where those are, and a first message carrying
+homework reads as a condition on being welcome.
+
+Stage what you write and send nothing. A person carries it.
+PROMPT_END
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+command -v "$AGENT" >/dev/null 2>&1 || {
+  echo "welcome_eo: $AGENT is not on PATH" >&2; exit 127; }
+
+echo "-- welcome_eo: $NAME ($TARGET), via $AGENT" >&2
+
+cd "$ROOT"
+if [ "$AGENT" = codex ]; then
+  if [ "$PRINT" = 1 ]; then exec codex exec "$PROMPT"; else exec codex "$PROMPT"; fi
+else
+  if [ "$PRINT" = 1 ]; then exec claude -p "$PROMPT"; else exec claude "$PROMPT"; fi
+fi

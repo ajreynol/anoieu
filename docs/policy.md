@@ -679,6 +679,16 @@ an untracked `ynoia-brief.local.md`: the register moves, and when a new README
 turns out wrong the version its author was working from is the only thing that
 explains it.
 
+When a new repository appears,
+[`scripts/welcome_eo`](../scripts/welcome_eo) reads it from here and drafts a
+first message: whether it is the tool the proposal described, what a reader
+cannot answer after one screen, and what we would want from it that they have not
+planned. It is explicitly **not** an audit — a tool that has just been created
+has joined nothing, and the policy check is quoted to the reviewer as context
+rather than reported to them as a shortfall. It also quotes their
+`ynoia-brief.local.md` if there is one, because when a new README does not match
+what we asked for, the brief is the only thing that says whose fault that is.
+
 Unlike `join_eo`, that prompt is not reproduced here and not drift-checked. One
 verbatim copy is a thing to keep true; two is a habit, and this one carries no
 compliance instructions to get wrong.

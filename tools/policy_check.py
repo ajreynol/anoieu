@@ -331,7 +331,7 @@ def check_links() -> list[str]:
     for rel in tracked("*.md") + ["scripts/check_anoieu", "scripts/process_anoieu",
                                     "scripts/join_eo", "scripts/check_join_eo",
                                     "scripts/process_discussion", "scripts/init_eo",
-                                    "scripts/global_audit"]:
+                                    "scripts/global_audit", "scripts/welcome_eo"]:
         full = os.path.join(ROOT, rel)
         if not os.path.isfile(full):
             continue

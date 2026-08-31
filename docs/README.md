@@ -76,8 +76,10 @@ whether one has — both defined by
 conclude the fault is ours, and is told to fix it here when it is. And three more:
 [`process_discussion`](../scripts/process_discussion), run here to work what
 another repository has addressed to us — read-only until a person names a topic;
-[`init_eo`](../scripts/init_eo), run in a brand new repository to name it and say
-what it is for, with nothing to comply with yet; and
+[`init_eo`](../scripts/init_eo), run in a brand new repository to say what it is
+for, with nothing to comply with yet; [`welcome_eo`](../scripts/welcome_eo), run
+here when one appears, to read it and draft a first message rather than a
+verdict; and
 [`global_audit`](../scripts/global_audit), which runs the checker over every
 member of `tools/ecosystem.json` checked out here and reads across the
 results. The prompts are the workflow; the scripts are a way of running them,
