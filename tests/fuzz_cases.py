@@ -25,9 +25,9 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from tools.anoieu_fuzz.checkers import classify, from_config, load_config  # noqa: E402
-from tools.anoieu_fuzz.codes import CODES, KIND_TO_CODE  # noqa: E402
-from tools.anoieu_fuzz.gen import (  # noqa: E402
+from anoieu_fuzz.checkers import classify, from_config, load_config  # noqa: E402
+from anoieu_fuzz.codes import CODES, KIND_TO_CODE  # noqa: E402
+from anoieu_fuzz.gen import (  # noqa: E402
     Case,
     unwrap,
     absolutize,
@@ -35,8 +35,8 @@ from tools.anoieu_fuzz.gen import (  # noqa: E402
     reformat,
     split_commands,
 )
-from tools.anoieu_fuzz.triage import Corpus, Finding, judge, shrink  # noqa: E402
-from tools.anoieu_fuzz import report as reporting  # noqa: E402
+from anoieu_fuzz.triage import Corpus, Finding, judge, shrink  # noqa: E402
+from anoieu_fuzz import report as reporting  # noqa: E402
 
 # A checker that accepts anything whose parentheses balance. It stands for the
 # permissive side of a disagreement.
@@ -120,7 +120,7 @@ def config(directory: str, name: str, **checkers: str) -> str:
 
 def run(*argv: str) -> tuple[int, str, str]:
     p = subprocess.run(
-        [sys.executable, "-m", "tools.anoieu_fuzz", *argv], capture_output=True, text=True, cwd=ROOT
+        [sys.executable, "-m", "anoieu_fuzz", *argv], capture_output=True, text=True, cwd=ROOT
     )
     return p.returncode, p.stdout, p.stderr
 
@@ -184,7 +184,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
 
     # -- the oracle
 
-    from tools.anoieu_fuzz.checkers import Outcome  # noqa: PLC0415
+    from anoieu_fuzz.checkers import Outcome  # noqa: PLC0415
 
     empty = Case(["(a)"])
     agree = [Outcome("x", "correct", "accept"), Outcome("y", "correct", "accept")]
@@ -266,7 +266,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     # that *that file* disagrees. The bucket does not say where a checker
     # refused, so an edit the verdict does not depend on holds it and survives --
     # which is how a promoted reproducer came to carry a cut the reference had
-    # never looked at. See shrink()'s docstring and docs/reports.md.
+    # never looked at. See shrink()'s docstring and docs/reports/reports.md.
     seeded = Case(["(keep (a (b c)) d)", "(cmd7)"], source="seed:committed.cpc")
     untouched, spent_seed = shrink(seeded, probe, "B")
     case("a seed run as it stands is not shrunk",
@@ -439,7 +439,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     # in the closed half and is accounted for there.
     text = ""
     for name in ("open-findings.md", "closed-findings.md"):
-        path = os.path.join(ROOT, "docs", name)
+        path = os.path.join(ROOT, "docs", "reports", name)
         text += open(path).read() if os.path.isfile(path) else ""
     unlisted = [k for k in reporting.rows() if f"`{k}`" not in text]
     case(

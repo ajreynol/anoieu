@@ -929,7 +929,7 @@ nothing checks it; it is that the check runs after a checker has been generated,
 reads the output rather than the input, and can therefore only report what a
 signature *became*. Answering the same questions from the signature and its
 semantics — before anything is generated, in terms the author wrote — is
-[eud-1](../../docs/reports.md#eudaimonia--the-template-for-other-calculi).
+[eud-1](../../docs/reports/reports.md#eudaimonia--the-template-for-other-calculi).
 
 *Its calculus profile has answers that are declared rather than verified.* Seven
 questions; five checked against what the compiler emitted, two recorded on

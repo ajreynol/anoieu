@@ -10,7 +10,7 @@ pass, the desugarer and the CI plumbing are written, and run over CPC on every
 push — where they have found three real bugs. A fuzzer for the checkers
 themselves,* [the anoieu fuzzer](docs/fuzzing.md)*, is the newest part.*
 
-## Two things this repository is
+## Three things this repository is
 
 **A tool**, first: an analyzer you run over a signature, in an editor or in CI,
 that reports what ethos accepts and should not.
@@ -20,6 +20,16 @@ signature in ethos, a semantics set in logos, a gap in the language itself — s
 it has to be published where its owner will read it, argued where they can
 disagree with it, and tracked until it is resolved or declined. This repository
 is that somewhere.
+
+**And the place the Eunoia ecosystem's shared policy is kept.** How a repository
+in this ecosystem is arranged, what its front page must say about who is writing
+it, how tools talk to one another, and what may be kept in a tree that is not
+part of what it ships — that is [`docs/policy.md`](docs/policy.md), written to
+be adopted rather than admired. It is arguably the most useful thing here: the
+analyzer reports on four projects, and the policy is what lets a fifth join
+without anybody negotiating it from scratch.
+[Joining](docs/policy.md#joining-the-eunoia-ecosystem) takes one sentence in
+your README and one CI step, and anoieu checks it.
 
 > **A successful pass is not a clean bill of health.**
 >
@@ -33,7 +43,7 @@ is that somewhere.
 > We publish defects and never assurances, deliberately: a false sense of
 > security is much harder to withdraw than a wrong finding. The position in full,
 > shared with [dokimasia](https://github.com/ajreynol/dokimasia), is
-> [`docs/reporting-policy.md`](docs/reporting-policy.md).
+> [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md).
 
 ## What it finds
 
@@ -83,8 +93,8 @@ implementation — is one of the
 future projects nobody has started, and does not exist.
 
 ```bash
-ETHOS=… LOGOS=… python3 -m tools.anoieu_fuzz run --mode proof -n 2000       # ethos against logos, on CPC
-ETHOS=…              python3 -m tools.anoieu_fuzz run --mode signature      # arbitrary signatures, at ethos
+ETHOS=… LOGOS=… python3 -m anoieu_fuzz run --mode proof -n 2000       # ethos against logos, on CPC
+ETHOS=…              python3 -m anoieu_fuzz run --mode signature      # arbitrary signatures, at ethos
 ```
 
 Findings are shrunk to a reproducer, deduplicated into buckets, and then go into
@@ -103,17 +113,17 @@ has to do to join in.
 
 ## If you own a tool in the Eunoia ecosystem
 
-[`docs/reports.md`](docs/reports.md) carries every open ask anoieu makes of
+[`docs/reports/reports.md`](docs/reports/reports.md) carries every open ask anoieu makes of
 anyone, each with an id, a state, and the reasoning underneath it:
 
 | you own | waiting for you |
 | --- | --- |
-| **cvc5** — the CPC signature | [2 requests they made of us; 1 finding fixed, and 1 we had recorded as fixed that never was](docs/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
-| **ethos** — the proof checker | [3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption, and 2 the fuzzer found: a crash and an error path with no location](docs/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
-| **ethos-eoc** — the Eunoia compiler | [3 integrations, including the `is_list_nil` diff its own docs ask for](docs/reports.md#ethos-eoc--the-eunoia-compiler) |
-| **logos** — the Lean development | [1 dead entry confirmed, 1 regeneration, 1 CI adoption, and an open question about a regression test of theirs that ethos will not take](docs/reports.md#logos--the-lean-development) |
-| **eudaimonia** — the calculus template | [2 preflight integrations](docs/reports.md#eudaimonia--the-template-for-other-calculi) |
-| **Eunoia** — the language and its manual | [7 proposed changes, from what writing the analyzer turned up](docs/reports.md#eunoia-itself--the-language-and-its-manual) |
+| **cvc5** — the CPC signature | [2 requests they made of us; 1 finding fixed, and 1 we had recorded as fixed that never was](docs/reports/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
+| **ethos** — the proof checker | [3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption, and 2 the fuzzer found: a crash and an error path with no location](docs/reports/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
+| **ethos-eoc** — the Eunoia compiler | [3 integrations, including the `is_list_nil` diff its own docs ask for](docs/reports/reports.md#ethos-eoc--the-eunoia-compiler) |
+| **logos** — the Lean development | [1 dead entry confirmed, 1 regeneration, 1 CI adoption, and an open question about a regression test of theirs that ethos will not take](docs/reports/reports.md#logos--the-lean-development) |
+| **eudaimonia** — the calculus template | [2 preflight integrations](docs/reports/reports.md#eudaimonia--the-template-for-other-calculi) |
+| **Eunoia** — the language and its manual | [7 proposed changes, from what writing the analyzer turned up](docs/reports/reports.md#eunoia-itself--the-language-and-its-manual) |
 
 We would rather show you what is checked than promise anything. Every push runs:
 
@@ -122,13 +132,13 @@ We would rather show you what is checked than promise anything. Every push runs:
 | each check reports the minimal signature written for it, and stays silent on the one it should not | [`tests/witnesses/`](tests/witnesses) — one file per case, readable in a minute. The suite also prints which checks have no witness yet |
 | what **ethos** says about every one of those files, unchanged since a real run recorded it | [`tests/oracle.json`](tests/oracle.json) — written by running ethos, never by hand. This is what backs "ethos accepts this and should not" |
 | CPC reports exactly what a committed baseline says, warnings denied | [`tests/corpus/cpc-baseline.json`](tests/corpus/cpc-baseline.json) — a change that invents a false positive fails *this* build before it reaches yours |
-| the report matches the commits it says it was measured against | [`docs/corpus.md`](docs/corpus.md) and `tools/deps.lock`, re-measured on every push |
+| the report matches the commits it says it was measured against | [`docs/reports/corpus.md`](docs/reports/corpus.md) and `tools/deps.lock`, re-measured on every push |
 
 Anything else we say about how we will behave — narrowing a check that fired
 wrongly, filing nothing twice — is an intention rather than a guarantee. Those
-are written down in [`docs/reporting-policy.md`](docs/reporting-policy.md), and worth
+are written down in [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md), and worth
 whatever our record of keeping them is worth; that record is the log in
-[`docs/reports.md`](docs/reports.md).
+[`docs/reports/reports.md`](docs/reports/reports.md).
 
 Working one of these with an assistant is routine enough that we keep a prompt
 for it. What comes back is your triage rather than a verdict, and we treat it
@@ -139,12 +149,12 @@ closes a row until the artifact it names says what happened.
 
 | | |
 | --- | --- |
-| [`docs/reports.md`](docs/reports.md) | what anoieu is asking of whom, how each finding was confirmed, and what came back |
-| [`docs/reporting-workflow.md`](docs/reporting-workflow.md) | how a finding is handled: the conventions, the three prompts, and how to run these checks in your own CI |
+| [`docs/reports/reports.md`](docs/reports/reports.md) | what anoieu is asking of whom, how each finding was confirmed, and what came back |
+| [`docs/reports/reporting-workflow.md`](docs/reports/reporting-workflow.md) | how a finding is handled: the conventions, the three prompts, and how to run these checks in your own CI |
 | [`docs/usage.md`](docs/usage.md) | the interface — every command and option, configuration, baselines, suppression, and the test suite |
 | [`docs/fuzzing.md`](docs/fuzzing.md) | the anoieu fuzzer, the fuzzer: what its oracle is, how a reproducer is shrunk, and how to point it at your checker |
-| [`docs/postmortem.md`](docs/postmortem.md) | one round of the reporting loop, as a log: what the assistant at the far end did with each finding, what we got wrong, and what changed |
-| [`docs/reporting-policy.md`](docs/reporting-policy.md) | what may be published about somebody else's code, and why |
+| [`docs/reports/postmortem.md`](docs/reports/postmortem.md) | one round of the reporting loop, as a log: what the assistant at the far end did with each finding, what we got wrong, and what changed |
+| [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md) | what may be published about somebody else's code, and why |
 | [`docs/notes.md`](docs/notes.md) | what ethos misses, what we have established about `.eo` and `.eos`, and the design |
 | [`docs/README.md`](docs/README.md) | the index, and the files a run generates: the open findings, the corpus, the check catalogue |
 
@@ -167,8 +177,14 @@ ever be asked to do, and checks all of it, with no proof in hand.
 
 ## How this repository is maintained
 
+This repository is part of the **Eunoia ecosystem** and follows its shared
+repository policy — which it also keeps, in
+[`docs/policy.md`](https://github.com/ajreynol/anoieu/blob/main/docs/policy.md).
+Keeping it is not an exemption from it: this README is checked against that
+policy on every push, by the same command any other repository would run.
+
 **Written by AI agents, under light human supervision.** A human directs the
 work, reads what is published and decides what is filed; nobody vets the
 internal design, and nothing reaches another project's issue tracker without
-review. [`docs/reporting-policy.md`](docs/reporting-policy.md) says what that does and does
+review. [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md) says what that does and does
 not cover, and why the intended audience is experts.

@@ -17,7 +17,7 @@ this run taught us about working findings* is here.
 
 **Whose job.** The anoieu maintainer processing a reply — step 7 of prompt two in
 [`reporting-workflow.md`](reporting-workflow.md#prompt-two-the-follow-up), which is
-what [`scripts/process_anoieu`](../scripts/process_anoieu) runs. Not the project
+what [`scripts/process_anoieu`](../../scripts/process_anoieu) runs. Not the project
 that owns the finding: they send feedback, we decide what it changed here.
 
 **When.** Every run, by default. The test an entry used to have to pass — did
@@ -105,7 +105,7 @@ Updated each round. This is the part to read if you want to know whether the loo
 is paying for itself.
 
 **What is working.** Re-measuring is exact and is one command each way —
-`tools/run.py --pinned` for the checks, `tools.anoieu_fuzz verify` for the reproducers
+`tools/run.py --pinned` for the checks, `anoieu_fuzz verify` for the reproducers
 — so *does this still hold* is a question with an answer rather than a judgement.
 Moving a row is a two-line edit. The two labels, `TRIAGE:` and `HUMAN RESPONSE:`,
 survived contact with a real reply and did the work they exist for. Naming the
@@ -136,7 +136,7 @@ to what a finding *is* rather than a tidy-up — the first five in logos's words
 further thread, from this side:
 the record is now edited mostly by an assistant, and what must stay true of it
 after such an edit is planned — not built — in
-[`notes.md`](notes.md#7a-maintenance-coherence--todo).
+[`notes.md`](../notes.md#7a-maintenance-coherence--todo).
 
 | what | why it matters | cost of not doing it |
 | --- | --- | --- |
@@ -238,7 +238,7 @@ direction. It will not always be the safe direction.
 `EO0054` now names the declaration it took `:right-assoc-nil` from, which is the
 one line that would have made the `Nary.eo` mismatch visible without an
 experiment, and says "a `cons`" rather than "an `cons`".
-[`fuzzing.md`](fuzzing.md#the-codes) now carries the fact that decides what
+[`fuzzing.md`](../fuzzing.md#the-codes) now carries the fact that decides what
 *fixed* means for every `FUZ` row — that ethos aborts on ordinary errors too, so
 how a checker exits is not the finding — which was in `codes.py`, two hops from
 the report, and which the maintainer called out as load-bearing for all three of
@@ -274,7 +274,7 @@ three cvc5 rows closed as *fixed upstream* on a fix that never landed, unnoticed
 for three months because a closed id is one nothing re-derives — adopted on
 purpose. So it is booked rather than assumed away. A row closed before its change
 has landed ends its verdict with `awaiting landing: <project> <branch> <commit>`;
-[`tools/landing.py`](../tools/landing.py) reads those back and asks each
+[`tools/landing.py`](../../tools/landing.py) reads those back and asks each
 project's checkout whether the commit has reached its default branch; and
 `tests/run.py` fails if a verdict is reworded into a marker the audit cannot
 parse, which is the only way a row could leave the audit while still owing it.

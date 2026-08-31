@@ -29,9 +29,9 @@ would be worth writing down for one person working at a person's pace, because
 the natural brakes — fatigue, the cost of typing, the reluctance to rewrite
 something that works — do the job. An agent has none of those brakes, and will
 improve a tool indefinitely, competently, and without ever shipping it. What
-follows is the substitute. The last tenet is different in kind from the other
-four: they are about how to build, and it is about who the building is for and
-who gets to decide it counted.
+follows is the substitute. The last two are different in kind from the first
+four: those are about how to build, and these are about who the building is for,
+who gets to decide it counted, and how to say so out loud.
 
 ## Policy is checked; vision is argued
 
@@ -185,8 +185,8 @@ But that is a decision to be made and stated, not a gap to be left; *it will be
 obvious later what this was for* is not the same as having decided.
 
 Where there is a deliverable, this page hands over to
-[`../docs/reporting-policy.md`](reporting-policy.md) and
-[`../docs/reporting-workflow.md`](reporting-workflow.md): what may be said
+[`../docs/reports/reporting-policy.md`](reports/reporting-policy.md) and
+[`../docs/reports/reporting-workflow.md`](reports/reporting-workflow.md): what may be said
 about code you do not own, what separates a candidate published under your own
 name from a finding carried to its owner, and how a row is closed. Speed belongs
 to producing the deliverable. It does not belong to sending it.
@@ -207,7 +207,7 @@ confers any of those.
 Two things follow, and the second matters more.
 
 The first is that the work should be arranged so the decision is cheap to make
-and cheap to act on, which is most of what tenets 1 to 4 are for: a README that
+and cheap to act on, which is most of what the first four tenets are for: a README that
 answers the question in one screen, CI that demonstrates the claims rather than
 asserting them, an artifact somebody can pick up and judge in a minute.
 Everything that makes a tool legible is also what makes it possible to take
@@ -227,6 +227,46 @@ than a directory as the thing that moves.
 
 *The test:* ask what a person would have to do to take this over on Monday
 morning, and whether anything in the repository is in their way.
+
+**6. Talk to each other.** There is a protocol. Use it.
+
+The characteristic failure across this ecosystem has never been saying too much;
+it is not saying it at all. Two projects stuck on the same boundary for months
+without either writing it down. A check neither of two tools built because each
+assumed the other would. A manual whose intent nobody asked about, worked around
+independently by three people. Every one of those cost more than the message
+would have.
+
+The channel is `docs/discussion.md` in each repository, and
+[`policy.md`](policy.md#the-discussion-file) fixes the format: who it is
+addressed to, named unequivocally, and what would settle it. Use that rather
+than inventing a channel, and rather than saying nothing because no channel
+seemed right.
+
+**An ambitious request costs nothing to make.** A feature request that turns out
+to be too large gets answered *no*, and a no is cheap — it is often the most
+informative thing you will get, because the reason attached to it is usually a
+fact about the subject nobody had written down. What is expensive is the request
+nobody made: the thing you needed, worked around, and never mentioned, so that
+the person who could have provided it in an afternoon never learned it was
+wanted. Ask for the thing you actually want rather than the diminished version
+you think will be accepted.
+
+**Wisdom is about your own power, not their patience.** The judgement worth
+making before you send is *could I do this myself* — because a request for
+something you could have built is the one kind that genuinely wastes somebody's
+time. If it is yours to do, do it and show them. If it is not, ask, and ask for
+the whole of it.
+
+**Then be fearless.** Self-censoring a request because it looks too large is what
+leaves nothing on the table for anybody to say no to, and it is much the more
+common error. The register rules still hold — say honestly whether it is a
+request or a proposal, and admit when the benefit is yours — but nothing in them
+asks you to be small.
+
+*The test:* name something you needed in the last month and worked around
+instead of asking for. That is a topic you did not open, and the protocol was
+there.
 
 ## The record
 
@@ -269,7 +309,7 @@ the ecosystem — a proof checker written in C++ for one purpose becoming a buil
 dependency of a Lean development written for another, because it was the thing
 already able to answer *does this proof check*. It also shows the cost of being
 consumed: a defect in CPC arrives in logos unchanged, which is what
-[`logos-1`](reports.md#logos--the-lean-development) records, and why
+[`logos-1`](reports/reports.md#logos--the-lean-development) records, and why
 auditing the copy filed cvc5's findings under logos's name seventeen times
 before we stopped reading it.
 
@@ -321,11 +361,11 @@ the generated checker's verdicts against it, keeping two implementations on
 purpose.
 
 **anoieu → everything.** One row per project in
-[`../docs/reports.md`](reports.md), each with an id and a state. To cvc5,
+[`../docs/reports/reports.md`](reports/reports.md), each with an id and a state. To cvc5,
 three real defects found on the first audit and confirmed against ethos — `cvc5-1`
 is `proofs/eo/cpc/programs/Strings.eo:42` and `:55`, two programs declaring
 `:signature ((Seq T)) Int` whose every case returns a Boolean — plus
-[`report/cpc-audit.html`](report/cpc-audit.html), rendered for readers who
+[`report/cpc-audit.html`](reports/cpc-audit.html), rendered for readers who
 will not clone anything. To ethos, three confirmed defects and three diagnostics
 worth improving, and separately two the fuzzer provoked: an uncaught C++
 exception on `(declare-const f (->))`, and an error path that skips ethos's own
@@ -345,7 +385,7 @@ configuration through elaboration to the Eunoia serialiser, and asks whether any
 path reaches an inference no proof step covers — particularly under
 `--safe-mode=safe`, where cvc5 promises that anything it solves it can prove.
 The two tools share no code and neither depends on the other; what they share is
-a position, [`../docs/reporting-policy.md`](reporting-policy.md), maintained here and
+a position, [`../docs/reports/reporting-policy.md`](reports/reporting-policy.md), maintained here and
 referenced there, which is its own kind of exchange and a cheap one. They meet at
 exactly one seam — `src/proof/eo/`, where cvc5 turns an internal proof into
 Eunoia. A rule cvc5 emits that CPC does not declare is invisible to each tool in
@@ -382,7 +422,7 @@ them would have excluded the best work on this list.
 
 **A person carried every one of them.** No exchange on this list was made by
 machinery, and that is the standing rule rather than a description of the
-current state — [`../docs/reporting-policy.md`](reporting-policy.md) is where it is
+current state — [`../docs/reports/reporting-policy.md`](reports/reporting-policy.md) is where it is
 argued.
 
 ## The front page
@@ -468,7 +508,7 @@ health — these are things a reader needs in order to weigh what follows. They
 belong where the reader arrives, stated once, plainly, in the tool's own voice.
 That is a different act from hedging, and the difference is that a caveat can be
 used and a mood cannot. Where those particular limits are argued is
-[`../docs/reporting-policy.md`](reporting-policy.md); the point here is only that
+[`../docs/reports/reporting-policy.md`](reports/reporting-policy.md); the point here is only that
 stating them clearly is entirely compatible with standing behind the work, and
 is in fact most of what makes standing behind it believable.
 
@@ -568,7 +608,7 @@ absence of that somebody.
 | who may strengthen a claim | a person, asked directly, with the evidence attached |
 | what enforces the policy | `tools/policy_check.py`, in CI |
 | what enforces the vision | nothing, deliberately — it is argued, not checked |
-| what governs a deliverable | [`../docs/reporting-policy.md`](reporting-policy.md), [`../docs/reporting-workflow.md`](reporting-workflow.md) |
+| what governs a deliverable | [`../docs/reports/reporting-policy.md`](reports/reporting-policy.md), [`../docs/reports/reporting-workflow.md`](reports/reporting-workflow.md) |
 | where speculative work goes instead | a child project, `tools/X/`, under [`policy.md`](policy.md) |
 | what confers standing on the tool | a person choosing to use, run or own it — never the agent's say-so |
 | the ending to aim for | a human takes over the development |
@@ -582,7 +622,7 @@ away from you has done everything on this page except the thing it was for.
 
 ## The report card
 
-How each tool in the ecosystem stands against the five tenets. It is here
+How each tool in the ecosystem stands against the six tenets. It is here
 because a vision document with nothing measured against it is a wish, and
 because the useful thing for another repository to read is not the rules but
 what happened when somebody applied them to real projects. Graded at the commits
@@ -626,10 +666,10 @@ It is **absolutely not a contract**: none of these projects agreed to these
 tenets, most predate this page, nothing here creates an obligation, and nobody
 may hold a project to a sentence in it. It is **not a set of findings**: a claim
 about somebody else's work goes through
-[`../docs/reporting-policy.md`](reporting-policy.md) and
-[`../docs/reporting-workflow.md`](reporting-workflow.md) — confirmed,
+[`../docs/reports/reporting-policy.md`](reports/reporting-policy.md) and
+[`../docs/reports/reporting-workflow.md`](reports/reporting-workflow.md) — confirmed,
 reproduced small, carried by a person — and nothing here has been through any of
-that, nor has any row in [`../docs/reports.md`](reports.md) come from it.
+that, nor has any row in [`../docs/reports/reports.md`](reports/reports.md) come from it.
 It is **not evenly evidenced**: this repository reads `.eo` and `.eos`, so what it
 knows about a C++ compiler's stages or a Lean proof's structure is read out of
 documents rather than measured, and the paragraphs say which. And it is **not a
@@ -749,27 +789,43 @@ a committed CPC baseline with warnings denied so a change inventing a false
 positive fails *this* build before it reaches anyone else's, generated documents
 regenerated and diffed on every push, and `--pinned` restoring recorded commits
 so the build goes red for its own reasons only. Tenet 4 is met:
-`report/cpc-audit.html` for readers who will not clone anything, six shrunk
+`reports/cpc-audit.html` for readers who will not clone anything, six shrunk
 reproducers under `tests/fuzz/`, and a ledger carrying an id and a state per row.
+Tenet 1 has one genuine instance now — `tools/policy_check.py --root` is a thing
+another repository runs in its own CI, and the interface is tested here rather
+than trusted.
 
-**Elleipsis.** Tenet 1, badly. Findings have reached six projects, but **no other
-repository runs this tool**: the CI adoptions are proposals rather than jobs, and
-nothing anywhere consumes its machine output. Nothing the fuzzer found has been
-filed upstream. Auditing logos's copy of CPC filed cvc5's findings under logos's
-name seventeen times before anyone noticed. Tenet 5 is unmet by definition, no
-person having taken over developing it.
+**Elleipsis.** Tenet 1 is still where the honest mark is low. Findings have
+reached six projects, but **no other repository runs the analyzer**: the CI
+adoptions are proposals rather than jobs, and nothing anywhere consumes its
+machine output. Nothing the fuzzer found has been filed upstream. Auditing
+logos's copy of CPC filed cvc5's findings under logos's name seventeen times
+before anyone noticed. Tenet 5 is unmet by definition, no person having taken
+over developing it.
+
+There is a newer and more specific failure, and it belongs here rather than in a
+footnote. The governance layer — this page, the policy, the coherence document,
+the reporting policy and workflow, the discussion protocol — now runs to
+thousands of lines, and the stretch of work that produced most of it **changed
+nothing about what the analyzer finds**. Two silent defects were introduced into
+the fuzzer during it, one of which would have let CI pass while verifying
+nothing at all. That is tenet 2 working, and it is also the clearest evidence
+available that documentation about the work is not the work. This page imposes a
+clutter budget on the README and none on itself.
 
 **Parainesis.** File the two ethos fuzzer findings, and get one CI job running in
 one other repository. Both have been the obvious next thing for long enough that
-the tenet 1 mark is now a description of avoidance rather than of difficulty —
-the machinery to do either has been finished for a while, and what is missing is
-the decision to spend somebody else's attention. Building a seventh check is the
-comfortable alternative and is not the work.
+the tenet 1 mark is a description of avoidance rather than of difficulty — the
+machinery has been finished for a while, and what is missing is the decision to
+spend somebody else's attention. Then stop writing governance. Every further page
+here has to displace a check, a finding, or an hour of somebody else's reading,
+and the sharp version of this tenet applies to its author before anybody else:
+**writing a seventh document is the comfortable alternative and is not the work.**
 
 ### dokimasia
 
 **Arete.** Tenet 1 in the cheapest available form: it adopted this repository's
-[`../docs/reporting-policy.md`](reporting-policy.md) by reference
+[`../docs/reports/reporting-policy.md`](reports/reporting-policy.md) by reference
 instead of forking a copy, so there is one position, one place to argue about it,
 and neither tool carrying a stale paraphrase of the other.
 
@@ -823,7 +879,6 @@ Two exist, tracked here in a sentence each and nowhere else:
 | --- | --- | --- |
 | [**sapheneia**](https://github.com/ajreynol/anoieu/tree/main/tools/sapheneia) | anoieu | a description of Eunoia written as a language definition rather than as a manual for a checker, in order to find where the existing account is silent, ambiguous or contradicts itself |
 | [**euthyna**](https://github.com/ajreynol/eudaimonia/tree/main/tools/euthyna) | eudaimonia | in its own words, an account of *the proof in logos: what it is made of, where its weight sits, and what would have to change for it to cover more than one calculus* — with a measurement harness over an unmodified logos checkout |
-| **anoieu_fuzz** | anoieu | a fuzzer for the programs that *read* Eunoia: it writes signatures and proofs nobody would write, hands them to a checker, and watches for the answer a checker should never give |
 | [**ynoia**](../tools/ynoia) | anoieu | *why Eunoia* — whether the ecosystem's arrangement earns its machinery, the strongest case against it, six ways it could be arranged instead, and the tools whose absence distorts the argument |
 
 Note what euthyna's row shows about the shape: its parent is eudaimonia and its
@@ -831,7 +886,7 @@ subject is logos, a third project entirely. It was also one of the six code
 names in [ynoia's account](../tools/ynoia/why-eunoia.md) reserved for work
 nobody had started, which is what starting one looks like.
 
-**Three of the four have not earned a place in this vision.** A child project is
+**Neither has earned a place in this vision.** A child project is
 a claim on attention that has so far produced nothing, and what earns it a place
 is a deliverable in the sense of tenet 4 — a finding carried, a measurement
 somebody uses, an argument somebody acts on. Until then it is named here and
@@ -842,18 +897,14 @@ outcomes rather than one — it graduates into its own repository, it is folded
 into the parent, or it is retired in place with a line saying what was learned.
 What is not an outcome is going quiet.
 
-**The fuzzer is the case that does not fit, and it is left not fitting on
-purpose.** It has earned its keep — an uncaught C++ exception in ethos, an error
-path that skips ethos's own convention, three proofs ethos and logos answer
-differently with one now a committed regression test — and it is depended on:
-CI runs it, the report generator imports it, its findings hold rows under
-`FUZ0001`–`FUZ0005`, and the front page advertises it. So it is a child project
-that fails the island test outright, and it stays one for now because *which*
-promotion it deserves — its own repository, or folding into the parent as a
-second shipped tool — is a decision nobody has taken. Rule 10 of
-[`policy.md`](policy.md) is where that is written down and where the broken
-rules are named one by one. The point of naming them is that an exception
-somebody chose and an exception nobody noticed look identical a year later.
+**One has already left.** The fuzzer was a child project here until it stopped
+being one: it had earned its keep, and it broke the island rules in four places
+in order to be useful — importing from the parent, being imported back, running
+in CI, and sitting on the front page. Those breaks were the evidence, not the
+problem. It has been **folded into the parent** under rule 9 and now ships as
+`anoieu_fuzz/` beside the analyzer. The lesson is worth more than the case: a
+long list of exceptions under rule 10 is not a project to be tolerated, it is a
+promotion nobody has got round to.
 
 This list and rule 3 of [`policy.md`](policy.md) look like they conflict, and do
 not. Rule 3 forbids a child project borrowing its parent's credibility with

@@ -28,7 +28,7 @@ act on, it is written down here:
 
 **Two sources feed this, and the code says which.** `EO`, `DOC` and `TRI` are
 what the checks read out of a signature. **`FUZ` is what the [anoieu
-fuzzer](fuzzing.md) provoked out of a checker** — a crash, a diagnostic outside
+fuzzer](../fuzzing.md) provoked out of a checker** — a crash, a diagnostic outside
 its own convention, or two checkers answering one file differently. A fuzzer
 finding is an (A) like any other and is held to the same standard, with one
 difference in how it is evidenced: it is confirmed by running a binary against
@@ -46,7 +46,7 @@ reply. None of those asks anything; this does.
 
 - ✅ **live** — written, tested, and run over the corpus
 - ◐ **partial** — the useful half exists and the limit is stated
-- ○ **sketched** — designed in [`notes.md`](notes.md#the-design), not written
+- ○ **sketched** — designed in [`notes.md`](../notes.md#the-design), not written
 
 #### If you own one of these tools
 
@@ -107,7 +107,7 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | # | tool | kind | what | state |
 | --- | --- | --- | --- | --- |
 | [cvc5-1](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `programs/Strings.eo:42` and `:55` declare `Int` and return `Bool` | reopened — recorded as fixed, never changed |
-| [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5; may belong to [dokimasia](https://github.com/ajreynol/dokimasia) instead, see [`notes.md`](notes.md#8-a-neighbouring-tool) |
+| [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5; may belong to [dokimasia](https://github.com/ajreynol/dokimasia) instead, see [`notes.md`](../notes.md#8-a-neighbouring-tool) |
 | [cvc5-7](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | keep a reproducer with every claim about first use, and derive severity from whether a call can stay stuck | requested by cvc5 |
 | [ethos-1](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/match-simple.eo:11` declares `<` `:right-assoc` with a `Bool` return | open |
 | [ethos-2](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | an unknown attribute warns and is dropped, silently changing what a term means; make it an error, or at least carry the location | proposed |
@@ -161,7 +161,7 @@ The second thing it is for is slower and possibly worth more: every check is a
 statement about what Eunoia means, so the check catalogue, its witnesses, and
 the differential harness against ethos amount to an executable account of a
 language whose `.eos` half is specified today by one README and the compiler
-that reads it. See [`notes.md`](notes.md#what-we-have-established-about-eo-and-eos).
+that reads it. See [`notes.md`](../notes.md#what-we-have-established-about-eo-and-eos).
 
 ### Status at a glance
 
@@ -176,10 +176,10 @@ that reads it. See [`notes.md`](notes.md#what-we-have-established-about-eo-and-e
 | the builtin layer | is an `eo::` operator applied to the right number of arguments, is this evaluation one the manual says cannot happen, does this literal have a type, is this list operator about an n-ary operator | ✅ |
 | documentation | does the docstring still describe the rule | ✅ |
 | CI plumbing | baselines, suppression comments, config files, SARIF, many entry points | ✅ |
-| full type checking | which rules *may* conclude a non-`Bool` through a program's cases | ○ — [M3](notes.md#7-roadmap) |
-| the triple | does the signature agree with its `.eos` semantics, and those with SMT-LIB | ○ — [M4](notes.md#7-roadmap) |
-| solver-backed obligations | is this `:is-list-nil` predicate actually the operator's nil | ○ — [Tier 5](notes.md#46-tier-5--opt-in-deeper) |
-| editor integration | the same findings while typing, with hover types and cross-triple jumps | ○ — [M5](notes.md#7-roadmap) |
+| full type checking | which rules *may* conclude a non-`Bool` through a program's cases | ○ — [M3](../notes.md#7-roadmap) |
+| the triple | does the signature agree with its `.eos` semantics, and those with SMT-LIB | ○ — [M4](../notes.md#7-roadmap) |
+| solver-backed obligations | is this `:is-list-nil` predicate actually the operator's nil | ○ — [Tier 5](../notes.md#46-tier-5--opt-in-deeper) |
+| editor integration | the same findings while typing, with hover types and cross-triple jumps | ○ — [M5](../notes.md#7-roadmap) |
 
 ---
 
@@ -187,7 +187,7 @@ that reads it. See [`notes.md`](notes.md#what-we-have-established-about-eo-and-e
 
 **Today.** Three real defects, found on the first audit and confirmed against
 ethos, plus documentation drift. Full write-up in [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed);
-the shareable version is [`report/cpc-audit.html`](report/cpc-audit.html).
+the shareable version is [`report/cpc-audit.html`](cpc-audit.html).
 
 **Why it matters here more than anywhere.** CPC is the input to the Lean
 development, to the VC generator, and to every proof cvc5 emits. A defect in it
@@ -649,7 +649,7 @@ statement per attribute, saying which of its conditions are requirements; a
 statement of *when* each requirement is checked, since the answer today ranges
 from "at the declaration" to "when a proof reaches that case"; and the list of
 what a pattern may not hold, which is currently discoverable only from an error
-message. The check catalogue in [`checks.md`](checks.md) is close to being that
+message. The check catalogue in [`checks.md`](../checks.md) is close to being that
 appendix, and it would be a better one if the manual and the checker agreed on
 which of its entries are errors.
 
@@ -722,17 +722,17 @@ in [`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci).
 
 | file | what it is |
 | --- | --- |
-| [`usage.md`](usage.md) | the interface: inputs, commands, options, exit codes |
+| [`usage.md`](../usage.md) | the interface: inputs, commands, options, exit codes |
 | [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) | what has been reported to another repository, and what happened to it |
 | [`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci) | running this in ethos, ethos-eoc, logos and cvc5 |
-| [`checks.md`](checks.md) | every check and its manual page, generated from the registry |
+| [`checks.md`](../checks.md) | every check and its manual page, generated from the registry |
 | [`closed-findings.md`](closed-findings.md) | every finding ruled on, with its verdict; `tools/landing.py` audits the ones closed before their fix landed |
 | [`corpus.md`](corpus.md) | what the checks report on every signature we can find, generated and checked in CI |
 | [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) | what the first runs found, and every false positive that had to be shed first |
-| [`notes.md`](notes.md#what-ethos-misses-and-why) | why ethos does not report these itself, by mechanism |
-| [`notes.md`](notes.md#what-we-have-established-about-eo-and-eos) | what we have established about `.eo` and `.eos`, and where they are unsettled |
-| [`notes.md`](notes.md#the-design) | the roadmap, the check catalogue, the architecture |
-| [`report/cpc-audit.html`](report/cpc-audit.html) | the CPC audit, written for a reader outside the project |
+| [`notes.md`](../notes.md#what-ethos-misses-and-why) | why ethos does not report these itself, by mechanism |
+| [`notes.md`](../notes.md#what-we-have-established-about-eo-and-eos) | what we have established about `.eo` and `.eos`, and where they are unsettled |
+| [`notes.md`](../notes.md#the-design) | the roadmap, the check catalogue, the architecture |
+| [`report/cpc-audit.html`](cpc-audit.html) | the CPC audit, written for a reader outside the project |
 
 
 ## The workings: how each finding was confirmed
@@ -778,7 +778,7 @@ rather than the detection -- ethos reports the pattern one, for instance, as
 the parameter.
 
 The forty-three are the case for the tool.
-[`notes.md`](notes.md#what-ethos-misses-and-why) says why each of them gets past
+[`notes.md`](../notes.md#what-ethos-misses-and-why) says why each of them gets past
 ethos.
 
 ### Real bugs in CPC
@@ -1127,7 +1127,7 @@ Changes the analyzer made as a result:
   `Nary.eo` rows);
 - **a merge is no longer what closes a row** — a maintainer's acceptance and a
   commit on a named branch are, with the landing tracked separately by
-  [`tools/landing.py`](../tools/landing.py) so that the shortcut is booked rather
+  [`tools/landing.py`](../../tools/landing.py) so that the shortcut is booked rather
   than forgotten (`ethos`, seven rows).
 
 ---
@@ -1270,7 +1270,7 @@ would make the analyzer worth running. Tracked as items in
 | a check comparing each rule against cvc5's `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` | open — would catch interface drift that makes an emitted proof uncheckable |
 | documentation checks that compare names and roles, not counts, and distinguish call arguments from pattern variables | open — and it is why cvc5-3 is deferred |
 | diagnostics naming the repository that owns the file | open |
-| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | **less than we claimed.** A baseline entry's id moves with the path root, so changing an entry point invalidates every entry while the findings are identical — which is what happened to `tests/corpus/cpc-baseline.json` when CPC's entry point moved. Tracked as C6 in [`notes.md`](notes.md#7a-maintenance-coherence--todo); releases and the narrowing policy are still not written down |
+| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | **less than we claimed.** A baseline entry's id moves with the path root, so changing an entry point invalidates every entry while the findings are identical — which is what happened to `tests/corpus/cpc-baseline.json` when CPC's entry point moved. Tracked as C6 in [`notes.md`](../notes.md#7a-maintenance-coherence--todo); releases and the narrowing policy are still not written down |
 
 ---
 
@@ -1302,7 +1302,7 @@ apart.
 them.** They are one commit, `292201c2`, cut from `main`@`8709609e`. For the
 four signature rows we ran the checks over the fixed files and over the
 originals: each fix clears its row, and each original still reports it. For the
-three `FUZ` rows `tools.anoieu_fuzz verify` moves every reproducer from `abnormal` to
+three `FUZ` rows `anoieu_fuzz verify` moves every reproducer from `abnormal` to
 `reject`, and the `Error: <file>:<line>.<col>:` text each now prints is
 introduced by that commit and absent from `main` — so each stopped reproducing
 *for the reason on its row*, which is the distinction the follow-up is supposed
@@ -1521,7 +1521,7 @@ who fixed their parser against it.
    identifier or indexed symbol as head of apply"* — not the type error the row
    recorded. logos narrowed `parseTermCore`, added guards in `test/Parser.lean`
    and `test/CpcParser.lean`, and against a build carrying that change the
-   reproducer no longer reproduces: `tools.anoieu_fuzz verify` reports it as `was
+   reproducer no longer reproduces: `anoieu_fuzz verify` reports it as `was
    accept, is reject`. That fix is real and stands on its own, whatever happens
    to this row.
 2. **The disagreement ethos was actually reporting is untouched by that fix, and

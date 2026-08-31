@@ -7,8 +7,8 @@ whether it says something coherent; the fuzzer asks whether the programs that
 *read* signatures behave when one is not.
 
 ```bash
-python3 -m tools.anoieu_fuzz run --mode proof        # ethos against a second checker, on a fixed signature
-python3 -m tools.anoieu_fuzz run --mode signature    # arbitrary signatures, at ethos alone
+python3 -m anoieu_fuzz run --mode proof        # ethos against a second checker, on a fixed signature
+python3 -m anoieu_fuzz run --mode signature    # arbitrary signatures, at ethos alone
 ```
 
 > **This is a baseline, deliberately.** Grammar-directed generation, mutation of
@@ -47,7 +47,7 @@ instrumentation, no corpus feedback loop and no attempt at one. And a run that
 finds nothing means the cases it wrote did not provoke anything —
 
 > **A quiet run is not a clean bill of health.** The same caution
-> [`reporting-policy.md`](reporting-policy.md) states for the analyzer holds here and holds
+> [`reporting-policy.md`](reports/reporting-policy.md) states for the analyzer holds here and holds
 > harder: a fuzzer's silence is a fact about the inputs it happened to write.
 > We publish reproducers and never assurances.
 
@@ -61,14 +61,14 @@ Cases are proofs written against a signature the checkers already agree on
 
 ```bash
 ETHOS=<ethos>/build/src/ethos LOGOS=<logos>/.lake/build/bin/logos \
-  python3 -m tools.anoieu_fuzz run --mode proof -n 2000 \
+  python3 -m anoieu_fuzz run --mode proof -n 2000 \
     --signature <cvc5>/proofs/eo/cpc/Cpc.eo \
     --seed-corpus <logos>/test/regress/sexp
 ```
 
 The vocabulary — which operators exist, what sorts they take, which rules take
 how many premises — is read out of the signature by anoieu's own loader
-(`tools/anoieu_fuzz/vocab.py`). That is the only place the fuzzer touches the analyzer,
+(`anoieu_fuzz/vocab.py`). That is the only place the fuzzer touches the analyzer,
 and it touches the front end rather than the checks. Types are used as
 *shapes*, to pick an argument that is at least plausible; anything a shape does
 not settle becomes a wildcard that matches everything. `--wild` says how often
@@ -100,7 +100,7 @@ crash, unexplained, timeout.
 
 ```bash
 ETHOS=<ethos>/build/src/ethos \
-  python3 -m tools.anoieu_fuzz run --mode signature -n 5000 \
+  python3 -m anoieu_fuzz run --mode signature -n 5000 \
     --seed-corpus <ethos>/tests --jobs 6
 ```
 
@@ -113,7 +113,7 @@ to do; without it, a generated signature mostly exercises the front end.
 `--metamorphic` adds the one differential question a *single* checker can be
 asked: the same file, laid out differently — whitespace and comments, nothing
 else — must get the same answer. The rewrite is deliberately timid, and
-[`tools/anoieu_fuzz/gen.py`](../tools/anoieu_fuzz/gen.py) says exactly what it will not touch.
+[`anoieu_fuzz/gen.py`](../anoieu_fuzz/gen.py) says exactly what it will not touch.
 
 ## Where cases come from
 
@@ -163,7 +163,7 @@ you have benchmarks:
 
 ```bash
 scripts/harvest_cpc_proofs ~/cvc5/test/regress/cli/regress0 --limit 300 --out seeds/
-python3 -m tools.anoieu_fuzz run --mode proof --seed-corpus seeds/ -n 2500
+python3 -m anoieu_fuzz run --mode proof --seed-corpus seeds/ -n 2500
 ```
 
 Three hundred benchmarks yield about a hundred proofs — most of a regression
@@ -211,15 +211,15 @@ new, so a nightly job is one line.
 ## The other commands
 
 ```bash
-python3 -m tools.anoieu_fuzz checkers                  # what is configured, and what is on this machine
-python3 -m tools.anoieu_fuzz one --seed 7              # print one case; run nothing
-python3 -m tools.anoieu_fuzz replay case.cpc           # what each checker says about a file
-python3 -m tools.anoieu_fuzz shrink case.cpc           # cut a case down to what still provokes it
-python3 -m tools.anoieu_fuzz promote fuzz-findings/X   # keep one: move it into tests/fuzz/
-python3 -m tools.anoieu_fuzz report                    # every promoted finding, as diagnostics
-python3 -m tools.anoieu_fuzz verify                    # do they still do what the record says
-python3 -m tools.anoieu_fuzz explain FUZ0002           # what a code means
-python3 -m tools.anoieu_fuzz list-codes                # the four of them
+python3 -m anoieu_fuzz checkers                  # what is configured, and what is on this machine
+python3 -m anoieu_fuzz one --seed 7              # print one case; run nothing
+python3 -m anoieu_fuzz replay case.cpc           # what each checker says about a file
+python3 -m anoieu_fuzz shrink case.cpc           # cut a case down to what still provokes it
+python3 -m anoieu_fuzz promote fuzz-findings/X   # keep one: move it into tests/fuzz/
+python3 -m anoieu_fuzz report                    # every promoted finding, as diagnostics
+python3 -m anoieu_fuzz verify                    # do they still do what the record says
+python3 -m anoieu_fuzz explain FUZ0002           # what a code means
+python3 -m anoieu_fuzz list-codes                # the four of them
 ```
 
 `replay` is how a reproducer is confirmed on another machine, and `shrink` is
@@ -285,15 +285,15 @@ artefact — a mutated `include` pointing at a file that had never existed.
 **Promotion is the step that makes it one**, and it is a command a person types:
 
 ```bash
-python3 -m tools.anoieu_fuzz replay  fuzz-findings/<bucket>/case.eo    # read it, confirm it
-python3 -m tools.anoieu_fuzz promote fuzz-findings/<bucket> --owner ethos --note "..."
+python3 -m anoieu_fuzz replay  fuzz-findings/<bucket>/case.eo    # read it, confirm it
+python3 -m anoieu_fuzz promote fuzz-findings/<bucket> --owner ethos --note "..."
 python3 tools/gen_open_findings.py                               # give it a row
 ```
 
 `promote` copies the reproducer into `tests/fuzz/`, where it is committed
 evidence, beside `tests/witnesses/` which is the same idea for the checks. From
 there it is a finding like any other: a code, an owner, a fingerprint, a row in
-[`open-findings.md`](open-findings.md), and it leaves the open table only when
+[`open-findings.md`](reports/open-findings.md), and it leaves the open table only when
 somebody rules on it.
 
 ### The codes
@@ -309,8 +309,8 @@ provoked**, which is the marker that says where a row came from.
 | `FUZ0004` | warning | a checker did not answer |
 | `FUZ0005` | warning | a checker refused what the reference accepted |
 
-`python3 -m tools.anoieu_fuzz explain FUZ0002` is the page behind one, written beside
-the code in [`../anoieu_fuzz/codes.py`](../tools/anoieu_fuzz/codes.py) so the two
+`python3 -m anoieu_fuzz explain FUZ0002` is the page behind one, written beside
+the code in [`../anoieu_fuzz/codes.py`](../anoieu_fuzz/codes.py) so the two
 cannot drift. `list-codes` is the inventory.
 
 **One thing to know before judging any of these fixed: how a checker exits is
@@ -320,7 +320,7 @@ refusal looks like too. What makes a row is the *absence of an explanation* --
 for `FUZ0002` nothing but a runtime's own words, for `FUZ0003` something said
 outside the `Error: <file>:<line>.<col>:` shape everything else uses. A fix
 lands when the message arrives in that shape, whether or not the process still
-aborts. `tools/anoieu_fuzz/checkers.py:classify` is where the line is drawn, and it is
+aborts. `anoieu_fuzz/checkers.py:classify` is where the line is drawn, and it is
 drawn on what the checker said rather than on how it exited. ethos judged three
 rows against this sentence and said it was the one that decided what *fixed*
 meant; it was only in `codes.py`, two hops from the report.
@@ -338,9 +338,9 @@ it — the same arrangement, for the same reason, as
 hand, and checkable by anyone who has the binary.
 
 ```bash
-python3 -m tools.anoieu_fuzz report                    # every promoted finding, as diagnostics
-python3 -m tools.anoieu_fuzz report --format sarif     # ... and in the shapes anoieu prints
-python3 -m tools.anoieu_fuzz verify                    # re-run every one against the checkers here
+python3 -m anoieu_fuzz report                    # every promoted finding, as diagnostics
+python3 -m anoieu_fuzz report --format sarif     # ... and in the shapes anoieu prints
+python3 -m anoieu_fuzz verify                    # re-run every one against the checkers here
 ```
 
 `verify` is the re-measuring step. It replays each committed reproducer and
@@ -354,13 +354,13 @@ us, and both are things somebody should look at rather than let a row go stale.
 
 The obligations that follow — confirm against a pinned build before filing, and
 never let the tool assign an owner to a disagreement — are in
-[`reporting-workflow.md`](reporting-workflow.md#a-finding-from-the-fuzzer).
+[`reporting-workflow.md`](reports/reporting-workflow.md#a-finding-from-the-fuzzer).
 
 ## What the first runs turned up
 
 Five findings are promoted, and they are in the ledger rather than here:
-[`open-findings.md`](open-findings.md) has the rows, and
-[`reports.md`](reports.md#the-register-what-anoieu-is-asking-and-of-whom) has
+[`open-findings.md`](reports/open-findings.md) has the rows, and
+[`reports.md`](reports/reports.md#the-register-what-anoieu-is-asking-and-of-whom) has
 what is being asked of whom — `ethos-8` and `ethos-9`. In short, from the first
 few thousand cases:
 
@@ -378,7 +378,7 @@ came from a seed run as it stands, the reference had refused on a line the
 shrinker then went on to edit, and the `_` was gone because `shrink` cut it — the
 bucket held throughout, since it says nothing about *where* a refusal happened.
 The shrinker no longer touches a seed run as it stands, and the write-up is in
-[`reports.md`](reports.md#logos-4-the-indexed-operator-what-we-got-wrong). The
+[`reports.md`](reports/reports.md#logos-4-the-indexed-operator-what-we-got-wrong). The
 `declare-fun` row above came the same way and survived only because the shrinker
 happened to find nothing to cut — which is the point: running a seed as it stands
 is the cheapest thing this fuzzer does, and it is the one place where shrinking
@@ -395,14 +395,14 @@ ledger is for; one per bucket would be filing the same thing three times.
 > was produced against the binaries on the machine the fuzzer was written on —
 > ethos 0.2.3 from a local build, logos from a local `lake build`. Re-run each
 > reproducer against a pinned build before it is carried anywhere; that is what
-> [`reporting-workflow.md`](reporting-workflow.md#a-finding-from-the-fuzzer)
+> [`reporting-workflow.md`](reports/reporting-workflow.md#a-finding-from-the-fuzzer)
 > requires, and a fuzzer's output has no special standing.
 
 ## Running it in CI
 
 Not on push. A fuzzer that fails a build finds a new bug and turns somebody's
 unrelated pull request red, which is the one thing
-[`reporting-policy.md`](reporting-policy.md) is most careful about. The `oracle` job already
+[`reporting-policy.md`](reports/reporting-policy.md) is most careful about. The `oracle` job already
 builds ethos and caches it by commit, so the fuzzing steps hang off that job on
 a schedule, upload what they find as an artifact, and warn rather than fail.
 
@@ -450,9 +450,9 @@ path is untested here.
 
 | file | its job |
 | --- | --- |
-| [`tools/anoieu_fuzz/vocab.py`](../tools/anoieu_fuzz/vocab.py) | what a fixed signature offers the generator: operators, their argument shapes, rules and their arities, literal categories. The only place the fuzzer touches anoieu |
-| [`tools/anoieu_fuzz/gen.py`](../tools/anoieu_fuzz/gen.py) | writing a case, damaging a case, splitting a file back into commands, and the one metamorphic rewrite |
-| [`tools/anoieu_fuzz/checkers.py`](../tools/anoieu_fuzz/checkers.py) | running a checker and reducing what it said to `accept` / `reject` / `abnormal` |
-| [`tools/anoieu_fuzz/triage.py`](../tools/anoieu_fuzz/triage.py) | the oracle, the buckets, the shrinker and the corpus |
-| [`tools/anoieu_fuzz/cli.py`](../tools/anoieu_fuzz/cli.py) | `run`, `one`, `replay`, `shrink`, `checkers` |
+| [`anoieu_fuzz/vocab.py`](../anoieu_fuzz/vocab.py) | what a fixed signature offers the generator: operators, their argument shapes, rules and their arities, literal categories. The only place the fuzzer touches anoieu |
+| [`anoieu_fuzz/gen.py`](../anoieu_fuzz/gen.py) | writing a case, damaging a case, splitting a file back into commands, and the one metamorphic rewrite |
+| [`anoieu_fuzz/checkers.py`](../anoieu_fuzz/checkers.py) | running a checker and reducing what it said to `accept` / `reject` / `abnormal` |
+| [`anoieu_fuzz/triage.py`](../anoieu_fuzz/triage.py) | the oracle, the buckets, the shrinker and the corpus |
+| [`anoieu_fuzz/cli.py`](../anoieu_fuzz/cli.py) | `run`, `one`, `replay`, `shrink`, `checkers` |
 | [`tests/fuzz_cases.py`](../tests/fuzz_cases.py) | the harness, against checkers written in the suite so that neither ethos nor logos has to be on the machine |

@@ -23,15 +23,15 @@ Topics anoieu has open with other tools in the Eunoia ecosystem, in the format
 
 **This is not where findings live.** A defect in somebody's file — with a path
 and a line number — is a finding, and it goes through
-[`reporting-workflow.md`](reporting-workflow.md) into
-[`reports.md`](reports.md) with an id, a state and a settling artifact. What is
+[`reporting-workflow.md`](reports/reporting-workflow.md) into
+[`reports.md`](reports/reports.md) with an id, a state and a settling artifact. What is
 here is everything else: what we want from another tool, what we think would
 improve one, what we do not understand about somebody's intent, and what is
 about to move under them.
 
 **Nothing here is delivered by machine.** A person carries a topic to whoever
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
-automatically* in [`reporting-policy.md`](reporting-policy.md).
+automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
 ## D5 — a documented machine-readable output from ethos
 
@@ -100,7 +100,7 @@ cites that record
 
 cvc5 asked for a check comparing each rule against its `ProofRule` declaration,
 its children and arguments, and the reshaping in `eo_printer.cpp`. That is
-`cvc5-6` in [`reports.md`](reports.md), and it sits exactly on the seam where
+`cvc5-6` in [`reports.md`](reports/reports.md), and it sits exactly on the seam where
 cvc5 turns an internal proof into Eunoia.
 
 Both of us can see the seam from one side only. You already read the emitter; we
@@ -151,7 +151,7 @@ Something moved under you, and we moved it.
 
 The page you reference — the shared position on reporting about code you do not
 own — was `docs/philosophy.md`, then briefly `docs/reporting-philosophy.md`, and
-is now [`reporting-policy.md`](reporting-policy.md). Its contents were also
+is now [`reporting-policy.md`](reports/reporting-policy.md). Its contents were also
 refactored: each position now states whether it is *enforced*, *structural*, or
 an *intention* backed by nothing but our record, and a twelfth position was
 added about writing for whoever maintains the receiving project.

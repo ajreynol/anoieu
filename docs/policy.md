@@ -25,7 +25,8 @@ renumber. Retire either in place, with a line saying why.
 | path | what it holds |
 | --- | --- |
 | `README.md` | the front page, and the whole of what any other document may assume has been read |
-| `docs/` | every written document, indexed by `docs/README.md`, together with the documents a run generates |
+| `docs/` | every written document, indexed by `docs/README.md` |
+| `docs/reports/` | everything about the record: the findings ledgers, what was measured, the reporting policy and workflow, the log |
 | `tools/` | the harness: generators, the runner, the dependency manifest — and child projects |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
 | `scripts/` | executable versions of workflows the documents define |
@@ -75,11 +76,36 @@ hand, and a difference in layout is not a finding — not ours to report, and no
 ours to normalise across somebody else's signature. Adopting it once it is ready
 is a TODO, carried in [`coherence.md`](coherence.md).
 
+**No document names a specific AI.** Say *an assistant*, *an agent*, *written by
+AI agents under light supervision* — never the vendor, the product or the model.
+Three reasons, and the third is the one that matters. A named model dates a
+document faster than anything else in it, and a document that looks stale is
+read as unmaintained. Naming one implies a dependency the work does not have:
+these are text files and a prompt, and any competent assistant runs them. And
+the fact a reader needs in order to weigh a finding is **that** it was produced
+by an agent under supervision that does not vet the internal design — never
+which agent, which tells them nothing they can act on.
+
+This page is the single exception, because gratitude needs a name to attach to.
+The work across this ecosystem has been done overwhelmingly by **Claude** and
+**Codex**, over a great many hours, and by people who wrote neither: the
+analyzer, the fuzzer, the accounts, this policy and most of the arguments in the
+documents around it. Thanking them here rather than in every file is the whole
+point of the rule — the credit is real, it belongs somewhere, and *somewhere* is
+one place.
+
 **Every repository explains its own name.** A short section on the front page
 with the etymology and why the word fits, written so somebody could disagree
 with it. The ecosystem names along a convention — Greek, and from the vocabulary
 it already draws on — and a convention nobody explains decays into decoration
 within about two repositories.
+
+**A link that does not resolve is a defect.** Every relative link in a document
+resolves, and so does every path named in an outbound prompt — a prompt that
+sends somebody to a document that moved is worse than one that sends them
+nowhere, because they will go looking. This is the characteristic cost of
+reorganising documentation: the prose still reads correctly and every path in it
+is wrong, silently. Checked.
 
 **`docs/` has an index, and the index is itself a document.** One row per
 document saying what that document is *for*, in a sentence, so that a question
@@ -147,7 +173,7 @@ the content:
 > **Written by AI agents, under light human supervision.** A human directs the
 > work, reads what is published and decides what is filed; nobody vets the
 > internal design, and nothing reaches another project's issue tracker without
-> review. [`docs/reporting-policy.md`](reporting-policy.md) says what that does and
+> review. [`docs/reports/reporting-policy.md`](reports/reporting-policy.md) says what that does and
 > does not cover, and why the intended audience is experts.
 
 Four properties, of which the third is the one that gets dropped and the fourth
@@ -195,8 +221,8 @@ from another project knows where the conversation is without being told.
 **This is not the bug-report channel, and confusing the two is the failure this
 paragraph exists to prevent.** A finding — anoieu believes line 42 of your file
 is wrong — has its own template, its own ids, its own states and its own
-prompts, all in [`reporting-workflow.md`](reporting-workflow.md), and what may
-be said in one is governed by [`reporting-policy.md`](reporting-policy.md). A
+prompts, all in [`reporting-workflow.md`](reports/reporting-workflow.md), and what may
+be said in one is governed by [`reporting-policy.md`](reports/reporting-policy.md). A
 finding never goes here, and a discussion topic never goes in the findings
 ledger. The test is whether the thing you want to say has a *file and a line
 number*: if it does, it is a finding.
@@ -412,8 +438,8 @@ replacement, and never something a reader could mistake for the specification.
 
 **7. Nothing leaves the island by machine.** Anything a research project wants
 to say to the project that owns its subject is subject to the host repository's
-ordinary reporting discipline — `docs/reporting-policy.md` for what may be published
-about somebody else's work, `docs/reporting-workflow.md` for how a finding is
+ordinary reporting discipline — `docs/reports/reporting-policy.md` for what may be published
+about somebody else's work, `docs/reports/reporting-workflow.md` for how a finding is
 carried, confirmed and closed. A research project has no separate channel and no
 lighter standard. In particular the *settling artifact* rule holds: a reply is
 somebody's triage, and only an artifact settles anything. What the project may
@@ -449,15 +475,18 @@ state is legitimate and is not a licence to go quiet — rule 9 still applies, a
 a project sitting here without a person standing behind it is retired, not
 parked.
 
-The instance here is the fuzzer, `tools/anoieu_fuzz/`. It has provoked defects
-in ethos and disagreements between ethos and logos, one of them now a committed
-regression test, so it has earned its keep. It also breaks **rule 2** in three
-ways — it imports `anoieu.diagnostics` and `anoieu.fingerprint`, the report
-generator imports it back, and it runs in CI — and breaks **rule 3**, being
-advertised on the front page and holding a row in the documentation index.
-Deleting the directory would break the build, which is exactly the test rule 2
-sets, and it fails it. That is recorded rather than fixed, because the fix is a
-promotion decision and that belongs to a person.
+The instance here was the fuzzer. It sat in this state for exactly as long as
+it took somebody to look at it: it had earned its keep, and it broke rule 2
+three ways and rule 3 outright — it imported from the analyzer, the report
+generator imported it back, it ran in CI, and it was on the front page.
+Deleting it would have broken the build, which is the test rule 2 sets, and it
+failed. It has since been **folded into the parent** under rule 9 and now ships
+as `anoieu_fuzz/` beside the analyzer.
+
+That is the pattern worth keeping rather than the exception: **the rules a
+project has to break in order to be useful are the evidence that it is no longer
+research.** A long list under this rule is not a project to be tolerated, it is
+a promotion nobody has got round to.
 
 ## What is checked
 
@@ -504,6 +533,74 @@ finding harder to argue with, because the audience has learned that this name
 covers both. Rules 3, 6 and 7 exist for this and are the ones worth defending
 when they are inconvenient.
 
+## Joining the Eunoia ecosystem
+
+Two steps. The first is a sentence; the second is a CI job that checks the
+sentence is true.
+
+### 1. Declare it, at the top of your maintenance note
+
+Every README here ends with a note saying how its development is run — *The
+maintenance note*, above. A repository in the ecosystem opens that note with one
+sentence saying so, and linking here:
+
+```markdown
+## How this repository is maintained
+
+This repository is part of the **Eunoia ecosystem** and follows its shared
+repository policy, kept by [anoieu](https://github.com/ajreynol/anoieu) in
+[`docs/policy.md`](https://github.com/ajreynol/anoieu/blob/main/docs/policy.md).
+
+<then your own note: who writes this, under what supervision, and what that
+supervision does not cover>
+```
+
+It goes **first** in that section for the same reason the note goes last in the
+README: it is what a reader needs in order to weigh everything above it. A
+reader who knows the arrangement knows what to expect of the tree — where the
+documents are, what the front page will and will not claim, that there is a
+`docs/discussion.md` to reach you at — without being told any of it twice.
+
+### 2. Run the check
+
+```yaml
+      - name: this repository still matches the Eunoia policy
+        run: |
+          git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
+          python3 /tmp/anoieu/tools/policy_check.py --root .
+```
+
+Nothing is installed and nothing is built: the checker reads text and needs only
+Python. It exits non-zero when the repository does not uphold what the
+declaration claims.
+
+**It passes if and only if two things hold.** The README declares membership as
+above, and the tree upholds the policies that apply to it. Either alone is a
+failure — a declaration nothing backs is the thing this check exists to prevent,
+and a compliant tree that says nothing has not joined anything.
+
+**Checks that do not apply are skipped and named.** A repository with no `deps/`
+is not asked about pinning, and one with no child projects is not asked about
+charters. The run prints what it skipped and why, so *passing* never reads as
+more coverage than it was. **Start with what you have**: the set is deliberately
+small and is expected to grow, so expect a future version to check more than
+this one, and expect that to be announced in
+[`docs/discussion.md`](discussion.md) before it lands rather than arriving as a
+red build.
+
+### What passing does and does not mean
+
+It means the arrangement is what it says it is: a reader can find the front
+page, the maintenance note, the documentation index, and a way to reach you. It
+is a claim about **form**, and the whole of what a program can decide from a
+tree.
+
+It is not a statement about your code, your tests, your findings or your
+judgement, and it is emphatically not an endorsement by anoieu of anything the
+repository does. *Silence is never evidence* applies here exactly as it applies
+to the analyzer: a green policy check says those checks passed. If it is ever
+quoted as more than that, it will be our fault for having built it.
+
 ## Adopting this in another repository
 
 The policy is written to be copied. What another repository has to decide:
@@ -515,8 +612,8 @@ The policy is written to be copied. What another repository has to decide:
 | where a maintainer starts | `docs/coherence.md`, linked from tooling and not from the front page |
 | where projects live | `tools/X/` |
 | who may start and end one | a human, explicitly (rule 1) |
-| what governs anything published | `docs/reporting-policy.md` |
-| what governs anything carried to another project | `docs/reporting-workflow.md` |
+| what governs anything published | `docs/reports/reporting-policy.md` |
+| what governs anything carried to another project | `docs/reports/reporting-workflow.md` |
 | what the ending states are | graduate, fold in, retire in place (rule 9) |
 
 Replace the rows that name documents with your own equivalents, keep the rules,

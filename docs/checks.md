@@ -410,7 +410,7 @@ once: cvc5 declined a finding that `$is_app` was dead, because the rule using it
 is in the expert signature and cvc5 loads the base and expert files in order
 into one symbol table. Several files given to a run are now one ordered profile,
 and where a run has more than one profile a finding is reported only if it holds
-in every profile that read the file. See the log in `docs/reports.md`.
+in every profile that read the file. See the log in `docs/reports/reports.md`.
 
 ## EO0062
 

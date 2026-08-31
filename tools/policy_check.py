@@ -26,7 +26,11 @@ import re
 import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HOME = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#: The repository under test. `--root` points it at somebody else's checkout;
+#: `HOME` stays this one, because a few checks are about anoieu's own files.
+ROOT = HOME
+POLICY_URL = "ajreynol/anoieu"
 
 # Rules with no automated check, and the honest reason. Printed on every run.
 UNCHECKED = [
@@ -45,7 +49,7 @@ UNCHECKED = [
 
 # Written by a run. `closed-findings.md` is deliberately absent: it is written by
 # the review step and *read* by the generator, so it is a hand-maintained file.
-GENERATED = ["open-findings.md", "corpus.md", "checks.md"]
+GENERATED = ["reports/open-findings.md", "reports/corpus.md", "checks.md"]
 INDEX_EXEMPT = {"README.md"}
 COMPETING_ENTRY = ["INTRODUCTION.md", "OVERVIEW.md", "ABOUT.md", "GUIDE.md", "START.md"]
 
@@ -83,6 +87,49 @@ def sections(text: str) -> list[str]:
     return re.findall(r"^##\s+(.+?)\s*$", text, re.M)
 
 
+#: Vendors and models. *No document names a specific AI* — this list is the
+#: check, so adding a name here is how the rule keeps up with the market.
+VENDORS = ["claude", "codex", "chatgpt", "openai", "anthropic", "copilot",
+           "gemini", "llama", "mistral", "deepseek", "grok"]
+
+
+def check_no_vendor() -> list[str]:
+    """*No document names a specific AI*, with this policy page as the exception."""
+    bad = []
+    for rel in tracked("*.md"):
+        if os.path.basename(rel) == "policy.md":
+            continue
+        low = read(rel).lower()
+        for v in VENDORS:
+            if re.search(rf"(?<![\w-]){v}(?![\w-])", low):
+                bad.append(f"{rel} names {v}; say 'an assistant' or 'an agent'")
+    return bad
+
+
+def check_declaration() -> list[str]:
+    """*Joining the Eunoia ecosystem* — the claim the rest of this run backs.
+
+    A declaration nothing backs is what this whole check exists to prevent, and a
+    compliant tree that says nothing has not joined anything. So both, or neither.
+    """
+    text = read("README.md")
+    if not text:
+        return ["no README.md, so nothing declares membership"]
+    secs = list(re.finditer(r"^##\s+(.+?)\s*$", text, re.M))
+    note = ""
+    for i, m in enumerate(secs):
+        if "maintain" in m.group(1).lower():
+            note = text[m.end(): secs[i + 1].start() if i + 1 < len(secs) else len(text)]
+    if not note:
+        return ["README.md has no maintenance note to declare membership in"]
+    bad = []
+    if "eunoia ecosystem" not in note.lower():
+        bad.append("the maintenance note does not say it is part of the Eunoia ecosystem")
+    if POLICY_URL not in note or "policy.md" not in note:
+        bad.append(f"the maintenance note does not link to {POLICY_URL}'s docs/policy.md")
+    return bad
+
+
 def check_front_page() -> list[str]:
     """*There is one entry point* and *Every repository explains its own name*."""
     bad = []
@@ -113,7 +160,9 @@ def check_docs_index() -> list[str]:
     if not index:
         return ["docs/README.md, the documentation index, does not exist"]
     bad = []
-    for path in tracked("docs/*.md"):
+    for path in tracked("docs"):
+        if not path.endswith(".md"):
+            continue
         base = os.path.basename(path)
         if base in INDEX_EXEMPT:
             continue
@@ -207,6 +256,38 @@ def check_children() -> list[str]:
     return bad
 
 
+def check_links() -> list[str]:
+    """*docs/ has an index* and the rest of the layout, made checkable.
+
+    A relative link that does not resolve is a defect in the tree, and it is the
+    characteristic cost of moving a document: the prose still reads correctly and
+    every path in it is wrong. This also covers the paths the outbound prompts in
+    `scripts/` name, because a prompt that sends somebody to a document that
+    moved is worse than one that sends them nowhere.
+    """
+    bad = []
+    for rel in tracked("*.md") + ["scripts/check_anoieu", "scripts/process_anoieu"]:
+        full = os.path.join(ROOT, rel)
+        if not os.path.isfile(full):
+            continue
+        here = os.path.dirname(full)
+        text = read(rel)
+        # markdown links resolve from the file; bare `docs/...` mentions are
+        # repo-relative by convention, in prose and in the prompts alike.
+        targets = [(m.group(1), here) for m in re.finditer(r"\]\(([^)\s]+)\)", text)]
+        targets += [(t, ROOT) for t in
+                    re.findall(r"(?<![\w/`(])(docs/[\w./-]+\.(?:md|html))", text)]
+        for t, base in targets:
+            t = t.split("#")[0]
+            if not t or t.startswith(("http", "mailto:")):
+                continue
+            if t.startswith("docs/"):
+                base = ROOT
+            if not os.path.exists(os.path.normpath(os.path.join(base, t))):
+                bad.append(f"{rel} links to {t}, which does not exist")
+    return bad
+
+
 def check_response_gate() -> list[str]:
     """*Responding to somebody else's discussion file* — the protocol's safety rule.
 
@@ -267,15 +348,35 @@ def check_discussion() -> list[str]:
     return bad
 
 
+def has(*rel):
+    """Applicability: the check runs only where the thing it is about exists."""
+    def applies():
+        for r in rel:
+            if os.path.exists(os.path.join(ROOT, r)):
+                return None
+        return "nothing at " + " or ".join(rel)
+    return applies
+
+
+def is_home():
+    return None if os.path.abspath(ROOT) == HOME else "specific to anoieu's own files"
+
+
+# (title, check, applies). A check that does not apply is skipped and named:
+# passing must never read as more coverage than it was. The set is deliberately
+# small and is expected to grow.
 CHECKS = [
-    ("the front page is the only entry point, and explains the name", check_front_page),
-    ("the README ends with the maintenance note", check_maintenance_note),
-    ("every document is named in the documentation index", check_docs_index),
-    ("every generated document says it is generated", check_generated_labelled),
-    ("dependencies are fetched and pinned, never vendored", check_dependencies),
-    ("working space is untracked", check_working_space),
-    ("child projects carry a charter, and name what they break", check_children),
-    ("the discussion file carries the response gate, at the top", check_response_gate),
+    ("the README declares membership of the ecosystem", check_declaration, None),
+    ("the front page is the only entry point, and explains the name", check_front_page, None),
+    ("the README ends with the maintenance note", check_maintenance_note, None),
+    ("every document is named in the documentation index", check_docs_index, has("docs")),
+    ("every generated document says it is generated", check_generated_labelled, is_home),
+    ("dependencies are fetched and pinned, never vendored", check_dependencies, has("deps", "tools/deps.json")),
+    ("working space is untracked", check_working_space, has(".gitignore")),
+    ("child projects carry a charter, and name what they break", check_children, has("tools")),
+    ("the discussion file carries the response gate, at the top", check_response_gate, None),
+    ("every link in a document or an outbound prompt resolves", check_links, None),
+    ("no document names a specific AI", check_no_vendor, None),
 ]
 
 
@@ -283,15 +384,15 @@ CHECKS = [
 # correspondence rather than a defect in their tree, and failing a build over
 # the shape of a sentence addressed to a colleague is the wrong instrument.
 MINOR = [
-    ("the discussion file is present and well-formed", check_discussion),
+    ("the discussion file is present and well-formed", check_discussion, None),
 ]
 
 
 def coverage() -> None:
     print("-- checked")
-    for title, _ in CHECKS:
+    for title, _, _a in CHECKS:
         print(f"   {title}")
-    for title, _ in MINOR:
+    for title, _, _a in MINOR:
         print(f"   {title} (minor: reported, never fatal)")
     print("-- not checked, and why")
     for rule, why in UNCHECKED:
@@ -301,11 +402,21 @@ def coverage() -> None:
 
 
 def main() -> int:
+    global ROOT
+    if "--root" in sys.argv:
+        ROOT = os.path.abspath(sys.argv[sys.argv.index("--root") + 1])
     if "--coverage" in sys.argv:
         coverage()
         return 0
-    failures = 0
-    for title, fn in CHECKS:
+    if os.path.abspath(ROOT) != HOME:
+        print(f"-- checking {ROOT} against {POLICY_URL}'s docs/policy.md")
+    failures = skipped = 0
+    for title, fn, applies in CHECKS:
+        why = applies() if applies else None
+        if why:
+            skipped += 1
+            print(f"skip {title} — {why}")
+            continue
         bad = fn()
         if bad:
             failures += len(bad)
@@ -314,7 +425,9 @@ def main() -> int:
                 print(f"     {b}")
         else:
             print(f"ok   {title}")
-    for title, fn in MINOR:
+    for title, fn, applies in MINOR:
+        if applies and applies():
+            continue
         bad = fn()
         if bad:
             print(f"minor {title}")
@@ -325,7 +438,7 @@ def main() -> int:
     print()
     coverage()
     print()
-    print(f"-- policy: {failures} failure(s)")
+    print(f"-- policy: {failures} failure(s), {skipped} skipped")
     return 1 if failures else 0
 
 

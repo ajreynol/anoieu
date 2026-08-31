@@ -11,12 +11,12 @@ Three steps, in order:
    rather than of the machine it was generated on. `tools/deps.json` says which
    projects, which refs, and which paths of each; changing a ref there changes
    what the report is a report of.
-2. **Measure.** `docs/corpus.md`, rewritten whole: the commits that were read,
+2. **Measure.** `docs/reports/corpus.md`, rewritten whole: the commits that were read,
    and what the checks report on them. A count and the version it was taken from
    belong in one file.
-3. **Findings.** `docs/open-findings.md`, appended to and never trimmed — a row
+3. **Findings.** `docs/reports/open-findings.md`, appended to and never trimmed — a row
    leaves it only through the review step described in
-   `docs/reporting-workflow.md`.
+   `docs/reports/reporting-workflow.md`.
 
     python3 tools/run.py                 # move to each tip, then measure
     python3 tools/run.py --pinned --check # re-measure the recorded commits
@@ -46,7 +46,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-CORPUS = os.path.join(ROOT, "docs", "corpus.md")
+CORPUS = os.path.join(ROOT, "docs", "reports", "corpus.md")
 
 sys.path.insert(0, ROOT)
 sys.path.insert(0, HERE)
@@ -68,7 +68,7 @@ def git(root: str, *args: str) -> str:
 
 
 def render_corpus(synced: list, rows: list) -> str:
-    """`docs/corpus.md`: the versions a run read, and what the checks said about
+    """`docs/reports/corpus.md`: the versions a run read, and what the checks said about
     them. One file, because a count is only meaningful next to the commit it was
     taken from."""
     out = [
@@ -127,7 +127,7 @@ def main() -> int:
     ap.add_argument(
         "--pinned",
         action="store_true",
-        help="re-measure the commits docs/corpus.md records, not each tip",
+        help="re-measure the commits docs/reports/corpus.md records, not each tip",
     )
     args = ap.parse_args()
 
@@ -160,7 +160,7 @@ def main() -> int:
     measured = sum(1 for *_x, ok in rows if ok)
     item(f"{measured} of {len(rows)} corpora measured")
     written = [
-        (CORPUS, "docs/corpus.md", render_corpus(synced, rows)),
+        (CORPUS, "docs/reports/corpus.md", render_corpus(synced, rows)),
         (deps_mod.LOCK, "tools/deps.lock", deps_mod.render_lock(synced)),
     ]
     for path, label, text in written:

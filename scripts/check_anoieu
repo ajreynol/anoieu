@@ -9,7 +9,7 @@
 #   check_anoieu 147433b3e48ae9d6   # one finding, by its id
 #   check_anoieu --codex ethos-8    # ... with codex instead of claude
 #
-# The canonical prompt is docs/reporting-workflow.md in the anoieu repository,
+# The canonical prompt is docs/reports/reporting-workflow.md in the anoieu repository,
 # under "Prompt one: in the project that owns the finding". The copy below is
 # that text with the scope line filled in; if the two disagree, the document is
 # the one that is right.
@@ -84,7 +84,7 @@ read -r -d '' PROMPT <<PROMPT_END || true
 anoieu is a static analyzer for the Eunoia languages. It has reported findings
 against this project:
 
-  https://github.com/ajreynol/anoieu/blob/main/docs/open-findings.md
+  https://github.com/ajreynol/anoieu/blob/main/docs/reports/open-findings.md
 
 Start there: it says what a row is, and how to confirm one for each code.
 

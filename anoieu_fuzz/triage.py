@@ -163,7 +163,7 @@ def shrink(case: Case, probe: Probe, bucket: str, budget: int = 120) -> tuple[Ca
     a reproducer promoted from `test-indexed-op.cpc` with the `_` cut out of
     line 4 by this function, while the reference had refused at line 3
     throughout, and a note that named the cut as the cause. See
-    `docs/reports.md`.
+    `docs/reports/reports.md`.
     """
     if case.source.startswith("seed:"):
         return case, 0
@@ -328,7 +328,7 @@ def _shrink_terms(command: str, holds: Callable[[str], bool]) -> str:
 class Corpus:
     """Where findings are kept: one directory per bucket, first instance only.
 
-    Deliberately append-only in the same sense `docs/open-findings.md` is: a
+    Deliberately append-only in the same sense `docs/reports/open-findings.md` is: a
     bucket that already has a case keeps the one it has, so re-running the
     fuzzer over a wider seed range never overwrites the small reproducer
     somebody already shrank and read.

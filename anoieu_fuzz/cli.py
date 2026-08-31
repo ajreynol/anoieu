@@ -313,8 +313,8 @@ def cmd_run(args) -> int:
         print(f"   {name:22} {counts}")
     if corpus.counts:
         print(f"-- cases are under {args.out}/; re-run one with "
-              f"`python3 -m tools.anoieu_fuzz replay <file>`, and keep one with "
-              f"`python3 -m tools.anoieu_fuzz promote {args.out}/<bucket>`")
+              f"`python3 -m anoieu_fuzz replay <file>`, and keep one with "
+              f"`python3 -m anoieu_fuzz promote {args.out}/<bucket>`")
     if args.format != "text" and corpus.new:
         keep = {f.bucket for f in corpus.new}
         records = [r for r in reporting.load(args.out) if r["bucket"] in keep]
@@ -397,7 +397,7 @@ def cmd_verify(args) -> int:
     """Re-run every promoted reproducer and compare against what was recorded.
 
     This is the fuzzer's half of "re-measuring", the slot
-    `docs/reporting-workflow.md` says carries the most weight: a follow-up that
+    `docs/reports/reporting-workflow.md` says carries the most weight: a follow-up that
     cannot reproduce the original finding is guessing. It is also how a promoted
     finding gets closed honestly -- a verdict that has moved is either a fix
     upstream or the binary having changed under us, and either way somebody
@@ -507,7 +507,7 @@ def _common(p: argparse.ArgumentParser) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="tools.anoieu_fuzz",
+    ap = argparse.ArgumentParser(prog="anoieu_fuzz",
                                  description="a fuzzer for Eunoia-based proof checkers")
     ap.add_argument("--version", action="version", version=f"anoieu-fuzz {__version__}")
     sub = ap.add_subparsers(dest="command")

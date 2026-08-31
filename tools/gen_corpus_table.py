@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Count what the checks report on the signatures we can find.
 
-A library rather than a command: `tools/run.py` writes `docs/corpus.md` from
+A library rather than a command: `tools/run.py` writes `docs/reports/corpus.md` from
 `measure_all()` and `render()` here, together with the versions those counts are
 relative to, because a count without a version is a number that was true once.
 
-    python3 tools/run.py            # rewrite docs/corpus.md
+    python3 tools/run.py            # rewrite docs/reports/corpus.md
     python3 tools/run.py --check    # exit 1 if it is stale
 
 A staleness failure means one of two things, and both are worth a look: upstream

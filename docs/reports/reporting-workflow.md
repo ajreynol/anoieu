@@ -31,7 +31,7 @@ can adopt the conventions below by filling the same slots with its own files:
 | **the report** | every finding currently reported, one row each, generated and additive | [`open-findings.md`](open-findings.md) |
 | **the verdicts** | the internal half: every row that has been ruled on, and what was decided | [`closed-findings.md`](closed-findings.md) |
 | **the id** | a fingerprint stable across edits elsewhere in the file, which everything else refers to | the check's code, the file, and the text of the line |
-| **the catalogue** | what each check assumes, and therefore how it can be wrong | [`checks.md`](checks.md) |
+| **the catalogue** | what each check assumes, and therefore how it can be wrong | [`checks.md`](../checks.md) |
 | **re-measuring** | one command that restores the exact versions the report was measured against | `python3 tools/run.py --pinned` |
 | **the regression** | where a case goes that would have prevented a wrong finding | `tests/witnesses/` |
 | **the ledger** | the prose history of what was reported and what came of it | [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) |
@@ -44,7 +44,7 @@ because a follow-up that cannot reproduce the original finding is guessing.
 
 ### A finding from the fuzzer
 
-The [anoieu fuzzer](fuzzing.md) fills the same slots, and differs in exactly one
+The [anoieu fuzzer](../fuzzing.md) fills the same slots, and differs in exactly one
 of them — which is worth stating rather than leaving a reader to infer, because
 it is the slot that carries the most weight.
 
@@ -52,8 +52,8 @@ it is the slot that carries the most weight.
 | --- | --- |
 | **the report** | the same [`open-findings.md`](open-findings.md), under codes `FUZ0001`–`FUZ0005` |
 | **the id** | the same fingerprint, over the committed reproducer rather than over somebody's signature |
-| **the catalogue** | `python3 -m tools.anoieu_fuzz explain FUZ0002`; five codes, one page each |
-| **re-measuring** | **different.** `python3 -m tools.anoieu_fuzz verify` replays every reproducer against a build of the checker and compares with what was recorded |
+| **the catalogue** | `python3 -m anoieu_fuzz explain FUZ0002`; five codes, one page each |
+| **re-measuring** | **different.** `python3 -m anoieu_fuzz verify` replays every reproducer against a build of the checker and compares with what was recorded |
 | **the regression** | `tests/fuzz/`, one directory per finding, beside `tests/witnesses/` |
 | **the ledger** | the same [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) |
 | **the frame** | the same two labels |
@@ -64,7 +64,7 @@ one on every push, and a row that has gone stale shows up as a row nothing
 reports. A fuzzer's finding cannot be: re-deriving it means running ethos or
 logos, which the job that generates the report does not have. So the evidence is
 the *reproducer*, committed, plus the verdicts recorded beside it — the same
-arrangement as [`../tests/oracle.json`](../tests/oracle.json), written by a real
+arrangement as [`../tests/oracle.json`](../../tests/oracle.json), written by a real
 run and never by hand.
 
 Three obligations follow, and they are on us rather than on anybody upstream.
@@ -170,7 +170,7 @@ naming where the change is —
 
     awaiting landing: <project> <branch> <commit>
 
-— and [`tools/landing.py`](../tools/landing.py) is the audit that reads them
+— and [`tools/landing.py`](../../tools/landing.py) is the audit that reads them
 back. It is **a separate pass, with its own question**: *did what we closed
 actually land?* It is asked on its own schedule, against checkouts, and it is
 deliberately not part of processing a reply — the two get confused precisely
@@ -449,7 +449,7 @@ and neither is stated where it does not.
 anoieu is a static analyzer for the Eunoia languages. It has reported findings
 against this project:
 
-  https://github.com/ajreynol/anoieu/blob/main/docs/open-findings.md
+  https://github.com/ajreynol/anoieu/blob/main/docs/reports/open-findings.md
 
 Start there: it says what a row is, and how to confirm one for each code.
 
@@ -540,15 +540,15 @@ Working in the anoieu repository, on the block about ID -- or, for the sweep
 form, on every block, one at a time, leaving the record consistent after each so
 that stopping partway is safe.
 
-docs/reporting-workflow.md is the authority on what you may change. The steps:
+docs/reports/reporting-workflow.md is the authority on what you may change. The steps:
 
-1. Find the rows the reply names, by id, in docs/open-findings.md and
-   docs/closed-findings.md. A row is in scope because the reply names it --
+1. Find the rows the reply names, by id, in docs/reports/open-findings.md and
+   docs/reports/closed-findings.md. A row is in scope because the reply names it --
    whoever owns it, closed or not. A reply disputing a verdict names a closed row.
 2. Establish what actually happened, which is not what the triage predicted.
    - EO, DOC, TRI: re-check with `python3 tools/run.py --pinned`. It re-derives
      open rows only; a disputed closed row you check by reading deps/ yourself.
-   - FUZ: re-run with `python3 -m tools.anoieu_fuzz verify`, $ETHOS and $LOGOS pointed
+   - FUZ: re-run with `python3 -m anoieu_fuzz verify`, $ETHOS and $LOGOS pointed
      at builds. A finding that no longer reproduces is strong evidence -- but
      establish *why*: stopped reproducing for a reason other than the one on the
      row is a bad reproducer, not a fix, and never reproduced against their
@@ -556,23 +556,23 @@ docs/reporting-workflow.md is the authority on what you may change. The steps:
    - Look at the branch rather than taking it: compare it to its base and read
      what is on it. A branch level with main, or a change left uncommitted, is
      not a fix. A branch that is ahead of main is: waiting for a merge is not
-     something we do -- see "what closes a row" in docs/reporting-workflow.md.
+     something we do -- see "what closes a row" in docs/reports/reporting-workflow.md.
 3. Clean up those rows and no others. Closing moves a row from
-   docs/open-findings.md to docs/closed-findings.md with a verdict, never
+   docs/reports/open-findings.md to docs/reports/closed-findings.md with a verdict, never
    deleting it; reopening is the same move back, noting what the verdict missed.
    A row closed before its change has landed ends its verdict with
    "awaiting landing: <project> <branch> <commit>", which is what the landing
    audit reads.
 4. If our analysis was wrong, fix what produced it rather than the row: narrow
    the check, add a witness under tests/witnesses/, and record the wrong
-   assumption in docs/reports.md. A FUZ finding has no check to narrow -- what
+   assumption in docs/reports/reports.md. A FUZ finding has no check to narrow -- what
    it may have is a reproducer that was an artefact of the harness, or a
    comparison that was never fair. Say which, remove the directory under
    tests/fuzz/, and ask whether the harness should have refused to report it.
-5. Write what happened in docs/reports.md under the log, and update the
+5. Write what happened in docs/reports/reports.md under the log, and update the
    project's section under the register if what we are asking has changed.
 6. Read FEEDBACK TO ANOIEU and any OBSERVED, NOT ACTED ON. Act on what concerns
-   the report or the tools. What concerns the prompts goes to docs/postmortem.md
+   the report or the tools. What concerns the prompts goes to docs/reports/postmortem.md
    with its evidence and then to me: a person approves every prompt edit, and
    each round leaves them shorter and more procedural, so a proposal that adds
    says what it removes, and technical detail belongs in the docs a prompt links
@@ -584,9 +584,9 @@ docs/reporting-workflow.md is the authority on what you may change. The steps:
    how anoieu works -- a check, the harness, the report, a prompt. If nothing
    here changed, say so and write nothing.
 
-   Entries go at the top of docs/postmortem.md, in the shape that file sets out
+   Entries go at the top of docs/reports/postmortem.md, in the shape that file sets out
    -- short, and only what happened and what the workflow learned; the reasoning
-   at length belongs in docs/reports.md. Update "Where the workflow stands" in
+   at length belongs in docs/reports/reports.md. Update "Where the workflow stands" in
    the same file if this round changed what is outstanding.
 
 Leave everything staged and commit nothing -- the diff is the review, and it is
@@ -599,8 +599,8 @@ would need to know.
 
 #### One way to run the two
 
-[`scripts/check_anoieu`](../scripts/check_anoieu) and
-[`scripts/process_anoieu`](../scripts/process_anoieu) are *an* implementation of
+[`scripts/check_anoieu`](../../scripts/check_anoieu) and
+[`scripts/process_anoieu`](../../scripts/process_anoieu) are *an* implementation of
 the two prompts above — a pair of shell scripts that hold the text with the
 scope filled in, so that running one is a command rather than a paste. They are
 not the workflow; the prompts are, and any other way of putting them in front of
@@ -612,7 +612,7 @@ scripts/process_anoieu <project> [ID]  # here, once that project has replied
 ```
 
 Naming a finding id addresses that one, and naming none sweeps. Everything else
-they can do — running codex instead of claude, printing the prompt without
+they can do — choosing which assistant to run, printing the prompt without
 running anything, reporting what became of a branch, saying where each project
 is checked out on this machine — is in `--help` and in the header of each file,
 rather than here.
@@ -644,7 +644,7 @@ stopping halfway is safe and the next run picks up whatever is left.
 
 ```text
 Bring the whole report up to date. This is a sweep over every open row in
-docs/open-findings.md, across every project tools/deps.json tracks. It will take
+docs/reports/open-findings.md, across every project tools/deps.json tracks. It will take
 a while. Work one row at a time and leave the record consistent after each, so
 that stopping partway is safe.
 
@@ -687,7 +687,7 @@ When you finish, or when you stop:
 
 - say how many rows you closed, how many you left open, and how many you could
   not settle;
-- write it up in docs/reports.md, under the log, as one entry per project
+- write it up in docs/reports/reports.md, under the log, as one entry per project
   rather than one per row: a sweep is a single event and reads better as one;
 - leave everything staged.
 
@@ -961,7 +961,7 @@ Three steps, each printing what it did:
    property of named commits rather than of the machine that produced it.
 2. **Measure.** [`corpus.md`](corpus.md), rewritten whole: the ref, commit and
    date of each project, and what the checks report on it.
-   [`../tools/deps.lock`](../tools/deps.lock) records the same commits in full,
+   [`../tools/deps.lock`](../../tools/deps.lock) records the same commits in full,
    for a machine. A finding is only true of a version, and the rows in the
    report carry none of their own.
 3. **Findings.** [`open-findings.md`](open-findings.md), appended to.
@@ -991,7 +991,7 @@ about six megabytes and takes a few seconds to create. The one thing that does
 need a built ethos is the differential oracle (`tests/run.py --oracle`), which is
 a separate job.
 
-What is read, and what is deliberately not, is [`tools/deps.json`](../tools/deps.json):
+What is read, and what is deliberately not, is [`tools/deps.json`](../../tools/deps.json):
 
 | project | ref | what we read | what we do not |
 | --- | --- | --- | --- |

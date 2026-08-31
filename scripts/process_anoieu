@@ -19,7 +19,7 @@
 # $ANOIEU_REPOS (colon-separated, default $HOME). Nothing is tracked or synced
 # -- the agent is pointed at the directory and finds the reply itself.
 #
-# The canonical prompt is docs/reporting-workflow.md, under "Prompt two: the
+# The canonical prompt is docs/reports/reporting-workflow.md, under "Prompt two: the
 # follow-up, here"; that one is written around a link, this one around a
 # checkout. If they disagree about anything else, the document is right.
 #
@@ -139,7 +139,7 @@ usage: process_anoieu [--status | --dry-run | --show-prompt]
   --dry-run       say what would be done, and do none of it
   --no-check      skip the check that every path in repos.local is a checkout
   --no-postm      let the agent decide whether this run earned a
-                  docs/postmortem.md entry -- the rule in docs/postmortem.md.
+                  docs/reports/postmortem.md entry -- the rule in docs/reports/postmortem.md.
                   By default an entry is written whatever it concludes
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
@@ -373,7 +373,7 @@ if [ "$STATUS" = 1 ]; then
 fi
 
 # -- where anoieu is: this script's checkout, or the one we are standing in
-looks_like_anoieu() { [ -f "$1/docs/open-findings.md" ] && [ -d "$1/tools/anoieu_fuzz" ]; }
+looks_like_anoieu() { [ -f "$1/docs/reports/open-findings.md" ] && [ -d "$1/anoieu_fuzz" ]; }
 ANOIEU=""
 for c in "${ANOIEU_ROOT:-}" "$HERE" "$HERE/.." "$PWD"; do
   if [ -n "$c" ] && looks_like_anoieu "$c"; then ANOIEU=$(cd "$c" && pwd); break; fi
@@ -416,15 +416,15 @@ carrying only a triage is a proposal rather than a result.
 
 Working in the anoieu repository ($ANOIEU).
 
-docs/reporting-workflow.md is the authority on what you may change. The steps:
+docs/reports/reporting-workflow.md is the authority on what you may change. The steps:
 
-1. Find the rows the reply names, by id, in docs/open-findings.md and
-   docs/closed-findings.md. A row is in scope because the reply names it --
+1. Find the rows the reply names, by id, in docs/reports/open-findings.md and
+   docs/reports/closed-findings.md. A row is in scope because the reply names it --
    whoever owns it, closed or not. A reply disputing a verdict names a closed row.
 2. Establish what actually happened, which is not what the triage predicted.
    - EO, DOC, TRI: re-check with \`python3 tools/run.py --pinned\`. It re-derives
      open rows only; a disputed closed row you check by reading deps/ yourself.
-   - FUZ: re-run with \`python3 -m tools.anoieu_fuzz verify\`, \$ETHOS and \$LOGOS pointed
+   - FUZ: re-run with \`python3 -m anoieu_fuzz verify\`, \$ETHOS and \$LOGOS pointed
      at builds. A finding that no longer reproduces is strong evidence -- but
      establish *why*: stopped reproducing for a reason other than the one on the
      row is a bad reproducer, not a fix, and never reproduced against their
@@ -432,23 +432,23 @@ docs/reporting-workflow.md is the authority on what you may change. The steps:
    - Look at the branch rather than taking it: compare it to its base and read
      what is on it. A branch level with main, or a change left uncommitted, is
      not a fix. A branch that is ahead of main is: waiting for a merge is not
-     something we do -- see "what closes a row" in docs/reporting-workflow.md.
+     something we do -- see "what closes a row" in docs/reports/reporting-workflow.md.
 3. Clean up those rows and no others. Closing moves a row from
-   docs/open-findings.md to docs/closed-findings.md with a verdict, never
+   docs/reports/open-findings.md to docs/reports/closed-findings.md with a verdict, never
    deleting it; reopening is the same move back, noting what the verdict missed.
    A row closed before its change has landed ends its verdict with
    "awaiting landing: <project> <branch> <commit>", which is what the landing
    audit reads.
 4. If our analysis was wrong, fix what produced it rather than the row: narrow
    the check, add a witness under tests/witnesses/, and record the wrong
-   assumption in docs/reports.md. A FUZ finding has no check to narrow -- what
+   assumption in docs/reports/reports.md. A FUZ finding has no check to narrow -- what
    it may have is a reproducer that was an artefact of the harness, or a
    comparison that was never fair. Say which, remove the directory under
    tests/fuzz/, and ask whether the harness should have refused to report it.
-5. Write what happened in docs/reports.md under the log, and update the
+5. Write what happened in docs/reports/reports.md under the log, and update the
    project's section under the register if what we are asking has changed.
 6. Read FEEDBACK TO ANOIEU and any OBSERVED, NOT ACTED ON. Act on what concerns
-   the report or the tools. What concerns the prompts goes to docs/postmortem.md
+   the report or the tools. What concerns the prompts goes to docs/reports/postmortem.md
    with its evidence and then to me: a person approves every prompt edit, and
    each round leaves them shorter and more procedural, so a proposal that adds
    says what it removes, and technical detail belongs in the docs a prompt links
@@ -456,9 +456,9 @@ docs/reporting-workflow.md is the authority on what you may change. The steps:
 
 $POSTM
 
-   Entries go at the top of docs/postmortem.md, in the shape that file sets out
+   Entries go at the top of docs/reports/postmortem.md, in the shape that file sets out
    -- short, and only what happened and what the workflow learned; the reasoning
-   at length belongs in docs/reports.md. Update "Where the workflow stands" in
+   at length belongs in docs/reports/reports.md. Update "Where the workflow stands" in
    the same file if this round changed what is outstanding.
 
 Leave everything staged and commit nothing -- the diff is the review, and it is

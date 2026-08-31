@@ -25,9 +25,9 @@ Six things, and only two of them are the tool.
 | what | where | who else it binds |
 | --- | --- | --- |
 | the analyzer | [`../anoieu/`](../anoieu) | anyone running it; the baselines other repositories would gate on |
-| the fuzzer, a **child project** that has earned its keep | [`../tools/anoieu_fuzz/`](../tools/anoieu_fuzz) | its `FUZ` rows are in the record and two CI steps run it — see rule 10 of [`../docs/policy.md`](policy.md) |
-| **the publishing position** | [`reporting-policy.md`](reporting-policy.md) | maintained here, **referenced by [dokimasia](https://github.com/ajreynol/dokimasia)** rather than copied |
-| **the reporting workflow** | [`reporting-workflow.md`](reporting-workflow.md) | [`../scripts/`](../scripts) implement it; other repositories adopt its CI half |
+| the fuzzer | [`../anoieu_fuzz/`](../anoieu_fuzz) | a second shipped tool: its `FUZ` rows are in the record and two CI steps run it |
+| **the publishing position** | [`reporting-policy.md`](reports/reporting-policy.md) | maintained here, **referenced by [dokimasia](https://github.com/ajreynol/dokimasia)** rather than copied |
+| **the reporting workflow** | [`reporting-workflow.md`](reports/reporting-workflow.md) | [`../scripts/`](../scripts) implement it; other repositories adopt its CI half |
 | **the development vision** | [`../docs/vision.md`](vision.md) | written for *every* repository in the ecosystem |
 | **the repository policy** | [`../docs/policy.md`](policy.md) | written to be copied; governs child projects in any parent |
 
@@ -69,7 +69,7 @@ can decide from the tree. Run it before proposing a change here — and if you a
 a rule, either make it checkable or accept that it lands on the checker's
 printed list of what it cannot decide.
 
-**3. [`reporting-policy.md`](reporting-policy.md) — not yet stable, so
+**3. [`reporting-policy.md`](reports/reporting-policy.md) — not yet stable, so
 say what you changed.** Unlike the two above, this page is still settling: its
 positions are being worked out rather than defended, and adding, sharpening or
 retiring one is ordinary work rather than something to ask about first. Two
@@ -85,17 +85,17 @@ retired, the page renamed again) is carried to dokimasia by hand.
 > Nothing here fixes that — nothing crosses a repository boundary by machine —
 > so it is a person's errand, and it is unfiled.
 
-**4. [`reporting-workflow.md`](reporting-workflow.md) — ask before the prompts.** A
+**4. [`reporting-workflow.md`](reports/reporting-workflow.md) — ask before the prompts.** A
 person approves every change to a prompt template, and each round should leave
 the prompts *shorter and clearer* than it found them — that rule was itself
 learned the expensive way and is written up in
-[`postmortem.md`](postmortem.md). `tests/run.py` fails when a script's copy of a
+[`postmortem.md`](reports/postmortem.md). `tests/run.py` fails when a script's copy of a
 prompt has drifted from the document, so the two move together or not at all.
 
 **5. The generated documents — never hand-edited, ask about nothing.**
-[`corpus.md`](corpus.md) and [`checks.md`](checks.md) are rewritten whole, so
-anything typed into them is lost. [`open-findings.md`](open-findings.md) and
-[`closed-findings.md`](closed-findings.md) are additive: the generator adds rows
+[`corpus.md`](reports/corpus.md) and [`checks.md`](checks.md) are rewritten whole, so
+anything typed into them is lost. [`open-findings.md`](reports/open-findings.md) and
+[`closed-findings.md`](reports/closed-findings.md) are additive: the generator adds rows
 and never removes or rewrites one, which is what keeps hand-written verdicts
 alive. Closing a row is a judgement made by the review step, never by a diff.
 
@@ -134,7 +134,7 @@ The record is now edited mostly by an assistant: `scripts/process_anoieu` reads 
 reply and moves rows, writes verdicts, narrows checks and appends to two logs.
 That has already worked and has already gone wrong — a verdict of *fixed
 upstream* was recorded three times for a fix that never happened, and nothing
-noticed for months (see [`postmortem.md`](postmortem.md)). The question this
+noticed for months (see [`postmortem.md`](reports/postmortem.md)). The question this
 section is for is not *how do we stop an agent editing the record* but **what
 must remain true of the record after any edit, whoever made it, and which of
 those can a machine check.**
@@ -152,12 +152,12 @@ Grouped by what they protect. The right-hand column is the honest status.
 
 | # | property | why | today |
 | --- | --- | --- | --- |
-| **C1** | **The log is append-only.** A run adds entries to [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) and [`postmortem.md`](postmortem.md); it does not rewrite what an earlier run wrote. | The log is the only account of what we believed and when. A log an agent may rewrite is a log that silently agrees with the present. | nothing checks it |
+| **C1** | **The log is append-only.** A run adds entries to [`reports.md`](reports/reports.md#the-log-what-was-reported-and-what-came-back) and [`postmortem.md`](reports/postmortem.md); it does not rewrite what an earlier run wrote. | The log is the only account of what we believed and when. A log an agent may rewrite is a log that silently agrees with the present. | nothing checks it |
 | **C2** | **Except to correct, and a correction is visible as one.** An earlier entry may be amended when it is *wrong* — not when it reads badly — and the amendment says so in place, keeping the original claim legible. | This round had to correct three verdicts and a false claim about the fuzzer's records. Forbidding that outright would have forced a knowingly false log. | done by hand, by convention |
-| **C3** | **Every id that has ever appeared is accounted for, forever.** An id in [`open-findings.md`](open-findings.md) or [`closed-findings.md`](closed-findings.md) never leaves both; it is open, or closed with a verdict, and never absent. | The whole point of an id. A row that can vanish makes every earlier decision unverifiable. | the generator is additive and cannot delete, but nothing forbids a *hand* deletion |
+| **C3** | **Every id that has ever appeared is accounted for, forever.** An id in [`open-findings.md`](reports/open-findings.md) or [`closed-findings.md`](reports/closed-findings.md) never leaves both; it is open, or closed with a verdict, and never absent. | The whole point of an id. A row that can vanish makes every earlier decision unverifiable. | the generator is additive and cannot delete, but nothing forbids a *hand* deletion |
 | **C4** | **No id is in both files, and no id appears twice in either.** | Two states for one finding is a record that answers differently depending on where you look. | not checked |
 | **C5** | **A closed row's verdict is re-derivable, or says why it is not.** A verdict of *fixed upstream* is a claim about a tree we have; it should carry the commit it was checked at, and a later run should be able to fail when the finding is still reported there. | This is exactly how three rows sat closed on a fix that never landed. | not checked; the highest-value gap |
-| **C6** | **An id is stable under things that are not the finding.** Regenerating the CPC baseline this round changed every id, because the fingerprint moved with the path root when the entry point changed — the findings were identical. An id that moves when nothing about the finding moved silently invalidates every verdict recorded against it. | Decisions are recorded against ids. | **broken**, and [`reports.md`](reports.md#what-cvc5-asked-for-next) currently claims otherwise |
+| **C6** | **An id is stable under things that are not the finding.** Regenerating the CPC baseline this round changed every id, because the fingerprint moved with the path root when the entry point changed — the findings were identical. An id that moves when nothing about the finding moved silently invalidates every verdict recorded against it. | Decisions are recorded against ids. | **broken**, and [`reports.md`](reports/reports.md#what-cvc5-asked-for-next) currently claims otherwise |
 | **C7** | **A closure is traceable to its evidence.** Every verdict names the run, the reply, or the commit it rests on, so a reader can go from a closed row to why. | *"Because an assistant said so"* is not a reason, and today the link is prose in a log entry. | by convention |
 | **C8** | **A finding reported to somebody is tracked until it is resolved**, including when the resolution is *declined*, *withdrawn*, or *reopened*. Reopening is a first-class transition, not an edit. | We reopened three rows this round and had to invent how. | ad hoc |
 | **C9** | **A generated file is only ever written by its generator**, and a hand edit to one is a failure rather than a surprise on the next run. | `corpus.md` and `checks.md` say this in prose; nothing enforces it. | not checked |
@@ -217,7 +217,7 @@ keys. Three options, none chosen:
   transitions: *reopened* is indistinguishable from *was always open* except in
   the log the script wrote.
 - **A tracker.** GitHub issues were the earlier plan
-  ([`reporting-workflow.md`](reporting-workflow.md#medium-term-issues-on-our-own-repository)),
+  ([`reporting-workflow.md`](reports/reporting-workflow.md#medium-term-issues-on-our-own-repository)),
   and the constraints there still hold: issues live on *our* repository, a
   person posts, never an agent. The argument for one is not bookkeeping — it is
   that **findings do not all come from our checks.** Some will come from a
@@ -250,7 +250,7 @@ readiness for us; somebody has to look.
 
 ## Where to start
 
-1. Read this page, then [`reporting-workflow.md`](reporting-workflow.md#the-workflow)
+1. Read this page, then [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow)
    if you are working a finding, or [`notes.md`](notes.md#the-design) if you are
    working on the tool.
 2. Check the ladder above before touching any document in it.

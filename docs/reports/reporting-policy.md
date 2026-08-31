@@ -11,8 +11,8 @@ change of position is one argument in one place. Anything here that is wrong for
 one tool is probably wrong for both.
 
 **Where this sits.** Three documents govern the work rather than the tool.
-[`policy.md`](policy.md) says how a repository is arranged.
-[`vision.md`](vision.md) says what the development is aiming at. This one says
+[`policy.md`](../policy.md) says how a repository is arranged.
+[`vision.md`](../vision.md) says what the development is aiming at. This one says
 what may be *said about somebody else's code* — and it is the only one of the
 three that binds a second repository, which is why it changes most carefully.
 [`reporting-workflow.md`](reporting-workflow.md) is the procedure that
@@ -26,7 +26,7 @@ whether either tool, as it is today, could sign a sentence without pretending.
 
 ## What backs a position
 
-[`vision.md`](vision.md) draws a line between what a machine decides and what
+[`vision.md`](../vision.md) draws a line between what a machine decides and what
 people argue about, and a page of positions is exactly where that line gets
 blurred — a stated intention reads like a guarantee, and the reader cannot tell
 them apart unless we say. So each position below carries a tier.
@@ -120,7 +120,7 @@ a verdict worth as much as a fix: it is usually a fact about the subject nobody
 had written down. A finding that is merely no longer reported has not thereby
 been fixed. The generator is additive and cannot delete a row, which is what
 makes this structural — but nothing yet forbids a *hand* deletion, and closing
-that gap is the first item in [`coherence.md`](coherence.md).
+that gap is the first item in [`coherence.md`](../coherence.md).
 
 **9. A reply is triage; an artifact settles it.** *(intention.)* What comes back
 from a project describes somebody's reading, made quickly and on our word. What
@@ -157,7 +157,7 @@ benefit of the doubt: they made choices for reasons that need not be visible in
 the tree, and an instruction presumes on all of it. A project run by agents gets
 the finding stated flatly, with what to do about it, because there is nobody to
 offend and hedging costs the reader time. **Which register applies is decided by
-what the project says about itself** — [`policy.md`](policy.md) asks every
+what the project says about itself** — [`policy.md`](../policy.md) asks every
 repository to end its README with a note on how its development is run — and
 never by our impression of the code. Where there is no such note, the first
 register applies, because guessing wrong in that direction is the cheaper error.

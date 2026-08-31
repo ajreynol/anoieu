@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Write `docs/open-findings.md`: every finding this project currently reports.
+"""Write `docs/reports/open-findings.md`: every finding this project currently reports.
 
 Maintaining this? Start at `docs/coherence.md`.
 
 Two files, because they answer different questions and have different audiences.
-`docs/open-findings.md` is the report: what anoieu believes and nobody has ruled
-on, and the thing another project is pointed at. `docs/closed-findings.md` is
+`docs/reports/open-findings.md` is the report: what anoieu believes and nobody has ruled
+on, and the thing another project is pointed at. `docs/reports/closed-findings.md` is
 the ledger of verdicts: internal bookkeeping, written by review and read by this
 generator, which skips any id listed in either.
 
@@ -49,11 +49,11 @@ from anoieu.semantics import load_set  # noqa: E402
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_corpus_table import DEFAULT_ROOTS, TARGETS, not_audited, signatures  # noqa: E402
 
-from tools.anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
+from anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "docs", "open-findings.md")
-LEDGER = os.path.join(ROOT, "docs", "closed-findings.md")
+OUT = os.path.join(ROOT, "docs", "reports", "open-findings.md")
+LEDGER = os.path.join(ROOT, "docs", "reports", "closed-findings.md")
 
 HEADER = """# Open findings
 
@@ -281,12 +281,12 @@ def main() -> int:
     if args.check:
         if not missing:
             print(
-                f"-- docs/open-findings.md lists every finding "
+                f"-- docs/reports/open-findings.md lists every finding "
                 f"({len(kept)} open, {len(closed)} closed)"
             )
             return 0
         print(
-            f"-- {len(missing)} finding(s) are not listed in docs/open-findings.md; "
+            f"-- {len(missing)} finding(s) are not listed in docs/reports/open-findings.md; "
             "run tools/gen_open_findings.py and commit",
             file=sys.stderr,
         )
@@ -304,9 +304,9 @@ def main() -> int:
     with open(LEDGER, "w") as f:
         f.write("\n".join([LEDGER_HEADER] + closed).rstrip() + "\n")
     print(
-        f"-- wrote docs/open-findings.md: {len(added)} added, {len(kept)} open"
+        f"-- wrote docs/reports/open-findings.md: {len(added)} added, {len(kept)} open"
     )
-    print(f"-- wrote docs/closed-findings.md: {len(closed)} ruled on")
+    print(f"-- wrote docs/reports/closed-findings.md: {len(closed)} ruled on")
     return 0
 
 

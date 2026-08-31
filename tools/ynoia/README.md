@@ -54,7 +54,7 @@ The boundary matters more than the goals, so it is stated first.
   with the alternatives listed for form's sake.
 - **It does not report defects.** Where reading the ecosystem turned up something
   actually wrong in somebody's file, that is a finding: it leaves through
-  [`reporting-workflow.md`](../../docs/reporting-workflow.md) with an id and a
+  [`reporting-workflow.md`](../../docs/reports/reporting-workflow.md) with an id and a
   state, and never through here. This project's output is argument.
 - **It does not speak for anoieu.** The host tool is a participant in the
   argument and an interested one — it exists because the narrow-fragment position

@@ -1,7 +1,7 @@
 """The codes the fuzzer reports under, and the page behind each.
 
 A finding from the fuzzer goes into the same ledger as a finding from the
-checks -- [`docs/open-findings.md`](../docs/open-findings.md), an id, an owner,
+checks -- [`docs/reports/open-findings.md`](../docs/reports/open-findings.md), an id, an owner,
 a verdict -- so it needs the same two things a check has: a code, and a page
 saying what the code means. The prefix is the marker. `EO`, `DOC` and `TRI` are
 things *anoieu read*; **`FUZ` is something the fuzzer provoked**, and the two

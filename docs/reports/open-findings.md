@@ -19,8 +19,8 @@ Two kinds of row, confirmed two different ways. The code says which.
 
 | code | what it is | how you confirm it |
 | --- | --- | --- |
-| `EO`, `DOC`, `TRI` | a **check** read something out of a signature. One page per code in [`checks.md`](checks.md) — link straight to yours, `checks.md#eo0054` and so on | the row names a file and a line **in your project**: read that file |
-| `FUZ` | the **[fuzzer](fuzzing.md)** provoked it out of a running checker. Codes are [one page each](fuzzing.md#the-codes) | the row names a committed reproducer under [`tests/fuzz/`](../tests/fuzz), fetchable raw: **run your own build on it** |
+| `EO`, `DOC`, `TRI` | a **check** read something out of a signature. One page per code in [`checks.md`](../checks.md) — link straight to yours, `checks.md#eo0054` and so on | the row names a file and a line **in your project**: read that file |
+| `FUZ` | the **[fuzzer](../fuzzing.md)** provoked it out of a running checker. Codes are [one page each](../fuzzing.md#the-codes) | the row names a committed reproducer under [`tests/fuzz/`](../../tests/fuzz), fetchable raw: **run your own build on it** |
 
 A `FUZ` row is about a program's *behaviour*, not about a file anyone maintains,
 and it was produced against somebody else's build — so it may not reproduce for

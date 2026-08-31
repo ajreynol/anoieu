@@ -8,7 +8,7 @@ binary it was found against may be somebody's working tree.
 **Promotion is the step that makes it one.** `anoieu-fuzz promote` copies a
 reproducer into `tests/fuzz/`, where it is committed, and from there it is
 exactly like a finding from the checks: it has a code, an owner, a fingerprint,
-a row in [`docs/open-findings.md`](../docs/open-findings.md), and it leaves the
+a row in [`docs/reports/open-findings.md`](../docs/reports/open-findings.md), and it leaves the
 open table only when somebody rules on it.
 
 The asymmetry with the checks is worth stating, because it is the reason this
@@ -134,8 +134,8 @@ def diagnostic(record: dict, sources: SourceMap | None = None) -> Diagnostic:
         span=Span(case or rel, line, 1, line, max(2, len(line_text) + 1)),
         label="this file",
         notes=notes,
-        help=f"confirm it with `python3 -m tools.anoieu_fuzz replay {rel}`, "
-        f"and read `python3 -m tools.anoieu_fuzz explain {spec.code}`",
+        help=f"confirm it with `python3 -m anoieu_fuzz replay {rel}`, "
+        f"and read `python3 -m anoieu_fuzz explain {spec.code}`",
     )
 
 
@@ -163,7 +163,7 @@ def owner_of(record: dict) -> str:
 
 
 def rows(corpus: str = "") -> dict[str, dict]:
-    """Every promoted finding as a row for `docs/open-findings.md`.
+    """Every promoted finding as a row for `docs/reports/open-findings.md`.
 
     The shape is `tools/gen_open_findings.py`'s, keyed by the same fingerprint,
     so the generator merges these with what the checks report and neither side
@@ -191,7 +191,7 @@ def promote(source: str, corpus: str = "", owner: str = "", note: str = "") -> s
     an artefact of this harness -- a mutated `include` pointing nowhere was the
     first one -- and a fuzzer that filed its own output would be publishing
     faster than anybody could read it, which is the one thing
-    `docs/reporting-policy.md` asks us not to do.
+    `docs/reports/reporting-policy.md` asks us not to do.
     """
     corpus = corpus or CORPUS
     record_path = os.path.join(source, "finding.json")

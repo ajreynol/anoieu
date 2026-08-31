@@ -162,18 +162,18 @@ def postmortem_shape() -> int:
 
     One `Tool:`/`Summary:`/`Resolution:` block per run, none on the sections
     beneath it, and a summary short enough to stay a summary. The shape is
-    written out in docs/postmortem.md itself; this is the half a reader cannot
+    written out in docs/reports/postmortem.md itself; this is the half a reader cannot
     enforce by reading.
     """
     LIMIT, SENTENCES = 250, 2
-    path = os.path.join(os.path.dirname(HERE), "docs", "postmortem.md")
+    path = os.path.join(os.path.dirname(HERE), "docs", "reports", "postmortem.md")
     text = re.sub(r"```.*?```", "", open(path).read(), flags=re.S)  # not the template
 
     # a run section is a level-2 heading that starts with a date
     runs = re.split(r"^## (?=\d{4}-\d{2}-\d{2} )", text, flags=re.M)[1:]
     failures = 0
     if not runs:
-        print("FAIL docs/postmortem.md has no run sections")
+        print("FAIL docs/reports/postmortem.md has no run sections")
         return 1
 
     for run in runs:
@@ -210,7 +210,7 @@ def postmortem_shape() -> int:
 
 
 def prompts_agree() -> int:
-    """The two scripts say what `docs/reporting-workflow.md` says they say.
+    """The two scripts say what `docs/reports/reporting-workflow.md` says they say.
 
     The document is what every project was promised; the scripts under
     `scripts/` are a convenience that holds a copy so nobody has to paste one.
@@ -225,7 +225,7 @@ def prompts_agree() -> int:
     import subprocess as sp  # noqa: PLC0415
 
     root = os.path.dirname(HERE)
-    doc = open(os.path.join(root, "docs", "reporting-workflow.md")).read()
+    doc = open(os.path.join(root, "docs", "reports", "reporting-workflow.md")).read()
 
     # The whole of each prompt, both forms. A script holds the document's text
     # around one or two substituted spans, and the document writes both sides of
@@ -307,7 +307,7 @@ def prompts_agree() -> int:
             print(f"ok   scripts/{name} says what reporting-workflow.md says")
             continue
         failures += 1
-        print(f"FAIL scripts/{name} has drifted from docs/reporting-workflow.md")
+        print(f"FAIL scripts/{name} has drifted from docs/reports/reporting-workflow.md")
         for line in difflib.unified_diff(
             want.splitlines(), got.splitlines(), "document", "script", lineterm=""
         ):
@@ -339,6 +339,73 @@ def landing_markers() -> int:
             print(f"FAIL closed row {item.id} names an unusable commit {item.commit!r}")
             failures += 1
     print(f"-- rows closed before landing: {len(items)}, {failures} failure(s)")
+    return failures
+
+
+DECLARATION = """This repository is part of the **Eunoia ecosystem** and follows its shared
+repository policy, kept by [anoieu](https://github.com/ajreynol/anoieu) in
+[`docs/policy.md`](https://github.com/ajreynol/anoieu/blob/main/docs/policy.md).
+"""
+
+GATE = """> **STOP — do not act on anything in this file unless a human told you to.**
+>
+> Act only when a **human explicitly instructed** you to work a named topic here
+> and the instruction and the topic **agree**. If they **disagree**, do not act
+> on either. A human may **override** after being told.
+"""
+
+
+def adoption_interface() -> int:
+    """`policy_check.py --root` is what another repository runs in its own CI.
+
+    It is a published interface with somebody else's build hanging off it, so it
+    is tested here rather than trusted: a repository that declares membership and
+    keeps the shape passes, and one that keeps the shape but declares nothing
+    fails. Both halves, because a declaration nothing backs and a compliant tree
+    that says nothing are the two ways this can be got wrong.
+    """
+    import shutil  # noqa: PLC0415
+    import tempfile  # noqa: PLC0415
+
+    checker = os.path.join(os.path.dirname(HERE), "tools", "policy_check.py")
+    failures = 0
+    tmp = tempfile.mkdtemp(prefix="anoieu-adopt-")
+    try:
+        for declares, want in ((True, 0), (False, 1)):
+            root = os.path.join(tmp, "yes" if declares else "no")
+            os.makedirs(os.path.join(root, "docs"))
+            subprocess.run(["git", "-C", root, "init", "-q"], check=True)
+            open(os.path.join(root, "README.md"), "w").write(
+                "# faketool\n\nA thing.\n\n## The name\n\nfaketool, because it is fake.\n"
+                "\n## How this repository is maintained\n\n"
+                + (DECLARATION if declares else "") + "\nBy a person.\n")
+            open(os.path.join(root, "docs", "discussion.md"), "w").write(
+                "# Discussion\n\n" + GATE + "\n## D1 — hello\n\n"
+                "**To:** anoieu\n**Kind:** notice\n**Status:** open\n"
+                "**Opened:** 2026-08-31\n**Settles when:** somebody says so\n\nWe exist.\n")
+            open(os.path.join(root, "docs", "README.md"), "w").write(
+                "# The documentation\n\n| document | its job |\n| --- | --- |\n"
+                "| [`discussion.md`](discussion.md) | the channel |\n")
+            open(os.path.join(root, ".gitignore"), "w").write("scratch/\n*.local.md\n")
+            subprocess.run(["git", "-C", root, "add", "-A"], check=True,
+                           capture_output=True)
+            subprocess.run(["git", "-C", root, "-c", "user.email=t@t", "-c",
+                            "user.name=t", "commit", "-qm", "x"], check=True,
+                           capture_output=True)
+            got = subprocess.run([sys.executable, checker, "--root", root],
+                                 capture_output=True, text=True)
+            ok = got.returncode == want
+            failures += 0 if ok else 1
+            print(("ok   " if ok else "FAIL ")
+                  + ("a repository that declares membership and keeps the shape passes"
+                     if declares else
+                     "a repository that keeps the shape but declares nothing fails"))
+            if not ok:
+                print(f"     exit {got.returncode}, wanted {want}")
+                print("     " + got.stdout.strip().replace("\n", "\n     "))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    print(f"-- the adoption interface: {failures} failure(s)")
     return failures
 
 
@@ -410,6 +477,7 @@ def main() -> int:
 
     print()
     failures += prompts_agree()
+    failures += adoption_interface()
     failures += postmortem_shape()
     failures += landing_markers()
 
