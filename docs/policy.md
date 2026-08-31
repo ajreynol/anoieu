@@ -363,6 +363,33 @@ And **nothing here crosses a repository boundary by machine** — the file is ou
 a person carries what is in it, exactly as rule 7 requires of a child project and
 as *Nothing crosses a repository boundary automatically* requires of a finding.
 
+### Who may address whom
+
+**A child project is addressed through its parent, and only anoieu addresses one
+directly.** A child project has no users, nothing depends on it, and it may be
+retired at any moment — so it has no `discussion.md`, opens no topics, and
+answers none. A tool that wants something from somebody's child project raises
+it with the **parent**, whose name is on the directory and who is accountable
+for what is in it. Correspondence with a thing that can vanish next week creates
+an obligation nobody has agreed to carry.
+
+The one exception is anoieu, which may address a child project directly because
+it keeps this policy and is the only tool positioned to ask a child project to
+do something *as a child project* — audit a proposal, produce a verdict, retire.
+That is a narrow licence and not a general one: it does not extend to asking a
+child project for work its parent has not agreed to, and the parent may say so.
+
+**A new repository is a human decision, always.** A topic may propose one, argue
+for one, or ask whether one is warranted, and none of that creates one. No agent
+creates a repository, claims a name for it, or commits the ecosystem to
+maintaining it — the name is a claim on a shared namespace and the repository is
+a claim on somebody's attention for years, and both are cheap to spend and
+expensive to withdraw. Where a proposal is serious enough to be worth a real
+answer, it goes to
+[`tools/ynoia/proposals.md`](../tools/ynoia/proposals.md), which audits it
+against a standard and produces a recommendation. **A recommendation is not an
+approval.** A person approves, or does not.
+
 ### What a topic is never about
 
 **Never open a topic about somebody else's discussion file.** Not that it is out

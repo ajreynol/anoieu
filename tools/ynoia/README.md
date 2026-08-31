@@ -45,7 +45,16 @@ So: write it down, make the strongest case against it, and see which survives.
    and it is deliberately short — a repository choosing its name should not have
    to read an argument about the ecosystem first.
 
-4. **Stretch: what would settle it.** An argument that cannot be lost is not
+4. **Auditing proposals.** Whether a given idea deserves a repository of its
+   own is the account's general question applied to one case, with a decision
+   attached — so it is answered here, against a stated standard, in
+   [`proposals.md`](proposals.md). The output is an argument with a
+   recommendation at the end. **It approves nothing:** a repository is a claim
+   on a shared namespace and on years of somebody's attention, and the policy
+   reserves that for a person. anoieu carries proposals in, because it is the
+   only tool that may address a child project directly.
+
+5. **Stretch: what would settle it.** An argument that cannot be lost is not
    worth having. The account carries what would change our minds and one
    experiment that would settle more than any further argument. Turning that into
    something somebody could actually run is the stretch goal, and it remains one.
@@ -74,6 +83,9 @@ The boundary matters more than the goals, so it is stated first.
 
 ## Status
 
+**Now also the place proposals are audited**, which is the first thing this
+project has been asked to produce for somebody else rather than for itself.
+
 **The account exists and is long.** Nothing in it has been argued with by
 anybody who disagrees, which is the whole point of writing it and has not
 happened yet. It has produced no deliverable and so has earned no place in
@@ -89,3 +101,4 @@ convergence is not something this project can establish about itself.
 | --- | --- |
 | [`why-eunoia.md`](why-eunoia.md) | the account: the case, the case against, the objections, six arrangements, the projects that do not exist, and what would change our minds |
 | [`names.md`](names.md) | the register of names: taken, reserved, and how to pick one. Goal 3 |
+| [`proposals.md`](proposals.md) | should this become a repository? The standard, and one section per proposal. Goal 4 |
