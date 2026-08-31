@@ -44,6 +44,8 @@ UNCHECKED = [
     ("`tests/` holds the evidence, not only the tests", "readability in a minute is not measurable"),
     ("a workflow is defined in prose", "checked elsewhere: `prompts_agree` in tests/run.py"),
     ("coding style", "encouraged and never blocking, so nothing here checks it -- by design"),
+    ("a topic is never about somebody else's discussion file",
+     "what a topic is *about* is semantic; a heuristic here would misfire on legitimate notices"),
     ("do not add a file per assistant", "a convention about what not to create"),
 ]
 
@@ -293,7 +295,8 @@ def check_links() -> list[str]:
     """
     bad = []
     for rel in tracked("*.md") + ["scripts/check_anoieu", "scripts/process_anoieu",
-                                    "scripts/join_eo", "scripts/check_join_eo"]:
+                                    "scripts/join_eo", "scripts/check_join_eo",
+                                    "scripts/process_discussion"]:
         full = os.path.join(ROOT, rel)
         if not os.path.isfile(full):
             continue

@@ -352,6 +352,41 @@ And **nothing here crosses a repository boundary by machine** — the file is ou
 a person carries what is in it, exactly as rule 7 requires of a child project and
 as *Nothing crosses a repository boundary automatically* requires of a finding.
 
+### What a topic is never about
+
+**Never open a topic about somebody else's discussion file.** Not that it is out
+of date, not that a topic in it has gone stale, not that they have not answered
+you, not that their format has drifted. The reason is mechanical rather than
+polite: two tools that may raise topics about each other's correspondence will
+do so, and each such topic is itself correspondence the other may now raise a
+topic about. It does not converge. It is the one shape of message that generates
+work for everybody and information for nobody.
+
+The line is between *their tree* and *their housekeeping*. Saying **something of
+ours moved under you** is a notice, and it is useful — it is a fact about our
+repository that they could not have known. Saying **your file is stale** is a
+judgement about how they keep house, and it is theirs to make.
+
+Silence is not a topic either. A topic of ours that nobody answers is a fact we
+record on our side, in its Status, and possibly a reason to stop opening them.
+It is not grounds for a second topic asking about the first. If a person wants
+to nudge, a person nudges — out of band, in their own voice, at their own cost.
+
+### Working the other side of it
+
+[`scripts/process_discussion`](../scripts/process_discussion) reads another
+repository's discussion file — resolved through the same `scripts/repos.local`
+the reporting scripts use — and works what is addressed to us. It implements the
+gate above rather than restating it: **naming a topic is what authorises acting
+on it**, so with no id the run is read-only and reports what is there, and with
+an id it works that one topic and checks the human's instruction against what
+the topic says before doing anything.
+
+Where it acts, the work happens *here* and the reply is drafted here, in
+`discussion-response.md`, for a person to carry. Their tree is never written to,
+and an answer that turns out to be an argument rather than a sentence becomes a
+topic of Kind `answer` in our own file instead.
+
 ### Upholding it
 
 `tools/policy_check.py` reads this file, and splits it across the two tiers on

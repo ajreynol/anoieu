@@ -69,7 +69,10 @@ both defined by
 ecosystem, and [`check_join_eo`](../scripts/check_join_eo), run here to ask
 whether one has — both defined by
 [`policy.md`](policy.md#joining-the-eunoia-ecosystem). `check_join_eo` can
-conclude the fault is ours, and is told to fix it here when it is. The prompts are the workflow; the scripts are a way of running them,
+conclude the fault is ours, and is told to fix it here when it is. And
+[`process_discussion`](../scripts/process_discussion), run here to work what
+another repository has addressed to us — read-only until a person names a
+topic. The prompts are the workflow; the scripts are a way of running them,
 and `tests/run.py` fails when their copy of the text has drifted from it.
 
 `reports/` also holds documents rendered for an audience that will not clone this
