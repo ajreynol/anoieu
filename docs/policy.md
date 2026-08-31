@@ -387,8 +387,15 @@ a claim on somebody's attention for years, and both are cheap to spend and
 expensive to withdraw. Where a proposal is serious enough to be worth a real
 answer, it goes to
 [`tools/ynoia/proposals.md`](../tools/ynoia/proposals.md), which audits it
-against a standard and produces a recommendation. **A recommendation is not an
-approval.** A person approves, or does not.
+against a standard and produces a recommendation. Each one opens by naming the **code names
+proposed**, what it is in a line, the verdict, and the first three steps if it is
+approved — a person deciding should not have to extract any of that from an
+argument. The verdict is about *us*: whether the ecosystem would depend on the
+tool, or whether it is simply worth building and nothing here waits on it. A
+proposed tool is an independent thing whose owner decides its scope, its name,
+and whether it ever joins this ecosystem at all. **A recommendation is not an approval.** A person
+approves, or does not, and the name is claimed at that moment rather than when a
+document suggests it.
 
 ### What a topic is never about
 
@@ -667,6 +674,14 @@ saying what it is for, and it is told explicitly not to comply with any of this 
 knowing what you are building is what makes the rest decidable, and that order
 is deliberate. Names come from the register the ecosystem keeps, which lists
 what is taken, what is reserved and what each reserved name was reserved for.
+It also asks the agent to copy the register entry and the proposal it read into
+an untracked `ynoia-brief.local.md`: the register moves, and when a new README
+turns out wrong the version its author was working from is the only thing that
+explains it.
+
+Unlike `join_eo`, that prompt is not reproduced here and not drift-checked. One
+verbatim copy is a thing to keep true; two is a habit, and this one carries no
+compliance instructions to get wrong.
 
 ### 1. Declare it, at the top of your maintenance note
 

@@ -84,6 +84,14 @@ with, and it will tell you exactly what to add. Do not add files in
 anticipation, and do not read the policy now — knowing what you are building is
 what makes the rest of it decidable, and that order is deliberate.
 
+**Leave a record of what you read.** Copy, verbatim, the register entry for the
+name you took and the proposal section it points to if there is one, into
+`ynoia-brief.local.md` at the root. Do not stage it: `*.local.md` is the
+ecosystem's suffix for a file that is deliberately not committed. It is there so
+that if this README turns out to be wrong, somebody can see what you were working
+from instead of guessing — the register moves, and the version you read is the
+only thing that explains what you wrote.
+
 Leave the work staged and not committed. Then say in two sentences what you
 named it and why, so a person can disagree with the name while it is still free.
 PROMPT_END

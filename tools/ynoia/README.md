@@ -84,7 +84,11 @@ The boundary matters more than the goals, so it is stated first.
 ## Status
 
 **Now also the place proposals are audited**, which is the first thing this
-project has been asked to produce for somebody else rather than for itself.
+project has been asked to produce for somebody else rather than for itself. Its
+first audit, `P1`, was carried to a decision and a repository was approved on the
+strength of it — which is a deliverable in the sense the vision means, and would
+be the thing that earns this project a place there. Whether it has is not this
+project's call.
 
 **The account exists and is long.** Nothing in it has been argued with by
 anybody who disagrees, which is the whole point of writing it and has not

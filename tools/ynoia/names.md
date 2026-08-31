@@ -35,6 +35,7 @@ an account — `anoieu_fuzz` is one — but the burden is on the name to earn it
 | **sapheneia** | σαφήνεια, clarity of an account: Eunoia as a language definition |
 | **ynoia** | *why Eunoia*: whether the arrangement earns its machinery |
 | **euthyna** | εὔθυνα, the audit at end of term: what logos's proof is made of. **Started**, in eudaimonia |
+| **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Approved**, awaiting its repository; see [`proposals.md`](proposals.md) `P1` |
 
 ## Reserved, and free to take
 
