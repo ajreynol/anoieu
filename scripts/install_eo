@@ -373,11 +373,13 @@ def merge_repos_local(root: str, repos: list[Repo], planned: set[str] = frozense
 
 # -- printing what would happen ---------------------------------------------
 
-def dump(root: str, repos: list[Repo], inv: dict, everything: list[Repo]) -> int:
+def dump(root: str, repos: list[Repo]) -> int:
     meanings = status_meanings()
     print("# The Eunoia ecosystem, as commands. Printed by scripts/install_eo,")
     print("# which has run none of them. Every uncommented line below is live:")
-    print("# `--run` executes exactly these, and a paste of them does the same.")
+    print("# `--run` runs exactly these, and a paste of them does the same.")
+    print("# `--run` also records where each tree ended up, in the untracked")
+    print("# scripts/repos.local that the other commands resolve an id through.")
     print(f"# Root: {root}   (--root PATH, or $EO_ROOT, to put it elsewhere)")
     if not repos:
         print("\n# nothing selected: everything asked for is already here.")
@@ -404,13 +406,6 @@ def dump(root: str, repos: list[Repo], inv: dict, everything: list[Repo]) -> int
         for c in r.elsewhere:
             for line in child_note(r, c):
                 print(f"#   {line}")
-
-    print()
-    print("# Every script in anoieu resolves a repo id through this file, so it is")
-    print("# the step that makes the checkouts usable rather than merely present.")
-    print(f"cat > {REPOS_FILE} <<'EOF'")
-    print(repos_local_text(root, everything, {r.key for r in repos if not r.opt_in}), end="")
-    print("EOF")
 
     kids = [(c, r) for r in repos for c in r.children]
     if kids:
@@ -680,7 +675,7 @@ def main() -> int:
         return show(args.root, chosen, inv, args.fetch, everything)
     if args.run:
         return run(args.root, chosen, everything, not args.no_repos_local)
-    return dump(args.root, chosen, inv, everything)
+    return dump(args.root, chosen)
 
 
 if __name__ == "__main__":
