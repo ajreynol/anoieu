@@ -39,6 +39,8 @@ UNCHECKED = [
     ("`tools/` is the harness, not the product", "no mechanical test separates the two"),
     ("`tests/` holds the evidence, not only the tests", "readability in a minute is not measurable"),
     ("a workflow is defined in prose", "checked elsewhere: `prompts_agree` in tests/run.py"),
+    ("coding style", "encouraged and never blocking, so nothing here checks it -- by design"),
+    ("do not add a file per assistant", "a convention about what not to create"),
 ]
 
 # Written by a run. `closed-findings.md` is deliberately absent: it is written by
@@ -50,6 +52,17 @@ COMPETING_ENTRY = ["INTRODUCTION.md", "OVERVIEW.md", "ABOUT.md", "GUIDE.md", "ST
 KINDS = {"request", "proposal", "question", "notice", "answer"}
 STATES = {"open", "answered", "declined", "withdrawn", "settled"}
 FIELDS = ["To", "Kind", "Status", "Opened", "Settles when"]
+
+# The response gate, clause by clause. Each entry is one clause of the banner
+# every discussion.md must carry, and the alternatives a repository may spell it
+# with. Wording may vary; a missing clause may not.
+BANNER = [
+    ("the refusal to act unbidden", ["do not act", "must not act", "never act"]),
+    ("the human instruction", ["human"]),
+    ("that it be explicit", ["explicit"]),
+    ("the disagreement rule", ["disagree"]),
+    ("the human override", ["override"]),
+]
 
 
 def tracked(pattern: str) -> list[str]:
@@ -194,6 +207,26 @@ def check_children() -> list[str]:
     return bad
 
 
+def check_response_gate() -> list[str]:
+    """*Responding to somebody else's discussion file* — the protocol's safety rule.
+
+    A build failure rather than a minor finding: it is the only thing in the file
+    that stops an agent acting on correspondence nobody asked it to act on, and a
+    safety rule that degrades to a warning is one that is eventually ignored.
+    """
+    text = read("docs/discussion.md")
+    if not text:
+        return ["docs/discussion.md does not exist, so it carries no response gate"]
+    first_topic = re.search(r"^##\s+D\d+\s", text, re.M)
+    head = text[: first_topic.start()] if first_topic else text
+    if "&gt;" not in head and not re.search(r"^>", head, re.M):
+        return ["docs/discussion.md has no banner block above its first topic"]
+    low = head.lower()
+    bad = [f"the banner does not state {what}"
+           for what, forms in BANNER if not any(f in low for f in forms)]
+    return bad
+
+
 def check_discussion() -> list[str]:
     """*The discussion file* — reported as minor, never as a build failure."""
     text = read("docs/discussion.md")
@@ -242,6 +275,7 @@ CHECKS = [
     ("dependencies are fetched and pinned, never vendored", check_dependencies),
     ("working space is untracked", check_working_space),
     ("child projects carry a charter, and name what they break", check_children),
+    ("the discussion file carries the response gate, at the top", check_response_gate),
 ]
 
 
