@@ -42,10 +42,12 @@ beneath, and they carry detail rather than fields of their own.
 
 **Tool:** the project the findings were reported to. This is the repository name
 passed to `scripts/process_anoieu`, so it is never a judgement call.
+
 **Summary:** **what the nature of the findings was**, most important first —
 what was actually wrong with the software, not what the exchange consisted of.
 Written for somebody who does not work on either project: no codes, no ids, no
 counts, no procedure. **Two sentences, 250 characters at most.**
+
 **Resolution:** how it came out, as a breakdown — how many were real defects and
 of what kind, how many were deliberate and declined, how many were ours to fix
 — and what changed here as a result. Counts and links belong in this field, not
@@ -61,6 +63,15 @@ than to this one.>
 
 `tests/run.py` enforces the shape: one field block per run, none on the sections
 beneath it, and a summary inside the limit.
+
+**Read the entries below before writing one.** They are the worked examples of
+what a good report looks like here — how much detail a finding needs before its
+resolution makes sense, how a summary reads when it describes the software
+rather than the correspondence, and what a `Learned:` line is for. They also
+show the two failure modes worth avoiding: an entry that restates
+[`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) at
+length, and one that records an outcome without saying what it changes for the
+next finding.
 
 Keep only text that makes clear **what happened** and **what the workflow
 learned**. Everything else — the commits, the reproduction, the argument — goes
@@ -129,9 +140,11 @@ is kept honest.
 ## 2026-08-31 — logos: the first full sweep
 
 **Tool:** logos
+
 **Summary:** Logos and Ethos disagreed about which proof files are valid, each
 accepting proofs the other refuses. Logos's semantics also described an operator
 its calculus does not define.
+
 **Resolution:** 2 of the 20 were real defects in Logos — [a parser
 bug](#3e271ee47343e758--a-reproducer-we-damaged-ourselves) and [a dead semantics
 entry](#eac7ccd4d5fb0953--a-fix-that-had-not-landed) — both fixed, neither
