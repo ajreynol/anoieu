@@ -153,6 +153,13 @@ def main() -> int:
     astray = [d.name for d in synced if pinned.get(d.name) and d.full != pinned[d.name]]
     if astray:
         item(f"could not restore: {', '.join(astray)} — the comparison below is not pinned")
+        # Under --check this is the failure, and it has to be reported as that
+        # one. Everything after this point compares against something other than
+        # the recorded commits, so a difference it finds is about the restore
+        # rather than about a check -- and the advice for a stale report, run the
+        # generator and commit, would here write a *worse* lock than the one it
+        # could not restore.
+        failures += 1 if args.check else 0
 
     step("Measuring what the checks report")
     roots = corpus_mod.roots_for(deps_dir) if args.roots else corpus_mod.DEFAULT_ROOTS
@@ -192,7 +199,15 @@ def main() -> int:
             item(line.lstrip("- ").strip())
         failures += 1 if result.returncode else 0
 
-    if failures:
+    if astray and args.check:
+        print(
+            f"error: could not restore {', '.join(astray)} at the commit "
+            "tools/deps.lock records, so nothing below was measured against what "
+            "the report claims. Fix the pin or the ref in tools/deps.json; "
+            "running the generator here would only record the shortfall.",
+            file=sys.stderr,
+        )
+    elif failures:
         print(
             "error: the report is not current; run `python3 tools/run.py` and commit",
             file=sys.stderr,

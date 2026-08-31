@@ -184,6 +184,49 @@ and most of that cost falls on somebody who is not us.
 This is not a formality: it is the last place where a change to a document that
 binds another repository can be caught.
 
+## The build
+
+**It has been red far more often than green, and it stopped being read.**
+Sixty-one consecutive runs failed, from 2026-08-30 to 2026-08-31, on two defects
+that had nothing to do with each other and neither of which was in the change
+that first turned it red. That is what this section guards against — not the
+failures, which were real, but a build everybody has learned to expect nothing
+from, which is worth the same as not having one.
+
+Both defects had the same shape: **a check that was a function of something
+other than the tree it was checking.**
+
+- The pinned corpus restore cloned a *branch* before fetching the commit, so a
+  pin was only as durable as the branch it happened to sit on. logos's was
+  deleted upstream, the clone failed before the pin was ever tried, and the job
+  whose entire design is to depend on nothing but this repository went red
+  because somebody else removed a ref. The failure it printed was worse than the
+  defect: *the report is not current; run `tools/run.py` and commit* named a fix
+  that would have dropped logos from the lock and recorded the shortfall.
+- A recorded oracle verdict held part of the recording machine's home directory.
+  ethos names the source file it was *built* from when it fails internally, and
+  the normaliser only knew how to strip the directory of a witness — so the
+  record could not match on another machine, and never would.
+
+**Be careful, and do not make the build slow.** Those pull against each other
+only if care is spelled *more steps*. It is not: both fixes above make a step
+depend on less rather than adding one, and the pinned restore now costs one
+network request per project instead of two. A run people wait on is a run people
+skip, and a skipped run is not evidence. Prefer the fix that removes an input
+over the fix that adds a guard.
+
+**The `policy` job is a contract, and it is the one place where no ground may be
+given.** Everything else here is ours to break and ours to fix on our own
+schedule. `tools/policy_check.py` is not: other repositories run it in their own
+CI, pinned at a commit of this one, and what it decides is what this repository
+is handing them downstream. So it is never relaxed to turn a build green, never
+made conditional on the rest passing, and never left to rot while something
+noisier is being fixed — and a check removed from it is a promise withdrawn from
+somebody else rather than a tidy-up here. A regression in any other job costs us
+a morning. A regression in that one costs a maintainer who does not work here,
+in a build they did not schedule, which has already happened once and is written
+up below.
+
 ## Defending the infrastructure
 
 The policy, the checker, the joining flow, the discussion protocol, the pin and
@@ -414,6 +457,35 @@ keys. Three options, none chosen:
 *row that changes state* or an *event log summarised into a row*. Everything
 follows from that — and the script above is worth writing either way, because it
 is the same interface in all three worlds.
+
+### CI should stop proving the report by re-running the tools
+
+**Future work, and it belongs in koine rather than here. Nothing changes yet.**
+
+The `corpus` job answers *is the report accurate* by cloning four upstream
+projects, running every check over all of them, and diffing the result against
+what is committed. That is an expensive way to ask the question and a brittle
+one: the job is a function of four remotes, of what git does when a ref
+disappears, and of whatever the checks happen to say today — and the first of
+those has already taken the build down for a day. A report is a record of what
+was measured and when. A build should be able to establish that the record is
+**coherent** — every id accounted for, every closed row carrying the evidence it
+rests on, nothing asserted about a commit the lock does not name — without
+measuring anything a second time.
+
+That is the same question the properties above are about, and it is why this
+belongs to [koine](https://github.com/ajreynol/koine) and not here: the loop
+that produces the record is shared between two tools already, so a check that
+the record is well-formed is shared too, and writing a second one here is
+exactly what koine exists to prevent. It is raised with koine and dokimasia as
+`D9` in [`discussion.md`](discussion.md).
+
+Two things hold in the meantime. The `corpus` job **stays as it is** — a slow
+proof is better than none, and removing it before the replacement exists would
+trade a real check for an intention. And the `policy` job is **not in scope for
+any of this**: it decides claims about this tree, clones nothing but the policy
+it is checked against, and is a contract with other repositories rather than a
+convenience for us.
 
 ### The ecosystem, and what we cannot see of it
 

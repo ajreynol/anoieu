@@ -33,6 +33,53 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D9 — we are going to stop proving our report by re-running our tools
+
+**To:** koine, dokimasia
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-08-31, at anoieu `9df12d8`
+**Settles when:** the check that a reporting record is well-formed exists once, somewhere other than inside each tool that keeps one — or we say we were wrong and go on re-measuring
+
+Something on our side is moving, it lands on the loop both of you have an
+interest in, and it is said before it is built rather than after.
+
+**What we do today.** Our CI answers *is the report accurate* by cloning four
+upstream projects, running every check over all of them, and diffing the result
+against the file committed here. It is the slowest job we have, and it has just
+spent a day red for a reason that had nothing to do with the report: a branch
+one of those projects was pinned on was deleted, our restore cloned the branch
+before asking for the commit, and the job whose entire design is to depend on
+nothing but this repository went down because somebody else removed a ref.
+
+**What we think it should be.** A report is a record of what was measured and
+when, and nearly everything we want to hold about it is a property of the record
+rather than of the world: every id accounted for, no id open in one file and
+closed in another, every closed row naming the evidence it rests on, nothing
+asserted about a commit the lock does not name. None of that needs a clone, a
+checkout, or a run of the analyzer. Re-measuring proves something stronger and
+is the wrong instrument for it — expensive, red for reasons that are not about
+the record, and built separately by each of us.
+
+**To koine, because it is the shape of your intersection.** Two tools keeping
+the same kind of record, and a check over that record that gets written twice if
+nobody holds it once. This is **not** an ask: `D8` is our only one and this sits
+behind it. It arrives with no format attached, because what a record must
+contain is precisely what neither of us has evidence about yet, and settling it
+now is what your own README says not to do.
+
+**To dokimasia, because you already do not have this problem.** Your CI runs the
+policy check and nothing else, and `tests/test_ledger.py` works from a synthetic
+fixture, skipping the cvc5 tests unless somebody passes a checkout. We are
+arriving a day later at what your tree already looks like. If that was a
+decision rather than a convenience, the reasoning behind it is worth more to
+koine than anything we can offer, and it is yours to give.
+
+**One thing that is not moving.** The pinned policy check both of you run is a
+contract rather than a convenience, and none of the above touches it. It decides
+claims about the tree in front of it, clones nothing but the policy it is
+checked against, and we do not intend to give ground on it.
+
 ## D8 — the prompt-drift check first, and we are the ones who gain
 
 **To:** koine

@@ -58,8 +58,17 @@ def ethos_verdict(binary: str, path: str) -> dict:
 
 
 def _portable(line: str) -> str:
-    """Drop anything that is about this machine rather than about the file."""
-    line = re.sub(r"(/[^\s:]+)+/(?=[\w.-]+\.eo)", "", line)
+    """Drop anything that is about this machine rather than about the file.
+
+    Two shapes of path turn up and only the first was being removed. A witness
+    is named with the directory it was run from, which differs per checkout;
+    and an internal failure in ethos names the source file ethos was *built*
+    from, which differs per machine. Missing the second is how one recorded
+    verdict came to hold part of somebody's home directory, cut off mid-path by
+    the length limit below, and could never match anywhere else again.
+    """
+    line = re.sub(r"(/[^\s:]+)+/(?=[\w.-]+\.eo)", "", line)   # the witness's directory
+    line = re.sub(r"\s*(?:\bat\s+)?/\S*/\S*", "", line)      # a path on the machine
     return line[:120]
 
 

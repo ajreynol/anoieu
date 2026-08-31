@@ -200,7 +200,7 @@
   "verdict": "accepted"
  },
  "EO0086-bad.eo": {
-  "detail": "Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at /home/andrew-reynol",
+  "detail": "Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&)",
   "verdict": "refused"
  },
  "EO0087-bad.eo": {

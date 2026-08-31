@@ -75,26 +75,35 @@ def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "") -
 
     `pin` is what makes a report reproducible. Given a commit, this fetches
     exactly that commit rather than whatever the branch has since become, so a
-    run over a recorded version measures the same bytes it measured before.
+    run over a recorded version measures the same bytes it measured before --
+    and it asks for the commit by name, so a branch that has since been renamed
+    or deleted is not something a pinned run can trip over.
     """
     dep.path = os.path.join(deps_dir, dep.name)
     exists = os.path.isdir(os.path.join(dep.path, ".git"))
 
     if pin and not offline:
         if not exists:
+            # No `clone` and no `--branch`: a pinned restore asks the server for
+            # one commit by name, and a branch is not part of that question. It
+            # used to clone the ref first, which made the pin only as durable as
+            # the branch it happened to be on -- logos's went away, the clone
+            # failed before the pin was ever tried, and every build went red for
+            # a reason none of them was measuring.
             os.makedirs(deps_dir, exist_ok=True)
-            code, msg = _git("clone", "--no-checkout", "--filter=blob:none",
-                             "--sparse", "--depth", "1", "--branch", dep.ref,
-                             dep.url, dep.path)
-            if code:
-                dep.status = f"could not clone: {msg.splitlines()[-1][:70]}"
-                return dep
+            _git("init", "--quiet", dep.path)
+            _git("remote", "add", "origin", dep.url, cwd=dep.path)
+            # what `clone --filter=blob:none` would have configured for us
+            _git("config", "remote.origin.promisor", "true", cwd=dep.path)
+            _git("config", "remote.origin.partialclonefilter", "blob:none",
+                 cwd=dep.path)
         _git("sparse-checkout", "set", *dep.paths, cwd=dep.path)
-        code, msg = _git("fetch", "--depth", "1", "origin", pin, cwd=dep.path)
+        code, msg = _git("fetch", "--depth", "1", "--filter=blob:none",
+                         "origin", pin, cwd=dep.path)
         if code:
-            # A commit can fall out of reach — force-pushed away, or a server
-            # that will not serve one by name. Say so rather than silently
-            # measuring something else.
+            # A commit can still fall out of reach -- garbage-collected once the
+            # branch holding it went, or a server that will not serve one by
+            # name. Say so rather than silently measuring something else.
             dep.status = f"pinned {pin[:12]} unreachable"
         else:
             _git("checkout", "--force", "FETCH_HEAD", cwd=dep.path)
@@ -131,9 +140,14 @@ def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "") -
             dep.status = "current" if before == after else "updated"
 
     if os.path.isdir(dep.path):
-        dep.full = _git("rev-parse", "HEAD", cwd=dep.path)[1]
-        dep.sha = dep.full[:12]
-        dep.date = _git("log", "-1", "--format=%cs", cwd=dep.path)[1]
+        # A clone that never got a commit has no HEAD to resolve, and reading
+        # the error back as if it were one is what made a missing project look
+        # measured further up.
+        code, head = _git("rev-parse", "HEAD", cwd=dep.path)
+        if not code:
+            dep.full = head
+            dep.sha = dep.full[:12]
+            dep.date = _git("log", "-1", "--format=%cs", cwd=dep.path)[1]
     return dep
 
 
