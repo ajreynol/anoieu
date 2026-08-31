@@ -43,6 +43,19 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 tools/policy_check.py
+      # Who is in the ecosystem is a decision a person records in
+      # tools/ecosystem.json, and a decision nobody re-checks goes stale
+      # silently: three tools joined and the file said `candidate` for as long
+      # as nobody happened to look. The first step reads the file as a document
+      # about itself and needs nothing else. The second fetches each member's
+      # README from its remote and asks whether what it declares is still what
+      # we have recorded -- one file per entry over https, a few seconds, and
+      # a remote it cannot reach is reported rather than counted against
+      # anybody.
+      - name: the inventory is well formed
+        run: python3 tools/ecosystem.py --check
+      - name: and who has joined is current
+        run: python3 tools/ecosystem.py --check --online
 
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a

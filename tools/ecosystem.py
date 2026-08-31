@@ -8,6 +8,8 @@ somebody to read across the answer and form a view.
 
     python3 tools/ecosystem.py            # the table
     python3 tools/ecosystem.py --verbose  # and why each policy verdict came out
+    python3 tools/ecosystem.py --check    # is the inventory itself still true?
+    python3 tools/ecosystem.py --check --online   # ... and ask each remote
 
 Health here means **what can be established from a checkout in about a second**:
 does it declare membership, does the policy check pass, is there a channel to
@@ -19,6 +21,26 @@ carries about its own silence applies here.
 Membership is a decision rather than a measurement, so the `status` column comes
 from `tools/ecosystem.json` and is never inferred. Where the measurement and the
 recorded status disagree, the row says so; changing the file is a person's job.
+
+`--check` is the same principle with an exit code, and it is what CI runs. Two
+questions, and the second is why it exists:
+
+**Is the inventory well formed?** Offline, and always: every entry has the fields
+its status requires, every parent named by a child exists, no two ids are one
+typo apart, and every repository the board addresses has a row here.
+
+**Is it still true?** With `--online`, each entry that is somebody's own
+repository has its README fetched from the remote and read for the membership
+declaration, by `policy_check.declaration_in` — the same function that decides it
+on a checkout. A tool recorded as a candidate that now declares membership is a
+stale inventory, and so is a member that has stopped declaring. That is the
+failure this was written for: three tools joined and the file did not move for
+long enough that nobody could say from the file alone which of them had.
+
+**What it cannot see** is whether a declaration is backed: that needs their whole
+tree and their own CI is where it is decided. A remote that cannot be reached is
+reported and not counted against anybody -- a network error is evidence about the
+network.
 """
 
 from __future__ import annotations
@@ -26,13 +48,29 @@ from __future__ import annotations
 import datetime
 import json
 import os
+import re
 import subprocess
 import sys
+import urllib.error
+import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INVENTORY = os.path.join(ROOT, "tools", "ecosystem.json")
 REPOS_FILE = os.environ.get("ANOIEU_REPOS_FILE",
                             os.path.join(ROOT, "scripts", "repos.local"))
+
+
+#: What each status requires of an entry, beyond `what`.
+REQUIRED = {
+    "member": ("repo", "url"),
+    "candidate": ("repo", "url"),
+    "served": ("repo", "url"),
+    "child": ("parent",),
+}
+
+#: The statuses that are somebody's own repository, and so have a README a
+#: declaration could be in. `served` is outside the ecosystem and is never asked.
+OWN_REPO = ("member", "candidate")
 
 
 def git(*args, cwd=None):
@@ -80,7 +118,139 @@ def check(path: str) -> tuple[str, list[str]]:
     return ("ok" if out.returncode == 0 else f"{len(failed)} failing"), detail
 
 
+def near(a: str, b: str) -> bool:
+    """Whether two ids are one edit apart, by the same rule `welcome_eo` uses."""
+    out = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "near.py"), a, b],
+                         capture_output=True, text=True)
+    return out.stdout.strip() == "1"
+
+
+def board_entities() -> set[str]:
+    """Every repository the board addresses, from its `Entities` lines."""
+    path = os.path.join(ROOT, "docs", "board.md")
+    if not os.path.isfile(path):
+        return set()
+    out = set()
+    for line in open(path, encoding="utf-8"):
+        m = re.match(r"\*\*Entities:\*\* (.+)", line.strip())
+        if m:
+            out |= {e.strip(" `") for e in m.group(1).split(",")}
+    return out
+
+
+def well_formed(inv: dict) -> list[str]:
+    """The inventory read as a document about itself. No network, no checkouts."""
+    bad = []
+    for name, e in inv.items():
+        status = e.get("status", "")
+        if status not in REQUIRED:
+            bad.append(f"{name}: status {status or '(none)'} is not one this file defines")
+            continue
+        for field in REQUIRED[status] + ("what",):
+            if not e.get(field):
+                bad.append(f"{name}: a {status} entry needs `{field}`")
+        if status == "child":
+            parent = e.get("parent", "")
+            if parent not in inv:
+                bad.append(f"{name}: its parent `{parent}` is not in this file")
+            elif inv[parent].get("status") == "child":
+                bad.append(f"{name}: its parent `{parent}` is itself a child project")
+        url = e.get("url", "")
+        if url and not url.startswith("https://"):
+            bad.append(f"{name}: `{url}` is not an https url")
+    names = sorted(inv)
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            if near(a, b):
+                bad.append(f"`{a}` and `{b}` are one character apart, which is a "
+                           "typo before it is two tools")
+    for entity in sorted(board_entities() - set(inv)):
+        bad.append(f"docs/board.md addresses `{entity}`, which has no row here")
+    return bad
+
+
+def readme_of(url: str, timeout: int = 20) -> tuple[str, str]:
+    """A repository's README, from its remote. Returns (text, why-not).
+
+    Read over https rather than by cloning, because this runs on every push and
+    the question is one file. Only GitHub urls can be turned into a raw one from
+    here; anything else is reported as unreadable rather than guessed at.
+    """
+    m = re.match(r"https://github\.com/([^/]+)/([^/]+?)(?:\.git)?/?$", url)
+    if not m:
+        return "", f"{url} is not a github url this can read a file from"
+    raw = f"https://raw.githubusercontent.com/{m.group(1)}/{m.group(2)}/HEAD/README.md"
+    try:
+        with urllib.request.urlopen(raw, timeout=timeout) as r:  # noqa: S310
+            return r.read().decode("utf-8", "replace"), ""
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return "", ""          # no README is an answer, not a failure to ask
+        return "", f"{raw}: HTTP {e.code}"
+    except (urllib.error.URLError, OSError, ValueError) as e:
+        return "", f"{raw}: {str(e)[:60]}"
+
+
+def still_true(inv: dict) -> tuple[list[str], list[str]]:
+    """Ask each remote whether the status recorded here is still the right one.
+
+    Returns (failures, unreachable). Unreachable is neither: it is a fact about
+    the network, and counting it as a stale inventory would make this job red for
+    something nobody here can fix.
+    """
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import policy_check  # noqa: PLC0415
+
+    bad, unseen = [], []
+    for name, e in inv.items():
+        if e.get("status") not in OWN_REPO:
+            continue
+        text, why = readme_of(e.get("url", ""))
+        if why:
+            unseen.append(f"{name}: {why}")
+            continue
+        missing = policy_check.declaration_in(text)
+        declares = not missing
+        if e["status"] == "candidate" and declares:
+            bad.append(f"{name} declares membership on its default branch and is "
+                       "recorded here as a candidate: it has joined, and this file "
+                       "has not been told")
+        if e["status"] == "member" and not declares:
+            bad.append(f"{name} is recorded here as a member and its README does "
+                       f"not declare it: {missing[0]}")
+    return bad, unseen
+
+
+def check(online: bool) -> int:
+    inv = json.load(open(INVENTORY, encoding="utf-8"))
+    inv = {k: v for k, v in inv.items() if not k.startswith("_")}
+
+    bad = well_formed(inv)
+    for b in bad:
+        print(f"FAIL {b}")
+    print(f"-- the inventory is well formed: {len(bad)} failure(s), "
+          f"{len(inv)} entries")
+
+    if not online:
+        print("-- whether it is still true was not asked: --online does that")
+        return 1 if bad else 0
+
+    stale, unseen = still_true(inv)
+    for b in stale:
+        print(f"FAIL {b}")
+    for u in unseen:
+        print(f"     unreachable, so unasked: {u}")
+    asked = sum(1 for e in inv.values() if e.get("status") in OWN_REPO) - len(unseen)
+    print(f"-- who has joined is current: {len(stale)} failure(s), {asked} asked")
+    print("   A declaration is what this reads. Whether their tree backs it is "
+          "decided by\n   their own CI, running the same checker, and is not "
+          "visible from here.")
+    return 1 if bad or stale else 0
+
+
 def main() -> int:
+    if "--check" in sys.argv:
+        return check("--online" in sys.argv)
     verbose = "--verbose" in sys.argv
     inv = json.load(open(INVENTORY, encoding="utf-8"))
     rows, notes = [], []

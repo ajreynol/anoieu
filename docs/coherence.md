@@ -645,11 +645,14 @@ readiness for us; somebody has to look.
 1. Get the ecosystem: `scripts/install_eo`, then `--status`. Nothing here
    reads anything until the other repositories are beside this one, and the
    status view is the fastest way to see what the ecosystem currently is.
-2. Read this page, then [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow)
+2. Read [`board.md`](board.md) for what is outstanding and in what
+   order — it is the shortest answer to *what should I do next*, and the only
+   page that carries one.
+3. Read this page, then [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow)
    if you are working a finding, or [`notes.md`](notes.md#the-design) if you are
    working on the tool.
-3. Check the ladder above before touching any document in it.
-4. If the task is the record itself, the ledger script in *The cheap route* is
+4. Check the ladder above before touching any document in it.
+5. If the task is the record itself, the ledger script in *The cheap route* is
    the first thing to build and nothing above it is blocked on the rest.
-5. Run `python3 tests/run.py` and `python3 tools/policy_check.py`.
-6. Leave the work staged.
+6. Run `python3 tests/run.py` and `python3 tools/policy_check.py`.
+7. Leave the work staged.

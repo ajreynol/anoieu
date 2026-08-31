@@ -57,19 +57,19 @@
     "what": "the Lean development, and the owner of Cpc.eos"
   },
   "eudaimonia": {
-    "status": "candidate",
+    "status": "member",
     "repo": "eudaimonia",
     "url": "https://github.com/ajreynol/eudaimonia",
     "what": "the calculus template: bring a signature, get a checker and its proofs"
   },
   "dokimasia": {
-    "status": "candidate",
+    "status": "member",
     "repo": "dokimasia",
     "url": "https://github.com/ajreynol/dokimasia",
     "what": "reads cvc5's proof-production C++ and asks what no proof step covers"
   },
   "koine": {
-    "status": "candidate",
+    "status": "member",
     "repo": "koine",
     "url": "https://github.com/ajreynol/koine",
     "what": "the shared machinery of the reporting loop: one implementation of the protocol rather than one per member"

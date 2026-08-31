@@ -69,6 +69,12 @@ commands a run would execute — only `git clone`, which the suite checks — an
 tool to the list is in
 [`coherence.md`](coherence.md#what-happens-when-we-add-a-new-tool-to-the-ecosystem).
 
+[`board.md`](board.md) is not in the table above either: it is **what is
+outstanding across the ecosystem, in priority order** — at most twenty items,
+each with the next thing to do, the repositories involved, and a prompt for each
+of them. It is kept by hand, `HUMAN FEEDBACK` on an item outranks everything else
+on it, and nothing consumes the file yet.
+
 [`coherence.md`](coherence.md) is not in the table above and is not written for
 a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not

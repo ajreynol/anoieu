@@ -144,13 +144,15 @@ def check_citations() -> list[str]:
     return bad
 
 
-def check_declaration() -> list[str]:
-    """*Joining the Eunoia ecosystem* — the claim the rest of this run backs.
+def declaration_in(text: str) -> list[str]:
+    """What is missing from a README's declaration of membership, if anything.
 
-    A declaration nothing backs is what this whole check exists to prevent, and a
-    compliant tree that says nothing has not joined anything. So both, or neither.
+    Split out from the check below because a second reader wants the same
+    answer from text it did not read off this disk: `tools/ecosystem.py --check
+    --online` asks it of a README fetched from a remote, to decide whether the
+    inventory's record of who has joined is still true. One implementation, so
+    the two cannot come to different answers about the same file.
     """
-    text = read("README.md")
     if not text:
         return ["no README.md, so nothing declares membership"]
     secs = list(re.finditer(r"^##\s+(.+?)\s*$", text, re.M))
@@ -166,6 +168,15 @@ def check_declaration() -> list[str]:
     if POLICY_URL not in note or "policy.md" not in note:
         bad.append(f"the maintenance note does not link to {POLICY_URL}'s docs/policy.md")
     return bad
+
+
+def check_declaration() -> list[str]:
+    """*Joining the Eunoia ecosystem* — the claim the rest of this run backs.
+
+    A declaration nothing backs is what this whole check exists to prevent, and a
+    compliant tree that says nothing has not joined anything. So both, or neither.
+    """
+    return declaration_in(read("README.md"))
 
 
 def check_front_page() -> list[str]:

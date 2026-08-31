@@ -166,6 +166,26 @@ def manifest_agrees() -> int:
     return failures
 
 
+def inventory_well_formed() -> int:
+    """`tools/ecosystem.json` read as a document about itself.
+
+    The offline half of `tools/ecosystem.py --check`, run here so that editing
+    the inventory fails at the moment somebody edits it rather than in CI. The
+    other half asks each remote whether what we record is still true, and needs
+    a network, so it stays a CI step and is not run from the suite.
+    """
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "tools"))
+    import ecosystem  # noqa: PLC0415
+
+    inv = {k: v for k, v in json.load(open(ecosystem.INVENTORY)).items()
+           if not k.startswith("_")}
+    bad = ecosystem.well_formed(inv)
+    for b in bad:
+        print(f"FAIL {b}")
+    print(f"-- the inventory is well formed: {len(bad)} failure(s), {len(inv)} entries")
+    return len(bad)
+
+
 def install_commands() -> int:
     """`scripts/install_eo` installs with `git clone`, and with nothing else.
 
@@ -611,6 +631,7 @@ def main() -> int:
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += install_commands()
+    failures += inventory_well_formed()
     failures += landing_markers()
 
     sys.stdout.flush()
