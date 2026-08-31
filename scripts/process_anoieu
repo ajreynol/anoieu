@@ -373,7 +373,7 @@ if [ "$STATUS" = 1 ]; then
 fi
 
 # -- where anoieu is: this script's checkout, or the one we are standing in
-looks_like_anoieu() { [ -f "$1/docs/open-findings.md" ] && [ -d "$1/anoieu_fuzz" ]; }
+looks_like_anoieu() { [ -f "$1/docs/open-findings.md" ] && [ -d "$1/tools/anoieu_fuzz" ]; }
 ANOIEU=""
 for c in "${ANOIEU_ROOT:-}" "$HERE" "$HERE/.." "$PWD"; do
   if [ -n "$c" ] && looks_like_anoieu "$c"; then ANOIEU=$(cd "$c" && pwd); break; fi
@@ -424,7 +424,7 @@ docs/reporting-policy.md is the authority on what you may change. The steps:
 2. Establish what actually happened, which is not what the triage predicted.
    - EO, DOC, TRI: re-check with \`python3 tools/run.py --pinned\`. It re-derives
      open rows only; a disputed closed row you check by reading deps/ yourself.
-   - FUZ: re-run with \`python3 -m anoieu_fuzz verify\`, \$ETHOS and \$LOGOS pointed
+   - FUZ: re-run with \`python3 -m tools.anoieu_fuzz verify\`, \$ETHOS and \$LOGOS pointed
      at builds. A finding that no longer reproduces is strong evidence -- but
      establish *why*: stopped reproducing for a reason other than the one on the
      row is a bad reproducer, not a fix, and never reproduced against their

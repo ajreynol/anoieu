@@ -109,19 +109,19 @@ jobs:
       # only ethos's half of a disagreement is compared.
       - name: the promoted reproducers still reproduce
         run: |
-          ETHOS=corpus/ethos/build/src/ethos python3 -m anoieu_fuzz verify
+          ETHOS=corpus/ethos/build/src/ethos python3 -m tools.anoieu_fuzz verify
 
       # And, since a build of ethos is already here, point the fuzzer at it.
       # On a schedule only, and never failing: a fuzzer that fails a build finds
       # a new bug and turns somebody's unrelated pull request red, which is the
-      # one thing docs/philosophy.md is most careful about. What it finds is
+      # one thing docs/reporting-philosophy.md is most careful about. What it finds is
       # uploaded and warned about; triage is a human step, as it is for every
       # other finding here. Only the signature mode runs — the differential mode
       # needs a second checker, and building logos is a Lean toolchain away.
       - name: fuzz ethos with signatures nobody would write
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
-          ETHOS=corpus/ethos/build/src/ethos python3 -m anoieu_fuzz run \
+          ETHOS=corpus/ethos/build/src/ethos python3 -m tools.anoieu_fuzz run \
             --mode signature -n 4000 --jobs 4 --time-limit 600 \
             --seed-corpus corpus/ethos/tests || true
           buckets=$(find fuzz-findings -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """The run: refresh the sources, measure them, and append anything new.
 
+Maintaining this? Start at `docs/coherence.md`.
+
 Three steps, in order:
 
 1. **Sync.** Every project a report is about is cloned into `deps/` and updated

@@ -25,9 +25,9 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from anoieu_fuzz.checkers import classify, from_config, load_config  # noqa: E402
-from anoieu_fuzz.codes import CODES, KIND_TO_CODE  # noqa: E402
-from anoieu_fuzz.gen import (  # noqa: E402
+from tools.anoieu_fuzz.checkers import classify, from_config, load_config  # noqa: E402
+from tools.anoieu_fuzz.codes import CODES, KIND_TO_CODE  # noqa: E402
+from tools.anoieu_fuzz.gen import (  # noqa: E402
     Case,
     unwrap,
     absolutize,
@@ -35,8 +35,8 @@ from anoieu_fuzz.gen import (  # noqa: E402
     reformat,
     split_commands,
 )
-from anoieu_fuzz.triage import Corpus, Finding, judge, shrink  # noqa: E402
-from anoieu_fuzz import report as reporting  # noqa: E402
+from tools.anoieu_fuzz.triage import Corpus, Finding, judge, shrink  # noqa: E402
+from tools.anoieu_fuzz import report as reporting  # noqa: E402
 
 # A checker that accepts anything whose parentheses balance. It stands for the
 # permissive side of a disagreement.
@@ -120,7 +120,7 @@ def config(directory: str, name: str, **checkers: str) -> str:
 
 def run(*argv: str) -> tuple[int, str, str]:
     p = subprocess.run(
-        [sys.executable, "-m", "anoieu_fuzz", *argv], capture_output=True, text=True, cwd=ROOT
+        [sys.executable, "-m", "tools.anoieu_fuzz", *argv], capture_output=True, text=True, cwd=ROOT
     )
     return p.returncode, p.stdout, p.stderr
 
@@ -184,7 +184,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
 
     # -- the oracle
 
-    from anoieu_fuzz.checkers import Outcome  # noqa: PLC0415
+    from tools.anoieu_fuzz.checkers import Outcome  # noqa: PLC0415
 
     empty = Case(["(a)"])
     agree = [Outcome("x", "correct", "accept"), Outcome("y", "correct", "accept")]

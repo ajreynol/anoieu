@@ -145,7 +145,7 @@ But that is a decision to be made and stated, not a gap to be left; *it will be
 obvious later what this was for* is not the same as having decided.
 
 Where there is a deliverable, this page hands over to
-[`../docs/philosophy.md`](../docs/philosophy.md) and
+[`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) and
 [`../docs/reporting-policy.md`](../docs/reporting-policy.md): what may be said
 about code you do not own, what separates a candidate published under your own
 name from a finding carried to its owner, and how a row is closed. Speed belongs
@@ -305,7 +305,7 @@ configuration through elaboration to the Eunoia serialiser, and asks whether any
 path reaches an inference no proof step covers — particularly under
 `--safe-mode=safe`, where cvc5 promises that anything it solves it can prove.
 The two tools share no code and neither depends on the other; what they share is
-a position, [`../docs/philosophy.md`](../docs/philosophy.md), maintained here and
+a position, [`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md), maintained here and
 referenced there, which is its own kind of exchange and a cheap one. They meet at
 exactly one seam — `src/proof/eo/`, where cvc5 turns an internal proof into
 Eunoia. A rule cvc5 emits that CPC does not declare is invisible to each tool in
@@ -342,7 +342,7 @@ them would have excluded the best work on this list.
 
 **A person carried every one of them.** No exchange on this list was made by
 machinery, and that is the standing rule rather than a description of the
-current state — [`../docs/philosophy.md`](../docs/philosophy.md) is where it is
+current state — [`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) is where it is
 argued.
 
 ## The front page
@@ -428,7 +428,7 @@ health — these are things a reader needs in order to weigh what follows. They
 belong where the reader arrives, stated once, plainly, in the tool's own voice.
 That is a different act from hedging, and the difference is that a caveat can be
 used and a mood cannot. Where those particular limits are argued is
-[`../docs/philosophy.md`](../docs/philosophy.md); the point here is only that
+[`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md); the point here is only that
 stating them clearly is entirely compatible with standing behind the work, and
 is in fact most of what makes standing behind it believable.
 
@@ -457,7 +457,7 @@ Four misreadings, each invited by a tenet as written, and each ruled out.
 *Fruitful to another tool* is a property of the artifact — consumable format,
 stable identifiers, documented meaning — and never a licence to push anything
 anywhere. **Nothing crosses a repository boundary automatically**, which is
-philosophy.md's position and is not weakened by anything here.
+reporting-philosophy.md's position and is not weakened by anything here.
 
 *Fast* applies to the tool and not to what it says about other people's files.
 A candidate may be published quickly under our own name, labelled unjudged; a
@@ -501,7 +501,7 @@ The expensive one is **the tool nobody can evaluate.** Entangled, undocumented,
 with a front page that either overclaims or says nothing precise. Its findings
 may be excellent and cannot be judged, because judging them requires trusting a
 thing no reader can inspect in the time they have. This is the same asset
-philosophy.md is protecting when it forbids research projects from borrowing the
+reporting-philosophy.md is protecting when it forbids research projects from borrowing the
 host tool's name, seen from the other side: there, speculation spends a
 reputation the tool earned; here, an illegible tool never earns one. Tenet 3 is
 the only cheap defence, and it is cheap only while the tool is small.
@@ -526,7 +526,7 @@ absence of that somebody.
 | where a reader arrives | `README.md`, and it must be sufficient on its own |
 | what on that page is fixed | the purpose and the caveat; results move as fast as they arrive |
 | who may strengthen a claim | a person, asked directly, with the evidence attached |
-| what governs a deliverable | [`../docs/philosophy.md`](../docs/philosophy.md), [`../docs/reporting-policy.md`](../docs/reporting-policy.md) |
+| what governs a deliverable | [`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md), [`../docs/reporting-policy.md`](../docs/reporting-policy.md) |
 | where speculative work goes instead | a child project, `tools/X/`, under [`policy.md`](policy.md) |
 | what confers standing on the tool | a person choosing to use, run or own it — never the agent's say-so |
 | the ending to aim for | a human takes over the development |
@@ -552,7 +552,7 @@ projects agreed to these tenets, most of them predate this page entirely,
 nothing here creates an obligation on anybody, and nobody may hold a project to
 a sentence in it. It is **not a set of findings**: a claim about somebody else's
 work goes through the discipline in
-[`../docs/philosophy.md`](../docs/philosophy.md) and
+[`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) and
 [`../docs/reporting-policy.md`](../docs/reporting-policy.md) — confirmed,
 reproduced in the smallest artifact that shows it, carried by a person — and
 nothing on this page has been through any of that, nor has any row in
@@ -669,7 +669,7 @@ taken seriously: this repository reads `.eo` and `.eos` rather than C++, so
 everything here comes out of that project's own documents and
 [`../docs/notes.md`](../docs/notes.md) §8 rather than out of any measurement. On
 that basis, tenet 1 in the cheapest available form — it adopted this
-repository's [`philosophy.md`](../docs/philosophy.md) by reference instead of
+repository's [`reporting-philosophy.md`](../docs/reporting-philosophy.md) by reference instead of
 forking a copy, so there is one position, one place to argue about it, and
 neither tool carrying a stale paraphrase of the other. Its consumers today are
 people rather than tools. The interesting item is shared: the seam at
@@ -714,22 +714,36 @@ Two exist, tracked here in a sentence each and nowhere else:
 | --- | --- | --- |
 | [**sapheneia**](https://github.com/ajreynol/anoieu/tree/main/tools/sapheneia) | anoieu | a description of Eunoia written as a language definition rather than as a manual for a checker, in order to find where the existing account is silent, ambiguous or contradicts itself |
 | [**euthyna**](https://github.com/ajreynol/eudaimonia/tree/main/tools/euthyna) | eudaimonia | in its own words, an account of *the proof in logos: what it is made of, where its weight sits, and what would have to change for it to cover more than one calculus* — with a measurement harness over an unmodified logos checkout |
+| **anoieu_fuzz** | anoieu | a fuzzer for the programs that *read* Eunoia: it writes signatures and proofs nobody would write, hands them to a checker, and watches for the answer a checker should never give |
 
 Note what euthyna's row shows about the shape: its parent is eudaimonia and its
 subject is logos, a third project entirely. It was also one of the six code
 names in [`../docs/why-eunoia.md`](../docs/why-eunoia.md) reserved for work
 nobody had started, which is what starting one looks like.
 
-**Neither has earned a place in this vision.** A child project is a claim on
-attention that has so far produced nothing, and what earns it a place is a
-deliverable in the sense of tenet 4 — a finding carried, a measurement somebody
-uses, an argument somebody acts on. Until then it is named here and nowhere
-else: not on the parent's front page, not in its documentation index, not in any
+**Two of the three have not earned a place in this vision.** A child project is
+a claim on attention that has so far produced nothing, and what earns it a place
+is a deliverable in the sense of tenet 4 — a finding carried, a measurement
+somebody uses, an argument somebody acts on. Until then it is named here and
+nowhere else: not on the parent's front page, not in its documentation index, not in any
 report, and not on the report card above. **The human decides when that
 changes**, exactly as a human decides to start one, and the decision has three
 outcomes rather than one — it graduates into its own repository, it is folded
 into the parent, or it is retired in place with a line saying what was learned.
 What is not an outcome is going quiet.
+
+**The fuzzer is the case that does not fit, and it is left not fitting on
+purpose.** It has earned its keep — an uncaught C++ exception in ethos, an error
+path that skips ethos's own convention, three proofs ethos and logos answer
+differently with one now a committed regression test — and it is depended on:
+CI runs it, the report generator imports it, its findings hold rows under
+`FUZ0001`–`FUZ0005`, and the front page advertises it. So it is a child project
+that fails the island test outright, and it stays one for now because *which*
+promotion it deserves — its own repository, or folding into the parent as a
+second shipped tool — is a decision nobody has taken. Rule 10 of
+[`policy.md`](policy.md) is where that is written down and where the broken
+rules are named one by one. The point of naming them is that an exception
+somebody chose and an exception nobody noticed look identical a year later.
 
 This list and rule 3 of [`policy.md`](policy.md) look like they conflict, and do
 not. Rule 3 forbids a child project borrowing its parent's credibility with

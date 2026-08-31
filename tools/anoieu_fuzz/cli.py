@@ -313,8 +313,8 @@ def cmd_run(args) -> int:
         print(f"   {name:22} {counts}")
     if corpus.counts:
         print(f"-- cases are under {args.out}/; re-run one with "
-              f"`python3 -m anoieu_fuzz replay <file>`, and keep one with "
-              f"`python3 -m anoieu_fuzz promote {args.out}/<bucket>`")
+              f"`python3 -m tools.anoieu_fuzz replay <file>`, and keep one with "
+              f"`python3 -m tools.anoieu_fuzz promote {args.out}/<bucket>`")
     if args.format != "text" and corpus.new:
         keep = {f.bucket for f in corpus.new}
         records = [r for r in reporting.load(args.out) if r["bucket"] in keep]
@@ -507,7 +507,7 @@ def _common(p: argparse.ArgumentParser) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="anoieu_fuzz",
+    ap = argparse.ArgumentParser(prog="tools.anoieu_fuzz",
                                  description="a fuzzer for Eunoia-based proof checkers")
     ap.add_argument("--version", action="version", version=f"anoieu-fuzz {__version__}")
     sub = ap.add_subparsers(dest="command")

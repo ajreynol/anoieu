@@ -42,6 +42,14 @@ competes for that role — no second overview in `docs/`, no wiki, no
 `INTRODUCTION.md`. This is the same requirement as tenet 3 of
 [`vision.md`](vision.md), seen from the filesystem rather than from the work.
 
+**The maintenance entry point is not the front page.** The README is written
+for somebody deciding whether the tool is worth their attention; how the work is
+run is noise to them and buried treasure to whoever is doing it. Keep the second
+audience a separate document — here [`../docs/coherence.md`](../docs/coherence.md)
+— reachable from the things a maintainer opens (the agent brief at the
+repository root, the headers of the programs that write the record) and not
+linked from the front page.
+
 **Every repository explains its own name.** A short section on the front page
 with the etymology and why the word fits, written so somebody could disagree
 with it. The ecosystem names along a convention — Greek, and from the vocabulary
@@ -107,7 +115,7 @@ the content:
 > **Written by AI agents, under light human supervision.** A human directs the
 > work, reads what is published and decides what is filed; nobody vets the
 > internal design, and nothing reaches another project's issue tracker without
-> review. [`docs/philosophy.md`](../docs/philosophy.md) says what that does and
+> review. [`docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) says what that does and
 > does not cover, and why the intended audience is experts.
 
 Four properties, of which the third is the one that gets dropped and the fourth
@@ -233,7 +241,7 @@ replacement, and never something a reader could mistake for the specification.
 
 **7. Nothing leaves the island by machine.** Anything a research project wants
 to say to the project that owns its subject is subject to the host repository's
-ordinary reporting discipline — `docs/philosophy.md` for what may be published
+ordinary reporting discipline — `docs/reporting-philosophy.md` for what may be published
 about somebody else's work, `docs/reporting-policy.md` for how a finding is
 carried, confirmed and closed. A research project has no separate channel and no
 lighter standard. In particular the *settling artifact* rule holds: a reply is
@@ -256,6 +264,29 @@ is **retired in place** with a line in its README saying what was learned and
 why it stopped. What is not an ending is going quiet. A directory that has not
 moved in a long time is a claim nobody is standing behind, and the honest form of
 that is a retirement note, not silence.
+
+**10. A child project that has earned its keep says so, and names what it broke.**
+A child project may deliver — a finding carried, a measurement somebody uses, an
+argument somebody acts on — long before anybody is ready to decide which of rule
+9's three endings applies. When that happens the honest move is not to pretend
+the island still holds. The project stays in `tools/`, and its own README states
+three things: **what it delivered**, **which of the rules above have stopped
+being true of it**, and **that the promotion decision is open, and with whom**.
+A named exception is a decision somebody made and can defend; an unnamed one is
+drift, and the difference between them is the whole of this rule. The holding
+state is legitimate and is not a licence to go quiet — rule 9 still applies, and
+a project sitting here without a person standing behind it is retired, not
+parked.
+
+The instance here is the fuzzer, `tools/anoieu_fuzz/`. It has provoked defects
+in ethos and disagreements between ethos and logos, one of them now a committed
+regression test, so it has earned its keep. It also breaks **rule 2** in three
+ways — it imports `anoieu.diagnostics` and `anoieu.fingerprint`, the report
+generator imports it back, and it runs in CI — and breaks **rule 3**, being
+advertised on the front page and holding a row in the documentation index.
+Deleting the directory would break the build, which is exactly the test rule 2
+sets, and it fails it. That is recorded rather than fixed, because the fix is a
+promotion decision and that belongs to a person.
 
 ### Why this shape
 
@@ -289,9 +320,10 @@ The policy is written to be copied. What another repository has to decide:
 | --- | --- |
 | how the tree is arranged | the table in *The layout* |
 | where the maintenance note goes | the last section of `README.md` |
+| where a maintainer starts | `docs/coherence.md`, linked from tooling and not from the front page |
 | where projects live | `tools/X/` |
 | who may start and end one | a human, explicitly (rule 1) |
-| what governs anything published | `docs/philosophy.md` |
+| what governs anything published | `docs/reporting-philosophy.md` |
 | what governs anything carried to another project | `docs/reporting-policy.md` |
 | what the ending states are | graduate, fold in, retire in place (rule 9) |
 

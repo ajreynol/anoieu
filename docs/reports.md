@@ -1302,7 +1302,7 @@ apart.
 them.** They are one commit, `292201c2`, cut from `main`@`8709609e`. For the
 four signature rows we ran the checks over the fixed files and over the
 originals: each fix clears its row, and each original still reports it. For the
-three `FUZ` rows `anoieu_fuzz verify` moves every reproducer from `abnormal` to
+three `FUZ` rows `tools.anoieu_fuzz verify` moves every reproducer from `abnormal` to
 `reject`, and the `Error: <file>:<line>.<col>:` text each now prints is
 introduced by that commit and absent from `main` — so each stopped reproducing
 *for the reason on its row*, which is the distinction the follow-up is supposed
@@ -1521,7 +1521,7 @@ who fixed their parser against it.
    identifier or indexed symbol as head of apply"* — not the type error the row
    recorded. logos narrowed `parseTermCore`, added guards in `test/Parser.lean`
    and `test/CpcParser.lean`, and against a build carrying that change the
-   reproducer no longer reproduces: `anoieu_fuzz verify` reports it as `was
+   reproducer no longer reproduces: `tools.anoieu_fuzz verify` reports it as `was
    accept, is reject`. That fix is real and stands on its own, whatever happens
    to this row.
 2. **The disagreement ethos was actually reporting is untouched by that fix, and

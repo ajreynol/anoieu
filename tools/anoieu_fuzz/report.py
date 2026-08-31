@@ -134,8 +134,8 @@ def diagnostic(record: dict, sources: SourceMap | None = None) -> Diagnostic:
         span=Span(case or rel, line, 1, line, max(2, len(line_text) + 1)),
         label="this file",
         notes=notes,
-        help=f"confirm it with `python3 -m anoieu_fuzz replay {rel}`, "
-        f"and read `python3 -m anoieu_fuzz explain {spec.code}`",
+        help=f"confirm it with `python3 -m tools.anoieu_fuzz replay {rel}`, "
+        f"and read `python3 -m tools.anoieu_fuzz explain {spec.code}`",
     )
 
 
@@ -191,7 +191,7 @@ def promote(source: str, corpus: str = "", owner: str = "", note: str = "") -> s
     an artefact of this harness -- a mutated `include` pointing nowhere was the
     first one -- and a fuzzer that filed its own output would be publishing
     faster than anybody could read it, which is the one thing
-    `docs/philosophy.md` asks us not to do.
+    `docs/reporting-philosophy.md` asks us not to do.
     """
     corpus = corpus or CORPUS
     record_path = os.path.join(source, "finding.json")

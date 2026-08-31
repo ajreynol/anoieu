@@ -8,7 +8,7 @@ content lives, every row below leads somewhere better.
 
 | document | its job |
 | --- | --- |
-| [`philosophy.md`](philosophy.md) | **what may be published about somebody else's code, and why.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — anoieu maintains it, dokimasia references it — including what "maintained by AI under light supervision" does and does not cover |
+| [`reporting-philosophy.md`](reporting-philosophy.md) | **what may be published about somebody else's code, and why.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — anoieu maintains it, dokimasia references it — including what "maintained by AI under light supervision" does and does not cover |
 | [`reports.md`](reports.md) | **what anoieu has to say about other people's code**: what it is asking of each project, how each finding was confirmed, and what came back when it was filed |
 | [`reporting-policy.md`](reporting-policy.md) | **how a finding is handled**: the conventions governing the record, the workflow and prompts for carrying one to whoever can fix it, and for
 sweeping the whole report, and what it takes for another repository to run these checks in its own CI |
@@ -39,6 +39,11 @@ taught us: the log of one project's twenty rows, what the assistant at the far
 end got right and wrong, what we got wrong, and the two rules the round
 established — that each round leaves the prompts *shorter and clearer*, and that
 a person approves every change to one.
+
+[`coherence.md`](coherence.md) is not in the table above and is not written for
+a reader of the tool: it is the **maintenance entry point**, for whoever is
+doing the work. What this repository is responsible for, which documents may not
+be changed without asking, and the open technical work on the record itself.
 
 [`../scripts/`](../scripts) holds one implementation of the workflow
 [`reporting-policy.md`](reporting-policy.md#the-workflow) defines: `check_anoieu`

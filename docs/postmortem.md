@@ -105,7 +105,7 @@ Updated each round. This is the part to read if you want to know whether the loo
 is paying for itself.
 
 **What is working.** Re-measuring is exact and is one command each way —
-`tools/run.py --pinned` for the checks, `anoieu_fuzz verify` for the reproducers
+`tools/run.py --pinned` for the checks, `tools.anoieu_fuzz verify` for the reproducers
 — so *does this still hold* is a question with an answer rather than a judgement.
 Moving a row is a two-line edit. The two labels, `TRIAGE:` and `HUMAN RESPONSE:`,
 survived contact with a real reply and did the work they exist for. Naming the

@@ -11,3 +11,13 @@ fuzz-findings/
 # where each project is checked out on this machine, written by
 # scripts/process_anoieu on first run
 scripts/repos.local
+
+# editor scratch
+*.swp
+*.swo
+
+# transient working space (tools/policy.md, "Working space is untracked")
+scratch/
+
+# private working notes, untracked by intent
+*.local.md

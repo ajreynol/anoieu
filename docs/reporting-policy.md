@@ -4,7 +4,7 @@ How a finding is handled from the moment a check reports it: the record it
 goes into, the conventions that govern that record, the workflow for carrying it
 to whoever can fix it, and what it takes for another repository to run these
 checks itself. The position underneath all of it — what may be published about
-somebody else's code at all — is [`philosophy.md`](philosophy.md).
+somebody else's code at all — is [`reporting-philosophy.md`](reporting-philosophy.md).
 
 Three parts, in the order you need them: the conventions, then the workflow that
 uses them, then adoption.
@@ -22,7 +22,7 @@ learning a new layout each time.
 **This is written to transfer.** Nothing below is really about anoieu: it is
 about any analyzer that publishes findings against somebody else's files and has
 to keep track of what came back. These are the mechanics;
-[`philosophy.md`](philosophy.md) is the position they implement, and is shared
+[`reporting-philosophy.md`](reporting-philosophy.md) is the position they implement, and is shared
 with [dokimasia](https://github.com/ajreynol/dokimasia) outright. A sibling tool
 can adopt the conventions below by filling the same slots with its own files:
 
@@ -52,8 +52,8 @@ it is the slot that carries the most weight.
 | --- | --- |
 | **the report** | the same [`open-findings.md`](open-findings.md), under codes `FUZ0001`–`FUZ0005` |
 | **the id** | the same fingerprint, over the committed reproducer rather than over somebody's signature |
-| **the catalogue** | `python3 -m anoieu_fuzz explain FUZ0002`; five codes, one page each |
-| **re-measuring** | **different.** `python3 -m anoieu_fuzz verify` replays every reproducer against a build of the checker and compares with what was recorded |
+| **the catalogue** | `python3 -m tools.anoieu_fuzz explain FUZ0002`; five codes, one page each |
+| **re-measuring** | **different.** `python3 -m tools.anoieu_fuzz verify` replays every reproducer against a build of the checker and compares with what was recorded |
 | **the regression** | `tests/fuzz/`, one directory per finding, beside `tests/witnesses/` |
 | **the ledger** | the same [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) |
 | **the frame** | the same two labels |
@@ -337,7 +337,7 @@ fix it and back. The arrangement is not specific to anoieu — the conventions i
 rests on are set out separately, in [`reporting-policy.md`](reporting-policy.md#the-conventions), so that another
 analyzer that reports findings against somebody else's files can adopt them by
 substituting its own, and the position they implement is stated once, for both
-tools, in [`philosophy.md`](philosophy.md). What is anoieu-specific here is
+tools, in [`reporting-philosophy.md`](reporting-philosophy.md). What is anoieu-specific here is
 confined to the prompts — the tool's name, the report's URL, and a handful of paths and
 commands — and to the right-hand column of the table on that page.
 
@@ -548,7 +548,7 @@ docs/reporting-policy.md is the authority on what you may change. The steps:
 2. Establish what actually happened, which is not what the triage predicted.
    - EO, DOC, TRI: re-check with `python3 tools/run.py --pinned`. It re-derives
      open rows only; a disputed closed row you check by reading deps/ yourself.
-   - FUZ: re-run with `python3 -m anoieu_fuzz verify`, $ETHOS and $LOGOS pointed
+   - FUZ: re-run with `python3 -m tools.anoieu_fuzz verify`, $ETHOS and $LOGOS pointed
      at builds. A finding that no longer reproduces is strong evidence -- but
      establish *why*: stopped reproducing for a reason other than the one on the
      row is a bad reproducer, not a fix, and never reproduced against their

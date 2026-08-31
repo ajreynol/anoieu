@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Write `docs/open-findings.md`: every finding this project currently reports.
 
+Maintaining this? Start at `docs/coherence.md`.
+
 Two files, because they answer different questions and have different audiences.
 `docs/open-findings.md` is the report: what anoieu believes and nobody has ruled
 on, and the thing another project is pointed at. `docs/closed-findings.md` is
@@ -47,7 +49,7 @@ from anoieu.semantics import load_set  # noqa: E402
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_corpus_table import DEFAULT_ROOTS, TARGETS, not_audited, signatures  # noqa: E402
 
-from anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
+from tools.anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "open-findings.md")

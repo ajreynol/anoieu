@@ -12,7 +12,7 @@ be a defect in our reading rather than in the manual.
 so through the host repository's ordinary reporting discipline
 (`docs/reporting-policy.md`), carried by a person who can answer the follow-up,
 and only once confirmed. Rows here are *candidates* in the sense of
-`docs/philosophy.md` position 4: published under our own name with the evidence
+`docs/reporting-philosophy.md` position 4: published under our own name with the evidence
 they have, and explicitly unjudged.
 
 Everything is about the **manual**, never about the language. Where a row
