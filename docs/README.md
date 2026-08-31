@@ -33,6 +33,12 @@ Written by a run, and the only files here a tool may edit.
 > The asymmetry is deliberate — a generator that could delete could quietly
 > delete a regression.
 
+[`../scripts/`](../scripts) holds the two commands the workflow above is run
+with — `check_anoieu` in the project a finding is about, `process_anoieu` here
+once it has replied. Each holds a copy of the prompt
+[`reporting-policy.md`](reporting-policy.md#the-workflow) defines, and
+`tests/run.py` fails when the copy has drifted from it.
+
 `report/` holds documents rendered for an audience that will not clone this
 repository, currently [`cpc-audit.html`](report/cpc-audit.html). They restate
 findings from the sources above rather than adding any, so nothing is filed

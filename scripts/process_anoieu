@@ -1,0 +1,239 @@
+#!/usr/bin/env bash
+# process_anoieu -- read a project's reply to anoieu's findings, from inside anoieu.
+#
+# The other half of check_anoieu. That one runs in ethos or logos and leaves a
+# draft reply there; this one runs here, reads that reply, works out what
+# actually happened, and updates the record.
+#
+#   process_anoieu logos                    # every reply in that repository
+#   process_anoieu ethos 147433b3e48ae9d6   # one finding, by its id
+#   process_anoieu --codex ~/src/cvc5       # ... with codex, and an explicit path
+#
+# The first argument is a *synonym* for a directory. It is resolved in three
+# steps: an existing path is used as it stands; otherwise scripts/repos.local is
+# consulted, which maps repo ids to directories on this machine and is written
+# on first run; otherwise a directory of that name is looked for under
+# $ANOIEU_REPOS (colon-separated, default $HOME). Nothing is tracked or synced
+# -- the agent is pointed at the directory and finds the reply itself.
+#
+# The canonical prompt is docs/reporting-policy.md, under "Prompt two: the
+# follow-up, here"; that one is written around a link, this one around a
+# checkout. If they disagree about anything else, the document is right.
+#
+# It prints the resolved path, so a pasted transcript carries it.
+
+set -euo pipefail
+
+AGENT=claude
+PRINT=0
+SHOW=0
+NAME=""
+ID=""
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: process_anoieu [--codex] [--print] [--show-prompt] NAME [ID]
+
+  NAME            a directory, or a repo id: looked up in scripts/repos.local
+                  (written on first run), then under $ANOIEU_REPOS (default $HOME)
+  ID              an anoieu finding id (16 hex digits) or register id (ethos-8).
+                  Omitted, every reply in that repository is processed.
+  --codex         run codex instead of claude
+  --print         run non-interactively and print the result
+  --show-prompt   print the prompt and exit, running nothing
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --codex) AGENT=codex; shift ;;
+    --claude) AGENT=claude; shift ;;
+    --print) PRINT=1; shift ;;
+    --show-prompt) SHOW=1; shift ;;
+    -h|--help) usage ;;
+    -*) echo "process_anoieu: unknown option $1" >&2; usage ;;
+    *) if [ -z "$NAME" ]; then NAME="$1"; elif [ -z "$ID" ]; then ID="$1";
+       else echo "process_anoieu: too many arguments" >&2; usage; fi; shift ;;
+  esac
+done
+[ -n "$NAME" ] || usage
+
+# -- the mapping file: repo ids to directories on this machine. Written on first
+#    run, never tracked, and entirely optional -- the scan below still works for
+#    a project whose checkout is simply $HOME/<name>. It exists for the ones
+#    that are not: a repository under a different name, or several checkouts of
+#    the same project where only one is the one you answer findings from.
+HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+
+write_repos_file() {
+  cat > "$REPOS_FILE" <<'TEMPLATE'
+# process_anoieu -- where each project is checked out on this machine.
+#
+# One entry per line:
+#
+#     <repo-id> <path>
+#
+# <repo-id> is what you type as the first argument to process_anoieu, and
+# <path> is the directory it means. A leading ~ is expanded, and a path may
+# contain spaces. A line whose first non-blank character is # is a comment,
+# blank lines are ignored, and the first entry for an id wins.
+#
+# This file is local to this machine and is not tracked by git. It is also
+# optional: an id with no entry here is resolved by looking for a directory of
+# that name under $ANOIEU_REPOS (default $HOME), and a path given on the command
+# line is used as it stands. What the file is for is the cases where neither
+# works -- a checkout under a different name, or several checkouts of one
+# project where only one of them is the one you answer findings from.
+#
+# The projects tools/deps.json tracks, as examples. Uncomment and correct:
+#
+#     ethos       ~/src/ethos
+#     logos       ~/src/logos
+#     cvc5        ~/src/cvc5
+#     eudaimonia  ~/src/eudaimonia
+TEMPLATE
+  echo "process_anoieu: wrote $REPOS_FILE -- repo ids to directories, one per line" >&2
+}
+[ -e "$REPOS_FILE" ] || write_repos_file
+
+# -- the synonym, resolved: an explicit path, then the mapping file, then a scan
+#    of $ANOIEU_REPOS. An exact directory name wins over a partial one, and an
+#    ambiguous partial is an error rather than a guess.
+from_repos_file() {
+  local want="$1" line id path
+  [ -f "$REPOS_FILE" ] || return 1
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
+    line="${line#"${line%%[![:space:]]*}"}"
+    id="${line%%[[:space:]]*}"
+    [ "$id" = "$want" ] || continue
+    path="${line#"$id"}"
+    path="${path#"${path%%[![:space:]]*}"}"
+    path="${path%"${path##*[![:space:]]}"}"
+    [ -n "$path" ] || continue
+    case "$path" in "~") path="$HOME" ;; "~/"*) path="$HOME/${path#\~/}" ;; esac
+    if [ ! -d "$path" ]; then
+      echo "process_anoieu: $REPOS_FILE maps '$want' to '$path', which is not a directory" >&2
+      return 2
+    fi
+    (cd "$path" && pwd)
+    return 0
+  done < "$REPOS_FILE"
+  return 1
+}
+
+resolve() {
+  local want="$1" roots r d exact=() partial=() mapped rc
+  if [ -d "$want" ]; then (cd "$want" && pwd); return; fi
+  mapped=$(from_repos_file "$want"); rc=$?
+  [ "$rc" = 2 ] && return 1
+  if [ "$rc" = 0 ]; then printf '%s\n' "$mapped"; return; fi
+  roots="${ANOIEU_REPOS:-$HOME}"
+  local IFS=:
+  for r in $roots; do
+    [ -d "$r" ] || continue
+    unset IFS
+    for d in "$r"/*/; do
+      d="${d%/}"
+      case "$(basename "$d")" in
+        "$want") exact+=("$d") ;;
+        *"$want"*) partial+=("$d") ;;
+      esac
+    done
+    local IFS=:
+  done
+  unset IFS
+  if [ "${#exact[@]}" -gt 0 ]; then printf '%s\n' "${exact[0]}"; return; fi
+  if [ "${#partial[@]}" -eq 1 ]; then printf '%s\n' "${partial[0]}"; return; fi
+  if [ "${#partial[@]}" -gt 1 ]; then
+    { echo "process_anoieu: '$want' matches more than one directory:";
+      printf '   %s\n' "${partial[@]}";
+      echo "   name one of them in $REPOS_FILE, or give a path"; } >&2
+    return 1
+  fi
+  { echo "process_anoieu: nothing called '$want' under ${roots//:/, }";
+    echo "   add an entry to $REPOS_FILE, or give a path"; } >&2
+  return 1
+}
+DIR=$(resolve "$NAME") || exit 2
+
+# -- where anoieu is: this script's checkout, or the one we are standing in
+looks_like_anoieu() { [ -f "$1/docs/open-findings.md" ] && [ -d "$1/anoieu_fuzz" ]; }
+ANOIEU=""
+for c in "${ANOIEU_ROOT:-}" "$HERE" "$HERE/.." "$PWD"; do
+  if [ -n "$c" ] && looks_like_anoieu "$c"; then ANOIEU=$(cd "$c" && pwd); break; fi
+done
+[ -n "$ANOIEU" ] || {
+  echo "process_anoieu: cannot find the anoieu checkout; set \$ANOIEU_ROOT" >&2; exit 2; }
+
+PROJECT=$(basename "$DIR")
+if [ -n "$ID" ]; then
+  SCOPE="Process the block about $ID and only that one; leave any others alone."
+else
+  SCOPE="Process every block in it, one at a time, leaving the record consistent
+after each so that stopping partway is safe. They are unrelated: each gets its
+own answer."
+fi
+
+read -r -d '' PROMPT <<PROMPT_END || true
+The $PROJECT project has replied to findings we reported. Their checkout:
+
+  $DIR
+
+Find the reply. Most likely anoieu-response.md at that repository's root, but
+what identifies it is blocks headed by a finding id carrying TRIAGE: and HUMAN
+RESPONSE: fields. If there are none, stop and say so rather than inferring the
+outcome from the repository's state.
+
+$SCOPE
+
+TRIAGE: is an assistant's reading, made quickly and on our word. HUMAN RESPONSE:
+is a maintainer's decision. Where they differ the decision counts, and a block
+carrying only a triage is a proposal rather than a result.
+
+Working in the anoieu repository ($ANOIEU):
+
+1. Find the row or rows in docs/open-findings.md the reply is about.
+2. Establish what actually happened, which is not what the triage predicted. For
+   an EO, DOC or TRI row, re-check at the recorded version with
+   \`python3 tools/run.py --pinned\`. For a FUZ row, re-run the reproducer with
+   \`python3 -m anoieu_fuzz verify\`: a finding that no longer reproduces is the
+   strongest evidence there is, and one that never reproduced against their
+   build is a different outcome from one they fixed. Either way follow the
+   branch they name to its end -- merged, reworked, reverted, or still open.
+3. Clean up those rows and no others, as docs/reporting-policy.md says. Closing
+   is moving a row to the Closed table with a verdict, never deleting it.
+4. If our analysis was wrong, fix what produced it rather than the row. For a
+   check: narrow it, add a witness under tests/witnesses/ that would have caught
+   the mistake, and record the wrong assumption in docs/reports.md under the
+   workings. For a FUZ finding there is no check to narrow -- what there may be
+   is a reproducer that was an artefact of the harness, or a comparison that was
+   never fair. Say which in docs/reports.md, remove the promoted directory under
+   tests/fuzz/, and consider whether the harness should have refused to report
+   it.
+5. Write what happened in docs/reports.md under the log, and update the
+   project's section under the register if what we are asking of it has changed.
+
+Leave everything staged, commit nothing, touch no issue tracker. Say what you
+decided and why -- the action you took, not a summary of what you read. Come
+back to me only if you disagree with how the reply classified the resolution, or
+cannot tell whether the finding is resolved: leave the row open and say what you
+would need to know.
+PROMPT_END
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+command -v "$AGENT" >/dev/null 2>&1 || {
+  echo "process_anoieu: $AGENT is not on PATH" >&2; exit 127; }
+
+echo "-- process_anoieu: $PROJECT -> $DIR" >&2
+echo "   ${ID:-every reply in that repository}, working in $ANOIEU, via $AGENT" >&2
+
+cd "$ANOIEU"
+if [ "$AGENT" = codex ]; then
+  if [ "$PRINT" = 1 ]; then exec codex exec "$PROMPT"; else exec codex "$PROMPT"; fi
+else
+  if [ "$PRINT" = 1 ]; then exec claude -p "$PROMPT"; else exec claude "$PROMPT"; fi
+fi

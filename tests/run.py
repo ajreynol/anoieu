@@ -18,6 +18,7 @@ suite so that neither ethos nor logos has to be on the machine.
 from __future__ import annotations
 
 import argparse
+import difflib
 import json
 import os
 import re
@@ -156,6 +157,68 @@ def manifest_agrees() -> int:
     return failures
 
 
+def prompts_agree() -> int:
+    """The two scripts say what `docs/reporting-policy.md` says they say.
+
+    The document is what every project was promised; the scripts under
+    `scripts/` are a convenience that holds a copy so nobody has to paste one.
+    A copy that has drifted is worse than no copy, because the drift is
+    invisible from the side that matters -- somebody in ethos or logos reading
+    a prompt they were sent.
+
+    Only the body is compared. The scope line and the branch are what the
+    scripts fill in, and are the reason they exist.
+    """
+    import re  # noqa: PLC0415
+    import subprocess as sp  # noqa: PLC0415
+
+    root = os.path.dirname(HERE)
+    doc = open(os.path.join(root, "docs", "reporting-policy.md")).read()
+
+    def canonical(start: str, end: str, at: str) -> str:
+        chunk = doc[doc.index(start) : doc.index(end)]
+        body = re.search(r"```text\n(.*?)\n```", chunk, re.S).group(1)
+        return body.split(at, 1)[1].strip()
+
+    def spoken(argv: list[str], at: str) -> str:
+        got = sp.run(argv, cwd=root, capture_output=True, text=True)
+        if got.returncode != 0 or at not in got.stdout:
+            return f"!! {argv[0]}: {(got.stderr or got.stdout).strip()[:120]}"
+        return got.stdout.split(at, 1)[1].strip()
+
+    failures = 0
+    cases = [
+        (
+            "check_anoieu",
+            canonical("### Prompt one", "### Prompt two", "A row is a claim"),
+            spoken(
+                ["bash", "scripts/check_anoieu", "--show-prompt", "ID"],
+                "A row is a claim",
+            ).replace("anoieu-ID", "BRANCH"),
+        ),
+        (
+            "process_anoieu",
+            canonical("### Prompt two", "### Prompt three", "1. Find the row"),
+            spoken(
+                ["bash", "scripts/process_anoieu", "--show-prompt", root, "ID"],
+                "1. Find the row",
+            ),
+        ),
+    ]
+    for name, want, got in cases:
+        if want == got:
+            print(f"ok   scripts/{name} says what reporting-policy.md says")
+            continue
+        failures += 1
+        print(f"FAIL scripts/{name} has drifted from docs/reporting-policy.md")
+        for line in difflib.unified_diff(
+            want.splitlines(), got.splitlines(), "document", "script", lineterm=""
+        ):
+            print(f"     {line}")
+    print(f"-- the outbound prompts: {failures} failure(s)")
+    return failures
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--oracle", action="store_true",
@@ -221,6 +284,9 @@ def main() -> int:
 
     print()
     failures += manifest_agrees()
+
+    print()
+    failures += prompts_agree()
 
     sys.stdout.flush()
     print()

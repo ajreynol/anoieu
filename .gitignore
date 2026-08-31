@@ -7,3 +7,7 @@ deps/
 
 # what a fuzzing run finds: reproducers, kept until somebody triages them
 fuzz-findings/
+
+# where each project is checked out on this machine, written by
+# scripts/process_anoieu on first run
+scripts/repos.local

@@ -264,61 +264,92 @@ the log then reads as more settled than it is.
 
 ### Prompt one: in the project that owns the finding
 
-Fixed text. The only things that change between uses are the id and the branch.
-It is written for whatever assistant you already work with, run however you
-already run it. Paste it in a checkout of the project the finding is about.
+Fixed text. The only things that change between uses are the branch and *which
+rows* — one id, or every open row the project owns. It is written for whatever
+assistant you already work with, run however you already run it. Paste it in a
+checkout of the project the finding is about.
 
 It deliberately says nothing about what kind of thing the finding is about. A
 row may be about a signature, a semantics set, a configuration, an inconsistency
 between two of them, or something anoieu learns to check next year, and a prompt
 that named one of those would quietly narrow what the reader looks for.
 
+**Two forms, and the difference is one line.** Naming an id addresses that
+finding. Naming none sweeps every open row the project owns, one at a time —
+which is what you want the first time a project is asked anything, and after a
+long gap. The sweep form is not a bulk operation: each row still gets its own
+verdict and its own paragraph, and an assistant that answers ten rows with one
+sentence has not done the job.
+
+**Two kinds of row, and they are confirmed differently.** A code beginning `EO`,
+`DOC` or `TRI` comes from a check, and is confirmed by reading the file it
+names. A code beginning `FUZ` comes from [the fuzzer](fuzzing.md), and is
+confirmed by *running* something: the row points at a committed reproducer, and
+the finding's notes carry the exact invocation each checker was given. The
+prompt says both, because a maintainer sent to `docs/checks.md` for a `FUZ` row
+will find nothing there.
+
 ```text
-anoieu is a static analyzer for the Eunoia languages. It has reported a finding
-against this project. The report is at
+anoieu is a static analyzer for the Eunoia languages. It has reported findings
+against this project:
 
   https://github.com/ajreynol/anoieu/blob/main/docs/open-findings.md
 
-Find the row whose id is ID. It names a file, a line, and a check, and that
-check is described under its code in docs/checks.md in the same repository.
-Treat the row as a claim about that file and nothing more: it does not tell you
-what kind of problem to expect, and you should not assume one.
+Address ID.
+  -- or, for the sweep form --
+Address every row in the Open table whose owner is PROJECT. There may be
+several, they are unrelated, and each gets its own verdict and its own block in
+the reply. Answering ten rows with one sentence is not doing this.
 
-Working on branch BRANCH, and only on what the row names:
+A row is a claim, not a diagnosis: it does not say what kind of problem to
+expect. How you confirm one depends on its code.
 
-1. Decide whether the finding is real by reading the file, not by trusting the
-   row. Some of what anoieu reports is wrong.
-2. If it is real, make the smallest change that fixes it, and say in one
-   sentence what a reader of that file would see differently as a result.
-3. If it is not real, or if you cannot tell, change nothing and say why. "I
-   cannot tell" is the honest answer when you do not already know what the file
-   was meant to say, and it is more useful than a guess.
+- EO, DOC, TRI -- a check, explained under its code in anoieu's docs/checks.md.
+  The row names a file and a line in THIS project. Confirm it by reading that
+  file.
+- FUZ -- the anoieu fuzzer, explained in anoieu's docs/fuzzing.md. The row names
+  a committed reproducer under tests/fuzz/ in the anoieu repository, fetchable
+  raw from GitHub, and its notes carry the command each checker was given and
+  what each answered. Confirm it by running your own build on that file. A FUZ
+  finding is about your program's behaviour, not about a file you maintain.
 
-Do not fix other findings you notice on the way; each is reported separately.
-Do not summarize the analyzer's other results anywhere: a check that reports
-nothing is not evidence that anything is right.
+On branch BRANCH, one row at a time, and only what the rows name:
 
-Then draft a reply for a maintainer of this project to review and send. It is
-your triage and not a resolution -- you are proposing a change that has not
-been reviewed, and what actually happened will be settled by this branch: by
-whether it is merged, and by the commits that follow it. Draft it as
+1. Decide whether it is real -- by reading the file, or by running the
+   reproducer -- rather than by trusting the row. Some of what anoieu reports is
+   wrong, and a FUZ row was produced against somebody else's build of your
+   program, so it may not reproduce here at all. Say which build you ran.
+2. If it is real: the smallest change that fixes it, and one sentence on what a
+   reader of that file, or a user of that program, would see differently.
+3. If it is not, or you cannot tell: change nothing and say why. "I cannot tell"
+   is the honest answer when you do not know what the file was meant to say.
 
-  ## ID -- <check> -- <path>:<line>
+A FUZ row about two checkers disagreeing says which direction it runs in, not
+which checker is wrong. FUZ0001 -- accepting what the reference refused -- is
+the serious direction, but the answer may still be that the reference is
+stricter than the language requires. Say which you concluded.
 
-  TRIAGE: triaged as fixed | not a defect | cannot tell, on branch BRANCH,
-  pending review. <What you changed, or why you changed nothing.>
+Fix nothing else you notice; each finding is reported separately. Do not
+summarise anoieu's other results: a check that reports nothing is not evidence
+that anything is right. Touch no issue tracker.
+
+Then draft a reply for a maintainer to review and send -- one block per row, in
+anoieu-response.md at the root of this repository, appending to it and leaving
+any block already there alone:
+
+  ## ID -- <code> -- <what the row names>
+
+  TRIAGE: fixed | not a defect | cannot tell, on branch BRANCH, pending review.
+  <What you changed, or why you changed nothing.>
 
   HUMAN RESPONSE:
 
-and leave the sending to them.
-
-Leave HUMAN RESPONSE: empty. It is the maintainer's, and the two labels exist
-to keep what you concluded apart from what a person decided. If they ask you to
-write it instead, do -- but then quote the field back to them exactly, the text
-itself and not a description of it, say plainly that you are writing in their
-place and it will be read under their name, and change it as many times as they
-ask until they say it says what they mean. Writing that field and summarising
-it back is the one thing this shape exists to prevent.
+It is your triage and not a resolution: what happened will be settled by whether
+this branch is merged and by the commits that follow it. Leave HUMAN RESPONSE
+empty -- it is the maintainer's, and the two labels keep what you concluded
+apart from what a person decided. If they ask you to write it anyway, do, but
+quote the field back to them verbatim, say plainly that it will be read under
+their name, and revise it until they say it says what they mean.
 ```
 
 ### Prompt two: the follow-up, here
@@ -342,35 +373,80 @@ work. What it may change, and the two cases where it should stop and ask, are in
 [`reporting-policy.md`](reporting-policy.md#the-conventions) rather than in the prompt.
 
 ```text
-A project we reported a finding to has responded:
+A project we reported findings to has responded:
 
   LINK
 
-Read it as two things. What follows TRIAGE: is an assistant's reading, made
-quickly and on our word. What follows HUMAN RESPONSE: is a maintainer's
-decision. Where the two differ the decision is what counts, and a reply
-carrying only a triage is a proposal rather than a result.
+Read each block as two things. What follows TRIAGE: is an assistant's reading,
+made quickly and on our word. What follows HUMAN RESPONSE: is a maintainer's
+decision. Where they differ the decision counts, and a block carrying only a
+triage is a proposal rather than a result.
 
-Working in the anoieu repository:
+Working in the anoieu repository, on the block about ID -- or, for the sweep
+form, on every block in the reply, one at a time, leaving the record consistent
+after each so that stopping partway is safe:
 
-1. Find the row or rows in docs/open-findings.md that the reply is about.
-2. Establish what actually happened: re-check at the version the report was
-   measured against with `python3 tools/run.py --pinned`, and follow the branch
-   to its end -- merged, reworked, reverted, or still open. That outcome counts,
-   not what the triage predicted.
-3. Clean up the table as the conventions in docs/reporting-policy.md say, for
-   those rows and no others.
-4. If our analysis was wrong, the check is what needs changing rather than the
-   row: narrow it, add a witness under tests/witnesses/ that would have caught
-   the mistake, and record what it had wrongly assumed in docs/reports.md,
-   under the workings.
-5. Write what happened in docs/reports.md, under the log.
+1. Find the row or rows in docs/open-findings.md the reply is about.
+2. Establish what actually happened, which is not what the triage predicted. For
+   an EO, DOC or TRI row, re-check at the recorded version with
+   `python3 tools/run.py --pinned`. For a FUZ row, re-run the reproducer with
+   `python3 -m anoieu_fuzz verify`: a finding that no longer reproduces is the
+   strongest evidence there is, and one that never reproduced against their
+   build is a different outcome from one they fixed. Either way follow the
+   branch they name to its end -- merged, reworked, reverted, or still open.
+3. Clean up those rows and no others, as docs/reporting-policy.md says. Closing
+   is moving a row to the Closed table with a verdict, never deleting it.
+4. If our analysis was wrong, fix what produced it rather than the row. For a
+   check: narrow it, add a witness under tests/witnesses/ that would have caught
+   the mistake, and record the wrong assumption in docs/reports.md under the
+   workings. For a FUZ finding there is no check to narrow -- what there may be
+   is a reproducer that was an artefact of the harness, or a comparison that was
+   never fair. Say which in docs/reports.md, remove the promoted directory under
+   tests/fuzz/, and consider whether the harness should have refused to report
+   it.
+5. Write what happened in docs/reports.md under the log, and update the
+   project's section under the register if what we are asking of it has changed.
 
-Leave everything staged, and say what you decided and why -- the action you
-took, not a summary of what you read. Come back to me only if you disagree with
-how the reply classified the resolution, or you cannot tell whether the finding
-is resolved; leave the row open and say what you would need to know.
+Leave everything staged, commit nothing, touch no issue tracker. Say what you
+decided and why -- the action you took, not a summary of what you read. Come
+back to me only if you disagree with how the reply classified the resolution, or
+cannot tell whether the finding is resolved: leave the row open and say what you
+would need to know.
 ```
+
+#### Running the two
+
+Both are a command rather than a paste. They hold the text above with the scope
+line filled in, and take the same optional argument — a finding id, or nothing
+for the sweep — plus `--codex` to run codex instead of claude and
+`--show-prompt` to print what they would say and stop.
+
+```bash
+scripts/check_anoieu [ID]              # in a checkout of ethos, logos, cvc5 …
+scripts/process_anoieu <project> [ID]  # here, once that project has replied
+```
+
+`check_anoieu` reads the project from the git remote and leaves the draft in
+`anoieu-response.md`. `process_anoieu` takes a synonym for a local directory and
+points the assistant at it; nothing is tracked or synced between the two, and
+finding the reply is part of the job. Both print the resolved path, so a pasted
+transcript carries it.
+
+A synonym resolves in three steps: an existing **path** is used as it stands;
+otherwise **`scripts/repos.local`** is consulted, which maps repo ids to
+directories and is written from a template on first run; otherwise a directory
+of that name is looked for under **`$ANOIEU_REPOS`** (default `$HOME`). The
+mapping file is gitignored, because where somebody keeps their checkouts is not
+a fact about this project — and it is optional, since the scan already finds a
+checkout that is simply `$HOME/<name>`. What it is for is the cases that are
+not: a repository cloned under a different name, or several checkouts of one
+project where only one is the one findings are answered from. An id it maps to
+a directory that is not there is an error rather than a fallthrough, so a stale
+entry is visible rather than quietly ignored.
+
+The scripts are a convenience and the document is the authority: if the text
+they hold has drifted from the text above, the text above is the one every
+project was promised.
 
 ### Prompt three: the sweep
 

@@ -30,6 +30,7 @@ import shutil
 from anoieu.diagnostics import Diagnostic, Severity, Span, SourceMap
 from anoieu.fingerprint import fingerprint
 
+from .checkers import DEFAULT_CONFIG, from_config
 from .codes import CODES, code_for
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -63,6 +64,23 @@ def _case_path(directory: str) -> str:
         if name.startswith("case."):
             return os.path.join(directory, name)
     return ""
+
+
+def how_to_run(mode: str) -> dict[str, str]:
+    """The command each checker is asked with, portably.
+
+    A reproducer is worth having only if somebody who has never checked out
+    this repository can run it, and the row in the ledger points at a case
+    file rather than at an invocation. So the diagnostic carries the
+    invocation: `<case>` is the file beside the finding and `<signature>` the
+    calculus it is written against.
+    """
+    out = {}
+    for checker in from_config(DEFAULT_CONFIG):
+        argv = checker.argv(mode, "<case>", "<signature>")
+        if argv:
+            out[checker.name] = " ".join(argv)
+    return out
 
 
 def _first_command(text: str) -> tuple[int, str]:
@@ -102,6 +120,10 @@ def diagnostic(record: dict, sources: SourceMap | None = None) -> Diagnostic:
         f"found by the anoieu fuzzer in {record.get('mode', '?')} mode"
         + (f", from {record['source']}" if record.get("source") else "")
     )
+    ran = {o["checker"].split(" ")[0] for o in outcomes if o.get("coarse") != "skipped"}
+    for name, command in how_to_run(record.get("mode", "proof")).items():
+        if name in ran:
+            notes.append(f"{name} was asked: {command}")
     if record.get("note"):
         notes.append(record["note"])
     rel = os.path.relpath(case, ROOT) if case else record.get("bucket", "?")
