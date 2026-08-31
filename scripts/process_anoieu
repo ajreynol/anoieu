@@ -62,17 +62,29 @@ write_repos_file() {
 #     cvc5        ~/src/cvc5
 #     eudaimonia  ~/src/eudaimonia
 TEMPLATE
+}
+
+# How many entries it has, which is what "set up" means. A file that exists and
+# says nothing is the same situation as no file at all, and was the bug this
+# replaced: the notice fired on creation, so a file created once and never
+# filled in went quiet while still being empty.
+repos_entries() {
+  local n
+  n=$(grep -cvE '^[[:space:]]*(#|$)' "$REPOS_FILE" 2>/dev/null) || n=0
+  printf '%s\n' "$n"
+}
+
+announce_repos_file() {
   cat >&2 <<BANNER
 
 ======================================================================
-  process_anoieu has just created its configuration file. Set it up.
+  $1
 
       $REPOS_FILE
 
   It maps repo ids to directories on this machine -- nothing else
-  knows where your checkouts are, and the file is not tracked by git,
-  so it starts with its instructions and no entries. Open it now and
-  add a line per project:
+  knows where your checkouts are, and the file is not tracked by git.
+  Open it now and add a line per project:
 
       <repo-id> <path>
 
@@ -80,27 +92,35 @@ TEMPLATE
   that name -- which finds a checkout called "logos" and nothing
   called anything else -- under
       ${ANOIEU_REPOS:-\$HOME}
+
+  This notice stops as soon as the file has one entry.
 ======================================================================
 
 BANNER
 }
 
-# Written before anything else is decided, including whether the arguments were
-# any good: the first run of this script is exactly when somebody needs to be
-# told the file exists, and a run that stops at the usage message is still a
-# first run.
-[ -e "$REPOS_FILE" ] || write_repos_file
+# Both checked before anything else is decided, including whether the arguments
+# were any good: a run that stops at the usage message is still a run where
+# somebody needs to be told about the file.
+if [ ! -e "$REPOS_FILE" ]; then
+  write_repos_file
+  announce_repos_file "process_anoieu has just created its configuration file. Set it up."
+elif [ "$(repos_entries)" -eq 0 ]; then
+  announce_repos_file "process_anoieu's configuration file has no entries yet. Set it up."
+fi
 
 AGENT=claude
 PRINT=0
 SHOW=0
 DRY=0
 STATUS=0
+CHECK=1
 BRANCH=""
 NAME=""
 ID=""
 
 usage() {
+
   cat >&2 <<'USAGE'
 usage: process_anoieu [--status | --dry-run | --show-prompt]
                      [--codex] [--print] [--branch NAME] NAME [ID]
@@ -115,9 +135,20 @@ usage: process_anoieu [--status | --dry-run | --show-prompt]
   --status        report what became of that branch and stop. Runs git in the
                   project's checkout and no assistant anywhere
   --dry-run       say what would be done, and do none of it
+  --no-check      skip the check that every path in repos.local is a checkout
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
 USAGE
+  local n; n=$(repos_entries)
+  echo "" >&2
+  if [ "$n" -eq 0 ]; then
+    echo "repo ids would come from $REPOS_FILE," >&2
+    echo "which has no entries yet -- until it does, an id is resolved by looking" >&2
+    echo "under ${ANOIEU_REPOS:-$HOME} for a directory of that name." >&2
+  else
+    echo "repo ids come from $REPOS_FILE" >&2
+    echo "($n mapped; anything else is looked for under ${ANOIEU_REPOS:-$HOME})" >&2
+  fi
   exit 2
 }
 
@@ -129,6 +160,7 @@ while [ $# -gt 0 ]; do
     --show-prompt) SHOW=1; shift ;;
     --dry-run) DRY=1; shift ;;
     --status) STATUS=1; shift ;;
+    --no-check) CHECK=0; shift ;;
     --branch) BRANCH="${2:-}"; [ -n "$BRANCH" ] || usage; shift 2 ;;
     -h|--help) usage ;;
     -*) echo "process_anoieu: unknown option $1" >&2; usage ;;
@@ -142,19 +174,30 @@ done
 # -- the synonym, resolved: an explicit path, then the mapping file, then a scan
 #    of $ANOIEU_REPOS. An exact directory name wins over a partial one, and an
 #    ambiguous partial is an error rather than a guess.
+# One entry, as "<id><tab><path>", with ~ expanded. Returns 1 for a blank line
+# or a comment. Both the lookup and the check below read the file through this,
+# so what the check validates is exactly what the lookup would use.
+parse_repos_line() {
+  local line="$1" id path
+  line="${line#"${line%%[![:space:]]*}"}"
+  case "$line" in ''|'#'*) return 1 ;; esac
+  id="${line%%[[:space:]]*}"
+  path="${line#"$id"}"
+  path="${path#"${path%%[![:space:]]*}"}"
+  path="${path%"${path##*[![:space:]]}"}"
+  case "$path" in "~") path="$HOME" ;; "~/"*) path="$HOME/${path#\~/}" ;; esac
+  printf '%s\t%s\n' "$id" "$path"
+}
+
 from_repos_file() {
-  local want="$1" line id path
+  local want="$1" line parsed id path
   [ -f "$REPOS_FILE" ] || return 1
   while IFS= read -r line || [ -n "$line" ]; do
-    case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
-    line="${line#"${line%%[![:space:]]*}"}"
-    id="${line%%[[:space:]]*}"
+    parsed=$(parse_repos_line "$line") || continue
+    id=${parsed%%$'\t'*}
+    path=${parsed#*$'\t'}
     [ "$id" = "$want" ] || continue
-    path="${line#"$id"}"
-    path="${path#"${path%%[![:space:]]*}"}"
-    path="${path%"${path##*[![:space:]]}"}"
     [ -n "$path" ] || continue
-    case "$path" in "~") path="$HOME" ;; "~/"*) path="$HOME/${path#\~/}" ;; esac
     if [ ! -d "$path" ]; then
       echo "process_anoieu: $REPOS_FILE maps '$want' to '$path', which is not a directory" >&2
       return 2
@@ -165,14 +208,57 @@ from_repos_file() {
   return 1
 }
 
-RESOLVED_BY=""
+# -- the file, checked. Every run does this: an entry that points nowhere is
+#    silent until the day you use it, and the day you use it is the day you
+#    wanted to be doing something else. A bad entry for the id you are actually
+#    resolving is a hard error above; the rest are reported and the run goes on,
+#    because a broken mapping for cvc5 is no reason not to answer logos.
+check_repos_file() {
+  local line parsed id path lineno=0 seen="" problems=()
+  [ -f "$REPOS_FILE" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    lineno=$((lineno + 1))
+    parsed=$(parse_repos_line "$line") || continue
+    id=${parsed%%$'\t'*}
+    path=${parsed#*$'\t'}
+    case " $seen " in
+      *" $id "*) problems+=("$lineno  $id -- already mapped above; this line is ignored") ;;
+      *)
+        seen="$seen $id"
+        if [ -z "$path" ]; then
+          problems+=("$lineno  $id -- no path; an entry is '<repo-id> <path>'")
+        elif [ ! -e "$path" ]; then
+          problems+=("$lineno  $id  $path -- no such directory")
+        elif [ ! -d "$path" ]; then
+          problems+=("$lineno  $id  $path -- not a directory")
+        elif ! git -C "$path" rev-parse --git-dir >/dev/null 2>&1; then
+          problems+=("$lineno  $id  $path -- not a git repository")
+        fi
+        ;;
+    esac
+  done < "$REPOS_FILE"
+  [ "${#problems[@]}" -gt 0 ] || return 0
+  {
+    echo ""
+    echo "process_anoieu: ${#problems[@]} problem(s) in $REPOS_FILE"
+    printf '   line %s\n' "${problems[@]}"
+    echo "   Fix them, or pass --no-check to stop looking. Ids that resolve some"
+    echo "   other way are unaffected, and this run continues."
+    echo ""
+  } >&2
+  return 1
+}
+
+# Prints two lines: how it resolved, then what it resolved to. Returning the
+# route in a variable does not work -- resolve runs in a command substitution,
+# and a subshell cannot set anything its caller will see, which is why --dry-run
+# used to report "a scan" whatever had actually happened.
 resolve() {
   local want="$1" roots r d exact=() partial=() mapped rc
-  if [ -d "$want" ]; then RESOLVED_BY="a path"; (cd "$want" && pwd); return; fi
+  if [ -d "$want" ]; then printf 'a path\n'; (cd "$want" && pwd); return; fi
   mapped=$(from_repos_file "$want"); rc=$?
   [ "$rc" = 2 ] && return 1
-  if [ "$rc" = 0 ]; then RESOLVED_BY="$REPOS_FILE"; printf '%s\n' "$mapped"; return; fi
-  RESOLVED_BY="a scan of ${ANOIEU_REPOS:-$HOME}"
+  if [ "$rc" = 0 ]; then printf '%s\n%s\n' "$REPOS_FILE" "$mapped"; return; fi
   roots="${ANOIEU_REPOS:-$HOME}"
   local IFS=:
   for r in $roots; do
@@ -188,8 +274,10 @@ resolve() {
     local IFS=:
   done
   unset IFS
-  if [ "${#exact[@]}" -gt 0 ]; then printf '%s\n' "${exact[0]}"; return; fi
-  if [ "${#partial[@]}" -eq 1 ]; then printf '%s\n' "${partial[0]}"; return; fi
+  if [ "${#exact[@]}" -gt 0 ]; then
+    printf 'a scan of %s\n%s\n' "$roots" "${exact[0]}"; return; fi
+  if [ "${#partial[@]}" -eq 1 ]; then
+    printf 'a scan of %s\n%s\n' "$roots" "${partial[0]}"; return; fi
   if [ "${#partial[@]}" -gt 1 ]; then
     { echo "process_anoieu: '$want' matches more than one directory:";
       printf '   %s\n' "${partial[@]}";
@@ -200,8 +288,11 @@ resolve() {
     echo "   add an entry to $REPOS_FILE, or give a path"; } >&2
   return 1
 }
-DIR=$(resolve "$NAME") || exit 2
-RESOLVED_BY=${RESOLVED_BY:-a scan of ${ANOIEU_REPOS:-$HOME}}
+[ "$CHECK" = 1 ] && { check_repos_file || true; }
+
+RESOLUTION=$(resolve "$NAME") || exit 2
+RESOLVED_BY=${RESOLUTION%%$'\n'*}
+DIR=${RESOLUTION#*$'\n'}
 PROJECT=$(basename "$DIR")
 : "${BRANCH:=anoieu-${ID:-findings}}"
 
