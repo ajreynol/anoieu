@@ -48,7 +48,7 @@ shared map from a repo id to a checkout on this machine; it is untracked, and
 | command | run in | what it does |
 | --- | --- | --- |
 | `init_eo` | the **new** repository | a README from the name register: what the tool is for, what it does not answer, the name explained. Complies with nothing, deliberately |
-| `welcome_eo <id> <path>` | here | records the checkout, reads the new tool, drafts a first message. A welcome, never an audit |
+| `welcome_eo <id> <path>` | here | records the checkout, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one; `--show-prompt` is a dry run |
 | `join_eo` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. Its prompt is fixed and drift-checked against [`policy.md`](policy.md) |
 | `check_join_eo <id>` | here | joined, ready, misconfigured or not ready — and whether the obstacle is ours |
 | `process_discussion <id> [Dn]` | here | works what another repository has addressed to us. **Read-only until a person names a topic** |

@@ -37,6 +37,14 @@ PRINT=0
 SHOW=0
 NAME=""
 WHERE=""
+FORCE=0
+
+die()  { echo "welcome_eo: $*" >&2; exit 2; }
+soft() {
+  if [ "$FORCE" = 1 ]; then echo "welcome_eo: warning: $*" >&2
+  else echo "welcome_eo: $*" >&2
+       echo "            if that is deliberate, pass --force." >&2; exit 2; fi
+}
 
 usage() {
   cat >&2 <<'USAGE'
@@ -47,9 +55,13 @@ usage: welcome_eo [--codex] [--print] [--show-prompt] ID PATH
   PATH            where it is checked out on this machine.
   --codex         run codex instead of claude
   --print         run non-interactively and print the result
-  --show-prompt   print the prompt and exit, running nothing
+  --show-prompt   print the prompt and exit. A dry run: records nothing
+  --force         proceed past a warning. Never past a hard failure
 
 Run this in anoieu. PATH may be omitted only if ID is already recorded.
+
+It refuses rather than guesses. Who is in the ecosystem is not a thing to
+corrupt with a typo, and an id here becomes the name eight other scripts use.
 USAGE
   exit 2
 }
@@ -60,6 +72,7 @@ while [ $# -gt 0 ]; do
     --claude) AGENT=claude; shift ;;
     --print) PRINT=1; shift ;;
     --show-prompt) SHOW=1; shift ;;
+    --force) FORCE=1; shift ;;
     -h|--help) usage ;;
     -*) echo "welcome_eo: unknown option $1" >&2; usage ;;
     *) if [ -z "$NAME" ]; then NAME="$1"
@@ -69,6 +82,12 @@ while [ $# -gt 0 ]; do
   esac
 done
 [ -n "$NAME" ] || usage
+
+# -- the id has to survive being written to a file and read back as a key
+case "$NAME" in
+  ""|.|..)           die "'$NAME' is not a usable repo id" ;;
+  *[!A-Za-z0-9._-]*) die "'$NAME' is not a usable repo id: letters, digits, dot, dash and underscore only" ;;
+esac
 
 # -- what is already recorded for this id, if anything
 RECORDED=""
@@ -90,19 +109,49 @@ else
   [ -d "$WHERE" ] || { echo "welcome_eo: $WHERE is not a directory" >&2; exit 2; }
   TARGET=$(cd "$WHERE" && pwd)
 fi
-[ -d "$TARGET" ] || { echo "welcome_eo: $TARGET is not a directory" >&2; exit 2; }
+[ -d "$TARGET" ] || die "$TARGET is not a directory"
+
+# -- it has to be a checkout, and it has to be somebody else's
+[ -e "$TARGET/.git" ] || die "$TARGET is not a git repository"
+case "$TARGET" in "$HOME"|/) die "$TARGET is not a repository checkout" ;; esac
+[ "$TARGET" != "$ROOT" ] || die "that is anoieu itself"
+case "$TARGET/" in "$ROOT"/*) die "$TARGET is inside anoieu; a member is its own repository" ;; esac
+case "$ROOT/" in "$TARGET"/*) die "anoieu is inside $TARGET; that is not a member checkout" ;; esac
+
+# -- the guards that catch a typo rather than a decision
+BASE=$(basename "$TARGET")
+[ "$NAME" = "$BASE" ] || soft "id '$NAME' does not match the directory name '$BASE'"
+
+if [ -f "$REPOS_FILE" ]; then
+  while IFS= read -r line; do
+    case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
+    oid=${line%%[[:space:]]*}; opath=${line#"$oid"}
+    opath=${opath#"${opath%%[![:space:]]*}"}
+    case "$opath" in "~"*) opath="$HOME${opath#\~}" ;; esac
+    [ "$oid" = "$NAME" ] && continue
+    [ "$opath" = "$TARGET" ] && soft "$TARGET is already recorded as '$oid'"
+    if [ "$(python3 "$ROOT/tools/near.py" "$NAME" "$oid" 2>/dev/null)" = 1 ]; then
+      soft "id '$NAME' is one character from '$oid', which is already recorded"
+    fi
+  done < "$REPOS_FILE"
+fi
 
 # -- record it, once. An existing entry is never silently rewritten: a repo id
 #    that changes meaning under the other scripts is worse than an error here.
-if [ -z "$RECORDED" ]; then
+if [ "$SHOW" = 1 ]; then
+  echo "-- dry run: nothing recorded. $NAME -> $TARGET" >&2
+elif [ -z "$RECORDED" ]; then
   if [ ! -f "$REPOS_FILE" ]; then
     printf '# where each project is checked out on this machine.\n# One entry per line, "<repo-id> <path>". See scripts/process_anoieu.\n' > "$REPOS_FILE"
   fi
   printf '%s\t%s\n' "$NAME" "$TARGET" >> "$REPOS_FILE"
-  echo "-- recorded $NAME -> $TARGET in $REPOS_FILE" >&2
+  echo "-- recorded in $REPOS_FILE:" >&2
+  echo "     $NAME	$TARGET" >&2
+  echo "   to undo:  sed -i '/^$NAME	/d' $REPOS_FILE" >&2
 elif [ "$RECORDED" != "$TARGET" ]; then
   echo "welcome_eo: '$NAME' is already recorded as $RECORDED" >&2
-  echo "            and you gave $TARGET. Edit $REPOS_FILE if the move is real." >&2
+  echo "            and you gave $TARGET. Edit $REPOS_FILE if the move is real;" >&2
+  echo "            --force will not rewrite an existing mapping." >&2
   exit 2
 fi
 
@@ -133,6 +182,19 @@ $BRIEF
 A person will usually have pointed them in a direction before this runs, with
 whatever prompts that took, so some of what you are reading came from us and is
 not recorded anywhere. Do not treat an unexplained decision as theirs alone.
+
+**Before anything else, check you are looking at the right repository.** The id
+`$NAME` was typed by a person and points at $TARGET, and a mistyped id records a
+name eight other scripts will use. So: does the README name this tool `$NAME`,
+or something else? Does the tree look like the thing the register and the brief
+describe, or like a different project entirely? Is there any sign this checkout
+belongs to some other tool?
+
+**If any of that is off, stop.** Do not review it, do not draft a topic, and do
+not guess which repository was meant. Say what you found and what you expected,
+and say that `sed -i '/^$NAME\t/d' $REPOS_FILE` removes the entry that was just
+recorded. Being wrong about who is in the ecosystem is more expensive than a
+wasted run.
 
 Read their README first, then whatever else they have. Three questions, in this
 order.
