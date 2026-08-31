@@ -12,4 +12,7 @@ Three things that are true before you read anything else:
   `docs/reporting-policy.md`. The ladder is in `docs/coherence.md`.
 - **Weakening a claim needs nobody; strengthening one needs a person.**
 
-Run the suite with `python3 tests/run.py`.
+Run `python3 tests/run.py` and `python3 tools/policy_check.py` before handing back.
+
+`policy_check.py` enforces `tools/policy.md`. Nothing enforces `tools/vision.md`,
+and nothing may: it is argued, not checked.

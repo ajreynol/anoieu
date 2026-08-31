@@ -288,6 +288,27 @@ Deleting the directory would break the build, which is exactly the test rule 2
 sets, and it fails it. That is recorded rather than fixed, because the fix is a
 promotion decision and that belongs to a person.
 
+## What is checked
+
+Every rule and convention on this page is a claim about *this tree*, which means
+a program can decide it without holding an opinion — and
+[`policy_check.py`](policy_check.py) decides the ones that are currently
+decidable, on every push. That is the property to preserve when adding to this
+page: **a rule nobody can check is a rule worded loosely enough to be
+tightened**, or one that belongs in [`vision.md`](vision.md) instead. The
+dividing line, and why the vision must never acquire a checker of its own, is
+*Policy is checked; vision is argued* on that page.
+
+    python3 tools/policy_check.py              # check; exit 1 on any failure
+    python3 tools/policy_check.py --coverage   # what is checked, and what is not
+
+The run prints the rules it **cannot** decide alongside the ones it can, each
+with the reason — intent, tone, elapsed time, editorial judgement. That list is
+part of the output rather than a footnote, because a checker that reports only
+its own passes reads as coverage it does not have. Shrinking it is ordinary
+work; a rule moving off it because it was reworded is the intended way this page
+improves.
+
 ### Why this shape
 
 Three failures this is arranged against, in increasing order of how much they

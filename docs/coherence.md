@@ -49,12 +49,25 @@ revise it is the agent it governs. This includes the report card at the bottom:
 a paragraph there is a judgement about somebody else's project, and softening or
 sharpening one is exactly the edit that should not be made quietly.
 
+**Nothing may ever check the vision mechanically.** No CI job, no script, no
+generated verdict against a tenet. Whether a tool is fruitful or a claim
+oversold is contestable and nobody has the standing to settle it, so a green
+tick against one would invent an authority that does not exist. The reasoning is
+*Policy is checked; vision is argued* on that page, and it is the one rule here
+that forbids work rather than requiring it.
+
 **2. [`../tools/policy.md`](../tools/policy.md) — ask before the rules.** The
 numbered rules may be **appended** to, never renumbered, and retiring one in
 place is a person's decision. The layout conventions are different in kind: when
 the tree and the conventions disagree, correcting the *description* to match
 what the tree actually does needs nobody, and changing the tree to match the
 description is ordinary work.
+
+Unlike the vision, this page **is** machine-checked:
+`python3 tools/policy_check.py` runs in CI and decides every rule that a program
+can decide from the tree. Run it before proposing a change here — and if you add
+a rule, either make it checkable or accept that it lands on the checker's
+printed list of what it cannot decide.
 
 **3. [`reporting-philosophy.md`](reporting-philosophy.md) — not yet stable, so
 say what you changed.** Unlike the two above, this page is still settling: its
@@ -219,4 +232,5 @@ is the same interface in all three worlds.
 2. Check the ladder above before touching any document in it.
 3. If the task is the record itself, the ledger script in *The cheap route* is
    the first thing to build and nothing above it is blocked on the rest.
-4. Leave the work staged.
+4. Run `python3 tests/run.py` and `python3 tools/policy_check.py`.
+5. Leave the work staged.

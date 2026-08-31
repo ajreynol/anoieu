@@ -33,6 +33,46 @@ follows is the substitute. The last tenet is different in kind from the other
 four: they are about how to build, and it is about who the building is for and
 who gets to decide it counted.
 
+## Policy is checked; vision is argued
+
+What divides this page from [`policy.md`](policy.md) is not subject matter. It
+is **who is able to settle a question.**
+
+Policy states facts about a tree: where a file goes, what the README ends with,
+what a child project may import, whether the lock file that pins a measurement
+exists. A program can decide every one of those without holding an opinion, and
+one does — [`policy_check.py`](policy_check.py), on every push. When it goes red
+something is wrong in a way nobody has to be persuaded of, which is the entire
+value of putting it in CI.
+
+Vision states what the work is *for*, and every question it raises is a
+judgement. Is this tool fruitful yet. Was that claim oversold. Did that count as
+a deliverable. Has a child project earned its keep. These are contestable, they
+are *meant* to be contestable, and **nobody has the authority to settle them** —
+least of all the agent whose work is being judged.
+
+So the rule is: **anoieu automates the tracking of adherence to policy, and must
+never automate the tracking of adherence to vision.** The reason is not modesty
+about the difficulty. A checker that returned a verdict on *is this tool
+fruitful* would manufacture an authority that does not exist, and a green tick
+is read as settled in a way a paragraph never is. That is the same failure as
+publishing an assurance because a run went quiet: the tick would be believed
+most by the readers least able to check it.
+
+It is also why the report card at the bottom is built the way it is —
+paragraphs somebody can disagree with, binding nobody, produced by a reader
+rather than by a job, and saying so before it says anything else. **The report
+card is not a build step and must not become one.**
+
+**The test for where a sentence belongs.** Can a program decide it from the
+tree, without an opinion? If yes it is policy: move it there and check it. If no
+it is vision, and it must never acquire a checker. A rule in `policy.md` that no
+program can decide is either in the wrong document or worded loosely enough to
+be tightened — and the checker prints, on every run, every policy rule it cannot
+decide, so that gap stays visible instead of being assumed away. The asymmetry
+runs both ways: a tenet somebody works out how to check mechanically was
+probably a policy convention all along, and should move.
+
 ## The tenets
 
 **1. Evolve to be fruitful to another tool as quickly as possible.** The state a
@@ -526,6 +566,8 @@ absence of that somebody.
 | where a reader arrives | `README.md`, and it must be sufficient on its own |
 | what on that page is fixed | the purpose and the caveat; results move as fast as they arrive |
 | who may strengthen a claim | a person, asked directly, with the evidence attached |
+| what enforces the policy | `tools/policy_check.py`, in CI |
+| what enforces the vision | nothing, deliberately — it is argued, not checked |
 | what governs a deliverable | [`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md), [`../docs/reporting-policy.md`](../docs/reporting-policy.md) |
 | where speculative work goes instead | a child project, `tools/X/`, under [`policy.md`](policy.md) |
 | what confers standing on the tool | a person choosing to use, run or own it — never the agent's say-so |

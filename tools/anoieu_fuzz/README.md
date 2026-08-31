@@ -3,6 +3,16 @@
 A child project of anoieu, under [`../policy.md`](../policy.md). Started by a
 human; it lives in `tools/` and is not part of what this repository ships.
 
+## The name
+
+Descriptive, and **deliberately not Greek** — which is a departure from rule 4 of
+[`../policy.md`](../policy.md), recorded below with the others. It is its
+parent's name and the word for what it does, because the convention exists to
+make a *research account* legible by its title, and this is not one: it is a
+program with a command line, and a reader looking for the fuzzer should find it
+by looking for the fuzzer. A Greek name here would be decoration, which rule 4
+says to avoid in the same breath as it asks for the convention.
+
 ## The question
 
 anoieu asks whether a *signature* is coherent. This asks whether the **programs
@@ -46,6 +56,7 @@ repaired:
 | **2**, not in CI | two CI steps run it |
 | **2**, deleting it changes nothing | deleting it fails the build |
 | **3**, not advertised | it is on the front page and in the documentation index |
+| **4**, named along the convention | the name is descriptive rather than Greek — see *The name* above |
 
 **The promotion decision is open**, and it is the maintainer's: either its own
 repository, or folding into the parent as a second shipped tool. Until somebody

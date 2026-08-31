@@ -25,6 +25,11 @@ jobs:
         run: |
           python3 tools/gen_checks_doc.py
           git diff --exit-code docs/checks.md
+      # tools/policy.md is a set of claims about this tree, so a program decides
+      # them. tools/vision.md is deliberately absent from this job and must stay
+      # absent -- see "Policy is checked; vision is argued" in tools/vision.md.
+      - name: the repository still matches tools/policy.md
+        run: python3 tools/policy_check.py
 
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a
