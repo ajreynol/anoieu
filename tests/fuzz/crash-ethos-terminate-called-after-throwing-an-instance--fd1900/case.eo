@@ -1,0 +1,2 @@
+; anoieu-fuzz signature case, seed big:1568 (mutated:seed:reference-query-commands.eo)
+(declare-const > (->))

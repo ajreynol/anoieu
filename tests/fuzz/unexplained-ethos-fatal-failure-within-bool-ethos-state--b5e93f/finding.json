@@ -1,0 +1,21 @@
+{
+ "bucket": "unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f",
+ "commands": 1,
+ "kind": "unexplained",
+ "mode": "signature",
+ "note": "an unclosed assume-push in a signature; the message speaks of 'including' a file given on the command line",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "abnormal",
+   "detail": "Fatal failure within bool ethos::State::includeFile(const std::string&, bool, bool, const ethos::Expr&) at <path>:N",
+   "exit": -6,
+   "seconds": 0.071,
+   "status": "unexplained"
+  }
+ ],
+ "owner": "ethos",
+ "seed": "big:377",
+ "source": "mutated:seed:segfault-98.eo",
+ "summary": "ethos unexplained: Fatal failure within bool ethos::State::includeFile(const std::string&, bool, bool, const ethos::Expr&) at <path>:N"
+}

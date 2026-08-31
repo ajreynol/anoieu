@@ -165,6 +165,9 @@ Writing proofs natively gives you a Lean theorem per proof. This arrangement
 gives you a Lean theorem about the *rules*, once, and then every proof that uses
 them for free.
 
+The word doing the work is *generated*, and it has never been tested against a
+target the compiler was not written for. Iogos, below, is that test.
+
 ## 7. Analyzability is a property you can design for
 
 Because the fragment is small, tools like this one are possible; because they
@@ -400,10 +403,10 @@ and what nothing else provides.
 
 ---
 
-# Three projects that do not exist yet, and change the picture
+# Five projects that do not exist yet, and change the picture
 
-**Pathos**, **hermeneia** and **noesis** are code names. None has a repository
-or a line of code: all three are future work, named here
+**Pathos**, **hermeneia**, **noesis**, **iogos** and **euthyna** are code names.
+None has a repository or a line of code: all five are future work, named here
 because the costs and open questions above are stated relative to what exists
 today, and each of these would move a different one. Writing down what they
 *would* change is also the cheapest way to notice which of today's arguments are
@@ -602,27 +605,167 @@ stay, because the signature stays. A smaller loss than T4 and a real one, and
 the same reason to distrust our enthusiasm — this time about a proposal we are
 recommending rather than resisting.
 
-## What the three mean for the argument above
+## Iogos — logos in a second proof assistant
+
+*A code name, for work not yet started.* An Isabelle/HOL backend for
+`ethos-eoc`, and the logos development redone against it: the same calculus, the
+same semantics and the same soundness argument, carried by a second kernel.
+
+**What it tests.** Reason 6 — the Lean side is generated rather than chosen — is
+what lets the arrangement claim a proof-assistant justification as a derived
+artifact rather than as a second project. Iogos is the falsification test for
+that claim, and it is eudaimonia's test on the other axis: eudaimonia asks
+whether a second calculus is a second pair of files, iogos asks whether a second
+prover is a second backend. The two answers are independent, and neither is
+known.
+
+**What it buys if it works.**
+
+- *Two kernels.* A calculus sound in Lean and in Isabelle rests on neither
+  prover's kernel, library conventions or embedding in particular. For an
+  ecosystem whose whole pitch is trust, a second independently elaborated
+  development is a larger increment than any one proof in either.
+- *It makes the semantics prover-neutral by force.* Today `.eos` leaks its
+  target: a termination measure is carried as literal Lean text inside a
+  semantics file, and this analyzer has a check for one that names a program no
+  longer there ([TRI0007](checks.md#tri0007)) because nothing else compares
+  them. A second backend cannot be built without separating what the semantics
+  says from how Lean says it — the boundary noesis has to draw, arrived at from
+  a third direction.
+- *A second consumer of the semantics.* Not the second *producer* objection O5
+  asks for, but the first consumer that is not downstream of Lean, which is the
+  half of the interchange claim that has never been exercised.
+- *A route to arrangement D with precedent.* Extracting a checker from an
+  Isabelle development into SML is a well-travelled path — CeTA, the certified
+  termination-proof checker, is the closest analogue in another community —
+  which puts iogos adjacent to Pathos rather than orthogonal to it.
+
+**Where it pulls against noesis, which is the part worth writing down.** Noesis
+moves the authoritative semantics *into* a prover. Iogos needs it *outside*
+every prover. Both cannot hold in their strongest forms. If `.eos` becomes Lean
+definitions, a second prover reads either a translation of them — trusted and
+unverified, which is the kind of seam this document exists to complain about —
+or nothing, and iogos becomes a rewrite rather than a backend. If the semantics
+stays a prover-neutral description, objection O2 stands and noesis is not
+available. That is a sharper form of open question 3 than the way it is asked
+there, and it wants deciding before either project is started rather than after.
+
+**Where the difficulty sits.** Eunoia's types are dependent where SMT-LIB's are
+— `concat : (-> (BitVec n) (BitVec m) (BitVec (eo::add n m)))` is an ordinary
+declaration in CPC — and a Lean embedding can follow that shape directly.
+Isabelle/HOL cannot: widths would become fields with well-formedness side
+conditions carried through every operation, which is not a translation of logos
+but a redesign of the part of it that is hardest to get right. The rest is more
+tractable than it looks — 591 near-identical per-rule obligations are the
+workload Isabelle's automation was built for, and if they go through easily that
+is itself a measurement about how much of the development is boilerplate.
+
+## Euthyna — advice to logos about its own proof
+
+*A code name, for work not yet started.* εὔθυνα is literally a *straightening*:
+at Athens, the examination a magistrate underwent at the end of the term, when
+the accounts were read. The sibling project
+[dokimasia](https://github.com/ajreynol/dokimasia) is named for δοκιμασία, the
+scrutiny that comes first.
+
+Euthyna reads logos's proof and tells logos how to make it better — what is dead
+and can go, what is repeated and wants factoring out, what is structured in a
+way that will cost the next regeneration — with the refactoring attached
+wherever it can produce one. It does not maintain the development and does not
+rewrite it. The findings go to the people who do, which is the arrangement this
+repository already has with logos: anoieu sends it findings about the `.eo` and
+`.eos` files it carries, and euthyna would send it findings about the 695,000
+lines of Lean those files turn into.
+
+**Why that artifact.** Six hundred and ninety-five thousand lines is not read,
+and what nobody reads, nobody maintains. Build time, the cost of a regeneration,
+and whether the thing the ecosystem's trust rests on can be reviewed at all are
+functions of that development's size and structure, and neither of those has
+been anybody's job. Nothing in the pipeline is looking at the proof as an object
+in its own right.
+
+**What it would have to say.**
+
+- *Minimize.* Generated lemmas nothing cites, hypotheses no proof needs,
+  rule-support lemmas left dead by a later signature, per-rule proofs that are
+  the same proof, obligations discharged twice, and machinery a calculus cannot
+  reach — eudaimonia's `examples/hello` carries 370 lines, 15% of what is
+  generated for it, of datatype and literal machinery it cannot use, and that is
+  the small end of the phenomenon.
+- *Modularize.* Separate the calculus-independent core from what a signature
+  contributes, give the pieces interfaces rather than adjacency, and replace
+  per-rule repetition with a shared support library. This is eudaimonia's own
+  stated blocker — *stabilize the SMT-LIB model as a fixed base that signatures
+  extend*, *extract the invariant core* — and arrangement **B**'s design
+  question, arrived at from inside the artifact rather than from the generator.
+- *Improve.* Build time, robustness across a regeneration, uniformity across the
+  591 per-rule proofs, and what the theorem actually rests on: the axioms behind
+  the top-level statement, every remaining `sorry` or stub, and any step that
+  recruits a compiler into the trusted base — `native_decide` is the Lean
+  example, and the point of naming it is that a development can acquire one
+  without anybody deciding to.
+
+**What kind of finding this is**, which matters because it is not the kind this
+repository publishes. anoieu reports defects: a thing is wrong, and the argument
+is about whether it is. Euthyna would report suggestions, where the owner's
+judgement governs and a declined one is not an unfixed defect but a difference
+of taste about a proof somebody else maintains. Same reporting system, a
+different burden — and the same refusal at the end of it, because a development
+euthyna has nothing to say about is not thereby a development that is good.
+
+**The stretch goal** is the same service for whatever eudaimonia builds next: a
+development the tool has not seen, for a calculus it does not know. That is also
+the honest test of the first goal — whether what euthyna learns on logos is
+about logos, or about generated proof developments in general.
+
+**What it would settle.** Reason 6 says the Lean side is generated and therefore
+close to free. That figure is what *free* currently weighs, and nobody has said
+how much of it is load-bearing. Euthyna is the only one of the five projects
+here that takes the artifact this document keeps calling a by-product as its
+subject, and its findings would be the first evidence either column has about
+whether a generated development of that size can be made modular at all.
+
+**Where the difficulty sits.** Some of what it finds will not be logos's to fix:
+in a generated development, a suggestion can only be taken by hand where the
+text is hand-written and preserved — eudaimonia already carries per-rule proofs
+across a regeneration — and everywhere else it is really a request to the
+compiler, forwarded through logos. Sorting the two is part of each finding, not
+a preliminary to it. Minimality is also a search, and the obvious method does
+not survive the size: delete something, rebuild, see whether it still goes
+through, does not scale to 695,000 lines, so most of the answer has to come from
+the dependency graph the prover already has. And smaller is not self-evidently
+better — 591 rules that look alike are worth more than 591 individually shortest
+proofs, and a refactoring no generator can reproduce is a liability rather than
+an improvement. Advice that does not say which of those it is optimizing for is
+not advice anybody should take.
+
+## What the five mean for the argument above
 
 Two of the cost columns are dated rather than wrong. Arrangement **D** is
 blocked on a measurement that Pathos would replace with an artifact, and reason
 4's folklore status matters much less if the trade-off it rests on is dissolved
 instead of settled.
 
-They also pull in different directions, which is worth being explicit about:
-Pathos improves the *checker* without touching the semantics question,
-hermeneia makes the semantics question more consequential — and is easier the
-more of the semantics lives in Lean — and noesis is the one that answers it. A
-team with effort for a single project is choosing between making the current
-arrangement's weakest artifact strong, making its strongest artifact reach
-further, and moving the artifact nobody in either column defends.
+They do not point the same way, which is worth being explicit about. Pathos
+improves the *checker* and touches nothing else. Hermeneia makes the semantics
+question more consequential — and is easier the more of the semantics lives in
+Lean. Euthyna changes nothing about the arrangement at all: it takes the largest
+artifact in it as a subject, and would be the first attempt to say what the
+generated half would have to look like for a person to maintain it. And noesis
+and iogos both move where the semantics is
+*defined*, in opposite directions: into a prover, or out of every prover. A team
+with effort for one project is choosing between making the arrangement's weakest
+artifact strong, making its strongest artifact reach further, making its largest
+one tractable, and settling where the semantics lives — and only the last of
+those is a fork rather than an increment.
 
-What all three share is that they are expensive things built *against* the
+What all five share is that they are expensive things built *against* the
 signature and the proof format, and each one that gets built raises the cost of
 moving those. That is an argument for settling questions 1 and 3 — where the
 calculus is defined, and whether `.eos` should be Lean — before rather than
-after. Noesis is the only one of the three that settles one of them rather than
-accruing against it, which is the argument for doing it first.
+after. Noesis and iogos are the two that would settle question 3 instead of
+accruing against it, which is the argument for doing one of them first, and for
+deciding which one before either is started.
 
 ---
 
@@ -697,7 +840,9 @@ so the compiler emits the same ordering whatever the signature says. A related
 measurement: `examples/hello` declares three constants and one rule, and 370 of
 its 2,395 generated lines — 15% — are datatype and literal machinery it cannot
 use. Both are the same underlying fact: pieces of the "template" are fixed where
-the claim says they are derived.
+the claim says they are derived. Both were also measured by hand, on one
+example, once, and dead weight of that kind is what euthyna would be pointed
+at.
 
 **What it points at.** Its own blocker for generalizing the proofs is to
 *"stabilize the SMT-LIB model as a fixed base that signatures extend"* and to
@@ -762,7 +907,9 @@ language that checks itself *if the analysis actually exists*. Every check in
    write the semantics as Lean definitions, generate what the SMT backend needs
    from those. Would that keep argument 1 and dissolve objection O2? It is
    arrangement **B**, and Noesis is the project that would answer it by
-   building it.
+   building it. And if it should: what does a *second* proof assistant then
+   read? Noesis and iogos pull opposite ways on that, and the fork is the
+   sharper question.
 4. **Where is the line between a rule and a side condition?** Every computation
    moved into a program is work not proved, and work whose meaning must be
    modelled somewhere.
@@ -777,7 +924,8 @@ language that checks itself *if the analysis actually exists*. Every check in
    remember them.
 7. **Where is the line between the invariant core and what a signature
    contributes?** eudaimonia's blocker and arrangement **B**'s design question
-   are the same question, and whoever answers it answers both.
+   are the same question, and euthyna cannot advise logos on modularizing
+   without answering it as well. Whoever answers it answers all three.
 8. **What is a well-formed signature?** Unanswered in the language itself, and
    the answer decides whether the weak checking is a bug or a deliberate trade.
 9. **Would a second producer change the calculus?** CPC is shaped by cvc5. A
@@ -807,6 +955,11 @@ language that checks itself *if the analysis actually exists*. Every check in
 - **A Lean-side calculus definition** from which the fast checker is generated as
   well as the soundness development, without losing readability for the people
   who maintain the signature. Reason 6 inverts.
+- **Iogos turning out to be a rewrite rather than a backend.** If a second
+  proof assistant cannot be reached without redoing the semantics by hand, then
+  reason 6's *generated* is doing less work than it claims, and the Lean
+  development is a project the arrangement carries rather than a by-product it
+  derives.
 - **Evidence that signature authors trip over the fragment's subtleties more
   often than Lean users trip over Lean's.** Objections O1 and O7 would outweigh
   the case.

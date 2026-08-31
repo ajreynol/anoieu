@@ -1,0 +1,5 @@
+; anoieu-fuzz proof case, seed /home/andrew-reynolds/logos/test/regress/sexp/test-indexed-op.cpc (seed:test-indexed-op.cpc)
+(declare-const a (BitVec 4))
+(assume @p0 (not (= ((_ extract 1 0) a) ((_ extract 1 0) a))))
+(step @p1 :rule refl :args ((( extract 1 0) a)))
+(step @p2 :rule contra :premises (@p1 @p0))

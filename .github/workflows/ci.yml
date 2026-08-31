@@ -101,6 +101,42 @@ jobs:
         run: |
           ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle
 
+      # The promoted reproducers still do what the record beside them says. This
+      # is the fuzzer's half of "re-measuring" (docs/reporting-policy.md), and
+      # it is a hard failure for the same reason the desugaring battery above is
+      # one: a verdict that moves without a reproducer moving is ethos having
+      # changed under us, and somebody should look. logos is not built here, so
+      # only ethos's half of a disagreement is compared.
+      - name: the promoted reproducers still reproduce
+        run: |
+          ETHOS=corpus/ethos/build/src/ethos python3 -m anoieu_fuzz verify
+
+      # And, since a build of ethos is already here, point the fuzzer at it.
+      # On a schedule only, and never failing: a fuzzer that fails a build finds
+      # a new bug and turns somebody's unrelated pull request red, which is the
+      # one thing docs/philosophy.md is most careful about. What it finds is
+      # uploaded and warned about; triage is a human step, as it is for every
+      # other finding here. Only the signature mode runs — the differential mode
+      # needs a second checker, and building logos is a Lean toolchain away.
+      - name: fuzz ethos with signatures nobody would write
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          ETHOS=corpus/ethos/build/src/ethos python3 -m anoieu_fuzz run \
+            --mode signature -n 4000 --jobs 4 --time-limit 600 \
+            --seed-corpus corpus/ethos/tests || true
+          buckets=$(find fuzz-findings -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)
+          echo "anoieu-fuzz: $buckets bucket(s)"
+          if [ "$buckets" -gt 0 ]; then
+            echo "::warning::anoieu-fuzz found $buckets bucket(s); see the artifact, and docs/fuzzing.md for what to do with one"
+          fi
+      - name: what the fuzzer found
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-findings
+          path: fuzz-findings/
+          if-no-files-found: ignore
+
   # The other question: what do the checks say about upstream *now*? This moves
   # every clone to its tip and regenerates, so a failure here is news rather
   # than a regression — new findings to triage, or counts to re-record. It is

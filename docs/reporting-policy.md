@@ -41,6 +41,51 @@ means much. The two that carry the most weight are *the id*, because a decision
 recorded against an unstable id is lost on the next run, and *re-measuring*,
 because a follow-up that cannot reproduce the original finding is guessing.
 
+### A finding from the fuzzer
+
+The [anoieu fuzzer](fuzzing.md) fills the same slots, and differs in exactly one
+of them — which is worth stating rather than leaving a reader to infer, because
+it is the slot that carries the most weight.
+
+| the slot | how the fuzzer fills it |
+| --- | --- |
+| **the report** | the same [`open-findings.md`](open-findings.md), under codes `FUZ0001`–`FUZ0004` |
+| **the id** | the same fingerprint, over the committed reproducer rather than over somebody's signature |
+| **the catalogue** | `python3 -m anoieu_fuzz explain FUZ0002`; four codes, one page each |
+| **re-measuring** | **different.** `python3 -m anoieu_fuzz verify` replays every reproducer against a build of the checker and compares with what was recorded |
+| **the regression** | `tests/fuzz/`, one directory per finding, beside `tests/witnesses/` |
+| **the ledger** | the same [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) |
+| **the frame** | the same two labels |
+
+**Re-measuring is the difference and it changes what a run can promise.** A
+check's finding is re-derived by running the check, so CI here re-derives every
+one on every push, and a row that has gone stale shows up as a row nothing
+reports. A fuzzer's finding cannot be: re-deriving it means running ethos or
+logos, which the job that generates the report does not have. So the evidence is
+the *reproducer*, committed, plus the verdicts recorded beside it — the same
+arrangement as [`../tests/oracle.json`](../tests/oracle.json), written by a real
+run and never by hand.
+
+Three obligations follow, and they are on us rather than on anybody upstream.
+
+1. **A candidate is not a finding.** A run writes to a scratch directory that is
+   not checked in. Nothing there has a code, an id or a row until somebody reads
+   it and runs `anoieu-fuzz promote`, and the first thing a run ever reported
+   here was an artefact of the harness rather than a defect — a mutated
+   `include` pointing at a file that had never existed.
+2. **Confirm against a pinned build before filing.** A crash in whatever binary
+   was on the machine that found it is not news. `tools/deps.lock` records the
+   commit the rest of the report is measured against; a `FUZ` row filed upstream
+   should have been reproduced against a build of it, and the row should say so.
+3. **A disagreement has no owner until somebody gives it one.** The generated
+   ledger files it against both checkers, because saying which of the two is
+   wrong is precisely the judgement the fuzzer cannot make. Assigning it is a
+   review step, and it happens in [`reports.md`](reports.md#the-register-what-anoieu-is-asking-and-of-whom) where a person signs for it.
+
+Everything else — the reply format, the three prompts, what happens to a
+decision — is unchanged. A `FUZ` row is followed up exactly like an `EO` one,
+with the reproducer's path where a signature's path would be.
+
 ### The findings report
 
 Two tables and one rule.

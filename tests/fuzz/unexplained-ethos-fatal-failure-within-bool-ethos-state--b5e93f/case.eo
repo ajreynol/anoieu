@@ -1,0 +1,2 @@
+; anoieu-fuzz signature case, seed big:377 (mutated:seed:segfault-98.eo)
+(assume-push context true)

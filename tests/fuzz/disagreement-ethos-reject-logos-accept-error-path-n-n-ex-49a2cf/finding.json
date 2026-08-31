@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf",
+ "commands": 9,
+ "kind": "disagreement",
+ "mode": "proof",
+ "note": "logos/test/regress/sexp/test-define.cpc, unmutated: declare-fun is an SMT-LIB command ethos takes only in a reference file",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "reject",
+   "detail": "Error: <path>:N.N: Expected Eunoia command, got `_` (SYMBOL).",
+   "exit": -6,
+   "seconds": 0.095,
+   "status": "rejected"
+  },
+  {
+   "checker": "logos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.003,
+   "status": "correct"
+  }
+ ],
+ "owner": "ethos+logos",
+ "seed": "/home/andrew-reynolds/logos/test/regress/sexp/test-define.cpc",
+ "source": "seed:test-define.cpc",
+ "summary": "logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (SYMBOL)."
+}

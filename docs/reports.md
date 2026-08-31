@@ -26,6 +26,18 @@ act on, it is written down here:
 - **(C) a change to Eunoia itself** — to the language or to the manual that
   defines it, argued from something writing the analyzer turned up.
 
+**Two sources feed this, and the code says which.** `EO`, `DOC` and `TRI` are
+what the checks read out of a signature. **`FUZ` is what the [anoieu
+fuzzer](fuzzing.md) provoked out of a checker** — a crash, a diagnostic outside
+its own convention, or two checkers answering one file differently. A fuzzer
+finding is an (A) like any other and is held to the same standard, with one
+difference in how it is evidenced: it is confirmed by running a binary against
+a committed reproducer under `tests/fuzz/`, rather than by re-running a check.
+The mechanical ledger in [`open-findings.md`](open-findings.md) carries both,
+and files a disagreement against *both* checkers, because deciding which of the
+two is wrong is exactly the judgement a row here has made and a row there has
+not.
+
 So this is the page to open when you want to know what anoieu is asking of
 anyone. [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) says how each defect was confirmed;
 [`reporting-policy.md`](reporting-policy.md#running-it-in-ci) says how the adoption works; [`reporting-policy.md`](reporting-policy.md#the-workflow)
@@ -100,6 +112,8 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [ethos-3](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | a misordered `declare-rule` field reports as `Expected conclusion`, several lines from the cause | proposed |
 | [ethos-4](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | a program applied to the wrong arity prints without a file or line, and the run still exits `correct` | proposed |
 | [ethos-5](#ethos--the-proof-checker-and-its-own-signatures) | ethos | B | run over `tests/*.eo`, `DOC*` disabled | proposed |
+| [ethos-8](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | **`FUZ0002`** — `(declare-const f (->))` aborts with an uncaught `std::length_error` | open |
+| [ethos-9](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | **`FUZ0003`** — three error paths abort outside the `Error: <file>:<line>` convention, with no location | open |
 | [ethos-6](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | two test signatures use literals whose category they never declare, so `+` gets an untyped nil | open |
 | [ethos-7](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/naive-nary.eo:182` — a case of `isPermutation` that can never be reached | open |
 | [eoc-1](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | preflight: have `driver.py` run anoieu over the triple before stage 1, so a missing semantics block is refused at launch rather than at stage 6 | proposed |
@@ -108,6 +122,8 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerate now that it is fixed upstream | ready |
 | [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:546` has an entry for `str.indexof_re_split`, which CPC does not declare | open |
 | [logos-3](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed |
+| [logos-4](#logos--the-lean-development) | logos | A | **`FUZ0001`** — the parser accepts two things ethos refuses, one of them in a committed regression test | open |
+| [logos-5](#logos--the-lean-development) | logos | A | **`FUZ0001`** — the parser refuses one thing ethos accepts: an `assume` after the first `step` | open |
 | [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed |
 | [eud-2](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | settle the calculus profile's two *declared* answers against the signature instead of recording them on trust | proposed |
 | [eunoia-1](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | refuse a re-declaration whose type is identical to an earlier one | proposed |
@@ -287,6 +303,31 @@ Reported by `EO0071`.
 matches any pair of identical arguments, so its second case, which matches a
 pair of identical `or`-terms, can never be reached. Reported by `EO0052`.
 
+**ethos-8 (A)** — `(declare-const f (->))` — a `->` type with no arguments —
+aborts ethos with `terminate called after throwing an instance of
+'std::length_error': cannot create std::vector larger than max_size()`. An
+uncaught C++ exception rather than a diagnostic, so nothing downstream can tell
+it from any other abnormal exit. Reproducer:
+`tests/fuzz/crash-ethos-terminate-called-after-throwing-an-instance--fd1900/`.
+Found by the fuzzer, `FUZ0002`.
+
+**ethos-9 (A)** — three error paths abort with a message that does not go
+through the `Error: <file>:<line>.<col>:` convention the rest of ethos's
+diagnostics use, so they carry no location and no `Error:` prefix:
+
+- `(declare-consts <numeral> Int)` followed by `(declare-consts <numeral> Bool)`
+  — "cannot set type rule for kind NUMERAL to Bool, since its type was already
+  set to Int";
+- `(assume-push p true)` at the top level of a `.eo`, which reports that
+  "including" the file did not preserve assumption scope, of a file that was
+  given on the command line rather than included;
+- `(include "no-such-file.eo")` — "Couldn't open file:".
+
+Each is a real refusal and should be one; the ask is that it say so in the
+form everything else says it, because an editor, a CI annotation and this
+repository's own oracle all read that output by its shape. Reproducers for the
+first two are under `tests/fuzz/`. Found by the fuzzer, `FUZ0003`.
+
 **ethos-5 (B)** — run over the test signatures. `anoieu check tests` reads 202
 files under 191 entry points and reports **seven errors, three warnings and
 three hints** in total — ethos-1, ethos-6, ethos-7, the `symm` docstring drift,
@@ -389,6 +430,27 @@ on the *target* side, and another entry transforms into it at line 584, which is
 legitimate; the input-side entry is what no compilation reaches. Found by the
 first run over the whole triple, and cvc5's response notes correctly that it
 belongs to whoever owns the semantics rather than to cvc5. Reported by `TRI0002`.
+
+**logos-4 (A)** — logos's README says it "accepts the same syntax for proofs as
+Ethos", and two cases show the parser is more permissive than that:
+
+- `test/regress/sexp/test-define.cpc`, **unmutated and committed**, uses
+  `declare-fun`. That is an SMT-LIB command, which ethos accepts only in a file
+  read via `reference`; ethos refuses the file outright and logos checks it and
+  prints `correct`. Either the file should use `declare-const`, or the parity
+  claim should be narrowed to say which SMT-LIB commands are also read.
+- `(( extract 1 0) a)` — the indexed operator written without its `_` — is read
+  by logos as `((_ extract 1 0) a)` and used to discharge a `refl` against a
+  term written the other way. Ethos type checks and refuses it.
+
+Reproducers under `tests/fuzz/`. Found by the fuzzer, `FUZ0001`.
+
+**logos-5 (A)** — the other direction: a proof that `assume`s after its first
+`step` is accepted by ethos and refused by logos's parser with "assumption after
+the first proof step". Nothing in the Eunoia grammar orders the two, so this is
+a completeness gap rather than a disagreement about the language — worth either
+supporting or documenting as a restriction of logos's input format. Reproducer
+under `tests/fuzz/`. Found by the fuzzer, `FUZ0001`.
 
 **logos-3 (B)** — run the triple in CI. logos already vendors ethos and consumes
 cvc5's signature, so it is the natural place for the job — see the open question

@@ -7,7 +7,8 @@ Eunoia compiler on the `ethosEoc3` branch.
 
 *Status: the front end, the checks that need no type checker, a shallow typing
 pass, the desugarer and the CI plumbing are written, and run over CPC on every
-push — where they have found three real bugs.*
+push — where they have found three real bugs. A fuzzer for the checkers
+themselves,* [the anoieu fuzzer](docs/fuzzing.md)*, is the newest part.*
 
 ## Two things this repository is
 
@@ -64,6 +65,34 @@ theories/Bools.eo:4:22: error[EO0041]: the nil terminator of `or` has the wrong 
           application of the operator whose type is asked for
 ```
 
+## The other half: the anoieu fuzzer
+
+anoieu asks whether a signature is coherent. **anoieu_fuzz** asks whether the
+programs that *read* signatures behave when one is not — it writes Eunoia
+nobody would write, hands it to a checker, and watches for the answer a checker
+should never give. It is semantics-free by construction, because everything it
+reports is a fact about two runs rather than about mathematics: two checkers
+disagreeing about one file, a checker dying without saying why, a checker never
+answering.
+
+```bash
+ETHOS=… LOGOS=… python3 -m anoieu_fuzz run --mode proof -n 2000       # ethos against logos, on CPC
+ETHOS=…              python3 -m anoieu_fuzz run --mode signature      # arbitrary signatures, at ethos
+```
+
+Findings are shrunk to a reproducer, deduplicated into buckets, and then go into
+**the same report as everything else** — the same ledger, the same fingerprints,
+the same renderers — under codes `FUZ0001`–`FUZ0004`, which is the marker that
+says a checker was provoked rather than a signature read. The first few thousand
+cases produced an uncaught C++ exception in ethos on `(declare-const f (->))`,
+three proofs that ethos and logos answer differently — one of them a *committed
+regression test* — and an ethos error path that skips its own `Error:`
+convention. Six reproducers are committed under
+[`tests/fuzz/`](tests/fuzz); nothing is filed upstream yet.
+[`docs/fuzzing.md`](docs/fuzzing.md) has the caveats and what a third checker
+has to do to join in.
+
+
 ## If you own a tool in the Eunoia ecosystem
 
 [`docs/reports.md`](docs/reports.md) carries every open ask anoieu makes of
@@ -72,9 +101,9 @@ anyone, each with an id, a state, and the reasoning underneath it:
 | you own | waiting for you |
 | --- | --- |
 | **cvc5** — the CPC signature | [2 requests they made of us; 2 findings already fixed](docs/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
-| **ethos** — the proof checker | [3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption](docs/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
+| **ethos** — the proof checker | [3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption, and 2 the fuzzer found: a crash and an error path with no location](docs/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
 | **ethos-eoc** — the Eunoia compiler | [3 integrations, including the `is_list_nil` diff its own docs ask for](docs/reports.md#ethos-eoc--the-eunoia-compiler) |
-| **logos** — the Lean development | [1 dead entry, 1 regeneration, 1 CI adoption](docs/reports.md#logos--the-lean-development) |
+| **logos** — the Lean development | [1 dead entry, 1 regeneration, 1 CI adoption, and 2 the fuzzer found: three proofs it and ethos answer differently](docs/reports.md#logos--the-lean-development) |
 | **eudaimonia** — the calculus template | [2 preflight integrations](docs/reports.md#eudaimonia--the-template-for-other-calculi) |
 | **Eunoia** — the language and its manual | [7 proposed changes, from what writing the analyzer turned up](docs/reports.md#eunoia-itself--the-language-and-its-manual) |
 
@@ -105,6 +134,7 @@ closes a row until the artifact it names says what happened.
 | [`docs/reports.md`](docs/reports.md) | what anoieu is asking of whom, how each finding was confirmed, and what came back |
 | [`docs/reporting-policy.md`](docs/reporting-policy.md) | how a finding is handled: the conventions, the three prompts, and how to run these checks in your own CI |
 | [`docs/usage.md`](docs/usage.md) | the interface — every command and option, configuration, baselines, suppression, and the test suite |
+| [`docs/fuzzing.md`](docs/fuzzing.md) | the anoieu fuzzer, the fuzzer: what its oracle is, how a reproducer is shrunk, and how to point it at your checker |
 | [`docs/philosophy.md`](docs/philosophy.md) | what may be published about somebody else's code, and why |
 | [`docs/notes.md`](docs/notes.md) | what ethos misses, what we have established about `.eo` and `.eos`, and the design |
 | [`docs/README.md`](docs/README.md) | the index, and the files a run generates: the open findings, the corpus, the check catalogue |

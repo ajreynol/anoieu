@@ -5,12 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "anoieu"
 version = "0.2.0"
-description = "A static analyzer for Eunoia signatures (.eo) and semantic configuration sets (.eos)"
+description = "A static analyzer for Eunoia signatures (.eo) and semantic configuration sets (.eos), and a fuzzer for the checkers that read them"
 requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
 anoieu = "anoieu.cli:main"
+anoieu-fuzz = "anoieu-fuzz.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["anoieu*"]
+include = ["anoieu*", "anoieu_fuzz*"]

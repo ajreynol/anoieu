@@ -1,0 +1,21 @@
+{
+ "bucket": "unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94",
+ "commands": 3,
+ "kind": "unexplained",
+ "mode": "signature",
+ "note": "declaring a literal category twice; the message has no Error: prefix, no file and no line",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "abnormal",
+   "detail": "Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at <path>:N",
+   "exit": -6,
+   "seconds": 0.08,
+   "status": "unexplained"
+  }
+ ],
+ "owner": "ethos",
+ "seed": "big:288",
+ "source": "generated",
+ "summary": "ethos unexplained: Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at <path>:N"
+}

@@ -1,0 +1,21 @@
+{
+ "bucket": "crash-ethos-terminate-called-after-throwing-an-instance--fd1900",
+ "commands": 1,
+ "kind": "crash",
+ "mode": "signature",
+ "note": "a nullary arrow type: minimal form is (declare-const f (->))",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "abnormal",
+   "detail": "terminate called after throwing an instance of 'std::length_error'",
+   "exit": -6,
+   "seconds": 0.083,
+   "status": "crash"
+  }
+ ],
+ "owner": "ethos",
+ "seed": "big:1568",
+ "source": "mutated:seed:reference-query-commands.eo",
+ "summary": "ethos crash: terminate called after throwing an instance of 'std::length_error'"
+}

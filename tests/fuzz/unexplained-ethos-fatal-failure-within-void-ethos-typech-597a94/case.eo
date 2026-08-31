@@ -1,0 +1,4 @@
+; anoieu-fuzz signature case, seed big:288 (generated)
+(declare-const Int Type)
+(declare-consts <numeral> Int)
+(declare-consts <numeral> Bool)

@@ -9,6 +9,10 @@ writing witnesses rather than assertions.
 
     python3 tests/run.py            # run every witness
     python3 tests/run.py --oracle   # also ask ethos what it says about each
+
+It also runs `cli_cases.py` -- what a *run* does with the findings -- and
+`fuzz_cases.py`, the harness of the fuzzer, whose checkers are written in the
+suite so that neither ethos nor logos has to be on the machine.
 """
 
 from __future__ import annotations
@@ -223,6 +227,12 @@ def main() -> int:
     import cli_cases  # noqa: PLC0415
 
     failures += cli_cases.main()
+
+    sys.stdout.flush()
+    print()
+    import fuzz_cases  # noqa: PLC0415
+
+    failures += fuzz_cases.main()
 
     if args.oracle:
         print()

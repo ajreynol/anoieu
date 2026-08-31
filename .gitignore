@@ -4,3 +4,6 @@ __pycache__/
 
 # the sources a report is generated from: a cache, rebuilt by tools/deps.py
 deps/
+
+# what a fuzzing run finds: reproducers, kept until somebody triages them
+fuzz-findings/
