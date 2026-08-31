@@ -62,6 +62,28 @@ TARGETS = [
     ),
 ]
 
+# Files a project carries but is not the author of, and which are therefore not
+# audited at all. Reporting against one puts somebody else's findings under its
+# name, and the copy having drifted from the original is a different question
+# from the original being wrong -- one that belongs to whatever keeps the two in
+# sync rather than to a static analyzer.
+#
+# `logos/install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the
+# ground truth; cvc5's CI is the planned place for the sync check. Eudaimonia's
+# `examples/cpc` is the same situation, handled above by naming `examples/hello`
+# in the target rather than the whole directory.
+NOT_AUDITED = {
+    "logos": ("install/defs/Cpc.cached.eo",),
+}
+
+
+def not_audited(repo: str, root: str) -> set:
+    """The absolute paths this repo's entry excludes."""
+    return {
+        os.path.abspath(os.path.join(root, rel)) for rel in NOT_AUDITED.get(repo, ())
+    }
+
+
 # Where the sources live: clones this project manages, never a checkout somebody
 # else owns. See tools/deps.py.
 from deps import roots as _dep_roots  # noqa: E402
@@ -74,20 +96,30 @@ def roots_for(deps_dir: str) -> dict:
     return {name: os.path.join(deps_dir, name) for name in DEFAULT_ROOTS}
 
 
-def signatures(paths: list[str]) -> list[list[str]]:
-    """A directory is one profile per file; files together are one profile."""
+def signatures(paths: list[str], skip: set | None = None) -> list[list[str]]:
+    """A directory is one profile per file; files together are one profile.
+
+    `skip` is `not_audited`: a file in it is never an entry point, and any
+    finding that lands in it is dropped by the caller as well, in case it was
+    reached through an include rather than named directly.
+    """
+    skip = skip or set()
     out: list[list[str]] = []
     files: list[str] = []
     for p in paths:
         if os.path.isdir(p):
             for root, _dirs, names in os.walk(p):
-                out += [[os.path.join(root, n)] for n in sorted(names) if n.endswith(".eo")]
-        else:
+                for n in sorted(names):
+                    full = os.path.join(root, n)
+                    if n.endswith(".eo") and os.path.abspath(full) not in skip:
+                        out.append([full])
+        elif os.path.abspath(p) not in skip:
             files.append(p)
     return ([files] if files else []) + out
 
 
-def measure(paths: list[str], triple: dict | None, roots: dict) -> tuple[collections.Counter, int]:
+def measure(paths: list[str], triple: dict | None, roots: dict,
+            skip: set | None = None) -> tuple[collections.Counter, int]:
     load_checks()
     sem = smt = None
     embed: set[str] = set()
@@ -104,7 +136,7 @@ def measure(paths: list[str], triple: dict | None, roots: dict) -> tuple[collect
     # the same dedupe the command line does: a finding in a file two profiles
     # both read is one finding, not two
     seen: set[tuple] = set()
-    for group in signatures(paths):
+    for group in signatures(paths, skip):
         result = load(group)
         ctx = Context(
             signature=result.signature,
@@ -118,6 +150,8 @@ def measure(paths: list[str], triple: dict | None, roots: dict) -> tuple[collect
         )
         files |= set(result.files)
         for d in list(result.diagnostics) + run_all(ctx):
+            if skip and os.path.abspath(d.span.path) in skip:
+                continue
             key = (d.span.path, d.span.line, d.span.col, d.code, d.message)
             if key in seen:
                 continue
@@ -184,6 +218,6 @@ def measure_all(roots: dict) -> list:
         if not all(os.path.exists(p) for p in needed):
             rows.append((label, collections.Counter(), 0, False))
             continue
-        codes, nfiles = measure(paths, triple, roots)
+        codes, nfiles = measure(paths, triple, roots, not_audited(repo, roots[repo]))
         rows.append((label, codes, nfiles, True))
     return rows

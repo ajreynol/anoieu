@@ -349,21 +349,32 @@ class Generator:
 
     # -- signature cases
 
-    def signature_case(self) -> list[str]:
+    def signature_case(self, include: str = "") -> list[str]:
         # A signature that declares nothing declares nothing to go wrong with:
         # every term in it names a symbol that is not there, and ethos stops at
-        # the first one. So a case opens with a prelude -- the same handful of
-        # declarations `vocab.fallback()` describes -- and the generated part
+        # the first one. So a case opens with a prelude and the generated part
         # is written against symbols that exist.
+        #
+        # Which prelude is the whole difference between two experiments. The
+        # default is the handful of declarations `vocab.fallback()` describes,
+        # and what it reaches is the front end. `include` instead opens the case
+        # with a real signature -- CPC, 190 declarations and 241 programs -- so
+        # what follows is nonsense written in a language the checker knows well,
+        # and the type checker has something to do.
         from .vocab import FALLBACK_PRELUDE  # noqa: PLC0415
 
-        cmds: list[str] = list(FALLBACK_PRELUDE)
+        cmds: list[str] = [f'(include "{include}")'] if include else list(FALLBACK_PRELUDE)
         for _ in range(self.rng.randint(1, 2)):
             name = self.fresh("S")
             cmds.append(f"(declare-const {name} Type)")
             self.sorts.append(name)
-        if self.chance(0.4):
-            cat = self.rng.choice(LIT_CATEGORIES)
+        # A category the vocabulary already has is a category ethos aborts on,
+        # by a path that is already a promoted finding -- and against a real
+        # signature that is most of them, so generating one would spend a fifth
+        # of every run re-finding it. Take a category nobody has claimed.
+        free = [c for c in LIT_CATEGORIES if c not in self.voc.literals]
+        if free and self.chance(0.4):
+            cat = self.rng.choice(free)
             sort = self.sort()
             cmds.append(f"(declare-consts {cat} {sort})")
             self.voc.literals[cat] = sort
@@ -532,12 +543,15 @@ def generate(
     voc: Vocabulary | None = None,
     wild: float = 0.1,
     depth: int = 3,
+    include: str = "",
 ) -> Case:
     rng = random.Random(seed)
     standalone = voc is None or voc.name == "builtin"
-    gen = Generator(rng, voc, wild=wild, depth=depth)
     if mode == "signature":
-        return Case(gen.signature_case(), mode, ".eo", seed, "generated")
+        # a copy: a signature case writes into its vocabulary as it declares
+        gen = Generator(rng, (voc or fallback()).copy(), wild=wild, depth=depth)
+        return Case(gen.signature_case(include), mode, ".eo", seed, "generated")
+    gen = Generator(rng, voc, wild=wild, depth=depth)
     return Case(gen.proof_case(prelude=standalone), mode, ".cpc", seed, "generated")
 
 

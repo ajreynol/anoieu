@@ -97,6 +97,23 @@ class Vocabulary:
                 self.nullary.setdefault(op.ret, []).append(op)
         return self
 
+    def copy(self) -> "Vocabulary":
+        """A vocabulary a generator may write into.
+
+        Signature cases declare as they go and record what they declared, so a
+        generator mutates its vocabulary. Sharing one across cases would leak
+        `f17` from one file into the next, and across threads it would be a
+        race; the fixed signature a run reads is therefore copied per case.
+        """
+        return Vocabulary(
+            name=self.name,
+            sorts=list(self.sorts),
+            sort_ctors=list(self.sort_ctors),
+            ops=list(self.ops),
+            rules=list(self.rules),
+            literals=dict(self.literals),
+        ).index()
+
     def ops_returning(self, sort: str) -> list[Op]:
         """Every operator whose application could have this sort.
 

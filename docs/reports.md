@@ -408,8 +408,15 @@ All three need the `.eos` front end, which is the next milestone.
 
 ### logos — the Lean development
 
-**Today.** Little that is specific: the signatures it installs are flattened
-copies of CPC, so it inherits CPC's findings and adds none of its own.
+**Today.** Little that is specific, and less than there was. `install/defs/Cpc.cached.eo`
+is a copy of cvc5's `Cpc.eo` rather than something logos wrote, and cvc5's
+`Cpc.eo` is the ground truth — so auditing the copy files cvc5's findings under
+logos's name, seventeen times as it turned out. It is no longer read at all
+(`NOT_AUDITED` in `tools/gen_corpus_table.py`), and whether the copy has drifted
+from the original is a sync check — planned, in cvc5's CI — rather than
+anything a static analyzer should be reporting. What is left for logos is what
+logos owns: `Cpc.eos`, the semantics, and the two parser findings the fuzzer
+turned up.
 
 **What it gets next, and it is the largest single item on the roadmap.** logos
 owns `Cpc.eos`, the official semantics of CPC, so the triple checks are what
@@ -1035,6 +1042,7 @@ analyzer does differently now.
 | **overstated — claim corrected** | 1 | `cvc5-1`'s impact |
 | **deferred** | 1 | `cvc5-3`, pending a documented convention |
 | **not yet** | 1 | `cvc5-5`, pending a pinned release |
+| **not audited** | 17 | every row against `logos/install/defs/Cpc.cached.eo` |
 
 Changes the analyzer made as a result:
 
@@ -1045,7 +1053,10 @@ Changes the analyzer made as a result:
 - **three levels of impact kept apart** for a declaration that disagrees with
   its cases (`cvc5-1`);
 - a regression case in `tests/cli_cases.py` for the arrangement that produced
-  the wrong finding.
+  the wrong finding;
+- **files a project did not author are not audited** (`NOT_AUDITED` in
+  `tools/gen_corpus_table.py`), after seventeen rows were filed against logos
+  for a copy of somebody else's signature.
 
 ---
 

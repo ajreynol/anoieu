@@ -39,7 +39,7 @@ from anoieu.loader import load  # noqa: E402
 from anoieu.semantics import load_set  # noqa: E402
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from gen_corpus_table import DEFAULT_ROOTS, TARGETS, signatures  # noqa: E402
+from gen_corpus_table import DEFAULT_ROOTS, TARGETS, not_audited, signatures  # noqa: E402
 
 from anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
 
@@ -136,7 +136,8 @@ def collect(roots: dict) -> dict[str, dict]:
             smt = load_set(os.path.join(roots[r], rel))
             r, rel = triple["embedding"]
             embed = _embedding_vocabulary(os.path.join(roots[r], rel))
-        for group in signatures(paths):
+        skip = not_audited(repo, roots[repo])
+        for group in signatures(paths, skip):
             result = load(group)
             ctx = Context(
                 signature=result.signature,
@@ -151,6 +152,8 @@ def collect(roots: dict) -> dict[str, dict]:
             for d in list(result.diagnostics) + run_all(ctx):
                 if d.code.startswith("ANO"):
                     continue
+                if os.path.abspath(d.span.path) in skip:
+                    continue  # see NOT_AUDITED in tools/gen_corpus_table.py
                 owner = owner_of(d.span.path, roots)
                 key = fingerprint(d, result.sources, roots.get(owner, roots[repo]))
                 if key in out:

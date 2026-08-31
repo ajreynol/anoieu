@@ -86,13 +86,17 @@ class Session:
         self.reference = getattr(args, "reference", "") or cfg.get("reference", "")
         self.note = ""
 
+        self.extend = getattr(args, "extend", False) and bool(self.signature)
         self.voc: Vocabulary = fallback()
-        if self.mode == "proof" and self.signature:
+        if self.signature and (self.mode == "proof" or self.extend):
             from .vocab import load as load_vocab  # noqa: PLC0415
 
             self.voc, self.note = load_vocab(self.signature)
         elif self.mode == "proof":
             self.note = "no signature given: cases carry their own declarations"
+        if self.mode == "signature":
+            self.note += ("; cases extend it" if self.extend
+                          else "cases stand alone on a builtin prelude")
 
         self.seeds: list[Case] = []
         self.pool: list[str] = []
@@ -126,8 +130,9 @@ class Session:
         rng = random.Random("choose:" + seed)
         if self.seeds and rng.random() < mutate_p:
             return mutate(seed, rng.choice(self.seeds), self.pool)
-        voc = self.voc if self.mode == "proof" else fallback()
-        return generate(seed, self.mode, voc, wild=self.wild, depth=self.depth)
+        voc = self.voc if (self.mode == "proof" or self.extend) else fallback()
+        return generate(seed, self.mode, voc, wild=self.wild, depth=self.depth,
+                        include=self.signature if self.extend else "")
 
     def ask(self, case: Case) -> list[Outcome]:
         """Every checker's answer to one case, plus -- under `--metamorphic` --
@@ -446,6 +451,10 @@ def _common(p: argparse.ArgumentParser) -> None:
     p.add_argument("--wild", type=float, default=0.1,
                    help="how often to ignore what a type says (0..1, default 0.1)")
     p.add_argument("--depth", type=int, default=3, help="how deep a term may nest")
+    p.add_argument("--extend", action="store_true",
+                   help="signature mode: open each case by including the fixed "
+                        "signature and write against its vocabulary, rather than "
+                        "standing alone on a builtin prelude")
     p.add_argument("--reference", default="",
                    help="the checker a disagreement's direction is measured against "
                         "(default: ethos). Accepting what it refuses is the serious "
