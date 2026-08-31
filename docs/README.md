@@ -65,25 +65,15 @@ a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not
 be changed without asking, and the open technical work on the record itself.
 
-[`../scripts/`](../scripts) holds the recommended prompts: `check_anoieu` to run
-in the project a finding is about and `process_anoieu` here once it has replied,
-both defined by
-[`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow); and
-[`join_eo`](../scripts/join_eo), run in a repository that wants to join the
-ecosystem, and [`check_join_eo`](../scripts/check_join_eo), run here to ask
-whether one has — both defined by
-[`policy.md`](policy.md#joining-the-eunoia-ecosystem). `check_join_eo` can
-conclude the fault is ours, and is told to fix it here when it is. And three more:
-[`process_discussion`](../scripts/process_discussion), run here to work what
-another repository has addressed to us — read-only until a person names a topic;
-[`init_eo`](../scripts/init_eo), run in a brand new repository to say what it is
-for, with nothing to comply with yet; [`welcome_eo`](../scripts/welcome_eo), run
-here when one appears, to read it and draft a first message rather than a
-verdict; and
-[`global_audit`](../scripts/global_audit), which runs the checker over every
-member of `tools/ecosystem.json` checked out here and reads across the
-results. The prompts are the workflow; the scripts are a way of running them,
-and `tests/run.py` fails when their copy of the text has drifted from it.
+[`../scripts/`](../scripts) holds the recommended prompts — for starting a tool,
+welcoming it, joining, working correspondence, and carrying findings both ways.
+**The table of what each one does, and where it is run, is in
+[`coherence.md`](coherence.md#the-scripts)**, which is also where a new one has
+to be listed. The prompts are the workflow and the scripts are a way of running
+them: [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow) and
+[`policy.md`](policy.md#joining-the-eunoia-ecosystem) are the documents that
+define them, and `tests/run.py` fails when a script's copy of a prompt has
+drifted from the document it came from.
 
 `reports/` also holds documents rendered for an audience that will not clone this
 repository, currently [`cpc-audit.html`](reports/cpc-audit.html). They restate

@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 # welcome_eo -- a new tool has appeared; read it and say something useful.
 #
-# Run it here, in anoieu, naming a repository that has just been created. The
-# checkout resolves from scripts/repos.local, as everywhere else.
+# Run it here, in anoieu, the first time a repository is worth looking at. It
+# takes the id it will be known by and where it is, records that in
+# scripts/repos.local so every other script can find it, and then reads it.
 #
-#   welcome_eo koine
-#   welcome_eo --show-prompt koine
+#   welcome_eo koine ~/koine
+#   welcome_eo --show-prompt koine ~/koine
+#
+# The typical sequence, which nothing enforces: a person creates the repository,
+# `init_eo` gives it a README from the register, a person points it in a
+# direction with whatever prompts that takes, and then this runs. So what it
+# reads may reflect direction we never gave, which is normal and not a defect.
 #
 # It reads their tree and writes nothing to it. What it produces is one or more
 # topics for *our* docs/discussion.md, addressed to them, staged for a person to
@@ -30,18 +36,20 @@ AGENT=claude
 PRINT=0
 SHOW=0
 NAME=""
+WHERE=""
 
 usage() {
   cat >&2 <<'USAGE'
-usage: welcome_eo [--codex] [--print] [--show-prompt] NAME
+usage: welcome_eo [--codex] [--print] [--show-prompt] ID PATH
 
-  NAME            a directory, or a repo id looked up in scripts/repos.local
-                  (shared with process_anoieu), then under $ANOIEU_REPOS.
+  ID              the repo id it will be known by everywhere here. Recorded in
+                  scripts/repos.local, which every other script reads.
+  PATH            where it is checked out on this machine.
   --codex         run codex instead of claude
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
 
-Run this in anoieu, naming the new repository.
+Run this in anoieu. PATH may be omitted only if ID is already recorded.
 USAGE
   exit 2
 }
@@ -54,34 +62,47 @@ while [ $# -gt 0 ]; do
     --show-prompt) SHOW=1; shift ;;
     -h|--help) usage ;;
     -*) echo "welcome_eo: unknown option $1" >&2; usage ;;
-    *) [ -z "$NAME" ] || { echo "welcome_eo: one repository at a time" >&2; usage; }
-       NAME="$1"; shift ;;
+    *) if [ -z "$NAME" ]; then NAME="$1"
+       elif [ -z "$WHERE" ]; then WHERE="$1"
+       else echo "welcome_eo: one repository at a time" >&2; usage; fi
+       shift ;;
   esac
 done
 [ -n "$NAME" ] || usage
 
-TARGET=""
-if [ -d "$NAME" ]; then
-  TARGET=$(cd "$NAME" && pwd)
-elif [ -f "$REPOS_FILE" ]; then
+# -- what is already recorded for this id, if anything
+RECORDED=""
+if [ -f "$REPOS_FILE" ]; then
   while IFS= read -r line; do
     case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
     id=${line%%[[:space:]]*}; path=${line#"$id"}
     path=${path#"${path%%[![:space:]]*}"}
     [ "$id" = "$NAME" ] || continue
     case "$path" in "~"*) path="$HOME${path#\~}" ;; esac
-    [ -d "$path" ] && TARGET=$(cd "$path" && pwd)
-    break
+    RECORDED="$path"; break
   done < "$REPOS_FILE"
 fi
-if [ -z "$TARGET" ]; then
-  for r in ${ANOIEU_REPOS:-$HOME}; do
-    [ -d "$r/$NAME" ] && { TARGET=$(cd "$r/$NAME" && pwd); break; }
-  done
+
+if [ -z "$WHERE" ]; then
+  [ -n "$RECORDED" ] || { echo "welcome_eo: '$NAME' is not recorded; give its path" >&2; usage; }
+  TARGET="$RECORDED"
+else
+  [ -d "$WHERE" ] || { echo "welcome_eo: $WHERE is not a directory" >&2; exit 2; }
+  TARGET=$(cd "$WHERE" && pwd)
 fi
-if [ -z "$TARGET" ]; then
-  echo "welcome_eo: nothing called '$NAME' -- give a path, or add an entry to" >&2
-  echo "            $REPOS_FILE" >&2
+[ -d "$TARGET" ] || { echo "welcome_eo: $TARGET is not a directory" >&2; exit 2; }
+
+# -- record it, once. An existing entry is never silently rewritten: a repo id
+#    that changes meaning under the other scripts is worse than an error here.
+if [ -z "$RECORDED" ]; then
+  if [ ! -f "$REPOS_FILE" ]; then
+    printf '# where each project is checked out on this machine.\n# One entry per line, "<repo-id> <path>". See scripts/process_anoieu.\n' > "$REPOS_FILE"
+  fi
+  printf '%s\t%s\n' "$NAME" "$TARGET" >> "$REPOS_FILE"
+  echo "-- recorded $NAME -> $TARGET in $REPOS_FILE" >&2
+elif [ "$RECORDED" != "$TARGET" ]; then
+  echo "welcome_eo: '$NAME' is already recorded as $RECORDED" >&2
+  echo "            and you gave $TARGET. Edit $REPOS_FILE if the move is real." >&2
   exit 2
 fi
 
@@ -108,6 +129,10 @@ do. Do not report it to them as a shortfall.
 $REPORT
 
 $BRIEF
+
+A person will usually have pointed them in a direction before this runs, with
+whatever prompts that took, so some of what you are reading came from us and is
+not recorded anywhere. Do not treat an unexplained decision as theirs alone.
 
 Read their README first, then whatever else they have. Three questions, in this
 order.

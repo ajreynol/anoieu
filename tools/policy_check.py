@@ -430,6 +430,26 @@ def check_declaration_first() -> list[str]:
     return []
 
 
+def check_scripts_listed() -> list[str]:
+    """Every command in `scripts/` appears in the table that lists them.
+
+    The cheapest kind of check: its input is the tree, so it cannot rot, and the
+    thing it prevents is the one that actually happened repeatedly -- a script
+    added and documented in a sentence somewhere, until the sentences were the
+    documentation.
+    """
+    table = read("docs/coherence.md")
+    if not table:
+        return []
+    bad = []
+    for rel in tracked("scripts/*"):
+        name = os.path.basename(rel)
+        if name.endswith(".local") or f"`{name}" in table:
+            continue
+        bad.append(f"scripts/{name} is not in the table in docs/coherence.md")
+    return bad
+
+
 def check_response_gate() -> list[str]:
     """*Responding to somebody else's discussion file* — the protocol's safety rule.
 
@@ -523,6 +543,7 @@ CHECKS = [
     ("every link to a heading finds one", check_anchors, None),
     ("no document names one machine's filesystem", check_local_paths, None),
     ("the membership declaration opens the maintenance note", check_declaration_first, None),
+    ("every script is listed where the scripts are listed", check_scripts_listed, is_home),
 ]
 
 

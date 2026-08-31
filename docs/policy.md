@@ -380,11 +380,27 @@ That is a narrow licence and not a general one: it does not extend to asking a
 child project for work its parent has not agreed to, and the parent may say so.
 
 **A new repository is a human decision, always.** A topic may propose one, argue
-for one, or ask whether one is warranted, and none of that creates one. No agent
-creates a repository, claims a name for it, or commits the ecosystem to
-maintaining it — the name is a claim on a shared namespace and the repository is
-a claim on somebody's attention for years, and both are cheap to spend and
-expensive to withdraw. Where a proposal is serious enough to be worth a real
+for one, or ask whether one is warranted, and none of that creates one. The name
+is a claim on a shared namespace and the repository is a claim on somebody's
+attention for years, both cheap to spend and expensive to withdraw.
+
+**And for a tool this workflow proposed, creating it is a security boundary
+rather than a convention.** That is the case worth being precise about, because
+of what the workflow can already do on its own. It can notice a gap, argue that
+a tool should exist, audit the argument against a standard it maintains, take a
+name from a register it also maintains, and write the new tool's README. Every
+one of those steps is defensible. **The composition is not**: if it could also
+create the repository, the whole path from an idea to a public artifact under
+somebody's account would run with no person in it.
+
+So the break is placed at the repository, because that is the step that is
+irreversible and outward-facing. Creating one is an account-level action
+carrying credentials: it publishes under a name people trust, it is visible
+immediately and permanently enough that deleting it is not undoing it, and it
+arrives with a place to put secrets and a runner that will execute whatever
+lands in `.github/workflows/`. **A person opens it by hand and hands over a
+checkout.** Every script here starts from a directory that already exists, and
+that is deliberate. Where a proposal is serious enough to be worth a real
 answer, it goes to
 [`tools/ynoia/proposals.md`](../tools/ynoia/proposals.md), which audits it
 against a standard and produces a recommendation. Each one opens by naming the **code names
@@ -679,9 +695,25 @@ an untracked `ynoia-brief.local.md`: the register moves, and when a new README
 turns out wrong the version its author was working from is the only thing that
 explains it.
 
-When a new repository appears,
-[`scripts/welcome_eo`](../scripts/welcome_eo) reads it from here and drafts a
-first message: whether it is the tool the proposal described, what a reader
+### How a new tool usually starts
+
+Nothing enforces this order and nothing checks it. It is written down because it
+is what has actually happened, and because each step is cheaper when the one
+before it has been taken.
+
+1. **A person creates the repository on GitHub, by hand**, and decides its name.
+   Neither is an agent's to do, and the first is a **security** boundary rather
+   than a matter of taste — see below.
+2. **`init_eo`**, run in it. A README from the register: what the tool is for,
+   what it does not answer, and the name explained. It complies with nothing.
+3. **A person points it in a direction**, with whatever prompts that takes. This
+   step is invisible afterwards — it leaves no artifact — which is worth
+   remembering when reading the result.
+4. **`welcome_eo <id> <path>`**, run here. Records the checkout so every other
+   script can find it, reads the tree, and drafts a first message.
+5. **`join_eo`**, if and when its owner wants it. Possibly never.
+
+`welcome_eo` reads it from here and drafts a first message: whether it is the tool the proposal described, what a reader
 cannot answer after one screen, and what we would want from it that they have not
 planned. It is explicitly **not** an audit — a tool that has just been created
 has joined nothing, and the policy check is quoted to the reviewer as context

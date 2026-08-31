@@ -37,6 +37,35 @@ editing one of them edits what other repositories are following, and the fact
 that the file sits in this tree does not make the change local. That is the
 whole reason the next section exists.
 
+## The scripts
+
+Every command this repository maintains, what it is for, and where it is run.
+Nine of them, and all but one are a **prompt**: they assemble context, hand it to
+an assistant, and write nothing anywhere by themselves. `repos.local` is the
+shared map from a repo id to a checkout on this machine; it is untracked, and
+`welcome_eo` is what writes to it.
+
+| command | run in | what it does |
+| --- | --- | --- |
+| `init_eo` | the **new** repository | a README from the name register: what the tool is for, what it does not answer, the name explained. Complies with nothing, deliberately |
+| `welcome_eo <id> <path>` | here | records the checkout, reads the new tool, drafts a first message. A welcome, never an audit |
+| `join_eo` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. Its prompt is fixed and drift-checked against [`policy.md`](policy.md) |
+| `check_join_eo <id>` | here | joined, ready, misconfigured or not ready — and whether the obstacle is ours |
+| `process_discussion <id> [Dn]` | here | works what another repository has addressed to us. **Read-only until a person names a topic** |
+| `check_anoieu [id]` | the project a **finding** is about | answers our findings there, and drafts a reply for its maintainer |
+| `process_anoieu <id> [ID]` | here | processes that reply: moves rows, writes verdicts, appends the logs |
+| `global_audit` | here | the whole ecosystem against policy and vision, fast, no deep analysis |
+| `harvest_cpc_proofs` | here | *not a prompt.* Collects real CPC proofs to seed the fuzzer with |
+
+Two non-prompt commands live in `tools/` rather than here, because they decide
+rather than ask: `python3 tools/policy_check.py [--root PATH]`, which is what
+every member's CI runs, and `python3 tools/ecosystem.py`, which prints the
+ecosystem as a table.
+
+**Every script takes `--show-prompt`**, which prints what it would send and runs
+nothing. That is the first thing to do with one you have not used, and the only
+way to review a prompt without spending a turn on it.
+
 ## The supervision ladder
 
 Ordered, most supervised first. *Supervised* means: propose the change and the
@@ -121,6 +150,19 @@ after being told, and then the override gets recorded. This is the only rule
 here enforced as a build failure rather than by convention:
 `tools/policy_check.py` fails when the banner stating it is missing from the top
 of the file.
+
+**Nothing here holds credentials that create or publish.** No repository is
+created, no remote is written to, no issue is opened, nothing is pushed; a person
+does each by hand, and every script starts from a directory that already exists.
+
+The case this matters most for is **a tool our own workflow proposed**. That
+path can run a long way unaided — notice a gap, argue for a tool, audit the
+argument against our standard, take a name from our register, write the new
+repository's README — and each step is fine. Creating the repository is where it
+would stop being fine, because that is the one step that is irreversible, public,
+and under somebody's account rather than in a diff they can read first. A closed
+loop from idea to published artifact is the thing being prevented, not
+repository creation as such.
 
 **Promise nothing we cannot keep.** Every commitment this repository makes to
 another repository is a maintenance obligation that outlives the enthusiasm that

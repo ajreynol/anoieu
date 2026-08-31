@@ -159,8 +159,10 @@ leaves them free: we are saying we would use it, not that they owe it to us.
 
 ### If approved
 
-1. **A person creates the repository.** Empty. Nothing here does this, and no
-   name is claimed until it is done.
+1. **A person creates the repository on GitHub, by hand.** Empty. Nothing here
+   does this and nothing here can: repository creation carries account
+   credentials and a runner, so it is a security boundary rather than a
+   convention. No name is claimed until it is done.
 2. **Its owner decides what it is.** `init_eo` is offered as a starting point —
    it takes a name and writes a README saying what the tool is for, and complies
    with nothing else. The **scope is theirs**; the name is not, and `init_eo` is
