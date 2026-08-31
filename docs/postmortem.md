@@ -1,317 +1,222 @@
-# Postmortem: one round of the reporting loop
+# Postmortem log
 
-An experience report, not a design document. One project — [logos](https://github.com/ajreynol/logos) —
-was handed twenty open rows, answered every one, and sent back a reply; that
-reply was then worked here. This is the log of what happened to each finding,
-what each side got right and wrong, and what we changed as a result.
+A living log of what handling findings has taught anoieu about **its own
+workflow**. One section per **iteration** — one run of the loop, one reply
+worked — with the findings that changed how this repository works listed under
+it: a check narrowed, the harness fixed, the report reshaped, a prompt
+rewritten. Newest first.
 
-It is one sample of one repository. Everything in it should be read as *where
-the effort actually went*, which is the only thing a workflow document can be
-tuned against.
+**This is not where a finding is written up.** That is
+[`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back), which
+carries the reasoning, the commits and the evidence at whatever length they
+need. An entry here is at most three paragraphs and points there. The two files
+answer different questions: *what happened to this finding* is the log in
+`reports.md`; *what this finding taught us about working findings* is here.
 
-**The loop this is about.** A finding leaves here as a row. A person carries it
-to the project that owns the file. An assistant there triages it, a maintainer
-decides, and the reply comes back. An assistant here reads the reply, establishes
-what actually happened, and rules on the row. Four hand-offs, two assistants, two
-people, and at every hand-off something can be lost. The prompts on both sides are
-in [`reporting-policy.md`](reporting-policy.md#the-workflow); this file is what
-running them once taught us.
+## The procedure
 
-## The design principle this round established
+**Whose job.** The anoieu maintainer processing a reply — step 7 of prompt two in
+[`reporting-policy.md`](reporting-policy.md#prompt-two-the-follow-up), which is
+what [`scripts/process_anoieu`](../scripts/process_anoieu) runs. Not the project
+that owns the finding: they send feedback, we decide what it changed here.
 
-**The prompt is the product, and the far end is the only thing that can tell you
-what is wrong with it.** An assistant working a row in somebody else's repository
-knows something nobody here does: which parts of the request were unanswerable,
-which detail was missing, which sentence sent it in the wrong direction, and how
-long each of those cost. That information used to leave with them. It now comes
-back, because we ask for it — see *Feedback, both ways* below.
+**When.** An entry is earned when processing a bug report **changed how anoieu
+works**. A row confirmed and closed on its merits, with nothing here altered,
+does not get one. If nothing changed, say so in the session rather than writing
+an entry that says nothing happened.
 
-Three rules follow, and they are not optional decorations on the loop; they are
-what stops it drifting.
+    scripts/process_anoieu <project> [ID]           # the agent decides
+    scripts/process_anoieu --postm <project> [ID]   # an entry is required
 
-1. **Every round makes the prompts clearer, more actionable and shorter to act
-   on.** Not longer. Feedback naturally arrives as a list of things to add, and
-   a prompt that grows every round ends as a document nobody finishes reading —
-   which is exactly the failure it was meant to prevent. An addition has to earn
-   its place, and usually something comes out to pay for it. The measure is not
-   how much the prompt says; it is how quickly its reader can start work and how
-   often it sends them somewhere useless.
-2. **A prompt is procedural; technical detail is a link.** What to do, how to
-   confirm before acting, what not to touch, how to report back — that is the
-   prompt. What a code means, what a record holds, what the reply shape is for:
-   those live in the docs. Detail restated in a prompt goes stale where nobody
-   maintains it, which is what happened to a sentence claiming a `FUZ` row
-   carried each checker's invocation. When a reader arrives unprepared, the fix
-   is a better landing page — so the header of `open-findings.md` is now written
-   for somebody who has just been handed a row.
-3. **A person approves every change to a prompt template.** An assistant may
-   draft one, argue for it, and show the diff. It may not adopt it. A prompt is
-   the thing every future project is answered against, and a template that
-   rewrote itself from its own experience would drift with no one having agreed
-   to the direction. The scripts hold a copy and `tests/run.py` fails when it
-   drifts from the document — that check is about accidental drift; this rule is
-   about deliberate change.
+`--postm` makes it mandatory for that run — for a round you already know is worth
+recording, or when you want the reasoning captured whatever the agent concludes.
+Without it the agent applies the test above and says which way it went.
 
-None of this touches the guardrails. *Fix nothing else you notice*, *do not
-summarise anoieu's other results*, *touch no issue tracker*, *leave everything
-staged and commit nothing* — those stay written out in full, both ways, every
-round. A shortening pass will reach for them first; they are four sentences and
-they are what keeps an agent inside the scope somebody agreed to.
+**The shape of an entry.** One heading per **iteration of anoieu** — one run of
+the loop, one reply worked — not one per bug. A run usually settles several
+findings; they are listed under the same heading, each with its own fields.
 
-## The log
+```text
+## <date> — <project>: <what this round was>
 
-Nineteen blocks came back. Sixteen were one fact restated sixteen times; three
-were substantive, and each went a different way. What follows is one entry per
-outcome rather than one per row, because the sixteen are the story of the
-sixteen.
+<One or two sentences: what was asked, what came back, what moved.>
 
----
+### <finding id, or a phrase for a group of them>
 
-### The sixteen rows against a generated file
+**Tool:** which project, and ours too when a tool of ours was at fault.
+**Summary:** what was reported, in one sentence.
+**Resolution:** what was decided, and what changed here.
 
-**What we asked.** Sixteen rows against `install/defs/Cpc.cached.eo`, owned by
-`logos`, under `EO0054`, `EO0064` and `EO0083`.
+<What happened — only enough to make the resolution make sense.>
 
-**How the agent behaved.** Correctly, and expensively. It read the file's header,
-worked out that it is a byte-exact flattened copy of cvc5's CPC signature, fetched
-cvc5 `main` to compare the lines character for character, and then discovered that
-twelve of the sixteen were *already ruled on* in our own Closed table, against
-cvc5, twenty lines further down the same document. It wrote sixteen blocks, one
-per row, because the prompt said to and because answering sixteen rows with one
-sentence is not doing the job.
+**Learned:** <the general fact, stated so it applies to the next finding rather
+than to this one.>
+```
 
-**What we did.** Nothing to the rows: they were already closed here as *not
-audited*, and the check no longer reads that file at all. The correct answer had
-already been reached, on the same reasoning, before the reply arrived.
+Keep only text that makes clear **what happened** and **what the workflow
+learned**. Everything else — the commits, the reproduction, the argument — goes
+in [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) and is
+linked from the entry. A finding that was settled on its merits with nothing
+changed here does not need its own section; say so in the round's opening
+sentences.
 
-**What it cost, and whose fault that was.** Ours, entirely. We filed sixteen rows
-we had already decided, made a maintainer re-derive the correspondence by hand,
-and got back sixteen near-identical paragraphs for it. Two specific failures:
+## Standing rules this log has produced
 
-- **The `notes` column was empty on all twenty rows.** It is the highest-value
-  field in the report and nothing had been written in it. A cell reading *same
-  source line as `c9887e6df81fcdb6` (cvc5, closed: intentional)* would have
-  turned forty minutes into a sentence. We compute a fingerprint for both sites
-  and could say this mechanically.
-- **A row against a generated file is filed against the wrong project.** The path
-  is logos's; the content is cvc5's. Nothing in that file can change there
-  without falsifying the pin.
+Stated in full in
+[`reporting-policy.md`](reporting-policy.md#feedback-both-ways); listed here with
+the entry that produced each, because a rule with no incident behind it is a
+preference.
 
----
+| rule | from |
+| --- | --- |
+| the outbound prompt asks for `FEEDBACK TO ANOIEU`, and the reply has a field for what was noticed but not acted on | the whole first round: everything we learned arrived as prose in a reply with nowhere to put it |
+| every round leaves the prompts clearer, more actionable and shorter | the first revision grew both and had to be cut back twice |
+| a prompt is procedural; technical detail is a link | 2026-08-31, `3e271ee47343e758` — a sentence inlined in the prompt had been untrue for as long as it had existed |
+| a person approves every change to a prompt template | standing; a template that rewrote itself from its own experience drifts with nobody agreeing to the direction |
+| the guardrails are never traded for brevity | standing: *fix nothing else*, *do not summarise other results*, *touch no issue tracker*, *leave everything staged* |
 
-### `eac7ccd4d5fb0953` — a semantics entry for a symbol CPC does not declare
+## Where the workflow stands
 
-**How the agent behaved.** Well, and this is the one it fixed. It found the entry
-was a *target*-side symbol that had been given an input-side entry by mistake,
-deleted it, and — the part worth copying — **proved the line was dead rather than
-merely unused**, by running `install/install-cpc.sh --cached --check` and showing
-the generated Lean byte-identical without it. It then declined to invent a
-regression test, on the grounds that the only honest one would be a
-re-implementation of the check that found it. It also volunteered that
-`bump-eoc-version.py` copies the file wholesale from ethos and would put the line
-back.
+Updated each round. This is the part to read if you want to know whether the loop
+is paying for itself.
 
-**How we responded.** We left the row **open**. The reply said "fixed on branch
-`anoieu-findings`"; that branch is `main` at `d4a03a59` with no commits of its
-own, and the deletion is an uncommitted edit in one working tree. The finding is
-real, the fix is right, and nothing has landed.
+**What is working.** Re-measuring is exact and is one command each way —
+`tools/run.py --pinned` for the checks, `anoieu_fuzz verify` for the reproducers
+— so *does this still hold* is a question with an answer rather than a judgement.
+Moving a row is a two-line edit. The two labels, `TRIAGE:` and `HUMAN RESPONSE:`,
+survived contact with a real reply and did the work they exist for. Naming the
+escape hatch in advance — *the serious direction may still end with the reference
+being stricter than the language requires* — is what let the far end decline a
+row confidently instead of hedging.
 
-**What this exercised.** The single most load-bearing sentence in the follow-up
-prompt: *what happened will be settled by whether this branch is merged*. Without
-it the honest-looking thing to do is close the row on the strength of a
-convincing paragraph. With it, the check takes ten seconds and gives a different
-answer.
+**What is hard, and it is all judgement.** Closing a row on the strength of a
+persuasive paragraph: two of three substantive replies were correct on the merits
+and one of them still could not be closed. Deciding scope, when a reply corrects
+something belonging to a third project. And a finding that stops reproducing
+looking like a fix when it is a bad reproducer.
 
----
+**Outstanding.** Five suggestions from the far end, none yet built, each a change
+to what a finding *is* rather than a tidy-up. In their words, in
+`anoieu-dev-response.md` in the logos repository.
 
-### `adc98aa79b4861bb` — `declare-fun` in a proof file
-
-**How the agent behaved.** It ran both checkers, said which builds, confirmed the
-divergence, and then **declined the finding with a reason rather than a hedge**:
-logos ignores `include` and `reference`, so a proof must carry its own
-declarations; the symbol gets exactly the type ethos would give it from a
-reference file; and cvc5's `eo` printer emits `declare-const`, so the divergence
-cannot arise on real output. It went and checked that last point in cvc5's
-printer source rather than asserting it.
-
-**How we responded.** Closed as declined. The reasoning holds and needs no branch
-to land.
-
-**What made that possible** was a sentence in the prompt that names the escape
-hatch in advance: *FUZ0001 is the serious direction, but the answer may still be
-that the reference is stricter than the language requires.* Told which way a
-finding leans and also that leaning is not a verdict, an assistant can say "not a
-defect" without hedging. That sentence stays.
-
-**What the agent pushed back on** was severity: the reproducer is one of their own
-regression tests, unmutated, and the finding is that their input format is a
-documented superset in one command — filed as an error. The severity is the
-*direction*, not the attribution, which the policy says; the fact that it had to
-be said in prose means the row has no field for it.
-
----
-
-### `3e271ee47343e758` — the one we got wrong
-
-**How the agent behaved: better than our record did.** It reproduced the case,
-concluded logos was at fault, narrowed the parser, added guards, and checked them
-against the executable. Then it did the thing that made this round worth having:
-**it disbelieved the note on the row.** The record said *`( extract 1 0)` without
-the `_`: logos reads it as the indexed operator, ethos does not.* The agent
-observed that its ethos also refuses `((_ extract 1 0) a)` — the SMT-LIB spelling,
-in a committed regression test — and said so, flagging that the recorded detail
-named the wrong cause and that a second disagreement might be hiding behind it.
-
-**How we responded.** We checked, and the agent was right. The reproducer was an
-artefact of **our own shrinker**: the case was a seed run as it stands, ethos was
-refusing at line 3, and `shrink` was therefore free to cut the `_` from line 4 —
-the bucket held throughout because it says nothing about *where* a refusal
-happened. The cut is exactly reproducible from the committed code. We promoted a
-file nobody wrote, under a note describing the cut rather than the refusal, and
-every later reader inherited it, including our own register and `fuzzing.md`.
-
-We withdrew the row, removed the reproducer, and stopped `shrink` from touching a
-seed run as it stands, with a case in `tests/fuzz_cases.py` that fails if the
-guard goes away. Their parser fix is real and stands on its own.
-
-**The general lesson is not about shrinking.** It is that we shipped a
-*hypothesis* — the note — in the same object as a *measurement* — the recorded
-outcomes — with nothing marking which was which. The agent nearly took it as
-given, which would have produced a confident and wrong triage. `fuzzing.md` is
-careful that a disagreement is not attributed to a checker, because that needs
-semantics the fuzzer does not have. A note naming a *cause* is the same move one
-level down and deserves the same care.
-
-**Bucketing hid it.** The portable detail — `Error: <path>:N.N: Type checking
-failed:` — is what a reader sees, and stripping `N.N` is precisely what concealed
-that the failure was on the assume and not on the step. Keeping the raw detail
-beside the portable one would have made the note visibly wrong at a glance.
-
----
-
-### `4de9bb965fa0c04b` — an `assume` after the first `step`
-
-**How the agent behaved.** It confirmed the divergence, established that the
-refusal is deliberate — logos reads a proof as an assumption set plus the steps
-that refute it, which is what its correctness theorem is stated over — documented
-the restriction in `docs/parser.md` with regression guards, and then **asked to be
-closed as documented rather than as fixed**, warning us that the reproducer will
-keep reproducing. It also offered the alternative it had not taken (change the
-command model instead) as a real option needing its own decision.
-
-**How we responded.** Closed as declined and documented. That is a decision not
-to change behaviour, and unlike the fix above it does not need a commit to be
-somebody's.
-
----
-
-### The correction we did not ask for, and the most valuable thing in the reply
-
-While checking whether the generated copy would pick up a fix at the next bump,
-the agent looked at what the copy is a copy *of* — and found that three rows we
-had closed as **fixed upstream — both signatures now return Bool** were not
-fixed. cvc5 `main` declares `Int` at those lines today.
-
-We checked, and it is worse than stale. `$is_seq_const_rec` and `$is_seq_const`
-declare `Int` at `622a50a3`, the commit the finding was reported against, and
-have never declared anything else: they entered `programs/Strings.eo` already
-declaring `Int`. The verdict was written from an assessment of the change we
-*proposed*, never from the tree afterwards. The three findings are still reported
-by the checks on every run; the only reason nobody saw them is that a closed id
-is one the generator skips.
-
-**This is the structural hole.** The report's asymmetry — the generator adds and
-never removes — is well argued and does what it claims. The hole is one level in:
-a closed row correctly stays closed, but its *reason* is a claim about the world
-that nothing rechecks. A verdict of *fixed upstream* is the one kind this
-repository can settle by itself, from `deps/`, and it was recorded without doing
-so.
-
-It was caught by a third party reading our own ledger, which is the argument for
-publishing the ids.
-
-## What it was like to work the reply, from this side
-
-An honest account, because the follow-up prompt is tuned against it.
-
-**What worked.** Re-measuring is one command and it is exact — `tools/run.py
---pinned` restores the recorded commits, so "does this still report" is a
-question with an answer rather than a judgement. `anoieu_fuzz verify` is the same
-thing for the other half, and pointing `$LOGOS` at a build made the difference
-between reasoning about the fix and watching the case stop reproducing. Moving a
-row is a two-line edit. Nothing about the mechanics was hard.
-
-**What was hard, and it was all judgement.** Three things:
-
-- **Closing on the strength of a good paragraph.** Two of the three substantive
-  replies were persuasive and correct on the merits, and one of them still could
-  not be closed, because the branch was empty. The prompt has to keep saying
-  this; the pull toward "they said fixed, it reads fixed, close it" is strong.
-- **Deciding what was in scope.** The reply's correction was about rows belonging
-  to *cvc5*, already *closed*, that logos merely happened to notice. "Clean up
-  those rows and no others" reads like it excludes them. It should not — a row
-  the reply names is in scope whoever owns it and whatever state it is in — and
-  the prompt did not say so.
-- **A finding that stopped reproducing looked like a fix.** `anoieu_fuzz verify`
-  reported `was accept, is reject` for the withdrawn row, which the prompt calls
-  "the strongest evidence there is". It was evidence of something else entirely.
-  The reproducer stopped reproducing for a reason other than the one recorded,
-  which is the signature of a bad reproducer rather than of a fix.
-
-**What I would have got wrong without the prompt.** Closed `eac7ccd4d5fb0953` on
-the triage. Recorded the withdrawn row as fixed upstream. Both were the reading
-the reply invited, and both are avoided by one instruction each.
-
-## What we changed
-
-Everything below is either done or explicitly not done, and the not-done ones say
-why.
-
-| change | why | state |
+| what | why it matters | cost of not doing it |
 | --- | --- | --- |
-| `shrink` no longer edits a seed run as it stands | the withdrawn row: for a file somebody else committed, the finding *is* the file | done, with a case in `tests/fuzz_cases.py` |
-| the closed rows moved to [`closed-findings.md`](closed-findings.md) | the report is what another project is pointed at; the verdicts are bookkeeping | done |
-| three cvc5 rows reopened, and the log corrected | *fixed upstream* was never true | done |
-| both prompts revised | below | **drafted, pending approval** — see the measured cost at the end |
-| the reply now has a place for feedback on the workflow itself | this file exists because of what came back in prose | done |
-| put the cross-corpus correspondence in the `notes` column mechanically | sixteen rows, forty minutes, and it is already computable here | **not done** — needs a content fingerprint rather than path-and-line |
-| let a corpus entry declare a path as derived, and attribute the row upstream | a row against a generated file is filed against the wrong project | **not done** — the checks already skip the file; the *report* still owns the ids |
-| record the argv, the checker version and the signature revision with each promoted finding | the record was not self-contained enough to replay | **not done** — `verify` knows all of it at promotion time |
-| mark a `note` as a reading rather than a measurement | shipping a hypothesis beside a measurement with nothing to tell them apart | **not done** |
-| keep the raw detail beside the portable one | the portable form hid which line failed | **not done** |
-| warn when a closed row's finding is still reported at the pinned commits | how *fixed upstream* survived three times | **not done** — the highest-value one left |
+| warn when a closed row's finding is still reported at the pinned commits | a verdict is a claim about the world and nothing rechecks it | three rows sat closed on a fix that never landed |
+| put the cross-corpus correspondence in the `notes` column mechanically | the twin is already computed here | sixteen rows and forty minutes of somebody matching text by hand |
+| record the argv, checker version and signature revision with each promoted finding | the record is not self-contained enough to replay | the far end had to guess the invocation, and the guess turned out to matter |
+| mark a `note` as a reading rather than a measurement | a hypothesis ships beside a measurement, indistinguishable | one confident, wrong note nearly produced a confident, wrong triage |
+| keep the raw detail beside the portable one | bucketing erases what the reader needs | `<path>:N.N` hid which line the reference actually refused |
 
-The five not-done items are the far end's own list, in its words, in
-`anoieu-dev-response.md` in the logos repository. They are recorded here rather
-than acted on because each is a change to what a finding *is*, and this file is
-the argument for making them, not the making.
+**Prompt size, by round.** The rule is that these come down; the number is how it
+is kept honest.
 
-## Feedback, both ways
+| round | prompt one | prompt two | what was removed to pay for additions |
+| --- | ---: | ---: | --- |
+| 1 (2026-08-31) | 60 → 54 | 39 → 63 | prompt one lost the inlined explanation of what each code means and how each is confirmed, which moved to the header of [`open-findings.md`](open-findings.md) where it can be maintained. Prompt two grew, and that is the honest number: it gained the postmortem step and its `--postm` alternative, the branch check, the closed-row scope rule, and the caveat on a reproducer that stops reproducing. It is the one number in this table going the wrong way. Next round's candidate for removal is step 4, which is procedure that could be a link |
 
-The prompt that goes out now ends by asking for exactly this: what was unclear,
-what was missing, what the row should have carried, and what else would be worth
-looking for. The prompt that comes back in now says to read it, act on the parts
-about the report, and bring the parts about the prompt to a person.
+---
 
-**Why it is asked for explicitly rather than hoped for.** Everything above that
-changed our tools came back as prose in a reply that had no field for it — the
-severity objection, the wrong note, the stale verdict. It arrived because one
-assistant chose to volunteer it and one maintainer chose to keep it. A loop that
-depends on that is a loop that works once.
+---
 
-**Why it goes to a person.** Feedback about the report is data we can act on.
-Feedback about the *prompt* is a proposal to change what every future project is
-asked, and that is a decision somebody signs — see the two rules at the top.
+## 2026-08-31 — logos: the first full sweep
 
-**What this round's revision cost, measured.** Prompt one went **60 → 54 lines**
-while gaining two template fields, the feedback section, and a scope
-clarification — paid for by deleting the inlined explanation of what each code
-means and how each is confirmed, which moved to the header of
-`open-findings.md` where it can be maintained. Prompt two went **39 → 52**, and
-that is the honest number: it gained a step it did not have (reading the
-feedback), the branch check that would have caught this round's near-miss, and
-the caveat on a reproducer that stops reproducing. It should come down next
-round, and the candidate is step 4, which is procedure that could be a link.
+Twenty open rows were put to logos and answered one at a time; nineteen came
+back. Sixteen were one fact about a generated file, restated sixteen times.
+Three were substantive: one fixed but not landed, two declined with reasons that
+hold. One row we withdrew as our own error, and one verdict of ours — against a
+third project — turned out never to have been true. Two of the four sections
+below are about tools of ours rather than about logos.
 
-Every round should be able to state these two numbers and what it removed. A
-round that cannot has not finished.
+The two clean declines are not written up here: `adc98aa79b4861bb`
+(`declare-fun` in a proof file) and `4de9bb965fa0c04b` (an `assume` after the
+first `step`) were both confirmed, both declined for reasons that hold, and
+neither changed anything in this repository. They are in
+[`reports.md`](reports.md#logos--the-parser-and-the-semantics).
+
+### `3e271ee47343e758`
+
+**Tool:** logos, and our own fuzzer.
+**Summary:** A `FUZ0001` disagreement — logos accepted a proof ethos refused —
+reported against a reproducer we had damaged ourselves.
+**Resolution:** logos fixed a real parser bug; we withdrew the row, deleted the
+reproducer, and stopped the shrinker editing seeds.
+
+The case was one of logos's own regression tests, `test-indexed-op.cpc`, run as
+a seed *as it stands*. logos accepted it, ethos refused it, and it was promoted
+under a note blaming the missing `_` in `(( extract 1 0) a)`. logos narrowed a
+parser that read any parenthesised head as a curried application, and the case
+stopped reproducing — but their agent disbelieved our note and said so. It was
+right: ethos had been refusing at **line 3** throughout, on the file's own
+unmutated SMT-LIB spelling. Our shrinker had cut the `_` from line 4 and the
+bucket held, because a bucket says nothing about *where* a refusal happened.
+`shrink` now refuses to touch a seed run as it stands, with a guard in
+`tests/fuzz_cases.py`. Detail in
+[`reports.md`](reports.md#logos-4-the-indexed-operator-what-we-got-wrong).
+
+**Learned:** we shipped a *hypothesis* — the note — inside the same record as a
+*measurement* — the outcomes — with nothing marking which was which, and the
+next reader nearly took it as given. And bucketing strips line numbers, which is
+right for deciding whether two findings are one and wrong for what a reader is
+shown: the stripped `N.N` is exactly what hid which line failed.
+
+### `1d977d28576d3693`, `878038145dca690c`, `6cc91770c5491971`
+
+**Tool:** cvc5.
+**Summary:** Three `EO0064` rows closed as *fixed upstream* had never been fixed.
+**Resolution:** Reopened, with the register and the log corrected.
+
+Nothing of ours found this. The assistant at the far end, checking whether the
+copy it maintains would pick up a fix at the next bump, read what the copy is a
+copy *of* and told us our own Closed table was wrong. It was worse than stale:
+both programs declare `Int` at the commit the finding was reported against and
+at the pinned tip, and they entered `programs/Strings.eo` already declaring
+`Int`. The verdict was written from an assessment of the change we *proposed*,
+never from the tree afterwards. Detail in
+[`reports.md`](reports.md#cvc5-1-what-we-recorded-as-fixed).
+
+**Learned:** the generator adds and never removes, which works — the hole is one
+level in. A closed row correctly stays closed, but its *reason* is a claim about
+the world that nothing rechecks, and `--pinned` re-derives open rows only. So a
+wrong verdict and a live finding can coexist indefinitely with nothing red.
+*Fixed upstream* is the one verdict this repository can settle by itself, from
+`deps/`, and should never be recorded without doing so.
+
+### Sixteen rows against `install/defs/Cpc.cached.eo`
+
+**Tool:** logos (the file), cvc5 (the content).
+**Summary:** Sixteen rows filed against the project that vendored a generated
+signature rather than the one that wrote it.
+**Resolution:** Already closed here as *not audited*; the prompt and the report's
+header were fixed instead.
+
+The rows cost nothing here and a great deal at the far end: it read the file's
+header, fetched cvc5 three times, matched premise text line by line, and only
+then found that twelve of the sixteen were **already ruled on, against cvc5,
+twenty lines further down the same document** — then wrote sixteen
+near-identical blocks, correctly, because the prompt said each row gets its own.
+
+**Learned:** the `notes` column is the highest-value field in the report and was
+empty on all twenty rows, when *same source line as `c9887e6df81fcdb6` (cvc5,
+closed: intentional)* was already computable here. The prompt also asserted the
+rows were unrelated; sixteen of twenty shared one cause. It now says rows may
+share a cause and to say so. The mechanical cross-reference is still not built.
+
+### `eac7ccd4d5fb0953`
+
+**Tool:** logos.
+**Summary:** `TRI0002` — the semantics declares an entry for a symbol CPC does
+not declare.
+**Resolution:** Confirmed and fixed at the far end; **row left open**, because
+nothing landed.
+
+The entry was a target-vocabulary symbol given an input-side entry by mistake,
+and they proved it dead rather than merely unused by showing the generated Lean
+byte-identical without it. The branch named in the reply was `main` with no
+commits of its own, and the deletion was an uncommitted edit in one working
+tree.
+
+**Learned:** *"fixed on branch X"* is worth nothing until somebody looks at X,
+and the looking takes ten seconds. Prompt two now says to compare the branch to
+its base and read what is on it, and that a branch level with main, or a change
+left uncommitted, is not a fix. This is the case the workflow's central claim —
+the branch is the authority, not the reply — exists for.

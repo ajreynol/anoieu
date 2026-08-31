@@ -73,10 +73,10 @@ if [ -n "$ID" ]; then
   SCOPE="Address $ID."
   : "${BRANCH:=anoieu-$ID}"
 else
-  SCOPE="Address every row whose owner names $PROJECT, including a shared owner
-like \"ethos+logos\". Work from the ids; that file is regenerated and rows move.
-Rows may share a cause -- say so, and still rule on each in its own block.
-Answering ten rows with one sentence is not doing this."
+  SCOPE="Address every row whose owner names $PROJECT, including a shared owner like
+\"ethos+logos\". Work from the ids; that file is regenerated and rows move. Rows
+may share a cause -- say so, and still rule on each in its own block. Answering
+ten rows with one sentence is not doing this."
   : "${BRANCH:=anoieu-findings}"
 fi
 

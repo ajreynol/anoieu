@@ -175,60 +175,81 @@ def prompts_agree() -> int:
     root = os.path.dirname(HERE)
     doc = open(os.path.join(root, "docs", "reporting-policy.md")).read()
 
-    # Both halves of each prompt, not just the tail. A script holds the document's
-    # text around one substituted scope line, and comparing from an anchor part
-    # way down leaves everything above it unchecked -- which is exactly where a
-    # stale paragraph survived a rewrite once.
-    def canonical(start: str, end: str, split_at: str) -> tuple[str, str]:
+    # The whole of each prompt, both forms. A script holds the document's text
+    # around one or two substituted spans, and the document writes both sides of
+    # each with a "-- or, ... --" marker between them. Resolving the marker lets
+    # the comparison cover every line, rather than anchoring part way down and
+    # leaving the rest unchecked -- which is how a stale paragraph once survived
+    # a rewrite of the text above it.
+    def body(start: str, end: str) -> str:
         chunk = doc[doc.index(start) : doc.index(end)]
-        body = re.search(r"```text\n(.*?)\n```", chunk, re.S).group(1)
-        head, _, tail = body.partition(split_at)
-        return head.strip(), (split_at + tail).strip()
+        return re.search(r"```text\n(.*?)\n```", chunk, re.S).group(1)
 
-    def spoken(argv: list[str], split_at: str) -> tuple[str, str]:
+    def resolve(text: str, marker: str, alt: bool) -> str:
+        """Keep one side of an alternatives block and drop the marker.
+
+        The block is the run of lines before the marker back to the last blank
+        line, the marker, and the run after it up to the next blank line.
+        """
+        lines = text.split("\n")
+        i = next(k for k, l in enumerate(lines) if l.strip() == marker)
+        a = max((k for k in range(i) if not lines[k].strip()), default=-1) + 1
+        b = next((k for k in range(i + 1, len(lines)) if not lines[k].strip()),
+                 len(lines))
+        keep = lines[i + 1 : b] if alt else lines[a:i]
+        return "\n".join(lines[:a] + keep + lines[b:])
+
+    def spoken(argv: list[str]) -> str:
         got = sp.run(argv, cwd=root, capture_output=True, text=True)
-        if got.returncode != 0 or split_at not in got.stdout:
-            return f"!! {argv[0]}: {(got.stderr or got.stdout).strip()[:120]}", ""
-        head, _, tail = got.stdout.partition(split_at)
-        return head.strip(), (split_at + tail).strip()
+        if got.returncode != 0:
+            return f"!! {argv[0]}: {(got.stderr or got.stdout).strip()[:160]}"
+        return got.stdout
 
     failures = 0
-    cases = []
-    def between(text: str, first: str, last: str) -> str:
-        """The shared span: from `first` (or the start) up to `last`."""
-        out = text[text.index(first):] if first and first in text else text
-        return out[: out.index(last)].strip() if last in out else out.strip()
+    cases: list[tuple[str, str, str]] = []
 
-    for name, argv, start, end, split_at, first, last, fix in (
-        (
-            "check_anoieu",
-            ["bash", "scripts/check_anoieu", "--show-prompt", "ID"],
-            "### Prompt one", "### Prompt two", "On branch",
-            "", "Address ",
-            lambda s: s.replace("anoieu-ID", "BRANCH"),
-        ),
-        (
-            # this one's opening differs by design: the document says "paste a
-            # link", the script has resolved a checkout. The shared text starts
-            # at TRIAGE.
-            "process_anoieu",
-            ["bash", "scripts/process_anoieu", "--show-prompt", root, "ID"],
-            "### Prompt two", "### Prompt three",
-            "docs/reporting-policy.md is the authority",
-            "TRIAGE: is an assistant", "Working in the anoieu repository",
-            lambda s: s,
-        ),
+    one = body("### Prompt one", "### Prompt two")
+    two = body("### Prompt two", "### Prompt three")
+    SWEEP, POSTM = "-- or, for the sweep form --", "-- or, with --postm --"
+
+    # prompt two's opening differs by design -- the document says "paste a link",
+    # the script has already resolved a checkout -- so compare from TRIAGE down,
+    # and separately its own scope sentence is a variable the script fills in.
+    def from_triage(text: str) -> str:
+        return text[text.index("TRIAGE: is an assistant") :].strip()
+
+    def drop_scope(text: str) -> str:
+        """The one sentence each side words for the run it is doing."""
+        out = []
+        for para in text.split("\n\n"):
+            if para.lstrip().startswith("Working in the anoieu repository"):
+                continue
+            if para.startswith("Process ") or para.startswith("Address "):
+                continue
+            out.append(para)
+        return "\n\n".join(out).strip()
+
+    for name, argv, want, fix in (
+        ("check_anoieu, one id",
+         ["bash", "scripts/check_anoieu", "--show-prompt", "ID"],
+         resolve(one, SWEEP, alt=False),
+         lambda s: s.replace("anoieu-ID", "BRANCH")),
+        ("check_anoieu, the sweep",
+         ["bash", "scripts/check_anoieu", "--show-prompt"],
+         resolve(one, SWEEP, alt=True).replace("PROJECT", "anoieu"),
+         lambda s: s.replace("anoieu-findings", "BRANCH")),
+        ("process_anoieu",
+         ["bash", "scripts/process_anoieu", "--show-prompt", "--no-check", root],
+         drop_scope(from_triage(resolve(two, POSTM, alt=False))),
+         lambda s: drop_scope(from_triage(s))),
+        ("process_anoieu --postm",
+         ["bash", "scripts/process_anoieu", "--show-prompt", "--no-check",
+          "--postm", root],
+         drop_scope(from_triage(resolve(two, POSTM, alt=True))),
+         lambda s: drop_scope(from_triage(s))),
     ):
-        want_head, want_tail = canonical(start, end, split_at)
-        got_head, got_tail = spoken(argv, split_at)
-        cases.append((f"{name} (the steps)", want_tail, fix(got_tail)))
-        cases.append(
-            (
-                f"{name} (above them)",
-                between(want_head, first, last),
-                between(got_head, first, last),
-            )
-        )
+        cases.append((name, want.strip(), fix(spoken(argv)).strip()))
+
     for name, want, got in cases:
         if want == got:
             print(f"ok   scripts/{name} says what reporting-policy.md says")

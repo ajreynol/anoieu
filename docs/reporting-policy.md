@@ -503,6 +503,17 @@ docs/reporting-policy.md is the authority on what you may change. The steps:
    says what it removes, and technical detail belongs in the docs a prompt links
    to rather than in the prompt.
 
+7. Decide whether this earned a postmortem entry. It did if handling it changed
+   how anoieu works -- a check, the harness, the report, a prompt. If nothing
+   here changed, say so and write nothing.
+  -- or, with --postm --
+7. Write a postmortem entry for this run, whether or not anything changed.
+
+   Entries go at the top of docs/postmortem.md, in the shape that file sets out
+   -- short, and only what happened and what the workflow learned; the reasoning
+   at length belongs in docs/reports.md. Update "Where the workflow stands" in
+   the same file if this round changed what is outstanding.
+
 Leave everything staged and commit nothing -- the diff is the review, and it is
 mine to approve. Touch no issue tracker, here or anywhere. Say what you decided
 and why: the action you took, not a summary of what you read. Come back to me
