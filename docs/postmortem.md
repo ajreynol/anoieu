@@ -42,10 +42,14 @@ beneath, and they carry detail rather than fields of their own.
 
 **Tool:** the project the findings were reported to. This is the repository name
 passed to `scripts/process_anoieu`, so it is never a judgement call.
-**Summary:** what was reported and what came back. **Two sentences, 250
-characters at most**, in plain language a reader outside the project can follow.
-Not technical, and not a list — the detail is below and in `Resolution:`.
-**Resolution:** what was decided across the run, and what changed here.
+**Summary:** **what the nature of the findings was**, most important first —
+what was actually wrong with the software, not what the exchange consisted of.
+Written for somebody who does not work on either project: no codes, no ids, no
+counts, no procedure. **Two sentences, 250 characters at most.**
+**Resolution:** how it came out, as a breakdown — how many were real defects and
+of what kind, how many were deliberate and declined, how many were ours to fix
+— and what changed here as a result. Counts and links belong in this field, not
+in the summary.
 
 ### <finding id, or a phrase for a group of them> — <what it was>
 
@@ -125,19 +129,23 @@ is kept honest.
 ## 2026-08-31 — logos: the first full sweep
 
 **Tool:** logos
-**Summary:** We sent logos twenty findings; they fixed one, declined two with
-good reasons, and caught two mistakes of ours. Sixteen were about a file logos
-only vendors.
-**Resolution:** One fix accepted but [not yet landed](#eac7ccd4d5fb0953--a-fix-that-had-not-landed); two
-declines that hold; one of our reports [withdrawn as our own
-error](#3e271ee47343e758--a-reproducer-we-damaged-ourselves); three rows [reopened against
-cvc5](#1d977d28576d3693-878038145dca690c-6cc91770c5491971--a-verdict-that-was-never-true); and
-[sixteen](#sixteen-rows-against-a-file-logos-does-not-write) left closed where they
-already were. What changed here: the fuzzer no longer damages the files it
-borrows, the settled verdicts moved out of the report into their own file, both
-prompts were rewritten, and this log began. The two declines —
-`adc98aa79b4861bb` and `4de9bb965fa0c04b` — changed nothing here and are written
-up in [`reports.md`](reports.md#logos--the-parser-and-the-semantics).
+**Summary:** Logos and Ethos disagreed about which proof files are valid, each
+accepting proofs the other refuses. Logos's semantics also described an operator
+its calculus does not define.
+**Resolution:** 2 of the 20 were real defects in Logos — [a parser
+bug](#3e271ee47343e758--a-reproducer-we-damaged-ourselves) and [a dead semantics
+entry](#eac7ccd4d5fb0953--a-fix-that-had-not-landed) — both fixed, neither
+merged yet. 2 were deliberate design choices, correctly
+[declined](reports.md#logos--the-parser-and-the-semantics). The other
+[16](#sixteen-rows-against-a-file-logos-does-not-write) were misfiled: they
+describe cvc5's calculus, which Logos only vendors and cannot change. Two of the
+faults turned out to be ours — the evidence behind the parser bug was wrong even
+though the bug was real, so we withdrew that report; and Logos caught [three
+findings we had recorded as fixed
+upstream](#1d977d28576d3693-878038145dca690c-6cc91770c5491971--a-verdict-that-was-never-true)
+that had never been fixed. What changed here: the fuzzer no longer damages the
+files it borrows, settled verdicts moved out of the report into their own file,
+both prompts were rewritten, and this log began.
 
 ### `3e271ee47343e758` — a reproducer we damaged ourselves
 
