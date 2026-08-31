@@ -3,12 +3,16 @@
 *An account of the language, independent of any checker.*
 
 > **This is not the specification.** The specification is `user_manual.md` in the
-> [ethos](https://github.com/cvc5/ethos) repository, and where this document and
-> that one disagree. This is a second account, written to be checked against the
-> first: two independent descriptions of the same language disagree exactly where
-> the language is unclear, and those places are the point. See 
-> [`README.md`](README.md) for why it exists, and [`feedback.md`](feedback.md) for
-> what writing it turned up.
+> [ethos](https://github.com/cvc5/ethos) repository. That document governs and
+> this one does not, and nothing here is offered as established fact about
+> Eunoia.
+>
+> Where the two disagree, **either may be the one at fault.** The disagreement
+> is itself the useful thing — two independent descriptions of the same language
+> come apart exactly where the language is unclear — so what we do with one is
+> record it in [`feedback.md`](feedback.md) as a candidate and leave it
+> unjudged. What we do not do is assume it settles in either direction. See
+> [`README.md`](README.md) for why this exists.
 >
 > Read against `user_manual.md` at `ethosEoc3` (`3cf1c03`).
 
@@ -31,8 +35,8 @@ So every claim here sits in one of three buckets, and the bucket is visible:
 | > **Implementation.** | **Ethos does this**, and the language does not appear to require it. A second implementation could reasonably differ. Signatures in the wild may nevertheless depend on it |
 | > **Unsettled.** | **Nobody has decided.** The manual and the implementation disagree, or the manual is normative and nothing enforces it, or neither says anything at all. Listed again in [chapter 11](#11-where-the-language-is-unsettled) |
 
-Assignments to the second and third buckets are this document's own judgement
-and are the most likely thing here to be wrong. Where a claim rests on a
+Which bucket a claim lands in is this document's own judgement, in all three
+cases, and is the most likely thing here to be wrong. Where a claim rests on a
 behaviour that was actually run against a checker rather than read out of a
 document, it is cited as **[verified]** with a pointer to where.
 

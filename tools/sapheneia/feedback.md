@@ -1,8 +1,11 @@
 # Feedback to the ethos user manual
 
 Candidate feedback found by writing [`manual.md`](manual.md) — a second account
-of the same language — and noticing where the first one is silent, ambiguous, or
-inconsistent with itself.
+of the same language — and noticing where the second reading could not recover
+something from the first: a silence, an ambiguity, or a place the document does
+not appear to agree with itself. Some rows below are checkable by reading the
+sentence they cite; others are judgement, and those are the ones most likely to
+be a defect in our reading rather than in the manual.
 
 **Nothing here has been carried anywhere.** This is a ledger, not a report. Under
 [`../policy.md`](../policy.md) rule 7, anything that leaves this directory does

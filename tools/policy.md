@@ -84,7 +84,10 @@ model, a rival description. This is legitimate and is often the point: two
 independent descriptions of the same artifact disagree in the places the artifact
 is genuinely unclear, and that disagreement is the finding. But the existing
 account **remains the authority**, and the project's own output says so, on its
-own front page, in its own words. "An alternative source of truth" means a
+own front page, in its own words. *Authority* here means that the existing
+account governs and the new one does not — it does not mean the existing one is
+presumed correct, and a project that resolves every disagreement in the
+incumbent's favour has stopped being a second reading and become a paraphrase. "An alternative source of truth" means a
 second thing a reader may consult and check the first against — never a
 replacement, and never something a reader could mistake for the specification.
 

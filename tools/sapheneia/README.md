@@ -63,11 +63,13 @@ The boundary matters more than the goals, so it is stated first-class.
 - **It does not describe how to run, build, install or configure a checker.**
   Command-line options, build flags and streaming behaviour are properties of a
   program. They are cut, not relocated.
-- **It is not a specification, and does not claim to be.** The ethos manual
-  remains the authority. This is a second account a reader may consult and check
-  the first against — additive, in the sense of rule 6 of the policy. Where the
-  two disagree and the disagreement is not listed in `feedback.md`, assume this
-  document is wrong.
+- **It is not a specification, and does not claim to be.** The ethos manual is
+  the authority, in the sense that it governs and this does not — which is not
+  the same as being presumed correct. This is a second account a reader may
+  consult and check the first against — additive, in the sense of rule 6 of the
+  policy. Where the two disagree, either may be at fault; the disagreement goes
+  to `feedback.md` as a candidate and stays unjudged until somebody who knows
+  the language rules on it.
 - **It says nothing about soundness.** Whether a calculus written in Eunoia
   proves only true things is a question about that calculus. This is a question
   about the language it is written in.
