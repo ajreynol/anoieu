@@ -15,7 +15,12 @@
     "  child      a child project inside another repository here. `parent`",
     "             names whose tree, `path` where in it, and `branch` the",
     "             branch of the parent its current work is on, where that is",
-    "             not the default one. A child is never a checkout of its own",
+    "             not the default one. A child is never a checkout of its own,",
+    "             and is listed by scripts/install_eo all the same: it is work",
+    "             that exists and may be worth reading, and saying where it",
+    "             lives costs a line. A name with no work behind it is a",
+    "             different thing and is not here at all -- tools/ynoia/",
+    "             names.md is the register of those",
     "",
     "A status is changed by a person. scripts/global_audit may report that one",
     "looks wrong; it does not edit this file on its own."
@@ -43,7 +48,7 @@
     "parent": "ethos",
     "path": "tools/eoc",
     "branch": "ethosEoc3",
-    "what": "the Eunoia compiler: a child project in the ethos tree"
+    "what": "the Eunoia compiler, and the semantics sets it ships"
   },
   "logos": {
     "status": "candidate",
@@ -72,16 +77,19 @@
   "sapheneia": {
     "status": "child",
     "parent": "anoieu",
+    "path": "tools/sapheneia",
     "what": "Eunoia described as a language definition rather than as a checker's manual"
   },
   "ynoia": {
     "status": "child",
     "parent": "anoieu",
+    "path": "tools/ynoia",
     "what": "whether the ecosystem's arrangement earns its machinery, and what it is missing"
   },
   "euthyna": {
     "status": "child",
     "parent": "eudaimonia",
+    "path": "tools/euthyna",
     "what": "what the proof in logos is made of, and where its weight sits"
   }
 }

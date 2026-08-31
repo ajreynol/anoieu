@@ -9,7 +9,12 @@ Three views of one list, so they cannot drift apart:
 
 **Printing is the default and running is the flag.** What the dump prints is
 exactly what `--run` executes, so reading it is a real review rather than a
-courtesy, and a paste of it does the same thing this does.
+courtesy, and a paste of it does the same thing this does. The commands are
+therefore printed live rather than commented out: an inert dump would be a
+different text from the one that runs, and the point of this one is that it is
+not. Every tool carries what the ecosystem records about it — member, candidate,
+served — because *whose repository is this and on what footing* is the question
+somebody cloning eight trees is actually asking.
 
 **Only a default branch is ever installed.** Every command here is a plain
 `git clone <url> <dir>`: no `-b`, no checkout, no branch switch. A **child
@@ -50,6 +55,7 @@ import argparse
 import datetime
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -59,7 +65,6 @@ TOOLS = os.path.join(ROOT, "tools")
 CHECKOUTS = os.path.join(TOOLS, "checkouts.json")
 INVENTORY = os.path.join(TOOLS, "ecosystem.json")
 DEPS = os.path.join(TOOLS, "deps.json")
-NAMES = os.path.join(TOOLS, "ynoia", "names.md")
 REPOS_FILE = os.environ.get("ANOIEU_REPOS_FILE",
                             os.path.join(ROOT, "scripts", "repos.local"))
 
@@ -87,8 +92,35 @@ def inventory() -> dict:
     return strip_comments(load(INVENTORY))
 
 
+def status_meanings() -> dict:
+    """What each membership status means, from the file that defines them.
+
+    Read out of `tools/ecosystem.json`'s own comment rather than restated here,
+    so a status whose meaning is edited there does not go on being advertised
+    the old way. Best effort: if that block is reworded past recognition this
+    returns nothing and the views print the bare status.
+    """
+    out, last = {}, ""
+    for line in load(INVENTORY).get("_comment", []):
+        m = re.match(r"^  (\w[\w-]*)  +(\S.*)$", line)
+        if m:
+            last = m.group(1)
+            out[last] = m.group(2).rstrip()
+        elif last and re.match(r"^ {8,}\S", line):
+            out[last] += " " + line.strip()
+        elif not line.strip():
+            last = ""
+    return out
+
+
 def deps() -> dict:
     return strip_comments(load(DEPS))
+
+
+def in_a_sentence(status: str, meanings: dict) -> str:
+    """`candidate: a tool the policy is addressed to, which has not joined`."""
+    said = meanings.get(status, "")
+    return f"{status}: {said.split('. ')[0]}" if said else status
 
 
 class Repo:
@@ -108,7 +140,7 @@ class Repo:
 
     @property
     def elsewhere(self) -> list[dict]:
-        """Children whose current work is on a branch other than the default."""
+        """Children whose current work is on a non-default branch."""
         return [c for c in self.children if c.get("branch")]
 
     @property
@@ -271,40 +303,6 @@ def child_note(r: Repo, c: dict) -> list[str]:
     return lines
 
 
-def reserved() -> list[tuple[str, str]]:
-    """The names ynoia has reserved and nobody has taken.
-
-    Parsed out of the register rather than restated, so a name taken there stops
-    being advertised here. Best effort: if the table moves this reports nothing
-    rather than something wrong.
-    """
-    try:
-        text = open(NAMES, encoding="utf-8").read()
-    except OSError:
-        return []
-    head = text.find("## Reserved")
-    if head < 0:
-        return []
-    tail = text.find("\n## ", head + 1)
-    out = []
-    for row in text[head:tail if tail > 0 else len(text)].splitlines():
-        cells = [c.strip() for c in row.strip().strip("|").split("|")]
-        if len(cells) == 3 and cells[0].startswith("**") and "---" not in cells[1]:
-            out.append((cells[0].strip("*"), cells[2]))
-    return out
-
-
-def not_fetched(inv: dict) -> list[str]:
-    lines = []
-    for n, e in inv.items():
-        if e.get("status") not in NOT_A_REPO:
-            continue
-        where = e.get("parent", "?") + (f"/{e['path']}" if e.get("path") else "")
-        lines.append(f"{n} -- a child project, in {where}, cloned with its parent")
-    lines += [f"{n} -- a reserved name with no repository: {w}" for n, w in reserved()]
-    return lines
-
-
 # -- scripts/repos.local ----------------------------------------------------
 
 def repos_local_rows(root: str, repos: list[Repo],
@@ -376,8 +374,10 @@ def merge_repos_local(root: str, repos: list[Repo], planned: set[str] = frozense
 # -- printing what would happen ---------------------------------------------
 
 def dump(root: str, repos: list[Repo], inv: dict, everything: list[Repo]) -> int:
-    print("# The Eunoia ecosystem, as commands. Printed by scripts/install_eo;")
-    print("# `--run` executes exactly this. Re-run it rather than keeping a copy.")
+    meanings = status_meanings()
+    print("# The Eunoia ecosystem, as commands. Printed by scripts/install_eo,")
+    print("# which has run none of them. Every uncommented line below is live:")
+    print("# `--run` executes exactly these, and a paste of them does the same.")
     print(f"# Root: {root}   (--root PATH, or $EO_ROOT, to put it elsewhere)")
     if not repos:
         print("\n# nothing selected: everything asked for is already here.")
@@ -388,7 +388,13 @@ def dump(root: str, repos: list[Repo], inv: dict, everything: list[Repo]) -> int
 
     for r in repos:
         print()
-        print(f"# {r.key} -- {r.label()}")
+        extra = [c for c in r.covers if c != r.key]
+        print(f"# {r.key}" + (f" -- also provides {', '.join(extra)}" if extra else ""))
+        for st in sorted(set(r.statuses)) or ["unrecorded"]:
+            head, *rest = wrap(f"in the Eunoia ecosystem, {in_a_sentence(st, meanings)}", 70)
+            print(f"#   {head}")
+            for chunk in rest:
+                print(f"#     {chunk}")
         for chunk in wrap(r.why):
             print(f"#   {chunk}")
         for chunk in wrap(f"not by default: {r.opt_in}", 70) if r.opt_in else []:
@@ -406,13 +412,18 @@ def dump(root: str, repos: list[Repo], inv: dict, everything: list[Repo]) -> int
     print(repos_local_text(root, everything, {r.key for r in repos if not r.opt_in}), end="")
     print("EOF")
 
-    print()
-    print("# What none of this fetches:")
-    for line in not_fetched(inv):
-        head, *rest = wrap(line, 70)
-        print(f"#   {head}")
-        for chunk in rest:
-            print(f"#     {chunk}")
+    kids = [(c, r) for r in repos for c in r.children]
+    if kids:
+        print()
+        print("# Child projects, which arrive with the tree they live in and are")
+        print("# never cloned separately:")
+        for c, r in kids:
+            where = f"{r.key}/{c['path']}" if c.get("path") else r.key
+            head, *rest = wrap(f"{c['name']} -- in {where}: {c['what']}", 70)
+            print(f"#   {head}")
+            for chunk in rest:
+                print(f"#     {chunk}")
+
     return 0
 
 
@@ -597,10 +608,17 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
                          else f"present but older here: its current work is on "
                               f"{c['branch']}, and this tree is on {on}")
             print(f"child project: {c['name']} -- in {where} ({state}), {c['what']}")
-    if whole:
-        for line in not_fetched(inv):
-            if not any(line.startswith(c["name"] + " ") for c, _ in kids):
-                print(f"nothing to clone: {line}")
+    meanings = status_meanings()
+    shown = sorted({st for r in repos for st in r.statuses} |
+                   ({"child"} if kids else set()))
+    if shown and whole and meanings:
+        print()
+        print("what the status column says about membership of the Eunoia "
+              "ecosystem, from\ntools/ecosystem.json, where it is a decision "
+              "somebody records rather than a measurement:")
+        for st in shown:
+            said = meanings.get(st, "").split(". ")[0]
+            print(f"  {st:<11}{said}")
 
     if notes:
         print()

@@ -52,12 +52,27 @@ branch ethosEoc3 — what a default-branch clone gives you is an older copy.
 and the reasoning is [a finding is about
 `main`](coherence.md#a-finding-is-about-main).
 
-A **child project** — `ethos-eoc` in `ethos/tools/eoc`, `sapheneia` and `ynoia`
-in this tree, `euthyna` in eudaimonia's — has no repository to clone and arrives
-with its parent, so it is never a checkout of its own. Its id still works
-everywhere: naming it selects the tree it lives in, `scripts/repos.local`
-resolves it to that checkout, and `--status` says whether the copy you have is
-the current one.
+A **child project** has no repository to clone and arrives with its parent, so it
+is never a checkout of its own: `ethos-eoc` in `ethos/tools/eoc`, `sapheneia` and
+`ynoia` in this tree, `euthyna` in eudaimonia's. Both views list them with where
+they live, because an analysis somebody can read is worth a line whether or not
+it ever becomes a tool — [`policy.md`](policy.md#research-projects) says what one
+is and what it may do. A child's id works everywhere the others do: naming it
+selects the tree it lives in, `scripts/repos.local` resolves it to that checkout,
+and `--status` says whether the copy you have is the current one.
+
+What is **not** listed is a name with no work behind it. The register in
+`tools/ynoia/names.md` reserves several for tools nobody has started, and an
+install that advertised those would be a list of things to go and not find.
+
+Every tool is printed with **what the ecosystem records about it** — member,
+candidate or served — because *whose repository is this, and on what footing* is
+the question somebody cloning several trees is asking. The words come from
+[`../tools/ecosystem.json`](../tools/ecosystem.json), where a status is a
+decision somebody records rather than a measurement, and `--status` prints the
+same vocabulary as a legend under its table. The commands themselves are printed
+**live rather than commented out**: an inert dump would be a different text from
+the one `--run` executes, and the whole point of this one is that it is not.
 
 | option | what it does |
 | --- | --- |
