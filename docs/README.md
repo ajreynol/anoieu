@@ -8,9 +8,10 @@ content lives, every row below leads somewhere better.
 
 | document | its job |
 | --- | --- |
-| [`reporting-philosophy.md`](reporting-philosophy.md) | **what may be published about somebody else's code, and why.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — anoieu maintains it, dokimasia references it — including what "maintained by AI under light supervision" does and does not cover |
+| [`reporting-policy.md`](reporting-policy.md) | **what may be published about somebody else's code, and why.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — anoieu maintains it, dokimasia references it — including what "maintained by AI under light supervision" does and does not cover |
 | [`reports.md`](reports.md) | **what anoieu has to say about other people's code**: what it is asking of each project, how each finding was confirmed, and what came back when it was filed |
-| [`reporting-policy.md`](reporting-policy.md) | **how a finding is handled**: the conventions governing the record, the workflow and prompts for carrying one to whoever can fix it, and for
+| [`reporting-policy.md`](reporting-policy.md) | **what may be published about somebody else's code, and why.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — twelve of them, each saying whether it is enforced, structural, or an intention nothing but our record backs |
+| [`reporting-workflow.md`](reporting-workflow.md) | **how a finding is handled**: the conventions governing the record, the workflow and prompts for carrying one to whoever can fix it, and for
 sweeping the whole report, and what it takes for another repository to run these checks in its own CI |
 | [`usage.md`](usage.md) | **the interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together |
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor is one of the future projects in [`why-eunoia.md`](why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture) |
@@ -40,13 +41,23 @@ end got right and wrong, what we got wrong, and the two rules the round
 established — that each round leaves the prompts *shorter and clearer*, and that
 a person approves every change to one.
 
+Two more govern **how the work is done** rather than what it found, and are
+written for every repository in the Eunoia ecosystem rather than only this one.
+They live here because a governing document filed beside the code is one
+somebody has to know to look for.
+
+| document | its job |
+| --- | --- |
+| [`policy.md`](policy.md) | **how a repository is arranged**: the layout, the maintenance note every README ends with, and the rules for child projects. Machine-checked by `tools/policy_check.py` on every push |
+| [`vision.md`](vision.md) | **what AI-assisted development is aiming at**: five tenets, the record of what the ecosystem's tools have actually delivered to one another, and a report card. Argued, never checked — the dividing line is stated on the page |
+
 [`coherence.md`](coherence.md) is not in the table above and is not written for
 a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not
 be changed without asking, and the open technical work on the record itself.
 
 [`../scripts/`](../scripts) holds one implementation of the workflow
-[`reporting-policy.md`](reporting-policy.md#the-workflow) defines: `check_anoieu`
+[`reporting-workflow.md`](reporting-workflow.md#the-workflow) defines: `check_anoieu`
 to run in the project a finding is about, `process_anoieu` here once it has
 replied. The prompts are the workflow; the scripts are a way of running them,
 and `tests/run.py` fails when their copy of the text has drifted from it.

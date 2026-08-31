@@ -16,7 +16,7 @@ scripts/repos.local
 *.swp
 *.swo
 
-# transient working space (tools/policy.md, "Working space is untracked")
+# transient working space (docs/policy.md, "Working space is untracked")
 scratch/
 
 # private working notes, untracked by intent

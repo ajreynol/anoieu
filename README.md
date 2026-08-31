@@ -33,7 +33,7 @@ is that somewhere.
 > We publish defects and never assurances, deliberately: a false sense of
 > security is much harder to withdraw than a wrong finding. The position in full,
 > shared with [dokimasia](https://github.com/ajreynol/dokimasia), is
-> [`docs/reporting-philosophy.md`](docs/reporting-philosophy.md).
+> [`docs/reporting-policy.md`](docs/reporting-policy.md).
 
 ## What it finds
 
@@ -127,7 +127,7 @@ We would rather show you what is checked than promise anything. Every push runs:
 
 Anything else we say about how we will behave — narrowing a check that fired
 wrongly, filing nothing twice — is an intention rather than a guarantee. Those
-are written down in [`docs/reporting-philosophy.md`](docs/reporting-philosophy.md), and worth
+are written down in [`docs/reporting-policy.md`](docs/reporting-policy.md), and worth
 whatever our record of keeping them is worth; that record is the log in
 [`docs/reports.md`](docs/reports.md).
 
@@ -141,11 +141,11 @@ closes a row until the artifact it names says what happened.
 | | |
 | --- | --- |
 | [`docs/reports.md`](docs/reports.md) | what anoieu is asking of whom, how each finding was confirmed, and what came back |
-| [`docs/reporting-policy.md`](docs/reporting-policy.md) | how a finding is handled: the conventions, the three prompts, and how to run these checks in your own CI |
+| [`docs/reporting-workflow.md`](docs/reporting-workflow.md) | how a finding is handled: the conventions, the three prompts, and how to run these checks in your own CI |
 | [`docs/usage.md`](docs/usage.md) | the interface — every command and option, configuration, baselines, suppression, and the test suite |
 | [`docs/fuzzing.md`](docs/fuzzing.md) | the anoieu fuzzer, the fuzzer: what its oracle is, how a reproducer is shrunk, and how to point it at your checker |
 | [`docs/postmortem.md`](docs/postmortem.md) | one round of the reporting loop, as a log: what the assistant at the far end did with each finding, what we got wrong, and what changed |
-| [`docs/reporting-philosophy.md`](docs/reporting-philosophy.md) | what may be published about somebody else's code, and why |
+| [`docs/reporting-policy.md`](docs/reporting-policy.md) | what may be published about somebody else's code, and why |
 | [`docs/notes.md`](docs/notes.md) | what ethos misses, what we have established about `.eo` and `.eos`, and the design |
 | [`docs/README.md`](docs/README.md) | the index, and the files a run generates: the open findings, the corpus, the check catalogue |
 
@@ -171,5 +171,5 @@ ever be asked to do, and checks all of it, with no proof in hand.
 **Written by AI agents, under light human supervision.** A human directs the
 work, reads what is published and decides what is filed; nobody vets the
 internal design, and nothing reaches another project's issue tracker without
-review. [`docs/reporting-philosophy.md`](docs/reporting-philosophy.md) says what that does and does
+review. [`docs/reporting-policy.md`](docs/reporting-policy.md) says what that does and does
 not cover, and why the intended audience is experts.

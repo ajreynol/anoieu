@@ -22,7 +22,7 @@ Kept as a file, and kept in git, for three reasons.
 closes when a maintainer accepted it and the change is a commit on a named
 branch; waiting for a merge would hold findings open for as long as somebody
 else's review queue, which says nothing about the finding. The full rule is
-[what closes a row](reporting-policy.md#what-closes-a-row-and-what-does-not).
+[what closes a row](reporting-workflow.md#what-closes-a-row-and-what-does-not).
 
 That is exactly the shape of the mistake in reason 3, taken on deliberately, so
 it is booked rather than assumed away. Such a row ends its verdict with
@@ -37,7 +37,7 @@ because that would drop a row from the audit while leaving the debt owed. When a
 change lands, a person replaces the marker with what landed it.
 
 Written by hand, by the review step in
-[`reporting-policy.md`](reporting-policy.md#the-workflow). The generator reads
+[`reporting-workflow.md`](reporting-workflow.md#the-workflow). The generator reads
 it and rewrites it, and rewriting preserves every row.
 
 | id | owner | code | where | what | verdict |

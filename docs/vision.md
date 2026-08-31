@@ -41,7 +41,7 @@ is **who is able to settle a question.**
 Policy states facts about a tree: where a file goes, what the README ends with,
 what a child project may import, whether the lock file that pins a measurement
 exists. A program can decide every one of those without holding an opinion, and
-one does — [`policy_check.py`](policy_check.py), on every push. When it goes red
+one does — [`tools/policy_check.py`](../tools/policy_check.py), on every push. When it goes red
 something is wrong in a way nobody has to be persuaded of, which is the entire
 value of putting it in CI.
 
@@ -185,8 +185,8 @@ But that is a decision to be made and stated, not a gap to be left; *it will be
 obvious later what this was for* is not the same as having decided.
 
 Where there is a deliverable, this page hands over to
-[`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) and
-[`../docs/reporting-policy.md`](../docs/reporting-policy.md): what may be said
+[`../docs/reporting-policy.md`](reporting-policy.md) and
+[`../docs/reporting-workflow.md`](reporting-workflow.md): what may be said
 about code you do not own, what separates a candidate published under your own
 name from a finding carried to its owner, and how a row is closed. Speed belongs
 to producing the deliverable. It does not belong to sending it.
@@ -233,7 +233,7 @@ morning, and whether anything in the repository is in their way.
 Six exchanges that have already happened. They are listed because a tenet with
 no instances is a preference, and because the shape of a real exchange is more
 instructive than the rule abstracted from it. Everything below is as of the
-commits [`deps.lock`](deps.lock) records — cvc5 `aee8742`, ethos `3cf1c03`,
+commits [`deps.lock`](../tools/deps.lock) records — cvc5 `aee8742`, ethos `3cf1c03`,
 logos `47f29bf`, eudaimonia `45e34e0` — and re-measurable from them.
 
 ### The tools
@@ -269,7 +269,7 @@ the ecosystem — a proof checker written in C++ for one purpose becoming a buil
 dependency of a Lean development written for another, because it was the thing
 already able to answer *does this proof check*. It also shows the cost of being
 consumed: a defect in CPC arrives in logos unchanged, which is what
-[`logos-1`](../docs/reports.md#logos--the-lean-development) records, and why
+[`logos-1`](reports.md#logos--the-lean-development) records, and why
 auditing the copy filed cvc5's findings under logos's name seventeen times
 before we stopped reading it.
 
@@ -321,11 +321,11 @@ the generated checker's verdicts against it, keeping two implementations on
 purpose.
 
 **anoieu → everything.** One row per project in
-[`../docs/reports.md`](../docs/reports.md), each with an id and a state. To cvc5,
+[`../docs/reports.md`](reports.md), each with an id and a state. To cvc5,
 three real defects found on the first audit and confirmed against ethos — `cvc5-1`
 is `proofs/eo/cpc/programs/Strings.eo:42` and `:55`, two programs declaring
 `:signature ((Seq T)) Int` whose every case returns a Boolean — plus
-[`report/cpc-audit.html`](../docs/report/cpc-audit.html), rendered for readers who
+[`report/cpc-audit.html`](report/cpc-audit.html), rendered for readers who
 will not clone anything. To ethos, three confirmed defects and three diagnostics
 worth improving, and separately two the fuzzer provoked: an uncaught C++
 exception on `(declare-const f (->))`, and an error path that skips ethos's own
@@ -345,7 +345,7 @@ configuration through elaboration to the Eunoia serialiser, and asks whether any
 path reaches an inference no proof step covers — particularly under
 `--safe-mode=safe`, where cvc5 promises that anything it solves it can prove.
 The two tools share no code and neither depends on the other; what they share is
-a position, [`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md), maintained here and
+a position, [`../docs/reporting-policy.md`](reporting-policy.md), maintained here and
 referenced there, which is its own kind of exchange and a cheap one. They meet at
 exactly one seam — `src/proof/eo/`, where cvc5 turns an internal proof into
 Eunoia. A rule cvc5 emits that CPC does not declare is invisible to each tool in
@@ -382,7 +382,7 @@ them would have excluded the best work on this list.
 
 **A person carried every one of them.** No exchange on this list was made by
 machinery, and that is the standing rule rather than a description of the
-current state — [`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) is where it is
+current state — [`../docs/reporting-policy.md`](reporting-policy.md) is where it is
 argued.
 
 ## The front page
@@ -468,7 +468,7 @@ health — these are things a reader needs in order to weigh what follows. They
 belong where the reader arrives, stated once, plainly, in the tool's own voice.
 That is a different act from hedging, and the difference is that a caveat can be
 used and a mood cannot. Where those particular limits are argued is
-[`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md); the point here is only that
+[`../docs/reporting-policy.md`](reporting-policy.md); the point here is only that
 stating them clearly is entirely compatible with standing behind the work, and
 is in fact most of what makes standing behind it believable.
 
@@ -497,7 +497,7 @@ Four misreadings, each invited by a tenet as written, and each ruled out.
 *Fruitful to another tool* is a property of the artifact — consumable format,
 stable identifiers, documented meaning — and never a licence to push anything
 anywhere. **Nothing crosses a repository boundary automatically**, which is
-reporting-philosophy.md's position and is not weakened by anything here.
+reporting-policy.md's position and is not weakened by anything here.
 
 *Fast* applies to the tool and not to what it says about other people's files.
 A candidate may be published quickly under our own name, labelled unjudged; a
@@ -541,7 +541,7 @@ The expensive one is **the tool nobody can evaluate.** Entangled, undocumented,
 with a front page that either overclaims or says nothing precise. Its findings
 may be excellent and cannot be judged, because judging them requires trusting a
 thing no reader can inspect in the time they have. This is the same asset
-reporting-philosophy.md is protecting when it forbids research projects from borrowing the
+reporting-policy.md is protecting when it forbids research projects from borrowing the
 host tool's name, seen from the other side: there, speculation spends a
 reputation the tool earned; here, an illegible tool never earns one. Tenet 3 is
 the only cheap defence, and it is cheap only while the tool is small.
@@ -568,7 +568,7 @@ absence of that somebody.
 | who may strengthen a claim | a person, asked directly, with the evidence attached |
 | what enforces the policy | `tools/policy_check.py`, in CI |
 | what enforces the vision | nothing, deliberately — it is argued, not checked |
-| what governs a deliverable | [`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md), [`../docs/reporting-policy.md`](../docs/reporting-policy.md) |
+| what governs a deliverable | [`../docs/reporting-policy.md`](reporting-policy.md), [`../docs/reporting-workflow.md`](reporting-workflow.md) |
 | where speculative work goes instead | a child project, `tools/X/`, under [`policy.md`](policy.md) |
 | what confers standing on the tool | a person choosing to use, run or own it — never the agent's say-so |
 | the ending to aim for | a human takes over the development |
@@ -582,155 +582,222 @@ away from you has done everything on this page except the thing it was for.
 
 ## The report card
 
-How each tool in the ecosystem stands against the five tenets, a paragraph each.
-It is here because a vision document with nothing measured against it is a wish,
-and because the useful thing for another repository to read is not the rules but
-what happened when somebody applied them to real projects. It is graded at the
-commits [`deps.lock`](deps.lock) records.
+How each tool in the ecosystem stands against the five tenets. It is here
+because a vision document with nothing measured against it is a wish, and
+because the useful thing for another repository to read is not the rules but
+what happened when somebody applied them to real projects. Graded at the commits
+[`deps.lock`](../tools/deps.lock) records.
+
+Three fields per tool, named along the ecosystem's convention:
+
+| field | means |
+| --- | --- |
+| **arete** — ἀρετή, excellence | what the project does well, and what another project should take from it |
+| **elleipsis** — ἔλλειψις, a falling short | where it comes up short of a tenet, with the evidence |
+| **parainesis** — παραίνεσις, counsel | what follows from the other two |
+
+### Two registers, and the project decides which
+
+[`policy.md`](policy.md) requires every repository to end its README with a note
+saying how its development is currently run. **That note decides how a paragraph
+here is written** — not our impression of the code, and not a list kept on this
+side that would be stale within a month.
+
+**A project run by people gets an observation.** The tenets were invented here
+and nobody agreed to them; a person made choices for reasons that need not be
+visible in the tree, and an instruction would be presuming on all of it. So:
+what we noticed, what it appears to have cost, and no imperative.
+
+**A project run by agents gets an instruction, and no apology.** There is nobody
+to offend and no accumulated judgement to defer to. Hedging is expensive at the
+rate an agent produces work and directness is cheap, so if such a project is
+underperforming a tenet, the paragraph says so plainly and says what to do about
+it. This is the one place where the *don't be self-deprecating* rule above has
+teeth: an agent softening a finding about another agent's tool is protecting
+nobody.
+
+Where a repository has no maintenance note at all, the first register applies —
+guessing is the failure this rule exists to prevent.
+
+### What this is not
 
 **Read it with a large grain of salt, and do not read it as binding anything.**
-Four things it is not. It is **absolutely not a contract**: none of these
-projects agreed to these tenets, most of them predate this page entirely,
-nothing here creates an obligation on anybody, and nobody may hold a project to
-a sentence in it. It is **not a set of findings**: a claim about somebody else's
-work goes through the discipline in
-[`../docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) and
-[`../docs/reporting-policy.md`](../docs/reporting-policy.md) — confirmed,
-reproduced in the smallest artifact that shows it, carried by a person — and
-nothing on this page has been through any of that, nor has any row in
-[`../docs/reports.md`](../docs/reports.md) come from it. It is **not evenly
-evidenced**: this repository reads `.eo` and `.eos` files, so what it knows about
-a C++ compiler's internal stages or a Lean development's proof structure is read
-out of documents rather than measured, and each paragraph says which it is. And
-it is **not a ranking**: the tenets fit some of these projects badly, and a tenet
-fitting badly is a fact about the tenet.
+It is **absolutely not a contract**: none of these projects agreed to these
+tenets, most predate this page, nothing here creates an obligation, and nobody
+may hold a project to a sentence in it. It is **not a set of findings**: a claim
+about somebody else's work goes through
+[`../docs/reporting-policy.md`](reporting-policy.md) and
+[`../docs/reporting-workflow.md`](reporting-workflow.md) — confirmed,
+reproduced small, carried by a person — and nothing here has been through any of
+that, nor has any row in [`../docs/reports.md`](reports.md) come from it.
+It is **not evenly evidenced**: this repository reads `.eo` and `.eos`, so what it
+knows about a C++ compiler's stages or a Lean proof's structure is read out of
+documents rather than measured, and the paragraphs say which. And it is **not a
+ranking** — the tenets fit some of these projects badly, and a tenet fitting
+badly is a fact about the tenet.
 
-The only real check on it is that the tool which wrote it is graded on the same
-scale and does not come out best. If it had, the exercise would be worth nothing.
+Those are limits on *standing*, and they do not soften into apology. The only
+real check here is that the tool which wrote the page is graded on the same
+scale, in the sharper register, and does not come out best.
 
-**cvc5.** Tenet 1 at its strongest, and largely by an accident of format: CPC
-sits in cvc5's own tree as plain text under `proofs/eo/cpc/`, and is read by
-ethos, compiled by `ethos-eoc`, copied into logos, vendored by eudaimonia and
-analyzed here — five consumers, no API, no release process, no coordination.
-That is the pattern this page generalizes from rather than one it taught. Tenet
-2 is where a specific gap is visible from here: nothing in cvc5's CI reads its
-own signature with an analyzer, the sync check against logos's copy is planned
-rather than running, and `cvc5-1` — two programs in `programs/Strings.eo`
-declaring `Int` where every case returns a Boolean — was recorded on our side as
-fixed upstream and never was, which is the kind of thing a gate catches and a
-review does not. Tenets 3 and 5 do not apply: it is a large human-developed
-solver with a settled front page, and the vaporware question is about work an
-agent is doing.
+### cvc5
 
-**ethos.** The clearest instance of tenet 1 in the ecosystem, and worth studying
+**Arete.** Tenet 1 at its strongest, largely by an accident of format: CPC sits
+in cvc5's own tree as plain text under `proofs/eo/cpc/`, and is read by ethos,
+compiled by `ethos-eoc`, copied into logos, vendored by eudaimonia and analyzed
+here — five consumers, no API, no release process, no coordination. That is the
+pattern this page generalizes from rather than one it taught.
+
+**Elleipsis.** Nothing in its CI reads its own signature with an analyzer, the
+drift check against logos's copy is planned rather than running, and `cvc5-1` —
+two programs in `programs/Strings.eo` declaring `Int` where every case returns a
+Boolean — was recorded on our side as fixed upstream and never was.
+
+**Parainesis.** An observation rather than advice: that defect survived every
+review the signature has had, and the thing that would have caught it is a gate
+rather than a reader. Tenets 3 and 5 do not apply here at all.
+
+### ethos
+
+**Arete.** The clearest instance of tenet 1 in the ecosystem, and worth studying
 because the fruitfulness was not designed: a checker written in C++ to answer
 *does this proof check* became a build dependency of a Lean development, which
 vendors it, and the reference implementation inside every project eudaimonia
-generates, which cross-checks the generated checker's verdicts against it. On
-tenet 3 it carries `user_manual.md`, the definition of Eunoia and the document
-the whole ecosystem reads — but it is a manual for a *program*: it opens with how
-to build the executable and never draws the line between what the language
-requires and what this implementation happens to do, which is the reason a
-second implementation cannot be written from it. Tenet 2 is where the fuzzer has evidence rather than
-an opinion: in the first few thousand cases it produced an uncaught C++
-exception on `(declare-const f (->))` and an error path that skips ethos's own
-`Error:` convention, which says the suite does not cover the shapes a checker
-gets handed by something that is not a person.
+generates.
 
-**ethos-eoc.** Tenet 1 is met by construction, since logos and eudaimonia both
-exist downstream of it, and tenet 2 is where it scores worst in the ecosystem —
-by its own account rather than ours. Its feedback loop is the longest thing
-here: adding one symbol to a calculus runs `sem_compile.py` → desugar →
+**Elleipsis.** `user_manual.md` is the definition of Eunoia and the document the
+whole ecosystem reads, but it is a manual for a *program* — it opens with how to
+build the executable and never draws the line between what the language requires
+and what this implementation happens to do, which is why a second implementation
+cannot be written from it. On tenet 2, the fuzzer produced an uncaught C++
+exception on `(declare-const f (->))` and an error path that skips ethos's own
+`Error:` convention within the first few thousand cases.
+
+**Parainesis.** An observation: those two are unfiled, which is our shortfall
+rather than theirs, and until they are filed this paragraph is worth less than
+it looks.
+
+### ethos-eoc
+
+**Arete.** Tenet 1 by construction — logos and eudaimonia both exist downstream
+of it.
+
+**Elleipsis.** The worst tenet 2 in the ecosystem, by its own account rather
+than ours. Adding one symbol to a calculus runs `sem_compile.py` → desugar →
 trim-defs → model-smt → smt-meta/lean-meta → cvc5 or Lean before you learn
 whether it was right, and its own map of itself says outright that there is no
 way to ask *is this one block well-formed against the embedding* short of
-compiling the set. The failure modes are all the late kind: a symbol with no
-semantics is fatal at stage 6; a forward-declared program that is never defined
-arrives in SMT-LIB as a free uninterpreted function and in Lean as a name nobody
-wrote. Each is decidable from the two input files, which is the argument for the
-three integrations recorded in [`../docs/reports.md`](../docs/reports.md), and
-also the general form of tenet 2 — a loop that long is not a discipline problem,
-it is the thing stopping a project from moving fast. Tenet 3 it cannot really
-meet: it is the second binary built from another tool's tree and has no front
-page of its own.
+compiling the set. The failure modes are all late: a symbol with no semantics is
+fatal at stage 6; a forward-declared program that is never defined arrives in
+SMT-LIB as a free uninterpreted function and in Lean as a name nobody wrote.
 
-**logos.** Exemplary on tenet 4, in the least obvious way. Its most valuable
+**Parainesis.** Build the block-level well-formedness check. Every failure named
+above is decidable from the two input files, which makes that loop long by
+omission rather than by necessity — and a compiler is the worst place in an
+ecosystem to keep the slowest feedback, because everything downstream inherits
+the wait. It is the highest-value unbuilt thing on this page.
+
+### logos
+
+**Arete.** Exemplary on tenet 4, in the least obvious way: its most valuable
 output to this repository has been three *replies* — `logos-2` accepted,
 `logos-4` declined with a reason that holds, `logos-5` declined and documented —
 and a decline with a written reason is worth as much as a fix, because it is
 usually a fact about the subject nobody had recorded. It also caught us being
-wrong, which is the most useful thing a consumer ever does: answering rows
-against its own copy of CPC is how it emerged that `cvc5-1` had been recorded as
-fixed upstream when it never was. Tenet 3 is the weak one —
-`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo` rather than something
-logos wrote, and whether it has drifted is a check that is planned rather than
-running. A repository carrying somebody else's ground truth by copy is not
-self-contained in the sense the tenet means, and the remedy is the ordinary one:
-a manifest and a lock. On tenet 2 it is the natural home for the triple check,
-since it already vendors ethos and consumes cvc5's signature; that is `logos-3`,
-and it is open.
+wrong, which is the most useful thing a consumer does: answering rows against
+its own copy of CPC is how it emerged that `cvc5-1` had been recorded as fixed
+when it never was.
 
-**eudaimonia.** The best adherent on this list, and the one whose adherence is
-most deliberate. Tenet 1 is its entire purpose — it exists to make somebody
-else's compiler reusable, and it is the falsification test for that compiler's
-central claim. Tenet 2 it does properly: a `--check` mode that installs into a
-throwaway copy and diffs, and ethos built alongside the compiler so the
-generated checker's verdicts are cross-checked against an independent
-implementation — two implementations kept on purpose rather than by accident.
-Tenet 4 is where it is exemplary, and it is the case that made this page word
-that tenet abstractly: what it delivered to logos is an argument, evidence and
-motivation that the correctness proof needs modularizing, rather than any
-artifact. The visible miss is tenet 3 — its `TODO.md` is more current than its
-README's status paragraph, so the front page is not the entry point, and its
-signature contract is specified in prose, which this repository misread once in
-its own documents and had to correct. A requirement stated in prose is a
-requirement that drifts, which is what `eud-1` proposes to fix by answering the
-contract from the signature.
+**Elleipsis.** Tenet 3. `install/defs/Cpc.cached.eo` is a copy of cvc5's
+`Cpc.eo` rather than something logos wrote, and whether it has drifted is a
+check that is planned rather than running.
 
-**anoieu.** Strongest on tenet 2, weakest on tenet 1, and vaporware under tenet
-5. The CI is the part worth copying: one small witness file per check, ethos's
-verdict on each recorded from a real run and never typed by hand, a committed
-CPC baseline with warnings denied so that a change inventing a false positive
-fails *this* build before it reaches anyone else's, generated documents
+**Parainesis.** An observation: a repository carrying somebody else's ground
+truth by copy is not self-contained in the sense the tenet means, and the
+ordinary remedy is a manifest and a lock. Separately, it is already the natural
+home for the triple check, since it vendors ethos and consumes cvc5's signature
+— that is `logos-3`, and it is open.
+
+### eudaimonia
+
+**Arete.** The best adherent on this list and the most deliberate one. Tenet 1
+is its entire purpose: it exists to make somebody else's compiler reusable, and
+it is the falsification test for that compiler's central claim. Tenet 2 it does
+properly — a `--check` mode that installs into a throwaway copy and diffs, and
+ethos built alongside so the generated checker's verdicts are cross-checked
+against an independent implementation. Tenet 4 is where it is exemplary, and it
+is the case that made this page word that tenet abstractly: what it delivered to
+logos is an argument — evidence and motivation that the correctness proof needs
+modularizing — rather than an artifact.
+
+**Elleipsis.** Tenet 3. Its `TODO.md` is more current than its README's status
+paragraph, so the front page is not the entry point; and its signature contract
+is specified in prose, which this repository misread once and had to correct.
+
+**Parainesis.** Generate the README's status paragraph from `TODO.md` or delete
+it. A front page less current than a file sitting beside it is exactly the
+failure *The front page* names, and it is a morning's work. Then answer the
+signature contract from the signature and its semantics rather than from what
+the compiler emitted — that is `eud-1`, and the argument for it is eudaimonia's
+own note that a declared `value-ordering` "is a finding".
+
+### anoieu
+
+**Arete.** Tenet 2, and it is the part worth copying: one small witness file per
+check, ethos's verdict on each recorded from a real run and never typed by hand,
+a committed CPC baseline with warnings denied so a change inventing a false
+positive fails *this* build before it reaches anyone else's, generated documents
 regenerated and diffed on every push, and `--pinned` restoring recorded commits
 so the build goes red for its own reasons only. Tenet 4 is met:
 `report/cpc-audit.html` for readers who will not clone anything, six shrunk
 reproducers under `tests/fuzz/`, and a ledger carrying an id and a state per row.
-Tenet 1 is where the honest mark is low — findings have reached six projects, but
-**no other repository runs this tool**: the CI adoptions are proposals rather
-than jobs, and nothing anywhere consumes its machine output, so by its own test,
-which asks whether something outside behaves differently because the tool
-exists, it passes on the findings and fails on the machinery. Two further misses
-belong here: nothing the fuzzer found has been filed upstream, and auditing
-logos's copy of CPC filed cvc5's findings under logos's name seventeen times
-before anyone noticed. Tenet 5 is unmet by definition, no human having taken over
-developing it, which is the ending it is supposed to be working towards.
 
-**dokimasia.** The paragraph with the least behind it, and that limit should be
-taken seriously: this repository reads `.eo` and `.eos` rather than C++, so
-everything here comes out of that project's own documents and
-[`../docs/notes.md`](../docs/notes.md) §8 rather than out of any measurement. On
-that basis, tenet 1 in the cheapest available form — it adopted this
-repository's [`reporting-philosophy.md`](../docs/reporting-philosophy.md) by reference instead of
-forking a copy, so there is one position, one place to argue about it, and
-neither tool carrying a stale paraphrase of the other. Its consumers today are
-people rather than tools. The interesting item is shared: the seam at
-`src/proof/eo/`, where cvc5 turns an internal proof into Eunoia, is visible from
-either side of it and from neither alone, which is `cvc5-6` and is currently
-owned by nobody. Two tools building the same check is exactly the waste tenet 1
-is meant to prevent, and it is being prevented at the moment only by neither
-having built it.
+**Elleipsis.** Tenet 1, badly. Findings have reached six projects, but **no other
+repository runs this tool**: the CI adoptions are proposals rather than jobs, and
+nothing anywhere consumes its machine output. Nothing the fuzzer found has been
+filed upstream. Auditing logos's copy of CPC filed cvc5's findings under logos's
+name seventeen times before anyone noticed. Tenet 5 is unmet by definition, no
+person having taken over developing it.
 
-**How to get a paragraph changed.** Say that it is wrong. There is no process,
-no id and no ledger for this, because none of it is a finding. The rows most
-likely to be wrong are the ones about internals this repository does not read —
-everything about `ethos-eoc`'s stages, logos's proof structure and dokimasia's
-C++ is read out of documents written by the people who built those things, and a
-document is not a measurement. The rows least likely to be wrong are the ones
-with a file and a line number in them, and those are also the ones that have
-already been carried properly, as findings, through a process this page is not.
+**Parainesis.** File the two ethos fuzzer findings, and get one CI job running in
+one other repository. Both have been the obvious next thing for long enough that
+the tenet 1 mark is now a description of avoidance rather than of difficulty —
+the machinery to do either has been finished for a while, and what is missing is
+the decision to spend somebody else's attention. Building a seventh check is the
+comfortable alternative and is not the work.
 
----
+### dokimasia
+
+**Arete.** Tenet 1 in the cheapest available form: it adopted this repository's
+[`../docs/reporting-policy.md`](reporting-policy.md) by reference
+instead of forking a copy, so there is one position, one place to argue about it,
+and neither tool carrying a stale paraphrase of the other.
+
+**Elleipsis.** Its consumers today are people rather than tools. And this
+paragraph has the least behind it of any here — the limit should be taken
+seriously, because this repository reads `.eo` and `.eos` rather than C++, so
+everything above comes out of that project's own documents and
+[`../docs/notes.md`](notes.md) §8 rather than out of any measurement.
+
+**Parainesis.** Settle who owns the check at the `src/proof/eo/` seam, where
+cvc5 turns an internal proof into Eunoia: a rule cvc5 emits that CPC does not
+declare is visible from either side and from neither alone. That is `cvc5-6`, it
+was requested by cvc5, and it is owned by nobody. Two tools building the same
+check is the waste tenet 1 exists to prevent, and it is being prevented right now
+only by neither having built it.
+
+### How to get a paragraph changed
+
+Say that it is wrong. There is no process, no id and no ledger, because none of
+this is a finding. The rows most likely to be wrong are the ones about internals
+this repository does not read — `ethos-eoc`'s stages, logos's proof structure,
+dokimasia's C++ — all read out of documents written by the people who built
+them, and a document is not a measurement. The rows least likely to be wrong are
+the ones with a file and a line number, and those have already been carried
+properly, as findings, through a process this page is not.
+
+If a paragraph is in the wrong register, the fix is upstream of us: the register
+follows the maintenance note in your README, so changing that changes this.
 
 ## Child projects
 
@@ -760,7 +827,7 @@ Two exist, tracked here in a sentence each and nowhere else:
 
 Note what euthyna's row shows about the shape: its parent is eudaimonia and its
 subject is logos, a third project entirely. It was also one of the six code
-names in [`../docs/why-eunoia.md`](../docs/why-eunoia.md) reserved for work
+names in [`../docs/why-eunoia.md`](why-eunoia.md) reserved for work
 nobody had started, which is what starting one looks like.
 
 **Two of the three have not earned a place in this vision.** A child project is

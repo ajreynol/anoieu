@@ -33,7 +33,7 @@ still end with the reference being stricter than the language requires.
 Decide whether it is real, by reading the file or running the reproducer, rather
 than by trusting the row. Then fix it, decline it with a reason, or say you
 cannot tell — all three are results. The reply goes back in the shape set out in
-[`reporting-policy.md`](reporting-policy.md#the-shape-of-a-reply), which also
+[`reporting-workflow.md`](reporting-workflow.md#the-shape-of-a-reply), which also
 says why an assistant's triage and a person's decision are kept in separate
 fields, and asks for feedback on this process in the other direction.
 
@@ -64,7 +64,7 @@ Generation is additive — it adds rows and never removes one, so a finding cann
 vanish without somebody saying why, and nothing in the `notes` column is ever
 overwritten. Closing is a separate, deliberate step that moves a row to the other
 file. The rules for both are in
-[`reporting-policy.md`](reporting-policy.md#the-conventions).
+[`reporting-workflow.md`](reporting-workflow.md#the-conventions).
 
 ## Open
 

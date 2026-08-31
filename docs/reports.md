@@ -40,7 +40,7 @@ not.
 
 So this is the page to open when you want to know what anoieu is asking of
 anyone. [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) says how each defect was confirmed;
-[`reporting-policy.md`](reporting-policy.md#running-it-in-ci) says how the adoption works; [`reporting-policy.md`](reporting-policy.md#the-workflow)
+[`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci) says how the adoption works; [`reporting-workflow.md`](reporting-workflow.md#the-workflow)
 suggests how to work one of these with an assistant, and what we do with the
 reply. None of those asks anything; this does.
 
@@ -682,7 +682,7 @@ compiler and logos arrive together with the triple, which is what makes them
 worth wiring up.
 
 The mechanics — workflow files, per-repository configuration, the ladder — are
-in [`reporting-policy.md`](reporting-policy.md#running-it-in-ci).
+in [`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci).
 
 ### What this is not
 
@@ -724,7 +724,7 @@ in [`reporting-policy.md`](reporting-policy.md#running-it-in-ci).
 | --- | --- |
 | [`usage.md`](usage.md) | the interface: inputs, commands, options, exit codes |
 | [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) | what has been reported to another repository, and what happened to it |
-| [`reporting-policy.md`](reporting-policy.md#running-it-in-ci) | running this in ethos, ethos-eoc, logos and cvc5 |
+| [`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci) | running this in ethos, ethos-eoc, logos and cvc5 |
 | [`checks.md`](checks.md) | every check and its manual page, generated from the registry |
 | [`closed-findings.md`](closed-findings.md) | every finding ruled on, with its verdict; `tools/landing.py` audits the ones closed before their fix landed |
 | [`corpus.md`](corpus.md) | what the checks report on every signature we can find, generated and checked in CI |
@@ -1315,7 +1315,7 @@ branch, with the merge treated as a separate question. Holding a finding open
 until somebody else's pull request is approved measures their review queue, not
 the finding, and while the checks are still moving that is a bad trade. What the
 change costs is stated where it is taken on, in
-[what closes a row](reporting-policy.md#what-closes-a-row-and-what-does-not):
+[what closes a row](reporting-workflow.md#what-closes-a-row-and-what-does-not):
 each of the seven verdicts ends with `awaiting landing: ethos anoieu-findings
 292201c2`, and `python3 tools/landing.py --check` is the pass that asks whether
 that commit has reached `main` yet. Today it answers *not yet* for all seven,
@@ -1475,7 +1475,7 @@ logos observed that the severity reads high for what it is — the reproducer is
 one of their own regression tests, unmutated, and the finding is that their input
 format is a documented superset in one command. The severity is not a claim about
 fault: `FUZ0001` is the direction, not the attribution, and
-[`reporting-policy.md`](reporting-policy.md#a-finding-from-the-fuzzer) says so.
+[`reporting-workflow.md`](reporting-workflow.md#a-finding-from-the-fuzzer) says so.
 What the observation is really about is that a `FUZ` row carries no field for
 "whose fault", which is the same ownership gap cvc5 asked for.
 

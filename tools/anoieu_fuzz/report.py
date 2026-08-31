@@ -191,7 +191,7 @@ def promote(source: str, corpus: str = "", owner: str = "", note: str = "") -> s
     an artefact of this harness -- a mutated `include` pointing nowhere was the
     first one -- and a fuzzer that filed its own output would be publishing
     faster than anybody could read it, which is the one thing
-    `docs/reporting-philosophy.md` asks us not to do.
+    `docs/reporting-policy.md` asks us not to do.
     """
     corpus = corpus or CORPUS
     record_path = os.path.join(source, "finding.json")

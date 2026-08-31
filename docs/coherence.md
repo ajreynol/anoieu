@@ -8,7 +8,7 @@ before editing anything; everything else is reachable from it.
 It is deliberately **not linked from the front page**. `README.md` is for
 somebody deciding whether the tool is worth their attention, and a page about
 how the work is run is noise to them — see *The front page* in
-[`../tools/vision.md`](../tools/vision.md). It is linked instead from the things
+[`../docs/vision.md`](vision.md). It is linked instead from the things
 an agent actually opens: [`../CLAUDE.md`](../CLAUDE.md), and the headers of the
 programs that write the record.
 
@@ -25,11 +25,11 @@ Six things, and only two of them are the tool.
 | what | where | who else it binds |
 | --- | --- | --- |
 | the analyzer | [`../anoieu/`](../anoieu) | anyone running it; the baselines other repositories would gate on |
-| the fuzzer, a **child project** that has earned its keep | [`../tools/anoieu_fuzz/`](../tools/anoieu_fuzz) | its `FUZ` rows are in the record and two CI steps run it — see rule 10 of [`../tools/policy.md`](../tools/policy.md) |
-| **the publishing position** | [`reporting-philosophy.md`](reporting-philosophy.md) | maintained here, **referenced by [dokimasia](https://github.com/ajreynol/dokimasia)** rather than copied |
-| **the reporting workflow** | [`reporting-policy.md`](reporting-policy.md) | [`../scripts/`](../scripts) implement it; other repositories adopt its CI half |
-| **the development vision** | [`../tools/vision.md`](../tools/vision.md) | written for *every* repository in the ecosystem |
-| **the repository policy** | [`../tools/policy.md`](../tools/policy.md) | written to be copied; governs child projects in any parent |
+| the fuzzer, a **child project** that has earned its keep | [`../tools/anoieu_fuzz/`](../tools/anoieu_fuzz) | its `FUZ` rows are in the record and two CI steps run it — see rule 10 of [`../docs/policy.md`](policy.md) |
+| **the publishing position** | [`reporting-policy.md`](reporting-policy.md) | maintained here, **referenced by [dokimasia](https://github.com/ajreynol/dokimasia)** rather than copied |
+| **the reporting workflow** | [`reporting-workflow.md`](reporting-workflow.md) | [`../scripts/`](../scripts) implement it; other repositories adopt its CI half |
+| **the development vision** | [`../docs/vision.md`](vision.md) | written for *every* repository in the ecosystem |
+| **the repository policy** | [`../docs/policy.md`](policy.md) | written to be copied; governs child projects in any parent |
 
 The four in bold are **not about anoieu**. They are ecosystem documents that
 happen to be maintained here, which has one consequence worth stating plainly:
@@ -42,7 +42,7 @@ whole reason the next section exists.
 Ordered, most supervised first. *Supervised* means: propose the change and the
 reason, and wait for a person — do not make it and mention it afterwards.
 
-**1. [`../tools/vision.md`](../tools/vision.md) — ask first, always.** It states
+**1. [`../docs/vision.md`](vision.md) — ask first, always.** It states
 what AI-assisted development in this ecosystem is for, it is addressed to
 repositories that did not write it, and the party with the least standing to
 revise it is the agent it governs. This includes the report card at the bottom:
@@ -56,7 +56,7 @@ tick against one would invent an authority that does not exist. The reasoning is
 *Policy is checked; vision is argued* on that page, and it is the one rule here
 that forbids work rather than requiring it.
 
-**2. [`../tools/policy.md`](../tools/policy.md) — ask before the rules.** The
+**2. [`../docs/policy.md`](policy.md) — ask before the rules.** The
 numbered rules may be **appended** to, never renumbered, and retiring one in
 place is a person's decision. The layout conventions are different in kind: when
 the tree and the conventions disagree, correcting the *description* to match
@@ -69,7 +69,7 @@ can decide from the tree. Run it before proposing a change here — and if you a
 a rule, either make it checkable or accept that it lands on the checker's
 printed list of what it cannot decide.
 
-**3. [`reporting-philosophy.md`](reporting-philosophy.md) — not yet stable, so
+**3. [`reporting-policy.md`](reporting-policy.md) — not yet stable, so
 say what you changed.** Unlike the two above, this page is still settling: its
 positions are being worked out rather than defended, and adding, sharpening or
 retiring one is ordinary work rather than something to ask about first. Two
@@ -80,12 +80,12 @@ edit moves a second repository — which means changes get flagged to a person
 even though they do not need permission, and a *structural* change (a position
 retired, the page renamed again) is carried to dokimasia by hand.
 
-> **Outstanding, from the rename to `reporting-philosophy.md`:** dokimasia's
-> links to the old `docs/philosophy.md` are now dead. Nothing here fixes that —
-> nothing crosses a repository boundary by machine — so it is a person's errand,
-> and it is unfiled.
+> **Outstanding:** this page has been renamed twice and its positions retiered
+> and extended, so dokimasia's links to it and any quotation of it are stale.
+> Nothing here fixes that — nothing crosses a repository boundary by machine —
+> so it is a person's errand, and it is unfiled.
 
-**4. [`reporting-policy.md`](reporting-policy.md) — ask before the prompts.** A
+**4. [`reporting-workflow.md`](reporting-workflow.md) — ask before the prompts.** A
 person approves every change to a prompt template, and each round should leave
 the prompts *shorter and clearer* than it found them — that rule was itself
 learned the expensive way and is written up in
@@ -206,7 +206,7 @@ keys. Three options, none chosen:
   transitions: *reopened* is indistinguishable from *was always open* except in
   the log the script wrote.
 - **A tracker.** GitHub issues were the earlier plan
-  ([`reporting-policy.md`](reporting-policy.md#medium-term-issues-on-our-own-repository)),
+  ([`reporting-workflow.md`](reporting-workflow.md#medium-term-issues-on-our-own-repository)),
   and the constraints there still hold: issues live on *our* repository, a
   person posts, never an agent. The argument for one is not bookkeeping — it is
   that **findings do not all come from our checks.** Some will come from a
@@ -226,7 +226,7 @@ is the same interface in all three worlds.
 
 ## Where to start
 
-1. Read this page, then [`reporting-policy.md`](reporting-policy.md#the-workflow)
+1. Read this page, then [`reporting-workflow.md`](reporting-workflow.md#the-workflow)
    if you are working a finding, or [`notes.md`](notes.md#the-design) if you are
    working on the tool.
 2. Check the ladder above before touching any document in it.

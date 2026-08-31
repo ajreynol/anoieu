@@ -210,7 +210,7 @@ def postmortem_shape() -> int:
 
 
 def prompts_agree() -> int:
-    """The two scripts say what `docs/reporting-policy.md` says they say.
+    """The two scripts say what `docs/reporting-workflow.md` says they say.
 
     The document is what every project was promised; the scripts under
     `scripts/` are a convenience that holds a copy so nobody has to paste one.
@@ -225,7 +225,7 @@ def prompts_agree() -> int:
     import subprocess as sp  # noqa: PLC0415
 
     root = os.path.dirname(HERE)
-    doc = open(os.path.join(root, "docs", "reporting-policy.md")).read()
+    doc = open(os.path.join(root, "docs", "reporting-workflow.md")).read()
 
     # The whole of each prompt, both forms. A script holds the document's text
     # around one or two substituted spans, and the document writes both sides of
@@ -304,10 +304,10 @@ def prompts_agree() -> int:
 
     for name, want, got in cases:
         if want == got:
-            print(f"ok   scripts/{name} says what reporting-policy.md says")
+            print(f"ok   scripts/{name} says what reporting-workflow.md says")
             continue
         failures += 1
-        print(f"FAIL scripts/{name} has drifted from docs/reporting-policy.md")
+        print(f"FAIL scripts/{name} has drifted from docs/reporting-workflow.md")
         for line in difflib.unified_diff(
             want.splitlines(), got.splitlines(), "document", "script", lineterm=""
         ):

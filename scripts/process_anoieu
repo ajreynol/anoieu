@@ -19,7 +19,7 @@
 # $ANOIEU_REPOS (colon-separated, default $HOME). Nothing is tracked or synced
 # -- the agent is pointed at the directory and finds the reply itself.
 #
-# The canonical prompt is docs/reporting-policy.md, under "Prompt two: the
+# The canonical prompt is docs/reporting-workflow.md, under "Prompt two: the
 # follow-up, here"; that one is written around a link, this one around a
 # checkout. If they disagree about anything else, the document is right.
 #
@@ -416,7 +416,7 @@ carrying only a triage is a proposal rather than a result.
 
 Working in the anoieu repository ($ANOIEU).
 
-docs/reporting-policy.md is the authority on what you may change. The steps:
+docs/reporting-workflow.md is the authority on what you may change. The steps:
 
 1. Find the rows the reply names, by id, in docs/open-findings.md and
    docs/closed-findings.md. A row is in scope because the reply names it --
@@ -432,7 +432,7 @@ docs/reporting-policy.md is the authority on what you may change. The steps:
    - Look at the branch rather than taking it: compare it to its base and read
      what is on it. A branch level with main, or a change left uncommitted, is
      not a fix. A branch that is ahead of main is: waiting for a merge is not
-     something we do -- see "what closes a row" in docs/reporting-policy.md.
+     something we do -- see "what closes a row" in docs/reporting-workflow.md.
 3. Clean up those rows and no others. Closing moves a row from
    docs/open-findings.md to docs/closed-findings.md with a verdict, never
    deleting it; reopening is the same move back, noting what the verdict missed.

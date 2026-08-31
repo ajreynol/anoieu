@@ -7,7 +7,7 @@ property of the **account**, not of the thing accounted for. Eunoia is not
 unclear. The description of it can be clearer, and that is the whole of what
 this project is for.*
 
-A research project under [`../policy.md`](../policy.md). Started by a human,
+A research project under [`docs/policy.md`](../../docs/policy.md). Started by a human,
 read-only, unadvertised, and not part of what this repository ships. Deleting
 this directory changes nothing anywhere else.
 

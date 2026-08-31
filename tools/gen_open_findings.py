@@ -90,7 +90,7 @@ still end with the reference being stricter than the language requires.
 Decide whether it is real, by reading the file or running the reproducer, rather
 than by trusting the row. Then fix it, decline it with a reason, or say you
 cannot tell — all three are results. The reply goes back in the shape set out in
-[`reporting-policy.md`](reporting-policy.md#the-shape-of-a-reply), which also
+[`reporting-workflow.md`](reporting-workflow.md#the-shape-of-a-reply), which also
 says why an assistant's triage and a person's decision are kept in separate
 fields, and asks for feedback on this process in the other direction.
 
@@ -121,7 +121,7 @@ Generation is additive — it adds rows and never removes one, so a finding cann
 vanish without somebody saying why, and nothing in the `notes` column is ever
 overwritten. Closing is a separate, deliberate step that moves a row to the other
 file. The rules for both are in
-[`reporting-policy.md`](reporting-policy.md#the-conventions).
+[`reporting-workflow.md`](reporting-workflow.md#the-conventions).
 """
 
 COLUMNS = "| id | owner | code | where | what | notes |"
@@ -150,7 +150,7 @@ Kept as a file, and kept in git, for three reasons.
 closes when a maintainer accepted it and the change is a commit on a named
 branch; waiting for a merge would hold findings open for as long as somebody
 else's review queue, which says nothing about the finding. The full rule is
-[what closes a row](reporting-policy.md#what-closes-a-row-and-what-does-not).
+[what closes a row](reporting-workflow.md#what-closes-a-row-and-what-does-not).
 
 That is exactly the shape of the mistake in reason 3, taken on deliberately, so
 it is booked rather than assumed away. Such a row ends its verdict with
@@ -165,7 +165,7 @@ because that would drop a row from the audit while leaving the debt owed. When a
 change lands, a person replaces the marker with what landed it.
 
 Written by hand, by the review step in
-[`reporting-policy.md`](reporting-policy.md#the-workflow). The generator reads
+[`reporting-workflow.md`](reporting-workflow.md#the-workflow). The generator reads
 it and rewrites it, and rewriting preserves every row.
 
 | id | owner | code | where | what | verdict |

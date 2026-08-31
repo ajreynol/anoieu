@@ -2,5 +2,5 @@
 run as `python3 -m tools.<name>` from the repository root.
 
 `tools/` is the harness and the home of child projects, neither of which is part
-of what this repository ships -- see `tools/policy.md`.
+of what this repository ships -- see `docs/policy.md`.
 """

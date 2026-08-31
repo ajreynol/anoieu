@@ -25,10 +25,10 @@ jobs:
         run: |
           python3 tools/gen_checks_doc.py
           git diff --exit-code docs/checks.md
-      # tools/policy.md is a set of claims about this tree, so a program decides
-      # them. tools/vision.md is deliberately absent from this job and must stay
-      # absent -- see "Policy is checked; vision is argued" in tools/vision.md.
-      - name: the repository still matches tools/policy.md
+      # docs/policy.md is a set of claims about this tree, so a program decides
+      # them. docs/vision.md is deliberately absent from this job and must stay
+      # absent -- see "Policy is checked; vision is argued" in docs/vision.md.
+      - name: the repository still matches docs/policy.md
         run: python3 tools/policy_check.py
 
   # The half that protects the repositories anoieu runs in: every signature we
@@ -107,7 +107,7 @@ jobs:
           ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle
 
       # The promoted reproducers still do what the record beside them says. This
-      # is the fuzzer's half of "re-measuring" (docs/reporting-policy.md), and
+      # is the fuzzer's half of "re-measuring" (docs/reporting-workflow.md), and
       # it is a hard failure for the same reason the desugaring battery above is
       # one: a verdict that moves without a reproducer moving is ethos having
       # changed under us, and somebody should look. logos is not built here, so
@@ -119,7 +119,7 @@ jobs:
       # And, since a build of ethos is already here, point the fuzzer at it.
       # On a schedule only, and never failing: a fuzzer that fails a build finds
       # a new bug and turns somebody's unrelated pull request red, which is the
-      # one thing docs/reporting-philosophy.md is most careful about. What it finds is
+      # one thing docs/reporting-policy.md is most careful about. What it finds is
       # uploaded and warned about; triage is a human step, as it is for every
       # other finding here. Only the signature mode runs — the differential mode
       # needs a second checker, and building logos is a Lean toolchain away.

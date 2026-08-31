@@ -1,12 +1,12 @@
 # anoieu_fuzz
 
-A child project of anoieu, under [`../policy.md`](../policy.md). Started by a
+A child project of anoieu, under [`docs/policy.md`](../../docs/policy.md). Started by a
 human; it lives in `tools/` and is not part of what this repository ships.
 
 ## The name
 
 Descriptive, and **deliberately not Greek** — which is a departure from rule 4 of
-[`../policy.md`](../policy.md), recorded below with the others. It is its
+[`docs/policy.md`](../../docs/policy.md), recorded below with the others. It is its
 parent's name and the word for what it does, because the convention exists to
 make a *research account* legible by its title, and this is not one: it is a
 program with a command line, and a reader looking for the fuzzer should find it

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Check this repository against `tools/policy.md`, and say what it cannot check.
+"""Check this repository against `docs/policy.md`, and say what it cannot check.
 
 Policy is a set of claims about a *tree* — where files go, what the README ends
 with, what a child project may import — so a program can decide them without
 asking anybody's opinion. That is the whole reason policy is checked here and
 the vision is not: see "Policy is checked; vision is argued" in
-`tools/vision.md`. **Nothing in this file may ever check `vision.md`.** Whether
+`docs/vision.md`. **Nothing in this file may ever check `vision.md`.** Whether
 a tool is fruitful yet, whether a claim is oversold, whether a child project has
 earned its keep — those are judgements nobody has the authority to settle, and a
 green tick against one would manufacture an authority that does not exist.
@@ -156,8 +156,8 @@ def island_breaks(name: str) -> list[str]:
     breaks = []
     hits = subprocess.run(
         ["git", "-C", ROOT, "grep", "-l", "-E", rf"\b(tools\.)?{re.escape(name)}\b",
-         "--", ":!tools/" + name, ":!docs/coherence.md", ":!tools/policy.md",
-         ":!tools/vision.md"],
+         "--", ":!tools/" + name, ":!docs/coherence.md", ":!docs/policy.md",
+         ":!docs/vision.md"],
         capture_output=True, text=True).stdout.split()
     code = [h for h in hits if h.endswith((".py", ".yml", ".toml"))]
     if any(h.startswith(".github/") for h in hits):
@@ -209,7 +209,7 @@ def coverage() -> None:
     for rule, why in UNCHECKED:
         print(f"   {rule} — {why}")
     print("-- never to be checked")
-    print("   tools/vision.md, in full — judgement, and nobody has the authority")
+    print("   docs/vision.md, in full — judgement, and nobody has the authority")
 
 
 def main() -> int:

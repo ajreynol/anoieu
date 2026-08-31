@@ -16,7 +16,7 @@ this run taught us about working findings* is here.
 ## The procedure
 
 **Whose job.** The anoieu maintainer processing a reply — step 7 of prompt two in
-[`reporting-policy.md`](reporting-policy.md#prompt-two-the-follow-up), which is
+[`reporting-workflow.md`](reporting-workflow.md#prompt-two-the-follow-up), which is
 what [`scripts/process_anoieu`](../scripts/process_anoieu) runs. Not the project
 that owns the finding: they send feedback, we decide what it changed here.
 
@@ -83,7 +83,7 @@ a section; say so in the run's `Resolution:`.
 ## Standing rules this log has produced
 
 Stated in full in
-[`reporting-policy.md`](reporting-policy.md#feedback-both-ways); listed here with
+[`reporting-workflow.md`](reporting-workflow.md#feedback-both-ways); listed here with
 the entry that produced each, because a rule with no incident behind it is a
 preference.
 

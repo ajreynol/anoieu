@@ -26,7 +26,7 @@ renumber. Retire either in place, with a line saying why.
 | --- | --- |
 | `README.md` | the front page, and the whole of what any other document may assume has been read |
 | `docs/` | every written document, indexed by `docs/README.md`, together with the documents a run generates |
-| `tools/` | the harness: generators, the runner, the dependency manifest, this page — and research projects |
+| `tools/` | the harness: generators, the runner, the dependency manifest — and child projects |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
 | `scripts/` | executable versions of workflows the documents define |
 | `deps/` | other people's repositories, fetched by a run and never committed |
@@ -45,7 +45,7 @@ competes for that role — no second overview in `docs/`, no wiki, no
 **The maintenance entry point is not the front page.** The README is written
 for somebody deciding whether the tool is worth their attention; how the work is
 run is noise to them and buried treasure to whoever is doing it. Keep the second
-audience a separate document — here [`../docs/coherence.md`](../docs/coherence.md)
+audience a separate document — here [`../docs/coherence.md`](coherence.md)
 — reachable from the things a maintainer opens (the agent brief at the
 repository root, the headers of the programs that write the record) and not
 linked from the front page.
@@ -74,8 +74,15 @@ generator that is allowed to delete can quietly delete a regression.
 or measures the repository's own claims, and nothing a user of the tool ever
 invokes. Each generator states at the top of its own file what it writes and
 what it refuses to write, which is the cheapest available defence against a
-script quietly acquiring an opinion. This page and [`vision.md`](vision.md) live
-here for the same reason: they govern the development rather than the tool.
+script quietly acquiring an opinion. Child projects live here too, for the
+adjacent reason: neither the harness nor a child project is part of what the
+repository ships.
+
+**The documents that govern the work live with the documents.** This page and
+[`vision.md`](vision.md) sit in `docs/` rather than beside the code they govern,
+because they are read far more often than the harness is, and by people who are
+not editing anything. A governing document filed under `tools/` is a document
+somebody has to know to look for.
 
 **`tests/` holds the evidence, not only the tests.** The property to preserve is
 that a person can open one file and see in a minute what a claim rests on: one
@@ -115,7 +122,7 @@ the content:
 > **Written by AI agents, under light human supervision.** A human directs the
 > work, reads what is published and decides what is filed; nobody vets the
 > internal design, and nothing reaches another project's issue tracker without
-> review. [`docs/reporting-philosophy.md`](../docs/reporting-philosophy.md) says what that does and
+> review. [`docs/reporting-policy.md`](reporting-policy.md) says what that does and
 > does not cover, and why the intended audience is experts.
 
 Four properties, of which the third is the one that gets dropped and the fourth
@@ -241,8 +248,8 @@ replacement, and never something a reader could mistake for the specification.
 
 **7. Nothing leaves the island by machine.** Anything a research project wants
 to say to the project that owns its subject is subject to the host repository's
-ordinary reporting discipline — `docs/reporting-philosophy.md` for what may be published
-about somebody else's work, `docs/reporting-policy.md` for how a finding is
+ordinary reporting discipline — `docs/reporting-policy.md` for what may be published
+about somebody else's work, `docs/reporting-workflow.md` for how a finding is
 carried, confirmed and closed. A research project has no separate channel and no
 lighter standard. In particular the *settling artifact* rule holds: a reply is
 somebody's triage, and only an artifact settles anything. What the project may
@@ -292,7 +299,7 @@ promotion decision and that belongs to a person.
 
 Every rule and convention on this page is a claim about *this tree*, which means
 a program can decide it without holding an opinion — and
-[`policy_check.py`](policy_check.py) decides the ones that are currently
+[`tools/policy_check.py`](../tools/policy_check.py) decides the ones that are currently
 decidable, on every push. That is the property to preserve when adding to this
 page: **a rule nobody can check is a rule worded loosely enough to be
 tightened**, or one that belongs in [`vision.md`](vision.md) instead. The
@@ -344,8 +351,8 @@ The policy is written to be copied. What another repository has to decide:
 | where a maintainer starts | `docs/coherence.md`, linked from tooling and not from the front page |
 | where projects live | `tools/X/` |
 | who may start and end one | a human, explicitly (rule 1) |
-| what governs anything published | `docs/reporting-philosophy.md` |
-| what governs anything carried to another project | `docs/reporting-policy.md` |
+| what governs anything published | `docs/reporting-policy.md` |
+| what governs anything carried to another project | `docs/reporting-workflow.md` |
 | what the ending states are | graduate, fold in, retire in place (rule 9) |
 
 Replace the rows that name documents with your own equivalents, keep the rules,

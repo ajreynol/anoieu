@@ -48,7 +48,7 @@ instrumentation, no corpus feedback loop and no attempt at one. And a run that
 finds nothing means the cases it wrote did not provoke anything —
 
 > **A quiet run is not a clean bill of health.** The same caution
-> [`reporting-philosophy.md`](reporting-philosophy.md) states for the analyzer holds here and holds
+> [`reporting-policy.md`](reporting-policy.md) states for the analyzer holds here and holds
 > harder: a fuzzer's silence is a fact about the inputs it happened to write.
 > We publish reproducers and never assurances.
 
@@ -355,7 +355,7 @@ us, and both are things somebody should look at rather than let a row go stale.
 
 The obligations that follow — confirm against a pinned build before filing, and
 never let the tool assign an owner to a disagreement — are in
-[`reporting-policy.md`](reporting-policy.md#a-finding-from-the-fuzzer).
+[`reporting-workflow.md`](reporting-workflow.md#a-finding-from-the-fuzzer).
 
 ## What the first runs turned up
 
@@ -396,14 +396,14 @@ ledger is for; one per bucket would be filing the same thing three times.
 > was produced against the binaries on the machine the fuzzer was written on —
 > ethos 0.2.3 from a local build, logos from a local `lake build`. Re-run each
 > reproducer against a pinned build before it is carried anywhere; that is what
-> [`reporting-policy.md`](reporting-policy.md#a-finding-from-the-fuzzer)
+> [`reporting-workflow.md`](reporting-workflow.md#a-finding-from-the-fuzzer)
 > requires, and a fuzzer's output has no special standing.
 
 ## Running it in CI
 
 Not on push. A fuzzer that fails a build finds a new bug and turns somebody's
 unrelated pull request red, which is the one thing
-[`reporting-philosophy.md`](reporting-philosophy.md) is most careful about. The `oracle` job already
+[`reporting-policy.md`](reporting-policy.md) is most careful about. The `oracle` job already
 builds ethos and caches it by commit, so the fuzzing steps hang off that job on
 a schedule, upload what they find as an artifact, and warn rather than fail.
 

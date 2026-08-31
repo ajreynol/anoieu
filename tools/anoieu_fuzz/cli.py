@@ -397,7 +397,7 @@ def cmd_verify(args) -> int:
     """Re-run every promoted reproducer and compare against what was recorded.
 
     This is the fuzzer's half of "re-measuring", the slot
-    `docs/reporting-policy.md` says carries the most weight: a follow-up that
+    `docs/reporting-workflow.md` says carries the most weight: a follow-up that
     cannot reproduce the original finding is guessing. It is also how a promoted
     finding gets closed honestly -- a verdict that has moved is either a fix
     upstream or the binary having changed under us, and either way somebody

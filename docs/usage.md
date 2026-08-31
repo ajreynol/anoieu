@@ -214,7 +214,7 @@ unused-parameter check, the dead-program check. `--pedantic` turns those on.
 ## Configuration, baselines and suppression
 
 A repository writes down what it checks and what it has agreed to live with, so
-that its CI job is one line. See [`reporting-policy.md`](reporting-policy.md#running-it-in-ci) for the whole arrangement; the
+that its CI job is one line. See [`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci) for the whole arrangement; the
 short version:
 
 ```json

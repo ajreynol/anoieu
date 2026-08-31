@@ -9,7 +9,7 @@
 #   check_anoieu 147433b3e48ae9d6   # one finding, by its id
 #   check_anoieu --codex ethos-8    # ... with codex instead of claude
 #
-# The canonical prompt is docs/reporting-policy.md in the anoieu repository,
+# The canonical prompt is docs/reporting-workflow.md in the anoieu repository,
 # under "Prompt one: in the project that owns the finding". The copy below is
 # that text with the scope line filled in; if the two disagree, the document is
 # the one that is right.

@@ -2,7 +2,7 @@
 """The landing audit: did the changes we closed on actually land?
 
 A row closes here when a maintainer accepted it and the change is a commit on a
-named branch -- not when that branch is merged. `docs/reporting-policy.md` says
+named branch -- not when that branch is merged. `docs/reporting-workflow.md` says
 why: holding a finding open until somebody else's review queue drains is not
 information about the finding. What it buys in agility it borrows against the
 one failure this repository has already had, and had for three months --

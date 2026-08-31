@@ -169,7 +169,7 @@ default.
 **This is not a score, and not a comparison between repositories.** These
 numbers say which of our checks tripped, not how much of a subject is sound, so
 a corpus with fewer findings has not been shown to be better. See *measure the
-subject, never our own coverage* in [`reporting-philosophy.md`](reporting-philosophy.md).
+subject, never our own coverage* in [`reporting-policy.md`](reporting-policy.md).
 
 """]
     out.append("| corpus | files | errors | warnings | hints |")

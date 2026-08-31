@@ -16,7 +16,7 @@ Three steps, in order:
    belong in one file.
 3. **Findings.** `docs/open-findings.md`, appended to and never trimmed — a row
    leaves it only through the review step described in
-   `docs/reporting-policy.md`.
+   `docs/reporting-workflow.md`.
 
     python3 tools/run.py                 # move to each tip, then measure
     python3 tools/run.py --pinned --check # re-measure the recorded commits
