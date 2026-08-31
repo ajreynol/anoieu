@@ -61,10 +61,10 @@ whether each passes the policy check, and how long since anything moved. Local,
 about a second, no assistant involved.
 
 [`../scripts/install_eo`](../scripts/install_eo) is the same ecosystem from the
-other side, and the first command to run on a new machine: the `git clone`
-commands that put it there, into siblings of this checkout. Printing them is the
-default, `--run` executes exactly what it printed, and `--status` reads the rows
-back off the disk and says what has drifted. Its options are in
+other side, and the first command to run on a new machine: it clones the rest of
+the ecosystem into siblings of this checkout. `--dry-run` prints exactly the
+commands a run would execute — only `git clone`, which the suite checks — and
+`--status` reads the rows back off the disk and says what has drifted. Its options are in
 [`usage.md`](usage.md#the-rest-of-the-ecosystem), and the sequence for adding a
 tool to the list is in
 [`coherence.md`](coherence.md#what-happens-when-we-add-a-new-tool-to-the-ecosystem).

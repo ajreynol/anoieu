@@ -155,9 +155,9 @@ is the first command to run:
 ```bash
 git clone https://github.com/ajreynol/anoieu
 cd anoieu
-scripts/install_eo                   # print the git clone commands, run nothing
-scripts/install_eo --run             # ... and run exactly what it printed
-scripts/install_eo --status          # what is here, and what disagrees with what
+scripts/install_eo                   # clone the rest of the ecosystem, beside this
+scripts/install_eo --dry-run         # ... or print those commands and run none
+scripts/install_eo --status          # ... or say what is here, and what disagrees
 ```
 
 It puts ethos, logos, eudaimonia, dokimasia and koine beside this checkout,

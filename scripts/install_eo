@@ -3,18 +3,27 @@
 
 Three views of one list, so they cannot drift apart:
 
-    scripts/install_eo                 # the commands, run nothing
-    scripts/install_eo --run           # ... and actually run them
-    scripts/install_eo --status        # what is on this machine
+    scripts/install_eo                 # clone what is not here yet
+    scripts/install_eo --dry-run       # ... or print the commands, run nothing
+    scripts/install_eo --status        # ... or say what is on this machine
 
-**Printing is the default and running is the flag.** What the dump prints is
-exactly what `--run` executes, so reading it is a real review rather than a
+**It installs, and `--dry-run` is how you look first.** What the dry run prints
+is exactly what a real run executes, so reading it is a review rather than a
 courtesy, and a paste of it does the same thing this does. The commands are
-therefore printed live rather than commented out: an inert dump would be a
-different text from the one that runs, and the point of this one is that it is
-not. Every tool carries what the ecosystem records about it — member, candidate,
-served — because *whose repository is this and on what footing* is the question
-somebody cloning eight trees is actually asking.
+printed live rather than commented out: an inert dump would be a different text
+from the one that runs, and the point of this one is that it is not. Every tool
+carries what the ecosystem records about it — member, candidate, served —
+because *whose repository is this and on what footing* is the question somebody
+cloning several trees is actually asking.
+
+**What it may run is a short list, and it is checked.** The only command that
+changes anything is `git clone`; the directory is made with `os.makedirs` and the
+`cd` is a `cwd=` argument, so neither is a command at all. Everything else is a
+read of a checkout — `rev-parse`, `status`, `log`, `rev-list`, `symbolic-ref` —
+plus `fetch`, only when `--status --fetch` asks for it. Both lists are enforced
+here, in `execute` and `git`, and asserted by `tests/run.py`, which reads what
+this prints and what it would run and fails if either grows a command. Nothing
+is passed to a shell anywhere in this file.
 
 **Only a default branch is ever installed.** Every command here is a plain
 `git clone <url> <dir>`: no `-b`, no checkout, no branch switch. A **child
@@ -244,7 +253,35 @@ def unknown(repos: list[Repo], ids: list[str]) -> list[str]:
 
 # -- git --------------------------------------------------------------------
 
+#: The one command that installs anything. `mkdir` is os.makedirs and `cd` is a
+#: cwd= argument, so this is the whole of what this script executes to install.
+INSTALL = ("git", "clone")
+
+#: What it may ask an existing checkout. Reads, except `fetch`, which touches
+#: the network on request and still writes nothing anybody works in.
+READS = frozenset({"rev-parse", "status", "log", "rev-list", "symbolic-ref",
+                   "cat-file", "merge-base", "fetch"})
+
+
+def execute(cmd: list[str], cwd: str) -> int:
+    """Run one install command, having checked that it is one.
+
+    The check is code rather than a comment because this is the one script here
+    that changes a machine outside this repository. `tests/run.py` asserts that
+    what the dry run prints and what this would run are both `git clone`; this
+    refuses, at run time, anything that got past that.
+    """
+    if tuple(cmd[:2]) != INSTALL:
+        raise SystemExit(f"install_eo: refusing to run `{' '.join(cmd[:2])}`; "
+                         f"this installs with `{' '.join(INSTALL)}` and nothing else")
+    return subprocess.run(cmd, cwd=cwd).returncode
+
+
 def git(path: str, *args: str) -> tuple[int, str]:
+    """Ask a checkout something. Reads only, by the same argument as above."""
+    if args and args[0] not in READS:
+        raise SystemExit(f"install_eo: refusing to run `git {args[0]}`; "
+                         "this reads a checkout and does not change one")
     try:
         p = subprocess.run(["git", "-C", path, *args],
                            capture_output=True, text=True, timeout=60)
@@ -375,10 +412,10 @@ def merge_repos_local(root: str, repos: list[Repo], planned: set[str] = frozense
 
 def dump(root: str, repos: list[Repo]) -> int:
     meanings = status_meanings()
-    print("# The Eunoia ecosystem, as commands. Printed by scripts/install_eo,")
-    print("# which has run none of them. Every uncommented line below is live:")
-    print("# `--run` runs exactly these, and a paste of them does the same.")
-    print("# `--run` also records where each tree ended up, in the untracked")
+    print("# The Eunoia ecosystem, as commands. This is --dry-run, so none of")
+    print("# them has been run. Every uncommented line below is live: a run")
+    print("# without --dry-run executes exactly these, and so does a paste.")
+    print("# A real run also records where each tree ended up, in the untracked")
     print("# scripts/repos.local that the other commands resolve an id through.")
     print(f"# Root: {root}   (--root PATH, or $EO_ROOT, to put it elsewhere)")
     if not repos:
@@ -446,7 +483,7 @@ def run(root: str, repos: list[Repo], everything: list[Repo], write_map: bool) -
             continue
         cmd = r.command()
         print(f"$ {' '.join(cmd)}")
-        if subprocess.run(cmd, cwd=root).returncode != 0:
+        if execute(cmd, root) != 0:
             failed.append(r.key)
             continue
         have.add(r.key)
@@ -632,11 +669,13 @@ def main() -> int:
     ap = argparse.ArgumentParser(
         description="the Eunoia ecosystem: what to clone, what is here, and the cloning",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="Printing is the default; --run is what touches the disk.")
+        epilog="It installs. --dry-run prints the same commands and runs none.")
     ap.add_argument("ids", nargs="*", metavar="ID",
                     help="only these tools, by repo id or by an id one provides")
-    ap.add_argument("--run", action="store_true", help="clone, instead of printing the commands")
-    ap.add_argument("--dry-run", action="store_true", help="print them, which is the default")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="print the commands and run nothing")
+    ap.add_argument("--run", action="store_true",
+                    help="clone, which is what it does anyway")
     ap.add_argument("--status", action="store_true", help="what is on this machine")
     ap.add_argument("--role", default="", metavar="member,candidate,served",
                     help="only tools recorded with one of these statuses")
@@ -673,9 +712,9 @@ def main() -> int:
 
     if args.status:
         return show(args.root, chosen, inv, args.fetch, everything)
-    if args.run:
-        return run(args.root, chosen, everything, not args.no_repos_local)
-    return dump(args.root, chosen)
+    if args.dry_run:
+        return dump(args.root, chosen)
+    return run(args.root, chosen, everything, not args.no_repos_local)
 
 
 if __name__ == "__main__":

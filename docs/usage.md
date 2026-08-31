@@ -24,22 +24,32 @@ own has nothing to read. [`scripts/install_eo`](../scripts/install_eo) is what
 fetches the rest, and it is the first thing to run on a new machine:
 
 ```bash
-scripts/install_eo                   # print the git clone commands, run nothing
-scripts/install_eo --run             # ... and run exactly what it printed
-scripts/install_eo --status          # what is here, and what disagrees with what
+scripts/install_eo                   # clone what is not here yet
+scripts/install_eo --dry-run         # ... or print those commands and run none
+scripts/install_eo --status          # ... or say what is here, and what disagrees
 ```
 
-**Printing is the default and `--run` is the flag**, so reading the commands
-first is a real review rather than a courtesy. The checkouts go beside this one —
-ethos, logos, eudaimonia, dokimasia and koine as siblings of the anoieu directory
-— and
-`--run` also writes `scripts/repos.local`, the map every other command here
-resolves a repo id through. cvc5 is on the list and is not cloned unless it is
-asked for: nothing needs a working copy of it, and it is the largest tree by an
-order of magnitude.
+**It installs, and `--dry-run` is how you look first** — what the dry run prints
+is what a real run executes, so reading it is a review rather than a courtesy.
+The checkouts go beside this one — ethos, logos, eudaimonia, dokimasia and koine
+as siblings of the anoieu directory — and a run also writes
+`scripts/repos.local`, the map every other command here resolves a repo id
+through. Nothing is re-cloned or reset: a tree that is already there is left
+exactly as it is. cvc5 is on the list and is not cloned unless it is asked for:
+nothing needs a working copy of it, and it is the largest tree by an order of
+magnitude.
+
+**What it may run is a short list, and `tests/run.py` checks it.** The only
+command that installs anything is `git clone`; the `mkdir -p` and `cd` in the dry
+run are there for a person pasting it, while the script itself makes the
+directory with `os.makedirs` and passes `cwd=`. Everything else is a read of a
+checkout, plus `fetch` when `--status --fetch` asks. Both lists are enforced in
+the script and asserted by the suite, which fails if the dry run prints a command
+outside them or if the script grows a second way to start a process. Nothing is
+passed to a shell.
 
 **Only a default branch is ever installed**: every command is a plain `git
-clone`, so what a paste of the dump does is what `--run` does, and nothing here
+clone`, so what a paste of the dry run does is what a run does, and nothing here
 puts a tree on a branch nobody asked for. Where that matters, it is said instead
 of done — cloning ethos prints
 
@@ -72,7 +82,7 @@ the question somebody cloning several trees is asking. The words come from
 decision somebody records rather than a measurement, and `--status` prints the
 same vocabulary as a legend under its table. The commands themselves are printed
 **live rather than commented out**: an inert dump would be a different text from
-the one `--run` executes, and the whole point of this one is that it is not.
+the one a real run executes, and the whole point of this one is that it is not.
 
 | option | what it does |
 | --- | --- |
@@ -84,7 +94,8 @@ the one `--run` executes, and the whole point of this one is that it is not.
 | `--missing` | only what is not cloned yet |
 | `--with-optional` | include the opt-in trees, cvc5 among them |
 | `--root PATH` | somewhere other than beside this checkout; `$EO_ROOT` does the same |
-| `--no-repos-local` | with `--run`, do not touch `scripts/repos.local` |
+| `--dry-run` | print the commands and run none of them |
+| `--no-repos-local` | do not touch `scripts/repos.local` |
 
 What to clone is derived from [`../tools/ecosystem.json`](../tools/ecosystem.json),
 so a tool added to the inventory is fetched without anything else being edited.
@@ -366,8 +377,8 @@ ETHOS=<ethos>/build/src/ethos \
 python3 tools/sweep.py <dir>...            # run over a corpus: crashes and counts
 python3 tools/gen_checks_doc.py            # rewrite docs/checks.md from the registry
 python3 tools/landing.py --check           # did what we closed on a promise land?
-scripts/install_eo                         # the clone commands for the whole ecosystem
-scripts/install_eo --run                   # ... and run them, into siblings of this checkout
+scripts/install_eo                         # install the rest of the ecosystem
+scripts/install_eo --dry-run               # ... or print them and run none
 scripts/install_eo --status                # ... or say what of it is on this machine
 ETHOS=<ethos>/build/src/ethos \
   python3 tools/oracle_desugar.py          # the desugarer against ethos, case by case

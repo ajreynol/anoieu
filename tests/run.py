@@ -166,6 +166,95 @@ def manifest_agrees() -> int:
     return failures
 
 
+def install_commands() -> int:
+    """`scripts/install_eo` installs with `git clone`, and with nothing else.
+
+    It is the one command in this repository that changes a machine outside it,
+    so what it may execute is checked rather than promised. Three questions, all
+    answerable without a network and without cloning anything: what the dry run
+    prints, what a real run would hand to `execute`, and whether anything else
+    could be run at all. A command added to this script fails here, which is the
+    point -- an install that quietly grew a `curl` would otherwise be reviewed
+    once, by whoever wrote it.
+    """
+    import importlib.machinery  # noqa: PLC0415
+    import importlib.util  # noqa: PLC0415
+    import io  # noqa: PLC0415
+    from contextlib import redirect_stdout  # noqa: PLC0415
+
+    path = os.path.join(os.path.dirname(HERE), "scripts", "install_eo")
+    loader = importlib.machinery.SourceFileLoader("install_eo", path)
+    spec = importlib.util.spec_from_loader("install_eo", loader)
+    mod = importlib.util.module_from_spec(spec)
+    loader.exec_module(mod)
+
+    failures = 0
+    source = open(path).read()
+
+    #: What a line of the dump may start with. `mkdir` and `cd` are printed for
+    #: a person pasting it; the script itself makes the directory with
+    #: os.makedirs and passes cwd=, so neither is ever executed here.
+    allowed = ("mkdir -p ", "cd ", "git clone ")
+
+    fake = os.path.join(HERE, "no-such-root-for-a-test")
+    out = io.StringIO()
+    with redirect_stdout(out):
+        mod.dump(fake, mod.plan())
+    live = [l for l in out.getvalue().splitlines() if l.strip() and not l.startswith("#")]
+    stray = [l for l in live if not l.startswith(allowed)]
+    if stray:
+        print(f"FAIL install_eo prints {len(stray)} line(s) that are not "
+              f"mkdir, cd or git clone: {stray[:3]}")
+        failures += 1
+    else:
+        print(f"ok   install_eo prints only mkdir, cd and git clone ({len(live)} lines)")
+
+    bad = [" ".join(r.command()) for r in mod.plan()
+           if tuple(r.command()[:2]) != mod.INSTALL]
+    if bad:
+        print(f"FAIL install_eo would run something other than git clone: {bad}")
+        failures += 1
+    else:
+        print("ok   and every command it would run is a git clone")
+
+    refused = 0
+    for cmd in (["rm", "-rf", "/"], ["git", "push"], ["curl", "http://example"],
+                ["git", "clone; rm -rf /"]):
+        try:
+            mod.execute(cmd, HERE)
+            print(f"FAIL install_eo executed {cmd}")
+        except SystemExit:
+            refused += 1
+        except Exception as e:  # noqa: BLE001
+            print(f"FAIL install_eo raised {type(e).__name__} rather than refusing {cmd}")
+    if refused == 4:
+        print("ok   and refuses anything else at run time, rather than trusting the caller")
+    else:
+        failures += 1
+
+    try:
+        mod.git(HERE, "push")
+        print("FAIL install_eo would run `git push` against a checkout")
+        failures += 1
+    except SystemExit:
+        print("ok   and asks a checkout only for reads")
+
+    for smell in ("shell=True", "os.system", "os.popen", "check_output"):
+        if smell in source:
+            print(f"FAIL install_eo contains {smell}")
+            failures += 1
+    starts = source.count("subprocess.run")
+    if starts != 2:
+        print(f"FAIL install_eo starts a process in {starts} places; "
+              "the audit knows about two, in execute and git")
+        failures += 1
+    else:
+        print("ok   and starts a process in exactly two places, both checked above")
+
+    print(f"-- the install script: {failures} failure(s)")
+    return failures
+
+
 def postmortem_shape() -> int:
     """The log's own conventions, since a convention nothing checks is a wish.
 
@@ -521,6 +610,7 @@ def main() -> int:
     failures += join_prompt_agrees()
     failures += adoption_interface()
     failures += postmortem_shape()
+    failures += install_commands()
     failures += landing_markers()
 
     sys.stdout.flush()

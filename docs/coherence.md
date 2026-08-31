@@ -49,7 +49,7 @@ it — the first for everything on the list, the second when a tool arrives.
 
 | command | run in | what it does |
 | --- | --- | --- |
-| `install_eo` | here, **first** | *not a prompt.* The rest of the ecosystem: prints the `git clone` commands, `--run` executes exactly what it printed, `--status` reads the rows back. Checkouts are siblings of this one unless `--root` or `$EO_ROOT` says otherwise. [The options](usage.md#the-rest-of-the-ecosystem) |
+| `install_eo` | here, **first** | *not a prompt.* Installs the rest of the ecosystem beside this checkout, with `git clone` and nothing else — audited by `tests/run.py`. `--dry-run` prints what it would run; `--status` reads the rows back. [The options](usage.md#the-rest-of-the-ecosystem) |
 | `init_eo` | the **new** repository | a README from the name register: what the tool is for, what it does not answer, the name explained. Complies with nothing, deliberately |
 | `welcome_eo <id> <path>` | here | records the checkout, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one; `--show-prompt` is a dry run |
 | `join_eo` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. Its prompt is fixed and drift-checked against [`policy.md`](policy.md) |
@@ -68,8 +68,9 @@ ecosystem as a table.
 **Every script that is a prompt takes `--show-prompt`**, which prints what it
 would send and runs nothing. That is the first thing to do with one you have not
 used, and the only way to review a prompt without spending a turn on it.
-`install_eo` is the same idea pointed the other way: printing what it would do is
-the default, and `--run` is the flag that does it.
+`install_eo` is the same idea for the one command that changes a machine:
+`--dry-run` prints exactly what a run would execute, and the suite checks that
+what it prints and what it runs are `git clone` and nothing else.
 
 ## What happens when we add a new tool to the ecosystem
 
@@ -139,8 +140,8 @@ measures `main` and the compiler work on top of it; when the branch merges, the
 ref in [`../tools/deps.json`](../tools/deps.json) becomes `main` and the exception
 is gone rather than renegotiated.
 
-**And the exception does not reach `install_eo`, which installs `main` and
-nothing else.** Every command it prints is a plain `git clone`: no `-b`, no
+**And the exception does not reach `install_eo`, which installs a default branch
+and nothing else.** Every command it prints is a plain `git clone`: no `-b`, no
 checkout, no branch switch. A child project is not a checkout obligation — it is
 a directory in somebody else's tree and it arrives when that tree does — so ethos
 installs normally and the install *says* that the copy of `ethos-eoc` on the
@@ -615,8 +616,8 @@ to consume it. None is started.
 it is [`../scripts/install_eo`](../scripts/install_eo). What to clone is derived
 from the inventory rather than listed again — a url and a repo id are all a clone
 needs, and `ethos` and `ethos-eoc` share a tree because the inventory says they
-share a repo id. Printing the commands is the default; `--run` executes exactly
-what it printed; `--status` reads the rows back off the disk.
+share a repo id. It installs by default; `--dry-run` prints exactly the commands
+a run would execute; `--status` reads the rows back off the disk.
 [`../tools/checkouts.json`](../tools/checkouts.json) holds only what cannot be
 derived: `ethosEoc3`, cvc5's blobless clone, and cvc5 being opt-in. Where the
 lists disagree — something fetched that nobody recorded, something recorded that
@@ -641,7 +642,7 @@ readiness for us; somebody has to look.
 
 ## Where to start
 
-1. Get the ecosystem: `scripts/install_eo --run`, then `--status`. Nothing here
+1. Get the ecosystem: `scripts/install_eo`, then `--status`. Nothing here
    reads anything until the other repositories are beside this one, and the
    status view is the fastest way to see what the ecosystem currently is.
 2. Read this page, then [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow)
