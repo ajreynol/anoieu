@@ -29,7 +29,7 @@ renumber. Retire either in place, with a line saying why.
 | `docs/reports/` | everything about the record: the findings ledgers, what was measured, the reporting policy and workflow, the log |
 | `tools/` | the harness: generators, the runner, the dependency manifest — and child projects |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
-| `scripts/` | executable versions of workflows the documents define |
+| `scripts/` | executable versions of workflows the documents define. anoieu keeps the ones that hand context to an assistant in `scripts/prompts/`, so that running a command never means deciding to spend a turn; the split is a convention worth copying and is not required |
 | `deps/` | other people's repositories, fetched by a run and never committed |
 | `.github/workflows/` | what runs on every push |
 | the package itself | at the top level, named after the tool |
@@ -435,7 +435,7 @@ to nudge, a person nudges — out of band, in their own voice, at their own cost
 
 ### Working the other side of it
 
-[`scripts/process_discussion`](../scripts/process_discussion) reads another
+[`scripts/prompts/process_discussion`](../scripts/prompts/process_discussion) reads another
 repository's discussion file — resolved through the same `scripts/repos.local`
 the reporting scripts use — and works what is addressed to us. It implements the
 gate above rather than restating it: **naming a topic is what authorises acting
@@ -450,7 +450,7 @@ topic of Kind `answer` in our own file instead.
 
 ### Auditing the whole of it
 
-[`scripts/global_audit`](../scripts/global_audit) runs the checker over every
+[`scripts/prompts/global_audit`](../scripts/prompts/global_audit) runs the checker over every
 member listed in `tools/ecosystem.json` that is checked out on this machine, and
 reads across the results. The inventory is a list somebody maintains rather than
 one anything derives: **membership is a decision, not a fact about a tree**, so
@@ -685,7 +685,7 @@ Two steps. The first is a sentence; the second is a CI job that checks the
 sentence is true.
 
 Before either of them, if the repository is brand new: nothing is required yet.
-[`scripts/init_eo`](../scripts/init_eo) gives a new tool a name and a README
+[`scripts/prompts/init_eo`](../scripts/prompts/init_eo) gives a new tool a name and a README
 saying what it is for, and it is told explicitly not to comply with any of this —
 knowing what you are building is what makes the rest decidable, and that order
 is deliberate. Names come from the register the ecosystem keeps, which lists
@@ -805,7 +805,7 @@ Nothing is installed and nothing is built: the checker reads text and needs only
 Python. It exits non-zero when the repository does not uphold what the
 declaration claims.
 
-Or run [`scripts/join_eo`](../scripts/join_eo) from a clone of anoieu, in the
+Or run [`scripts/prompts/join_eo`](../scripts/prompts/join_eo) from a clone of anoieu, in the
 repository that is joining, and let an assistant do both steps.
 
 **It passes if and only if two things hold.** The README declares membership as
@@ -844,7 +844,7 @@ never made.
 
 ### If you want an assistant to do it
 
-[`scripts/join_eo`](../scripts/join_eo) in the anoieu repository starts one with
+[`scripts/prompts/join_eo`](../scripts/prompts/join_eo) in the anoieu repository starts one with
 this prompt, which is the canonical copy — the script holds a duplicate and
 `tests/run.py` fails when the two drift apart.
 
@@ -882,7 +882,7 @@ update.
 
 ### Checking a repository from this side
 
-[`scripts/check_join_eo`](../scripts/check_join_eo) is the counterpart, run in
+[`scripts/prompts/check_join_eo`](../scripts/prompts/check_join_eo) is the counterpart, run in
 anoieu and pointed at somebody's checkout. It runs the checker, then has an
 assistant judge what a program cannot — whether a maintenance note says anything
 or merely satisfies the check, whether a discussion file is a channel or a stub

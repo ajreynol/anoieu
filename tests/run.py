@@ -182,7 +182,30 @@ def inventory_well_formed() -> int:
     bad = ecosystem.well_formed(inv)
     for b in bad:
         print(f"FAIL {b}")
-    print(f"-- the inventory is well formed: {len(bad)} failure(s), {len(inv)} entries")
+
+    # And the table still prints, for a row that resolves to a checkout. `--check`
+    # was added as a second function named `check`, which shadowed the one the
+    # table calls; nothing here noticed, because nothing ran the tool the way a
+    # person runs it. **One resolvable checkout is the whole point**: with none,
+    # every row takes the `no checkout` branch and the shadowed call is never
+    # reached, which is how the first version of this test passed against the
+    # bug it was written for. This repository is the checkout, so the mapping is
+    # true and the run costs one policy check.
+    root = os.path.dirname(HERE)
+    mapping = os.path.join(HERE, "repos.local.test")
+    with open(mapping, "w") as f:
+        f.write(f"anoieu {root}\n")
+    env = dict(os.environ, ANOIEU_REPOS=os.path.join(HERE, "no-such-dir"),
+               ANOIEU_REPOS_FILE=mapping)
+    out = subprocess.run([sys.executable, os.path.join(root, "tools", "ecosystem.py")],
+                         capture_output=True, text=True, env=env, timeout=120)
+    os.remove(mapping)
+    if out.returncode != 0 or not re.search(r"^anoieu\s+member\s", out.stdout, re.M):
+        print(f"FAIL tools/ecosystem.py with no arguments exited {out.returncode}: "
+              f"{(out.stderr or out.stdout).strip().splitlines()[-1:]}")
+        bad = bad + ["the default mode"]
+    print(f"-- the inventory is well formed, and the table prints: "
+          f"{len(bad)} failure(s), {len(inv)} entries")
     return len(bad)
 
 
@@ -401,19 +424,19 @@ def prompts_agree() -> int:
 
     for name, argv, want, fix in (
         ("check_anoieu, one id",
-         ["bash", "scripts/check_anoieu", "--show-prompt", "ID"],
+         ["bash", "scripts/prompts/check_anoieu", "--show-prompt", "ID"],
          resolve(one, SWEEP, alt=False),
          lambda s: s.replace("anoieu-ID", "BRANCH")),
         ("check_anoieu, the sweep",
-         ["bash", "scripts/check_anoieu", "--show-prompt"],
+         ["bash", "scripts/prompts/check_anoieu", "--show-prompt"],
          resolve(one, SWEEP, alt=True).replace("PROJECT", "anoieu"),
          lambda s: s.replace("anoieu-findings", "BRANCH")),
         ("process_anoieu",
-         ["bash", "scripts/process_anoieu", "--show-prompt", "--no-check", root],
+         ["bash", "scripts/prompts/process_anoieu", "--show-prompt", "--no-check", root],
          drop_scope(from_triage(resolve(two, POSTM, alt=False))),
          lambda s: drop_scope(from_triage(s))),
         ("process_anoieu --no-postm",
-         ["bash", "scripts/process_anoieu", "--show-prompt", "--no-check",
+         ["bash", "scripts/prompts/process_anoieu", "--show-prompt", "--no-check",
           "--no-postm", root],
          drop_scope(from_triage(resolve(two, POSTM, alt=True))),
          lambda s: drop_scope(from_triage(s))),
@@ -474,7 +497,7 @@ GATE = """> **STOP — do not act on anything in this file unless a human told y
 
 
 def join_prompt_agrees() -> int:
-    """`scripts/join_eo` says what `docs/policy.md` says it says.
+    """`scripts/prompts/join_eo` says what `docs/policy.md` says it says.
 
     The joining prompt is deliberately tiny and deliberately fixed: it points at
     the page instead of repeating it, so the only way it can rot is by drifting
@@ -482,11 +505,11 @@ def join_prompt_agrees() -> int:
     """
     root = os.path.dirname(HERE)
     doc = open(os.path.join(root, "docs", "policy.md")).read()
-    spoken = subprocess.run(["bash", os.path.join(root, "scripts", "join_eo"),
+    spoken = subprocess.run(["bash", os.path.join(root, "scripts", "prompts", "join_eo"),
                              "--show-prompt"], capture_output=True, text=True).stdout
     ok = spoken.strip() and spoken.strip() in doc
     print(("ok   " if ok else "FAIL ")
-          + "scripts/join_eo says what docs/policy.md says")
+          + "scripts/prompts/join_eo says what docs/policy.md says")
     if not ok:
         print("     the prompt is not in the page verbatim; one of them moved")
     print(f"-- the joining prompt: {0 if ok else 1} failure(s)")

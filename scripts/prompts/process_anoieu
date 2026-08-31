@@ -34,7 +34,7 @@ set -euo pipefail
 #    different name, or several checkouts of one project where only one is the
 #    one you answer findings from.
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../repos.local}"
 
 write_repos_file() {
   cat > "$REPOS_FILE" <<'TEMPLATE'
@@ -375,7 +375,7 @@ fi
 # -- where anoieu is: this script's checkout, or the one we are standing in
 looks_like_anoieu() { [ -f "$1/docs/reports/open-findings.md" ] && [ -d "$1/anoieu_fuzz" ]; }
 ANOIEU=""
-for c in "${ANOIEU_ROOT:-}" "$HERE" "$HERE/.." "$PWD"; do
+for c in "${ANOIEU_ROOT:-}" "$HERE" "$HERE/.." "$HERE/../.." "$PWD"; do
   if [ -n "$c" ] && looks_like_anoieu "$c"; then ANOIEU=$(cd "$c" && pwd); break; fi
 done
 [ -n "$ANOIEU" ] || {

@@ -17,7 +17,7 @@ this run taught us about working findings* is here.
 
 **Whose job.** The anoieu maintainer processing a reply — step 7 of prompt two in
 [`reporting-workflow.md`](reporting-workflow.md#prompt-two-the-follow-up-here), which is
-what [`scripts/process_anoieu`](../../scripts/process_anoieu) runs. Not the project
+what [`scripts/prompts/process_anoieu`](../../scripts/prompts/process_anoieu) runs. Not the project
 that owns the finding: they send feedback, we decide what it changed here.
 
 **When.** Every run, by default. The test an entry used to have to pass — did
@@ -26,8 +26,8 @@ default: a round that changes nothing here is still a round whose *reasoning*
 about why it changed nothing is worth having, and the judgement call cost more
 than the entry.
 
-    scripts/process_anoieu <project> [ID]              # an entry is written
-    scripts/process_anoieu --no-postm <project> [ID]   # the agent decides
+    scripts/prompts/process_anoieu <project> [ID]              # an entry is written
+    scripts/prompts/process_anoieu --no-postm <project> [ID]   # the agent decides
 
 `--no-postm` restores the older behaviour for a run: the agent applies the test
 above and says which way it went. A run that changed nothing here still writes
@@ -42,7 +42,7 @@ beneath, and they carry detail rather than fields of their own.
 ## <date> — <project>: <what this run was>
 
 **Tool:** the project the findings were reported to. This is the repository name
-passed to `scripts/process_anoieu`, so it is never a judgement call.
+passed to `scripts/prompts/process_anoieu`, so it is never a judgement call.
 
 **Summary:** **what the nature of the findings was**, most important first —
 what was actually wrong with the software, not what the exchange consisted of.

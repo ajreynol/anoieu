@@ -600,16 +600,16 @@ would need to know.
 
 #### One way to run the two
 
-[`scripts/check_anoieu`](../../scripts/check_anoieu) and
-[`scripts/process_anoieu`](../../scripts/process_anoieu) are *an* implementation of
+[`scripts/prompts/check_anoieu`](../../scripts/prompts/check_anoieu) and
+[`scripts/prompts/process_anoieu`](../../scripts/prompts/process_anoieu) are *an* implementation of
 the two prompts above — a pair of shell scripts that hold the text with the
 scope filled in, so that running one is a command rather than a paste. They are
 not the workflow; the prompts are, and any other way of putting them in front of
 an assistant is as good.
 
 ```bash
-scripts/check_anoieu [ID]              # in a checkout of ethos, logos, cvc5 …
-scripts/process_anoieu <project> [ID]  # here, once that project has replied
+scripts/prompts/check_anoieu [ID]              # in a checkout of ethos, logos, cvc5 …
+scripts/prompts/process_anoieu <project> [ID]  # here, once that project has replied
 ```
 
 Naming a finding id addresses that one, and naming none sweeps. Everything else

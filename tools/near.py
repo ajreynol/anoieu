@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Print 1 when two repo ids are one edit apart, 0 otherwise.
 
-Its only caller is `scripts/welcome_eo`, which uses it to refuse a repo id that
+Its only caller is `scripts/prompts/welcome_eo`, which uses it to refuse a repo id that
 looks like a typo of one already recorded. Membership in the ecosystem is not a
 thing to corrupt by mistyping a name, and the cost of asking is a flag.
 """

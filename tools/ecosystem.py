@@ -3,7 +3,7 @@
 
 No assistant and no prompting -- this is a local command that reads trees and
 reports. It is the thing to run when the question is *where does everything
-stand*; `scripts/global_audit` is the thing to run when the question needs
+stand*; `scripts/prompts/global_audit` is the thing to run when the question needs
 somebody to read across the answer and form a view.
 
     python3 tools/ecosystem.py            # the table
@@ -221,7 +221,13 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
     return bad, unseen
 
 
-def check(online: bool) -> int:
+def audit(online: bool) -> int:
+    """`--check`: the inventory as a document, and optionally as a claim.
+
+    Named apart from `check` above, which asks the policy checker about one
+    checkout. The two were briefly the same name, and the table stopped working
+    for as long as that was true.
+    """
     inv = json.load(open(INVENTORY, encoding="utf-8"))
     inv = {k: v for k, v in inv.items() if not k.startswith("_")}
 
@@ -250,7 +256,7 @@ def check(online: bool) -> int:
 
 def main() -> int:
     if "--check" in sys.argv:
-        return check("--online" in sys.argv)
+        return audit("--online" in sys.argv)
     verbose = "--verbose" in sys.argv
     inv = json.load(open(INVENTORY, encoding="utf-8"))
     rows, notes = [], []

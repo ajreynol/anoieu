@@ -39,47 +39,62 @@ whole reason the next section exists.
 
 ## The scripts
 
-Every command this repository maintains, what it is for, and where it is run.
-`install_eo` is the one to run first, and the only one that needs nothing else to
-be in place already; of the other nine, all but one are a **prompt**: they
-assemble context, hand it to an assistant, and write nothing anywhere by
-themselves. `repos.local` is the shared map from a repo id to a checkout on this
-machine; it is untracked, and `install_eo` and `welcome_eo` are what write to
-it — the first for everything on the list, the second when a tool arrives.
+**Two kinds, and the directory says which.** `scripts/` holds commands that do
+what they say and run nothing else; `scripts/prompts/` holds the ones that
+assemble context and hand it to an assistant. The partition is the whole of the
+convention: a person can run anything in `scripts/` without deciding whether
+they are willing to spend a turn, and anything under `scripts/prompts/` is a
+turn by definition.
+
+`repos.local` is the shared map from a repo id to a checkout on this machine. It
+stays at `scripts/repos.local`, above the partition, because both halves resolve
+ids through it; it is untracked, and `install_eo` and `welcome_eo` are what write
+to it — the first for everything on the list, the second when a tool arrives.
+
+### `scripts/` — commands
 
 | command | run in | what it does |
 | --- | --- | --- |
-| `install_eo` | here, **first** | *not a prompt.* Installs the rest of the ecosystem beside this checkout, with `git clone` and nothing else — audited by `tests/run.py`. `--dry-run` prints what it would run; `--status` reads the rows back. [The options](usage.md#the-rest-of-the-ecosystem) |
+| `install_eo` | here, **first** | the rest of the ecosystem, cloned beside this checkout with `git clone` and nothing else — audited by `tests/run.py`. `--dry-run` prints what it would run; `--status` reads the rows back. [The options](usage.md#the-rest-of-the-ecosystem) |
+| `status_eo` | here | who is in the ecosystem and how each looks: declared or not, whether the policy check passes, whether there is a channel, how long since anything moved. `--check` decides whether the inventory itself is still true, and is what CI runs |
+| `harvest_cpc_proofs` | here | collects real CPC proofs to seed the fuzzer with |
+
+`status_eo` is a wrapper around `tools/ecosystem.py`, and `tools/policy_check.py`
+has no wrapper on purpose: it is the interface **other repositories** run in
+their CI, so its path is published in [`policy.md`](policy.md) and must not
+acquire a second spelling.
+
+### `scripts/prompts/` — the prompts
+
+Each assembles context, hands it to an assistant, and writes nothing anywhere by
+itself.
+
+| command | run in | what it does |
+| --- | --- | --- |
 | `init_eo` | the **new** repository | a README from the name register: what the tool is for, what it does not answer, the name explained. Complies with nothing, deliberately |
-| `welcome_eo <id> <path>` | here | records the checkout, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one; `--show-prompt` is a dry run |
+| `welcome_eo <id> <path>` | here | records the checkout, syncs the ecosystem's list, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one |
 | `join_eo` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. Its prompt is fixed and drift-checked against [`policy.md`](policy.md) |
 | `check_join_eo <id>` | here | joined, ready, misconfigured or not ready — and whether the obstacle is ours |
 | `process_discussion <id> [Dn]` | here | works what another repository has addressed to us. **Read-only until a person names a topic** |
 | `check_anoieu [id]` | the project a **finding** is about | answers our findings there, and drafts a reply for its maintainer |
 | `process_anoieu <id> [ID]` | here | processes that reply: moves rows, writes verdicts, appends the logs |
 | `global_audit` | here | the whole ecosystem against policy and vision, fast, no deep analysis |
-| `harvest_cpc_proofs` | here | *not a prompt.* Collects real CPC proofs to seed the fuzzer with |
 
-Two non-prompt commands live in `tools/` rather than here, because they decide
-rather than ask: `python3 tools/policy_check.py [--root PATH]`, which is what
-every member's CI runs, and `python3 tools/ecosystem.py`, which prints the
-ecosystem as a table.
-
-**Every script that is a prompt takes `--show-prompt`**, which prints what it
-would send and runs nothing. That is the first thing to do with one you have not
-used, and the only way to review a prompt without spending a turn on it.
-`install_eo` is the same idea for the one command that changes a machine:
-`--dry-run` prints exactly what a run would execute, and the suite checks that
-what it prints and what it runs are `git clone` and nothing else.
+**Every prompt takes `--show-prompt`**, which prints what it would send and runs
+nothing. That is the first thing to do with one you have not used, and the only
+way to review a prompt without spending a turn on it. `install_eo` is the same
+idea for the one command that changes a machine: `--dry-run` prints exactly what
+a run would execute, and the suite checks that what it prints and what it runs
+are `git clone` and nothing else.
 
 ## What happens when we add a new tool to the ecosystem
 
 A new tool is a decision, and `welcome_eo` is what turns the decision into the
 files. The sequence, which nothing enforces:
 
-1. Somebody creates the repository, and [`init_eo`](../scripts/init_eo) gives it
+1. Somebody creates the repository, and [`init_eo`](../scripts/prompts/init_eo) gives it
    a README from the name register.
-2. [`welcome_eo <id> <path>`](../scripts/welcome_eo) is run here, once there is
+2. [`welcome_eo <id> <path>`](../scripts/prompts/welcome_eo) is run here, once there is
    something worth reading. It records the checkout in `scripts/repos.local` —
    the file every other script resolves an id through — **and syncs the
    ecosystem's own list**, by running `scripts/install_eo --status <id>` and
@@ -448,7 +463,7 @@ anything is either perfect or pointless, and the second is the way to bet.
 
 **Planning only. Nothing below is built.**
 
-The record is now edited mostly by an assistant: `scripts/process_anoieu` reads a
+The record is now edited mostly by an assistant: `scripts/prompts/process_anoieu` reads a
 reply and moves rows, writes verdicts, narrows checks and appends to two logs.
 That has already worked and has already gone wrong — a verdict of *fixed
 upstream* was recorded three times for a fix that never happened, and nothing
@@ -587,7 +602,7 @@ convenience for us.
 `python3 tools/ecosystem.py` prints who is in the ecosystem and how each looks:
 declared or not, whether the policy check passes, whether there is a channel to
 reach them, how long since anything moved. It is local, takes about a second,
-and involves no assistant — `scripts/global_audit` is the version that has
+and involves no assistant — `scripts/prompts/global_audit` is the version that has
 somebody read across the answer.
 
 What it establishes is **form on a checkout**, and the gaps are worth naming

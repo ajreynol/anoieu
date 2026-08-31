@@ -80,11 +80,15 @@ a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not
 be changed without asking, and the open technical work on the record itself.
 
-[`../scripts/`](../scripts) holds `install_eo`, above, and the recommended
-prompts — for starting a tool, welcoming it, joining, working correspondence, and
-carrying findings both ways. **The table of what each one does, and where it is
-run, is in [`coherence.md`](coherence.md#the-scripts)**, which is also where a new
-one has to be listed. The prompts are the workflow and the scripts are a way of running
+[`../scripts/`](../scripts) holds the commands that run something —
+`install_eo`, `status_eo`, `harvest_cpc_proofs` — and
+[`../scripts/prompts/`](../scripts/prompts) holds the ones that hand context to
+an assistant: starting a tool, welcoming it, joining, working correspondence, and
+carrying findings both ways. The directory is the whole of the distinction, and
+it is there so that running something never means deciding whether to spend a
+turn. **The table of what each one does, and where it is run, is in
+[`coherence.md`](coherence.md#the-scripts)**, which is also where a new one has to
+be listed. The prompts are the workflow and the scripts are a way of running
 them: [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow) and
 [`policy.md`](policy.md#joining-the-eunoia-ecosystem) are the documents that
 define them, and `tests/run.py` fails when a script's copy of a prompt has

@@ -35,8 +35,8 @@
 set -euo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
-ROOT=$(cd "$HERE/.." && pwd)
-REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+ROOT=$(cd "$HERE/../.." && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../repos.local}"
 AGENT=claude
 PRINT=0
 SHOW=0
@@ -147,7 +147,7 @@ if [ "$SHOW" = 1 ]; then
   echo "-- dry run: nothing recorded. $NAME -> $TARGET" >&2
 elif [ -z "$RECORDED" ]; then
   if [ ! -f "$REPOS_FILE" ]; then
-    printf '# where each project is checked out on this machine.\n# One entry per line, "<repo-id> <path>". See scripts/process_anoieu.\n' > "$REPOS_FILE"
+    printf '# where each project is checked out on this machine.\n# One entry per line, "<repo-id> <path>". See scripts/prompts/process_anoieu.\n' > "$REPOS_FILE"
   fi
   printf '%s\t%s\n' "$NAME" "$TARGET" >> "$REPOS_FILE"
   echo "-- recorded in $REPOS_FILE:" >&2

@@ -98,7 +98,7 @@ anybody who disagrees, which is the whole point of writing it and has not
 happened yet. It has produced no deliverable and so has earned no place in
 [`docs/vision.md`](../../docs/vision.md) — with one qualification: of the six projects it named, **euthyna** has since been started
 as a child project of eudaimonia, and the register in
-[`names.md`](names.md) is now consulted by `scripts/init_eo` when a new
+[`names.md`](names.md) is now consulted by `scripts/prompts/init_eo` when a new
 repository picks a name. Whether that is this account's doing or
 convergence is not something this project can establish about itself.
 

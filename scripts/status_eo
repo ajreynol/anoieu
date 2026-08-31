@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# status_eo -- who is in the Eunoia ecosystem, and how each one looks.
+#
+# A wrapper around tools/ecosystem.py, where the code lives. It is here so the
+# command sits beside the other things a person runs, rather than being a path
+# into the harness somebody has to have been told about.
+#
+#   status_eo                    # the table: status, policy, channel, moved
+#   status_eo --verbose          # ... and why each policy verdict came out
+#   status_eo --check            # is the inventory itself well formed?
+#   status_eo --check --online   # ... and does each remote still agree with it
+#
+# **Not a prompt**, which is why it is here and not in scripts/prompts/: no
+# assistant, no turn spent, nothing to review before running it.
+#
+# Two questions that sound alike and are not. This one is *who is in the
+# ecosystem and on what footing*, which is a fact about the inventory and about
+# other people's trees. `install_eo --status` is *what is on this machine*,
+# which is a fact about your disk. Neither answers the other.
+set -euo pipefail
+HERE=$(cd "$(dirname "$0")" && pwd)
+exec python3 "$HERE/../tools/ecosystem.py" "$@"

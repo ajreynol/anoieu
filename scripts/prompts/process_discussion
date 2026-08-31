@@ -21,8 +21,8 @@
 set -euo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
-ROOT=$(cd "$HERE/.." && pwd)
-REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+ROOT=$(cd "$HERE/../.." && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../repos.local}"
 AGENT=claude
 PRINT=0
 SHOW=0
@@ -88,7 +88,7 @@ FILE="$TARGET/docs/discussion.md"
 if [ ! -f "$FILE" ] && [ "$SHOW" = 0 ]; then
   echo "process_discussion: $NAME has no docs/discussion.md at $FILE" >&2
   echo "                    that is not a finding and not a topic; it means they" >&2
-  echo "                    have not adopted the protocol. scripts/check_join_eo" >&2
+  echo "                    have not adopted the protocol. scripts/prompts/check_join_eo" >&2
   echo "                    is the thing to run instead." >&2
   exit 1
 fi
