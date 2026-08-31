@@ -83,6 +83,12 @@ def read(rel: str) -> str:
         return ""
 
 
+def prose(text: str) -> str:
+    """The text with fenced code stripped: a sample is not a sentence, and the
+    prose conventions below have no business linting somebody's example."""
+    return re.sub(r"^```.*?^```", "", text, flags=re.S | re.M)
+
+
 def sections(text: str) -> list[str]:
     return re.findall(r"^##\s+(.+?)\s*$", text, re.M)
 
@@ -99,10 +105,30 @@ def check_no_vendor() -> list[str]:
     for rel in tracked("*.md"):
         if os.path.basename(rel) == "policy.md":
             continue
-        low = read(rel).lower()
+        low = prose(read(rel)).lower()
         for v in VENDORS:
             if re.search(rf"(?<![\w-]){v}(?![\w-])", low):
                 bad.append(f"{rel} names {v}; say 'an assistant' or 'an agent'")
+    return bad
+
+
+#: Where each numbering is defined. A number is legible inside its own document
+#: and is a lookup everywhere else, so it is only allowed at home.
+NUMBERED = {"rule": "policy.md", "tenet": "vision.md",
+            "position": "reporting-policy.md"}
+
+
+def check_citations() -> list[str]:
+    """*When you cite a rule from another document, say what it says*."""
+    bad = []
+    for rel in tracked("*.md"):
+        base = os.path.basename(rel)
+        text = prose(read(rel))
+        for word, home in NUMBERED.items():
+            if base == home:
+                continue
+            for m in re.finditer(rf"\b{word}s?\s(\d{{1,2}})\b", text, re.I):
+                bad.append(f"{rel} cites {word} {m.group(1)} by number; say what it says")
     return bad
 
 
@@ -377,6 +403,7 @@ CHECKS = [
     ("the discussion file carries the response gate, at the top", check_response_gate, None),
     ("every link in a document or an outbound prompt resolves", check_links, None),
     ("no document names a specific AI", check_no_vendor, None),
+    ("no document cites another document's rule by number", check_citations, None),
 ]
 
 

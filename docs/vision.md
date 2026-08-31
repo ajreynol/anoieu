@@ -556,8 +556,8 @@ produced says which of its checks tripped, never how much of anything is sound,
 and publishing it as a measure of the tool is overselling with a number attached.
 
 And none of this starts a research project. That takes a human, explicitly,
-under rule 1 of [`policy.md`](policy.md) — an agent reading this page has no
-authority to name a new one.
+— [`policy.md`](policy.md) reserves that for a person, explicitly. An agent
+reading this page has no authority to name a new one.
 
 ## Why this shape
 
@@ -695,7 +695,10 @@ Boolean — was recorded on our side as fixed upstream and never was.
 
 **Parainesis.** An observation rather than advice: that defect survived every
 review the signature has had, and the thing that would have caught it is a gate
-rather than a reader. Tenets 3 and 5 do not apply here at all.
+rather than a reader. Tenets 3 and 5 do not apply here at all — and neither does
+membership. cvc5 sits outside the ecosystem, which exists to serve it; it is
+graded here because the tenets were largely learned by watching it, not because
+anybody expects it to adopt them.
 
 ### ethos
 
@@ -901,13 +904,13 @@ What is not an outcome is going quiet.
 being one: it had earned its keep, and it broke the island rules in four places
 in order to be useful — importing from the parent, being imported back, running
 in CI, and sitting on the front page. Those breaks were the evidence, not the
-problem. It has been **folded into the parent** under rule 9 and now ships as
-`anoieu_fuzz/` beside the analyzer. The lesson is worth more than the case: a
-long list of exceptions under rule 10 is not a project to be tolerated, it is a
-promotion nobody has got round to.
+problem. It has been **folded into the parent** — one of the three endings a
+child project can have — and now ships as `anoieu_fuzz/` beside the analyzer.
+The lesson is worth more than the case: a long list of exceptions is not a
+project to be tolerated, it is a promotion nobody has got round to.
 
-This list and rule 3 of [`policy.md`](policy.md) look like they conflict, and do
-not. Rule 3 forbids a child project borrowing its parent's credibility with
+This list and [`policy.md`](policy.md) look like they conflict, and do not. What
+the policy forbids is a child project borrowing its parent's credibility with
 readers — the front page, the documentation index, a report, anywhere somebody
 arrives expecting the parent's considered position. This is `tools/`, beside the
 policy that governs them, and the whole content of each entry is that the

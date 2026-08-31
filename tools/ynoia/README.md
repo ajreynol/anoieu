@@ -3,9 +3,8 @@
 *The name is **"why Eunoia"**, elided. It keeps the root and drops the
 judgement: εὔνοια is εὖ + νοῦς, **good thinking** — and this project removes the
 εὖ and asks whether the thinking is good. That is a claim somebody can disagree
-with, which rule 4 asks for: if the honest answer is that the arrangement is
-obviously right and the question is idle, the name is wrong and so is the
-project. It also follows the sibling convention — [anoieu](../../README.md) is
+with: if the arrangement is obviously right and the question idle, the name is
+wrong and so is the project. It also follows the sibling convention — [anoieu](../../README.md) is
 Eunoia read backwards, and this is Eunoia read as a question.*
 
 A child project under [`docs/policy.md`](../../docs/policy.md). Started by a
@@ -70,9 +69,8 @@ The boundary matters more than the goals, so it is stated first.
 
 **The account exists and is long.** Nothing in it has been argued with by
 anybody who disagrees, which is the whole point of writing it and has not
-happened yet. Under rule 9 it has produced no deliverable and has therefore
-earned no place in [`docs/vision.md`](../../docs/vision.md) — with one honest
-qualification: of the six projects it named, **euthyna** has since been started
+happened yet. It has produced no deliverable and so has earned no place in
+[`docs/vision.md`](../../docs/vision.md) — with one qualification: of the six projects it named, **euthyna** has since been started
 as a child project of eudaimonia. Whether that is this account's doing or
 convergence is not something this project can establish about itself.
 

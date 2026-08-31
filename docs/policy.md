@@ -40,8 +40,9 @@ The conventions that go with it.
 the tool is, what it finds, what it refuses to claim, how to run it, and a route
 to everything else; every other document may assume it has been read. Nothing
 competes for that role — no second overview in `docs/`, no wiki, no
-`INTRODUCTION.md`. This is the same requirement as tenet 3 of
-[`vision.md`](vision.md), seen from the filesystem rather than from the work.
+`INTRODUCTION.md`. [`vision.md`](vision.md) asks for the same thing from the
+other side — a tool legible from its front page — seen here as a filesystem
+rule rather than as a property of the work.
 
 **The maintenance entry point is not the front page.** The README is written
 for somebody deciding whether the tool is worth their attention; how the work is
@@ -75,6 +76,25 @@ is **not ready for production**. Until it is, `.eo` and `.eos` are laid out by
 hand, and a difference in layout is not a finding — not ours to report, and not
 ours to normalise across somebody else's signature. Adopting it once it is ready
 is a TODO, carried in [`coherence.md`](coherence.md).
+
+**Say it, and stop.** Two habits, both of which read as diligence and cost a
+reader real time.
+
+*Padding.* Prefer the shortest form that is still arguable. A paragraph
+restating the one above it in other words is not emphasis, and a sentence
+explaining why the previous sentence was correct is filler.
+
+*Performing compliance.* Do not narrate that you are following the rules. No *as
+the policy requires*, no *which is why this section exists*, no defending a
+choice against an objection nobody raised. A well-arranged document shows its
+arrangement; announcing it is showing your homework, and it makes a reader
+wonder what the display is covering.
+
+**When you cite a rule from another document, say what it says.** A number is a
+lookup somebody has to go and perform, and *rule 4* carries no meaning at the
+point of reading. Inside the document that defines them, numbers are fine — the
+reader can see them. Across documents, give the substance: *a child project is
+not advertised*, never *rule 3*. Checked.
 
 **No document names a specific AI.** Say *an assistant*, *an agent*, *written by
 AI agents under light supervision* — never the vendor, the product or the model.
@@ -534,6 +554,19 @@ covers both. Rules 3, 6 and 7 exist for this and are the ones worth defending
 when they are inconvenient.
 
 ## Joining the Eunoia ecosystem
+
+This is addressed to tools built *around* the calculus: checkers, compilers,
+Lean developments, analyzers, templates, and the child projects they carry.
+
+**cvc5 is not a candidate, and is not meant to become one.** It sits outside the
+ecosystem, and the ecosystem exists to serve it. CPC is cvc5's file, the proofs
+are cvc5's output, and every tool here is downstream of decisions cvc5 made
+before any of this existed. Asking it to adopt our README conventions would have
+the arrows backwards: these conventions were derived by watching what happens
+around cvc5, never agreed with it, and it has its own governance, its own scale
+and an audience that is not ours. We report findings to cvc5, we take requests
+from it, and we do not ask it to join anything. The same holds for any project
+the ecosystem is built to support rather than built from.
 
 Two steps. The first is a sentence; the second is a CI job that checks the
 sentence is true.

@@ -2,19 +2,14 @@
 
 A second tool shipped from this repository, beside the analyzer. It began as a
 child project under [`docs/policy.md`](../docs/policy.md) and was **folded into
-the parent** — rule 9's second ending — once it had earned its keep: the island
-rules it had to break in order to be useful were the sign that it had stopped
-being research.
+the parent** once it had earned its keep: the island rules it had to break in
+order to be useful were the sign that it had stopped being research.
 
 ## The name
 
-Descriptive, and **deliberately not Greek** — which is a departure from rule 4 of
-[`docs/policy.md`](../docs/policy.md), recorded below with the others. It is its
-parent's name and the word for what it does, because the convention exists to
-make a *research account* legible by its title, and this is not one: it is a
-program with a command line, and a reader looking for the fuzzer should find it
-by looking for the fuzzer. A Greek name here would be decoration, which rule 4
-says to avoid in the same breath as it asks for the convention.
+Its parent's name and the word for what it does. The ecosystem names along a
+Greek convention; this is a program with a command line, and somebody looking
+for the fuzzer should find it by looking for the fuzzer.
 
 ## The question
 

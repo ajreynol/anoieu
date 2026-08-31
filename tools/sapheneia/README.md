@@ -66,8 +66,7 @@ The boundary matters more than the goals, so it is stated first-class.
 - **It is not a specification, and does not claim to be.** The ethos manual is
   the authority, in the sense that it governs and this does not — which is not
   the same as being presumed correct. This is a second account a reader may
-  consult and check the first against — additive, in the sense of rule 6 of the
-  policy. Where the two disagree, either may be at fault; the disagreement goes
+  consult and check the first against: additive, never authoritative. Where the two disagree, either may be at fault; the disagreement goes
   to `feedback.md` as a candidate and stays unjudged until somebody who knows
   the language rules on it.
 - **It says nothing about soundness.** Whether a calculus written in Eunoia
@@ -77,7 +76,8 @@ The boundary matters more than the goals, so it is stated first-class.
 ## Method, and what it inherits
 
 The project builds on what writing an analyzer taught this repository, which is
-the reason it lives here rather than in a repository of its own (policy rule 8).
+the reason it lives here rather than in a repository of its own — a research
+project that does not use the host's evidence should be its own repository.
 Three inheritances, each of which must be cited where it is used:
 
 - **Verified behaviour.** `docs/notes.md` §3 records six behaviours checked
