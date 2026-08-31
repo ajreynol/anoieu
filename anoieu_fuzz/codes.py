@@ -38,27 +38,35 @@ def _code(code: str, title: str, severity: Severity, page: str) -> None:
 
 _code(
     "FUZ0001",
-    "two checkers answer the same file differently",
+    "a checker accepted what the reference refused",
     Severity.ERROR,
     """
-One checker accepted this file and another refused it. Both were given the same
-bytes, so exactly one of them is wrong, and which one this finding does not say
--- deciding that needs the semantics the fuzzer deliberately does without.
+A checker took a file that the reference implementation will not. This is the
+serious direction, and it is the reason the fuzzer distinguishes the two.
 
-Read it in the direction that matters for the checker you own:
+Ethos is the reference: it is what defines, operationally, which files are
+Eunoia and which proofs are derivations. A second checker that accepts a file
+ethos rejects is accepting something outside that definition, and if the second
+checker is a verified one, its theorem is now about a term its parser invented
+rather than about the proof somebody wrote. That is the shape of an unsoundness
+even when the particular case is harmless -- the guarantee has been quietly
+restated.
 
-- **the reference accepts and yours refuses** is a completeness gap: a proof
-  somebody could legitimately produce, that your checker will not take;
-- **yours accepts and the reference refuses** is the one to look at first. It
-  may be a soundness bug, and it may equally be the reference being stricter
-  than the language requires -- ethos refuses `declare-fun` outside a reference
-  file, for instance, which is a fact about ethos's file roles rather than about
-  the proof.
+It is not proof of one. Ethos refuses files for reasons that are about ethos: a
+`declare-fun` outside a reference file is a fact about its file roles rather
+than about the proof. So the finding is a question, and the answer is one of:
 
-Before filing either, check the comparison is fair. Ethos is run with
-`--require-proof-of-false` so that its `correct` means what logos's does; a
-checker configured without the equivalent will disagree about almost every file
-and none of it will be a defect. `docs/fuzzing.md` has the arrangement.
+- the second checker is wrong, and the fix is in its parser or its checker;
+- the reference is stricter than the language requires, and `ethos` is the
+  finding;
+- the two are answering different questions, and the comparison was unfair --
+  check `--require-proof-of-false` is in play before anything else.
+
+Which checker is the reference is configuration -- the `"reference"` key of a
+`--config` file, `ethos` by default. When the reference did not run, a
+disagreement is reported under this code rather than `FUZ0005`, because
+assuming the less serious reading of an unattributed disagreement is the wrong
+way to be wrong.
 """,
 )
 
@@ -123,9 +131,36 @@ second is worth filing and the first is not.
 """,
 )
 
-#: What each kind of finding is reported as.
+_code(
+    "FUZ0005",
+    "a checker refused what the reference accepted",
+    Severity.WARNING,
+    """
+The other direction, and the less serious one: a checker will not take a file
+the reference checks happily.
+
+Nothing unsound follows from it. A checker that refuses too much rejects
+work it should have done, which costs its users a proof they cannot check;
+a checker that accepts too much (`FUZ0001`) may be guaranteeing something it
+has not established. The two are not symmetric and the severity says so --
+error there, warning here.
+
+It is still a defect, and often a documentation defect rather than a code one.
+A checker with a deliberately narrower input format -- assumptions before
+steps, say, because its correctness theorem is stated over an assumption list
+-- is not wrong to have one, but the restriction is then part of its interface
+and should be written down where somebody producing proofs for it will read it.
+A parity claim that is not qualified is what turns a restriction into a
+finding.
+""",
+)
+
+#: What each kind of finding is reported as. The two directions of a
+#: disagreement are different findings with different severities; everything
+#: else is about one checker on its own.
 KIND_TO_CODE = {
-    "disagreement": "FUZ0001",
+    "overaccept": "FUZ0001",
+    "underaccept": "FUZ0005",
     "crash": "FUZ0002",
     "unexplained": "FUZ0003",
     "timeout": "FUZ0004",

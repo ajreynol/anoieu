@@ -1,7 +1,8 @@
 {
  "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf",
+ "code": "FUZ0001",
  "commands": 9,
- "kind": "disagreement",
+ "kind": "overaccept",
  "mode": "proof",
  "note": "logos/test/regress/sexp/test-define.cpc, unmutated: declare-fun is an SMT-LIB command ethos takes only in a reference file",
  "outcomes": [

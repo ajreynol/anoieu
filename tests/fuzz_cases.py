@@ -196,9 +196,30 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
         "",
     )
     split = [Outcome("x", "correct", "accept"), Outcome("y", "incorrect", "reject", "no")]
-    got = judge(empty, split)
-    case("one accepting and one refusing is a disagreement",
-         got is not None and got.kind == "disagreement", got.kind if got else "none")
+    got = judge(empty, split, reference="y")
+    case("accepting what the reference refused is the serious direction",
+         got is not None and got.code == "FUZ0001",
+         got.code if got else "none")
+    got_other = judge(empty, split, reference="x")
+    case("and refusing what it accepted is the mild one",
+         got_other is not None and got_other.code == "FUZ0005",
+         got_other.code if got_other else "none")
+    case("which is a warning rather than an error",
+         CODES["FUZ0005"].severity.value == "warning" and
+         CODES["FUZ0001"].severity.value == "error", "")
+    unattributed = judge(empty, split, reference="nobody")
+    case("a disagreement the reference sat out is read the serious way",
+         unattributed is not None and unattributed.code == "FUZ0001",
+         unattributed.code if unattributed else "none")
+    case("both directions keep the `disagreement` bucket prefix, so the ids "
+         "already in the ledger survive the split",
+         got.bucket.startswith("disagreement") and got_other.bucket.startswith("disagreement"),
+         f"{got.bucket[:26]} / {got_other.bucket[:26]}")
+    flipped = judge(empty, [Outcome("x", "rejected", "reject", "no"),
+                            Outcome("y", "correct", "accept")], reference="y")
+    case("and the two directions are still different buckets",
+         flipped is not None and flipped.bucket != got.bucket,
+         f"{flipped.bucket[:34]} / {got.bucket[:34]}" if flipped else "none")
     got = judge(empty, [Outcome("x", "crash", "abnormal", "boom")])
     case("a crash is a finding on its own", got is not None and got.kind == "crash",
          got.kind if got else "none")
@@ -336,8 +357,14 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
 
     case(
         "every kind of finding has a code",
-        set(KIND_TO_CODE) == {"disagreement", "crash", "unexplained", "timeout"},
+        set(KIND_TO_CODE) == {"overaccept", "underaccept", "crash", "unexplained", "timeout"},
         str(sorted(KIND_TO_CODE)),
+    )
+    case(
+        "and the two directions of a disagreement are not equally severe",
+        CODES[KIND_TO_CODE["overaccept"]].severity.rank
+        < CODES[KIND_TO_CODE["underaccept"]].severity.rank,
+        f'{CODES["FUZ0001"].severity.value} vs {CODES["FUZ0005"].severity.value}',
     )
     case(
         "and every code has a page",
@@ -411,11 +438,13 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     os.makedirs(vdir, exist_ok=True)
     write(vdir, "case.cpc", "; header\n(declare-fun f (U) U)\n")
     with open(os.path.join(vdir, "finding.json"), "w") as f:
-        json.dump({"kind": "disagreement", "bucket": "b-verify", "mode": "proof",
+        json.dump({"kind": "overaccept", "bucket": "b-verify", "mode": "proof",
                    "summary": "lenient accepted what strict refused",
                    "outcomes": [
                        {"checker": "lenient", "status": "correct", "coarse": "accept"},
                        {"checker": "strict", "status": "incorrect", "coarse": "reject"}]}, f)
+    # `disagreement` is not a kind any more, so this record would not resolve to
+    # a code; the corpus cases above are what keep the promoted ones honest.
     rc, o, _ = run("verify", "--config", cfg, "--corpus", os.path.join(d, "vcorpus"))
     case("verify replays a promoted reproducer",
          rc == 0 and o.count(" ok ") == 2 and "2 verdict(s) compared" in o, o[-220:])
@@ -438,7 +467,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     rc, _, e = run("explain", "FUZ9999")
     case("and refuses an unknown code", rc == 2, f"exit {rc}")
     rc, o, _ = run("list-codes")
-    case("list-codes prints all four", rc == 0 and o.count("FUZ") == 4, o[:80])
+    case("list-codes prints every code", rc == 0 and o.count("FUZ") == len(CODES), o[:80])
 
     return out
 

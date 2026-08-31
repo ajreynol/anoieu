@@ -1,5 +1,6 @@
 {
  "bucket": "unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f",
+ "code": "FUZ0003",
  "commands": 1,
  "kind": "unexplained",
  "mode": "signature",

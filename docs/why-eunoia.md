@@ -403,10 +403,11 @@ and what nothing else provides.
 
 ---
 
-# Five projects that do not exist yet, and change the picture
+# Six projects that do not exist yet, and change the picture
 
-**Pathos**, **hermeneia**, **noesis**, **iogos** and **euthyna** are code names.
-None has a repository or a line of code: all five are future work, named here
+**Pathos**, **hermeneia**, **noesis**, **iogos**, **euthyna** and **elenchos**
+are code names.
+None has a repository or a line of code: all six are future work, named here
 because the costs and open questions above are stated relative to what exists
 today, and each of these would move a different one. Writing down what they
 *would* change is also the cheapest way to notice which of today's arguments are
@@ -705,6 +706,25 @@ in its own right.
   example, and the point of naming it is that a development can acquire one
   without anybody deciding to.
 
+**Two outputs that are not advice, and that come first.** A development nobody
+reads needs, before it needs suggestions, an account of itself: what the
+top-level theorem says in English, what the parts are and which of them the
+argument turns on, how the core checker proof, the side conditions, the
+soundness theorem and the 591 per-rule proofs fit together, and where a reader
+who is not going to read all of it should start. Hermeneia quotes logos's
+guarantee above; one theorem statement is close to the whole of what a person
+gets today. Alongside it, detailed statistics — lines by component, generated
+against hand-written, per-rule against shared, how much of each is boilerplate,
+how deep the dependency graph runs, what a full build and a full regeneration
+cost, how many obligations are still stubs — because most of what is said about
+this development, in this document included, is said without a number.
+
+Both would have to be produced from the development rather than written beside
+it, for the reason this repository renders its own check pages from the registry
+they document: a description maintained by hand against a generated artifact
+drifts, and a drifted description of a proof is worse than none. And both are
+worth having on their own, whether or not a single suggestion is ever taken.
+
 **What kind of finding this is**, which matters because it is not the kind this
 repository publishes. anoieu reports defects: a thing is wrong, and the argument
 is about whether it is. Euthyna would report suggestions, where the owner's
@@ -720,10 +740,12 @@ about logos, or about generated proof developments in general.
 
 **What it would settle.** Reason 6 says the Lean side is generated and therefore
 close to free. That figure is what *free* currently weighs, and nobody has said
-how much of it is load-bearing. Euthyna is the only one of the five projects
-here that takes the artifact this document keeps calling a by-product as its
-subject, and its findings would be the first evidence either column has about
-whether a generated development of that size can be made modular at all.
+how much of it is load-bearing — the statistics alone would retire several
+sentences in this document that currently begin *nobody has measured*. Euthyna
+is the only one of the six projects here that takes the artifact this document
+keeps calling a by-product as its subject, and its findings would be the first
+evidence either column has about whether a generated development of that size
+can be made modular at all.
 
 **Where the difficulty sits.** Some of what it finds will not be logos's to fix:
 in a generated development, a suggestion can only be taken by hand where the
@@ -739,7 +761,75 @@ proofs, and a refactoring no generator can reproduce is a liability rather than
 an improvement. Advice that does not say which of those it is optimizing for is
 not advice anybody should take.
 
-## What the five mean for the argument above
+## Elenchos — differential fuzzing as a derived artifact
+
+*A code name, for work not yet started.* ἔλεγχος is cross-examination: the
+Socratic move of testing a claim by producing the case where it fails, which is
+what a differential fuzzer does to two checkers that claim to agree.
+
+Elenchos would be a research-quality fuzzer for the ecosystem's checkers, and
+the reason it belongs in this document rather than in a tool's issue tracker is
+the observation it rests on: **this arrangement manufactures its own second
+implementation.** Reason 6 says the Lean side is generated. A generated checker
+is also an *independent* checker — different language, different author,
+different bugs — so every calculus the pipeline compiles arrives with an oracle
+attached, and differential testing gets cheaper the more the ecosystem invests
+in generation rather than more expensive. Nothing in either column has tested
+that.
+
+**What a research-quality version has that a baseline does not.**
+
+- *Coverage guidance.* Instrumented builds of each checker, a corpus that grows
+  toward what has not been executed, and a scheduler. This is the difference
+  between reaching the parser and reaching the program evaluator.
+- *A generator that produces proofs which should be accepted.* Random Eunoia
+  bounces off the front end; a generator that builds a derivation *from the
+  calculus* — assembling steps whose premises it has already produced — makes
+  "refused" the finding rather than the default, which is the only way to
+  exercise a rule's side conditions at all.
+- *A soundness oracle that needs no reference checker.* Take an assumption set a
+  solver reports satisfiable, and no checker may accept a refutation of it. That
+  is a defect claim about a single checker, and it is the one class of finding
+  this ecosystem most needs a tool for and least has one.
+- *The semantics as the oracle.* `.eos`, or the Lean model behind it, says what
+  a rule may conclude. A fuzzer that consults it is checking a checker against
+  the specification rather than against another checker, and the two answers
+  differ exactly where the specification is the thing that is wrong.
+- *Metamorphic relations with content.* A proof and its `eo::define`-inlined
+  form; a signature and its desugared form; a rule and the Lean lemma
+  `ethos-eoc` compiles it into. The last is the interesting one, because it is a
+  relation between two halves of the pipeline rather than within one.
+
+**What it would settle.** O6 says two implementations is a choice rather than a
+consequence, and the reply from the generation column has always been that the
+second one is close to free. Elenchos is the test of the other half of that
+claim — whether the free second implementation is *worth having*, measured in
+defects it finds in the first. If a generated checker turns out to be a good
+oracle for a hand-written one, that is an argument for generation which has
+nothing to do with soundness proofs and which nobody has made. If it turns out
+that the two fail in the same places, because the compiler inherited the
+checker's reading of the language, that is a much more uncomfortable result and
+worth knowing.
+
+**Where the difficulty sits.** A differential finding is unattributed by
+construction: the tool says the two answers differ and cannot say which is
+wrong, so every finding costs a person's judgement before it can be filed. The
+generated checker is also not independent in the way the argument wants — it
+comes from a compiler that reads the same signature, and a bug in the shared
+reading is invisible to both. Deciding how much independence the pipeline
+actually buys is part of the project rather than an assumption behind it. And
+the expensive half — instrumentation, a corpus, a scheduler — pays only if the
+cheap half has stopped paying, which is an empirical question about a specific
+checker at a specific time.
+
+**What exists today.** The baseline: [`fuzzing.md`](fuzzing.md), in this
+repository, which has none of the above and is deliberately the floor —
+grammar-directed generation, mutation of a seed corpus, three verdict-level
+oracles, and no instrumentation anywhere. It is worth having partly for what it
+finds and partly because a floor is what makes "research-quality" a measurable
+claim rather than an adjective.
+
+## What the six mean for the argument above
 
 Two of the cost columns are dated rather than wrong. Arrangement **D** is
 blocked on a measurement that Pathos would replace with an artifact, and reason
@@ -747,19 +837,22 @@ blocked on a measurement that Pathos would replace with an artifact, and reason
 instead of settled.
 
 They do not point the same way, which is worth being explicit about. Pathos
-improves the *checker* and touches nothing else. Hermeneia makes the semantics
-question more consequential — and is easier the more of the semantics lives in
-Lean. Euthyna changes nothing about the arrangement at all: it takes the largest
-artifact in it as a subject, and would be the first attempt to say what the
-generated half would have to look like for a person to maintain it. And noesis
-and iogos both move where the semantics is
-*defined*, in opposite directions: into a prover, or out of every prover. A team
-with effort for one project is choosing between making the arrangement's weakest
-artifact strong, making its strongest artifact reach further, making its largest
-one tractable, and settling where the semantics lives — and only the last of
-those is a fork rather than an increment.
+improves the *checker* and touches nothing else. Elenchos improves nothing and
+takes the arrangement's own by-product — a generated second checker — as an
+instrument for testing the first, which is the only one of the six that would
+pay for the generation column in a currency other than trust. Hermeneia makes
+the semantics question more consequential — and is easier the more of the
+semantics lives in Lean. Euthyna changes nothing about the arrangement at all:
+it takes the largest artifact in it as a subject, and would be the first attempt
+to say what the generated half would have to look like for a person to maintain
+it. And noesis and iogos both move where the semantics is *defined*, in opposite
+directions: into a prover, or out of every prover. A team with effort for one
+project is choosing between making the arrangement's weakest artifact strong,
+turning its by-product into an instrument, making its strongest artifact reach
+further, making its largest one tractable, and settling where the semantics
+lives — and only the last of those is a fork rather than an increment.
 
-What all five share is that they are expensive things built *against* the
+What all six share is that they are expensive things built *against* the
 signature and the proof format, and each one that gets built raises the cost of
 moving those. That is an argument for settling questions 1 and 3 — where the
 calculus is defined, and whether `.eos` should be Lean — before rather than

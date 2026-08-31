@@ -1,7 +1,8 @@
 {
  "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ty-bbdf0a",
+ "code": "FUZ0001",
  "commands": 4,
- "kind": "disagreement",
+ "kind": "overaccept",
  "mode": "proof",
  "note": "( extract 1 0) without the _: logos reads it as the indexed operator, ethos does not",
  "outcomes": [

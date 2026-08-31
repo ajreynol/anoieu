@@ -1,5 +1,6 @@
 {
  "bucket": "crash-ethos-terminate-called-after-throwing-an-instance--fd1900",
+ "code": "FUZ0002",
  "commands": 1,
  "kind": "crash",
  "mode": "signature",

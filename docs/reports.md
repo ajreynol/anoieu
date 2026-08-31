@@ -123,7 +123,7 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:546` has an entry for `str.indexof_re_split`, which CPC does not declare | open |
 | [logos-3](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed |
 | [logos-4](#logos--the-lean-development) | logos | A | **`FUZ0001`** — the parser accepts two things ethos refuses, one of them in a committed regression test | open |
-| [logos-5](#logos--the-lean-development) | logos | A | **`FUZ0001`** — the parser refuses one thing ethos accepts: an `assume` after the first `step` | open |
+| [logos-5](#logos--the-lean-development) | logos | A | **`FUZ0005`** — the parser refuses one thing ethos accepts: an `assume` after the first `step` | open |
 | [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed |
 | [eud-2](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | settle the calculus profile's two *declared* answers against the signature instead of recording them on trust | proposed |
 | [eunoia-1](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | refuse a re-declaration whose type is identical to an earlier one | proposed |
@@ -450,7 +450,9 @@ Reproducers under `tests/fuzz/`. Found by the fuzzer, `FUZ0001`.
 the first proof step". Nothing in the Eunoia grammar orders the two, so this is
 a completeness gap rather than a disagreement about the language — worth either
 supporting or documenting as a restriction of logos's input format. Reproducer
-under `tests/fuzz/`. Found by the fuzzer, `FUZ0001`.
+under `tests/fuzz/`. Found by the fuzzer, `FUZ0005` — the milder of the two
+directions, and reported as a warning: logos refuses, so nothing unsound follows
+from it.
 
 **logos-3 (B)** — run the triple in CI. logos already vendors ethos and consumes
 cvc5's signature, so it is the natural place for the job — see the open question

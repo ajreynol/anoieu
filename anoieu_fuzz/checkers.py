@@ -62,6 +62,10 @@ DEFAULT_CONFIG: dict = {
         },
     },
     "signature": "",
+    # Which checker decides the direction of a disagreement. Ethos is it
+    # because it is the implementation that defines, operationally, which files
+    # are Eunoia -- not because it is more likely to be right.
+    "reference": "ethos",
 }
 
 ACCEPT = "accept"

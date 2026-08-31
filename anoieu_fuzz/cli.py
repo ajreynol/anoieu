@@ -83,6 +83,7 @@ class Session:
         self.wild = args.wild
         self.depth = args.depth
         self.metamorphic = getattr(args, "metamorphic", False)
+        self.reference = getattr(args, "reference", "") or cfg.get("reference", "")
         self.note = ""
 
         self.voc: Vocabulary = fallback()
@@ -162,7 +163,7 @@ class Session:
         return out
 
     def probe(self, case: Case) -> Finding | None:
-        return judge(case, self.ask(case))
+        return judge(case, self.ask(case), self.reference)
 
 
 # -- the commands -------------------------------------------------------------
@@ -181,6 +182,11 @@ def cmd_run(args) -> int:
         print(f"   {checker.name:10} {where or '(not on PATH; set $' + (checker.env or 'PATH') + ')'}")
     if session.signature:
         print(f"   signature  {os.path.relpath(session.signature, ROOT)}")
+    if len(live) > 1:
+        here = any(c.name == session.reference for c in live)
+        print(f"   reference  {session.reference or '(none)'}"
+              + ("" if here else "  -- not among the checkers, so every disagreement "
+                                 "is reported as the serious direction"))
     if session.note:
         print(f"   vocabulary {session.note}")
     runnable = [c for c in live if c.resolve(session.mode)]
@@ -212,7 +218,7 @@ def cmd_run(args) -> int:
         seed = f"{args.seed}:{i}"
         case = session.make(seed, args.mutate, i)
         outcomes = session.ask(case)
-        finding = judge(case, outcomes)
+        finding = judge(case, outcomes, session.reference)
         with lock:
             done += 1
             for o in outcomes:
@@ -225,7 +231,7 @@ def cmd_run(args) -> int:
             if corpus.seen(finding.bucket):
                 corpus.add(finding)
                 if args.verbose:
-                    print(f"[{done:5}] {finding.kind} (bucket already known)")
+                    print(f"[{done:5}] {finding.code} (bucket already known)")
                 return
         was = len(finding.case.commands)
         spent = 0
@@ -238,7 +244,7 @@ def cmd_run(args) -> int:
         with lock:
             if corpus.add(finding):
                 now = len(finding.case.commands)
-                print(f"[{done:5}] {finding.kind}: {finding.summary}")
+                print(f"[{done:5}] {finding.code} {finding.kind}: {finding.summary}")
                 print(f"         {os.path.join(args.out, finding.bucket)}"
                       f"  ({now} command(s)"
                       + (f", shrunk from {was} in {spent} runs" if spent else "")
@@ -288,11 +294,11 @@ def cmd_replay(args) -> int:
     outcomes = session.ask(case)
     for o in outcomes:
         print(o.line())
-    finding = judge(case, outcomes)
+    finding = judge(case, outcomes, session.reference)
     if finding is None:
         print("-- nothing to report: every checker agreed, and none fell over")
         return 0
-    print(f"-- {finding.kind}: {finding.summary}")
+    print(f"-- {finding.code} {finding.kind}: {finding.summary}")
     print(f"   bucket {finding.bucket}")
     return 1
 
@@ -440,6 +446,10 @@ def _common(p: argparse.ArgumentParser) -> None:
     p.add_argument("--wild", type=float, default=0.1,
                    help="how often to ignore what a type says (0..1, default 0.1)")
     p.add_argument("--depth", type=int, default=3, help="how deep a term may nest")
+    p.add_argument("--reference", default="",
+                   help="the checker a disagreement's direction is measured against "
+                        "(default: ethos). Accepting what it refuses is the serious "
+                        "direction, and is reported as an error")
     p.add_argument("--seed-corpus", action="append", default=[],
                    help="a file or directory of real cases to mutate; repeatable")
     p.add_argument("--mutate", type=float, default=0.5,

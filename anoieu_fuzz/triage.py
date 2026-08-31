@@ -4,9 +4,14 @@ case is cut down to the part that matters.
 The oracle is three sentences long.
 
 - **A disagreement.** Two checkers were given the same file and one accepted it
-  while the other refused. One of them is wrong, and which one is a question
-  for a person -- a checker accepting what the reference refuses is a candidate
-  soundness bug, the other way round a candidate completeness bug.
+  while the other refused. One of them is wrong, and which one is a question for
+  a person -- but the two directions are not equally serious, and the oracle
+  says which is which rather than leaving it to whoever reads the row.
+  **Accepting what the reference refuses** is the serious one: a checker taking
+  something outside the reference's definition of the language, which for a
+  verified checker means its theorem is about a term its parser invented.
+  Refusing what the reference accepts costs its users a proof and guarantees
+  nothing false. Error and warning respectively, `FUZ0001` and `FUZ0005`.
 - **A crash.** A checker went down with nothing to say: a signal and an empty
   stream, an assertion, an uncaught exception. Ethos reports every ordinary
   error by aborting, so "died on a signal" is not on its own a finding --
@@ -36,6 +41,7 @@ from dataclasses import dataclass, field
 from typing import Callable
 
 from .checkers import ABNORMAL, Outcome
+from .codes import KIND_TO_CODE
 from .gen import Case
 
 
@@ -47,9 +53,14 @@ class Finding:
     case: Case
     outcomes: list[Outcome] = field(default_factory=list)
 
+    @property
+    def code(self) -> str:
+        return KIND_TO_CODE[self.kind]
+
     def as_json(self) -> dict:
         return {
             "kind": self.kind,
+            "code": self.code,
             "bucket": self.bucket,
             "summary": self.summary,
             "mode": self.case.mode,
@@ -70,8 +81,16 @@ class Finding:
         }
 
 
-def judge(case: Case, outcomes: list[Outcome]) -> Finding | None:
-    """The oracle. `None` means the run was ordinary."""
+def judge(case: Case, outcomes: list[Outcome], reference: str = "") -> Finding | None:
+    """The oracle. `None` means the run was ordinary.
+
+    `reference` names the checker that decides which direction a disagreement
+    runs in -- ethos, by default, because it is what defines operationally
+    which files are Eunoia. A disagreement in which the reference took part and
+    *refused* is the serious one. When the reference did not run, the
+    disagreement is reported as the serious one anyway: assuming the mild
+    reading of something nobody attributed is the wrong way to be wrong.
+    """
     ran = [o for o in outcomes if o.coarse != "skipped"]
     if not ran:
         return None
@@ -92,8 +111,15 @@ def judge(case: Case, outcomes: list[Outcome]) -> Finding | None:
             f"{', '.join(accepting)} accepted what "
             f"{', '.join(o.checker for o in refusing)} refused: {why}"
         )
+        ref = next((o for o in ran if o.checker.split(" ")[0] == reference), None)
+        kind = "underaccept" if ref is not None and ref.coarse == "accept" else "overaccept"
         who = "+".join(f"{o.checker}={o.coarse}" for o in sorted(ran, key=lambda o: o.checker))
-        return Finding("disagreement", _bucket("disagreement", who, why), summary, case, ran)
+        # The bucket keeps saying `disagreement` in both directions. The
+        # direction is already in `who`, and the prefix is part of a reproducer's
+        # path, which is part of its fingerprint -- so renaming it would restate
+        # every finding already in the ledger to say something the row next to it
+        # already says.
+        return Finding(kind, _bucket("disagreement", who, why), summary, case, ran)
     return None
 
 

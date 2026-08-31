@@ -109,9 +109,9 @@ where the mechanical half now lives.
 | `147433b3e48ae9d6` | ethos | FUZ0002 | `tests/fuzz/crash-ethos-terminate-called-after-throwing-an-instance--fd1900/case.eo:2` | ethos crash: terminate called after throwing an instance of 'std::length_error' |  |
 | `918dbdb5f068f46c` | ethos | FUZ0003 | `tests/fuzz/unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f/case.eo:2` | ethos unexplained: Fatal failure within bool ethos::State::includeFile(const std::string&, bool, bool, const ethos::Expr&) at <path>:N |  |
 | `f419f6265e79b94b` | ethos | FUZ0003 | `tests/fuzz/unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94/case.eo:2` | ethos unexplained: Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at <path>:N |  |
-| `2a7b67b48b4b3bd6` | ethos+logos | FUZ0001 | `tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2` | ethos accepted what logos refused: Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ "\u{a}" "\u{6f}rd")) N))) |  |
 | `adc98aa79b4861bb` | ethos+logos | FUZ0001 | `tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf/case.cpc:2` | logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (SYMBOL). |  |
 | `3e271ee47343e758` | ethos+logos | FUZ0001 | `tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ty-bbdf0a/case.cpc:2` | logos accepted what ethos refused: Error: <path>:N.N: Type checking failed: |  |
+| `4de9bb965fa0c04b` | ethos+logos | FUZ0005 | `tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2` | ethos accepted what logos refused: Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ "\u{a}" "\u{6f}rd")) N))) |  |
 
 ## Closed
 
@@ -121,6 +121,7 @@ reasoning belongs in [`reports.md`](reports.md#the-log-what-was-reported-and-wha
 
 | id | owner | code | where | what | verdict |
 | --- | --- | --- | --- | --- | --- |
+| `2a7b67b48b4b3bd6` | ethos+logos | FUZ0001 | `tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2` | ethos accepted what logos refused: Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ "\u{a}" "\u{6f}rd")) N))) | re-coded `FUZ0005` — the fuzzer now separates the two directions of a disagreement; the same reproducer is `4de9bb965fa0c04b` |
 | `ece08559e3edd79c` | cvc5 | EO0054 | `proofs/eo/cpc/programs/Strings.eo:1749` | this pattern matches an `*` of exactly 2 element(s) | intentional — cvc5: the reported CPC occurrences are deliberate |
 | `1d977d28576d3693` | cvc5 | EO0064 | `proofs/eo/cpc/programs/Strings.eo:46` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |
 | `878038145dca690c` | cvc5 | EO0064 | `proofs/eo/cpc/programs/Strings.eo:47` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | fixed upstream — both signatures now return Bool |

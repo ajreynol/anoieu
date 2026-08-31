@@ -13,7 +13,7 @@ content lives, every row below leads somewhere better.
 | [`reporting-policy.md`](reporting-policy.md) | **how a finding is handled**: the conventions governing the record, the workflow and prompts for carrying one to whoever can fix it, and for
 sweeping the whole report, and what it takes for another repository to run these checks in its own CI |
 | [`usage.md`](usage.md) | **the interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together |
-| [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk and bucketed, how to point it at a third checker, and what the first runs turned up |
+| [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor is one of the future projects in [`why-eunoia.md`](why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture) |
 | [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the six above belongs here |
 
 ## Generated

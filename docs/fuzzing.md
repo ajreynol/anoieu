@@ -11,11 +11,19 @@ python3 -m anoieu_fuzz run --mode proof        # ethos against a second checker,
 python3 -m anoieu_fuzz run --mode signature    # arbitrary signatures, at ethos alone
 ```
 
-> **It has a nickname, for fun: *elenchos*.** ἔλεγχος is cross-examination —
-> testing a claim by producing the case where it fails, which is what a
-> differential fuzzer does to two checkers that claim to agree. It lives in this
-> paragraph and nowhere else: the package is `anoieu_fuzz`, the command is
-> `anoieu-fuzz`, and in prose it is **the anoieu fuzzer**.
+> **This is a baseline, deliberately.** Grammar-directed generation, mutation of
+> a seed corpus, five verdict-level oracles, and no instrumentation anywhere. It
+> is not coverage-guided, it does not build derivations that ought to be
+> accepted, and it has no soundness oracle. Those belong to a research-quality
+> successor, which is one of the
+> [future projects](why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture)
+> in `why-eunoia.md` and does not exist.
+>
+> The floor is worth having on its own terms. In its first few thousand cases it
+> found a crash in ethos, three proofs ethos and logos answer differently, and an
+> ethos error path that carries no location — and a floor is what makes
+> "research-quality" a measurable claim about a successor rather than an
+> adjective.
 
 ## What it is, and what it is not
 
@@ -25,7 +33,8 @@ about two *runs*:
 
 | kind | what happened | what it means |
 | --- | --- | --- |
-| **disagreement** | two checkers were given the same file; one accepted it, the other refused | one of them is wrong. Which one is a question for a person: a checker accepting what the reference refuses is a candidate soundness bug, the other way round a candidate completeness bug |
+| **disagreement, the serious direction** | a checker **accepted** what the reference **refused** | the one to look at first. The checker took something outside the reference's definition of the language — and for a *verified* checker that means its theorem is about a term its parser invented rather than about the proof somebody wrote. Reported as an **error** |
+| **disagreement, the other direction** | a checker **refused** what the reference **accepted** | a completeness gap. It costs its users a proof they cannot check and guarantees nothing false, so it is reported as a **warning** — often a documentation defect, where a checker has a deliberately narrower input format and has not said so |
 | **crash** | a checker went down with nothing to say — a signal and an empty stream, an assertion, an uncaught exception | a bug in the checker |
 | **unexplained** | a checker printed something and then failed anyway, outside the diagnostic convention it uses everywhere else | a bug in what the checker *says*: every tool downstream that reads its output misses this one |
 | **timeout** | a checker never answered | suspect rather than certain — the generator can write a genuinely expensive file, and the finding says so |
@@ -65,6 +74,15 @@ and it touches the front end rather than the checks. Types are used as
 *shapes*, to pick an argument that is at least plausible; anything a shape does
 not settle becomes a wildcard that matches everything. `--wild` says how often
 to ignore even that.
+
+> **Ethos is the reference, and which checker that is decides a disagreement's
+> severity.** `"reference": "ethos"` in the configuration, `--reference` on the
+> command line. Ethos holds the role because it is the implementation that
+> defines, operationally, which files are Eunoia — not because it is more likely
+> to be right, and `FUZ0001`'s page says what to do when it is the one at fault.
+> A disagreement the reference did not take part in is reported as the serious
+> direction, because assuming the mild reading of something nobody attributed is
+> the wrong way to be wrong.
 
 > **Ethos is run with `--require-proof-of-false`, and this is not optional.**
 > Ethos by default does not care *what* a proof proves: it prints `correct` for
@@ -195,7 +213,8 @@ one word. So a third one is a few lines of JSON rather than a plugin.
     "logos": {"env": "LOGOS", "modes": {"proof": ["logos", "{file}"]}},
     "mine":  {"env": "MINE",  "modes": {"proof": ["/path/to/mine", "--check", "{file}"]}}
   },
-  "signature": "/path/to/Cpc.eo"
+  "signature": "/path/to/Cpc.eo",
+  "reference": "ethos"
 }
 ```
 
@@ -247,10 +266,11 @@ provoked**, which is the marker that says where a row came from.
 
 | code | severity | what it says |
 | --- | --- | --- |
-| `FUZ0001` | error | two checkers answer the same file differently |
+| `FUZ0001` | error | a checker accepted what the reference refused |
 | `FUZ0002` | error | a checker died with nothing to say |
 | `FUZ0003` | warning | a checker failed outside its own diagnostic convention |
 | `FUZ0004` | warning | a checker did not answer |
+| `FUZ0005` | warning | a checker refused what the reference accepted |
 
 `python3 -m anoieu_fuzz explain FUZ0002` is the page behind one, written beside
 the code in [`../anoieu_fuzz/codes.py`](../anoieu_fuzz/codes.py) so the two
@@ -301,7 +321,7 @@ In short, from the first few thousand cases:
 | `FUZ0003` | `(declare-consts <numeral> Int)` then `… Bool` | aborts with an internal message carrying no `Error:`, no file and no line. Two more paths do the same: `assume-push` at the top level of a signature, and an `include` of a file that is not there |
 | `FUZ0001` | `logos/test/regress/sexp/test-define.cpc`, **unmutated** | it uses `declare-fun`, an SMT-LIB command ethos accepts only in a reference file. Ethos refuses the file; logos checks it and says `correct` |
 | `FUZ0001` | `(( extract 1 0) a)` — the indexed operator without its `_` | logos reads it as the indexed operator and accepts the proof; ethos type checks and refuses |
-| `FUZ0001` | an `(assume …)` after the first `step` | ethos allows it; logos refuses to parse the file |
+| `FUZ0005` | an `(assume …)` after the first `step` | ethos allows it; logos refuses to parse the file. The mild direction: logos refuses, so nothing unsound follows from it |
 
 Not promoted, and worth saying so: a `(step #b1 …)` taking a binary literal
 where a symbol belongs, a `(step … (=) :rule evaluate …)` whose stated
@@ -327,11 +347,29 @@ a schedule, upload what they find as an artifact, and warn rather than fail.
 
 ## The design, and what it does not do
 
-**No coverage guidance.** It would help, and it costs a instrumented build of
+Everything here is a decision to stay at the floor, so this section doubles as
+the honest list of what a research-quality successor would have to add — the one
+sketched among the
+[future projects](why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture)
+in `why-eunoia.md`, which does not exist.
+
+**No coverage guidance.** It would help, and it costs an instrumented build of
 each checker, a corpus feedback loop and a scheduler. Generation plus mutation
-against a real seed corpus found a crash and four divergences in the first
-few thousand cases; that is the cheap end of the curve, and the expensive end
-can wait until the cheap end stops paying.
+against a real seed corpus found a crash and three divergences in the first few
+thousand cases; that is the cheap end of the curve, and the expensive end can
+wait until the cheap end stops paying.
+
+**No generator that builds a derivation from the calculus.** Random Eunoia
+bounces off the front end: in a differential run, roughly nineteen cases in
+twenty are refused by both checkers before a rule is ever reached. Assembling a
+proof step by step out of premises it has already produced is what would make
+*refused* the finding rather than the default, and it is the single change that
+would most raise what this reaches. It is also most of a proof-search engine.
+
+**No soundness oracle.** "No checker may accept a refutation of a satisfiable
+assumption set" needs a solver in the loop and is a claim about one checker
+rather than about two. It is the class of finding the ecosystem most wants and
+this tool cannot make.
 
 **No type-correct generation.** A generator that produced only well-typed terms
 would only ever ask a checker the questions it was built to answer. Types are

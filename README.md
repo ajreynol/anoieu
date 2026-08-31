@@ -67,13 +67,21 @@ theories/Bools.eo:4:22: error[EO0041]: the nil terminator of `or` has the wrong 
 
 ## The other half: the anoieu fuzzer
 
-anoieu asks whether a signature is coherent. **anoieu_fuzz** asks whether the
-programs that *read* signatures behave when one is not — it writes Eunoia
+anoieu asks whether a signature is coherent. **The anoieu fuzzer** asks whether
+the programs that *read* signatures behave when one is not — it writes Eunoia
 nobody would write, hands it to a checker, and watches for the answer a checker
 should never give. It is semantics-free by construction, because everything it
 reports is a fact about two runs rather than about mathematics: two checkers
 disagreeing about one file, a checker dying without saying why, a checker never
 answering.
+
+It is a **baseline**, deliberately: grammar-directed generation, mutation of a
+seed corpus, five verdict-level oracles, and no instrumentation anywhere. What a
+research-quality one would add — coverage guidance, derivations built from the
+calculus, a soundness oracle, the generated Lean checker used as a second
+implementation — is one of the
+[future projects](docs/why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture)
+in `docs/why-eunoia.md`, and does not exist.
 
 ```bash
 ETHOS=… LOGOS=… python3 -m anoieu_fuzz run --mode proof -n 2000       # ethos against logos, on CPC
@@ -82,8 +90,9 @@ ETHOS=…              python3 -m anoieu_fuzz run --mode signature      # arbitr
 
 Findings are shrunk to a reproducer, deduplicated into buckets, and then go into
 **the same report as everything else** — the same ledger, the same fingerprints,
-the same renderers — under codes `FUZ0001`–`FUZ0004`, which is the marker that
-says a checker was provoked rather than a signature read. The first few thousand
+the same renderers — under codes `FUZ0001`–`FUZ0005`, which is the marker that
+says a checker was provoked rather than a signature read. A checker accepting
+what the reference refuses is an error; refusing what it accepts is a warning. The first few thousand
 cases produced an uncaught C++ exception in ethos on `(declare-const f (->))`,
 three proofs that ethos and logos answer differently — one of them a *committed
 regression test* — and an ethos error path that skips its own `Error:`

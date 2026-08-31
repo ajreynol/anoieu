@@ -1,7 +1,8 @@
 {
  "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094",
+ "code": "FUZ0005",
  "commands": 3,
- "kind": "disagreement",
+ "kind": "underaccept",
  "mode": "proof",
  "note": "an assume after the first step: ethos allows it, logos will not parse the file",
  "outcomes": [

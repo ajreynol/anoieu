@@ -49,9 +49,9 @@ it is the slot that carries the most weight.
 
 | the slot | how the fuzzer fills it |
 | --- | --- |
-| **the report** | the same [`open-findings.md`](open-findings.md), under codes `FUZ0001`–`FUZ0004` |
+| **the report** | the same [`open-findings.md`](open-findings.md), under codes `FUZ0001`–`FUZ0005` |
 | **the id** | the same fingerprint, over the committed reproducer rather than over somebody's signature |
-| **the catalogue** | `python3 -m anoieu_fuzz explain FUZ0002`; four codes, one page each |
+| **the catalogue** | `python3 -m anoieu_fuzz explain FUZ0002`; five codes, one page each |
 | **re-measuring** | **different.** `python3 -m anoieu_fuzz verify` replays every reproducer against a build of the checker and compares with what was recorded |
 | **the regression** | `tests/fuzz/`, one directory per finding, beside `tests/witnesses/` |
 | **the ledger** | the same [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) |
@@ -79,7 +79,11 @@ Three obligations follow, and they are on us rather than on anybody upstream.
    should have been reproduced against a build of it, and the row should say so.
 3. **A disagreement has no owner until somebody gives it one.** The generated
    ledger files it against both checkers, because saying which of the two is
-   wrong is precisely the judgement the fuzzer cannot make. Assigning it is a
+   wrong is precisely the judgement the fuzzer cannot make. What it *can* say is
+   which direction the disagreement runs in, and that is the difference between
+   `FUZ0001` and `FUZ0005`: accepting what the reference refuses is an error and
+   refusing what it accepts is a warning. Severity is not attribution — the
+   error may still turn out to be the reference's fault. Assigning it is a
    review step, and it happens in [`reports.md`](reports.md#the-register-what-anoieu-is-asking-and-of-whom) where a person signs for it.
 
 Everything else — the reply format, the three prompts, what happens to a
