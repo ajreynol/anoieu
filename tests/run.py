@@ -316,6 +316,32 @@ def prompts_agree() -> int:
     return failures
 
 
+def landing_markers() -> int:
+    """Every row closed before its change landed is still reachable by the audit.
+
+    Closing on a promise is the one place this repository has been wrong for
+    months at a time, and `tools/landing.py` is the whole of what stops it
+    happening again. The marker it reads lives in free-text prose, so the way it
+    fails is a verdict somebody reworded: the row stays closed, the debt stays
+    owed, and it silently leaves the audit. That is checked here rather than
+    trusted.
+    """
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "tools"))
+    import landing  # noqa: PLC0415
+
+    failures = 0
+    for fid in landing.malformed():
+        print(f"FAIL closed row {fid} says `awaiting landing` and does not parse")
+        failures += 1
+    items = landing.read_ledger()
+    for item in items:
+        if not re.fullmatch(r"[0-9a-f]{7,40}", item.commit):
+            print(f"FAIL closed row {item.id} names an unusable commit {item.commit!r}")
+            failures += 1
+    print(f"-- rows closed before landing: {len(items)}, {failures} failure(s)")
+    return failures
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--oracle", action="store_true",
@@ -385,6 +411,7 @@ def main() -> int:
     print()
     failures += prompts_agree()
     failures += postmortem_shape()
+    failures += landing_markers()
 
     sys.stdout.flush()
     print()

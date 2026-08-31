@@ -92,6 +92,16 @@ cannot tell — all three are results. The reply goes back in the shape set out 
 says why an assistant's triage and a person's decision are kept in separate
 fields, and asks for feedback on this process in the other direction.
 
+**What settling one takes from you is small, and it is not a merge.** Put the
+fix on a branch, push the branch, and tell us where it is; a change nobody has
+committed is one we have no way to read, and it is the only thing that has ever
+held a row open here after its maintainer had accepted it. We do **not** wait
+for the branch to reach your default branch before closing the finding — your
+word that it will is enough, and whether it did is a question we ask separately,
+of the commit, and never of you. Declining takes less: say so in as many words.
+Silence is the one answer we cannot record, because we cannot tell it from
+nobody having looked.
+
 **A quiet corpus is not a clean one**, and a check that reports nothing is not
 evidence that anything is right: see *What we do not publish* in the top-level
 README. What has happened to findings already reported — including the ones we
@@ -133,6 +143,24 @@ Kept as a file, and kept in git, for three reasons.
    for as long as it did because a closed id is one nothing re-derives. Where a
    verdict depends on somebody else's tree, it should say which commit it was
    checked at.
+
+**Most rows here are closed before their change has landed, on purpose.** A row
+closes when a maintainer accepted it and the change is a commit on a named
+branch; waiting for a merge would hold findings open for as long as somebody
+else's review queue, which says nothing about the finding. The full rule is
+[what closes a row](reporting-policy.md#what-closes-a-row-and-what-does-not).
+
+That is exactly the shape of the mistake in reason 3, taken on deliberately, so
+it is booked rather than assumed away. Such a row ends its verdict with
+
+    awaiting landing: <project> <branch> <commit>
+
+and `python3 tools/landing.py --check` reads every one of them back and asks the
+project's checkout whether that commit has reached the default branch. It is a
+separate pass with its own question -- *did what we closed actually land* -- and
+`tests/run.py` fails if a marker is reworded into something it cannot parse,
+because that would drop a row from the audit while leaving the debt owed. When a
+change lands, a person replaces the marker with what landed it.
 
 Written by hand, by the review step in
 [`reporting-policy.md`](reporting-policy.md#the-workflow). The generator reads

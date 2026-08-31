@@ -290,6 +290,7 @@ ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle --record   # ... and re-record it after a change
 python3 tools/sweep.py <dir>...            # run over a corpus: crashes and counts
 python3 tools/gen_checks_doc.py            # rewrite docs/checks.md from the registry
+python3 tools/landing.py --check           # did what we closed on a promise land?
 ETHOS=<ethos>/build/src/ethos \
   python3 tools/oracle_desugar.py          # the desugarer against ethos, case by case
 ```

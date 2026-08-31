@@ -94,6 +94,10 @@ preference.
 | a prompt is procedural; technical detail is a link | 2026-08-31, `3e271ee47343e758` — a sentence inlined in the prompt had been untrue for as long as it had existed |
 | a person approves every change to a prompt template | standing; a template that rewrote itself from its own experience drifts with nobody agreeing to the direction |
 | the guardrails are never traded for brevity | standing: *fix nothing else*, *do not summarise other results*, *touch no issue tracker*, *leave everything staged* |
+| a decline is confirmed explicitly, and an unconfirmed one is *cannot tell* | 2026-08-31, ethos — ten declined rows, all correct, none of which the maintainer had been asked to push back on |
+| a postmortem entry is written every round, not only when something changed | 2026-08-31, ethos — the judgement call cost more than the entry, and a round that changes nothing still has reasoning worth keeping |
+| a merge does not close a row; a maintainer's acceptance plus a commit on a named branch does | 2026-08-31, ethos — seven fixes held open on somebody else's review queue, which is not information about the finding |
+| a shortcut taken for tempo leaves something mechanical behind that will notice | 2026-08-31, ethos — closing on a promise is the `fixed upstream` mistake on purpose, so it got a marker, an audit and a test |
 
 ## Where the workflow stands
 
@@ -109,15 +113,27 @@ escape hatch in advance — *the serious direction may still end with the refere
 being stricter than the language requires* — is what let the far end decline a
 row confidently instead of hedging.
 
+**What changed most recently.** A merge is no longer what closes a row — a
+maintainer's acceptance and a commit on a named branch are, and whether the
+change reached anybody's default branch is now a separate pass,
+`tools/landing.py`, asked of the commit rather than of the person. The loop got
+faster and took on a debt to do it; the debt is the seven rows that pass
+currently answers *not yet* for.
+
 **What is hard, and it is all judgement.** Closing a row on the strength of a
 persuasive paragraph: two of three substantive replies were correct on the merits
 and one of them still could not be closed. Deciding scope, when a reply corrects
 something belonging to a third project. And a finding that stops reproducing
-looking like a fix when it is a bad reproducer.
+looking like a fix when it is a bad reproducer. The ethos round added a fourth,
+and it is the one that has cost the most: **a decline is accepted by default.**
+Nineteen rows came back, seven fixed and ten declined, and it was the ten that
+needed the process work — a fix has to survive somebody reading a diff, and a
+"nothing needs doing" has to survive nobody saying anything.
 
-**Outstanding.** Five suggestions from the far end, none yet built, each a change
-to what a finding *is* rather than a tidy-up. In their words, in
-`anoieu-dev-response.md` in the logos repository. A sixth thread, from this side:
+**Outstanding.** Seven suggestions from the far end, none yet built, each a change
+to what a finding *is* rather than a tidy-up — the first five in logos's words, in
+`anoieu-dev-response.md` in that repository, and the last two from ethos. A
+further thread, from this side:
 the record is now edited mostly by an assistant, and what must stay true of it
 after such an edit is planned — not built — in
 [`notes.md`](notes.md#7a-maintenance-coherence--todo).
@@ -129,6 +145,8 @@ after such an edit is planned — not built — in
 | record the argv, checker version and signature revision with each promoted finding | the record is not self-contained enough to replay | the far end had to guess the invocation, and the guess turned out to matter |
 | mark a `note` as a reading rather than a measurement | a hypothesis ships beside a measurement, indistinguishable | one confident, wrong note nearly produced a confident, wrong triage |
 | keep the raw detail beside the portable one | bucketing erases what the reader needs | `<path>:N.N` hid which line the reference actually refused |
+| a reverse include edge across the corpus | a row against a file something else includes should say so, and `EO0071` should not call it a signature | four of ethos's nineteen rows were one wrong word, and the maintainer spent most of the round reconstructing what each file was |
+| resolve a name in the scope that binds it, everywhere | `EO0054` is narrowed; every other check that resolves a head through the flat table has the same hole | two rows against ethos claimed a program's own parameter was somebody else's n-ary operator |
 
 **Prompt size, by round.** The rule is that these come down; the number is how it
 is kept honest.
@@ -136,6 +154,8 @@ is kept honest.
 | round | prompt one | prompt two | what was removed to pay for additions |
 | --- | ---: | ---: | --- |
 | 1 (2026-08-31) | 60 → 54 | 39 → 63 | prompt one lost the inlined explanation of what each code means and how each is confirmed, which moved to the header of [`open-findings.md`](open-findings.md) where it can be maintained. Prompt two grew, and that is the honest number: it gained the postmortem step and its `--postm` alternative, the branch check, the closed-row scope rule, and the caveat on a reproducer that stops reproducing. It is the one number in this table going the wrong way. Next round's candidate for removal is step 4, which is procedure that could be a link |
+| 2 (2026-08-31) | 54 → 56 | 63 → 63 | prompt one grew by two lines and nothing came out to pay for it, which is the second round running that the number has gone the wrong way. What it bought is the decline confirmation, and the trade offered against it — folding the two sentences on `HUMAN RESPONSE` into one — paid back only one line of the three. Prompt two is unchanged: making `--postm` the default swapped which side of the alternatives block is the default and cost nothing. Step 4 of prompt two is still the candidate for removal, and is now overdue |
+| 3 (2026-08-31) | 56 → 59 | 63 → 67 | the branch workflow: prompt one gained a paragraph on branching, committing locally and pushing nothing, and a `WHAT THIS NEEDS FROM YOU` section that says what the maintainer has to do for a finding to settle. That was +9 before a tightening pass took 6 back — the landing-page pointer, the reply-file sentence, the standalone `HUMAN RESPONSE` note folded into the template line, and the handover section cut by a third. Prompt two gained the new closing rule and the marker a closed-before-landing row carries. **Three rounds, three increases**, and the pass above is the first time a round has cut anything without being asked to. Both prompts should be read end to end for removals before round 4 rather than trimmed at the edges again; step 4 of prompt two remains the named candidate and is now two rounds overdue |
 
 ---
 
@@ -150,20 +170,22 @@ three of its error paths reported without a file or a line. Its test signatures
 also carried a mis-declared operator, an unreachable program case and a
 docstring naming the wrong field.
 
-**Resolution:** 7 of the 19 were real and are fixed on one unmerged commit —
+**Resolution:** 7 of the 19 were real and are fixed on one commit —
 [four in the signatures and three in the checker
 itself](reports.md#ethos--the-checker-and-its-test-signatures), the latter all
 the same shape: a message that never reached the `Error: <file>:<line>.<col>:`
-convention everything else uses. 2 were
+convention everything else uses. Those 7 are **closed**. 2 were
 [ours](#the-two-naryeo-rows--a-name-that-meant-two-things), a check reading a
 program's parameter as somebody else's operator; the check is narrowed and has a
 witness. 8 were deliberate and declined, and 2 the maintainer deliberately left
-open. **Nothing was closed.** The fixes are real but unmerged, and the declines
-turned out to rest on
-[silence](#ten-declines-and-none-of-them-pushed-back-on) — which is what changed
-most here: prompt one now has to get a decline confirmed before it records one,
-`--postm` is on by default, and `EO0054` says which declaration it read an
-attribute from.
+open; those 12 stay open, because the declines turned out to rest on
+[silence](#ten-declines-and-none-of-them-pushed-back-on). Two rules changed
+underneath this round rather than because of any one finding: a decline now has
+to be [confirmed](#ten-declines-and-none-of-them-pushed-back-on) before it is
+recorded, and a fix no longer has to be
+[merged](#closing-on-a-promise-and-the-audit-that-pays-for-it) before its row
+closes. Also here: `--postm` is on by default, and `EO0054` says which
+declaration it read an attribute from.
 
 ### The two `Nary.eo` rows — a name that meant two things
 
@@ -238,6 +260,35 @@ the entry point and profiles are independent by construction.
 **Learned:** a finding can be true of the file and false about what the file is,
 and the second is the half a maintainer reads first. Four of nineteen rows were
 that one word.
+
+### Closing on a promise, and the audit that pays for it
+
+The seven fixes sat closed-in-all-but-name for a day, on a rule that a change had
+to be merged before its row could close. The maintainer's objection was about
+tempo: waiting on a pull request measures somebody else's review queue, not the
+finding, and while the checks are still moving that is the wrong thing to be
+blocked on. A developer's word that the change will be merged now closes the row.
+
+What that is, precisely, is the mistake this repository has already made once —
+three cvc5 rows closed as *fixed upstream* on a fix that never landed, unnoticed
+for three months because a closed id is one nothing re-derives — adopted on
+purpose. So it is booked rather than assumed away. A row closed before its change
+has landed ends its verdict with `awaiting landing: <project> <branch> <commit>`;
+[`tools/landing.py`](../tools/landing.py) reads those back and asks each
+project's checkout whether the commit has reached its default branch; and
+`tests/run.py` fails if a verdict is reworded into a marker the audit cannot
+parse, which is the only way a row could leave the audit while still owing it.
+
+The condition that replaced *merged* is not *accepted*. It is **accepted, and
+committed on a named branch** — which is what separates ethos's seven from
+logos's `logos-2`, accepted two rounds ago and still open because the change has
+only ever existed as a dirty working tree. That is the right answer for the right
+reason: we can read a commit, and we cannot read an intention.
+
+**Learned:** a shortcut that trades correctness for tempo is fine to take and not
+fine to forget, and the difference between the two is whether something
+mechanical is left behind that will notice. The rule changed in one sentence; the
+audit, the marker and the test that guards it are what the sentence cost.
 
 ---
 

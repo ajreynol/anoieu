@@ -279,7 +279,8 @@ folds its result back into its second argument, so its type must be
 Drop the attribute. Reported by `EO0040`.
 
 *Answered: accepted, the attribute is removed on `anoieu-findings`@`292201c2`.
-Nothing more is asked of ethos than merging it.*
+The finding is closed on that; whether it reaches `main` is a question for the
+landing audit rather than for this one.*
 
 **ethos-2 (A)** — an attribute ethos does not know prints
 `Unsupported attribute :right-assoc-nill`, is dropped, and the run exits
@@ -317,7 +318,8 @@ matches any pair of identical arguments, so its second case, which matches a
 pair of identical `or`-terms, can never be reached. Reported by `EO0052`.
 
 *Answered: accepted, the case is deleted on `anoieu-findings`@`292201c2`.
-Nothing more is asked of ethos than merging it.*
+The finding is closed on that; whether it reaches `main` is a question for the
+landing audit rather than for this one.*
 
 **ethos-8 (A)** — `(declare-const f (->))` — a `->` type with no arguments —
 aborts ethos with `terminate called after throwing an instance of
@@ -329,7 +331,7 @@ Found by the fuzzer, `FUZ0002`.
 
 *Answered: accepted. `(->)` is refused in the parser before a term is built, so
 the message carries a position, on `anoieu-findings`@`292201c2` with a
-regression. Nothing more is asked than merging it. ethos noted that `(_)` is
+regression. The finding is closed on that. ethos noted that `(_)` is
 still a bare `Check failure` — not reported by any row, and not asked for.*
 
 **ethos-9 (A)** — three error paths abort with a message that does not go
@@ -352,15 +354,15 @@ first two are under `tests/fuzz/`. Found by the fuzzer, `FUZ0003`.
 *Answered: accepted for the two that had reproducers, both routed through the
 lexer's `parseError` on `anoieu-findings`@`292201c2` with regressions. The third,
 `(include "no-such-file.eo")`, was not in the report and is not ruled on.
-Nothing more is asked than merging what is there.*
+The findings are closed on that, and the landing is audited separately.*
 
 **ethos-5 (B)** — run over the test signatures. `anoieu check tests` reads 202
 files under 191 entry points and reports **seven errors, three warnings and
 one hint** in total — ethos-1, ethos-6, ethos-7, the `symm` docstring drift,
 and one pattern that matches exactly two elements. It was three hints until two
-of them turned out to be ours: see the `Nary.eo` rows in the log. That is a job that could be
-blocking on the day it is turned on. Its tests are not written to the docstring
-convention, so:
+of them turned out to be ours: see the `Nary.eo` rows in the log. That is a job
+that could be blocking on the day it is turned on. Its tests are not written to
+the docstring convention, so:
 
 ```json
 { "entry_points": ["tests"], "disable": ["DOC0010", "DOC0011", "DOC0012"] }
@@ -711,6 +713,10 @@ in [`reporting-policy.md`](reporting-policy.md#running-it-in-ci).
 | Should `driver.py` call anoieu, or should CI? | A preflight helps the person; a CI job protects the branch. They are not exclusive. | open (eoc-1) |
 | How stable are check numbers? | Baselines and per-repository policy refer to them by code. | codes are permanent once released; a narrowed check keeps its number |
 | Generated signatures in a corpus. | `Cpc.cached.eo` repeats what CPC says, so checking both reports everything twice. | resolved by convention: check sources, not artifacts |
+| Should a check enumerate the class the fuzzer sampled? | Both `FUZ0003` fixes were one shape — a user-reachable `EO_FATAL()` in a file with no lexer — which is greppable in the ethos sources without a fuzzer. | open; ethos's suggestion, and the strongest of the four |
+| Should the generator apply every builtin head to zero arguments? | `(->)` was `FUZ0002` and `(_)` is behind it with a bare `Check failure`; one mutation would sweep the family instead of one bucket at a time. | open; ethos's suggestion |
+| Should a nil terminator's type be checked against the operator's tail? | `EO0040` checks the *shape* of a `:right-assoc` type and nothing checks the terminator, whose type is asked for the moment the operator is applied. The computational-operator exemption is right for literals generally and wrong in terminator position. | open; ethos's suggestion, and it would have caught the `str.++` mismatch nobody reported |
+| Should a docstring's *field names* be checked, not just its counts? | `DOC0011` and `DOC0012` both assume the fields are right and count what is under them; it took both firing at once to say that `tests/Uf-rules.eo` wrote `; args:` where `; premises:` belonged, and neither can see the reverse mistake. | open; ethos's suggestion |
 
 ### The documents
 
@@ -720,6 +726,7 @@ in [`reporting-policy.md`](reporting-policy.md#running-it-in-ci).
 | [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) | what has been reported to another repository, and what happened to it |
 | [`reporting-policy.md`](reporting-policy.md#running-it-in-ci) | running this in ethos, ethos-eoc, logos and cvc5 |
 | [`checks.md`](checks.md) | every check and its manual page, generated from the registry |
+| [`closed-findings.md`](closed-findings.md) | every finding ruled on, with its verdict; `tools/landing.py` audits the ones closed before their fix landed |
 | [`corpus.md`](corpus.md) | what the checks report on every signature we can find, generated and checked in CI |
 | [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) | what the first runs found, and every false positive that had to be shed first |
 | [`notes.md`](notes.md#what-ethos-misses-and-why) | why ethos does not report these itself, by mechanism |
@@ -1092,7 +1099,8 @@ analyzer does differently now.
 | **not audited** | 17 | every row against `logos/install/defs/Cpc.cached.eo` |
 | **declined, and the reason holds** | 2 | `logos-4`'s `declare-fun` case, `logos-5` |
 | **withdrawn — our error** | 1 | `logos-4`'s indexed-operator case |
-| **accepted, not landed** | 8 | `logos-2`; ethos-1, ethos-7, ethos-8, ethos-9 and the `symm` docstring — seven ethos rows on one unmerged commit |
+| **accepted, closed, awaiting landing** | 7 | ethos-1, ethos-7, ethos-8, ethos-9 and the `symm` docstring — seven rows on `anoieu-findings`@`292201c2`, tracked by `tools/landing.py` |
+| **accepted, and nothing committed** | 1 | `logos-2`, still open — the one case the new closing rule does *not* cover |
 | **declined, not yet confirmed** | 8 | the three ethos `EO0084` rows, `conclusion-spec.eo`, the four `eo-definitions.eo` rows |
 | **our error, not yet withdrawn** | 2 | the two ethos `Nary.eo` rows |
 | **undecided by the maintainer** | 2 | ethos-6's two `right-assoc-variants.eo` rows |
@@ -1116,7 +1124,11 @@ Changes the analyzer made as a result:
 - **a pattern's head is read in the scope that binds it** (`EO0054`), after two
   rows against ethos resolved a program's own parameter against a
   `:right-assoc-nil` declaration made by the file that includes it (`ethos`, the
-  `Nary.eo` rows).
+  `Nary.eo` rows);
+- **a merge is no longer what closes a row** — a maintainer's acceptance and a
+  commit on a named branch are, with the landing tracked separately by
+  [`tools/landing.py`](../tools/landing.py) so that the shortcut is booked rather
+  than forgotten (`ethos`, seven rows).
 
 ---
 
@@ -1272,19 +1284,19 @@ deliberate, and two the maintainer left undecided.
 
 | item | what we said | decision |
 | --- | --- | --- |
-| **ethos-1** | `<` is `:right-assoc` with a `Bool` return in `tests/match-simple.eo:11` | **accepted, fixed** — attribute removed. **Left open**: not landed |
-| **ethos-7** | `isPermutation`'s case at `naive-nary.eo:182` is shadowed by the one above it | **accepted, fixed** — line deleted. **Left open**: not landed |
-| the `symm` docstring | `tests/Uf-rules.eo:25` heads a premise `; args:` | **accepted, fixed** — one line, `; args:` to `; premises:`, settling both rows. **Left open**: not landed |
-| **ethos-8** | `(declare-const f (->))` aborts with an uncaught `std::length_error` | **accepted, fixed** — refused in the parser, with a position. **Left open**: not landed |
-| **ethos-9** | two error paths abort outside the `Error: <file>:<line>.<col>:` convention | **accepted, fixed** — both routed through the lexer's `parseError`. **Left open**: not landed |
+| **ethos-1** | `<` is `:right-assoc` with a `Bool` return in `tests/match-simple.eo:11` | **accepted, fixed** — attribute removed. **Closed**, awaiting landing |
+| **ethos-7** | `isPermutation`'s case at `naive-nary.eo:182` is shadowed by the one above it | **accepted, fixed** — line deleted. **Closed**, awaiting landing |
+| the `symm` docstring | `tests/Uf-rules.eo:25` heads a premise `; args:` | **accepted, fixed** — one line, `; args:` to `; premises:`, settling both rows. **Closed**, awaiting landing |
+| **ethos-8** | `(declare-const f (->))` aborts with an uncaught `std::length_error` | **accepted, fixed** — refused in the parser, with a position. **Closed**, awaiting landing |
+| **ethos-9** | two error paths abort outside the `Error: <file>:<line>.<col>:` convention | **accepted, fixed** — both routed through the lexer's `parseError`. **Closed**, awaiting landing |
 | the three `EO0084` rows | `identity` and `id` conclude one of their own premises | **declined** — deliberate no-op rules. Open; see below |
 | `conclusion-spec.eo:8` | the pattern matches an `or` of exactly two elements | **declined** — a split clause has exactly two disjuncts. Open; see below |
 | the two `Nary.eo` rows | the pattern matches a `cons` of exactly two elements | **our error.** The head is a program parameter. Check narrowed; open pending confirmation |
 | the four `eo-definitions.eo` rows | literals whose category the signature never declares | **declined** — the file is an include fragment, and the word *signature* is what is wrong. Open; see below |
 | **ethos-6**, `right-assoc-variants.eo` | `+`'s nil terminator `0`, and `""`, have no declared category | **undecided** — the trial edit was made and reverted. Open |
 
-**Nothing was closed this round**, for two unrelated reasons that are worth
-keeping apart.
+**Seven rows closed and twelve did not**, for reasons that are worth keeping
+apart.
 
 **The seven accepted fixes are real, and we checked them rather than took
 them.** They are one commit, `292201c2`, cut from `main`@`8709609e`. For the
@@ -1294,10 +1306,20 @@ three `FUZ` rows `anoieu_fuzz verify` moves every reproducer from `abnormal` to
 `reject`, and the `Error: <file>:<line>.<col>:` text each now prints is
 introduced by that commit and absent from `main` — so each stopped reproducing
 *for the reason on its row*, which is the distinction the follow-up is supposed
-to make and the one a bare "no longer reproduces" would have missed. What holds
-the rows open is that the branch is unmerged: `main` is still `8709609e`, and
-the ref the report is measured against, `ethosEoc3`@`3cf1c03f`, does not contain
-the commit. That is the verdict the ledger already calls *accepted, not landed*.
+to make and the one a bare "no longer reproduces" would have missed.
+
+They were left open for a day, on the rule that a branch had to be merged before
+a row could close. **That rule is gone**, and these seven are the first rows
+closed under what replaced it: a maintainer's acceptance plus a commit on a named
+branch, with the merge treated as a separate question. Holding a finding open
+until somebody else's pull request is approved measures their review queue, not
+the finding, and while the checks are still moving that is a bad trade. What the
+change costs is stated where it is taken on, in
+[what closes a row](reporting-policy.md#what-closes-a-row-and-what-does-not):
+each of the seven verdicts ends with `awaiting landing: ethos anoieu-findings
+292201c2`, and `python3 tools/landing.py --check` is the pass that asks whether
+that commit has reached `main` yet. Today it answers *not yet* for all seven,
+which is the correct answer and a recorded one rather than an assumed one.
 
 Worth recording because it cuts the other way from the last round: the reply's
 own header states that *nothing is committed* and that the changes sit unstaged

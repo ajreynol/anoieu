@@ -139,6 +139,44 @@ it belonged in the first place. See
   what happened, and it needs evidence: the branch, and what the ledger records
   of it.
 
+### What closes a row, and what does not
+
+Two things have to be true, and **a merge is not one of them**.
+
+1. **A maintainer accepted it**, in `HUMAN RESPONSE:` and in their own words.
+   Not an assistant's triage; and for a decline, not silence either — see
+   [the shape of a reply](#the-shape-of-a-reply).
+2. **The change is a commit on a named branch** in their repository. Not a dirty
+   working tree, not a patch pasted into a reply: a commit somebody else can
+   fetch and read. A decline has nothing to commit and needs only the first.
+
+That second condition is the one that does the work, and it is the line between
+the two rounds we have run. ethos accepted seven rows and had them committed on
+`anoieu-findings`; those close. logos accepted a deletion and left it in a dirty
+working tree on a branch level with `main`; that one does not, and has stayed
+open through two rounds for the right reason.
+
+**Waiting for a merge, on the other hand, we no longer do.** A row held open
+until somebody else's pull request is approved is not telling us about the
+finding — it is telling us about their review queue. While the checks are still
+moving, a developer's commitment that the change will be merged is good enough
+to close a finding *here*, and the loop stays agile enough to be worth running.
+
+**That is a debt, and we have already defaulted on it once.** Three cvc5 rows sat
+closed as *fixed upstream* on a fix that never landed, for three months, because
+a closed id is one nothing re-derives. So the debt is booked rather than assumed
+away: a row closed before its change has landed ends its verdict with a marker
+naming where the change is —
+
+    awaiting landing: <project> <branch> <commit>
+
+— and [`tools/landing.py`](../tools/landing.py) is the audit that reads them
+back. It is **a separate pass, with its own question**: *did what we closed
+actually land?* It is asked on its own schedule, against checkouts, and it is
+deliberately not part of processing a reply — the two get confused precisely
+when somebody is in a hurry, which is when the wrong one gets skipped. When a
+change lands, the marker is replaced by what landed it.
+
 ### The shape of a reply
 
 One block per row, and one section at the end that is not about any row:
@@ -247,9 +285,11 @@ Four rules keep the loop from turning into drift.
    asked, and goes to a person with the evidence attached.
 
 Neither shortening nor linking touches the guardrails. *Fix nothing else you
-notice*, *do not summarise anoieu's other results*, *touch no issue tracker*,
-*leave everything staged and commit nothing* — those stay written out in full, in
-every round, in both directions. They are what keep an agent inside the scope
+notice*, *do not summarise anoieu's other results*, *touch no issue tracker* —
+those stay written out in full, in every round, in both directions. The fourth
+is directional and is written out in whichever form applies: *leave everything
+staged and commit nothing* here, *commit to the branch and push nothing* in the
+project that owns the finding. They are what keep an agent inside the scope
 somebody agreed to, and they cost four sentences.
 
 What one round of this produced, in full, is
@@ -274,8 +314,10 @@ It should come back to the person it is working with in two cases only:
 - **it disagrees with how the reply classified the resolution** — the reply says
   *fixed* and the branch does not bear that out, or says *not a defect* for a
   reason that does not hold;
-- **it cannot tell whether the finding is resolved** — the branch is unmerged,
-  the change does not touch what the row is about, or the trail runs out.
+- **it cannot tell whether the finding is resolved** — there is no commit to
+  read, the change does not touch what the row is about, or the trail runs out.
+  *Unmerged is not one of these*: an unmerged branch with the fix on it settles
+  the finding, and the merge is the landing audit's question.
 
 Both leave the row open, because both are the same fact: nobody knows yet. What
 those cases need from a person is a decision, not a review, and asking for one
@@ -335,19 +377,23 @@ say to us, and what they say describes their triage** — where their reading
 landed, often under time pressure, on our word, sometimes without having written
 the file in question.
 
-So the authority on what happened is not the reply. It is **the branch**:
-whether the change is merged, what review does to it, and what the commits that
-follow it look like. A fix can be accepted and then quietly reverted; a decline
-can be reversed by the next person to read the file; and the case we care about
-most — our analysis being wrong — usually only becomes clear in review, when
-somebody who knows what the file was for objects to the fix rather than to the
-finding.
+So the authority on what happened is not the reply. It is **the branch** — what
+is committed on it, which is a thing you can fetch and read rather than a
+sentence somebody wrote about their intentions. A fix can be accepted and then
+quietly reverted; a decline can be reversed by the next person to read the file;
+and the case we care about most — our analysis being wrong — usually only
+becomes clear in review, when somebody who knows what the file was for objects
+to the fix rather than to the finding. The ethos round made the point cheaply:
+the reply's own header said nothing had been committed, and a commit was sitting
+on the branch.
 
-Which gives the rule for our side: **a reply opens a question here, it does not
-close one.** Record the branch against the row, leave the row open, and go back
-to the branch later to find out what actually happened — which is the whole job
-of the second prompt. A row closed on a triage is a row closed on a guess, and
-the log then reads as more settled than it is.
+Which gives the rule for our side: **an assistant's triage opens a question
+here, it does not close one.** What closes one is a maintainer's decision plus a
+commit, and the two conditions are set out in
+[what closes a row](#what-closes-a-row-and-what-does-not). Read the branch
+rather than the paragraph about it — that is the whole job of the second prompt,
+and it is why the prompt says to compare the branch to its base rather than to
+take its word.
 
 ### Prompt one: in the project that owns the finding
 
@@ -384,11 +430,20 @@ lost time discovering it, and the sentence had been wrong for as long as it had
 existed. A link cannot drift from the thing it points at.
 
 **The guardrails stay, every round.** *Fix nothing else you notice*, *do not
-summarise anoieu's other results*, *touch no issue tracker*, and — on the way
-back — *leave everything staged, commit nothing*. These are the constraints that
-keep an agent from turning a triage into a spree or a claim into somebody's
-inbox, and they are the first thing a shortening pass will be tempted to cut.
-They are not padding, and they are cheap: four sentences.
+summarise anoieu's other results*, *touch no issue tracker*. These are the
+constraints that keep an agent from turning a triage into a spree or a claim
+into somebody's inbox, and they are the first thing a shortening pass will be
+tempted to cut. They are not padding, and they are cheap.
+
+**The fourth one is different in each direction, and conflating them cost a
+round.** *Here*, an agent leaves everything staged and commits nothing: the diff
+is the maintainer's to approve. *There*, an agent commits to a branch and pushes
+nothing: an uncommitted change is not a fix, and we have no way to read one. The
+list above used to run them together as "on the way back, leave everything
+staged, commit nothing", which contradicted prompt one's own instruction to
+commit; the ethos round hit the contradiction, followed the prompt, and was
+corrected by the person in the session. Both halves are stated where they apply
+and neither is stated where it does not.
 
 ```text
 anoieu is a static analyzer for the Eunoia languages. It has reported findings
@@ -396,9 +451,7 @@ against this project:
 
   https://github.com/ajreynol/anoieu/blob/main/docs/open-findings.md
 
-Start there. That page says what a row is, how to confirm one for each code, and
-links the page behind each code -- read the one page your row points at rather
-than the catalogue behind it.
+Start there: it says what a row is, and how to confirm one for each code.
 
 Address ID.
   -- or, for the sweep form --
@@ -407,7 +460,12 @@ Address every row whose owner names PROJECT, including a shared owner like
 may share a cause -- say so, and still rule on each in its own block. Answering
 ten rows with one sentence is not doing this.
 
-On branch BRANCH, one row at a time, and only what the rows name:
+Work on branch BRANCH, creating it if it is not there. Commit to it locally and
+push nothing -- pushing, and any pull request, are the maintainer's. An
+uncommitted change is not a fix; the commit is what anoieu reads. Keep
+anoieu-response.md out of it: the reply is for us, not for your history.
+
+One row at a time, and only what the rows name:
 
 1. Decide whether it is real -- by reading the file, or by running the
    reproducer -- rather than by trusting the row. Some of what anoieu reports is
@@ -417,9 +475,6 @@ On branch BRANCH, one row at a time, and only what the rows name:
    differently.
 3. If it is not, or you cannot tell: change nothing and say why. "I cannot tell"
    is the honest answer when you do not know what the file was meant to say.
-   Then put the decline to the maintainer in as many words and wait for an
-   answer -- not fixing something is a decision somebody signs, and silence is
-   not a signature. Unconfirmed, it is "cannot tell", never "not a defect".
 
 Fix nothing else you notice; each finding is reported separately. Do not
 summarise anoieu's other results: a check that reports nothing is not evidence
@@ -428,8 +483,7 @@ anybody's. Everything that reaches a person who did not ask for it is sent by a
 person.
 
 Then draft a reply for a maintainer to review and send, in anoieu-response.md at
-the root of this repository, appending and leaving any block already there
-alone. One block per row:
+the repository root, appending and leaving any block already there. One per row:
 
   ## ID -- <code> -- <what the row names>
 
@@ -438,15 +492,19 @@ alone. One block per row:
 
   OBSERVED, NOT ACTED ON: <optional -- anything true you found and left alone.>
 
-  HUMAN RESPONSE:
+  HUMAN RESPONSE: <leave this empty; the decision is theirs, not yours>
 
-Commit your work to the branch: that, not the reply, is what settles this. Leave
-HUMAN RESPONSE empty; the report page links what to do if they hand it to you.
+End with two sections. FEEDBACK TO ANOIEU: blunt is useful -- where the time
+went and what would have made it fast; what a row should have carried, and
+anything here that was unclear or untrue; what else is worth looking for that
+anoieu does not do.
 
-End with one section, FEEDBACK TO ANOIEU. It is asked for, and blunt is useful:
-where the time went and what would have made it fast; what a row should have
-carried, and anything here that was unclear or untrue; what else is worth
-looking for that anoieu does not do.
+Then WHAT THIS NEEDS FROM YOU: name BRANCH, say nothing is pushed, and say anoieu
+sees none of this until they push it and send back where to look. A merge is not
+needed to settle a finding; a branch somebody can fetch is. Then list every row
+you are declining and ask them to confirm each -- not fixing something is a
+decision somebody signs, silence is not a signature, and unconfirmed it is
+reported as "cannot tell".
 ```
 
 ### Prompt two: the follow-up, here
@@ -497,10 +555,14 @@ docs/reporting-policy.md is the authority on what you may change. The steps:
      build is a third outcome again.
    - Look at the branch rather than taking it: compare it to its base and read
      what is on it. A branch level with main, or a change left uncommitted, is
-     not a fix.
+     not a fix. A branch that is ahead of main is: waiting for a merge is not
+     something we do -- see "what closes a row" in docs/reporting-policy.md.
 3. Clean up those rows and no others. Closing moves a row from
    docs/open-findings.md to docs/closed-findings.md with a verdict, never
    deleting it; reopening is the same move back, noting what the verdict missed.
+   A row closed before its change has landed ends its verdict with
+   "awaiting landing: <project> <branch> <commit>", which is what the landing
+   audit reads.
 4. If our analysis was wrong, fix what produced it rather than the row: narrow
    the check, add a witness under tests/witnesses/, and record the wrong
    assumption in docs/reports.md. A FUZ finding has no check to narrow -- what

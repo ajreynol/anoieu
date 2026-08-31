@@ -431,10 +431,14 @@ docs/reporting-policy.md is the authority on what you may change. The steps:
      build is a third outcome again.
    - Look at the branch rather than taking it: compare it to its base and read
      what is on it. A branch level with main, or a change left uncommitted, is
-     not a fix.
+     not a fix. A branch that is ahead of main is: waiting for a merge is not
+     something we do -- see "what closes a row" in docs/reporting-policy.md.
 3. Clean up those rows and no others. Closing moves a row from
    docs/open-findings.md to docs/closed-findings.md with a verdict, never
    deleting it; reopening is the same move back, noting what the verdict missed.
+   A row closed before its change has landed ends its verdict with
+   "awaiting landing: <project> <branch> <commit>", which is what the landing
+   audit reads.
 4. If our analysis was wrong, fix what produced it rather than the row: narrow
    the check, add a witness under tests/witnesses/, and record the wrong
    assumption in docs/reports.md. A FUZ finding has no check to narrow -- what

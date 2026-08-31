@@ -18,6 +18,24 @@ Kept as a file, and kept in git, for three reasons.
    verdict depends on somebody else's tree, it should say which commit it was
    checked at.
 
+**Most rows here are closed before their change has landed, on purpose.** A row
+closes when a maintainer accepted it and the change is a commit on a named
+branch; waiting for a merge would hold findings open for as long as somebody
+else's review queue, which says nothing about the finding. The full rule is
+[what closes a row](reporting-policy.md#what-closes-a-row-and-what-does-not).
+
+That is exactly the shape of the mistake in reason 3, taken on deliberately, so
+it is booked rather than assumed away. Such a row ends its verdict with
+
+    awaiting landing: <project> <branch> <commit>
+
+and `python3 tools/landing.py --check` reads every one of them back and asks the
+project's checkout whether that commit has reached the default branch. It is a
+separate pass with its own question -- *did what we closed actually land* -- and
+`tests/run.py` fails if a marker is reworded into something it cannot parse,
+because that would drop a row from the audit while leaving the debt owed. When a
+change lands, a person replaces the marker with what landed it.
+
 Written by hand, by the review step in
 [`reporting-policy.md`](reporting-policy.md#the-workflow). The generator reads
 it and rewrites it, and rewriting preserves every row.
@@ -59,3 +77,10 @@ it and rewrites it, and rewriting preserves every row.
 | `adc98aa79b4861bb` | ethos+logos | FUZ0001 | `tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf/case.cpc:2` | logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (SYMBOL). | declined — logos: `declare-fun` in a proof file is deliberate and documented, because logos ignores `include` and `reference` and a proof must carry its own declarations; the symbol gets the type ethos would give it from a reference file, and cvc5's `eo` printer emits `declare-const`, so the divergence cannot arise on real output. Still reproduces, by design |
 | `3e271ee47343e758` | ethos+logos | FUZ0001 | `tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ty-bbdf0a/case.cpc:2` | logos accepted what ethos refused: Error: <path>:N.N: Type checking failed: | withdrawn — our error: the reproducer was an artefact of the shrinker, which deleted the `_` from line 4 of a committed seed while ethos's refusal was decided on line 3. Reproducer removed from `tests/fuzz/` |
 | `4de9bb965fa0c04b` | ethos+logos | FUZ0005 | `tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2` | ethos accepted what logos refused: Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ "\u{a}" "\u{6f}rd")) N))) | declined — logos: a proof is read as an assumption set plus the steps that refute it, which is what its correctness theorem is stated over, so the refusal is the input format and not a parser gap; `docs/parser.md` now records it. Still reproduces, by design |
+| `b742c6d3a4fa9d74` | ethos | DOC0011 | `tests/Uf-rules.eo:25` | rule `symm` takes 0 argument(s), and its docstring lists 1 | accepted and fixed -- ethos: the docstring headed a premise `; args:`, changed to `; premises:`. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2 |
+| `d0b325c24c13892a` | ethos | DOC0012 | `tests/Uf-rules.eo:25` | rule `symm` has no args, and its docstring documents one | accepted and fixed -- ethos: settled by the same one-line change as `b742c6d3a4fa9d74`, which is why both rows close together. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2 |
+| `b4b49bbcd0bffd3a` | ethos | EO0040 | `tests/match-simple.eo:11` | `<` is marked `:right-assoc`, so its second argument and its return type must agree | accepted and fixed -- ethos: `:right-assoc` cannot fold on a relation typed `(-> Int Int Bool)`, and the attribute is removed. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2 |
+| `5c38f46b13406872` | ethos | EO0052 | `tests/naive-nary.eo:182` | this case of `isPermutation` can never be reached | accepted and fixed -- ethos: the case is shadowed by the one above it and is deleted. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2 |
+| `147433b3e48ae9d6` | ethos | FUZ0002 | `tests/fuzz/crash-ethos-terminate-called-after-throwing-an-instance--fd1900/case.eo:2` | ethos crash: terminate called after throwing an instance of 'std::length_error' | accepted and fixed -- ethos: `(->)` is refused in the parser before a term is built, so the message carries a position; regression added. `anoieu_fuzz verify` moves the reproducer from `abnormal` to `reject`, and the positioned `Error:` it now prints is introduced by that commit and absent from `main` -- so it stopped reproducing for the reason on the row. awaiting landing: ethos anoieu-findings 292201c2 |
+| `918dbdb5f068f46c` | ethos | FUZ0003 | `tests/fuzz/unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f/case.eo:2` | ethos unexplained: Fatal failure within bool ethos::State::includeFile(const std::string&, bool, bool, const ethos::Expr&) at <path>:N | accepted and fixed -- ethos: the unclosed `assume-push` now reports through the lexer's `parseError` with a position; regression added. `anoieu_fuzz verify` moves the reproducer from `abnormal` to `reject`, and the positioned `Error:` it now prints is introduced by that commit and absent from `main` -- so it stopped reproducing for the reason on the row. awaiting landing: ethos anoieu-findings 292201c2 |
+| `f419f6265e79b94b` | ethos | FUZ0003 | `tests/fuzz/unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94/case.eo:2` | ethos unexplained: Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at <path>:N | accepted and fixed -- ethos: a repeated `declare-consts` now returns a failure through `CmdParser` with a position, instead of `EO_FATAL`; regression added. `anoieu_fuzz verify` moves the reproducer from `abnormal` to `reject`, and the positioned `Error:` it now prints is introduced by that commit and absent from `main` -- so it stopped reproducing for the reason on the row. awaiting landing: ethos anoieu-findings 292201c2 |

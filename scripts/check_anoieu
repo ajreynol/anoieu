@@ -86,13 +86,16 @@ against this project:
 
   https://github.com/ajreynol/anoieu/blob/main/docs/open-findings.md
 
-Start there. That page says what a row is, how to confirm one for each code, and
-links the page behind each code -- read the one page your row points at rather
-than the catalogue behind it.
+Start there: it says what a row is, and how to confirm one for each code.
 
 $SCOPE
 
-On branch $BRANCH, one row at a time, and only what the rows name:
+Work on branch $BRANCH, creating it if it is not there. Commit to it locally and
+push nothing -- pushing, and any pull request, are the maintainer's. An
+uncommitted change is not a fix; the commit is what anoieu reads. Keep
+anoieu-response.md out of it: the reply is for us, not for your history.
+
+One row at a time, and only what the rows name:
 
 1. Decide whether it is real -- by reading the file, or by running the
    reproducer -- rather than by trusting the row. Some of what anoieu reports is
@@ -102,9 +105,6 @@ On branch $BRANCH, one row at a time, and only what the rows name:
    differently.
 3. If it is not, or you cannot tell: change nothing and say why. "I cannot tell"
    is the honest answer when you do not know what the file was meant to say.
-   Then put the decline to the maintainer in as many words and wait for an
-   answer -- not fixing something is a decision somebody signs, and silence is
-   not a signature. Unconfirmed, it is "cannot tell", never "not a defect".
 
 Fix nothing else you notice; each finding is reported separately. Do not
 summarise anoieu's other results: a check that reports nothing is not evidence
@@ -113,8 +113,7 @@ anybody's. Everything that reaches a person who did not ask for it is sent by a
 person.
 
 Then draft a reply for a maintainer to review and send, in anoieu-response.md at
-the root of this repository, appending and leaving any block already there
-alone. One block per row:
+the repository root, appending and leaving any block already there. One per row:
 
   ## ID -- <code> -- <what the row names>
 
@@ -123,15 +122,19 @@ alone. One block per row:
 
   OBSERVED, NOT ACTED ON: <optional -- anything true you found and left alone.>
 
-  HUMAN RESPONSE:
+  HUMAN RESPONSE: <leave this empty; the decision is theirs, not yours>
 
-Commit your work to the branch: that, not the reply, is what settles this. Leave
-HUMAN RESPONSE empty; the report page links what to do if they hand it to you.
+End with two sections. FEEDBACK TO ANOIEU: blunt is useful -- where the time
+went and what would have made it fast; what a row should have carried, and
+anything here that was unclear or untrue; what else is worth looking for that
+anoieu does not do.
 
-End with one section, FEEDBACK TO ANOIEU. It is asked for, and blunt is useful:
-where the time went and what would have made it fast; what a row should have
-carried, and anything here that was unclear or untrue; what else is worth
-looking for that anoieu does not do.
+Then WHAT THIS NEEDS FROM YOU: name $BRANCH, say nothing is pushed, and say anoieu
+sees none of this until they push it and send back where to look. A merge is not
+needed to settle a finding; a branch somebody can fetch is. Then list every row
+you are declining and ask them to confirm each -- not fixing something is a
+decision somebody signs, silence is not a signature, and unconfirmed it is
+reported as "cannot tell".
 PROMPT_END
 
 if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
