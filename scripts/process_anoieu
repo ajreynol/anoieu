@@ -14,7 +14,7 @@
 # The first argument is a *synonym* for a directory. It is resolved in three
 # steps: an existing path is used as it stands; otherwise scripts/repos.local is
 # consulted, which maps repo ids to directories on this machine and is written
-# on first run; otherwise a directory of that name is looked for under
+# on the first run of any kind; otherwise a directory of that name is looked for under
 # $ANOIEU_REPOS (colon-separated, default $HOME). Nothing is tracked or synced
 # -- the agent is pointed at the directory and finds the reply itself.
 #
@@ -25,6 +25,71 @@
 # It prints the resolved path, so a pasted transcript carries it.
 
 set -euo pipefail
+
+# -- the mapping file: repo ids to directories on this machine. Written on the
+#    first run of any kind, never tracked, and entirely optional -- the scan
+#    further down still works for a project whose checkout is simply
+#    $HOME/<name>. It exists for the ones that are not: a repository under a
+#    different name, or several checkouts of one project where only one is the
+#    one you answer findings from.
+HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+
+write_repos_file() {
+  cat > "$REPOS_FILE" <<'TEMPLATE'
+# process_anoieu -- where each project is checked out on this machine.
+#
+# One entry per line:
+#
+#     <repo-id> <path>
+#
+# <repo-id> is what you type as the first argument to process_anoieu, and
+# <path> is the directory it means. A leading ~ is expanded, and a path may
+# contain spaces. A line whose first non-blank character is # is a comment,
+# blank lines are ignored, and the first entry for an id wins.
+#
+# This file is local to this machine and is not tracked by git. It is also
+# optional: an id with no entry here is resolved by looking for a directory of
+# that name under $ANOIEU_REPOS (default $HOME), and a path given on the command
+# line is used as it stands. What the file is for is the cases where neither
+# works -- a checkout under a different name, or several checkouts of one
+# project where only one of them is the one you answer findings from.
+#
+# The projects tools/deps.json tracks, as examples. Uncomment and correct:
+#
+#     ethos       ~/src/ethos
+#     logos       ~/src/logos
+#     cvc5        ~/src/cvc5
+#     eudaimonia  ~/src/eudaimonia
+TEMPLATE
+  cat >&2 <<BANNER
+
+======================================================================
+  process_anoieu has just created its configuration file. Set it up.
+
+      $REPOS_FILE
+
+  It maps repo ids to directories on this machine -- nothing else
+  knows where your checkouts are, and the file is not tracked by git,
+  so it starts with its instructions and no entries. Open it now and
+  add a line per project:
+
+      <repo-id> <path>
+
+  Until you do, an id is only resolved by looking for a directory of
+  that name -- which finds a checkout called "logos" and nothing
+  called anything else -- under
+      ${ANOIEU_REPOS:-\$HOME}
+======================================================================
+
+BANNER
+}
+
+# Written before anything else is decided, including whether the arguments were
+# any good: the first run of this script is exactly when somebody needs to be
+# told the file exists, and a run that stops at the usage message is still a
+# first run.
+[ -e "$REPOS_FILE" ] || write_repos_file
 
 AGENT=claude
 PRINT=0
@@ -41,7 +106,7 @@ usage: process_anoieu [--status | --dry-run | --show-prompt]
                      [--codex] [--print] [--branch NAME] NAME [ID]
 
   NAME            a directory, or a repo id: looked up in scripts/repos.local
-                  (written on first run), then under $ANOIEU_REPOS (default $HOME)
+                  (written on the first run), then under $ANOIEU_REPOS (default $HOME)
   ID              an anoieu finding id (16 hex digits) or register id (ethos-8).
                   Omitted, every reply in that repository is processed.
   --codex         run codex instead of claude
@@ -73,44 +138,6 @@ while [ $# -gt 0 ]; do
 done
 [ -n "$NAME" ] || usage
 
-# -- the mapping file: repo ids to directories on this machine. Written on first
-#    run, never tracked, and entirely optional -- the scan below still works for
-#    a project whose checkout is simply $HOME/<name>. It exists for the ones
-#    that are not: a repository under a different name, or several checkouts of
-#    the same project where only one is the one you answer findings from.
-HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
-
-write_repos_file() {
-  cat > "$REPOS_FILE" <<'TEMPLATE'
-# process_anoieu -- where each project is checked out on this machine.
-#
-# One entry per line:
-#
-#     <repo-id> <path>
-#
-# <repo-id> is what you type as the first argument to process_anoieu, and
-# <path> is the directory it means. A leading ~ is expanded, and a path may
-# contain spaces. A line whose first non-blank character is # is a comment,
-# blank lines are ignored, and the first entry for an id wins.
-#
-# This file is local to this machine and is not tracked by git. It is also
-# optional: an id with no entry here is resolved by looking for a directory of
-# that name under $ANOIEU_REPOS (default $HOME), and a path given on the command
-# line is used as it stands. What the file is for is the cases where neither
-# works -- a checkout under a different name, or several checkouts of one
-# project where only one of them is the one you answer findings from.
-#
-# The projects tools/deps.json tracks, as examples. Uncomment and correct:
-#
-#     ethos       ~/src/ethos
-#     logos       ~/src/logos
-#     cvc5        ~/src/cvc5
-#     eudaimonia  ~/src/eudaimonia
-TEMPLATE
-  echo "process_anoieu: wrote $REPOS_FILE -- repo ids to directories, one per line" >&2
-}
-[ -e "$REPOS_FILE" ] || write_repos_file
 
 # -- the synonym, resolved: an explicit path, then the mapping file, then a scan
 #    of $ANOIEU_REPOS. An exact directory name wins over a partial one, and an
