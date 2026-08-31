@@ -175,36 +175,60 @@ def prompts_agree() -> int:
     root = os.path.dirname(HERE)
     doc = open(os.path.join(root, "docs", "reporting-policy.md")).read()
 
-    def canonical(start: str, end: str, at: str) -> str:
+    # Both halves of each prompt, not just the tail. A script holds the document's
+    # text around one substituted scope line, and comparing from an anchor part
+    # way down leaves everything above it unchecked -- which is exactly where a
+    # stale paragraph survived a rewrite once.
+    def canonical(start: str, end: str, split_at: str) -> tuple[str, str]:
         chunk = doc[doc.index(start) : doc.index(end)]
         body = re.search(r"```text\n(.*?)\n```", chunk, re.S).group(1)
-        return body.split(at, 1)[1].strip()
+        head, _, tail = body.partition(split_at)
+        return head.strip(), (split_at + tail).strip()
 
-    def spoken(argv: list[str], at: str) -> str:
+    def spoken(argv: list[str], split_at: str) -> tuple[str, str]:
         got = sp.run(argv, cwd=root, capture_output=True, text=True)
-        if got.returncode != 0 or at not in got.stdout:
-            return f"!! {argv[0]}: {(got.stderr or got.stdout).strip()[:120]}"
-        return got.stdout.split(at, 1)[1].strip()
+        if got.returncode != 0 or split_at not in got.stdout:
+            return f"!! {argv[0]}: {(got.stderr or got.stdout).strip()[:120]}", ""
+        head, _, tail = got.stdout.partition(split_at)
+        return head.strip(), (split_at + tail).strip()
 
     failures = 0
-    cases = [
+    cases = []
+    def between(text: str, first: str, last: str) -> str:
+        """The shared span: from `first` (or the start) up to `last`."""
+        out = text[text.index(first):] if first and first in text else text
+        return out[: out.index(last)].strip() if last in out else out.strip()
+
+    for name, argv, start, end, split_at, first, last, fix in (
         (
             "check_anoieu",
-            canonical("### Prompt one", "### Prompt two", "A row is a claim"),
-            spoken(
-                ["bash", "scripts/check_anoieu", "--show-prompt", "ID"],
-                "A row is a claim",
-            ).replace("anoieu-ID", "BRANCH"),
+            ["bash", "scripts/check_anoieu", "--show-prompt", "ID"],
+            "### Prompt one", "### Prompt two", "On branch",
+            "", "Address ",
+            lambda s: s.replace("anoieu-ID", "BRANCH"),
         ),
         (
+            # this one's opening differs by design: the document says "paste a
+            # link", the script has resolved a checkout. The shared text starts
+            # at TRIAGE.
             "process_anoieu",
-            canonical("### Prompt two", "### Prompt three", "1. Find the row"),
-            spoken(
-                ["bash", "scripts/process_anoieu", "--show-prompt", root, "ID"],
-                "1. Find the row",
-            ),
+            ["bash", "scripts/process_anoieu", "--show-prompt", root, "ID"],
+            "### Prompt two", "### Prompt three",
+            "docs/reporting-policy.md is the authority",
+            "TRIAGE: is an assistant", "Working in the anoieu repository",
+            lambda s: s,
         ),
-    ]
+    ):
+        want_head, want_tail = canonical(start, end, split_at)
+        got_head, got_tail = spoken(argv, split_at)
+        cases.append((f"{name} (the steps)", want_tail, fix(got_tail)))
+        cases.append(
+            (
+                f"{name} (above them)",
+                between(want_head, first, last),
+                between(got_head, first, last),
+            )
+        )
     for name, want, got in cases:
         if want == got:
             print(f"ok   scripts/{name} says what reporting-policy.md says")

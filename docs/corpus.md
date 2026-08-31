@@ -41,7 +41,7 @@ subject, never our own coverage* in [`philosophy.md`](philosophy.md).
 | CPC | 35 | 3 | 19 | 15 |
 | CPC with the expert signature | 51 | 3 | 23 | 15 |
 | ethos test signatures | 202 | 7 | 6 | 4 |
-| logos installed definitions | 1 | 3 | 1 | 15 |
+| logos installed definitions | 0 | 0 | 0 | 0 |
 | eudaimonia examples | 1 | 0 | 0 | 0 |
 | the CPC triple | 35 | 3 | 20 | 15 |
 
@@ -85,12 +85,7 @@ subject, never our own coverage* in [`philosophy.md`](philosophy.md).
 
 **logos installed definitions**
 
-| code | severity | count |
-| --- | --- | ---: |
-| EO0054 | hint | 14 |
-| EO0064 | error | 3 |
-| EO0077 | hint | 1 |
-| EO0083 | warning | 1 |
+Nothing reported by the checks that are on by default.
 
 **eudaimonia examples**
 

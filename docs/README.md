@@ -22,16 +22,23 @@ Written by a run, and the only files here a tool may edit.
 
 | document | its job |
 | --- | --- |
-| [`open-findings.md`](open-findings.md) | **every finding currently reported**, one row each, plus the ones already ruled on. *Additive* — see the caution below |
+| [`open-findings.md`](open-findings.md) | **every finding currently reported**, one row each. *Additive* — see the caution below |
+| [`closed-findings.md`](closed-findings.md) | **internal**: every row already ruled on, and the verdict against it. What stops a settled finding being listed again |
 | [`corpus.md`](corpus.md) | **what was measured, and what the checks reported on it**: the commits each project was restored to, and the counts taken from them. *Rewritten whole* |
 | [`checks.md`](checks.md) | **one page per check** — what it reports, what it assumes, and what it deliberately does not. Rendered from the registry, so a page cannot drift from the code beside it. *Rewritten whole* |
 
-> **`open-findings.md` is not like the other two.** They are rewritten whole, so
-> anything typed into one is lost on the next run. It is *additive*: the
-> generator adds rows and never removes or rewrites one, so the notes column,
-> the verdicts and the *Closed* table are all written by hand and all survive.
-> The asymmetry is deliberate — a generator that could delete could quietly
-> delete a regression.
+> **The two findings files are not like the others.** `corpus.md` and
+> `checks.md` are rewritten whole, so anything typed into one is lost on the next
+> run. The findings files are *additive*: the generator adds rows and never
+> removes or rewrites one, so the notes column and every verdict are written by
+> hand and all survive. The asymmetry is deliberate — a generator that could
+> delete could quietly delete a regression.
+
+[`postmortem.md`](postmortem.md) is what running that workflow once actually
+taught us: the log of one project's twenty rows, what the assistant at the far
+end got right and wrong, what we got wrong, and the two rules the round
+established — that each round leaves the prompts *shorter and clearer*, and that
+a person approves every change to one.
 
 [`../scripts/`](../scripts) holds one implementation of the workflow
 [`reporting-policy.md`](reporting-policy.md#the-workflow) defines: `check_anoieu`

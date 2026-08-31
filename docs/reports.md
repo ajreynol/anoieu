@@ -56,7 +56,7 @@ before it was written down.
 
 | you own | your section | read first |
 | --- | --- | --- |
-| cvc5's CPC signature | [cvc5](#cvc5--the-calculus-everything-downstream-is-built-from) | the log first: two findings fixed, one declined ([`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back)) |
+| cvc5's CPC signature | [cvc5](#cvc5--the-calculus-everything-downstream-is-built-from) | the log first: one finding fixed, one declined, and one we recorded as fixed that never was ([`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back)) |
 | ethos, the proof checker | [ethos](#ethos--the-proof-checker-and-its-own-signatures) | ethos-1: a test signature declares an operator that cannot fold |
 | ethos-eoc, the compiler | [ethos-eoc](#ethos-eoc--the-eunoia-compiler) | eoc-3: the `is_list_nil` diff your own docs ask for |
 | logos | [logos](#logos--the-lean-development) | logos-2: a semantics entry for an operator CPC does not declare |
@@ -70,9 +70,10 @@ before it was written down.
 | **Open findings** | this page, below | what anoieu believes and nobody has ruled on: hypotheses, each reproduced, each still able to be wrong |
 | **The log** | [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) | what was reported and what came back: accepted, declined, deferred — and what the analyzer changed when a finding was wrong |
 
-Two findings have landed in cvc5, one was declined because our analysis was
-wrong, and one was overstated. The log is the more honest half of the pair, and
-the one to read first if you are deciding how much weight to give the other.
+One finding has landed in cvc5, one was declined because our analysis was
+wrong, one was overstated, and one we recorded as fixed turned out never to have
+been changed at all. The log is the more honest half of the pair, and the one to
+read first if you are deciding how much weight to give the other.
 
 #### How a row moves
 
@@ -105,6 +106,7 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 
 | # | tool | kind | what | state |
 | --- | --- | --- | --- | --- |
+| [cvc5-1](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `programs/Strings.eo:42` and `:55` declare `Int` and return `Bool` | reopened — recorded as fixed, never changed |
 | [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5; may belong to [dokimasia](https://github.com/ajreynol/dokimasia) instead, see [`notes.md`](notes.md#8-a-neighbouring-tool) |
 | [cvc5-7](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | keep a reproducer with every claim about first use, and derive severity from whether a call can stay stuck | requested by cvc5 |
 | [ethos-1](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/match-simple.eo:11` declares `<` `:right-assoc` with a `Bool` return | open |
@@ -119,11 +121,10 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [eoc-1](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | preflight: have `driver.py` run anoieu over the triple before stage 1, so a missing semantics block is refused at launch rather than at stage 6 | proposed |
 | [eoc-2](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | run over `semantics/*.eos` and the signatures the tests compile | proposed |
 | [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote | proposed |
-| [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerate now that it is fixed upstream | ready |
-| [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:546` has an entry for `str.indexof_re_split`, which CPC does not declare | open |
+| [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerating picks it up once cvc5 fixes it | blocked on cvc5-1 |
+| [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:546` has an entry for `str.indexof_re_split`, which CPC does not declare | confirmed, fix not landed |
 | [logos-3](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed |
-| [logos-4](#logos--the-lean-development) | logos | A | **`FUZ0001`** — the parser accepts two things ethos refuses, one of them in a committed regression test | open |
-| [logos-5](#logos--the-lean-development) | logos | A | **`FUZ0005`** — the parser refuses one thing ethos accepts: an `assume` after the first `step` | open |
+| [logos-6](#logos--the-lean-development) | logos | A | `test/regress/sexp/test-indexed-op.cpc`, committed and unmutated, is accepted by logos and refused by ethos — and it is not the thing we filed | open question |
 | [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed |
 | [eud-2](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | settle the calculus profile's two *declared* answers against the signature instead of recording them on trust | proposed |
 | [eunoia-1](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | refuse a re-declaration whose type is identical to an earlier one | proposed |
@@ -134,11 +135,13 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [eunoia-6](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | settle `eo::define` in the grammar: several bindings, bound in parallel | proposed |
 | [eunoia-7](#eunoia-itself--the-language-and-its-manual) | Eunoia | C | say what `eo::hash` guarantees, or mark it as the one thing a model cannot follow | open question |
 
-**Settled, and not repeated here:** `cvc5-1` and `cvc5-2` are fixed upstream,
-`cvc5-3` is deferred, `cvc5-4` was declined because our analysis was wrong, and
-`cvc5-5` waits on a pinned release. All five, with the reasoning and with what
-the analyzer does differently as a result, are in
+**Settled, and not repeated here:** `cvc5-2` is fixed upstream, `cvc5-3` is
+deferred, `cvc5-4` was declined because our analysis was wrong, and `cvc5-5`
+waits on a pinned release. All four, with the reasoning and with what the
+analyzer does differently as a result, are in
 [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back).
+**`cvc5-1` is not settled and is back in the table above:** it was closed on a
+triage that said both signatures now return `Bool`, and they never did.
 
 ### The claim
 
@@ -415,8 +418,9 @@ logos's name, seventeen times as it turned out. It is no longer read at all
 (`NOT_AUDITED` in `tools/gen_corpus_table.py`), and whether the copy has drifted
 from the original is a sync check — planned, in cvc5's CI — rather than
 anything a static analyzer should be reporting. What is left for logos is what
-logos owns: `Cpc.eos`, the semantics, and the two parser findings the fuzzer
-turned up.
+logos owns: `Cpc.eos`, the semantics, and what the fuzzer turned up about the
+parser — of which one finding was confirmed and fixed, one was declined with a
+reason that holds, and one we withdrew as our own error.
 
 **What it gets next, and it is the largest single item on the roadmap.** logos
 owns `Cpc.eos`, the official semantics of CPC, so the triple checks are what
@@ -427,9 +431,11 @@ programs will need a hand-written `:lean` termination clause.
 
 #### Actions
 
-**logos-1 (A)** — `install/defs/Cpc.eo` and `Cpc.cached.eo` carry cvc5-1, which
-is now fixed upstream. Regenerating picks it up; nothing to change in logos
-itself.
+**logos-1 (A)** — `install/defs/Cpc.eo` and `Cpc.cached.eo` carry cvc5-1.
+Nothing to change in logos itself: regenerating picks the fix up once there is
+one. There is not one yet — we recorded cvc5-1 as fixed upstream and it never
+was, which logos caught while answering the rows against the copy, so the next
+signature bump will carry the same three cases across unchanged.
 
 **logos-2 (A)** — `Cpc.eos:546` has `(define-symbol str.indexof_re_split (s r q))`
 and CPC declares no such operator: it declares `str.indexof_re`. The name is real
@@ -438,28 +444,40 @@ legitimate; the input-side entry is what no compilation reaches. Found by the
 first run over the whole triple, and cvc5's response notes correctly that it
 belongs to whoever owns the semantics rather than to cvc5. Reported by `TRI0002`.
 
-**logos-4 (A)** — logos's README says it "accepts the same syntax for proofs as
-Ethos", and two cases show the parser is more permissive than that:
+**Confirmed by logos, and the fix has not landed.** They deleted the entry and
+established it was dead rather than merely unused —
+`install/install-cpc.sh --cached --check` reports the generated Lean byte-identical
+with the line gone. But the deletion is an uncommitted working-tree edit, and the
+branch it was said to be on, `anoieu-findings`, is `main` (`d4a03a59`) with no
+commits of its own; the row stays open until it is somewhere a second person can
+read it.
+**And it will come back.** `scripts/bump-eoc-version.py` copies this file wholesale
+from ethos's `tools/eoc/semantics/development-cpc.eos`, which still carries the same
+line at `:542` in the ethos we pin (`3cf1c03fdfd0`) — so the next internal bump
+restores it unless the deletion lands there first. That makes the same finding an
+ethos one, in a file `deps.json` already checks out and no corpus currently reads
+as a triple.
 
-- `test/regress/sexp/test-define.cpc`, **unmutated and committed**, uses
-  `declare-fun`. That is an SMT-LIB command, which ethos accepts only in a file
-  read via `reference`; ethos refuses the file outright and logos checks it and
-  prints `correct`. Either the file should use `declare-const`, or the parity
-  claim should be narrowed to say which SMT-LIB commands are also read.
-- `(( extract 1 0) a)` — the indexed operator written without its `_` — is read
-  by logos as `((_ extract 1 0) a)` and used to discharge a `refl` against a
-  term written the other way. Ethos type checks and refuses it.
+**logos-4 and logos-5 are ruled on** and are in
+[the log](reports.md#logos--the-parser-and-the-semantics): the `declare-fun` case
+declined for a reason that holds, the `assume`-after-`step` case declined and
+documented, and the indexed-operator case withdrawn as ours.
 
-Reproducers under `tests/fuzz/`. Found by the fuzzer, `FUZ0001`.
-
-**logos-5 (A)** — the other direction: a proof that `assume`s after its first
-`step` is accepted by ethos and refused by logos's parser with "assumption after
-the first proof step". Nothing in the Eunoia grammar orders the two, so this is
-a completeness gap rather than a disagreement about the language — worth either
-supporting or documenting as a restriction of logos's input format. Reproducer
-under `tests/fuzz/`. Found by the fuzzer, `FUZ0005` — the milder of the two
-directions, and reported as a warning: logos refuses, so nothing unsound follows
-from it.
+**logos-6 (A, open question)** — `test/regress/sexp/test-indexed-op.cpc`,
+committed and unmutated, writes `((_ extract 1 0) a)`. logos says `correct`; the
+ethos on this machine refuses it at that line — *"Incorrect arity for extract,
+which expects 2 arguments but 1 were provided"*, reading `(_ extract 1 0)` as a
+curried `((extract 1) 0)`. That is the same shape as the `declare-fun` row: a
+committed regression test of one checker that the other will not take.
+**It is an open question and not a finding**, for two reasons. It is unconfirmed
+against the reference: `deps.json` checks out ethos's `tests`, `tools/eoc` and
+`plugins` and no source, so the pinned ethos cannot be built here, and every `FUZ`
+row already carries that caveat. And logos raised it themselves, saying it may be
+an artefact of which ethos they have. It needs one run against whichever ethos we
+call the reference; if it stands, it is promoted through `anoieu-fuzz promote`
+like any other, by a person.
+It matters more than its size because it is what the withdrawn row was standing
+in front of — see the log.
 
 **logos-3 (B)** — run the triple in CI. logos already vendors ethos and consumes
 cvc5's signature, so it is the natural place for the job — see the open question
@@ -756,9 +774,13 @@ Every case returns a Boolean, the docstring says *"return: true if s is a
 sequence constant"*, and the signature says `Int`. Program bodies are not type
 checked, so ethos accepts it.
 
-**Corrected, after cvc5 assessed it.** The finding was right and both signatures
-now return `Bool` -- but our claim about *when* it bites was too strong, and the
-correction is worth more than the finding.
+**Corrected, after cvc5 assessed it.** The finding was right -- and it is still
+there. We recorded it as fixed, "both signatures now return `Bool`", and both
+still declare `Int`: at `622a50a3`, the commit it was reported against, and at
+`aee874240419`, the commit this report is measured against. See
+[`reports.md`](reports.md#cvc5-1-what-we-recorded-as-fixed).
+What *was* wrong was our claim about when it bites, and that correction is worth
+more than the finding.
 
 We wrote that a use where a `Bool` is expected is a type error, from this
 reproduction:
@@ -1037,12 +1059,16 @@ analyzer does differently now.
 
 | verdict | count | which |
 | --- | --- | --- |
-| **fixed upstream** | 2 | `cvc5-1`, `cvc5-2` |
+| **fixed upstream** | 1 | `cvc5-2` |
 | **declined — our error** | 1 | `cvc5-4` |
 | **overstated — claim corrected** | 1 | `cvc5-1`'s impact |
+| **recorded as fixed, and never was** | 1 | `cvc5-1`, reopened |
 | **deferred** | 1 | `cvc5-3`, pending a documented convention |
 | **not yet** | 1 | `cvc5-5`, pending a pinned release |
 | **not audited** | 17 | every row against `logos/install/defs/Cpc.cached.eo` |
+| **declined, and the reason holds** | 2 | `logos-4`'s `declare-fun` case, `logos-5` |
+| **withdrawn — our error** | 1 | `logos-4`'s indexed-operator case |
+| **accepted, not landed** | 1 | `logos-2`, still open |
 
 Changes the analyzer made as a result:
 
@@ -1054,6 +1080,9 @@ Changes the analyzer made as a result:
   its cases (`cvc5-1`);
 - a regression case in `tests/cli_cases.py` for the arrangement that produced
   the wrong finding;
+- **the fuzzer's shrinker no longer edits a seed run as it stands**, after a
+  promoted reproducer turned out to differ from the committed file it came from
+  by a cut the reference had never looked at (`logos-4`);
 - **files a project did not author are not audited** (`NOT_AUDITED` in
   `tools/gen_corpus_table.py`), after seventeen rows were filed against logos
   for a copy of somebody else's signature.
@@ -1067,15 +1096,20 @@ response is reproduced in that repository as `anoieu-response.md`.
 
 | item | what we said | decision |
 | --- | --- | --- |
-| **cvc5-1** | `$is_seq_const_rec` and `$is_seq_const` declare `Int` and return `Bool` | **accepted, fixed** — both signatures now return `Bool` |
+| **cvc5-1** | `$is_seq_const_rec` and `$is_seq_const` declare `Int` and return `Bool` | **accepted** — and *not* fixed. We recorded "both signatures now return `Bool`"; they did not then and do not now. Reopened, see below |
 | **cvc5-2** | four arithmetic skolem declarations duplicated in `expert/theories/ArithExt.eo` | **accepted, fixed** — the second block removed |
 | **cvc5-3** | 18 documentation arity and field findings | **deferred** — documentation rather than calculus, and the convention for documenting a program's pattern variables has to be decided first |
 | **cvc5-4** | `$is_app` is reached by nothing | **declined — our analysis was wrong.** See below |
 | **cvc5-5** | run anoieu in CI, report-only then blocking | **not yet** — reasonable once the entry-point handling is fixed and a released version can be pinned |
 
-Both accepted changes were verified on a temporary copy before landing: ethos
-accepted the base and the base-plus-expert signature, and the `EO0031` and
-`EO0064` diagnostics went away.
+Both accepted changes were verified on a temporary copy *before* landing:
+ethos accepted the base and the base-plus-expert signature, and the `EO0031` and
+`EO0064` diagnostics went away. **That is a check on the change we proposed, not
+on the tree afterwards, and neither was ever re-checked against cvc5.** For
+`cvc5-1` that is how it came to be recorded as fixed when nothing had changed.
+`cvc5-2` has not been re-checked here either, and the four `EO0031` rows it is
+about are still open in [`open-findings.md`](open-findings.md) — nobody has
+ruled on what that means, and this entry is not the place to decide it.
 
 #### cvc5-4: what we got wrong
 
@@ -1120,9 +1154,8 @@ disagree.
 
 #### cvc5-1: what we overstated
 
-The finding was right and the fix landed, but our *impact* claim did not
-reproduce. We wrote that a use of `$is_seq_const` where a `Bool` is expected is
-a type error; cvc5 found that a direct typed use checks as `correct`, because
+The finding was right, but our *impact* claim did not reproduce. We wrote that a
+use of `$is_seq_const` where a `Bool` is expected is a type error; cvc5 found that a direct typed use checks as `correct`, because
 both programs are total over their argument and ethos evaluates the application
 before consulting the declared return type. The declared `Int` surfaces only
 when an application stays stuck.
@@ -1137,6 +1170,45 @@ cvc5's words:
 
 `EO0064`'s manual page says which of the three it is, and
 [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) is corrected.
+
+#### cvc5-1: what we recorded as fixed
+
+**The three rows are reopened.** We closed them with the verdict *fixed
+upstream — both signatures now return Bool*. They do not. `$is_seq_const_rec`
+and `$is_seq_const` declare `:signature ((Seq T)) Int` at `622a50a3`, the commit
+the finding was reported against, and at `aee874240419`, the commit
+[`corpus.md`](corpus.md) records this report as measured against — and over the
+last three hundred commits of cvc5 `main` neither program has ever declared
+anything else. They entered `programs/Strings.eo` in `6441210` already declaring
+`Int`. The checks report all three cases today; the only reason they were not in
+the open table is that a closed id is one the generator skips.
+
+**Nobody upstream told us it was fixed and nothing here checked.** The verdict
+was written from an assessment of the change we proposed, and the entry above
+records that both accepted changes were verified *on a temporary copy before
+landing*. That is a check that the fix would work, not that it happened, and the
+gap between the two is where this sat.
+
+**It was caught by a third party reading our own ledger.** logos, answering the
+rows we filed against its flattened copy of the same signature, went to cvc5
+`main` to check whether the copy would pick up a fix at the next bump, found the
+line unchanged, and told us the closed verdicts were wrong — three times, once per
+row, each naming the id. That is the whole argument for publishing the ledger
+with the ids in it.
+
+What follows for the tool, rather than for this row:
+
+- **`--pinned` never re-derived these.** It re-runs every check over the
+  recorded commits and reports what they say, and all three are still reported;
+  what it cannot do is notice that a *closed* id is still being reported,
+  because closing is defined as removing the finding from the generator's
+  consideration. A closed row and a live finding can therefore coexist
+  indefinitely with nothing red. Worth a check on the report itself: an id in
+  `closed-findings.md` that the checks still report at the pinned commits is either
+  a wrong verdict or a verdict that has expired, and both want a person.
+- **A verdict of *fixed upstream* is a claim about somebody else's tree**, and it
+  is the one kind of verdict this repository can settle by itself, from `deps/`.
+  It should not have been recorded without that.
 
 ---
 
@@ -1166,9 +1238,156 @@ Nothing filed yet. Four items stand in the register: the `<` declared
 whose category they never declare, a dead case in `naive-nary.eo`, and three
 diagnostics worth improving.
 
-### logos
+### logos — the parser and the semantics
 
-Nothing filed yet. One triple finding stands: `Cpc.eos:546` has an entry for
-`str.indexof_re_split`, which CPC does not declare. cvc5's response notes
-correctly that this belongs to the repository that owns the semantics, not to
-cvc5 — which is also the argument for the ownership field they asked for.
+Nineteen rows were put to logos and answered one at a time, on branch
+`anoieu-findings`; the reply is reproduced in that repository as
+`anoieu-response.md`. Sixteen of them were rows we had already closed as *not
+audited*, and the answer to each is the one that closure had assumed —
+`install/defs/Cpc.cached.eo` is generated, byte-exact against the cvc5 signature
+the Lean packages were compiled from, and a correction there would falsify the
+pin rather than fix anything. Nothing moved for those sixteen. Three rows were
+substantive.
+
+| item | what we said | decision |
+| --- | --- | --- |
+| **logos-2** | `Cpc.eos:542` declares a semantics entry for `str.indexof_re_split`, which CPC does not declare | **accepted** — entry deleted, generated Lean byte-identical without it. **Left open**: the change has not landed |
+| **logos-4**, `declare-fun` | `test/regress/sexp/test-define.cpc`, committed and unmutated, is accepted by logos and refused by ethos | **declined**, and the reason holds. Closed |
+| **logos-4**, `(( extract 1 0) a)` | logos reads the indexed operator without its `_` and accepts a proof ethos refuses | **withdrawn — our error.** The reproducer was an artefact of our shrinker. Closed |
+| **logos-5** | an `assume` after the first `step`: ethos accepts, logos refuses | **declined and documented** — a deliberate restriction of logos's input format, now stated in `docs/parser.md`. Closed |
+
+#### logos-2: accepted, and the row stays open
+
+The entry was a symbol of the *target* vocabulary — declared in ethos's
+`smt.eos`, and legitimately written by the transform a few lines below it — that
+had been given an input-side entry it had no business having, so it contributed a
+transform case nothing could reach. logos deleted it and established that it was
+dead rather than merely unused: `install/install-cpc.sh --cached --check` reports
+the generated Lean byte-identical with the line gone.
+
+**The row is still open, and the reason is the branch.** `anoieu-findings` is
+`main`, `d4a03a59`, with no commits of its own; the deletion, and the parser work
+below, are uncommitted edits in one working tree. Our own report is measured
+against `updateCompiler` at `47f29bfa`, a different branch, where the line stands
+and `TRI0002` still reports it. A reply is a triage and the branch is the
+authority, and here the branch is empty — so the row keeps its finding and gains
+a note saying where the work is.
+
+logos also told us the finding will return: `scripts/bump-eoc-version.py` copies
+`Cpc.eos` wholesale from ethos's `tools/eoc/semantics/development-cpc.eos`, which
+carries the same line at `:542` in the ethos we pin. That is checked out here
+already and no corpus reads it as a triple.
+
+#### logos-4, `declare-fun`: declined, and the reason holds
+
+`declare-fun` in a proof file is deliberate and documented. logos ignores
+`include` and `reference` — it has the signature built in and never reads the
+input problem — so a proof has to carry its own declarations, where ethos puts
+the command behind its reference-file table because that is where it expects them
+to come from. The symbol gets exactly the type SMT-LIB gives it, which is the
+type ethos would give it from a reference file, so nothing is misread. And the
+divergence cannot arise on real cvc5 output: the `eo` variant of cvc5's printer
+emits `(declare-const f (-> U U U))`, never `declare-fun`. The reproducer still
+reproduces, by design, and the row is closed as declined rather than as fixed.
+
+logos observed that the severity reads high for what it is — the reproducer is
+one of their own regression tests, unmutated, and the finding is that their input
+format is a documented superset in one command. The severity is not a claim about
+fault: `FUZ0001` is the direction, not the attribution, and
+[`reporting-policy.md`](reporting-policy.md#a-finding-from-the-fuzzer) says so.
+What the observation is really about is that a `FUZ` row carries no field for
+"whose fault", which is the same ownership gap cvc5 asked for.
+
+#### logos-4, the indexed operator: what we got wrong
+
+**The reproducer was an artefact of our own shrinker, and the note on it named a
+cause that had nothing to do with why ethos refused the file.**
+
+The case was `test/regress/sexp/test-indexed-op.cpc`, taken from logos's own
+regression suite and run *as it stands* — which is a thing this fuzzer does
+first, deliberately, and which is where its best finding so far came from. It
+disagreed: logos said `correct`, ethos refused. So far so good.
+
+Then the shrinker ran. `shrink` keeps an edit when the finding is still the same
+finding, and "the same" is the bucket — the two checkers' coarse verdicts and a
+normalisation of the refusing one's message. The bucket says nothing about
+*where* the refusal happened. Ethos was refusing at **line 3**, on the file's own
+unmutated `((_ extract 1 0) a)`. So the shrinker was free to cut anything on line
+4, and it cut the `_` out of `(((_ extract 1 0) a))`, leaving `((( extract 1 0)
+a))`, and the bucket held — not because the cut mattered but because nothing on
+line 4 had ever been reached.
+
+That reduction is exactly reproducible from the committed code:
+
+```python
+>>> from anoieu_fuzz.triage import _spans, _cut
+>>> cmd = "(step @p1 :rule refl :args (((_ extract 1 0) a)))"
+>>> _cut(cmd, *next(s for s in _spans(cmd)[1] if cmd[slice(*s)] == "_"))
+'(step @p1 :rule refl :args ((( extract 1 0) a)))'
+```
+
+What was then promoted was a file nobody had written, under a note — *"( extract
+1 0) without the `_`: logos reads it as the indexed operator, ethos does not"* —
+that described the cut rather than the refusal. Every later reader inherited it,
+including this repository's own register and `fuzzing.md`, and including logos,
+who fixed their parser against it.
+
+**What is true underneath.** Three separate things, and the row conflated them:
+
+1. The parser *was* more permissive than the grammar: a parenthesised head that
+   is not marked `_` was read as a curried application. Reduced on its own,
+   `(( extract 1 0) a)` gets a **parse** error from ethos — *"Expected qualified
+   identifier or indexed symbol as head of apply"* — not the type error the row
+   recorded. logos narrowed `parseTermCore`, added guards in `test/Parser.lean`
+   and `test/CpcParser.lean`, and against a build carrying that change the
+   reproducer no longer reproduces: `anoieu_fuzz verify` reports it as `was
+   accept, is reject`. That fix is real and stands on its own, whatever happens
+   to this row.
+2. **The disagreement ethos was actually reporting is untouched by that fix, and
+   is still there.** `((_ extract 1 0) a)` — the SMT-LIB spelling, in a committed
+   regression test — is accepted by logos and refused by the ethos on this
+   machine. It is now `logos-6` in the register, as an open question rather than
+   a row, because it is unconfirmed against the reference build and logos
+   themselves flagged it as possibly an artefact of their ethos.
+3. The row's severity and direction were right and its subject was wrong, which
+   is the worst combination: a true headline over a reproducer that does not
+   support it.
+
+**What changed here.** The reproducer is removed from `tests/fuzz/` and the row
+is closed as withdrawn. `shrink` now refuses to touch a case whose source is a
+seed run as it stands, with the reasoning in its docstring and a case in
+`tests/fuzz_cases.py` that fails if the guard goes away. The argument is not that
+shrinking is bad — for a case the fuzzer generated it is most of what makes the
+corpus readable — but that for a file somebody else committed the finding *is*
+the file, and an edit restates it as a claim about a file nobody has.
+
+**What did not change, and is the harder question.** A coarser bucket than the
+thing being claimed is what let this through, and that is not specific to seeds:
+any shrink can keep an edit the verdict never depended on. A shrinker that asked
+the reference *where* it refused, and required that to stay put, would have
+caught it. That is a real change to `judge` and to what an `Outcome` carries, and
+it is not one to make while writing up the row it would have prevented.
+
+#### logos-5: declined, and documented
+
+The refusal is deliberate. logos reads a proof as an assumption set together with
+the steps that refute it, and that shape is what its correctness theorem is
+stated over, so accepting a mid-proof `assume` would change what a proof *is*
+there rather than fix a parser. What was missing is that `docs/parser.md` claimed
+syntactic parity with ethos without recording the restriction; it now records it,
+with regression guards. The reproducer will keep reproducing and the row is
+closed as declined rather than as fixed — which is what logos asked for, and the
+distinction `FUZ0005` exists to make: refusing what the reference accepts costs a
+user a proof and guarantees nothing false.
+
+The documenting sentence is in the same uncommitted working tree as everything
+else on that branch. That does not hold the row open, because what closes it is
+the decision not to change the behaviour, and that decision does not need a
+commit to be somebody's.
+
+#### And a correction to our ledger, from logos
+
+Answering the rows against the copy, logos went and looked at what the copy is a
+copy *of*, and found that three rows we had closed as *fixed upstream* were not
+fixed. That is [cvc5-1](#cvc5-1-what-we-recorded-as-fixed), above, and it is the
+most valuable thing in the reply.

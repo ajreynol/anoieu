@@ -29,6 +29,7 @@ can adopt the conventions below by filling the same slots with its own files:
 | the slot | what it is for | anoieu's |
 | --- | --- | --- |
 | **the report** | every finding currently reported, one row each, generated and additive | [`open-findings.md`](open-findings.md) |
+| **the verdicts** | the internal half: every row that has been ruled on, and what was decided | [`closed-findings.md`](closed-findings.md) |
 | **the id** | a fingerprint stable across edits elsewhere in the file, which everything else refers to | the check's code, the file, and the text of the line |
 | **the catalogue** | what each check assumes, and therefore how it can be wrong | [`checks.md`](checks.md) |
 | **re-measuring** | one command that restores the exact versions the report was measured against | `python3 tools/run.py --pinned` |
@@ -94,20 +95,32 @@ with the reproducer's path where a signature's path would be.
 
 Two tables and one rule.
 
-**Open** — every finding the checks currently report, one row each, with an id,
-the project the file belongs to, the check that reported it, where, what it said,
-and a **notes** column that no generator ever writes to: anything in it was put
-there by hand and stays.
+**The report**, [`open-findings.md`](open-findings.md) — every finding the checks
+currently report, one row each, with an id, the project the file belongs to, the
+check that reported it, where, what it said, and a **notes** column that no
+generator ever writes to: anything in it was put there by hand and stays.
 
-**Closed** — rows that have been ruled on. The same columns, except the last is a
-*verdict* rather than notes: what was decided, in a few words.
+**The verdicts**, [`closed-findings.md`](closed-findings.md) — rows that have
+been ruled on. The same columns, except the last is a *verdict* rather than
+notes: what was decided, in a few words. It is **internal**: nobody outside is
+asked to read it, and the report is what a project is pointed at.
+
+Two files rather than two tables in one, because they are read by different
+people for different reasons, and because a report whose second half is a
+hundred rows of bookkeeping is a report people skim. The split has a cost that is
+worth naming: the first project to work a full sweep of its rows found *twelve of
+its sixteen answers* in the Closed table, by hand, because a row and its already-
+settled twin were twenty lines apart. Moving the table further away makes that
+worse unless the correspondence is in the `notes` column instead — which is where
+it belonged in the first place. See
+[`postmortem.md`](postmortem.md).
 
 **The rule is that generation adds and never removes.** So:
 
 - **Move a row; never delete one.** A deleted row is reported again on the next
-  run, because the finding is still there to be found. The Closed table is the
-  only thing that makes a verdict stick — generation skips any id already listed
-  in the file, in either table.
+  run, because the finding is still there to be found.
+  [`closed-findings.md`](closed-findings.md) is the only thing that makes a
+  verdict stick — generation skips any id already listed in either file.
 - **Touch only the rows the response is about.** Not the ones next to them, not
   ones that look stale, not ones whose wording could be better. A tidying pass
   over rows nobody asked about is how a report quietly stops being trustworthy,
@@ -128,8 +141,7 @@ there by hand and stays.
 
 ### The shape of a reply
 
-What a project sends back has two labels, and the distinction between them is
-the only formality anywhere in this workflow:
+One block per row, and one section at the end that is not about any row:
 
 ```text
 ## <id> — <check> — <path>:<line>
@@ -137,7 +149,16 @@ the only formality anywhere in this workflow:
 TRIAGE: triaged as fixed | not a defect | cannot tell, on branch <branch>,
 pending review. What was changed, or why nothing was.
 
+OBSERVED, NOT ACTED ON: optional. Anything true that was found and left alone.
+
 HUMAN RESPONSE:
+
+...
+
+FEEDBACK TO ANOIEU
+
+Where the time went; what a row should have carried; what in the prompt was
+unclear or untrue; what else would be worth looking for.
 ```
 
 **`TRIAGE:`** is what an assistant concluded — a reading made quickly, on
@@ -149,6 +170,17 @@ settled when what actually happened is that something was suggested.
 `HUMAN RESPONSE:` comes last so that reading a block top to bottom arrives at
 the question rather than at an answer, and a reply that carries only a triage is
 a proposal rather than a result.
+
+**`OBSERVED, NOT ACTED ON:`** is where a true thing goes that the row did not
+ask about. *Fix nothing else you notice* is the right rule and it leaves nothing
+to do with what you noticed; without a field, it either goes in prose or goes
+nowhere. The first round produced three of these — a second checker disagreement
+behind a reproducer, a documentation sentence two rows both undermined, and a
+verdict of ours that was three months stale — and all three arrived only because
+one assistant chose to write them down.
+
+**`FEEDBACK TO ANOIEU`** is the loop closing, and it is the subject of the next
+section.
 
 #### When the human defers the field
 
@@ -168,6 +200,50 @@ somebody's decision without them seeing it. So, having written it:
 
 An assistant that writes the field and summarises it back has done the one thing
 the shape exists to prevent.
+
+### Feedback, both ways
+
+**The prompt is the product, and the far end is the only place its defects are
+visible.** An assistant working a row in somebody else's repository knows which
+part of the request was unanswerable, which detail was missing, which sentence
+sent it the wrong way, and what each of those cost. None of that is visible from
+here. So the outbound prompt asks for it by name, under `FEEDBACK TO ANOIEU`,
+and asks for one thing more: what *else* would be worth looking for — a check, a
+mutation, a comparison — by somebody who has just spent a day on the output of
+the ones that exist.
+
+Four rules keep the loop from turning into drift.
+
+1. **Every round makes the prompts clearer, more actionable and shorter to act
+   on.** Feedback arrives as a list of things to add, and a prompt that grows
+   every round ends as a document nobody finishes reading — which is the failure
+   it exists to prevent. An addition has to earn its place and usually something
+   comes out to pay for it. The measure is how fast its reader can start, and
+   how often it sends them somewhere useless.
+2. **A prompt is procedural. Technical detail is a link.** What to do, how to
+   confirm before acting, what not to touch, how to report back — that is the
+   prompt. What a code means, what a record contains, what the reply format is
+   for: those live in the docs, and the prompt points at them. When a reader
+   arrives unprepared, the fix is a better landing page, not a longer prompt.
+3. **A person approves every change to a prompt template.** An assistant may
+   draft one, argue for it and show the diff; it may not adopt it. A prompt is
+   what every future project is answered against, and a template that rewrote
+   itself from its own experience would drift with nobody having agreed to the
+   direction. `tests/run.py` fails when the scripts drift from this document —
+   that guards against accident; this rule guards against intent.
+4. **Feedback about the report is acted on; feedback about the prompt is
+   proposed.** The first is data. The second is a change to what everybody is
+   asked, and goes to a person with the evidence attached.
+
+Neither shortening nor linking touches the guardrails. *Fix nothing else you
+notice*, *do not summarise anoieu's other results*, *touch no issue tracker*,
+*leave everything staged and commit nothing* — those stay written out in full, in
+every round, in both directions. They are what keep an agent inside the scope
+somebody agreed to, and they cost four sentences.
+
+What one round of this produced, in full, is
+[`postmortem.md`](postmortem.md) — including the five suggestions we have not
+acted on and why.
 
 ### The follow-up
 
@@ -281,13 +357,27 @@ long gap. The sweep form is not a bulk operation: each row still gets its own
 verdict and its own paragraph, and an assistant that answers ten rows with one
 sentence has not done the job.
 
-**Two kinds of row, and they are confirmed differently.** A code beginning `EO`,
-`DOC` or `TRI` comes from a check, and is confirmed by reading the file it
-names. A code beginning `FUZ` comes from [the fuzzer](fuzzing.md), and is
-confirmed by *running* something: the row points at a committed reproducer, and
-the finding's notes carry the exact invocation each checker was given. The
-prompt says both, because a maintainer sent to `docs/checks.md` for a `FUZ` row
-will find nothing there.
+**The prompt is procedural; the technical detail is a link away.** What it says
+is what to do: which rows, confirm before you act, the three outcomes, the
+guardrails, and how to report back. What a row *is*, how each code is confirmed,
+and which page explains which — all of that is in the header of
+[`open-findings.md`](open-findings.md), which is the one link the prompt opens
+with and the page every other link hangs off. That header is written for somebody
+who has just been handed a row and knows nothing else, and it is the place to
+improve when a reader arrives unprepared.
+
+Detail restated inside a prompt is detail that goes stale in a place nobody
+maintains. The first round shipped a sentence claiming a `FUZ` row's notes
+"carry the command each checker was given"; they carried nothing, the far end
+lost time discovering it, and the sentence had been wrong for as long as it had
+existed. A link cannot drift from the thing it points at.
+
+**The guardrails stay, every round.** *Fix nothing else you notice*, *do not
+summarise anoieu's other results*, *touch no issue tracker*, and — on the way
+back — *leave everything staged, commit nothing*. These are the constraints that
+keep an agent from turning a triage into a spree or a claim into somebody's
+inbox, and they are the first thing a shortening pass will be tempted to cut.
+They are not padding, and they are cheap: four sentences.
 
 ```text
 anoieu is a static analyzer for the Eunoia languages. It has reported findings
@@ -295,61 +385,55 @@ against this project:
 
   https://github.com/ajreynol/anoieu/blob/main/docs/open-findings.md
 
+Start there. That page says what a row is, how to confirm one for each code, and
+links the page behind each code -- read the one page your row points at rather
+than the catalogue behind it.
+
 Address ID.
   -- or, for the sweep form --
-Address every row in the Open table whose owner is PROJECT. There may be
-several, they are unrelated, and each gets its own verdict and its own block in
-the reply. Answering ten rows with one sentence is not doing this.
-
-A row is a claim, not a diagnosis: it does not say what kind of problem to
-expect. How you confirm one depends on its code.
-
-- EO, DOC, TRI -- a check, explained under its code in anoieu's docs/checks.md.
-  The row names a file and a line in THIS project. Confirm it by reading that
-  file.
-- FUZ -- the anoieu fuzzer, explained in anoieu's docs/fuzzing.md. The row names
-  a committed reproducer under tests/fuzz/ in the anoieu repository, fetchable
-  raw from GitHub, and its notes carry the command each checker was given and
-  what each answered. Confirm it by running your own build on that file. A FUZ
-  finding is about your program's behaviour, not about a file you maintain.
+Address every row whose owner names PROJECT, including a shared owner like
+"ethos+logos". Work from the ids; that file is regenerated and rows move. Rows
+may share a cause -- say so, and still rule on each in its own block. Answering
+ten rows with one sentence is not doing this.
 
 On branch BRANCH, one row at a time, and only what the rows name:
 
 1. Decide whether it is real -- by reading the file, or by running the
    reproducer -- rather than by trusting the row. Some of what anoieu reports is
-   wrong, and a FUZ row was produced against somebody else's build of your
-   program, so it may not reproduce here at all. Say which build you ran.
-2. If it is real: the smallest change that fixes it, and one sentence on what a
-   reader of that file, or a user of that program, would see differently.
+   wrong. Say which build you ran.
+2. If it is real: make the smallest change that fixes it, and say in one
+   sentence what a reader of that file, or a user of that program, would see
+   differently.
 3. If it is not, or you cannot tell: change nothing and say why. "I cannot tell"
    is the honest answer when you do not know what the file was meant to say.
 
-A FUZ row about two checkers disagreeing says which direction it runs in, not
-which checker is wrong. FUZ0001 -- accepting what the reference refused -- is
-the serious direction, but the answer may still be that the reference is
-stricter than the language requires. Say which you concluded.
-
 Fix nothing else you notice; each finding is reported separately. Do not
 summarise anoieu's other results: a check that reports nothing is not evidence
-that anything is right. Touch no issue tracker.
+that anything is right. Touch no issue tracker -- not ours, not yours, not
+anybody's. Everything that reaches a person who did not ask for it is sent by a
+person.
 
-Then draft a reply for a maintainer to review and send -- one block per row, in
-anoieu-response.md at the root of this repository, appending to it and leaving
-any block already there alone:
+Then draft a reply for a maintainer to review and send, in anoieu-response.md at
+the root of this repository, appending and leaving any block already there
+alone. One block per row:
 
   ## ID -- <code> -- <what the row names>
 
   TRIAGE: fixed | not a defect | cannot tell, on branch BRANCH, pending review.
   <What you changed, or why you changed nothing.>
 
+  OBSERVED, NOT ACTED ON: <optional -- anything true you found and left alone.>
+
   HUMAN RESPONSE:
 
-It is your triage and not a resolution: what happened will be settled by whether
-this branch is merged and by the commits that follow it. Leave HUMAN RESPONSE
-empty -- it is the maintainer's, and the two labels keep what you concluded
-apart from what a person decided. If they ask you to write it anyway, do, but
-quote the field back to them verbatim, say plainly that it will be read under
-their name, and revise it until they say it says what they mean.
+Commit your work to the branch: that, not the reply, is what settles this. Leave
+HUMAN RESPONSE empty -- it is the maintainer's decision and yours is a triage;
+the report page links what to do if they hand you the field anyway.
+
+End with one section, FEEDBACK TO ANOIEU. It is asked for, and blunt is useful:
+where the time went and what would have made it fast; what a row should have
+carried, and anything here that was unclear or untrue; what else is worth
+looking for that anoieu does not do.
 ```
 
 ### Prompt two: the follow-up, here
@@ -377,40 +461,53 @@ A project we reported findings to has responded:
 
   LINK
 
-Read each block as two things. What follows TRIAGE: is an assistant's reading,
-made quickly and on our word. What follows HUMAN RESPONSE: is a maintainer's
-decision. Where they differ the decision counts, and a block carrying only a
-triage is a proposal rather than a result.
+TRIAGE: is an assistant's reading, made quickly and on our word. HUMAN RESPONSE:
+is a maintainer's decision. Where they differ the decision counts, and a block
+carrying only a triage is a proposal rather than a result.
 
 Working in the anoieu repository, on the block about ID -- or, for the sweep
-form, on every block in the reply, one at a time, leaving the record consistent
-after each so that stopping partway is safe:
+form, on every block, one at a time, leaving the record consistent after each so
+that stopping partway is safe.
 
-1. Find the row or rows in docs/open-findings.md the reply is about.
-2. Establish what actually happened, which is not what the triage predicted. For
-   an EO, DOC or TRI row, re-check at the recorded version with
-   `python3 tools/run.py --pinned`. For a FUZ row, re-run the reproducer with
-   `python3 -m anoieu_fuzz verify`: a finding that no longer reproduces is the
-   strongest evidence there is, and one that never reproduced against their
-   build is a different outcome from one they fixed. Either way follow the
-   branch they name to its end -- merged, reworked, reverted, or still open.
-3. Clean up those rows and no others, as docs/reporting-policy.md says. Closing
-   is moving a row to the Closed table with a verdict, never deleting it.
-4. If our analysis was wrong, fix what produced it rather than the row. For a
-   check: narrow it, add a witness under tests/witnesses/ that would have caught
-   the mistake, and record the wrong assumption in docs/reports.md under the
-   workings. For a FUZ finding there is no check to narrow -- what there may be
-   is a reproducer that was an artefact of the harness, or a comparison that was
-   never fair. Say which in docs/reports.md, remove the promoted directory under
-   tests/fuzz/, and consider whether the harness should have refused to report
-   it.
+docs/reporting-policy.md is the authority on what you may change. The steps:
+
+1. Find the rows the reply names, by id, in docs/open-findings.md and
+   docs/closed-findings.md. A row is in scope because the reply names it --
+   whoever owns it, closed or not. A reply disputing a verdict names a closed row.
+2. Establish what actually happened, which is not what the triage predicted.
+   - EO, DOC, TRI: re-check with `python3 tools/run.py --pinned`. It re-derives
+     open rows only; a disputed closed row you check by reading deps/ yourself.
+   - FUZ: re-run with `python3 -m anoieu_fuzz verify`, $ETHOS and $LOGOS pointed
+     at builds. A finding that no longer reproduces is strong evidence -- but
+     establish *why*: stopped reproducing for a reason other than the one on the
+     row is a bad reproducer, not a fix, and never reproduced against their
+     build is a third outcome again.
+   - Look at the branch rather than taking it: compare it to its base and read
+     what is on it. A branch level with main, or a change left uncommitted, is
+     not a fix.
+3. Clean up those rows and no others. Closing moves a row from
+   docs/open-findings.md to docs/closed-findings.md with a verdict, never
+   deleting it; reopening is the same move back, noting what the verdict missed.
+4. If our analysis was wrong, fix what produced it rather than the row: narrow
+   the check, add a witness under tests/witnesses/, and record the wrong
+   assumption in docs/reports.md. A FUZ finding has no check to narrow -- what
+   it may have is a reproducer that was an artefact of the harness, or a
+   comparison that was never fair. Say which, remove the directory under
+   tests/fuzz/, and ask whether the harness should have refused to report it.
 5. Write what happened in docs/reports.md under the log, and update the
-   project's section under the register if what we are asking of it has changed.
+   project's section under the register if what we are asking has changed.
+6. Read FEEDBACK TO ANOIEU and any OBSERVED, NOT ACTED ON. Act on what concerns
+   the report or the tools. What concerns the prompts goes to docs/postmortem.md
+   with its evidence and then to me: a person approves every prompt edit, and
+   each round leaves them shorter and more procedural, so a proposal that adds
+   says what it removes, and technical detail belongs in the docs a prompt links
+   to rather than in the prompt.
 
-Leave everything staged, commit nothing, touch no issue tracker. Say what you
-decided and why -- the action you took, not a summary of what you read. Come
-back to me only if you disagree with how the reply classified the resolution, or
-cannot tell whether the finding is resolved: leave the row open and say what you
+Leave everything staged and commit nothing -- the diff is the review, and it is
+mine to approve. Touch no issue tracker, here or anywhere. Say what you decided
+and why: the action you took, not a summary of what you read. Come back to me
+only if you disagree with how the reply classified the resolution, or cannot
+tell whether the finding is resolved -- leave the row open and say what you
 would need to know.
 ```
 
@@ -838,10 +935,12 @@ finding, and it is **additive**:
   fails when a finding is unlisted and never when a row is extra.
 - **Closing is a separate step, and it is a judgement.** A finding leaves the
   open table when it is fixed upstream, declined, or shown to be our error. The
-  row *moves* to the Closed table with a verdict rather than being deleted:
-  deletion would not stick, because the finding is still there to be found and
-  the next generation would list it again. The Closed table is what makes the
-  verdict durable.
+  row *moves* to [`closed-findings.md`](closed-findings.md) with a verdict
+  rather than being deleted: deletion would not stick, because the finding is
+  still there to be found and the next generation would list it again. That file
+  is what makes the verdict durable — and, because nothing re-derives a closed
+  row, it is also where a wrong verdict can sit unnoticed. A verdict that is a
+  claim about somebody else's tree should say which commit it was checked at.
 - **For now the review is an AI process under human supervision.** It takes a
   row, reads the current state of the file it is about, and either leaves it or
   moves it with a verdict — writing the reasoning into

@@ -261,6 +261,22 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     case("and cuts inside the command it kept", "(keep)" in small.commands,
          str(small.commands))
 
+    # A seed run as it stands is the file somebody committed, and the finding is
+    # that *that file* disagrees. The bucket does not say where a checker
+    # refused, so an edit the verdict does not depend on holds it and survives --
+    # which is how a promoted reproducer came to carry a cut the reference had
+    # never looked at. See shrink()'s docstring and docs/reports.md.
+    seeded = Case(["(keep (a (b c)) d)", "(cmd7)"], source="seed:committed.cpc")
+    untouched, spent_seed = shrink(seeded, probe, "B")
+    case("a seed run as it stands is not shrunk",
+         untouched.commands == seeded.commands and spent_seed == 0,
+         f"{untouched.commands} in {spent_seed} runs")
+    mutated = Case(["(keep (a (b c)) d)", "(cmd7)", "(cmd8)"],
+                   source="mutated:seed:committed.cpc")
+    cut, _ = shrink(mutated, probe, "B")
+    case("but a mutation of one still is",
+         sorted(cut.commands) == ["(cmd7)", "(keep)"], str(cut.commands))
+
     # -- the corpus
 
     root = os.path.join(d, "findings")
@@ -383,8 +399,12 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
 
     # The generator in tools/ needs deps/ to run the checks, and CI's fast job
     # has none; this half of what it checks needs nothing but this repository.
-    ledger = os.path.join(ROOT, "docs", "open-findings.md")
-    text = open(ledger).read() if os.path.isfile(ledger) else ""
+    # Both files, because a promoted finding that has been ruled on has its row
+    # in the closed half and is accounted for there.
+    text = ""
+    for name in ("open-findings.md", "closed-findings.md"):
+        path = os.path.join(ROOT, "docs", name)
+        text += open(path).read() if os.path.isfile(path) else ""
     unlisted = [k for k in reporting.rows() if f"`{k}`" not in text]
     case(
         "every promoted finding has a row in the ledger",

@@ -309,19 +309,31 @@ never let the tool assign an owner to a disagreement — are in
 
 ## What the first runs turned up
 
-Six findings are promoted, and they are in the ledger rather than here:
+Five findings are promoted, and they are in the ledger rather than here:
 [`open-findings.md`](open-findings.md) has the rows, and
 [`reports.md`](reports.md#the-register-what-anoieu-is-asking-and-of-whom) has
-what is being asked of whom — `ethos-8` and `ethos-9`, `logos-4` and `logos-5`.
-In short, from the first few thousand cases:
+what is being asked of whom — `ethos-8` and `ethos-9`. In short, from the first
+few thousand cases:
 
 | kind | reproducer | what happens |
 | --- | --- | --- |
 | `FUZ0002` | `(declare-const f (->))` | ethos dies with an uncaught `std::length_error` — "cannot create `std::vector` larger than `max_size()`". A nullary arrow type |
 | `FUZ0003` | `(declare-consts <numeral> Int)` then `… Bool` | aborts with an internal message carrying no `Error:`, no file and no line. Two more paths do the same: `assume-push` at the top level of a signature, and an `include` of a file that is not there |
 | `FUZ0001` | `logos/test/regress/sexp/test-define.cpc`, **unmutated** | it uses `declare-fun`, an SMT-LIB command ethos accepts only in a reference file. Ethos refuses the file; logos checks it and says `correct` |
-| `FUZ0001` | `(( extract 1 0) a)` — the indexed operator without its `_` | logos reads it as the indexed operator and accepts the proof; ethos type checks and refuses |
 | `FUZ0005` | an `(assume …)` after the first `step` | ethos allows it; logos refuses to parse the file. The mild direction: logos refuses, so nothing unsound follows from it |
+
+A sixth was promoted and **withdrawn**: `(( extract 1 0) a)`, the indexed
+operator without its `_`, filed as logos reading it as the indexed operator where
+ethos type checks and refuses. Neither half of that was what happened. The case
+came from a seed run as it stands, the reference had refused on a line the
+shrinker then went on to edit, and the `_` was gone because `shrink` cut it — the
+bucket held throughout, since it says nothing about *where* a refusal happened.
+The shrinker no longer touches a seed run as it stands, and the write-up is in
+[`reports.md`](reports.md#logos-4-the-indexed-operator-what-we-got-wrong). The
+`declare-fun` row above came the same way and survived only because the shrinker
+happened to find nothing to cut — which is the point: running a seed as it stands
+is the cheapest thing this fuzzer does, and it is the one place where shrinking
+destroys what was found.
 
 Not promoted, and worth saying so: a `(step #b1 …)` taking a binary literal
 where a symbol belongs, a `(step … (=) :rule evaluate …)` whose stated

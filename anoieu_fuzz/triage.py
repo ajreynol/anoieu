@@ -153,7 +153,20 @@ def shrink(case: Case, probe: Probe, bucket: str, budget: int = 120) -> tuple[Ca
     The commands-not-characters granularity is why this is short. It also
     bounds what it can do -- it will not simplify a term inside a command --
     which is a trade the corpus makes for a shrinker anyone can read.
+
+    **A seed run as it stands is never shrunk.** The bucket is coarse on
+    purpose, and it says nothing about *where* a checker refused -- so an edit
+    the verdict does not depend on holds the bucket and is kept. That is a good
+    trade for a case this fuzzer wrote and a bad one for a file somebody else
+    committed, where the finding is "this file, as it is, disagrees" and any
+    edit restates it as a claim about a file nobody has. It cost us a real one:
+    a reproducer promoted from `test-indexed-op.cpc` with the `_` cut out of
+    line 4 by this function, while the reference had refused at line 3
+    throughout, and a note that named the cut as the cause. See
+    `docs/reports.md`.
     """
+    if case.source.startswith("seed:"):
+        return case, 0
     best = case
     spent = 0
 

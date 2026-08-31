@@ -379,8 +379,8 @@ if [ -n "$ID" ]; then
   SCOPE="Process the block about $ID and only that one; leave any others alone."
 else
   SCOPE="Process every block in it, one at a time, leaving the record consistent
-after each so that stopping partway is safe. They are unrelated: each gets its
-own answer."
+after each so that stopping partway is safe. Blocks may share a cause; each
+still gets its own answer."
 fi
 
 read -r -d '' PROMPT <<PROMPT_END || true
@@ -399,33 +399,47 @@ TRIAGE: is an assistant's reading, made quickly and on our word. HUMAN RESPONSE:
 is a maintainer's decision. Where they differ the decision counts, and a block
 carrying only a triage is a proposal rather than a result.
 
-Working in the anoieu repository ($ANOIEU):
+Working in the anoieu repository ($ANOIEU).
 
-1. Find the row or rows in docs/open-findings.md the reply is about.
-2. Establish what actually happened, which is not what the triage predicted. For
-   an EO, DOC or TRI row, re-check at the recorded version with
-   \`python3 tools/run.py --pinned\`. For a FUZ row, re-run the reproducer with
-   \`python3 -m anoieu_fuzz verify\`: a finding that no longer reproduces is the
-   strongest evidence there is, and one that never reproduced against their
-   build is a different outcome from one they fixed. Either way follow the
-   branch they name to its end -- merged, reworked, reverted, or still open.
-3. Clean up those rows and no others, as docs/reporting-policy.md says. Closing
-   is moving a row to the Closed table with a verdict, never deleting it.
-4. If our analysis was wrong, fix what produced it rather than the row. For a
-   check: narrow it, add a witness under tests/witnesses/ that would have caught
-   the mistake, and record the wrong assumption in docs/reports.md under the
-   workings. For a FUZ finding there is no check to narrow -- what there may be
-   is a reproducer that was an artefact of the harness, or a comparison that was
-   never fair. Say which in docs/reports.md, remove the promoted directory under
-   tests/fuzz/, and consider whether the harness should have refused to report
-   it.
+docs/reporting-policy.md is the authority on what you may change. The steps:
+
+1. Find the rows the reply names, by id, in docs/open-findings.md and
+   docs/closed-findings.md. A row is in scope because the reply names it --
+   whoever owns it, closed or not. A reply disputing a verdict names a closed row.
+2. Establish what actually happened, which is not what the triage predicted.
+   - EO, DOC, TRI: re-check with \`python3 tools/run.py --pinned\`. It re-derives
+     open rows only; a disputed closed row you check by reading deps/ yourself.
+   - FUZ: re-run with \`python3 -m anoieu_fuzz verify\`, \$ETHOS and \$LOGOS pointed
+     at builds. A finding that no longer reproduces is strong evidence -- but
+     establish *why*: stopped reproducing for a reason other than the one on the
+     row is a bad reproducer, not a fix, and never reproduced against their
+     build is a third outcome again.
+   - Look at the branch rather than taking it: compare it to its base and read
+     what is on it. A branch level with main, or a change left uncommitted, is
+     not a fix.
+3. Clean up those rows and no others. Closing moves a row from
+   docs/open-findings.md to docs/closed-findings.md with a verdict, never
+   deleting it; reopening is the same move back, noting what the verdict missed.
+4. If our analysis was wrong, fix what produced it rather than the row: narrow
+   the check, add a witness under tests/witnesses/, and record the wrong
+   assumption in docs/reports.md. A FUZ finding has no check to narrow -- what
+   it may have is a reproducer that was an artefact of the harness, or a
+   comparison that was never fair. Say which, remove the directory under
+   tests/fuzz/, and ask whether the harness should have refused to report it.
 5. Write what happened in docs/reports.md under the log, and update the
-   project's section under the register if what we are asking of it has changed.
+   project's section under the register if what we are asking has changed.
+6. Read FEEDBACK TO ANOIEU and any OBSERVED, NOT ACTED ON. Act on what concerns
+   the report or the tools. What concerns the prompts goes to docs/postmortem.md
+   with its evidence and then to me: a person approves every prompt edit, and
+   each round leaves them shorter and more procedural, so a proposal that adds
+   says what it removes, and technical detail belongs in the docs a prompt links
+   to rather than in the prompt.
 
-Leave everything staged, commit nothing, touch no issue tracker. Say what you
-decided and why -- the action you took, not a summary of what you read. Come
-back to me only if you disagree with how the reply classified the resolution, or
-cannot tell whether the finding is resolved: leave the row open and say what you
+Leave everything staged and commit nothing -- the diff is the review, and it is
+mine to approve. Touch no issue tracker, here or anywhere. Say what you decided
+and why: the action you took, not a summary of what you read. Come back to me
+only if you disagree with how the reply classified the resolution, or cannot
+tell whether the finding is resolved -- leave the row open and say what you
 would need to know.
 PROMPT_END
 

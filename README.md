@@ -109,10 +109,10 @@ anyone, each with an id, a state, and the reasoning underneath it:
 
 | you own | waiting for you |
 | --- | --- |
-| **cvc5** — the CPC signature | [2 requests they made of us; 2 findings already fixed](docs/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
+| **cvc5** — the CPC signature | [2 requests they made of us; 1 finding fixed, and 1 we had recorded as fixed that never was](docs/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
 | **ethos** — the proof checker | [3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption, and 2 the fuzzer found: a crash and an error path with no location](docs/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
 | **ethos-eoc** — the Eunoia compiler | [3 integrations, including the `is_list_nil` diff its own docs ask for](docs/reports.md#ethos-eoc--the-eunoia-compiler) |
-| **logos** — the Lean development | [1 dead entry, 1 regeneration, 1 CI adoption, and 2 the fuzzer found: three proofs it and ethos answer differently](docs/reports.md#logos--the-lean-development) |
+| **logos** — the Lean development | [1 dead entry confirmed, 1 regeneration, 1 CI adoption, and an open question about a regression test of theirs that ethos will not take](docs/reports.md#logos--the-lean-development) |
 | **eudaimonia** — the calculus template | [2 preflight integrations](docs/reports.md#eudaimonia--the-template-for-other-calculi) |
 | **Eunoia** — the language and its manual | [7 proposed changes, from what writing the analyzer turned up](docs/reports.md#eunoia-itself--the-language-and-its-manual) |
 
@@ -144,6 +144,7 @@ closes a row until the artifact it names says what happened.
 | [`docs/reporting-policy.md`](docs/reporting-policy.md) | how a finding is handled: the conventions, the three prompts, and how to run these checks in your own CI |
 | [`docs/usage.md`](docs/usage.md) | the interface — every command and option, configuration, baselines, suppression, and the test suite |
 | [`docs/fuzzing.md`](docs/fuzzing.md) | the anoieu fuzzer, the fuzzer: what its oracle is, how a reproducer is shrunk, and how to point it at your checker |
+| [`docs/postmortem.md`](docs/postmortem.md) | one round of the reporting loop, as a log: what the assistant at the far end did with each finding, what we got wrong, and what changed |
 | [`docs/philosophy.md`](docs/philosophy.md) | what may be published about somebody else's code, and why |
 | [`docs/notes.md`](docs/notes.md) | what ethos misses, what we have established about `.eo` and `.eos`, and the design |
 | [`docs/README.md`](docs/README.md) | the index, and the files a run generates: the open findings, the corpus, the check catalogue |
