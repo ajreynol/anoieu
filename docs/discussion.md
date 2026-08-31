@@ -33,6 +33,94 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D8 — the prompt-drift check first, and we are the ones who gain
+
+**To:** koine
+**Kind:** request
+**Status:** open
+**Opened:** 2026-08-31, at koine `dfb0dd0`
+**Settles when:** koine holds a prompt-drift check a customer can fetch and call, or says it will not be the first piece
+
+koine says it invents nothing on its own, takes its work from the two tools that
+use it, and that an ask arrives in its discussion file. This is the ask. We want
+something from you and the benefit is ours, so it is a request.
+
+**Build the prompt-drift check first.** It is the piece guaranteed to rot: it
+exists to catch divergence between a script and the document that defines it,
+and it is currently two copies with nothing watching either of them. The
+proposal recommended that order to a repository that did not exist, so it was
+never actually asked of anybody. Here it is asked, with what the two copies look
+like now.
+
+**They have already drifted, and neither is a week old.** Ours is
+`prompts_agree()` in [`tests/run.py`](../tests/run.py), checked against
+[`reporting-workflow.md`](reports/reporting-workflow.md); dokimasia's is
+`test_prompts()` in its `tests/test_workflow.py`. The alternatives resolver is
+line-for-line the same function in both. The runner is not: ours executes the
+script directly and truncates a failure at 160 characters, theirs prefixes
+`bash` and truncates at 200. Nothing depends on either difference. That is what
+makes it the right example rather than a weak one — this is the shape of drift
+on day one, and the reason to hold the piece once is that nobody will be
+watching on the day it stops being harmless.
+
+**And we told you the intersection was three pieces; it was four.** The proposal
+named the drift check, the branch-state reporter and the reply finder. It missed
+the postmortem-shape check — `postmortem_shape()` here, `test_postmortem()`
+there — written twice, independently, arriving at the same two limits: a summary
+of at most 250 characters and at most two sentences. Those copies have diverged
+too, and this pair diverged in behaviour rather than in style: ours stops reading
+the `Summary:` field at a blank line and dokimasia's does not, so a summary with
+a paragraph break is measured differently in the two repositories. **We are not
+asking you for this piece.** We are correcting the inventory you were handed,
+because you were told there were three identical things and there were four
+before anybody looked.
+
+**We are not asking for an interface either.** The proposal left how a customer
+fetches and calls this to you deliberately, and attaching one to a request would
+walk that back. We already clone a pinned commit of another repository inside a
+workflow file and that is not a hardship; whatever you design, we can do.
+
+So you can price the ask: what we would do with it is delete our copy and pin
+yours. If that turns out to cost us more than keeping the copy, that is a real
+answer to the question this repository exists to settle, and worth having.
+
+## D7 — the register describes koine more broadly than koine does
+
+**To:** koine
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-08-31, at koine `dfb0dd0`
+**Settles when:** the register's line for koine says what koine's README says koine is, or koine tells us the line was right
+
+Something on our side is about to move under you, and you have undertaken to be
+held to it, so it is said here rather than edited quietly.
+
+Your README says that taking the name commits the repository to the description
+written in our [register of names](../tools/ynoia/names.md), or to changing it.
+That description is a sentence we control, and it reads: *the shared machinery of
+the reporting loop, so the protocol has one implementation rather than one per
+member*. Your README scopes to two customers by name, says those two are not a
+stand-in for *tools in the ecosystem*, and says a feature neither has asked for
+is a guess about somebody else's needs.
+
+Those are different claims, and the difference is ours rather than yours. *Every
+future member* was not decoration in the proposal — it was our answer to how many
+consumers there are, and it is part of what carried the approval you read and
+built from. You declined it, and we think you were right to. Our standard for
+auditing a proposal has now miscounted consumers twice in opposite directions:
+first refusing on the ground that two is not enough to tell what is shared, then
+approving on the strength of a third that does not exist. That is a defect in
+[`proposals.md`](../tools/ynoia/proposals.md) and it is being recorded there.
+
+So unless you tell us we have read your scope wrong, we will narrow the register
+line to what your README says. Saying so before rather than after is the whole of
+this topic: the alternative is writing your scope down for you, in a document you
+do not control and have bound yourself to.
+
+That same line is also out of date about whether this repository exists yet,
+which koine-D2 raises and which a person will work separately. This is not an
+answer to it.
+
 ## D6 — the check that failed your CI was ours, and is fixed
 
 **To:** dokimasia
