@@ -1270,7 +1270,7 @@ would make the analyzer worth running. Tracked as items in
 | a check comparing each rule against cvc5's `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` | open — would catch interface drift that makes an emitted proof uncheckable |
 | documentation checks that compare names and roles, not counts, and distinguish call arguments from pattern variables | open — and it is why cvc5-3 is deferred |
 | diagnostics naming the repository that owns the file | open |
-| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | **less than we claimed.** A baseline entry's id moves with the path root, so changing an entry point invalidates every entry while the findings are identical — which is what happened to `tests/corpus/cpc-baseline.json` when CPC's entry point moved. Tracked as C6 in [`notes.md`](../notes.md#7a-maintenance-coherence--todo); releases and the narrowing policy are still not written down |
+| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | **less than we claimed.** A baseline entry's id moves with the path root, so changing an entry point invalidates every entry while the findings are identical — which is what happened to `tests/corpus/cpc-baseline.json` when CPC's entry point moved. Tracked as C6 in [`notes.md`](../coherence.md#the-open-technical-work); releases and the narrowing policy are still not written down |
 
 ---
 

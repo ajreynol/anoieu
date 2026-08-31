@@ -16,7 +16,7 @@ this run taught us about working findings* is here.
 ## The procedure
 
 **Whose job.** The anoieu maintainer processing a reply — step 7 of prompt two in
-[`reporting-workflow.md`](reporting-workflow.md#prompt-two-the-follow-up), which is
+[`reporting-workflow.md`](reporting-workflow.md#prompt-two-the-follow-up-here), which is
 what [`scripts/process_anoieu`](../../scripts/process_anoieu) runs. Not the project
 that owns the finding: they send feedback, we decide what it changed here.
 
@@ -136,7 +136,7 @@ to what a finding *is* rather than a tidy-up — the first five in logos's words
 further thread, from this side:
 the record is now edited mostly by an assistant, and what must stay true of it
 after such an edit is planned — not built — in
-[`notes.md`](../notes.md#7a-maintenance-coherence--todo).
+[`notes.md`](../coherence.md#the-open-technical-work).
 
 | what | why it matters | cost of not doing it |
 | --- | --- | --- |

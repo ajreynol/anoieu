@@ -73,8 +73,11 @@ def check(path: str) -> tuple[str, list[str]]:
     out = subprocess.run(
         [sys.executable, os.path.join(ROOT, "tools", "policy_check.py"),
          "--root", path], capture_output=True, text=True)
-    fails = [l.strip() for l in out.stdout.splitlines() if l.startswith("     ")]
-    return ("ok" if out.returncode == 0 else f"{len(fails)} fail"), fails
+    # count the failing *checks*, not their detail lines: one check that reports
+    # three things is one thing wrong, and saying "3 fail" overstates it.
+    failed = [l[5:] for l in out.stdout.splitlines() if l.startswith("FAIL ")]
+    detail = [l.strip() for l in out.stdout.splitlines() if l.startswith("     ")]
+    return ("ok" if out.returncode == 0 else f"{len(failed)} failing"), detail
 
 
 def main() -> int:

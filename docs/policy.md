@@ -125,12 +125,18 @@ arrived with its name already fixed, or whose name has no story worth a
 paragraph, is not doing anything wrong, and a suggestion about being readable is
 the wrong thing to gate somebody's build on.
 
-**A link that does not resolve is a defect.** Every relative link in a document
-resolves, and so does every path named in an outbound prompt — a prompt that
-sends somebody to a document that moved is worse than one that sends them
-nowhere, because they will go looking. This is the characteristic cost of
-reorganising documentation: the prose still reads correctly and every path in it
-is wrong, silently. Checked.
+**A link that does not resolve is a defect**, and so is a link to a heading that
+is not there. Every relative link in a document resolves, every anchor on one
+finds a heading in the file it names, and every path named in an outbound prompt
+exists — a prompt that sends somebody to a document that moved is worse than one
+that sends them nowhere, because they will go looking. This is the
+characteristic cost of reorganising documentation, and the anchor is the half
+that survives a careless fix: the file still resolves and the section it named is
+gone. Checked, all three.
+
+**And no document names one machine.** An absolute path out of somebody's home
+directory is a leak rather than an instruction — it tells a reader about a
+filesystem that is not theirs. Checked.
 
 **`docs/` has an index, and the index is itself a document.** One row per
 document saying what that document is *for*, in a sentence, so that a question

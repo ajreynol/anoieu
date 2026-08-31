@@ -356,6 +356,80 @@ def check_links() -> list[str]:
     return bad
 
 
+def slug(heading: str) -> str:
+    """A heading as GitHub anchors it: lowercased, punctuation dropped, spaces
+    hyphenated. Approximate by design -- it is used to *accept*, never to
+    rewrite, so an anchor this gets wrong is reported and looked at."""
+    h = re.sub(r"`|\*|_", "", heading.strip().lower())
+    h = re.sub(r"[^\w\s-]", "", h)
+    # each space becomes a hyphen, runs are not collapsed: "a - b" anchors as
+    # "a---b" once the dash is dropped, which is what GitHub does.
+    return re.sub(r"\s", "-", h)
+
+
+def check_anchors() -> list[str]:
+    """A link to a heading that does not exist, in a document in this tree.
+
+    The half of a moved document that a plain link check misses: the file still
+    resolves and the section it names is gone. This is the damage a reorganised
+    documentation tree does silently, and it costs nothing to keep true.
+    """
+    bad = []
+    for rel in tracked("*.md"):
+        here = os.path.dirname(os.path.join(ROOT, rel))
+        text = prose(read(rel))
+        for m in re.finditer(r"\]\(([^)\s]*\.md)#([^)\s]+)\)", text):
+            target, anchor = m.group(1), m.group(2)
+            full = os.path.normpath(os.path.join(here, target))
+            if not os.path.isfile(full):
+                continue                      # the link check owns that failure
+            with open(full, encoding="utf-8") as fh:
+                heads = {slug(h) for h in re.findall(r"^#{1,6}\s+(.+?)\s*$",
+                                                     prose(fh.read()), re.M)}
+            if anchor.lower() not in heads:
+                bad.append(f"{rel} links to {target}#{anchor}, and that heading "
+                           "is not in it")
+    return bad
+
+
+def check_local_paths() -> list[str]:
+    """An absolute path out of somebody's home directory, committed in a document.
+
+    Always a leak and never useful to a reader: it names a machine that is not
+    theirs. Decidable, and the list of things it looks for does not grow.
+    """
+    bad = []
+    for rel in tracked("*.md"):
+        for m in re.finditer(r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/",
+                             prose(read(rel))):
+            bad.append(f"{rel} carries the absolute path {m.group(1)}/…, "
+                       "which names one machine")
+            break
+    return bad
+
+
+def check_declaration_first() -> list[str]:
+    """*Declare it, at the top of your maintenance note.*
+
+    Position is the whole of what this adds: a declaration buried under three
+    paragraphs is not what a reader arriving at the note first sees.
+    """
+    text = read("README.md")
+    secs = list(re.finditer(r"^##\s+(.+?)\s*$", text, re.M))
+    for i, m in enumerate(secs):
+        if "maintain" not in m.group(1).lower():
+            continue
+        end = secs[i + 1].start() if i + 1 < len(secs) else len(text)
+        note = text[m.end():end].strip()
+        if "eunoia ecosystem" not in note.lower():
+            return []                      # check_declaration owns that failure
+        first = note.split("\n\n")[0].lower()
+        if "eunoia ecosystem" not in first:
+            return ["the membership declaration is not the first paragraph of "
+                    "the maintenance note"]
+    return []
+
+
 def check_response_gate() -> list[str]:
     """*Responding to somebody else's discussion file* — the protocol's safety rule.
 
@@ -446,6 +520,9 @@ CHECKS = [
     ("every link in a document or an outbound prompt resolves", check_links, None),
     ("no document names a specific AI", check_no_vendor, None),
     ("no document cites another document's rule by number", check_citations, None),
+    ("every link to a heading finds one", check_anchors, None),
+    ("no document names one machine's filesystem", check_local_paths, None),
+    ("the membership declaration opens the maintenance note", check_declaration_first, None),
 ]
 
 

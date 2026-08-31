@@ -142,6 +142,60 @@ and most of that cost falls on somebody who is not us.
 This is not a formality: it is the last place where a change to a document that
 binds another repository can be caught.
 
+## Adding a check
+
+The checker is the one thing here that runs on other people's builds, so a check
+is not a change to this repository — it is a change to theirs. It lands
+permanently, it fires at moments nobody chose, and it is nearly never deleted.
+Four conditions before one goes in.
+
+**It is decidable without an opinion.** If answering it requires judgement, it
+belongs in [`vision.md`](vision.md) and must never acquire a checker.
+
+**It has been run against a tree we did not write.** Every false positive so far
+was found by somebody else's repository and none by ours, which is not luck:
+this is the one repository shaped like the checker's assumptions. Run a new check
+against every candidate checked out on the machine before it lands. A check that
+has only ever seen this tree has not been tested.
+
+**Its message names the fix.** A failure a maintainer has to interpret costs more
+than the defect it found, and they are reading it in a red build on somebody
+else's schedule.
+
+**It stays true without curation.** The expensive kind is the check whose *data*
+rots — a list of vendor names, a registry of tools, anything that must be
+updated as the world changes rather than as the tree does. There is one of those
+already, the vendor list, and it is the check most likely to be wrong a year from
+now. Prefer checks whose only input is the repository in front of them.
+
+### Why this is a limit and not a ritual
+
+The failure mode is drifting into maintenance mode: a set of checks large enough
+that keeping it honest is the work, and forward progress stops. Three things
+make that happen, and they are worth naming because each looks like diligence.
+
+**A check that fires wrongly costs more than it can ever save.** It costs
+somebody else an afternoon, and it costs us the credibility of the whole set —
+a maintainer who has been sent one spurious failure reads the next one
+differently, including the true ones.
+
+**Every check is a migration.** A repository that passes today and fails
+tomorrow has to do work it did not ask for, at a moment it did not choose.
+Pinning makes that survivable; it does not make it free, and *we do not pay it.*
+
+**Checks accumulate and are almost never removed.** So the question at the point
+of adding one is not *is this true* but *will I defend this in a year, on
+somebody else's repository, when it fails inconveniently.* If the answer is
+anything short of yes, it belongs in the minor tier, which is what that tier is
+for — the naming convention is the worked example, a hard failure that every
+real candidate failed and that was, on inspection, a suggestion about being
+readable.
+
+**And there is a stopping rule.** A check earns its place by finding something.
+The anchor check found three dead links on its first run, two of them made that
+same day by the person who added the check. A check that has never fired on
+anything is either perfect or pointless, and the second is the way to bet.
+
 ## The open technical work
 
 **Planning only. Nothing below is built.**
