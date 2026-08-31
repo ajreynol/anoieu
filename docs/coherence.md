@@ -142,6 +142,74 @@ and most of that cost falls on somebody who is not us.
 This is not a formality: it is the last place where a change to a document that
 binds another repository can be caught.
 
+## Defending the infrastructure
+
+The policy, the checker, the joining flow, the discussion protocol, the pin and
+the proposal audit are **not a proposal any more.** They have been used, by a
+repository other than this one, and the record of what they did is short enough
+to state and specific enough to argue with.
+
+**A second repository adopted the policy and runs the check in its own CI.**
+dokimasia declared membership, wired the workflow, and went red — on a defect in
+*our* checker, not in their tree: twenty-two link failures, every one spurious,
+caused by a rule of ours that resolved a child project's own documentation from
+the wrong root. They declined to work around it, cited the sentence on our own
+page that says a check firing on a non-problem is ours to fix, and left the links
+alone. We fixed it, added a regression test, and their build went green without
+them changing anything.
+
+That episode is the strongest evidence available that the arrangement works,
+and it is worth being precise about why: **the first outside run of the checker
+found a defect in the checker**, surfaced it through the channel built for it,
+and cost the other party an afternoon that we then owed them. Every part of that
+was designed and every part of it fired.
+
+**Four topics have come through the protocol, and three changed what we do.**
+The link resolution. The joining step, which pinned nothing and made every
+member's build a function of a repository they do not own — the sharpest sentence
+anyone has sent us is theirs, that a build which can turn *green* without a
+commit cannot be evidence that a commit was good. And the naming convention,
+which was a hard failure that every real candidate failed and was, on inspection,
+a suggestion about readability. The fourth produced an audited proposal, an
+approved repository and a name.
+
+**The checker also finds things here.** Three dead anchors on its first run, two
+of them made that same day by the person who added the check.
+
+### What defending it means
+
+**Removing a piece is a decision with a burden of proof, not a tidy-up.** The
+cases are on record; if a rule is in the way, name the case, because there is now
+a place to put that argument and somebody on the other end who will answer it.
+
+**The pieces interlock, and that is not decoration.** A declaration is worthless
+without a check; the check is unsafe unpinned, because one rename here turns
+every member red with no commit near them; a pin is unusable without a version to
+print; and the discussion protocol is what allowed all three to be corrected by
+somebody who was not us. Each of those links was put in by an exchange rather
+than designed up front, which is exactly why pulling one out quietly is
+expensive — the chain looks arbitrary until you know which failure each link
+answers.
+
+**The failure mode is treating this as overhead during a rush.** Infrastructure
+is cheapest to delete at the moment it is most load-bearing, and an agent under
+time pressure is well placed to make that trade badly and describe it as
+simplification.
+
+### And the honest limit
+
+**One adopter is not five.** ethos, logos and eudaimonia have not joined and may
+never; evidence that this coordinates two repositories is not evidence that it
+coordinates ten, and the second adopter will find things the first did not.
+`koine` does not exist yet.
+
+**It has not been free.** The report card in [`vision.md`](vision.md) records
+that the stretch of work which produced most of this changed nothing about what
+the analyzer finds, and introduced two silent defects into the fuzzer — one of
+which would have let CI pass while verifying nothing at all. Defending the
+infrastructure is not claiming it was cheap, and the case for it rests on what it
+has done for other repositories rather than on what it has done for this one.
+
 ## Adding a check
 
 The checker is the one thing here that runs on other people's builds, so a check
