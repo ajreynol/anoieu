@@ -291,6 +291,9 @@ ETHOS=<ethos>/build/src/ethos \
 python3 tools/sweep.py <dir>...            # run over a corpus: crashes and counts
 python3 tools/gen_checks_doc.py            # rewrite docs/checks.md from the registry
 python3 tools/landing.py --check           # did what we closed on a promise land?
+scripts/install_eo                         # the clone commands for the whole ecosystem
+scripts/install_eo --run                   # ... and run them, into siblings of this checkout
+scripts/install_eo --status                # ... or say what of it is on this machine
 ETHOS=<ethos>/build/src/ethos \
   python3 tools/oracle_desugar.py          # the desugarer against ethos, case by case
 ```

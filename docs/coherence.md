@@ -40,10 +40,10 @@ whole reason the next section exists.
 ## The scripts
 
 Every command this repository maintains, what it is for, and where it is run.
-Nine of them, and all but one are a **prompt**: they assemble context, hand it to
+Ten of them, and all but two are a **prompt**: they assemble context, hand it to
 an assistant, and write nothing anywhere by themselves. `repos.local` is the
 shared map from a repo id to a checkout on this machine; it is untracked, and
-`welcome_eo` is what writes to it.
+`welcome_eo` and `install_eo` are what write to it.
 
 | command | run in | what it does |
 | --- | --- | --- |
@@ -56,15 +56,74 @@ shared map from a repo id to a checkout on this machine; it is untracked, and
 | `process_anoieu <id> [ID]` | here | processes that reply: moves rows, writes verdicts, appends the logs |
 | `global_audit` | here | the whole ecosystem against policy and vision, fast, no deep analysis |
 | `harvest_cpc_proofs` | here | *not a prompt.* Collects real CPC proofs to seed the fuzzer with |
+| `install_eo` | here | *not a prompt.* The ecosystem on this machine: prints the `git clone` commands, `--run` executes them, `--status` reads them back. Checkouts are siblings of this one unless `--root` says otherwise |
 
 Two non-prompt commands live in `tools/` rather than here, because they decide
 rather than ask: `python3 tools/policy_check.py [--root PATH]`, which is what
 every member's CI runs, and `python3 tools/ecosystem.py`, which prints the
 ecosystem as a table.
 
-**Every script takes `--show-prompt`**, which prints what it would send and runs
-nothing. That is the first thing to do with one you have not used, and the only
+**Every script that is a prompt takes `--show-prompt`**, which prints what it
+would send and runs nothing. `install_eo` is the same idea in the other
+direction: printing is its default and `--run` is the flag. That is the first thing to do with one you have not used, and the only
 way to review a prompt without spending a turn on it.
+
+## What happens when we add a new tool to the ecosystem
+
+A new tool is a decision, and `welcome_eo` is what turns the decision into the
+files. The sequence, which nothing enforces:
+
+1. Somebody creates the repository, and [`init_eo`](../scripts/init_eo) gives it
+   a README from the name register.
+2. [`welcome_eo <id> <path>`](../scripts/welcome_eo) is run here, once there is
+   something worth reading. It records the checkout in `scripts/repos.local` —
+   the file every other script resolves an id through — **and syncs the
+   ecosystem's own list**, by running `scripts/install_eo --status <id>` and
+   printing what comes back, before it reads the tree and drafts a first message.
+3. That sync reports and never edits. If the tool is not in
+   [`../tools/ecosystem.json`](../tools/ecosystem.json) it says a status is owed,
+   and a person adds the entry: `status`, `repo`, `url`, `what`. Membership is a
+   decision a person makes, which is why no script writes that file.
+4. **The entry is the whole of the work.** `install_eo` derives what to clone
+   from the inventory, so the new tool appears in the dump, in `--status`, and in
+   `scripts/repos.local` on the next machine with nothing else edited.
+   [`../tools/checkouts.json`](../tools/checkouts.json) carries only what cannot
+   be derived — a branch that is not the default, a clone flag, a tree nobody
+   should fetch unasked — and the ordinary case needs none of it.
+5. `join_eo` and `check_join_eo` come later, or never. Joining is its owner's
+   choice, and a tool that never joins is still in the inventory.
+
+**What the sync is there to prevent** is a tool that exists only on the machine
+of whoever welcomed it: recorded in `repos.local`, absent from the inventory, and
+missing from every other checkout — a state nothing used to report, because each
+half looked complete from where it stood. `welcome_eo` is where it is caught
+because that is the one moment somebody is already thinking about the new tool.
+
+## A finding is about `main`
+
+We report a defect against what a project ships. Every ref in
+[`../tools/deps.json`](../tools/deps.json) is a branch somebody else's users get,
+and a finding measured on a topic branch is one its owner can close by deleting
+the branch.
+
+That is not hypothetical. `logos-2` was measured against `updateCompiler` and
+held open for four days, because the accepted fix sat in a working tree on a
+branch level with `main`. The branch was then deleted, and with it any way of
+asking what the report had been a report of. The finding had in fact landed; the
+row survived the confusion only because its id had been written down.
+
+**The exception is ethos-eoc, and the branch is `ethosEoc3`.** The compiler and
+the semantics sets the ecosystem is built on are there and are not on ethos's
+`main`, so that branch *is* the shipped thing for that tool — which is the test
+an exception has to pass. It is not an exception for being where the work is
+convenient to read. ethos's own `main` is still where the Eunoia manual is read
+from, and findings against the checker are against `main`.
+
+A second exception is a decision, and it is written down here with its reason or
+it is not made. A branch named in somebody's *reply* — `anoieu-findings`, say —
+is where a fix is read before it lands; it is never what a finding is measured
+against, and [what closes a row](reports/reporting-workflow.md#what-closes-a-row-and-what-does-not)
+is a separate question with its own answer.
 
 ## The supervision ladder
 
@@ -505,14 +564,32 @@ because a table invites more confidence than it has earned:
   reads it today.
 - **Whether a checkout here is what upstream has.** These are working copies on
   one machine; a stale clone reports a stale answer with no indication that it
-  is one.
+  is one. `scripts/install_eo --status --fetch` answers this much of it —
+  branch, distance from upstream, whether the tree is dirty — and
+  `tools/ecosystem.py` still does not read it.
 - **Anything about the tools themselves.** Not whether they work, not whether
   they are maintained, not whether the thing they produce is any good.
 
 *TODO*, in the order they are worth doing: read each member's `anoieu.yml` for
-its pin and report the distance; report a checkout's distance from its own
-remote, so a stale row says so; and give the table a `--json` mode if anything
-ever wants to consume it. None is started.
+its pin and report the distance; carry the distance `scripts/install_eo
+--status` already measures into this table, so a stale row says so where
+somebody is looking; and give the table a `--json` mode if anything ever wants
+to consume it. None is started.
+
+**Getting the ecosystem onto a machine** is the other half of the same list, and
+it is [`../scripts/install_eo`](../scripts/install_eo). What to clone is derived
+from the inventory rather than listed again — a url and a repo id are all a clone
+needs, and `ethos` and `ethos-eoc` share a tree because the inventory says they
+share a repo id. Printing the commands is the default; `--run` executes exactly
+what it printed; `--status` reads the rows back off the disk.
+[`../tools/checkouts.json`](../tools/checkouts.json) holds only what cannot be
+derived: `ethosEoc3`, cvc5's blobless clone, and cvc5 being opt-in. Where the
+lists disagree — something fetched that nobody recorded, something recorded that
+nothing fetches, a ref `tools/deps.json` reports on that the checkout does not
+have — `--status` says so under `note:` and repairs nothing, because membership
+is a decision a person makes. [What happens when we add a new
+tool](#what-happens-when-we-add-a-new-tool-to-the-ecosystem) is the sequence in
+full.
 
 ### Smaller, and not blocked on any of the above
 

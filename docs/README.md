@@ -60,6 +60,11 @@ in [`policy.md`](policy.md#the-discussion-file).
 whether each passes the policy check, and how long since anything moved. Local,
 about a second, no assistant involved.
 
+[`../scripts/install_eo`](../scripts/install_eo) is the same ecosystem from the
+other side — the `git clone` commands that put it on a machine, into siblings of
+this checkout. Printing them is the default, `--run` executes exactly what it
+printed, and `--status` reads the same rows back off the disk.
+
 [`coherence.md`](coherence.md) is not in the table above and is not written for
 a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not

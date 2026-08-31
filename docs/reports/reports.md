@@ -59,7 +59,7 @@ before it was written down.
 | cvc5's CPC signature | [cvc5](#cvc5--the-calculus-everything-downstream-is-built-from) | the log first: one finding fixed, one declined, and one we recorded as fixed that never was ([`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back)) |
 | ethos, the proof checker | [ethos](#ethos--the-proof-checker-and-its-own-signatures) | ethos-1: a test signature declares an operator that cannot fold |
 | ethos-eoc, the compiler | [ethos-eoc](#ethos-eoc--the-eunoia-compiler) | eoc-3: the `is_list_nil` diff your own docs ask for |
-| logos | [logos](#logos--the-lean-development) | logos-2: a semantics entry for an operator CPC does not declare |
+| logos | [logos](#logos--the-lean-development) | logos-6: a regression test of theirs that ethos will not take |
 | eudaimonia | [eudaimonia](#eudaimonia--the-template-for-other-calculi) | eud-1: preflight a calculus against the signature contract |
 | Eunoia itself | [Eunoia](#eunoia-itself--the-language-and-its-manual) | eunoia-1: an identical re-declaration makes two symbols that print the same |
 
@@ -122,7 +122,6 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [eoc-2](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | run over `semantics/*.eos` and the signatures the tests compile | proposed |
 | [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote | proposed |
 | [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerating picks it up once cvc5 fixes it | blocked on cvc5-1 |
-| [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:542` has an entry for `str.indexof_re_split`, which CPC does not declare | confirmed, fix not landed |
 | [logos-3](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed |
 | [logos-6](#logos--the-lean-development) | logos | A | `test/regress/sexp/test-indexed-op.cpc`, committed and unmutated, is accepted by logos and refused by ethos — and it is not the thing we filed | open question |
 | [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed |
@@ -470,19 +469,16 @@ legitimate; the input-side entry is what no compilation reaches. Found by the
 first run over the whole triple, and cvc5's response notes correctly that it
 belongs to whoever owns the semantics rather than to cvc5. Reported by `TRI0002`.
 
-**Confirmed by logos, and the fix has not landed.** They deleted the entry and
+**Confirmed by logos, and it has landed. Closed.** They deleted the entry and
 established it was dead rather than merely unused —
 `install/install-cpc.sh --cached --check` reports the generated Lean byte-identical
-with the line gone. But the deletion is an uncommitted working-tree edit, and the
-branch it was said to be on, `anoieu-findings`, is `main` (`d4a03a59`) with no
-commits of its own; the row stays open until it is somewhere a second person can
-read it.
-**And it will come back.** `scripts/bump-eoc-version.py` copies this file wholesale
-from ethos's `tools/eoc/semantics/development-cpc.eos`, which still carries the same
-line at `:542` in the ethos we pin (`3cf1c03fdfd0`) — so the next internal bump
-restores it unless the deletion lands there first. That makes the same finding an
-ethos one, in a file `deps.json` already checks out and no corpus currently reads
-as a triple.
+with the line gone. The deletion is on logos `main` at `6cb59db5`, and the run of
+2026-08-31 reports no `TRI0002` on the triple. It was held open for four days
+against `updateCompiler`, a branch that has since been deleted; **that is why we
+now measure every project on `main`**, which is where a change has to be for
+anybody else to see it. `str.indexof_re_split` is gone from ethos's
+`tools/eoc/semantics/development-cpc.eos` too, at `7f4482b7`, so the bump that
+would have restored it will not.
 
 **logos-4 and logos-5 are ruled on** and are in
 [the log](reports.md#logos--the-parser-and-the-semantics): the `declare-fun` case
@@ -941,7 +937,9 @@ One finding: `Cpc.eos:542` has `(define-symbol str.indexof_re_split (s r q))`,
 and CPC declares no such operator — it declares `str.indexof_re`. The name is
 real on the *target* side (`smt.eos:1639` defines it) and another entry
 transforms into it at line 584, which is legitimate; what is dead is the
-input-side entry, which no compilation reaches.
+input-side entry, which no compilation reaches. *(That entry was deleted by logos
+and the deletion is on `main`; the triple reports nothing there now. The log has
+[the round](reports.md#logos--the-parser-and-the-semantics).)*
 
 The other four checks — coverage, the `:is-list-nil` diff, exclusion closure and
 transformation targets — reported nothing on this run. That is a fact about
@@ -1100,7 +1098,7 @@ analyzer does differently now.
 | **declined, and the reason holds** | 2 | `logos-4`'s `declare-fun` case, `logos-5` |
 | **withdrawn — our error** | 1 | `logos-4`'s indexed-operator case |
 | **accepted, closed, awaiting landing** | 7 | ethos-1, ethos-7, ethos-8, ethos-9 and the `symm` docstring — seven rows on `anoieu-findings`@`292201c2`, tracked by `tools/landing.py` |
-| **accepted, and nothing committed** | 1 | `logos-2`, still open — the one case the new closing rule does *not* cover |
+| **accepted, and landed on `main`** | 1 | `logos-2`, closed at logos `6cb59db5` after four days open against a branch that was later deleted |
 | **declined, not yet confirmed** | 8 | the three ethos `EO0084` rows, `conclusion-spec.eo`, the four `eo-definitions.eo` rows |
 | **our error, not yet withdrawn** | 2 | the two ethos `Nary.eo` rows |
 | **undecided by the maintainer** | 2 | ethos-6's two `right-assoc-variants.eo` rows |
@@ -1437,7 +1435,7 @@ substantive.
 | **logos-4**, `(( extract 1 0) a)` | logos reads the indexed operator without its `_` and accepts a proof ethos refuses | **withdrawn — our error.** The reproducer was an artefact of our shrinker. Closed |
 | **logos-5** | an `assume` after the first `step`: ethos accepts, logos refuses | **declined and documented** — a deliberate restriction of logos's input format, now stated in `docs/parser.md`. Closed |
 
-#### logos-2: accepted, and the row stays open
+#### logos-2: accepted, and it landed
 
 The entry was a symbol of the *target* vocabulary — declared in ethos's
 `smt.eos`, and legitimately written by the transform a few lines below it — that
@@ -1446,18 +1444,18 @@ transform case nothing could reach. logos deleted it and established that it was
 dead rather than merely unused: `install/install-cpc.sh --cached --check` reports
 the generated Lean byte-identical with the line gone.
 
-**The row is still open, and the reason is the branch.** `anoieu-findings` is
-`main`, `d4a03a59`, with no commits of its own; the deletion, and the parser work
-below, are uncommitted edits in one working tree. Our own report is measured
-against `updateCompiler` at `47f29bfa`, a different branch, where the line stands
-and `TRI0002` still reports it. A reply is a triage and the branch is the
-authority, and here the branch is empty — so the row keeps its finding and gains
-a note saying where the work is.
+**It was held open for four days, and the reason was a branch.** The reply named
+`anoieu-findings`, which was `main` (`d4a03a59`) with no commits of its own, while
+our own report was measured against `updateCompiler` at `47f29bfa` — a branch that
+has since been deleted, taking with it any way of asking whether that was true.
+The change is now on logos `main` at `6cb59db5` and `TRI0002` reports nothing, so
+the row is closed. The general rule this cost us is in
+[`coherence.md`](../coherence.md#a-finding-is-about-main): a finding is measured
+against what a project ships.
 
-logos also told us the finding will return: `scripts/bump-eoc-version.py` copies
-`Cpc.eos` wholesale from ethos's `tools/eoc/semantics/development-cpc.eos`, which
-carries the same line at `:542` in the ethos we pin. That is checked out here
-already and no corpus reads it as a triple.
+logos also told us the finding would return, because `scripts/bump-eoc-version.py`
+copies `Cpc.eos` wholesale from ethos's `tools/eoc/semantics/development-cpc.eos`.
+It will not: the line is gone from there too, at `7f4482b7`.
 
 #### logos-4, `declare-fun`: declined, and the reason holds
 

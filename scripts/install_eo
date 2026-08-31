@@ -1,0 +1,589 @@
+#!/usr/bin/env python3
+"""install_eo -- put the Eunoia ecosystem on a machine, or say what is here.
+
+Three views of one list, so they cannot drift apart:
+
+    scripts/install_eo                 # the commands, run nothing
+    scripts/install_eo --run           # ... and actually run them
+    scripts/install_eo --status        # what is on this machine
+
+**Printing is the default and running is the flag.** What the dump prints is
+exactly what `--run` executes, so reading it is a real review rather than a
+courtesy, and a paste of it does the same thing this does.
+
+The list is derived from `tools/ecosystem.json`: every entry that is not a child
+project carries a url and a repo id, and the clone follows from them. Adding a
+tool to the inventory is therefore the whole of adding it here.
+`tools/checkouts.json` holds only the exceptions -- a branch that is not the
+default, a clone flag, a repo somebody has to decide about -- and nothing has to
+be edited for the ordinary case.
+
+Membership stays a decision a person makes: this file reads
+`tools/ecosystem.json` and never writes it. Where the inventory, the clone list,
+`tools/deps.json` and `scripts/repos.local` disagree, `--status` says so under
+`note:` and repairs nothing.
+
+Choosing what to include:
+
+    scripts/install_eo --run ethos koine     # just these
+    scripts/install_eo --role member         # by recorded status
+    scripts/install_eo --exclude cvc5        # all but
+    scripts/install_eo --missing             # what is not here yet
+    scripts/install_eo --with-optional       # include the opt-in ones
+
+An id is a repo id or any inventory id it provides, so `ethos-eoc` selects the
+one ethos tree that carries both.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime
+import json
+import os
+import subprocess
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+TOOLS = os.path.join(ROOT, "tools")
+CHECKOUTS = os.path.join(TOOLS, "checkouts.json")
+INVENTORY = os.path.join(TOOLS, "ecosystem.json")
+DEPS = os.path.join(TOOLS, "deps.json")
+NAMES = os.path.join(TOOLS, "ynoia", "names.md")
+REPOS_FILE = os.environ.get("ANOIEU_REPOS_FILE",
+                            os.path.join(ROOT, "scripts", "repos.local"))
+
+#: Inventory statuses that are somebody's own repository. `child` is a project
+#: inside another tree and has nothing to clone; an unknown status is treated as
+#: cloneable, because a status this file has not heard of is not a reason to
+#: drop a tool out of the list silently.
+NOT_A_REPO = ("child",)
+
+#: The order statuses are dumped in, so a new tool lands somewhere sensible
+#: without anybody choosing. Anything else sorts last.
+STATUS_ORDER = ("member", "candidate", "served")
+
+
+def load(path: str) -> dict:
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def strip_comments(d: dict) -> dict:
+    return {k: v for k, v in d.items() if not k.startswith("_")}
+
+
+def inventory() -> dict:
+    return strip_comments(load(INVENTORY))
+
+
+def deps() -> dict:
+    return strip_comments(load(DEPS))
+
+
+class Repo:
+    """One clone: a directory, a url, and the inventory ids it provides."""
+
+    def __init__(self, key: str, url: str, covers: list[str], statuses: list[str],
+                 over: dict, what: str) -> None:
+        self.key = key                       # the directory, and the repo id
+        self.url = url
+        self.covers = covers                 # inventory ids this tree provides
+        self.statuses = statuses
+        self.ref = over.get("ref", "")       # "" means the default branch
+        self.args = list(over.get("args", []))
+        self.opt_in = over.get("opt_in", "")
+        self.extra = list(over.get("extra", []))
+        self.why = over.get("why", "") or what
+        self.recorded = bool(statuses)       # in tools/ecosystem.json at all
+
+    @property
+    def status(self) -> str:
+        return "/".join(sorted(set(self.statuses))) or "unrecorded"
+
+    def label(self) -> str:
+        return f"{', '.join(self.covers) or self.key} -- {self.status}"
+
+    def command(self) -> list[str]:
+        ref = ["-b", self.ref] if self.ref else []
+        return ["git", "clone", *self.args, *ref, self.url, self.key]
+
+
+def plan() -> list[Repo]:
+    """Every tree to clone: the inventory, grouped by repository, plus anything
+    `tools/checkouts.json` names that the inventory does not carry yet."""
+    conf = load(CHECKOUTS)
+    over = conf.get("overrides", {})
+    order = conf.get("order", [])
+
+    grouped: dict[str, dict] = {}
+    for name, e in inventory().items():
+        if e.get("status") in NOT_A_REPO:
+            continue
+        key = e.get("repo", name)
+        g = grouped.setdefault(key, {"covers": [], "statuses": [], "url": "", "what": ""})
+        g["covers"].append(name)
+        g["statuses"].append(e.get("status", "?"))
+        g["url"] = g["url"] or e.get("url", "")
+        g["what"] = g["what"] or e.get("what", "")
+
+    repos = [Repo(k, g["url"], g["covers"], g["statuses"], over.get(k, {}), g["what"])
+             for k, g in grouped.items()]
+    # An override may carry its own url: a repository somebody is fetching
+    # before anybody has decided what its status is. It is listed, and --status
+    # reports the decision as owed.
+    for k, o in over.items():
+        if k not in grouped and o.get("url"):
+            repos.append(Repo(k, o["url"], [k], [], o, ""))
+
+    def rank(r: Repo) -> tuple:
+        first = STATUS_ORDER.index(r.statuses[0]) if r.statuses and r.statuses[0] in STATUS_ORDER else len(STATUS_ORDER)
+        return (order.index(r.key) if r.key in order else len(order), first, r.key)
+
+    return sorted(repos, key=rank)
+
+
+def default_root() -> str:
+    """Where the checkouts go: siblings of this anoieu checkout, unless told.
+
+    The directory holding anoieu, so a second tool lands beside it; $EO_ROOT or
+    --root override that.
+
+    A guess from the tree rather than a fact about anybody's setup, which is why
+    it is printed at the top of the dump rather than assumed.
+    """
+    env = os.environ.get("EO_ROOT")
+    if env:
+        return os.path.abspath(os.path.expanduser(env))
+    return os.path.abspath(os.path.join(ROOT, load(CHECKOUTS).get("root", "..")))
+
+
+def select(repos: list[Repo], args) -> list[Repo]:
+    """What the flags asked for, in list order."""
+    named = {n for n in args.ids}
+    out = []
+    for r in repos:
+        ids = {r.key, *r.covers}
+        if named and not (ids & named):
+            continue
+        if ids & set(args.exclude):
+            continue
+        if args.role and not (set(args.statuses_of(r)) & set(args.role)):
+            continue
+        # An opt-in tree is absent on purpose: it takes an explicit ask.
+        if r.opt_in and not (named & ids) and not args.with_optional:
+            continue
+        if args.missing and os.path.isdir(os.path.join(args.root, r.key, ".git")):
+            continue
+        out.append(r)
+    return out
+
+
+def unknown(repos: list[Repo], ids: list[str]) -> list[str]:
+    """Ids this list has never heard of, which is the interesting case: a tool
+    somebody has on their machine and nothing here can fetch."""
+    return sorted(set(ids) - {i for r in repos for i in (r.key, *r.covers)})
+
+
+# -- git --------------------------------------------------------------------
+
+def git(path: str, *args: str) -> tuple[int, str]:
+    try:
+        p = subprocess.run(["git", "-C", path, *args],
+                           capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        return 1, str(e)[:80]
+    return p.returncode, (p.stdout or p.stderr).strip()
+
+
+def is_checkout(path: str) -> bool:
+    return os.path.isdir(os.path.join(path, ".git"))
+
+
+def age(path: str) -> str:
+    code, when = git(path, "log", "-1", "--format=%cI")
+    if code != 0 or not when:
+        return "?"
+    then = datetime.datetime.fromisoformat(when)
+    days = (datetime.datetime.now(then.tzinfo) - then).days
+    return "today" if days == 0 else f"{days}d"
+
+
+def default_branch(path: str) -> str:
+    code, out = git(path, "symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD")
+    return out.split("/", 1)[1] if code == 0 and "/" in out else ""
+
+
+# -- text -------------------------------------------------------------------
+
+def wrap(text: str, width: int = 74) -> list[str]:
+    out, line = [], ""
+    for word in text.split():
+        if line and len(line) + 1 + len(word) > width:
+            out.append(line)
+            line = word
+        else:
+            line = f"{line} {word}".strip()
+    if line:
+        out.append(line)
+    return out
+
+
+def reserved() -> list[tuple[str, str]]:
+    """The names ynoia has reserved and nobody has taken.
+
+    Parsed out of the register rather than restated, so a name taken there stops
+    being advertised here. Best effort: if the table moves this reports nothing
+    rather than something wrong.
+    """
+    try:
+        text = open(NAMES, encoding="utf-8").read()
+    except OSError:
+        return []
+    head = text.find("## Reserved")
+    if head < 0:
+        return []
+    tail = text.find("\n## ", head + 1)
+    out = []
+    for row in text[head:tail if tail > 0 else len(text)].splitlines():
+        cells = [c.strip() for c in row.strip().strip("|").split("|")]
+        if len(cells) == 3 and cells[0].startswith("**") and "---" not in cells[1]:
+            out.append((cells[0].strip("*"), cells[2]))
+    return out
+
+
+def not_fetched(inv: dict) -> list[str]:
+    lines = [f"{n} -- a child project, in the {e.get('parent', '?')} tree already"
+             for n, e in inv.items() if e.get("status") in NOT_A_REPO]
+    lines += [f"{n} -- a reserved name with no repository: {w}" for n, w in reserved()]
+    return lines
+
+
+# -- scripts/repos.local ----------------------------------------------------
+
+def repos_local_rows(root: str, repos: list[Repo],
+                     planned: set[str] = frozenset()) -> list[tuple[str, str, bool]]:
+    """`(id, path, live)` for every id.
+
+    Live means a checkout is there, or is about to be by the time the mapping is
+    read -- the dump writes the file after its clones, so what it is about to
+    fetch counts. Anything else is written commented out: a row pointing at a
+    directory that is not there sends every script in this repository after it.
+    """
+    rows = []
+    for r in repos:
+        path = os.path.join(root, r.key)
+        live = is_checkout(path) or r.key in planned
+        rows.extend((c, path, live) for c in r.covers)
+    return rows
+
+
+def repos_local_text(root: str, repos: list[Repo],
+                     planned: set[str] = frozenset()) -> str:
+    rows = repos_local_rows(root, repos, planned)
+    width = max((len(c) for c, _, _ in rows), default=8) + 2
+    out = ["# id            where it is on this machine"]
+    for name, path, live in rows:
+        out.append(f"{'' if live else '# '}{name:<{width}}{path}")
+    return "\n".join(out) + "\n"
+
+
+def merge_repos_local(root: str, repos: list[Repo], planned: set[str] = frozenset(),
+                      path: str = REPOS_FILE) -> tuple[str, list[str]]:
+    """Add what is missing to the mapping, and rewrite nothing that is there.
+
+    `scripts/welcome_eo` records an id here by hand and refuses to rewrite an
+    existing one, on the grounds that a repo id changing meaning under the other
+    scripts is worse than an error. This follows that rule rather than
+    contradicting it: a row already recorded is left exactly as it is, and a
+    disagreement with where this list expects the tree is returned to be
+    reported. The person decides which is right.
+    """
+    known = {name: p for name, p, live in repos_local_rows(root, repos, planned) if live}
+    if not os.path.exists(path):
+        return repos_local_text(root, repos, planned), []
+    lines = open(path, encoding="utf-8").read().splitlines()
+    seen, disagree = set(), []
+    for line in lines:
+        bare = line.strip()
+        if not bare or bare.startswith("#"):
+            continue
+        parts = bare.split(None, 1)
+        if len(parts) == 2 and parts[0] in known:
+            seen.add(parts[0])
+            here = os.path.expanduser(parts[1].strip())
+            if os.path.abspath(here) != os.path.abspath(known[parts[0]]):
+                disagree.append(f"{parts[0]} is recorded at {here}, and this list "
+                                f"expects {known[parts[0]]} -- left as recorded")
+    width = max((len(n) for n in known), default=8) + 2
+    out = list(lines)
+    for name, p in known.items():
+        if name not in seen:
+            out.append(f"{name:<{width}}{p}")
+    return "\n".join(out) + "\n", disagree
+
+
+# -- printing what would happen ---------------------------------------------
+
+def dump(root: str, repos: list[Repo], inv: dict, everything: list[Repo]) -> int:
+    print("# The Eunoia ecosystem, as commands. Printed by scripts/install_eo;")
+    print("# `--run` executes exactly this. Re-run it rather than keeping a copy.")
+    print(f"# Root: {root}   (--root PATH, or $EO_ROOT, to put it elsewhere)")
+    if not repos:
+        print("\n# nothing selected: everything asked for is already here.")
+        return 0
+    print()
+    print(f"mkdir -p {root}")
+    print(f"cd {root}")
+
+    for r in repos:
+        print()
+        print(f"# {r.key} -- {r.label()}")
+        for chunk in wrap(r.why):
+            print(f"#   {chunk}")
+        for chunk in wrap(f"not by default: {r.opt_in}", 70) if r.opt_in else []:
+            print(f"#   {chunk}")
+        lead = "# " if r.opt_in else ""
+        print(lead + " ".join(r.command()))
+        for extra in r.extra:
+            for chunk in wrap(extra.get("comment", "")):
+                print(f"#   {chunk}")
+            print(("" if extra.get("run") else "# ") + extra["cmd"])
+
+    print()
+    print("# Every script in anoieu resolves a repo id through this file, so it is")
+    print("# the step that makes the checkouts usable rather than merely present.")
+    print(f"cat > {REPOS_FILE} <<'EOF'")
+    print(repos_local_text(root, everything, {r.key for r in repos if not r.opt_in}), end="")
+    print("EOF")
+
+    print()
+    print("# What none of this fetches:")
+    for line in not_fetched(inv):
+        head, *rest = wrap(line, 70)
+        print(f"#   {head}")
+        for chunk in rest:
+            print(f"#     {chunk}")
+    return 0
+
+
+# -- doing it ---------------------------------------------------------------
+
+def run(root: str, repos: list[Repo], everything: list[Repo], write_map: bool) -> int:
+    """Clone what was selected. Skips what is there; refuses what is in the way."""
+    if not repos:
+        print("-- nothing to do: everything selected is already here.")
+    failed, have = [], set()
+    os.makedirs(root, exist_ok=True)
+    for r in repos:
+        path = os.path.join(root, r.key)
+        if is_checkout(path):
+            print(f"-- {r.key}: already a checkout, left alone")
+            have.add(r.key)
+            continue
+        if os.path.isdir(path) and os.listdir(path):
+            print(f"-- {r.key}: {path} has something in it and is not a checkout "
+                  "-- refusing to touch it")
+            failed.append(r.key)
+            continue
+        cmd = r.command()
+        print(f"$ {' '.join(cmd)}")
+        if subprocess.run(cmd, cwd=root).returncode != 0:
+            failed.append(r.key)
+            continue
+        have.add(r.key)
+        for extra in r.extra:
+            if extra.get("run"):
+                print(f"$ {extra['cmd']}")
+                subprocess.run(extra["cmd"], cwd=root, shell=True)
+
+    if write_map:
+        text, disagree = merge_repos_local(root, everything, have)
+        os.makedirs(os.path.dirname(REPOS_FILE), exist_ok=True)
+        with open(REPOS_FILE, "w", encoding="utf-8") as f:
+            f.write(text)
+        print(f"-- {REPOS_FILE}: added what was missing, rewrote nothing")
+        for d in disagree:
+            print(f"   note: {d}")
+
+    if failed:
+        print(f"-- {len(failed)} did not clone: {', '.join(failed)}")
+        return 1
+    print("-- done. `--status` says where everything stands.")
+    return 0
+
+
+# -- the status mirror ------------------------------------------------------
+
+def read_repos_file() -> dict:
+    found = {}
+    if os.path.isfile(REPOS_FILE):
+        for line in open(REPOS_FILE, encoding="utf-8"):
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split(None, 1)
+            if len(parts) == 2:
+                found[parts[0]] = os.path.expanduser(parts[1].strip())
+    return found
+
+
+def observe(path: str, want: str, do_fetch: bool, opt_in: bool) -> tuple[str, list[str], bool]:
+    """One checkout, as a cell, some notes, and whether it is a checkout at all.
+
+    Offline unless asked otherwise. An empty directory is reported as empty
+    rather than as broken: it is what the clone expects to find, and calling a
+    correct state a fault is how a status view stops being read.
+    """
+    if not is_checkout(path):
+        if opt_in:
+            return "opt-in, not cloned", [], False
+        if not os.path.isdir(path):
+            return "absent", [], False
+        if not os.listdir(path):
+            return "empty dir", [], False
+        return "not a checkout", [f"{path} has something in it and is not a "
+                                  "git repository"], False
+    notes = []
+    if do_fetch:
+        code, out = git(path, "fetch", "--quiet")
+        if code != 0:
+            notes.append(f"fetch failed: {out.splitlines()[0] if out else '?'}")
+    branch = git(path, "rev-parse", "--abbrev-ref", "HEAD")[1] or "?"
+    head = git(path, "rev-parse", "--short=7", "HEAD")[1] or "?"
+    dirty = "dirty" if git(path, "status", "--porcelain")[1] else "clean"
+    cell = f"{branch} {head} {dirty}"
+    code, counts = git(path, "rev-list", "--left-right", "--count", "@{upstream}...HEAD")
+    if code == 0 and counts:
+        behind, ahead = (counts.split() + ["0", "0"])[:2]
+        if behind != "0" or ahead != "0":
+            cell += f" -{behind}/+{ahead}"
+    expected = want or default_branch(path)
+    if expected and branch != expected:
+        notes.append(f"on {branch}, and the list says {expected}")
+    return cell, notes, True
+
+
+def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
+         everything: list[Repo] | None = None) -> int:
+    dep, mapped = deps(), read_repos_file()
+    everything = everything or repos
+    whole = len(repos) == len(everything)
+    notes: list[str] = []
+    rows = []
+
+    for r in repos:
+        path = os.path.join(root, r.key)
+        cell, why, here = observe(path, r.ref, do_fetch, bool(r.opt_in))
+        notes += [f"{r.key}: {w}" for w in why]
+        rows.append((r.key, r.label(), cell, age(path) if here else "-", path))
+        if not r.recorded:
+            notes.append(f"{r.key} is fetched here and is not in tools/ecosystem.json: "
+                         "a status is a decision, so somebody still owes one")
+        for c in r.covers:
+            if c in mapped and os.path.abspath(mapped[c]) != os.path.abspath(path):
+                notes.append(f"{c}: scripts/repos.local points at {mapped[c]}, "
+                             f"and this list expects {path}")
+            elif c not in mapped and here:
+                notes.append(f"{c} is checked out and not in scripts/repos.local, "
+                             "so anoieu's scripts will not find it")
+        pinned = dep.get(r.key, {}).get("ref", "")
+        if pinned:
+            wanted = r.ref or (default_branch(path) if here else "")
+            if wanted and pinned != wanted:
+                notes.append(f"{r.key}: tools/deps.json reports on {pinned}, "
+                             f"and this checkout is on {wanted}")
+            if here and git(path, "rev-parse", "--verify", "--quiet",
+                            f"origin/{pinned}")[0] != 0:
+                notes.append(f"{r.key}: tools/deps.json reports on {pinned}, and this "
+                             f"checkout has no origin/{pinned} -- gone from the "
+                             "remote, or never fetched")
+
+    for name, path in mapped.items():
+        # against the whole list, never the selection: a row is only orphaned if
+        # nothing anywhere fetches it.
+        if name not in {c for r in everything for c in r.covers}:
+            notes.append(f"scripts/repos.local carries {name}, which nothing on "
+                         "this list fetches")
+
+    if not rows:
+        print("nothing selected.")
+        return 0
+    w = max(len(r[0]) for r in rows) + 2
+    k = max(len(r[1]) for r in rows) + 2
+    print(f"{'dir':<{w}}{'covers -- status':<{k}}{'checkout':<32}{'moved':<8}where")
+    for key, label, cell, moved, path in rows:
+        print(f"{key:<{w}}{label:<{k}}{cell:<32}{moved:<8}"
+              f"{path.replace(os.path.expanduser('~'), '~')}")
+
+    if whole:
+        print()
+        for line in not_fetched(inv):
+            print(f"nothing to clone: {line}")
+
+    if notes:
+        print()
+        for n in notes:
+            print(f"note: {n}")
+    print()
+    print("What a checkout says, and nothing about what is in it. Membership and "
+          "policy are\n`python3 tools/ecosystem.py`; whether a tool is any good "
+          "is not a thing either prints.")
+    return 0
+
+
+# -- the interface ----------------------------------------------------------
+
+def main() -> int:
+    ap = argparse.ArgumentParser(
+        description="the Eunoia ecosystem: what to clone, what is here, and the cloning",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="Printing is the default; --run is what touches the disk.")
+    ap.add_argument("ids", nargs="*", metavar="ID",
+                    help="only these tools, by repo id or by an id one provides")
+    ap.add_argument("--run", action="store_true", help="clone, instead of printing the commands")
+    ap.add_argument("--dry-run", action="store_true", help="print them, which is the default")
+    ap.add_argument("--status", action="store_true", help="what is on this machine")
+    ap.add_argument("--role", default="", metavar="member,candidate,served",
+                    help="only tools recorded with one of these statuses")
+    ap.add_argument("--exclude", default="", metavar="ID,ID",
+                    help="all but these")
+    ap.add_argument("--missing", action="store_true", help="only what is not cloned yet")
+    ap.add_argument("--with-optional", action="store_true",
+                    help="include the opt-in trees, which are skipped by default")
+    ap.add_argument("--no-repos-local", action="store_true",
+                    help="with --run, do not update scripts/repos.local")
+    ap.add_argument("--root", default="", metavar="PATH",
+                    help="where the checkouts live; the default is siblings of this anoieu checkout, or $EO_ROOT")
+    ap.add_argument("--fetch", action="store_true",
+                    help="with --status, fetch each checkout first")
+    args = ap.parse_args()
+
+    if args.run and args.dry_run:
+        print("install_eo: --run and --dry-run ask for opposite things", file=sys.stderr)
+        return 2
+    args.root = os.path.abspath(os.path.expanduser(args.root)) if args.root else default_root()
+    args.role = [s for s in args.role.split(",") if s]
+    args.exclude = [s for s in args.exclude.split(",") if s]
+    args.statuses_of = lambda r: r.statuses or ["unrecorded"]
+
+    inv, everything = inventory(), plan()
+    for u in unknown(everything, args.ids):
+        print(f"note: {u} is in neither tools/ecosystem.json nor "
+              "tools/checkouts.json, so nothing here fetches it. An inventory "
+              "entry -- status, repo, url, what -- is what puts it on the list.")
+    # The status view shows the whole list: a row you did not ask about is how
+    # you find out something is missing.
+    chosen = everything if args.status and not (args.ids or args.role or args.exclude) \
+        else select(everything, args)
+
+    if args.status:
+        return show(args.root, chosen, inv, args.fetch, everything)
+    if args.run:
+        return run(args.root, chosen, everything, not args.no_repos_local)
+    return dump(args.root, chosen, inv, everything)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

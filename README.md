@@ -121,7 +121,7 @@ anyone, each with an id, a state, and the reasoning underneath it:
 | **cvc5** — the CPC signature | [2 requests they made of us; 1 finding fixed, and 1 we had recorded as fixed that never was](docs/reports/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
 | **ethos** — the proof checker | [3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption, and 2 the fuzzer found: a crash and an error path with no location](docs/reports/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
 | **ethos-eoc** — the Eunoia compiler | [3 integrations, including the `is_list_nil` diff its own docs ask for](docs/reports/reports.md#ethos-eoc--the-eunoia-compiler) |
-| **logos** — the Lean development | [1 dead entry confirmed, 1 regeneration, 1 CI adoption, and an open question about a regression test of theirs that ethos will not take](docs/reports/reports.md#logos--the-lean-development) |
+| **logos** — the Lean development | [1 regeneration, 1 CI adoption, and an open question about a regression test of theirs that ethos will not take; the dead entry is fixed and closed](docs/reports/reports.md#logos--the-lean-development) |
 | **eudaimonia** — the calculus template | [2 preflight integrations](docs/reports/reports.md#eudaimonia--the-template-for-other-calculi) |
 | **Eunoia** — the language and its manual | [7 proposed changes, from what writing the analyzer turned up](docs/reports/reports.md#eunoia-itself--the-language-and-its-manual) |
 

@@ -14,9 +14,9 @@ own, so these are what they are relative to.
 | project | ref | commit | dated | what is read |
 | --- | --- | --- | --- | --- |
 | **cvc5** | `main` | `aee874240419` | 2026-08-29 | the CPC signature and the expert extension; the solver's own proof machinery is dokimasia's subject, not ours |
-| **ethos** | `ethosEoc3` | `3cf1c03fdfd0` | 2026-08-30 | the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool |
-| **logos** | `updateCompiler` | `47f29bfac93e` | 2026-08-30 | the installed signature and the CPC semantics logos owns |
-| **eudaimonia** | `main` | `45e34e0d6c2d` | 2026-08-30 | its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read |
+| **ethos** | `ethosEoc3` | `7f4482b7f065` | 2026-08-31 | the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool |
+| **logos** | `main` | `6cb59db508dc` | 2026-08-31 | the installed signature and the CPC semantics logos owns |
+| **eudaimonia** | `main` | `a93fbec2f6d8` | 2026-08-31 | its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read |
 
 Produced by anoieu `0.2.0`. Which commit of anoieu produced it is
 the commit this file is committed in, and is deliberately not written here:
@@ -43,7 +43,7 @@ subject, never our own coverage* in [`reporting-policy.md`](reporting-policy.md)
 | ethos test signatures | 202 | 7 | 6 | 2 |
 | logos installed definitions | 0 | 0 | 0 | 0 |
 | eudaimonia examples | 1 | 0 | 0 | 0 |
-| the CPC triple | 35 | 3 | 20 | 15 |
+| the CPC triple | 35 | 3 | 19 | 15 |
 
 ## By check
 
@@ -101,4 +101,3 @@ Nothing reported by the checks that are on by default.
 | EO0064 | error | 3 |
 | EO0077 | hint | 1 |
 | EO0083 | warning | 1 |
-| TRI0002 | warning | 1 |

@@ -7,17 +7,17 @@
   },
   "ethos": {
     "ref": "ethosEoc3",
-    "commit": "3cf1c03fdfd01720b4ec7614f475a75b31c3b483",
-    "date": "2026-08-30"
+    "commit": "7f4482b7f0656c9dc5cc828820c755c73b2d4bbc",
+    "date": "2026-08-31"
   },
   "logos": {
-    "ref": "updateCompiler",
-    "commit": "47f29bfac93e4364c6452e733e2d944c267a9b2c",
-    "date": "2026-08-30"
+    "ref": "main",
+    "commit": "6cb59db508dcdd4ea00d359aa44ae7e787717a6b",
+    "date": "2026-08-31"
   },
   "eudaimonia": {
     "ref": "main",
-    "commit": "45e34e0d6c2dc3b7799fe4fbaac260d017f458c5",
-    "date": "2026-08-30"
+    "commit": "a93fbec2f6d8125f6ce42b97c3f8f80eb18ad6cb",
+    "date": "2026-08-31"
   }
 }

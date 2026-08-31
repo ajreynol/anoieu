@@ -17,6 +17,11 @@
 # topics for *our* docs/discussion.md, addressed to them, staged for a person to
 # carry.
 #
+# It also syncs the two lists that decide whether anybody else can find the tool:
+# scripts/repos.local, which it writes, and tools/ecosystem.json, which it reads
+# through scripts/install_eo and reports on rather than editing. Recording a tool
+# as a member or a candidate is a decision a person makes.
+#
 # **This is a welcome, not an audit.** A new tool has joined nothing: joining is
 # its owner's choice and comes later, or never. The policy check is run and
 # quoted for context, and a failing line at this stage is a fact about what they
@@ -155,6 +160,16 @@ elif [ "$RECORDED" != "$TARGET" ]; then
   exit 2
 fi
 
+# -- sync the lists that decide whether anybody else can find this tool.
+#    scripts/repos.local, written above, is where *this machine* looks. The
+#    clone list every other machine uses is derived from tools/ecosystem.json by
+#    scripts/install_eo, so a tool recorded here and not there is one that only
+#    exists on somebody's laptop -- the failure this step is here to catch. It
+#    reports and does not edit: a status is a decision a person makes.
+SYNC=$(python3 "$ROOT/scripts/install_eo" --status "$NAME" 2>&1 || true)
+echo "-- the ecosystem's own list, for $NAME:" >&2
+printf '%s\n' "$SYNC" | sed 's/^/   /' >&2
+
 REPORT=$(python3 "$ROOT/tools/policy_check.py" --root "$TARGET" 2>&1 || true)
 
 BRIEF="They left no ynoia-brief.local.md, so what they read is not recorded."
@@ -179,13 +194,22 @@ $REPORT
 
 $BRIEF
 
+This is what the ecosystem's own lists say about $NAME. \`scripts/repos.local\`
+now points at their checkout; the clone list everybody else uses is derived from
+\`tools/ecosystem.json\`, so if that reports a status is owed, say so at the end
+of what you write and leave the file alone -- recording a tool as a member or a
+candidate is a decision a person makes.
+
+$SYNC
+
 A person will usually have pointed them in a direction before this runs, with
 whatever prompts that took, so some of what you are reading came from us and is
 not recorded anywhere. Do not treat an unexplained decision as theirs alone.
 
 **Before anything else, check you are looking at the right repository.** The id
-`$NAME` was typed by a person and points at $TARGET, and a mistyped id records a
-name eight other scripts will use. So: does the README name this tool `$NAME`,
+\`$NAME\` was typed by a person and points at $TARGET, and a mistyped id records
+a name eight other scripts will use. So: does the README name this tool
+\`$NAME\`,
 or something else? Does the tree look like the thing the register and the brief
 describe, or like a different project entirely? Is there any sign this checkout
 belongs to some other tool?

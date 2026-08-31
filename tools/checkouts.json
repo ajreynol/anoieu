@@ -1,0 +1,52 @@
+{
+  "_comment": [
+    "The exceptions to cloning the Eunoia ecosystem, and nothing else.",
+    "",
+    "What to clone is *derived* from tools/ecosystem.json: every entry there",
+    "that is not a child project has a url and a repo id, and the obvious",
+    "command follows from them. A tool added to the inventory therefore appears",
+    "in the dump, in the status view and in scripts/repos.local without anybody",
+    "editing this file -- which is the point, because a second list to maintain",
+    "is a second list to forget.",
+    "",
+    "So this file holds only what cannot be derived. Keyed by repo id:",
+    "",
+    "  ref      the branch the ecosystem works against, where it is not the",
+    "           repository's default. A choice, not a fact -- the same kind",
+    "           tools/deps.json records, and the two are compared at run time",
+    "  args     extra clone flags, with the reason in `why`",
+    "  opt_in   why this one is not cloned by default. Its command is printed",
+    "           commented out and `--run` skips it unless it is named",
+    "  why      what a reader needs that the inventory's `what` does not say",
+    "  extra    further commands after the clone. `run: false` prints one",
+    "           commented out, for a person to decide",
+    "  url      only for a repo the inventory does not carry. The status view",
+    "           reports that as a status somebody still owes",
+    "",
+    "`order` is the order of the dump. Anything unlisted follows, inventory",
+    "order within its status, so a new tool lands in a sensible place unasked."
+  ],
+  "root": "..",
+  "order": ["anoieu", "ethos", "logos", "eudaimonia", "dokimasia", "koine", "cvc5"],
+  "overrides": {
+    "anoieu": {
+      "why": "where this list lives, so you already have it if you are reading this"
+    },
+    "ethos": {
+      "ref": "ethosEoc3",
+      "why": "the proof checker and the Eunoia compiler are two binaries from one tree, so one clone serves both ids. ethosEoc3 is the branch the compiler and the semantics sets are on",
+      "extra": [
+        {
+          "run": false,
+          "comment": "the Eunoia manual is on main, not on ethosEoc3. A worktree gives you both without a second clone",
+          "cmd": "git -C ethos worktree add ../ethos-main main"
+        }
+      ]
+    },
+    "cvc5": {
+      "args": ["--filter=blob:none"],
+      "why": "nothing here builds it and only proofs/eo is read, so the blobless clone is the whole of what is wanted -- drop the filter if you intend to build it",
+      "opt_in": "the largest tree here by an order of magnitude, and nothing needs a working copy of it: tools/deps.py fetches proofs/eo shallow and sparse when a report is generated"
+    }
+  }
+}

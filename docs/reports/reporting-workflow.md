@@ -153,8 +153,9 @@ Two things have to be true, and **a merge is not one of them**.
 That second condition is the one that does the work, and it is the line between
 the two rounds we have run. ethos accepted seven rows and had them committed on
 `anoieu-findings`; those close. logos accepted a deletion and left it in a dirty
-working tree on a branch level with `main`; that one does not, and has stayed
-open through two rounds for the right reason.
+working tree on a branch level with `main`; that one did not close, and stayed
+open through two rounds for the right reason — until the change reached logos
+`main` at `6cb59db5`, where it closed on the evidence rather than on the reply.
 
 **Waiting for a merge, on the other hand, we no longer do.** A row held open
 until somebody else's pull request is approved is not telling us about the
@@ -997,11 +998,17 @@ What is read, and what is deliberately not, is [`tools/deps.json`](../../tools/d
 | --- | --- | --- | --- |
 | **cvc5** | `main` | `proofs/eo` — the CPC signature and the expert extension | the solver, its build system, its proof-production code: whether cvc5 can *justify* what it decides is [dokimasia](https://github.com/ajreynol/dokimasia)'s question |
 | **ethos** | `ethosEoc3` | the test signatures, `tools/eoc/semantics`, and the deep embedding | the C++ of the checker and the compiler |
-| **logos** | `updateCompiler` | `install/defs` — the installed signature and the CPC semantics | the Lean development |
+| **logos** | `main` | `install/defs` — the installed signature and the CPC semantics | the Lean development |
 | **eudaimonia** | `main` | `examples/hello`, its own example calculus | `examples/cpc`, a vendored copy of cvc5's signature: reading it would report cvc5's findings under eudaimonia's name |
 
 A ref in that file is a choice rather than a fact — it says which branch the
-findings are about, and changing one changes what the report is a report of.
+findings are about, and changing one changes what the report is a report of. The
+choice is made once, and it is `main`: we report against what a project ships,
+and a finding measured on a topic branch is one its owner can close by deleting
+the branch. `ethosEoc3` is the single exception, because the compiler and the
+semantics sets are there and not on ethos's `main`. The reason, and what a second
+exception would have to show, is [a finding is about
+`main`](../coherence.md#a-finding-is-about-main).
 
 ### Maintaining the report
 

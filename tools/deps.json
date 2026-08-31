@@ -7,7 +7,15 @@
     "",
     "A `ref` is a choice, not a fact. It says which branch a finding is about,",
     "and changing one changes what the report is a report of -- so it is data",
-    "here rather than a flag somewhere."
+    "here rather than a flag somewhere.",
+    "",
+    "**A ref is `main`.** We report a defect against what a project ships, so a",
+    "finding measured on somebody's topic branch is one they can close by",
+    "deleting the branch -- which is what happened, and what the rule is for.",
+    "The single exception is ethos, where the compiler and the semantics sets",
+    "the ecosystem is built on live on `ethosEoc3`: that branch is the version",
+    "of ethos-eoc anybody here cares about. Adding a second exception is a",
+    "decision, and docs/coherence.md is where the reason has to be written."
   ],
   "cvc5": {
     "url": "https://github.com/cvc5/cvc5.git",
@@ -23,7 +31,7 @@
   },
   "logos": {
     "url": "https://github.com/ajreynol/logos.git",
-    "ref": "updateCompiler",
+    "ref": "main",
     "paths": ["install/defs"],
     "reads": "the installed signature and the CPC semantics logos owns"
   },
