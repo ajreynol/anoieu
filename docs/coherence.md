@@ -251,6 +251,33 @@ keys. Three options, none chosen:
 follows from that — and the script above is worth writing either way, because it
 is the same interface in all three worlds.
 
+### The ecosystem, and what we cannot see of it
+
+`python3 tools/ecosystem.py` prints who is in the ecosystem and how each looks:
+declared or not, whether the policy check passes, whether there is a channel to
+reach them, how long since anything moved. It is local, takes about a second,
+and involves no assistant — `scripts/global_audit` is the version that has
+somebody read across the answer.
+
+What it establishes is **form on a checkout**, and the gaps are worth naming
+because a table invites more confidence than it has earned:
+
+- **Whether anybody actually runs the check.** A member's own CI is the only
+  evidence of that and we cannot see it from here.
+- **Which commit of the policy a member is pinned to**, and how far behind that
+  is. It is in their workflow file, so it is readable in principle and nothing
+  reads it today.
+- **Whether a checkout here is what upstream has.** These are working copies on
+  one machine; a stale clone reports a stale answer with no indication that it
+  is one.
+- **Anything about the tools themselves.** Not whether they work, not whether
+  they are maintained, not whether the thing they produce is any good.
+
+*TODO*, in the order they are worth doing: read each member's `anoieu.yml` for
+its pin and report the distance; report a checkout's distance from its own
+remote, so a stale row says so; and give the table a `--json` mode if anything
+ever wants to consume it. None is started.
+
 ### Smaller, and not blocked on any of the above
 
 **Adopt ethos's Eunoia formatter, once it is ready.** ethos ships a format tool

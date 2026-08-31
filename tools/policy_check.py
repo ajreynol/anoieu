@@ -169,7 +169,7 @@ def check_declaration() -> list[str]:
 
 
 def check_front_page() -> list[str]:
-    """*There is one entry point* and *Every repository explains its own name*."""
+    """*There is one entry point.*"""
     bad = []
     readme = read("README.md")
     if not readme:
@@ -177,9 +177,21 @@ def check_front_page() -> list[str]:
     for name in COMPETING_ENTRY:
         if os.path.exists(os.path.join(ROOT, name)):
             bad.append(f"{name} competes with README.md for the entry point")
-    if not any("name" in s.lower() for s in sections(readme)):
-        bad.append("README.md has no section explaining the repository's name")
     return bad
+
+
+def check_name_explained() -> list[str]:
+    """*Every repository explains its own name* -- recommended, never enforced.
+
+    A repository that arrived with its name already fixed, or whose name has no
+    story worth a paragraph, is not doing anything wrong, and failing somebody's
+    build over the absence of an etymology would be the wrong instrument for what
+    is at bottom a suggestion about being readable.
+    """
+    readme = read("README.md")
+    if readme and not any("name" in s.lower() for s in sections(readme)):
+        return ["README.md has no section explaining the repository's name"]
+    return []
 
 
 def check_maintenance_note() -> list[str]:
@@ -245,12 +257,24 @@ def check_working_space() -> list[str]:
 
 
 def child_projects() -> list[str]:
+    """Directories under `tools/` that say they are child projects.
+
+    A README is not enough on its own: plenty of repositories keep an ordinary
+    tool under `tools/` with a README describing it, and holding those to the
+    charter rules is a check firing on something that is not a problem. Like
+    membership, this is declared rather than inferred -- a child project says so
+    in its own first paragraph, and one that does not is not one.
+    """
     out = []
     tools = os.path.join(ROOT, "tools")
+    if not os.path.isdir(tools):
+        return out
     for name in sorted(os.listdir(tools)):
         d = os.path.join(tools, name)
-        if os.path.isdir(d) and not name.startswith((".", "__")) \
-           and os.path.exists(os.path.join(d, "README.md")):
+        if not os.path.isdir(d) or name.startswith((".", "__")):
+            continue
+        readme = read(os.path.join("tools", name, "README.md"))
+        if re.search(r"\b(child|research) project\b", readme, re.I):
             out.append(name)
     return out
 
@@ -411,7 +435,7 @@ def is_home():
 # small and is expected to grow.
 CHECKS = [
     ("the README declares membership of the ecosystem", check_declaration, None),
-    ("the front page is the only entry point, and explains the name", check_front_page, None),
+    ("the front page is the only entry point", check_front_page, None),
     ("the README ends with the maintenance note", check_maintenance_note, None),
     ("every document is named in the documentation index", check_docs_index, has("docs")),
     ("every generated document says it is generated", check_generated_labelled, is_home),
@@ -430,6 +454,7 @@ CHECKS = [
 # the shape of a sentence addressed to a colleague is the wrong instrument.
 MINOR = [
     ("the discussion file is present and well-formed", check_discussion, None),
+    ("the README explains the repository's name", check_name_explained, None),
 ]
 
 

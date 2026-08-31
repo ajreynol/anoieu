@@ -114,11 +114,16 @@ documents around it. Thanking them here rather than in every file is the whole
 point of the rule — the credit is real, it belongs somewhere, and *somewhere* is
 one place.
 
-**Every repository explains its own name.** A short section on the front page
-with the etymology and why the word fits, written so somebody could disagree
-with it. The ecosystem names along a convention — Greek, and from the vocabulary
-it already draws on — and a convention nobody explains decays into decoration
-within about two repositories.
+**Every repository explains its own name — recommended, not required.** A short
+section on the front page with the etymology and why the word fits, written so
+somebody could disagree with it. The ecosystem names along a convention — Greek,
+and from the vocabulary it already draws on — and a convention nobody explains
+decays into decoration within about two repositories.
+
+It is reported as a minor finding and never fails a build. A repository that
+arrived with its name already fixed, or whose name has no story worth a
+paragraph, is not doing anything wrong, and a suggestion about being readable is
+the wrong thing to gate somebody's build on.
 
 **A link that does not resolve is a defect.** Every relative link in a document
 resolves, and so does every path named in an outbound prompt — a prompt that

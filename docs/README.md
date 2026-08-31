@@ -56,6 +56,10 @@ a question about somebody's intent, a notice that something here is moving under
 them. Its format, and the reason it is kept apart from the findings ledger, are
 in [`policy.md`](policy.md#the-discussion-file).
 
+`python3 tools/ecosystem.py` prints the ecosystem as a table — who is in it,
+whether each passes the policy check, and how long since anything moved. Local,
+about a second, no assistant involved.
+
 [`coherence.md`](coherence.md) is not in the table above and is not written for
 a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not
