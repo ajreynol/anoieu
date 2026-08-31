@@ -122,7 +122,7 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [eoc-2](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | run over `semantics/*.eos` and the signatures the tests compile | proposed |
 | [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote | proposed |
 | [logos-1](#logos--the-lean-development) | logos | A | the flattened copies carry cvc5-1; regenerating picks it up once cvc5 fixes it | blocked on cvc5-1 |
-| [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:546` has an entry for `str.indexof_re_split`, which CPC does not declare | confirmed, fix not landed |
+| [logos-2](#logos--the-lean-development) | logos | A | `Cpc.eos:542` has an entry for `str.indexof_re_split`, which CPC does not declare | confirmed, fix not landed |
 | [logos-3](#logos--the-lean-development) | logos | B | run the triple over `Cpc.eos` and the signature it is of | proposed |
 | [logos-6](#logos--the-lean-development) | logos | A | `test/regress/sexp/test-indexed-op.cpc`, committed and unmutated, is accepted by logos and refused by ethos — and it is not the thing we filed | open question |
 | [eud-1](#eudaimonia--the-template-for-other-calculi) | eudaimonia | B | answer the signature contract from the signature and semantics, before a checker is generated, rather than from the compiler's output afterwards | proposed |
@@ -437,7 +437,7 @@ one. There is not one yet — we recorded cvc5-1 as fixed upstream and it never
 was, which logos caught while answering the rows against the copy, so the next
 signature bump will carry the same three cases across unchanged.
 
-**logos-2 (A)** — `Cpc.eos:546` has `(define-symbol str.indexof_re_split (s r q))`
+**logos-2 (A)** — `Cpc.eos:542` has `(define-symbol str.indexof_re_split (s r q))`
 and CPC declares no such operator: it declares `str.indexof_re`. The name is real
 on the *target* side, and another entry transforms into it at line 584, which is
 legitimate; the input-side entry is what no compilation reaches. Found by the
@@ -906,7 +906,7 @@ python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo \
   --embedding <ethos>/plugins/model_smt/model_smt.eo
 ```
 
-One finding: `Cpc.eos:546` has `(define-symbol str.indexof_re_split (s r q))`,
+One finding: `Cpc.eos:542` has `(define-symbol str.indexof_re_split (s r q))`,
 and CPC declares no such operator — it declares `str.indexof_re`. The name is
 real on the *target* side (`smt.eos:1639` defines it) and another entry
 transforms into it at line 584, which is legitimate; what is dead is the
@@ -1227,7 +1227,7 @@ would make the analyzer worth running. Tracked as items in
 | a check comparing each rule against cvc5's `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` | open — would catch interface drift that makes an emitted proof uncheckable |
 | documentation checks that compare names and roles, not counts, and distinguish call arguments from pattern variables | open — and it is why cvc5-3 is deferred |
 | diagnostics naming the repository that owns the file | open |
-| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | partly — baselines are path-independent already; releases and the narrowing policy are not written down |
+| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | **less than we claimed.** A baseline entry's id moves with the path root, so changing an entry point invalidates every entry while the findings are identical — which is what happened to `tests/corpus/cpc-baseline.json` when CPC's entry point moved. Tracked as C6 in [`notes.md`](notes.md#7a-maintenance-coherence--todo); releases and the narrowing policy are still not written down |
 
 ---
 

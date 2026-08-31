@@ -116,7 +116,10 @@ looking like a fix when it is a bad reproducer.
 
 **Outstanding.** Five suggestions from the far end, none yet built, each a change
 to what a finding *is* rather than a tidy-up. In their words, in
-`anoieu-dev-response.md` in the logos repository.
+`anoieu-dev-response.md` in the logos repository. A sixth thread, from this side:
+the record is now edited mostly by an assistant, and what must stay true of it
+after such an edit is planned — not built — in
+[`notes.md`](notes.md#7a-maintenance-coherence--todo).
 
 | what | why it matters | cost of not doing it |
 | --- | --- | --- |

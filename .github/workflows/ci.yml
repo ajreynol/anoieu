@@ -161,6 +161,7 @@ jobs:
           path: |
             docs/corpus.md
             docs/open-findings.md
+            docs/closed-findings.md
             tools/deps.lock
       - name: say whether upstream moved
         run: |
