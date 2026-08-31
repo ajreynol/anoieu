@@ -1,27 +1,30 @@
 {
   "_comment": [
-    "The exceptions to cloning the Eunoia ecosystem, and nothing else.",
+    "The exceptions to installing the Eunoia ecosystem, and nothing else.",
     "",
-    "What to clone is *derived* from tools/ecosystem.json: every entry there",
-    "that is not a child project has a url and a repo id, and the obvious",
-    "command follows from them. A tool added to the inventory therefore appears",
-    "in the dump, in the status view and in scripts/repos.local without anybody",
-    "editing this file -- which is the point, because a second list to maintain",
-    "is a second list to forget.",
+    "What to clone is derived from tools/ecosystem.json: every entry there that",
+    "is not a child project carries a url and a repo id, and the clone follows",
+    "from them. A tool added to the inventory therefore appears in the dump, in",
+    "the status view and in scripts/repos.local without anybody editing this",
+    "file -- which is the point, because a second list to maintain is a second",
+    "list to forget.",
+    "",
+    "**Only a default branch is ever installed.** scripts/install_eo prints and",
+    "runs `git clone <url> <dir>` and nothing else: no `-b`, no checkout, no",
+    "branch switch. Where a child project's current work is on some other",
+    "branch of its parent -- ethos-eoc, on ethosEoc3 -- that is a fact about",
+    "the child and is recorded on the child, in tools/ecosystem.json. The",
+    "parent still installs, and the install says which branch to go to for the",
+    "newest copy of the child.",
     "",
     "So this file holds only what cannot be derived. Keyed by repo id:",
     "",
-    "  ref      the branch the ecosystem works against, where it is not the",
-    "           repository's default. A choice, not a fact -- the same kind",
-    "           tools/deps.json records, and the two are compared at run time",
-    "  args     extra clone flags, with the reason in `why`",
-    "  opt_in   why this one is not cloned by default. Its command is printed",
-    "           commented out and `--run` skips it unless it is named",
-    "  why      what a reader needs that the inventory's `what` does not say",
-    "  extra    further commands after the clone. `run: false` prints one",
-    "           commented out, for a person to decide",
-    "  url      only for a repo the inventory does not carry. The status view",
-    "           reports that as a status somebody still owes",
+    "  args         extra clone flags, with the reason in `why`",
+    "  opt_in       why this one is not cloned by default. Its command is",
+    "               printed commented out and `--run` skips it unless it is named",
+    "  why          what a reader needs that the inventory's `what` does not say",
+    "  url          only for a repo the inventory does not carry. The status",
+    "               view reports that as a status somebody still owes",
     "",
     "`order` is the order of the dump. Anything unlisted follows, inventory",
     "order within its status, so a new tool lands in a sensible place unasked."
@@ -33,15 +36,7 @@
       "why": "where this list lives, so you already have it if you are reading this"
     },
     "ethos": {
-      "ref": "ethosEoc3",
-      "why": "the proof checker and the Eunoia compiler are two binaries from one tree, so one clone serves both ids. ethosEoc3 is the branch the compiler and the semantics sets are on",
-      "extra": [
-        {
-          "run": false,
-          "comment": "the Eunoia manual is on main, not on ethosEoc3. A worktree gives you both without a second clone",
-          "cmd": "git -C ethos worktree add ../ethos-main main"
-        }
-      ]
+      "why": "the proof checker's own tree. Its `main` is what the Eunoia manual is read from and what findings against the checker are measured against; the ethos-eoc child project lives here too"
     },
     "cvc5": {
       "args": ["--filter=blob:none"],

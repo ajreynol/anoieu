@@ -145,6 +145,34 @@ for it. What comes back is your triage rather than a verdict, and we treat it
 that way: nothing on our side files anything in your repository, and no reply
 closes a row until the artifact it names says what happened.
 
+## Starting from scratch
+
+Everything anoieu reads belongs to somebody else, so a checkout of this
+repository on its own has nothing to report on.
+[`scripts/install_eo`](scripts/install_eo) fetches the rest of the ecosystem, and
+is the first command to run:
+
+```bash
+git clone https://github.com/ajreynol/anoieu
+cd anoieu
+scripts/install_eo                   # print the git clone commands, run nothing
+scripts/install_eo --run             # ... and run exactly what it printed
+scripts/install_eo --status          # what is here, and what disagrees with what
+```
+
+It puts ethos, logos, eudaimonia, dokimasia and koine beside this checkout,
+writes the map the other commands resolve a repo id through, and leaves cvc5 —
+the one tree nothing here needs a working copy of — until you ask for it. **Only
+a default branch is ever installed**, so where that is not the whole story it
+says so rather than acting: cloning ethos tells you that `ethos-eoc`, the
+compiler that lives in `ethos/tools/eoc`, has its current work on `ethosEoc3`,
+and gives you the one line that gets it. `--status` is what to run afterwards,
+and next month: it says which branch each tree is on, whether a child project is
+the current copy, and what has drifted. The options are in
+[`docs/usage.md`](docs/usage.md#the-rest-of-the-ecosystem); the other commands,
+for welcoming a tool, joining, and carrying findings, are in
+[`docs/coherence.md`](docs/coherence.md#the-scripts).
+
 ## The documentation
 
 | | |

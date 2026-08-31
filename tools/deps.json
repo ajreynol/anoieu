@@ -12,10 +12,15 @@
     "**A ref is `main`.** We report a defect against what a project ships, so a",
     "finding measured on somebody's topic branch is one they can close by",
     "deleting the branch -- which is what happened, and what the rule is for.",
-    "The single exception is ethos, where the compiler and the semantics sets",
-    "the ecosystem is built on live on `ethosEoc3`: that branch is the version",
-    "of ethos-eoc anybody here cares about. Adding a second exception is a",
-    "decision, and docs/coherence.md is where the reason has to be written."
+    "The single exception is ethos, whose `ethos-eoc` child project -- the",
+    "compiler, at tools/eoc -- is developed on `ethosEoc3` along with the",
+    "semantics sets the ecosystem is built on. That branch contains `main` in",
+    "full, so measuring it measures `main` and the compiler work on top of it,",
+    "and when it merges this ref becomes `main` and the exception is gone.",
+    "Adding a second exception is a decision, and docs/coherence.md is where",
+    "the reason has to be written. scripts/install_eo takes no exception at",
+    "all: it installs a default branch and says where the newer copy of a",
+    "child project is, rather than checking one out."
   ],
   "cvc5": {
     "url": "https://github.com/cvc5/cvc5.git",

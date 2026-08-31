@@ -17,6 +17,66 @@ pip install -e .                     # or install, which gives you `anoieu`
 
 Both spellings are the same program; the examples below use the first.
 
+## The rest of the ecosystem
+
+anoieu reports on other people's repositories, so a checkout of this one on its
+own has nothing to read. [`scripts/install_eo`](../scripts/install_eo) is what
+fetches the rest, and it is the first thing to run on a new machine:
+
+```bash
+scripts/install_eo                   # print the git clone commands, run nothing
+scripts/install_eo --run             # ... and run exactly what it printed
+scripts/install_eo --status          # what is here, and what disagrees with what
+```
+
+**Printing is the default and `--run` is the flag**, so reading the commands
+first is a real review rather than a courtesy. The checkouts go beside this one —
+ethos, logos, eudaimonia, dokimasia and koine as siblings of the anoieu directory
+— and
+`--run` also writes `scripts/repos.local`, the map every other command here
+resolves a repo id through. cvc5 is on the list and is not cloned unless it is
+asked for: nothing needs a working copy of it, and it is the largest tree by an
+order of magnitude.
+
+**Only a default branch is ever installed**: every command is a plain `git
+clone`, so what a paste of the dump does is what `--run` does, and nothing here
+puts a tree on a branch nobody asked for. Where that matters, it is said instead
+of done — cloning ethos prints
+
+```text
+ethos-eoc, the child project at ethos/tools/eoc, has its current work on
+branch ethosEoc3 — what a default-branch clone gives you is an older copy.
+  git -C ethos checkout ethosEoc3
+```
+
+and the reasoning is [a finding is about
+`main`](coherence.md#a-finding-is-about-main).
+
+A **child project** — `ethos-eoc` in `ethos/tools/eoc`, `sapheneia` and `ynoia`
+in this tree, `euthyna` in eudaimonia's — has no repository to clone and arrives
+with its parent, so it is never a checkout of its own. Its id still works
+everywhere: naming it selects the tree it lives in, `scripts/repos.local`
+resolves it to that checkout, and `--status` says whether the copy you have is
+the current one.
+
+| option | what it does |
+| --- | --- |
+| `ID ...` | only these. An id is a repo id, an inventory id a tree provides, or a child project's id — `ethos-eoc` selects the ethos tree it lives in |
+| `--status` | the same rows read off the disk: branch, commit, clean or dirty, and the distance from upstream |
+| `--fetch` | with `--status`, `git fetch` first. The only thing here that touches the network without being asked |
+| `--role member,candidate,served` | only tools recorded with one of those statuses |
+| `--exclude ID,ID` | all but these |
+| `--missing` | only what is not cloned yet |
+| `--with-optional` | include the opt-in trees, cvc5 among them |
+| `--root PATH` | somewhere other than beside this checkout; `$EO_ROOT` does the same |
+| `--no-repos-local` | with `--run`, do not touch `scripts/repos.local` |
+
+What to clone is derived from [`../tools/ecosystem.json`](../tools/ecosystem.json),
+so a tool added to the inventory is fetched without anything else being edited.
+`--status` reports where the inventory, the clone list, `tools/deps.json` and
+`scripts/repos.local` disagree, and repairs none of it. The sequence for adding a
+tool is in [`coherence.md`](coherence.md#what-happens-when-we-add-a-new-tool-to-the-ecosystem).
+
 ## The input
 
 **Profiles.** A consumer does not always name one file: cvc5 checks an expert

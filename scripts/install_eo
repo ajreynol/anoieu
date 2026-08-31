@@ -11,6 +11,15 @@ Three views of one list, so they cannot drift apart:
 exactly what `--run` executes, so reading it is a real review rather than a
 courtesy, and a paste of it does the same thing this does.
 
+**Only a default branch is ever installed.** Every command here is a plain
+`git clone <url> <dir>`: no `-b`, no checkout, no branch switch. A **child
+project** is not a checkout of its own -- it is a directory in somebody else's
+tree, and it arrives when that tree does. Where a child's current work is on
+another branch of its parent, as `ethos-eoc`'s is on `ethosEoc3`, the parent
+installs normally and the install *says so*, with the one command that gets you
+the newer copy. Nobody is put on a branch they did not choose, and nothing is
+withheld because a directory inside it moves faster than its default branch.
+
 The list is derived from `tools/ecosystem.json`: every entry that is not a child
 project carries a url and a repo id, and the clone follows from them. Adding a
 tool to the inventory is therefore the whole of adding it here.
@@ -86,17 +95,21 @@ class Repo:
     """One clone: a directory, a url, and the inventory ids it provides."""
 
     def __init__(self, key: str, url: str, covers: list[str], statuses: list[str],
-                 over: dict, what: str) -> None:
+                 over: dict, what: str, children: list[dict] | None = None) -> None:
         self.key = key                       # the directory, and the repo id
         self.url = url
         self.covers = covers                 # inventory ids this tree provides
         self.statuses = statuses
-        self.ref = over.get("ref", "")       # "" means the default branch
         self.args = list(over.get("args", []))
         self.opt_in = over.get("opt_in", "")
-        self.extra = list(over.get("extra", []))
         self.why = over.get("why", "") or what
         self.recorded = bool(statuses)       # in tools/ecosystem.json at all
+        self.children = list(children or [])  # child projects living in this tree
+
+    @property
+    def elsewhere(self) -> list[dict]:
+        """Children whose current work is on a branch other than the default."""
+        return [c for c in self.children if c.get("branch")]
 
     @property
     def status(self) -> str:
@@ -106,8 +119,8 @@ class Repo:
         return f"{', '.join(self.covers) or self.key} -- {self.status}"
 
     def command(self) -> list[str]:
-        ref = ["-b", self.ref] if self.ref else []
-        return ["git", "clone", *self.args, *ref, self.url, self.key]
+        """The clone, which is always of the default branch."""
+        return ["git", "clone", *self.args, self.url, self.key]
 
 
 def plan() -> list[Repo]:
@@ -117,8 +130,16 @@ def plan() -> list[Repo]:
     over = conf.get("overrides", {})
     order = conf.get("order", [])
 
+    inv = inventory()
+    kids: dict[str, list[dict]] = {}
+    for name, e in inv.items():
+        if e.get("status") in NOT_A_REPO:
+            kids.setdefault(e.get("parent", ""), []).append(
+                {"name": name, "path": e.get("path", ""), "what": e.get("what", ""),
+                 "branch": e.get("branch", "")})
+
     grouped: dict[str, dict] = {}
-    for name, e in inventory().items():
+    for name, e in inv.items():
         if e.get("status") in NOT_A_REPO:
             continue
         key = e.get("repo", name)
@@ -128,7 +149,8 @@ def plan() -> list[Repo]:
         g["url"] = g["url"] or e.get("url", "")
         g["what"] = g["what"] or e.get("what", "")
 
-    repos = [Repo(k, g["url"], g["covers"], g["statuses"], over.get(k, {}), g["what"])
+    repos = [Repo(k, g["url"], g["covers"], g["statuses"], over.get(k, {}), g["what"],
+                  kids.get(k, []))
              for k, g in grouped.items()]
     # An override may carry its own url: a repository somebody is fetching
     # before anybody has decided what its status is. It is listed, and --status
@@ -164,7 +186,7 @@ def select(repos: list[Repo], args) -> list[Repo]:
     named = {n for n in args.ids}
     out = []
     for r in repos:
-        ids = {r.key, *r.covers}
+        ids = {r.key, *r.covers, *(c["name"] for c in r.children)}
         if named and not (ids & named):
             continue
         if ids & set(args.exclude):
@@ -183,7 +205,9 @@ def select(repos: list[Repo], args) -> list[Repo]:
 def unknown(repos: list[Repo], ids: list[str]) -> list[str]:
     """Ids this list has never heard of, which is the interesting case: a tool
     somebody has on their machine and nothing here can fetch."""
-    return sorted(set(ids) - {i for r in repos for i in (r.key, *r.covers)})
+    known = {i for r in repos
+             for i in (r.key, *r.covers, *(c["name"] for c in r.children))}
+    return sorted(set(ids) - known)
 
 
 # -- git --------------------------------------------------------------------
@@ -230,6 +254,23 @@ def wrap(text: str, width: int = 74) -> list[str]:
     return out
 
 
+def child_note(r: Repo, c: dict) -> list[str]:
+    """What to say about a child project whose work is on another branch.
+
+    Not a warning and not a refusal: the tree installs, and this says where the
+    newer copy of one directory in it is. A person who does not care about that
+    child never has to act on it.
+    """
+    where = f"{r.key}/{c['path']}" if c.get("path") else r.key
+    lines = wrap(f"{c['name']}, the child project at {where}, has its current "
+                 f"work on branch {c['branch']} — what a default-branch clone "
+                 f"gives you is an older copy of it.", 70)
+    lines.append(f"  git -C {r.key} checkout {c['branch']}")
+    lines.append("or, to keep both:")
+    lines.append(f"  git -C {r.key} worktree add ../{c['name']} {c['branch']}")
+    return lines
+
+
 def reserved() -> list[tuple[str, str]]:
     """The names ynoia has reserved and nobody has taken.
 
@@ -254,8 +295,12 @@ def reserved() -> list[tuple[str, str]]:
 
 
 def not_fetched(inv: dict) -> list[str]:
-    lines = [f"{n} -- a child project, in the {e.get('parent', '?')} tree already"
-             for n, e in inv.items() if e.get("status") in NOT_A_REPO]
+    lines = []
+    for n, e in inv.items():
+        if e.get("status") not in NOT_A_REPO:
+            continue
+        where = e.get("parent", "?") + (f"/{e['path']}" if e.get("path") else "")
+        lines.append(f"{n} -- a child project, in {where}, cloned with its parent")
     lines += [f"{n} -- a reserved name with no repository: {w}" for n, w in reserved()]
     return lines
 
@@ -276,6 +321,10 @@ def repos_local_rows(root: str, repos: list[Repo],
         path = os.path.join(root, r.key)
         live = is_checkout(path) or r.key in planned
         rows.extend((c, path, live) for c in r.covers)
+        # A child project has no repository of its own, and its id is still the
+        # handle every other script here takes, so it resolves to the tree it
+        # lives in. `process_anoieu ethos-eoc` has to find something.
+        rows.extend((c["name"], path, live) for c in r.children)
     return rows
 
 
@@ -346,10 +395,9 @@ def dump(root: str, repos: list[Repo], inv: dict, everything: list[Repo]) -> int
             print(f"#   {chunk}")
         lead = "# " if r.opt_in else ""
         print(lead + " ".join(r.command()))
-        for extra in r.extra:
-            for chunk in wrap(extra.get("comment", "")):
-                print(f"#   {chunk}")
-            print(("" if extra.get("run") else "# ") + extra["cmd"])
+        for c in r.elsewhere:
+            for line in child_note(r, c):
+                print(f"#   {line}")
 
     print()
     print("# Every script in anoieu resolves a repo id through this file, so it is")
@@ -374,13 +422,16 @@ def run(root: str, repos: list[Repo], everything: list[Repo], write_map: bool) -
     """Clone what was selected. Skips what is there; refuses what is in the way."""
     if not repos:
         print("-- nothing to do: everything selected is already here.")
-    failed, have = [], set()
+    failed, have, advise = [], set(), []
     os.makedirs(root, exist_ok=True)
     for r in repos:
         path = os.path.join(root, r.key)
         if is_checkout(path):
             print(f"-- {r.key}: already a checkout, left alone")
             have.add(r.key)
+            # Still worth saying, if the tree is not where the child's work is.
+            on = git(path, "rev-parse", "--abbrev-ref", "HEAD")[1]
+            advise += [(r, c) for c in r.elsewhere if c["branch"] != on]
             continue
         if os.path.isdir(path) and os.listdir(path):
             print(f"-- {r.key}: {path} has something in it and is not a checkout "
@@ -393,10 +444,15 @@ def run(root: str, repos: list[Repo], everything: list[Repo], write_map: bool) -
             failed.append(r.key)
             continue
         have.add(r.key)
-        for extra in r.extra:
-            if extra.get("run"):
-                print(f"$ {extra['cmd']}")
-                subprocess.run(extra["cmd"], cwd=root, shell=True)
+        advise += [(r, c) for c in r.elsewhere]
+
+    for r, c in advise:
+        # Said after the clones rather than beside one, because it is not about
+        # whether the install worked: it worked, and one directory in it has a
+        # newer copy somewhere the install does not go.
+        print(f"-- {r.key} is installed, and:")
+        for line in child_note(r, c):
+            print(f"   {line}")
 
     if write_map:
         text, disagree = merge_repos_local(root, everything, have)
@@ -429,7 +485,7 @@ def read_repos_file() -> dict:
     return found
 
 
-def observe(path: str, want: str, do_fetch: bool, opt_in: bool) -> tuple[str, list[str], bool]:
+def observe(path: str, r: "Repo", do_fetch: bool) -> tuple[str, list[str], bool]:
     """One checkout, as a cell, some notes, and whether it is a checkout at all.
 
     Offline unless asked otherwise. An empty directory is reported as empty
@@ -437,7 +493,7 @@ def observe(path: str, want: str, do_fetch: bool, opt_in: bool) -> tuple[str, li
     correct state a fault is how a status view stops being read.
     """
     if not is_checkout(path):
-        if opt_in:
+        if r.opt_in:
             return "opt-in, not cloned", [], False
         if not os.path.isdir(path):
             return "absent", [], False
@@ -459,9 +515,13 @@ def observe(path: str, want: str, do_fetch: bool, opt_in: bool) -> tuple[str, li
         behind, ahead = (counts.split() + ["0", "0"])[:2]
         if behind != "0" or ahead != "0":
             cell += f" -{behind}/+{ahead}"
-    expected = want or default_branch(path)
-    if expected and branch != expected:
-        notes.append(f"on {branch}, and the list says {expected}")
+    default = default_branch(path)
+    if default and branch != default:
+        kid = next((c["name"] for c in r.elsewhere if c["branch"] == branch), "")
+        why = (f", which is where {kid}'s current work is" if kid else
+               f", and install_eo installs {default}")
+        notes.append(f"on {branch}{why} — switched by hand, since install_eo "
+                     "only ever clones a default branch")
     return cell, notes, True
 
 
@@ -475,7 +535,7 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
 
     for r in repos:
         path = os.path.join(root, r.key)
-        cell, why, here = observe(path, r.ref, do_fetch, bool(r.opt_in))
+        cell, why, here = observe(path, r, do_fetch)
         notes += [f"{r.key}: {w}" for w in why]
         rows.append((r.key, r.label(), cell, age(path) if here else "-", path))
         if not r.recorded:
@@ -490,10 +550,13 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
                              "so anoieu's scripts will not find it")
         pinned = dep.get(r.key, {}).get("ref", "")
         if pinned:
-            wanted = r.ref or (default_branch(path) if here else "")
+            # A ref that is a child's branch is the report saying which version
+            # of that child it is about, which is a decision already recorded.
+            child_refs = {c["branch"] for c in r.elsewhere}
+            wanted = "" if pinned in child_refs else (default_branch(path) if here else "")
             if wanted and pinned != wanted:
                 notes.append(f"{r.key}: tools/deps.json reports on {pinned}, "
-                             f"and this checkout is on {wanted}")
+                             f"and the ecosystem works on {wanted}")
             if here and git(path, "rev-parse", "--verify", "--quiet",
                             f"origin/{pinned}")[0] != 0:
                 notes.append(f"{r.key}: tools/deps.json reports on {pinned}, and this "
@@ -502,8 +565,9 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
 
     for name, path in mapped.items():
         # against the whole list, never the selection: a row is only orphaned if
-        # nothing anywhere fetches it.
-        if name not in {c for r in everything for c in r.covers}:
+        # nothing anywhere fetches it, and a child id is fetched with its parent.
+        if name not in {i for r in everything
+                        for i in (*r.covers, *(c["name"] for c in r.children))}:
             notes.append(f"scripts/repos.local carries {name}, which nothing on "
                          "this list fetches")
 
@@ -517,10 +581,26 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
         print(f"{key:<{w}}{label:<{k}}{cell:<32}{moved:<8}"
               f"{path.replace(os.path.expanduser('~'), '~')}")
 
-    if whole:
+    kids = [(c, r) for r in repos for c in r.children]
+    if kids:
         print()
+        for c, r in kids:
+            where = f"{r.key}/{c['path']}" if c.get("path") else r.key
+            path = os.path.join(root, r.key)
+            if not is_checkout(path):
+                state = "not cloned"
+            elif not c.get("branch"):
+                state = "present"
+            else:
+                on = git(path, "rev-parse", "--abbrev-ref", "HEAD")[1]
+                state = (f"present and current, on {c['branch']}" if on == c["branch"]
+                         else f"present but older here: its current work is on "
+                              f"{c['branch']}, and this tree is on {on}")
+            print(f"child project: {c['name']} -- in {where} ({state}), {c['what']}")
+    if whole:
         for line in not_fetched(inv):
-            print(f"nothing to clone: {line}")
+            if not any(line.startswith(c["name"] + " ") for c, _ in kids):
+                print(f"nothing to clone: {line}")
 
     if notes:
         print()

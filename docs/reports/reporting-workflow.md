@@ -1005,8 +1005,9 @@ A ref in that file is a choice rather than a fact — it says which branch the
 findings are about, and changing one changes what the report is a report of. The
 choice is made once, and it is `main`: we report against what a project ships,
 and a finding measured on a topic branch is one its owner can close by deleting
-the branch. `ethosEoc3` is the single exception, because the compiler and the
-semantics sets are there and not on ethos's `main`. The reason, and what a second
+the branch. `ethosEoc3` is the single exception, because ethos's `ethos-eoc`
+child project — the compiler, at `tools/eoc` — and the semantics sets are there
+and not on ethos's `main`. The reason, and what a second
 exception would have to show, is [a finding is about
 `main`](../coherence.md#a-finding-is-about-main).
 

@@ -40,13 +40,16 @@ whole reason the next section exists.
 ## The scripts
 
 Every command this repository maintains, what it is for, and where it is run.
-Ten of them, and all but two are a **prompt**: they assemble context, hand it to
-an assistant, and write nothing anywhere by themselves. `repos.local` is the
-shared map from a repo id to a checkout on this machine; it is untracked, and
-`welcome_eo` and `install_eo` are what write to it.
+`install_eo` is the one to run first, and the only one that needs nothing else to
+be in place already; of the other nine, all but one are a **prompt**: they
+assemble context, hand it to an assistant, and write nothing anywhere by
+themselves. `repos.local` is the shared map from a repo id to a checkout on this
+machine; it is untracked, and `install_eo` and `welcome_eo` are what write to
+it — the first for everything on the list, the second when a tool arrives.
 
 | command | run in | what it does |
 | --- | --- | --- |
+| `install_eo` | here, **first** | *not a prompt.* The rest of the ecosystem: prints the `git clone` commands, `--run` executes exactly what it printed, `--status` reads the rows back. Checkouts are siblings of this one unless `--root` or `$EO_ROOT` says otherwise. [The options](usage.md#the-rest-of-the-ecosystem) |
 | `init_eo` | the **new** repository | a README from the name register: what the tool is for, what it does not answer, the name explained. Complies with nothing, deliberately |
 | `welcome_eo <id> <path>` | here | records the checkout, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one; `--show-prompt` is a dry run |
 | `join_eo` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. Its prompt is fixed and drift-checked against [`policy.md`](policy.md) |
@@ -56,7 +59,6 @@ shared map from a repo id to a checkout on this machine; it is untracked, and
 | `process_anoieu <id> [ID]` | here | processes that reply: moves rows, writes verdicts, appends the logs |
 | `global_audit` | here | the whole ecosystem against policy and vision, fast, no deep analysis |
 | `harvest_cpc_proofs` | here | *not a prompt.* Collects real CPC proofs to seed the fuzzer with |
-| `install_eo` | here | *not a prompt.* The ecosystem on this machine: prints the `git clone` commands, `--run` executes them, `--status` reads them back. Checkouts are siblings of this one unless `--root` says otherwise |
 
 Two non-prompt commands live in `tools/` rather than here, because they decide
 rather than ask: `python3 tools/policy_check.py [--root PATH]`, which is what
@@ -64,9 +66,10 @@ every member's CI runs, and `python3 tools/ecosystem.py`, which prints the
 ecosystem as a table.
 
 **Every script that is a prompt takes `--show-prompt`**, which prints what it
-would send and runs nothing. `install_eo` is the same idea in the other
-direction: printing is its default and `--run` is the flag. That is the first thing to do with one you have not used, and the only
-way to review a prompt without spending a turn on it.
+would send and runs nothing. That is the first thing to do with one you have not
+used, and the only way to review a prompt without spending a turn on it.
+`install_eo` is the same idea pointed the other way: printing what it would do is
+the default, and `--run` is the flag that does it.
 
 ## What happens when we add a new tool to the ecosystem
 
@@ -83,13 +86,19 @@ files. The sequence, which nothing enforces:
 3. That sync reports and never edits. If the tool is not in
    [`../tools/ecosystem.json`](../tools/ecosystem.json) it says a status is owed,
    and a person adds the entry: `status`, `repo`, `url`, `what`. Membership is a
-   decision a person makes, which is why no script writes that file.
+   decision a person makes, which is why no script writes that file. **A child
+   project** — a tool inside somebody else's tree, like `ethos-eoc` at
+   `ethos/tools/eoc` — takes `status: child` with `parent` and `path` instead of
+   a `repo` and a `url`: nothing clones it, it arrives with its parent, and its
+   id still resolves to the parent's checkout so the other scripts can take it.
+   Where the child's current work is on another branch of the parent, `branch`
+   says which, and the install repeats it rather than acting on it.
 4. **The entry is the whole of the work.** `install_eo` derives what to clone
    from the inventory, so the new tool appears in the dump, in `--status`, and in
    `scripts/repos.local` on the next machine with nothing else edited.
    [`../tools/checkouts.json`](../tools/checkouts.json) carries only what cannot
-   be derived — a branch that is not the default, a clone flag, a tree nobody
-   should fetch unasked — and the ordinary case needs none of it.
+   be derived — a clone flag, or a tree nobody should fetch unasked. The
+   ordinary case needs none of it.
 5. `join_eo` and `check_join_eo` come later, or never. Joining is its owner's
    choice, and a tool that never joins is still in the inventory.
 
@@ -112,12 +121,32 @@ branch level with `main`. The branch was then deleted, and with it any way of
 asking what the report had been a report of. The finding had in fact landed; the
 row survived the confusion only because its id had been written down.
 
-**The exception is ethos-eoc, and the branch is `ethosEoc3`.** The compiler and
-the semantics sets the ecosystem is built on are there and are not on ethos's
-`main`, so that branch *is* the shipped thing for that tool — which is the test
-an exception has to pass. It is not an exception for being where the work is
-convenient to read. ethos's own `main` is still where the Eunoia manual is read
-from, and findings against the checker are against `main`.
+**The exception is ethos-eoc, and the branch is `ethosEoc3`.** ethos-eoc is not a
+repository: it is a **child project in the ethos tree**, at `tools/eoc`, and it is
+developed on `ethosEoc3`. The compiler and the semantics sets the ecosystem is
+built on are there and are not on ethos's `main`, so that branch *is* the shipped
+thing for that tool — which is the test an exception has to pass. It is not an
+exception for being where the work is convenient to read. ethos's own `main` is
+still where the Eunoia manual is read from, and findings against the checker are
+against `main`. `ethosEoc3` contains `main` in full, so measuring the tree there
+measures `main` and the compiler work on top of it; when the branch merges, the
+ref in [`../tools/deps.json`](../tools/deps.json) becomes `main` and the exception
+is gone rather than renegotiated.
+
+**And the exception does not reach `install_eo`, which installs `main` and
+nothing else.** Every command it prints is a plain `git clone`: no `-b`, no
+checkout, no branch switch. A child project is not a checkout obligation — it is
+a directory in somebody else's tree and it arrives when that tree does — so ethos
+installs normally and the install *says* that the copy of `ethos-eoc` on the
+default branch is the older one, with the command that gets the newer:
+
+    git -C ethos checkout ethosEoc3          # or a worktree, to keep both
+
+Which is the whole of the accommodation: a fact stated where somebody will read
+it, and a branch nobody is put on without choosing it. The branch is recorded on
+the **child** in [`../tools/ecosystem.json`](../tools/ecosystem.json), because it
+is a fact about the child rather than about the repository — ethos's own default
+branch is not wrong, and a checker finding is still measured there.
 
 A second exception is a decision, and it is written down here with its reason or
 it is not made. A branch named in somebody's *reply* — `anoieu-findings`, say —
@@ -606,11 +635,14 @@ readiness for us; somebody has to look.
 
 ## Where to start
 
-1. Read this page, then [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow)
+1. Get the ecosystem: `scripts/install_eo --run`, then `--status`. Nothing here
+   reads anything until the other repositories are beside this one, and the
+   status view is the fastest way to see what the ecosystem currently is.
+2. Read this page, then [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow)
    if you are working a finding, or [`notes.md`](notes.md#the-design) if you are
    working on the tool.
-2. Check the ladder above before touching any document in it.
-3. If the task is the record itself, the ledger script in *The cheap route* is
+3. Check the ladder above before touching any document in it.
+4. If the task is the record itself, the ledger script in *The cheap route* is
    the first thing to build and nothing above it is blocked on the rest.
-4. Run `python3 tests/run.py` and `python3 tools/policy_check.py`.
-5. Leave the work staged.
+5. Run `python3 tests/run.py` and `python3 tools/policy_check.py`.
+6. Leave the work staged.

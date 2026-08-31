@@ -12,7 +12,10 @@
     "  candidate  a tool the policy is addressed to, which has not joined",
     "  served     outside the ecosystem, and the reason it exists. Not a",
     "             candidate, and not to be asked -- see docs/policy.md",
-    "  child      a child project inside another repository here",
+    "  child      a child project inside another repository here. `parent`",
+    "             names whose tree, `path` where in it, and `branch` the",
+    "             branch of the parent its current work is on, where that is",
+    "             not the default one. A child is never a checkout of its own",
     "",
     "A status is changed by a person. scripts/global_audit may report that one",
     "looks wrong; it does not edit this file on its own."
@@ -33,13 +36,14 @@
     "status": "candidate",
     "repo": "ethos",
     "url": "https://github.com/cvc5/ethos",
-    "what": "the proof checker, and the home of the Eunoia manual"
+    "what": "the proof checker, the home of the Eunoia manual, and the tree the ethos-eoc child project is in"
   },
   "ethos-eoc": {
-    "status": "candidate",
-    "repo": "ethos",
-    "url": "https://github.com/cvc5/ethos",
-    "what": "the Eunoia compiler: a second binary from the ethos tree, branch ethosEoc3"
+    "status": "child",
+    "parent": "ethos",
+    "path": "tools/eoc",
+    "branch": "ethosEoc3",
+    "what": "the Eunoia compiler: a child project in the ethos tree"
   },
   "logos": {
     "status": "candidate",
