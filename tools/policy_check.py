@@ -47,6 +47,10 @@ GENERATED = ["open-findings.md", "corpus.md", "checks.md"]
 INDEX_EXEMPT = {"README.md"}
 COMPETING_ENTRY = ["INTRODUCTION.md", "OVERVIEW.md", "ABOUT.md", "GUIDE.md", "START.md"]
 
+KINDS = {"request", "proposal", "question", "notice", "answer"}
+STATES = {"open", "answered", "declined", "withdrawn", "settled"}
+FIELDS = ["To", "Kind", "Status", "Opened", "Settles when"]
+
 
 def tracked(pattern: str) -> list[str]:
     out = subprocess.run(["git", "-C", ROOT, "ls-files", pattern],
@@ -190,6 +194,46 @@ def check_children() -> list[str]:
     return bad
 
 
+def check_discussion() -> list[str]:
+    """*The discussion file* — reported as minor, never as a build failure."""
+    text = read("docs/discussion.md")
+    if not text:
+        return ["docs/discussion.md does not exist: no standing channel to the ecosystem"]
+    bad, seen, fenced = [], set(), False
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        if line.startswith("```"):
+            fenced = not fenced
+            continue
+        if fenced:
+            continue
+        m = re.match(r"^##\s+(D\d+)\s+—\s+(.+?)\s*$", line)
+        if not m:
+            if re.match(r"^##\s+(?!#)", line) and i > 6:
+                bad.append(f"{line.strip()!r} is not `## D<n> — <topic>`")
+            continue
+        tid, _ = m.groups()
+        if tid in seen:
+            bad.append(f"{tid} is used twice; ids are allocated once and never reused")
+        seen.add(tid)
+        block = "\n".join(lines[i + 1:i + 9])
+        got = dict(re.findall(r"^\*\*([A-Za-z ]+):\*\*\s*(.*)$", block, re.M))
+        for f in FIELDS:
+            if f not in got or not got[f].strip():
+                bad.append(f"{tid} has no **{f}:**")
+        if got.get("To", "").strip().lower() in {"", "upstream", "the ecosystem", "everyone"}:
+            bad.append(f"{tid} does not name the tool it addresses unequivocally")
+        kind = got.get("Kind", "").strip()
+        if kind and kind not in KINDS:
+            bad.append(f"{tid} has Kind {kind!r}, not one of {'/'.join(sorted(KINDS))}")
+        state = got.get("Status", "").strip()
+        if state and state not in STATES:
+            bad.append(f"{tid} has Status {state!r}, not one of {'/'.join(sorted(STATES))}")
+    if not seen:
+        bad.append("docs/discussion.md carries no topics")
+    return bad
+
+
 CHECKS = [
     ("the front page is the only entry point, and explains the name", check_front_page),
     ("the README ends with the maintenance note", check_maintenance_note),
@@ -201,10 +245,20 @@ CHECKS = [
 ]
 
 
+# Reported, never fatal. A malformed field block is a lapse in somebody's
+# correspondence rather than a defect in their tree, and failing a build over
+# the shape of a sentence addressed to a colleague is the wrong instrument.
+MINOR = [
+    ("the discussion file is present and well-formed", check_discussion),
+]
+
+
 def coverage() -> None:
     print("-- checked")
     for title, _ in CHECKS:
         print(f"   {title}")
+    for title, _ in MINOR:
+        print(f"   {title} (minor: reported, never fatal)")
     print("-- not checked, and why")
     for rule, why in UNCHECKED:
         print(f"   {rule} — {why}")
@@ -222,6 +276,14 @@ def main() -> int:
         if bad:
             failures += len(bad)
             print(f"FAIL {title}")
+            for b in bad:
+                print(f"     {b}")
+        else:
+            print(f"ok   {title}")
+    for title, fn in MINOR:
+        bad = fn()
+        if bad:
+            print(f"minor {title}")
             for b in bad:
                 print(f"     {b}")
         else:

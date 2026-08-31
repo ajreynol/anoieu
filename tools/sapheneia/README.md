@@ -50,7 +50,7 @@ The boundary matters more than the goals, so it is stated first-class.
 - **It does not justify any tool.** Not anoieu, not ethos, not the compiler, not
   the Lean development. If a paragraph here reads as an argument for something
   being built, it is off-charter and should be cut. The case for the ecosystem's
-  arrangement is argued in `docs/why-eunoia.md`, which is a different document
+  arrangement is argued in `tools/ynoia/why-eunoia.md`, which is a different document
   with a different audience, and this project does not participate in it.
 - **It does not propose language changes.** Where the language is underspecified
   this account says so and stops. Proposing the resolution is a change to

@@ -80,8 +80,7 @@ seed corpus, five verdict-level oracles, and no instrumentation anywhere. What a
 research-quality one would add — coverage guidance, derivations built from the
 calculus, a soundness oracle, the generated Lean checker used as a second
 implementation — is one of the
-[future projects](docs/why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture)
-in `docs/why-eunoia.md`, and does not exist.
+future projects nobody has started, and does not exist.
 
 ```bash
 ETHOS=… LOGOS=… python3 -m tools.anoieu_fuzz run --mode proof -n 2000       # ethos against logos, on CPC

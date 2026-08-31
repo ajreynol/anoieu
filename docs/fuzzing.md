@@ -16,8 +16,7 @@ python3 -m tools.anoieu_fuzz run --mode signature    # arbitrary signatures, at 
 > is not coverage-guided, it does not build derivations that ought to be
 > accepted, and it has no soundness oracle. Those belong to a research-quality
 > successor, which is one of the
-> [future projects](why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture)
-> in `why-eunoia.md` and does not exist.
+> future projects nobody has started, and does not exist.
 >
 > The floor is worth having on its own terms. In its first few thousand cases it
 > found a crash in ethos, three proofs ethos and logos answer differently, and an
@@ -412,8 +411,7 @@ a schedule, upload what they find as an artifact, and warn rather than fail.
 Everything here is a decision to stay at the floor, so this section doubles as
 the honest list of what a research-quality successor would have to add — the one
 sketched among the
-[future projects](why-eunoia.md#six-projects-that-do-not-exist-yet-and-change-the-picture)
-in `why-eunoia.md`, which does not exist.
+future projects nobody has started, which does not exist.
 
 **No coverage guidance.** It would help, and it costs an instrumented build of
 each checker, a corpus feedback loop and a scheduler. Generation plus mutation

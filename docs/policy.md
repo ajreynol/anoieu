@@ -158,6 +158,93 @@ section is how that becomes visible to everybody who was not in the room. A note
 that has drifted from the truth is worse than no note at all, since the whole of
 its value is that it can be relied on without being checked.
 
+## The discussion file
+
+**Every repository in the ecosystem keeps `docs/discussion.md`.** It is the
+standing channel for saying something to another tool that is *not a defect
+report*: a question about intent, a proposal that would cross a boundary, a
+notice that something here is about to move under somebody, an answer to any of
+those. One file per repository, one predictable path, so a maintainer arriving
+from another project knows where the conversation is without being told.
+
+**This is not the bug-report channel, and confusing the two is the failure this
+paragraph exists to prevent.** A finding — anoieu believes line 42 of your file
+is wrong — has its own template, its own ids, its own states and its own
+prompts, all in [`reporting-workflow.md`](reporting-workflow.md), and what may
+be said in one is governed by [`reporting-policy.md`](reporting-policy.md). A
+finding never goes here, and a discussion topic never goes in the findings
+ledger. The test is whether the thing you want to say has a *file and a line
+number*: if it does, it is a finding.
+
+### The format
+
+One `##` section per topic, newest first, each opening with a five-line field
+block and nothing between the heading and the fields.
+
+```markdown
+## D3 — should the seam check live here or in dokimasia
+
+**To:** dokimasia
+**Kind:** request
+**Status:** open
+**Opened:** 2026-08-31, at cvc5 `aee8742`
+**Settles when:** one of us writes it down as ours, in our own tree
+
+Body: what is being asked, and the reasoning somebody would have to argue with.
+Long enough to be answerable and short enough to be read.
+
+### Replies
+
+**dokimasia, 2026-09-04.** What came back, quoted or summarised, attributed and
+dated. Replies are appended; nothing above them is rewritten.
+```
+
+The fields, and why each is required:
+
+| field | rule |
+| --- | --- |
+| **To** | **one or more tools, named unequivocally** — the exact name the project uses for itself, never "the compiler" or "upstream". A topic addressed to nobody in particular is addressed to nobody |
+| **Kind** | one of the five below. A topic that fits none of them is probably a finding |
+| **Status** | `open`, `answered`, `declined`, `withdrawn` or `settled` |
+| **Opened** | the date, and the commits the topic was formed against where the topic depends on them |
+| **Settles when** | what would end it. Required while a topic is open, because a question with no answerable form is a complaint |
+
+### The kinds
+
+Most topics are one of the first two, and the distinction between them is the
+one worth getting right.
+
+| kind | what it is |
+| --- | --- |
+| `request` | **we want something from you.** It would help us if your tool did X. The interested party is us, and saying so is what lets you weigh it as the ask it is |
+| `proposal` | **we think you would be better off doing X**, and we do not obviously gain. Costlier to make well, and easier for you to decline without owing anyone anything |
+| `question` | we do not know something about your intent, and guessing has a cost |
+| `notice` | something on our side is about to move under you |
+| `answer` | a reply to one of the above, raised as its own topic because it needs room |
+
+**A request dressed as a proposal is the characteristic failure of this file.**
+It asks somebody to spend their afternoon for our benefit while implying the
+benefit is theirs, and a maintainer who notices — they will — has learned
+something about how to read everything else we send. When in doubt it is a
+request: claiming less standing costs us nothing.
+
+**Ids** are `D<n>`, allocated once and never reused; another repository's topic is
+cited as `<repo>-D<n>`. **Append; do not rewrite.** A topic's body is what was
+said at the time, and it is amended only to correct something false, visibly.
+And **nothing here crosses a repository boundary by machine** — the file is ours,
+a person carries what is in it, exactly as rule 7 requires of a child project and
+as *Nothing crosses a repository boundary automatically* requires of a finding.
+
+### Upholding it
+
+`tools/policy_check.py` reads this file and reports on it as a **minor** finding
+— never a build failure. That is deliberate and is the only tier of its kind on
+this page: a malformed field block is a lapse in somebody's *correspondence*, not
+a defect in their tree, and failing a build over the shape of a sentence
+addressed to a colleague would be the wrong instrument. The same applies when we
+notice another project's file is missing or stale: worth one line in a sweep,
+never worth a row in a report.
+
 ## Research projects
 
 A **research project** is a subdirectory of `tools/` named after a tool that

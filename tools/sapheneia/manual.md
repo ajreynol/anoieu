@@ -1834,6 +1834,6 @@ Not gaps — deliberate exclusions, listed so a reader can tell the two apart.
 | building, installing and invoking a checker; command-line options; streaming | the checker's own documentation |
 | trace tags, statistics, error message formatting, dagified printing | likewise |
 | the `.eos` semantics-set language and the compiler that reads it | their own reference; out of charter ([`README.md`](README.md)) |
-| the case for the ecosystem's arrangement | `docs/why-eunoia.md`; out of charter |
+| the case for the ecosystem's arrangement | `tools/ynoia/why-eunoia.md`; out of charter |
 | proposed changes to Eunoia | the host repository's report to the language's maintainers |
 | the derived-operator signature reconstructing the list operators in pure Eunoia | the manual's appendix, which is the right place for it |

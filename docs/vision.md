@@ -824,13 +824,14 @@ Two exist, tracked here in a sentence each and nowhere else:
 | [**sapheneia**](https://github.com/ajreynol/anoieu/tree/main/tools/sapheneia) | anoieu | a description of Eunoia written as a language definition rather than as a manual for a checker, in order to find where the existing account is silent, ambiguous or contradicts itself |
 | [**euthyna**](https://github.com/ajreynol/eudaimonia/tree/main/tools/euthyna) | eudaimonia | in its own words, an account of *the proof in logos: what it is made of, where its weight sits, and what would have to change for it to cover more than one calculus* — with a measurement harness over an unmodified logos checkout |
 | **anoieu_fuzz** | anoieu | a fuzzer for the programs that *read* Eunoia: it writes signatures and proofs nobody would write, hands them to a checker, and watches for the answer a checker should never give |
+| [**ynoia**](../tools/ynoia) | anoieu | *why Eunoia* — whether the ecosystem's arrangement earns its machinery, the strongest case against it, six ways it could be arranged instead, and the tools whose absence distorts the argument |
 
 Note what euthyna's row shows about the shape: its parent is eudaimonia and its
 subject is logos, a third project entirely. It was also one of the six code
-names in [`../docs/why-eunoia.md`](why-eunoia.md) reserved for work
+names in [ynoia's account](../tools/ynoia/why-eunoia.md) reserved for work
 nobody had started, which is what starting one looks like.
 
-**Two of the three have not earned a place in this vision.** A child project is
+**Three of the four have not earned a place in this vision.** A child project is
 a claim on attention that has so far produced nothing, and what earns it a place
 is a deliverable in the sense of tenet 4 — a finding carried, a measurement
 somebody uses, an argument somebody acts on. Until then it is named here and

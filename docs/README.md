@@ -51,6 +51,12 @@ somebody has to know to look for.
 | [`policy.md`](policy.md) | **how a repository is arranged**: the layout, the maintenance note every README ends with, and the rules for child projects. Machine-checked by `tools/policy_check.py` on every push |
 | [`vision.md`](vision.md) | **what AI-assisted development is aiming at**: five tenets, the record of what the ecosystem's tools have actually delivered to one another, and a report card. Argued, never checked — the dividing line is stated on the page |
 
+[`discussion.md`](discussion.md) is the standing channel to the rest of the
+ecosystem for anything that is **not** a defect report — a request, a proposal,
+a question about somebody's intent, a notice that something here is moving under
+them. Its format, and the reason it is kept apart from the findings ledger, are
+in [`policy.md`](policy.md#the-discussion-file).
+
 [`coherence.md`](coherence.md) is not in the table above and is not written for
 a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not

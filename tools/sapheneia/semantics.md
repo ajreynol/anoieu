@@ -16,7 +16,7 @@ term — a definition against which an implementation is correct or is not.
 - a proof that any particular calculus is sound. That is a question about a
   signature, not about the language it is written in.
 - a Lean development of the embedding, or of the compiler. Those are separate
-  pieces of future work under their own names (`docs/why-eunoia.md` calls them
+  pieces of future work under their own names (`tools/ynoia/why-eunoia.md` calls them
   *hermeneia* and *noesis*), with different subjects and different audiences.
 - a decision on any of the open questions in
   [`manual.md` §11](manual.md#11-where-the-language-is-unsettled). A
