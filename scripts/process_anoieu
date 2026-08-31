@@ -8,6 +8,8 @@
 #   process_anoieu logos                    # every reply in that repository
 #   process_anoieu ethos 147433b3e48ae9d6   # one finding, by its id
 #   process_anoieu --codex ~/src/cvc5       # ... with codex, and an explicit path
+#   process_anoieu --status logos           # what became of the branch; no agent
+#   process_anoieu --dry-run logos          # what this would do; no agent
 #
 # The first argument is a *synonym* for a directory. It is resolved in three
 # steps: an existing path is used as it stands; otherwise scripts/repos.local is
@@ -27,18 +29,27 @@ set -euo pipefail
 AGENT=claude
 PRINT=0
 SHOW=0
+DRY=0
+STATUS=0
+BRANCH=""
 NAME=""
 ID=""
 
 usage() {
   cat >&2 <<'USAGE'
-usage: process_anoieu [--codex] [--print] [--show-prompt] NAME [ID]
+usage: process_anoieu [--status | --dry-run | --show-prompt]
+                     [--codex] [--print] [--branch NAME] NAME [ID]
 
   NAME            a directory, or a repo id: looked up in scripts/repos.local
                   (written on first run), then under $ANOIEU_REPOS (default $HOME)
   ID              an anoieu finding id (16 hex digits) or register id (ethos-8).
                   Omitted, every reply in that repository is processed.
   --codex         run codex instead of claude
+  --branch NAME   the branch check_anoieu worked on (default: anoieu-findings,
+                  or anoieu-ID); only --status reads it
+  --status        report what became of that branch and stop. Runs git in the
+                  project's checkout and no assistant anywhere
+  --dry-run       say what would be done, and do none of it
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
 USAGE
@@ -51,6 +62,9 @@ while [ $# -gt 0 ]; do
     --claude) AGENT=claude; shift ;;
     --print) PRINT=1; shift ;;
     --show-prompt) SHOW=1; shift ;;
+    --dry-run) DRY=1; shift ;;
+    --status) STATUS=1; shift ;;
+    --branch) BRANCH="${2:-}"; [ -n "$BRANCH" ] || usage; shift 2 ;;
     -h|--help) usage ;;
     -*) echo "process_anoieu: unknown option $1" >&2; usage ;;
     *) if [ -z "$NAME" ]; then NAME="$1"; elif [ -z "$ID" ]; then ID="$1";
@@ -124,12 +138,14 @@ from_repos_file() {
   return 1
 }
 
+RESOLVED_BY=""
 resolve() {
   local want="$1" roots r d exact=() partial=() mapped rc
-  if [ -d "$want" ]; then (cd "$want" && pwd); return; fi
+  if [ -d "$want" ]; then RESOLVED_BY="a path"; (cd "$want" && pwd); return; fi
   mapped=$(from_repos_file "$want"); rc=$?
   [ "$rc" = 2 ] && return 1
-  if [ "$rc" = 0 ]; then printf '%s\n' "$mapped"; return; fi
+  if [ "$rc" = 0 ]; then RESOLVED_BY="$REPOS_FILE"; printf '%s\n' "$mapped"; return; fi
+  RESOLVED_BY="a scan of ${ANOIEU_REPOS:-$HOME}"
   roots="${ANOIEU_REPOS:-$HOME}"
   local IFS=:
   for r in $roots; do
@@ -158,6 +174,79 @@ resolve() {
   return 1
 }
 DIR=$(resolve "$NAME") || exit 2
+RESOLVED_BY=${RESOLVED_BY:-a scan of ${ANOIEU_REPOS:-$HOME}}
+PROJECT=$(basename "$DIR")
+: "${BRANCH:=anoieu-${ID:-findings}}"
+
+# -- the reply, if it is there. Bounded to two levels: the file is meant to be
+#    at the root, and walking a whole cvc5 checkout to find out otherwise is not
+#    a trade worth making.
+find_reply() {
+  local d="$1"
+  if [ -f "$d/anoieu-response.md" ]; then printf '%s\n' "$d/anoieu-response.md"; return 0; fi
+  find "$d" -maxdepth 2 -type f -name '*.md' -not -path '*/.git/*' \
+    -exec grep -l 'HUMAN RESPONSE:' {} + 2>/dev/null | head -1
+}
+
+describe_reply() {
+  local reply blocks waiting
+  reply=$(find_reply "$1")
+  if [ -z "$reply" ]; then
+    echo "   reply      none found -- looked for anoieu-response.md, and for"
+    echo "              HUMAN RESPONSE: in *.md within two levels"
+    return 1
+  fi
+  blocks=$(grep -c '^## ' "$reply" 2>/dev/null || echo 0)
+  waiting=$(grep -c 'HUMAN RESPONSE: *$' "$reply" 2>/dev/null || echo 0)
+  echo "   reply      ${reply#$1/}  -- $blocks block(s), $waiting awaiting a human"
+  return 0
+}
+
+# -- --status: what became of the branch check_anoieu was told to work on. No
+#    assistant is involved and nothing is written: this is git, reported.
+if [ "$STATUS" = 1 ]; then
+  git -C "$DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+    echo "process_anoieu: $DIR is not a git repository" >&2; exit 2; }
+  CURRENT=$(git -C "$DIR" branch --show-current 2>/dev/null || true)
+  echo "-- $PROJECT: $DIR  (from $RESOLVED_BY)"
+  echo "   checked out ${CURRENT:-(detached HEAD)}; asking after $BRANCH"
+
+  WHERE=""
+  git -C "$DIR" show-ref --verify --quiet "refs/heads/$BRANCH" && WHERE="local"
+  git -C "$DIR" show-ref --verify --quiet "refs/remotes/origin/$BRANCH" \
+    && WHERE="${WHERE:+$WHERE and }origin"
+  if [ -z "$WHERE" ]; then
+    echo "   branch     $BRANCH is not here -- nothing has been answered on it,"
+    echo "              or it was answered somewhere else"
+  else
+    REF="$BRANCH"
+    git -C "$DIR" show-ref --verify --quiet "refs/heads/$BRANCH" || REF="origin/$BRANCH"
+    BASE=$(git -C "$DIR" symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)
+    if [ -z "$BASE" ]; then
+      for c in origin/main origin/master main master; do
+        git -C "$DIR" rev-parse --verify --quiet "$c" >/dev/null 2>&1 && { BASE="$c"; break; }
+      done
+    fi
+    echo "   branch     $BRANCH ($WHERE)"
+    if [ -n "$BASE" ]; then
+      AHEAD=$(git -C "$DIR" rev-list --count "$BASE..$REF" 2>/dev/null || echo "?")
+      if git -C "$DIR" merge-base --is-ancestor "$REF" "$BASE" 2>/dev/null; then
+        echo "              merged into $BASE"
+      else
+        echo "              $AHEAD commit(s) $BASE does not have"
+      fi
+      git -C "$DIR" log --oneline --no-decorate -10 "$BASE..$REF" 2>/dev/null \
+        | sed 's/^/                /'
+    else
+      git -C "$DIR" log --oneline --no-decorate -10 "$REF" 2>/dev/null \
+        | sed 's/^/                /'
+    fi
+  fi
+  describe_reply "$DIR" || true
+  echo "   git status"
+  git -C "$DIR" status --short --branch | sed 's/^/                /'
+  exit 0
+fi
 
 # -- where anoieu is: this script's checkout, or the one we are standing in
 looks_like_anoieu() { [ -f "$1/docs/open-findings.md" ] && [ -d "$1/anoieu_fuzz" ]; }
@@ -168,7 +257,6 @@ done
 [ -n "$ANOIEU" ] || {
   echo "process_anoieu: cannot find the anoieu checkout; set \$ANOIEU_ROOT" >&2; exit 2; }
 
-PROJECT=$(basename "$DIR")
 if [ -n "$ID" ]; then
   SCOPE="Process the block about $ID and only that one; leave any others alone."
 else
@@ -224,6 +312,29 @@ would need to know.
 PROMPT_END
 
 if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+if [ "$AGENT" = codex ]; then
+  RUN=$([ "$PRINT" = 1 ] && echo "codex exec" || echo "codex")
+else
+  RUN=$([ "$PRINT" = 1 ] && echo "claude -p" || echo "claude")
+fi
+
+if [ "$DRY" = 1 ]; then
+  echo "-- process_anoieu, dry run: nothing below is run"
+  echo "   project    $PROJECT"
+  echo "   directory  $DIR  (from $RESOLVED_BY)"
+  echo "   anoieu     $ANOIEU"
+  echo "   scope      ${ID:-every block in the reply}"
+  describe_reply "$DIR" || true
+  command -v "$AGENT" >/dev/null 2>&1 \
+    && echo "   agent      $(command -v "$AGENT")" \
+    || echo "   agent      $AGENT is NOT on PATH; the real run would stop here"
+  echo "   would run  cd $ANOIEU && $RUN '<the prompt, ${#PROMPT} characters>'"
+  echo "              the assistant reads $DIR, and edits docs/ and tests/ here,"
+  echo "              leaving everything staged and committing nothing"
+  echo "   the prompt is --show-prompt; the branch's state is --status"
+  exit 0
+fi
 
 command -v "$AGENT" >/dev/null 2>&1 || {
   echo "process_anoieu: $AGENT is not on PATH" >&2; exit 127; }

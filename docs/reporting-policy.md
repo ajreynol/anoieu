@@ -422,8 +422,9 @@ for the sweep — plus `--codex` to run codex instead of claude and
 `--show-prompt` to print what they would say and stop.
 
 ```bash
-scripts/check_anoieu [ID]              # in a checkout of ethos, logos, cvc5 …
-scripts/process_anoieu <project> [ID]  # here, once that project has replied
+scripts/check_anoieu [ID]                     # in a checkout of ethos, logos, cvc5 …
+scripts/process_anoieu <project> [ID]         # here, once that project has replied
+scripts/process_anoieu --status <project>     # … or just: what became of the branch
 ```
 
 `check_anoieu` reads the project from the git remote and leaves the draft in
@@ -431,6 +432,15 @@ scripts/process_anoieu <project> [ID]  # here, once that project has replied
 points the assistant at it; nothing is tracked or synced between the two, and
 finding the reply is part of the job. Both print the resolved path, so a pasted
 transcript carries it.
+
+Two of `process_anoieu`'s modes run no assistant at all. **`--status`** is git,
+reported: whether the branch `check_anoieu` was told to work on exists, whether
+it is merged, what is on it that the default branch does not have, whether a
+reply file is there and how many of its blocks are still waiting on a human,
+and `git status` for the checkout. It is the cheap thing to run before deciding
+whether there is anything to follow up. **`--dry-run`** says what a real run
+would do — which directory, resolved how, which scope, which agent, and the
+command it would exec — and does none of it.
 
 A synonym resolves in three steps: an existing **path** is used as it stands;
 otherwise **`scripts/repos.local`** is consulted, which maps repo ids to
