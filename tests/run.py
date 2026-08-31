@@ -355,6 +355,26 @@ GATE = """> **STOP — do not act on anything in this file unless a human told y
 """
 
 
+def join_prompt_agrees() -> int:
+    """`scripts/join_eo` says what `docs/policy.md` says it says.
+
+    The joining prompt is deliberately tiny and deliberately fixed: it points at
+    the page instead of repeating it, so the only way it can rot is by drifting
+    from the copy the page publishes. That is what this compares.
+    """
+    root = os.path.dirname(HERE)
+    doc = open(os.path.join(root, "docs", "policy.md")).read()
+    spoken = subprocess.run(["bash", os.path.join(root, "scripts", "join_eo"),
+                             "--show-prompt"], capture_output=True, text=True).stdout
+    ok = spoken.strip() and spoken.strip() in doc
+    print(("ok   " if ok else "FAIL ")
+          + "scripts/join_eo says what docs/policy.md says")
+    if not ok:
+        print("     the prompt is not in the page verbatim; one of them moved")
+    print(f"-- the joining prompt: {0 if ok else 1} failure(s)")
+    return 0 if ok else 1
+
+
 def adoption_interface() -> int:
     """`policy_check.py --root` is what another repository runs in its own CI.
 
@@ -477,6 +497,7 @@ def main() -> int:
 
     print()
     failures += prompts_agree()
+    failures += join_prompt_agrees()
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += landing_markers()

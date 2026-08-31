@@ -607,6 +607,9 @@ Nothing is installed and nothing is built: the checker reads text and needs only
 Python. It exits non-zero when the repository does not uphold what the
 declaration claims.
 
+Or run [`scripts/join_eo`](../scripts/join_eo) from a clone of anoieu, in the
+repository that is joining, and let an assistant do both steps.
+
 **It passes if and only if two things hold.** The README declares membership as
 above, and the tree upholds the policies that apply to it. Either alone is a
 failure — a declaration nothing backs is the thing this check exists to prevent,
@@ -620,6 +623,72 @@ small and is expected to grow, so expect a future version to check more than
 this one, and expect that to be announced in
 [`docs/discussion.md`](discussion.md) before it lands rather than arriving as a
 red build.
+
+### If you want an assistant to do it
+
+[`scripts/join_eo`](../scripts/join_eo) in the anoieu repository starts one with
+this prompt, which is the canonical copy — the script holds a duplicate and
+`tests/run.py` fails when the two drift apart.
+
+```text
+This repository is joining the Eunoia ecosystem. One page says how, and it is
+the authority:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#joining-the-eunoia-ecosystem
+
+Read it, then do what it says, here:
+
+1. Declare membership at the top of the README's "How this repository is
+   maintained" section, creating that section if there is not one.
+2. Add the CI step the page gives.
+3. Run the check and fix what it reports:
+
+     git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
+     python3 /tmp/anoieu/tools/policy_check.py --root .
+
+Change nothing the check does not ask for, and add no file it does not ask for.
+Where the page and this prompt disagree, the page is right.
+
+Leave the work staged and not committed: `git add` what you changed and stop
+there, so a maintainer reviews a diff rather than a history. Then say, in one
+paragraph: what you changed, what
+the check still reports, and anything the page asked for that does not fit this
+repository -- that last one is worth more to us than a clean run.
+```
+
+It is short on purpose and is not expected to change. Everything that *can*
+change — what the declaration says, which checks run, what gets skipped — is on
+this page, and the prompt links here rather than repeating any of it. A prompt
+that restates a policy is a second copy of the policy that nobody remembers to
+update.
+
+### Checking a repository from this side
+
+[`scripts/check_join_eo`](../scripts/check_join_eo) is the counterpart, run in
+anoieu and pointed at somebody's checkout. It runs the checker, then has an
+assistant judge what a program cannot — whether a maintenance note says anything
+or merely satisfies the check, whether a discussion file is a channel or a stub
+— and returns one of four verdicts: **joined**, **misconfigured** (it declares
+membership and the check fails, which is the serious one), **ready**, or **not
+ready**. It reads their tree and writes nothing to it, and what it produces is a
+candidate for a person rather than a decision.
+
+**A deeper obstacle becomes a topic, not a to-do list.** Where joining would
+take a repository more than a sentence — a layout to restructure, a convention
+that collides with one of theirs, a decision only their maintainer can take —
+the script opens a topic in [`discussion.md`](discussion.md) addressed to them
+by name rather than burying it in a verdict. Staged, never sent: a person
+carries it. It never becomes a row in a findings report, which is for defects in
+their code and not for what it would cost them to join.
+
+**A repository that cannot join may be our defect, not theirs.** A check that
+fires on something that is not a problem, a policy that does not fit a
+legitimate shape of repository, an instruction a careful reader would get wrong
+— each is ours to fix here, and the script is told to say so and make the change
+rather than report it as their shortfall. This is the same position the analyzer
+takes about its own false positives, and it matters more here: a policy that
+fits only the repository that wrote it is not a policy, and the first few
+repositories to try joining are the cheapest chance we get to find that out.
 
 ### What passing does and does not mean
 

@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+# join_eo -- join the Eunoia ecosystem, from inside the repository that is joining.
+#
+# Run it in a checkout of the repository you want to join, not in anoieu. It
+# starts an assistant with a short fixed prompt that points at the instructions
+# and at the checker; it does not carry the instructions itself.
+#
+#   join_eo                 # do it
+#   join_eo --show-prompt   # print the prompt and exit
+#   join_eo --print         # run non-interactively and print the result
+#
+# The prompt is deliberately tiny and deliberately stable. Everything that can
+# change -- what the declaration says, which checks run, what is skipped -- lives
+# on one page in the anoieu repository, and the prompt links to it rather than
+# repeating it. If the page and this text ever disagree, the page is right.
+#
+# The canonical copy of the prompt is the fenced block under "Joining the Eunoia
+# ecosystem" in docs/policy.md; tests/run.py fails when the two drift apart.
+
+set -euo pipefail
+
+AGENT=claude
+PRINT=0
+SHOW=0
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: join_eo [--codex] [--print] [--show-prompt]
+
+  --codex         run codex instead of claude
+  --print         run non-interactively and print the result
+  --show-prompt   print the prompt and exit, running nothing
+
+Run this in the repository that is joining, not in anoieu.
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --codex) AGENT=codex; shift ;;
+    --claude) AGENT=claude; shift ;;
+    --print) PRINT=1; shift ;;
+    --show-prompt) SHOW=1; shift ;;
+    -h|--help) usage ;;
+    *) echo "join_eo: unknown option $1" >&2; usage ;;
+  esac
+done
+
+read -r -d '' PROMPT <<'PROMPT_END' || true
+This repository is joining the Eunoia ecosystem. One page says how, and it is
+the authority:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#joining-the-eunoia-ecosystem
+
+Read it, then do what it says, here:
+
+1. Declare membership at the top of the README's "How this repository is
+   maintained" section, creating that section if there is not one.
+2. Add the CI step the page gives.
+3. Run the check and fix what it reports:
+
+     git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
+     python3 /tmp/anoieu/tools/policy_check.py --root .
+
+Change nothing the check does not ask for, and add no file it does not ask for.
+Where the page and this prompt disagree, the page is right.
+
+Leave the work staged and not committed: `git add` what you changed and stop
+there, so a maintainer reviews a diff rather than a history. Then say, in one
+paragraph: what you changed, what
+the check still reports, and anything the page asked for that does not fit this
+repository -- that last one is worth more to us than a clean run.
+PROMPT_END
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+command -v "$AGENT" >/dev/null 2>&1 || {
+  echo "join_eo: $AGENT is not on PATH" >&2; exit 127; }
+
+if ! ROOT=$(git rev-parse --show-toplevel 2>/dev/null); then
+  echo "join_eo: not in a git repository -- run this in a checkout of the" >&2
+  echo "         repository that is joining." >&2
+  exit 2
+fi
+
+echo "-- join_eo: $(basename "$ROOT") ($ROOT), via $AGENT" >&2
+
+cd "$ROOT"
+if [ "$AGENT" = codex ]; then
+  if [ "$PRINT" = 1 ]; then exec codex exec "$PROMPT"; else exec codex "$PROMPT"; fi
+else
+  if [ "$PRINT" = 1 ]; then exec claude -p "$PROMPT"; else exec claude "$PROMPT"; fi
+fi

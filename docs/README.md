@@ -61,10 +61,15 @@ a reader of the tool: it is the **maintenance entry point**, for whoever is
 doing the work. What this repository is responsible for, which documents may not
 be changed without asking, and the open technical work on the record itself.
 
-[`../scripts/`](../scripts) holds one implementation of the workflow
-[`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow) defines: `check_anoieu`
-to run in the project a finding is about, `process_anoieu` here once it has
-replied. The prompts are the workflow; the scripts are a way of running them,
+[`../scripts/`](../scripts) holds the recommended prompts: `check_anoieu` to run
+in the project a finding is about and `process_anoieu` here once it has replied,
+both defined by
+[`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow); and
+[`join_eo`](../scripts/join_eo), run in a repository that wants to join the
+ecosystem, and [`check_join_eo`](../scripts/check_join_eo), run here to ask
+whether one has — both defined by
+[`policy.md`](policy.md#joining-the-eunoia-ecosystem). `check_join_eo` can
+conclude the fault is ours, and is told to fix it here when it is. The prompts are the workflow; the scripts are a way of running them,
 and `tests/run.py` fails when their copy of the text has drifted from it.
 
 `reports/` also holds documents rendered for an audience that will not clone this

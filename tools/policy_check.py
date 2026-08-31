@@ -292,7 +292,8 @@ def check_links() -> list[str]:
     moved is worse than one that sends them nowhere.
     """
     bad = []
-    for rel in tracked("*.md") + ["scripts/check_anoieu", "scripts/process_anoieu"]:
+    for rel in tracked("*.md") + ["scripts/check_anoieu", "scripts/process_anoieu",
+                                    "scripts/join_eo", "scripts/check_join_eo"]:
         full = os.path.join(ROOT, rel)
         if not os.path.isfile(full):
             continue

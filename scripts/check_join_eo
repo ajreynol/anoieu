@@ -1,0 +1,175 @@
+#!/usr/bin/env bash
+# check_join_eo -- is that repository ready to join the Eunoia ecosystem, already
+# in it, or claiming to be without backing the claim?
+#
+# Run it here, in anoieu, pointed at somebody else's checkout. The counterpart is
+# scripts/join_eo, which runs in *their* repository and does the joining.
+#
+#   check_join_eo ethos             # by repo id, or by path
+#   check_join_eo --show-prompt eo  # print the prompt and exit
+#
+# It reads their tree and writes nothing to it. Two halves, deliberately split:
+#
+#   tools/policy_check.py --root decides everything a program can decide, and
+#   its output is quoted into the prompt as fact.
+#
+#   The assistant judges only what is left -- whether a maintenance note says
+#   anything, whether a discussion file is real or a stub -- and its verdict is a
+#   candidate for a person, not a decision.
+#
+# The checkout is resolved the same way process_anoieu resolves one, from the
+# same scripts/repos.local: an existing path is used as it stands, then the
+# mapping file, then a scan of $ANOIEU_REPOS (default $HOME). That file's format
+# is documented in its own header, which process_anoieu writes.
+
+set -euo pipefail
+
+HERE=$(cd "$(dirname "$0")" && pwd)
+ROOT=$(cd "$HERE/.." && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/repos.local}"
+AGENT=claude
+PRINT=0
+SHOW=0
+NAME=""
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: check_join_eo [--codex] [--print] [--show-prompt] NAME
+
+  NAME            a directory, or a repo id looked up in scripts/repos.local
+                  (shared with process_anoieu), then under $ANOIEU_REPOS.
+  --codex         run codex instead of claude
+  --print         run non-interactively and print the result
+  --show-prompt   print the prompt and exit, running nothing
+
+Run this in anoieu, pointed at the repository you are asking about.
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --codex) AGENT=codex; shift ;;
+    --claude) AGENT=claude; shift ;;
+    --print) PRINT=1; shift ;;
+    --show-prompt) SHOW=1; shift ;;
+    -h|--help) usage ;;
+    -*) echo "check_join_eo: unknown option $1" >&2; usage ;;
+    *) [ -z "$NAME" ] || { echo "check_join_eo: one repository at a time" >&2; usage; }
+       NAME="$1"; shift ;;
+  esac
+done
+[ -n "$NAME" ] || usage
+
+# -- the checkout: a path, then repos.local, then a scan. Same order, same file
+#    and same environment variables as process_anoieu.
+TARGET=""
+if [ -d "$NAME" ]; then
+  TARGET=$(cd "$NAME" && pwd)
+elif [ -f "$REPOS_FILE" ]; then
+  while IFS= read -r line; do
+    case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
+    id=${line%%[[:space:]]*}; path=${line#"$id"}
+    path=${path#"${path%%[![:space:]]*}"}
+    [ "$id" = "$NAME" ] || continue
+    case "$path" in "~"*) path="$HOME${path#\~}" ;; esac
+    [ -d "$path" ] && TARGET=$(cd "$path" && pwd)
+    break
+  done < "$REPOS_FILE"
+fi
+if [ -z "$TARGET" ]; then
+  for r in ${ANOIEU_REPOS:-$HOME}; do
+    [ -d "$r/$NAME" ] && { TARGET=$(cd "$r/$NAME" && pwd); break; }
+  done
+fi
+if [ -z "$TARGET" ]; then
+  echo "check_join_eo: nothing called '$NAME' -- give a path, or add an entry to" >&2
+  echo "               $REPOS_FILE" >&2
+  exit 2
+fi
+
+REPORT=$(python3 "$ROOT/tools/policy_check.py" --root "$TARGET" 2>&1 || true)
+
+read -r -d '' PROMPT <<PROMPT_END || true
+Decide where $NAME stands with respect to the Eunoia ecosystem. It is checked
+out at $TARGET. **Read it; change nothing in it.**
+
+The policy is docs/policy.md here, and its "Joining the Eunoia ecosystem"
+section is what a repository has to do. The mechanical half has already been
+run, and this is its output. Treat it as fact -- do not re-derive it, and do not
+argue with it:
+
+$REPORT
+
+Your job is the half a program cannot decide. Read their README, their
+docs/discussion.md if there is one, and enough of the tree to answer: does the
+maintenance note actually say who does the work and what the supervision does
+not cover, or is it a sentence that satisfies the check and tells a reader
+nothing? Is the discussion file a channel somebody would use, or a stub?
+
+Then give exactly one verdict:
+
+  JOINED         -- declares membership, and the check passes.
+  MISCONFIGURED  -- declares membership and the check fails. Say which claim is
+                    unbacked; this is the serious one, because a declaration
+                    nothing supports is what the check exists to prevent.
+  READY          -- does not declare membership, but nothing else is in the way.
+                    Say what the one sentence would be.
+  NOT READY      -- does not declare, and something else is missing too. List it.
+
+The answer then lands in one or two places, and the second is the one that gets
+skipped.
+
+**Theirs, and small.** What they would have to change, smallest first. Say it in
+the verdict and leave it there.
+
+**Ours.** If the reason they cannot join is a defect on this side, that is ours
+to fix rather than theirs to work around. Three shapes it takes: a check that
+fires on something that is not actually a problem; a policy that does not fit a
+legitimate shape of repository; an instruction that is wrong, missing or
+ambiguous enough that a careful reader would get it wrong. Say so plainly, and
+then make the change here in anoieu -- narrow the check, reword the page, or
+carve the exemption -- and `git add` it, leaving it staged and not committed
+for a maintainer to review. Do not soften the
+verdict to avoid the work.
+
+Say explicitly when the fault is *not* ours, too, so that silence is not the
+only evidence either way.
+
+This is worth more than a clean verdict. A policy that fits only the repository
+that wrote it is not a policy, and the first repositories to try joining are the
+cheapest chance we will ever get to find that out.
+
+**Theirs, and deep.** Some obstacles are not a sentence they can add. A
+documentation layout they would have to restructure, a convention that collides
+with one of their own, a channel they do not have, a decision only their
+maintainer can take. Do not bury those in the verdict, where they read as a
+to-do list somebody wrote for them. Open a topic in docs/discussion.md here,
+addressed to them by name, in the format docs/policy.md sets out: To, Kind,
+Status, Opened, Settles when. Choose the Kind honestly -- a request if we want
+something from them, a proposal if they gain and we do not, a question if we do
+not know their intent -- and write what would settle it, because an obstacle
+with no answerable form is a complaint. One topic per obstacle. Stage it and
+send nothing; a person carries it, as with everything else that leaves here.
+
+Never a row in a findings report. That is for defects in their code, and what it
+would take somebody to join is not one.
+
+This is a candidate assessment for a person to read, never a decision and never
+an endorsement. A passing check is a claim about form and nothing else. File
+nothing, open nothing, and send nothing anywhere.
+PROMPT_END
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+command -v "$AGENT" >/dev/null 2>&1 || {
+  echo "check_join_eo: $AGENT is not on PATH" >&2; exit 127; }
+
+echo "-- check_join_eo: $NAME ($TARGET), via $AGENT" >&2
+
+cd "$ROOT"
+if [ "$AGENT" = codex ]; then
+  if [ "$PRINT" = 1 ]; then exec codex exec "$PROMPT"; else exec codex "$PROMPT"; fi
+else
+  if [ "$PRINT" = 1 ]; then exec claude -p "$PROMPT"; else exec claude "$PROMPT"; fi
+fi
