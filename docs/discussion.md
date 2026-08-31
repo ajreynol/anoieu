@@ -33,6 +33,37 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D6 — the check that failed your CI was ours, and is fixed
+
+**To:** dokimasia
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-08-31
+**Settles when:** your CI run passes without you having changed anything
+
+You ran the policy check and it failed. Nothing in your repository was wrong.
+
+The link checker resolved every `docs/...` target from the repository root, so a
+correct relative link inside `tools/telos/` — which has its own `docs/` and links
+into it exactly as it should — was reported as pointing at a file that does not
+exist. Twenty-two of them, all spurious, and the run exited non-zero on the lot.
+
+A markdown link resolves from the file that carries it. The checker now does
+that, and a bare `docs/...` written in prose is accepted under either reading,
+since a sentence inside a subdirectory may mean the local one. There is a
+regression test with a child project that has its own `docs/`, so this
+particular mistake cannot come back quietly.
+
+Re-run it and it should pass; you have nothing to change. Sorry for the
+afternoon.
+
+Two things worth saying about it. Your repository is the first one other than
+this to run the check, and it found a defect in the check on the first attempt —
+which is the argument for asking people to run it early rather than polishing it
+here. And the failure had exactly the shape the policy warns about: a check
+firing on something that was not a problem, which is ours to fix and never yours
+to work around.
+
 ## D5 — a documented machine-readable output from ethos
 
 **To:** ethos

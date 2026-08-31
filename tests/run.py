@@ -407,6 +407,18 @@ def adoption_interface() -> int:
                 "# The documentation\n\n| document | its job |\n| --- | --- |\n"
                 "| [`discussion.md`](discussion.md) | the channel |\n")
             open(os.path.join(root, ".gitignore"), "w").write("scratch/\n*.local.md\n")
+            # A child project with its own docs/, linking into it the way a
+            # child project does. This once failed: the link checker forced
+            # every `docs/...` target to resolve from the repository root, so a
+            # correct relative link inside tools/<child>/ was reported dead --
+            # a check firing on something that was not a problem, which is ours.
+            os.makedirs(os.path.join(root, "tools", "kalon", "docs"))
+            open(os.path.join(root, "tools", "kalon", "docs", "design.md"), "w").write(
+                "# design\n")
+            open(os.path.join(root, "tools", "kalon", "README.md"), "w").write(
+                "# kalon\n\n*\u03ba\u03b1\u03bb\u03cc\u03bd, the fitting thing.*\n\n"
+                "A child project. It does not ship anything.\n\n"
+                "See [the design](docs/design.md).\n")
             subprocess.run(["git", "-C", root, "add", "-A"], check=True,
                            capture_output=True)
             subprocess.run(["git", "-C", root, "-c", "user.email=t@t", "-c",

@@ -303,18 +303,21 @@ def check_links() -> list[str]:
             continue
         here = os.path.dirname(full)
         text = read(rel)
-        # markdown links resolve from the file; bare `docs/...` mentions are
-        # repo-relative by convention, in prose and in the prompts alike.
-        targets = [(m.group(1), here) for m in re.finditer(r"\]\(([^)\s]+)\)", text)]
-        targets += [(t, ROOT) for t in
+        # A markdown link resolves from the file that carries it, always -- a
+        # child project with its own docs/ writes `](docs/x.md)` and means its
+        # own. A bare `docs/...` in prose or in a prompt is conventionally
+        # repo-relative, but the same sentence inside a subdirectory may mean
+        # the local one, so either reading counts: a path that resolves under
+        # one of them is not a broken link.
+        targets = [(m.group(1), [here]) for m in re.finditer(r"\]\(([^)\s]+)\)", text)]
+        targets += [(t, [ROOT, here]) for t in
                     re.findall(r"(?<![\w/`(])(docs/[\w./-]+\.(?:md|html))", text)]
-        for t, base in targets:
+        for t, bases in targets:
             t = t.split("#")[0]
             if not t or t.startswith(("http", "mailto:")):
                 continue
-            if t.startswith("docs/"):
-                base = ROOT
-            if not os.path.exists(os.path.normpath(os.path.join(base, t))):
+            if not any(os.path.exists(os.path.normpath(os.path.join(b, t)))
+                       for b in bases):
                 bad.append(f"{rel} links to {t}, which does not exist")
     return bad
 
