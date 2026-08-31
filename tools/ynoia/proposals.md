@@ -3,6 +3,11 @@
 Ideas that might deserve a repository of their own, audited here, one section
 each. Newest first.
 
+Work that wants doing but not a repository of its own is
+[`requests.md`](requests.md), which tracks where it would live instead. A
+request that turns out to need its own tree is promoted here; a proposal that
+turns out not to is sent there.
+
 Every proposal opens with the same five lines, because what a person is being
 asked is short and should not have to be extracted from an argument:
 
@@ -77,6 +82,145 @@ The likeliest right answer is often **not yet, and here is what would change
 that** — a threshold somebody can watch for rather than a refusal. It is not the
 default answer, and a standard that reaches it every time is a standard that has
 stopped being applied.
+
+## P2 — the ecosystem's governance, out of the analyzer
+
+**Names:** **`kanon`**, then `thesmos`, `epistates`, `oikonomia`
+**What:** the policy every member is checked against, the checker that decides
+it, the inventory of who is in, and the scripts that start, welcome, join and
+install a tool — in a repository that is not also the tool that files findings
+against you
+**Verdict:** **needed** — the ecosystem already depends on this; the question is
+whose tree it lives in
+**If approved:** a person creates the empty repository → the policy, its checker,
+the inventory and the `*_eo` scripts move there in one commit, with anoieu
+becoming a consumer of them → every member's CI pin changes once, at a moment
+somebody chose
+**Decided:** **open.** Raised by the maintainer on 2026-08-31, who is inclined to
+do it, and **deliberately not actionable until they raise it again**. Audited
+here so that the argument exists before the decision does, which is the only
+thing this page is for.
+
+### The names
+
+None is taken. A name is claimed when a person approves one, so nothing here
+touches [`names.md`](names.md).
+
+| name | Greek | the claim it makes | the objection to it |
+| --- | --- | --- | --- |
+| **kanon** | κανών, *the measuring rod* — the standard a thing is held against | the policy is exactly a rod: `policy_check.py` lays it alongside a tree and reports where the tree is short. It names the instrument rather than the authority, which is what this actually is | *canon* in English is about scripture and lists of approved works, and a governance repository is the one place that misreading does real harm |
+| **thesmos** | θεσμός, *a thing laid down* — an institution before it is a law | it is the arrangement itself, written down: what a repository is, what a member owes, what a child project may do | heavier than the thing. A `thesmos` sounds founding and permanent, and this is a policy somebody amends on a Tuesday |
+| **epistates** | ἐπιστάτης, the presiding member of the council, for one day | presides and does not rule: it runs the meeting, and the decisions stay with people. That is precisely the relationship the policy has to members | needs the footnote to land at all, which by the register's own test means it is not following the convention |
+| **oikonomia** | οἰκονομία, *management of the house* | the unglamorous half is true: the inventory, the checkouts, who lives where | *economy* in English, and it says nothing about the rules, which are the part that matters |
+
+**Recommended: `kanon`.** The register asks for a word for what the tool does to
+its subject, and what this one does is *measure a tree against a stated
+standard*. The objection is real and worth stating on the repository's own front
+page: this is a rod, not a canon, and nothing in it is scripture.
+
+### The proposal
+
+anoieu is currently three things, and its own README says so: an analyzer, a
+reporting system, and *the place the Eunoia ecosystem's shared policy is kept*.
+The third has grown since that sentence was written. It is now
+[`docs/policy.md`](../../docs/policy.md),
+[`tools/policy_check.py`](../../tools/policy_check.py) — which runs in every
+member's CI — [`tools/ecosystem.json`](../../tools/ecosystem.json),
+[`tools/ecosystem.py`](../../tools/ecosystem.py),
+[`scripts/init_eo`](../../scripts/init_eo),
+[`scripts/join_eo`](../../scripts/join_eo),
+[`scripts/check_join_eo`](../../scripts/check_join_eo),
+[`scripts/welcome_eo`](../../scripts/welcome_eo),
+[`scripts/global_audit`](../../scripts/global_audit),
+[`scripts/install_eo`](../../scripts/install_eo) and
+[`tools/checkouts.json`](../../tools/checkouts.json). That is a tool, and it is
+not the analyzer.
+
+The argument is not that the machinery is bad. It is that **one repository both
+writes the rules a member is judged by and files the findings against them.** A
+member that disputes a finding is disputing with the body that also defines what
+compliance is, and the only thing separating those two roles today is that the
+same people are careful. Separation is cheap now and expensive later.
+
+### Against the standard
+
+*Does it exist anywhere yet?* Yes — once, and **running in other repositories'
+CI**, which is a third kind of evidence the standard does not have a line for.
+Written twice means the shared shape has been discovered. Written once but
+*consumed by four trees under a contract* means something stronger: the
+dependency is already real, and the only open question is whose release surface
+it rides on.
+
+*How many consumers, really?* Four today — anoieu, eudaimonia, dokimasia, koine —
+and every future member, by construction: joining *is* running this checker. The
+count that matters here is not how many use it but how many pin **anoieu** to get
+it, which is the same four, and each new member makes the move more expensive.
+
+*What does a repository buy that `tools/` does not?* Three things, and the first
+is the whole proposal. **The judge stops being the prosecutor.** Then: a release
+surface that does not move when a check is added to the analyzer — today a member
+pinning the policy pins a repository whose commits are mostly about `.eo`
+parsing. And it lets anoieu's front page say one thing.
+
+*Who maintains it when the enthusiasm is gone?* The honest risk is *anoieu under
+another name*, which is what sank the first audit of `P1` and would sink this
+one. Two things argue against it here. The artifact is documents plus one
+checker with no dependencies, which is the lowest-maintenance shape anything in
+this ecosystem has. And the work is mostly **refusal** — saying no to rules that
+have not been run against a real tree — which is a job somebody can do in an
+afternoon a month, or not at all, without the thing rotting.
+
+### What the standard is missing, and this proposal needs
+
+Every question above assumes a tool being *built*. This is a **transfer**, and a
+transfer asks two more:
+
+5. **What does the losing repository keep?** Here: the analyzer, the fuzzer, the
+   findings ledger, and the reporting workflow. The line to argue is
+   [`reporting-policy.md`](../../docs/reports/reporting-policy.md), which is a
+   position shared with dokimasia about what may be published — governance by
+   any reading, and also the document anoieu most needs to own, since it is the
+   one constraining anoieu's own behaviour. **Recommendation: it stays**, and the
+   governance repository holds what a repository *is*, not what a report may say.
+6. **Is either half left unable to answer a question it used to answer alone?**
+   One: *does this finding's project comply?* — today one tree holds both the
+   finding and the checker. After a split, `global_audit` lives with the policy
+   and the findings live with the analyzer, and the audit that reads across both
+   needs two checkouts. `install_eo` already makes that a one-line problem, which
+   is an argument for doing this **after** the install script settles, not
+   before.
+
+The standard should gain both questions whether or not this proposal is
+approved. A page that audits *should this be a repository* and has no vocabulary
+for *should this move* will keep producing confident answers to a question
+nobody asked.
+
+### If approved
+
+1. **A person creates the repository, empty.** Nothing here can: repository
+   creation carries credentials and a runner. No name is claimed until it is
+   done.
+2. **The move is one commit, not a migration.** The files above, their tests, and
+   the parts of `tests/run.py` that check them. Anything left behind in anoieu
+   that mentions the policy becomes a link.
+3. **anoieu becomes a consumer, and is checked by a policy it no longer owns.**
+   That is the forcing function the whole proposal rests on: the first rule that
+   cannot survive being applied to its former author is the first rule that
+   should not have been written.
+4. **Every member's pin moves once.** The CI snippet in `policy.md` fetches a
+   URL; it changes, and each member changes it at a moment they choose. This is
+   the cost, it is real, and it grows with the member count — which is the
+   argument for doing it while there are four.
+
+### The risk worth writing down
+
+A policy separated from the tree it was written for can drift into rules nobody
+has run against a real repository — which is the failure the current arrangement
+structurally cannot have, because the policy's author is also its first victim.
+The mitigation is that the checker moves *with* the policy and anoieu stays a
+consumer, so every rule is still run against at least one tree that did not write
+it. If the governance repository ever ships a rule with no checkout behind it,
+this proposal was wrong.
 
 ## P1 — central tooling for reporting
 

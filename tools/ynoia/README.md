@@ -48,7 +48,10 @@ So: write it down, make the strongest case against it, and see which survives.
 4. **Auditing proposals.** Whether a given idea deserves a repository of its
    own is the account's general question applied to one case, with a decision
    attached — so it is answered here, against a stated standard, in
-   [`proposals.md`](proposals.md). The output is an argument with a
+   [`proposals.md`](proposals.md). Most wants are not that question, and the
+   ones that are work rather than repositories are tracked in
+   [`requests.md`](requests.md) with an argument about whose tree they belong
+   in. The output is an argument with a
    recommendation at the end. **It approves nothing:** a repository is a claim
    on a shared namespace and on years of somebody's attention, and the policy
    reserves that for a person. anoieu carries proposals in, because it is the
