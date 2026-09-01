@@ -166,6 +166,73 @@ rather than earning one. Where there is no command it says so instead:
 `Type "epoch brainstorm" to drop back.` — down is free, and the one way out that
 is always available should always be visible.
 
+### The line: where an agent says the workflow seems off
+
+**Every command's output ends at a rule of `=` characters. Below it, and only
+below it, an agent may say that something about the workflow looks wrong.**
+
+```text
+  ... command output, in its documented shape ...
+================================================================
+  the agent, out of band: what looks off, and why
+```
+
+**Above the line is the command; below it is the agent.** The separation exists
+because the two are different kinds of thing and mixing them costs both: command
+output that carries prose stops being scannable, and a real concern buried in a
+status block gets read as decoration.
+
+**It is empty by default, and that is the whole discipline.** Most commands print
+nothing below the line. A `====` on every output would train a reader to skip
+past it, at which point the one time it mattered is the one time nobody read it.
+
+**What belongs below it:**
+
+- a gate that looks *wrong* rather than merely failing;
+- a rule that has produced an absurd result — the deadlock case, where the note
+  says **the hatch exists** and never takes it;
+- the command was obeyed and the outcome looks incoherent;
+- something noticed in passing that would change the person's decision, and that
+  the command had no field for.
+
+**What does not:** advice about what to work on — that is `epoch advice`, and it
+is requested. Explanations of what was done. Anything that is merely interesting.
+
+**It is the one thing that may appear at any level, including `staged`**, where
+the rule is otherwise simple actionable requests and no implementation detail.
+That is deliberate: **the level that most restricts what an agent may say is the
+level where an agent noticing a problem matters most**, and a mode that had no
+way to raise one would be a mode that suppresses them.
+
+**Below the line is how an agent reaches the person's escape hatch** in
+[`policy.md`](policy.md#the-ecosystem-never-locks-everybody-out) — by saying a
+deadlock exists and that an override is the way out. Taking it remains the
+person's, and being certain changes nothing.
+
+### What a transition prints
+
+**A move says what it means we are now doing.** Not only which level was
+reached — a level name is a label, and the useful thing is the change in what the
+next hour looks like:
+
+| entering | what we are now doing |
+| --- | --- |
+| `brainstorm` | working out what the next epoch should be. Nothing load-bearing moves, and the protected files are shut |
+| `planned` | done exploring, about to assemble. **The protected files are open again** |
+| `staged` | **discussing whether we are ready to deploy** |
+| `deployed` | waiting on members. Nothing further happens here until they act |
+| `installed` | finished. There is nothing left to do for this epoch |
+
+**Then what is now open or shut, and what the next move would take.** Those two
+are the practical consequences and they are what somebody actually needs; the
+level name is a handle for them rather than the point.
+
+**The sentence for going down is not the reverse of going up.** Dropping to
+`brainstorm` re-shuts the protected files, which is a real change and is worth
+saying, but it also means *whatever we were about to assemble is not being
+assembled* — and that is the part somebody would otherwise discover by noticing
+that nothing is happening.
+
 ### `epoch help`
 
 Printed as a command line prints it — terse, aligned, no prose:

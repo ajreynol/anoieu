@@ -61,10 +61,10 @@ the next person could not have guessed.
 
 ## E1 — through 2026-09-01
 
-**Status:** `brainstorm`, dropped from `planned` on 2026-09-01 by `epoch
-brainstorm`. Down needs nobody and costs one line, which is this one. Nothing
-critical is in play while it stays here; the registers and the discussion file
-are. Not `staged`: nobody is being given instructions to stage it, and a gate
+**Status:** `planned`, raised from `brainstorm` on 2026-09-01 by `epoch plan` —
+a person's word, which is the whole of that criterion. The protected rings are
+open again. Previously `brainstorm`, dropped from `planned` earlier the same
+day by `epoch brainstorm`. Not `staged`: nobody is being given instructions to stage it, and a gate
 is failing. The move to `deployed` belongs to `R28`, the
 epoch build system role, which anoieu holds — so it is a person acting for that
 role who makes it, and this row will say so when it happens.
