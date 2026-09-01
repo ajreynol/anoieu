@@ -12,7 +12,7 @@ content lives, every row below leads somewhere better.
 | [`reporting-policy.md`](reports/reporting-policy.md) | **what may be published about somebody else's code, and why.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — twelve of them, each saying whether it is enforced, structural, or an intention nothing but our record backs |
 | [`reporting-workflow.md`](reports/reporting-workflow.md) | **how a finding is handled**: the conventions governing the record, the workflow and prompts for carrying one to whoever can fix it, and for
 sweeping the whole report, and what it takes for another repository to run these checks in its own CI |
-| [`usage.md`](usage.md) | **the interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together |
+| [`usage.md`](usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together. The *person's* interface to this repository is [`interface.md`](interface.md), below |
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor nobody has started |
 | [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the six above belongs here |
 
@@ -75,6 +75,16 @@ outstanding across the ecosystem, in priority order** — at most twenty items,
 each with the next thing to do, the repositories involved, and a prompt for each
 of them. It is kept by hand, `HUMAN FEEDBACK` on an item outranks everything else
 on it, and nothing consumes the file yet.
+
+[`interface.md`](interface.md) is not in the table and is the page to read
+**first if you are the person driving this repository** rather than reading about
+it. What to say, what comes back, what never comes back, and the decisions that
+are nobody's but yours. Its stated default — *work with anoieu to develop the
+next epoch* — is a **conjecture about the right level of abstraction**, said so on
+the page, with what would show it wrong and five other levels to drop to,
+including the two where anything actually gets built. Distinct from
+[`usage.md`](usage.md), which is the analyzer's command line, and from
+[`coherence.md`](coherence.md), which is the standards the work is held to.
 
 [`epoch-policy.md`](epoch-policy.md) and [`epochs.md`](epochs.md) are a pair and
 are not in the table either. An **epoch** is the span between one global
