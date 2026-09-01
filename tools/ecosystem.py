@@ -61,16 +61,26 @@ REPOS_FILE = os.environ.get("ANOIEU_REPOS_FILE",
 
 
 #: What each status requires of an entry, beyond `what`.
+#:
+#: `associate` requires `vetted` and `why`, and nothing else requires either. A
+#: footing that rests on our judgement rather than on their declaration carries
+#: the date a person last made that judgement and what they made it about, or it
+#: becomes a claim that only ever accumulates. `why` is what we vetted them
+#: *as* -- why they are load-bearing for us -- and is not a second `what`.
 REQUIRED = {
     "member": ("repo", "url"),
+    "associate": ("repo", "url", "vetted", "why"),
     "candidate": ("repo", "url"),
-    "served": ("repo", "url"),
+    "foundation": ("repo", "url"),
     "child": ("parent",),
 }
 
-#: The statuses that are somebody's own repository, and so have a README a
-#: declaration could be in. `served` is outside the ecosystem and is never asked.
-OWN_REPO = ("member", "candidate")
+#: The statuses whose entry asserts something about a README somebody else
+#: keeps, and which `--online` therefore reads. `foundation` is deliberately not
+#: here: its entry is a fact about *our* arrangement, asserts nothing about their
+#: tree, and asking them for anything is what that footing exists to refuse.
+OWN_REPO = ("member", "associate", "candidate")
+
 
 
 def git(*args, cwd=None):
@@ -203,7 +213,8 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
 
     bad, unseen = [], []
     for name, e in inv.items():
-        if e.get("status") not in OWN_REPO:
+        status = e.get("status")
+        if status not in OWN_REPO:
             continue
         text, why = readme_of(e.get("url", ""))
         if why:
@@ -211,13 +222,28 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
             continue
         missing = policy_check.declaration_in(text)
         declares = not missing
-        if e["status"] == "candidate" and declares:
+        if status == "candidate" and declares:
             bad.append(f"{name} declares membership on its default branch and is "
                        "recorded here as a candidate: it has joined, and this file "
                        "has not been told")
-        if e["status"] == "member" and not declares:
+        if status == "member" and not declares:
             bad.append(f"{name} is recorded here as a member and its README does "
                        f"not declare it: {missing[0]}")
+        if status == "associate":
+            # The affiliating note is asked about first, and a tree that carries
+            # one is settled: its refusal clause is what stops `declaration_in`
+            # reading it as a declaration, so the two can never both be true.
+            # Only a tree with no affiliating note can have joined outright.
+            gone = policy_check.affiliation_in(text)
+            if not gone:
+                pass
+            elif declares:
+                bad.append(f"{name} declares full membership and is recorded here "
+                           "as an associate: it has joined, and this file has not "
+                           "been told")
+            else:
+                bad.append(f"{name} is recorded here as an associate and its "
+                           f"README does not carry the affiliating note: {gone[0]}")
     return bad, unseen
 
 
@@ -248,9 +274,13 @@ def audit(online: bool) -> int:
         print(f"     unreachable, so unasked: {u}")
     asked = sum(1 for e in inv.values() if e.get("status") in OWN_REPO) - len(unseen)
     print(f"-- who has joined is current: {len(stale)} failure(s), {asked} asked")
-    print("   A declaration is what this reads. Whether their tree backs it is "
-          "decided by\n   their own CI, running the same checker, and is not "
-          "visible from here.")
+    print("   One section of one README is what this reads: a declaration for a "
+          "member,\n   an affiliating note for an associate. Whether their tree "
+          "backs a declaration is\n   decided by their own CI, running the same "
+          "checker, and is not visible from here.")
+    print("   Whether an associate is still worth vetting is nobody's to decide "
+          "from here\n   either: the `vetted` date says when a person last did, "
+          "and it does not expire\n   on its own.")
     return 1 if bad or stale else 0
 
 
@@ -265,14 +295,18 @@ def main() -> int:
         if name == "_comment":
             continue
         status = e.get("status", "?")
-        if status in ("child", "served"):
+        if status in ("child", "foundation"):
             rows.append((name, status, "-", "-", "-", e.get("parent", "")))
             continue
         path = locate(e.get("repo", name))
         if not path:
             rows.append((name, status, "no checkout", "-", "-", ""))
             continue
-        verdict, fails = check(path)
+        # An associate is held to none of this, so nothing here runs the checker
+        # over its tree. A failure count in that row would be this table
+        # grading somebody who never agreed to be graded, which is the whole of
+        # what the footing refuses.
+        verdict, fails = ("not held", []) if status == "associate" else check(path)
         topics = ""
         disc = os.path.join(path, "docs", "discussion.md")
         if os.path.isfile(disc):

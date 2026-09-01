@@ -73,7 +73,7 @@ itself.
 | --- | --- | --- |
 | `init_eo new` <br> `init_eo from-child <path>` | the **new** repository | the README that says what the tool is for: what it answers, the question it does not, the name explained. `new` writes it from the name register; `from-child` writes it from an existing child project's charter and from what that project delivered. The mode is required, never guessed. Complies with nothing, deliberately |
 | `welcome_eo <id> <path>` | here | records the checkout, syncs the ecosystem's list, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one |
-| `join_eo` <br> `join_eo --soft` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. `--soft` is a different act rather than a smaller one: the maintenance note alone, declaring no membership, linking nowhere, adding no workflow and running no checker — for a repository that should not join and is still worth a note. Both prompts are fixed and drift-checked against [`policy.md`](policy.md) |
+| `join_eo` <br> `join_eo --soft` <br> `join_eo --soft --affiliated` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. `--soft` is a different act rather than a smaller one: the maintenance note alone, declaring no membership, linking nowhere, adding no workflow and running no checker — for a repository that should not join and is still worth a note. `--affiliated` is the same again with one paragraph changed: it names the ecosystem and says the repository is not held to its policy, which is the note an `associate` in the inventory carries. All three prompts are fixed and drift-checked against [`policy.md`](policy.md) |
 | `check_join_eo <id>` | here | joined, ready, misconfigured or not ready — and whether the obstacle is ours |
 | `process_discussion <id> [Dn]` | here | works what another repository has addressed to us. **Read-only until a person names a topic** |
 | `check_anoieu [id]` | the project a **finding** is about | answers our findings there, and drafts a reply for its maintainer |
@@ -113,7 +113,9 @@ files. The sequence, which nothing enforces:
    printing what comes back, before it reads the tree and drafts a first message.
 3. That sync reports and never edits. If the tool is not in
    [`../tools/ecosystem.json`](../tools/ecosystem.json) it says a status is owed,
-   and a person adds the entry: `status`, `repo`, `url`, `what`. Membership is a
+   and a person adds the entry: `status`, `repo`, `url`, `what` — plus `vetted`
+   and `why` where the footing is `associate`, because a footing that rests on
+   our judgement carries the date somebody made it and what they made it about. Membership is a
    decision a person makes, which is why no script writes that file. **A child
    project** — a tool inside somebody else's tree, like `ethos-eoc` at
    `ethos/tools/eoc` — takes `status: child` with `parent` and `path` instead of

@@ -206,14 +206,14 @@ number worth looking at, in both directions.
 | tool | footing | how many |
 | --- | --- | --- |
 | `anoieu` | member | 6 |
-| `cvc5` | served | 2 |
+| `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
-| `ethos` | candidate | 2 |
+| `ethos` | associate | 2 |
 | `ethos-eoc` | child of `ethos` | 2 |
 | `eudaimonia` | member | 1 |
 | `euthyna` | child of `eudaimonia` | 1 |
 | `koine` | member | 1 |
-| `logos` | candidate | 3 |
+| `logos` | associate | 3 |
 | `sapheneia` | child of `anoieu` | 1 |
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
@@ -312,7 +312,8 @@ artifact in the ecosystem is downstream of that output, and of decisions this
 role made before any of the rest existed.
 **Owns:** the solver, its proof production, and the proofs themselves.
 **Not this role:** checking them — that is `R10` and `R17` — and adopting
-anything from this ecosystem. It is not a candidate and is not asked.
+anything from this ecosystem. Its footing is **foundation**: nothing here
+constrains it and nothing here asks it for anything.
 
 ### R8 — CPC, the calculus
 

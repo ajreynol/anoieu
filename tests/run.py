@@ -503,15 +503,20 @@ def join_prompt_agrees() -> int:
     point at the page instead of repeating it, so the only way one can rot is by
     drifting from the copy the page publishes. That is what this compares.
 
-    The soft prompt is checked for the same reason and one more: it is the only
-    thing this repository hands to somebody who is joining *nothing*, so a
-    sentence in it that has drifted is a claim made on a repository that never
-    agreed to anything here.
+    The two soft prompts are checked for the same reason and one more: they are
+    the only thing this repository hands to somebody who is joining *nothing*, so
+    a sentence in one that has drifted is a claim made on a repository that never
+    agreed to anything here. The affiliating one is the note an `associate`
+    carries, and `tools/ecosystem.py --check --online` reads that note back off
+    their README -- so a drift there desynchronises a prompt from a check in
+    somebody else's tree.
     """
     root = os.path.dirname(HERE)
     doc = open(os.path.join(root, "docs", "policy.md")).read()
     failures = 0
-    for label, extra in (("the joining prompt", []), ("the soft prompt", ["--soft"])):
+    for label, extra in (("the joining prompt", []),
+                         ("the soft prompt", ["--soft"]),
+                         ("the affiliating prompt", ["--soft", "--affiliated"])):
         spoken = subprocess.run(["bash", os.path.join(root, "scripts", "prompts", "join_eo"),
                                  "--show-prompt", *extra],
                                 capture_output=True, text=True).stdout
@@ -522,6 +527,54 @@ def join_prompt_agrees() -> int:
             print("     the prompt is not in the page verbatim; one of them moved")
             failures += 1
     print(f"-- the joining prompts: {failures} failure(s)")
+    return failures
+
+
+def note_forms() -> int:
+    """The three maintenance notes `docs/policy.md` publishes, read by the two
+    readers that decide a footing.
+
+    A member's declaration and an associate's affiliating note are both a
+    paragraph in somebody else's README, and `tools/ecosystem.py --check
+    --online` tells them apart from a remote. Getting that wrong is not a failed
+    build: it is this repository recording a footing that is not true, about a
+    repository that never agreed to anything.
+
+    The templates are pulled from the page rather than typed here, so editing one
+    of them fails this test rather than silently changing what a footing means.
+    """
+    root = os.path.dirname(HERE)
+    sys.path.insert(0, os.path.join(root, "tools"))
+    import policy_check  # noqa: PLC0415
+
+    doc = open(os.path.join(root, "docs", "policy.md")).read()
+
+    def template(after: str) -> str:
+        chunk = doc[doc.index(after):]
+        return re.search(r"```markdown\n(.*?)\n```", chunk, re.S).group(1)
+
+    joined = template("### 1. Declare it, at the top of your maintenance note")
+    independent = template("### The soft form: the note without the membership")
+    affiliating = template("**There is a second form, for a repository that is happy")
+
+    # (label, text, declares a member?, carries the affiliating note?)
+    cases = [
+        ("the membership declaration", joined, True, False),
+        ("the independent soft note", independent, False, False),
+        ("the affiliating soft note", affiliating, False, True),
+        ("no maintenance note at all", "# A tool\n\nWhat it does.\n", False, False),
+    ]
+    failures = 0
+    for label, text, want_member, want_assoc in cases:
+        is_member = not policy_check.declaration_in(text)
+        is_assoc = not policy_check.affiliation_in(text)
+        for got, want, reader in ((is_member, want_member, "declaration_in"),
+                                  (is_assoc, want_assoc, "affiliation_in")):
+            ok = got == want
+            failures += 0 if ok else 1
+            print(("ok   " if ok else "FAIL ")
+                  + f"{reader} {'accepts' if want else 'refuses'} {label}")
+    print(f"-- the maintenance notes a footing rests on: {failures} failure(s)")
     return failures
 
 
@@ -660,6 +713,7 @@ def main() -> int:
     print()
     failures += prompts_agree()
     failures += join_prompt_agrees()
+    failures += note_forms()
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += install_commands()

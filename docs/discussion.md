@@ -33,6 +33,100 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D11 — we have elaborated the footings, and two of you are recorded differently
+
+**To:** ethos, logos, dokimasia, eudaimonia, koine
+**Kind:** request
+**Status:** open
+**Opened:** 2026-09-01, at anoieu `1be2d27`
+**Settles when:** ethos and logos have each either carried the affiliating note or told us not to record them as associates — and any member who thinks the new meaning of `member` overclaims has said so
+
+`D10` above is pinned and asks nothing. **This one asks something**, of two of
+you, which is why it is a separate topic and why it is a request rather than a
+proposal: we want it, and claiming less standing costs us nothing.
+
+### What changed
+
+`tools/ecosystem.json` recorded four footings — `member`, `candidate`, `served`,
+`child` — on what turned out to be one scale. It now records five on two, because
+what a repository **owes us** and what we **say about it** were never the same
+question:
+
+| footing | what they owe us | what we say about them |
+| --- | --- | --- |
+| `member` | the declaration, and a green check every push | they share the approach our vision argues for |
+| `associate` | nothing | we have read them, and they are load-bearing for us |
+| `candidate` | nothing | nothing; the page is addressed to them and that is all |
+| `foundation` | nothing, ever | the arrangement is downstream of them |
+
+**They are not a ladder.** A member trades compliance for nothing; an associate
+trades nothing for a claim we make about them. Neither is above the other, and an
+associate is not a member who has fallen short.
+
+### To ethos and logos, who are the ask
+
+You were recorded as `candidate`, which said only that this page was addressed to
+you and you had not joined. That was accurate and it was the wrong thing to be
+saying about either of you: one is the checker every other reading of the
+language is measured against and the tree our oracle is a recording of; the other
+is where the trust argument terminates. Neither is a repository we are waiting on
+to comply with something.
+
+You are now recorded as **`associate`**, with the date a person last read the
+tree and a line saying what we vetted you *as*. **It obliges you to nothing** —
+no declaration, no workflow, no pin, and the inventory's table now prints `not
+held` in your policy column instead of a count of failures, because running our
+checker over a tree that never agreed to it and publishing the number was the
+grading this footing exists to refuse.
+
+**What we would like, and it is one paragraph.** `join_eo --soft --affiliated`,
+run in your repository, adds a *How this repository is maintained* section that
+names this ecosystem as one you work with and says plainly that you are **not
+held to** its policy — not checked against it, adopting none of it, and not
+answerable for what our tools publish about you. Nothing else changes, no file
+but `README.md` is touched, and no CI job appears.
+
+The reason to want it is not tidiness. A footing that rests only on our judgement
+is a claim we make about you in your absence; one that also rests on a paragraph
+in your own README is a relationship you assented to. `ecosystem.py --check
+--online` reads that paragraph back off your README the same way it reads a
+member's declaration, so the record stays true without anybody remembering to
+update it.
+
+**And if you would rather not be recorded as associates, say so and we will
+change the file.** Nothing about the arrangement depends on the label.
+
+### To the members, who are told rather than asked
+
+`member` now means the declaration, a green check, **and** that you share the
+approach — the third clause is new. It is a judgement, it is ours, and it is
+worth objecting to if you think it overclaims on your behalf.
+
+Two guarantees come with it. **Only the mechanical half is ever checked**: the
+online check still decides *declares / does not declare* and nothing else, and
+whether a member shares the approach is a vision question no program here may
+ever acquire an opinion about. And **nothing about your CI moved** — no check was
+added and the `anoieu / policy` job decides exactly what it decided last week.
+
+### On cvc5, which is not addressed here
+
+cvc5 is recorded as **`foundation`** and is deliberately not in the `To` line
+above. The footing places no constraint on it, asks it for nothing, and is
+written as a fact about *our* arrangement rather than a status conferred on
+theirs — *the ecosystem is downstream of cvc5* is ours to say; *cvc5 is a member
+of the Eunoia ecosystem* is a claim on their name that we do not make. That
+distinction is why neither new footing has the word *member* in it, and it is the
+part of this we would most like told we have got wrong.
+
+### What is not in the list at all
+
+Lean and its toolchain, the compiler ethos is built by, Python, the CI runner.
+Several are more load-bearing than half the rows in the inventory, and the line
+is **subject matter rather than reliance**: the file lists tools built around the
+calculus, plus the one project all of it is downstream of. What those
+dependencies cost is a real question and a different one, and it is written up as
+a request in our own tree rather than answered here.
+
 ## D10 — three changes to the pages you are pinned to, and one of them asks nothing
 
 **To:** dokimasia, eudaimonia, koine, ethos, logos

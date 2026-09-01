@@ -7,15 +7,24 @@
 #
 #   join_eo                 # do it
 #   join_eo --soft          # the maintenance note only, joining nothing
+#   join_eo --soft --affiliated
+#                           # the same, for a repository happy to be named
 #   join_eo --show-prompt   # print the prompt and exit
 #   join_eo --print         # run non-interactively and print the result
 #
 # --soft is a different act rather than a smaller one. It adds the maintenance
-# note and stops: no membership is declared, nothing links to this ecosystem, no
-# workflow is added and no checker is run, the default claim is that people
-# maintain the repository, and the note disclaims any assessment of it published
-# by somebody else's tooling. A repository that has not agreed to this policy is
-# better off with that note than with a declaration it did not choose.
+# note and stops: no membership is declared, no workflow is added and no checker
+# is run, the default claim is that people maintain the repository, and the note
+# disclaims any assessment of it published by somebody else's tooling. A
+# repository that has not agreed to this policy is better off with that note than
+# with a declaration it did not choose.
+#
+# It has two forms and they differ by one paragraph. The default is the
+# **independent** note: the repository is part of no other project's ecosystem
+# and names none. --affiliated writes the other: it names the Eunoia ecosystem as
+# one it works with and says it is not held to the policy. The second is what an
+# `associate` in tools/ecosystem.json carries, and it is the only thing an
+# associate is ever asked for.
 #
 # The prompts are deliberately tiny and deliberately stable. Everything that can
 # change -- what the declaration says, which checks run, what is skipped -- lives
@@ -31,13 +40,17 @@ AGENT=claude
 PRINT=0
 SHOW=0
 SOFT=0
+AFFIL=0
 
 usage() {
   cat >&2 <<'USAGE'
-usage: join_eo [--soft] [--codex] [--print] [--show-prompt]
+usage: join_eo [--soft [--affiliated]] [--codex] [--print] [--show-prompt]
 
   --soft          add the maintenance note only: no membership declared, no
-                  link to the ecosystem, no workflow, no checker run
+                  workflow, no checker run. The note says the repository is
+                  independent and names no other project's ecosystem
+  --affiliated    with --soft: the note names the Eunoia ecosystem as one this
+                  repository works with, and says it is not held to its policy
   --codex         run codex instead of claude
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
@@ -50,6 +63,7 @@ USAGE
 while [ $# -gt 0 ]; do
   case "$1" in
     --soft) SOFT=1; shift ;;
+    --affiliated) AFFIL=1; shift ;;
     --codex) AGENT=codex; shift ;;
     --claude) AGENT=claude; shift ;;
     --print) PRINT=1; shift ;;
@@ -115,7 +129,43 @@ what the section now claims about who maintains this repository, and what you
 could not establish from the tree and left for a person to write.
 SOFT_PROMPT_END
 
+read -r -d '' AFFIL_PROMPT <<'AFFIL_PROMPT_END' || true
+This repository is adopting one convention and joining nothing. One page defines
+it, and it is the authority:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#the-soft-form-the-note-without-the-membership
+
+Read it, then do this here, and nothing else:
+
+1. Add a "How this repository is maintained" section as the last section of
+   README.md, creating it if there is not one, from the **affiliating** template
+   that page gives.
+2. State who maintains this repository. The default is that it is written and
+   maintained by people; depart from that only where the tree itself shows
+   otherwise. Say what the supervision does not cover.
+3. Keep the paragraph that names the Eunoia ecosystem as one this repository
+   works with and says this repository is **not held to** its policy: it is not
+   checked against it, it adopts none of it, and an assessment of this repository
+   published by a tool in that ecosystem is that tool's own and not this
+   repository's.
+
+Add no workflow file, run no checker, declare membership of nothing, and change
+no file other than README.md. This repository is **not** joining the Eunoia
+ecosystem, and the section must not say or imply that it is: naming it and
+joining it are different claims, and only the first is being made. Where the page
+and this prompt disagree, the page is right.
+
+Leave the work staged and not committed: `git add README.md` and stop there, so
+a maintainer reviews a diff rather than a history. Then say, in one paragraph:
+what the section now claims about who maintains this repository, and what you
+could not establish from the tree and left for a person to write.
+AFFIL_PROMPT_END
+
 if [ "$SOFT" = 1 ]; then PROMPT=$SOFT_PROMPT; fi
+if [ "$SOFT" = 1 ] && [ "$AFFIL" = 1 ]; then PROMPT=$AFFIL_PROMPT; fi
+if [ "$SOFT" = 0 ] && [ "$AFFIL" = 1 ]; then
+  echo "join_eo: --affiliated is a form of --soft; pass both" >&2; exit 2
+fi
 
 if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
 
@@ -129,7 +179,8 @@ if ! ROOT=$(git rev-parse --show-toplevel 2>/dev/null); then
 fi
 
 WHAT=joining
-if [ "$SOFT" = 1 ]; then WHAT="the note only"; fi
+if [ "$SOFT" = 1 ]; then WHAT="the note only, independent"; fi
+if [ "$SOFT" = 1 ] && [ "$AFFIL" = 1 ]; then WHAT="the note only, affiliated"; fi
 echo "-- join_eo: $(basename "$ROOT") ($ROOT), $WHAT, via $AGENT" >&2
 
 cd "$ROOT"

@@ -725,7 +725,9 @@ when they are inconvenient.
 This is addressed to tools built *around* the calculus: checkers, compilers,
 Lean developments, analyzers, templates, and the child projects they carry.
 
-**cvc5 is not a candidate, and is not meant to become one.** It sits outside the
+**cvc5 is not a candidate, and is not meant to become one.** Its footing is
+**foundation**, described below, which is the arrangement's way of saying that it
+is asked for nothing. It sits outside the
 ecosystem, and the ecosystem exists to serve it. CPC is cvc5's file, the proofs
 are cvc5's output, and every tool here is downstream of decisions cvc5 made
 before any of this existed. Asking it to adopt our README conventions would have
@@ -749,6 +751,80 @@ It also asks the agent to copy the register entry and the proposal it read into
 an untracked `ynoia-brief.local.md`: the register moves, and when a new README
 turns out wrong the version its author was working from is the only thing that
 explains it.
+
+### The footings, and what each one costs whom
+
+[`../tools/ecosystem.json`](../tools/ecosystem.json) records one **footing** per
+tool. It is the file that says who is in this and on what terms, and the terms
+are not a single scale.
+
+| footing | what they owe us | what we say about them | backed by |
+| --- | --- | --- | --- |
+| **member** | the declaration, and a green `anoieu / policy` on every push | they share the approach [`vision.md`](vision.md) argues for | their README, checkably |
+| **associate** | nothing | we have read them, and they are load-bearing for us | the affiliating note in their README, and our dated vetting |
+| **candidate** | nothing | nothing. This page is addressed to them, and that is all | nothing |
+| **foundation** | nothing, ever | the arrangement is downstream of them | nothing, deliberately |
+| **child** | — | not a footing: it is not a repository | its parent's tree |
+
+**These are not a ladder, and reading them as one is the mistake this section
+exists to prevent.** A member trades compliance for nothing. An associate trades
+nothing for a claim we make about them. Neither is above the other, moving
+between them is not a promotion in either direction, and a tool that is an
+associate is not failing at being a member. The two things being traded are
+different, which is why the table has two columns instead of a rank.
+
+**Two of them are claims about somebody else, published under our name.** The
+older footings all describe what a repository *did*; `associate` and
+`foundation` describe what we *think* about a project that did not ask. That is
+a small version of the act the reporting position governs, so it carries the
+same discipline: **an endorsing footing is phrased as a fact about our
+arrangement, never as a status conferred on theirs.** *The ecosystem is
+downstream of cvc5* is ours to say and is true. *cvc5 is a member of the Eunoia
+ecosystem* is a claim on their name that they never made, and we do not make it.
+This is why neither new footing has the word *member* in it.
+
+**`member` now carries a judgement, and only the mechanical half is ever
+checked.** Declaring and passing is decidable from a tree; sharing the approach
+is a vision question, and *Policy is checked; vision is argued* forbids a program
+from ever deciding it. So the two halves stay separable:
+`tools/ecosystem.py --check --online` reads one section of one README and decides
+*declares / does not declare*, and nothing more. The judgement is what a person
+writes in the entry and revises by hand. Whoever extends that check next should
+read this paragraph first, because the trap is invisible from the code.
+
+**`associate` is the one footing with an expiry built in.** Its entry carries
+`vetted`, the date a person last read the tree and meant it, and `why` — what we
+vetted them *as*, which is not a second description of what they are. A vetting
+with no date is a claim that only ever accumulates, and a register that only ever
+accumulates is a marketing page. Nothing expires on its own: the date is there so
+that a stale vetting is a fact somebody can point at rather than an impression.
+
+**Nothing runs against an associate.** The inventory's table prints `not held` in
+their policy column rather than a count of failures, because running the checker
+over a tree that is held to none of this and publishing the number would be the
+grading the footing exists to refuse.
+
+**And a candidate is not an accusation.** It means the page is addressed to them
+and they have not joined — no vetting, no claim, and no obligation on anybody
+including us. If the tier is ever empty that is worth noticing rather than
+tidying away: it would mean every tool we have addressed has either joined or
+been vetted, which is a fact about our reach and not about them.
+
+### What is not in this list
+
+Everything these tools are built **with** rather than built **around**: Lean and
+its toolchain, the C++ compiler ethos is built by, Python, the CI runner. Several
+of them are more load-bearing than half the rows in the inventory, and none of
+them is a footing.
+
+The line is **subject matter, not how much we rely on it.** The inventory lists
+tools built around the Eunoia calculus, plus the one project all of it is
+downstream of. A general-purpose proof assistant used by one member is not that,
+however much would break without it. Drawing the line at intimacy instead would
+grow the file until it was a dependency manifest with opinions, and there is
+already a better answer to *what do we depend on and is it needed* — the auditor
+described in [`../tools/ynoia/requests.md`](../tools/ynoia/requests.md), which is
+that question asked properly and is not this file's job.
 
 ### How a new tool usually starts
 
@@ -976,6 +1052,34 @@ one day have to stand behind in front of somebody who has read a finding about
 their code and drawn a conclusion from it, and a sentence written to sound
 relaxed is a sentence that has to be reissued at exactly that moment.
 
+**There is a second form, for a repository that is happy to be named.** The note
+above disclaims the affiliation outright, which is right for a neighbour who
+wants distance and wrong for a tool this ecosystem is built around. `join_eo
+--soft --affiliated` writes the other one, and it differs by a single paragraph:
+
+```markdown
+## How this repository is maintained
+
+**This repository is written and maintained by people.** <who does the work,
+under what supervision, and what that supervision does not cover>
+
+It works with the **Eunoia ecosystem** and is **not held to** that ecosystem's
+repository policy: it adopts none of it, it is not checked against it, and it
+speaks only for itself. Where a tool in that ecosystem publishes an assessment of
+this repository, that assessment is that tool's own work and not ours.
+```
+
+**Naming an ecosystem and joining it are different claims, and only the first is
+made here.** That distinction is the whole of the paragraph's job, which is why
+the refusal is stated rather than implied: a note that named us and said nothing
+else would be read as a declaration by everybody who has seen one.
+
+This is the note an **associate** carries, and it is the only thing an associate
+is ever asked for. It is what lets a footing that rests on our judgement also
+rest on something in their tree, so that we are recording a relationship they
+assented to rather than announcing one — and it is read from their README by
+`tools/ecosystem.py --check --online`, exactly as a declaration is.
+
 **A repository that later joins rewrites the section rather than adding to it.**
 The independence paragraph and the membership declaration are contradictory
 claims, and a note carrying both says nothing. Joining is the ordinary two steps
@@ -1052,7 +1156,42 @@ what the section now claims about who maintains this repository, and what you
 could not establish from the tree and left for a person to write.
 ```
 
-Both prompts are run in the repository that is adopting something, never here.
+`--soft --affiliated` sends the third, which differs from the second in step 3
+and in what it forbids:
+
+```text
+This repository is adopting one convention and joining nothing. One page defines
+it, and it is the authority:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#the-soft-form-the-note-without-the-membership
+
+Read it, then do this here, and nothing else:
+
+1. Add a "How this repository is maintained" section as the last section of
+   README.md, creating it if there is not one, from the **affiliating** template
+   that page gives.
+2. State who maintains this repository. The default is that it is written and
+   maintained by people; depart from that only where the tree itself shows
+   otherwise. Say what the supervision does not cover.
+3. Keep the paragraph that names the Eunoia ecosystem as one this repository
+   works with and says this repository is **not held to** its policy: it is not
+   checked against it, it adopts none of it, and an assessment of this repository
+   published by a tool in that ecosystem is that tool's own and not this
+   repository's.
+
+Add no workflow file, run no checker, declare membership of nothing, and change
+no file other than README.md. This repository is **not** joining the Eunoia
+ecosystem, and the section must not say or imply that it is: naming it and
+joining it are different claims, and only the first is being made. Where the page
+and this prompt disagree, the page is right.
+
+Leave the work staged and not committed: `git add README.md` and stop there, so
+a maintainer reviews a diff rather than a history. Then say, in one paragraph:
+what the section now claims about who maintains this repository, and what you
+could not establish from the tree and left for a person to write.
+```
+
+All three are run in the repository that is adopting something, never here.
 
 ### Checking a repository from this side
 

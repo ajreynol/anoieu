@@ -52,7 +52,10 @@ UNCHECKED = [
     ("a repository with a result writes it up in `report/`",
      "whether work is worth a paper is a judgement, and the vision may never acquire a checker"),
     ("the soft form of the maintenance note",
-     "adopted by repositories that join nothing, so nothing here ever runs against one"),
+     "about a repository held to none of this, so no check here runs against one; "
+     "`affiliation_in` reads it for the inventory and never grades anybody"),
+    ("a member shares the approach the vision argues for",
+     "the judgement half of a footing; vision may never acquire a checker"),
 ]
 
 # Written by a run. `closed-findings.md` is deliberately absent: it is written by
@@ -154,6 +157,27 @@ def check_citations() -> list[str]:
     return bad
 
 
+#: How an affiliating note may spell its refusal of the policy. Wording varies;
+#: the clause may not.
+NOT_HELD = ["does not adopt", "adopts no", "not held to", "does not follow",
+            "not bound by", "does not adhere"]
+
+
+def maintenance_note(text: str) -> str:
+    """The body of the README's maintenance note, or "" if there is none.
+
+    Shared by the two readers below, because a footing that makes a claim about
+    somebody's tree should be decided by reading that tree, and both of them read
+    the same section of it.
+    """
+    secs = list(re.finditer(r"^##\s+(.+?)\s*$", text, re.M))
+    note = ""
+    for i, m in enumerate(secs):
+        if "maintain" in m.group(1).lower():
+            note = text[m.end(): secs[i + 1].start() if i + 1 < len(secs) else len(text)]
+    return note
+
+
 def declaration_in(text: str) -> list[str]:
     """What is missing from a README's declaration of membership, if anything.
 
@@ -165,18 +189,51 @@ def declaration_in(text: str) -> list[str]:
     """
     if not text:
         return ["no README.md, so nothing declares membership"]
-    secs = list(re.finditer(r"^##\s+(.+?)\s*$", text, re.M))
-    note = ""
-    for i, m in enumerate(secs):
-        if "maintain" in m.group(1).lower():
-            note = text[m.end(): secs[i + 1].start() if i + 1 < len(secs) else len(text)]
+    note = maintenance_note(text)
     if not note:
         return ["README.md has no maintenance note to declare membership in"]
     bad = []
-    if "eunoia ecosystem" not in note.lower():
+    low = note.lower()
+    if "eunoia ecosystem" not in low:
         bad.append("the maintenance note does not say it is part of the Eunoia ecosystem")
     if POLICY_URL not in note or "policy.md" not in note:
         bad.append(f"the maintenance note does not link to {POLICY_URL}'s docs/policy.md")
+    # A note that declares membership and also refuses the policy says nothing,
+    # and *a repository that later joins rewrites the section rather than adding
+    # to it* is the rule that makes it so. Refusing the contradiction here is what
+    # keeps an affiliating note -- which may well link this page in order to say
+    # what it is not held to -- from being read as a declaration.
+    if not bad and any(f in low for f in NOT_HELD):
+        bad.append("the maintenance note declares membership and also says it is "
+                   "not held to the policy; a note carrying both says nothing")
+    return bad
+
+
+def affiliation_in(text: str) -> list[str]:
+    """What is missing from an **affiliating** maintenance note, if anything.
+
+    The note an `associate` in `tools/ecosystem.json` carries: it names the
+    ecosystem it works with, and it says it is not held to the policy. Read from
+    a fetched README by `tools/ecosystem.py --check --online`, exactly as
+    `declaration_in` is for a member -- so both footings that assert something
+    about somebody else's tree are decided by reading that tree.
+
+    **This is never a check in `CHECKS`.** It is about a repository that has
+    joined nothing, and running it here would be this tree grading somebody who
+    is not held to it.
+    """
+    if not text:
+        return ["no README.md, so nothing says how the repository is maintained"]
+    note = maintenance_note(text)
+    if not note:
+        return ["README.md has no maintenance note"]
+    low = note.lower()
+    bad = []
+    if "eunoia ecosystem" not in low:
+        bad.append("the maintenance note does not name the Eunoia ecosystem")
+    if not any(f in low for f in NOT_HELD):
+        bad.append("the maintenance note does not say it is not held to the policy, "
+                   "which is what keeps it from reading as a declaration")
     return bad
 
 
