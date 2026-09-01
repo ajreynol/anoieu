@@ -25,15 +25,29 @@ to; it has never said who must be contacted, and neither does this page.
 [`discussion.md`](discussion.md), which is the record. This holds the covering
 note somebody would paste when handing one over.
 
-Five parts per entry, and the last is the one worth the space:
+Seven parts per entry, and the last is the one worth the space:
 
 | part | what it holds |
 | --- | --- |
-| **Announcement** | the topic id in [`discussion.md`](discussion.md) |
-| **Recommended for** | the repositories it was written for, and the footing they stood on at the time |
+| **Announcement** | the topic id or ids in [`discussion.md`](discussion.md) |
+| **At** | the commit this epoch is adopted at, and whether our CI was green there |
+| **Involved** | every tool the epoch actually touched, and in what way. A fact about the epoch |
+| **Suggested notifications** | which of those a person might tell, and why each. **A suggestion and never a list of obligations** |
 | **What it carried** | a few lines. The topic is the authority; this is the reminder |
 | **The prompt** | verbatim, in a fenced block, so it can be pasted without editing |
 | **What was rejected** | the wording considered and turned down, and why |
+
+**Involved and suggested are two different questions, which is why they are two
+rows.** A tool is *involved* if the epoch changed something that touches it —
+that is a fact, and getting it wrong is an error. Whether anybody *tells* it is a
+judgement, and it is **entirely the human's**: they may notify all of them, some,
+one, or none, in whatever words they like, and none of that is recorded here.
+
+**An epoch is only deployable where our CI is green at its commit**, which is why
+**At** is a row rather than a footnote — see *The hard constraint* in
+[`epoch-policy.md`](epoch-policy.md#the-hard-constraint-a-red-epoch-is-not-deployable).
+The value here is what we assert; `python3 tools/bump_check.py --rev <sha>` is
+how somebody checks it without taking our word for it.
 
 **The rejected wording is kept deliberately.** A prompt is short enough that the
 reasoning behind it is invisible from the result, and the ways a covering note
@@ -44,10 +58,26 @@ the next person could not have guessed.
 
 ## E1 — through 2026-09-01
 
-**Announcement:** [`D14`](discussion.md#d14--global-announcement-what-changed-this-week-and-the-one-thing-we-are-asking-of-everybody)
-**Recommended for:** `dokimasia`, `eudaimonia`, `koine` — every member at the
-time. Not `ethos` or `logos`, which were candidates held to none of it and whose
-question was [`D11`](discussion.md#d11--we-have-a-footing-for-you-and-no-protocol-to-put-you-in-it).
+**Announcement:** [`D14`](discussion.md#d14--global-announcement-what-changed-this-week-and-the-one-thing-we-are-asking-of-everybody),
+and [`D16`](discussion.md#d16--only-move-your-pin-to-a-commit-where-our-ci-is-green)
+for the hard constraint, which arrived after `D14` was written.
+**At:** not yet fixed. The epoch is adopted at whatever commit carries these
+documents, and it is deployable only if `python3 tools/bump_check.py --rev <sha>`
+says our CI is green there. **This row is filled in when the commit exists**, and
+until it does the epoch is not adoptable by anybody.
+**Involved:** `dokimasia`, `eudaimonia`, `koine` — members, and the ask lands on
+all three. `ethos`, `logos` — named in the footings work, and their own question
+is [`D11`](discussion.md#d11--we-have-a-footing-for-you-and-no-protocol-to-put-you-in-it),
+not this. `cvc5` — its footing changed to `foundation`, which constrains it with
+nothing and asks it for nothing. `epikrisis`, through `eudaimonia` — two event
+classes it cannot derive, and a question about where it sits.
+**Suggested notifications:** the three members, because the ask is theirs and the
+CI constraint changes how they bump. `eudaimonia` twice over, since the epikrisis
+question is theirs to settle. **Not** `ethos` or `logos` — they are held to none
+of this and telling them would blur a boundary the epoch spent its length
+drawing. **Not** `cvc5`, ever, by the same reasoning the `foundation` footing is
+written under. *All of that is a suggestion; who is actually told is the human's
+decision and is not recorded here.*
 **What it carried:** footings recorded on two axes instead of one; the
 `associate` footing, defined and held by nobody; the `report/` convention and the
 rule that a child project states whether there is a paper in it; `join_eo --soft`
@@ -62,16 +92,27 @@ anoieu has opened D14, a global announcement, in its docs/discussion.md:
 
   https://github.com/ajreynol/anoieu/blob/main/docs/discussion.md
 
-One thing is asked of you: state a publishing stance for your repository and for
-each child project in your tree -- whether a paper exists for it, what the plan
-is, or that there is nothing in it worth writing up. All three are answers and
-the third is the commonest.
+Two things are asked of you, and D16 in the same file is the second.
+
+1. State a publishing stance for your repository and for each child project in
+   your tree -- whether a paper exists for it, what the plan is, or that there is
+   nothing in it worth writing up. All three are answers, and the third is the
+   commonest.
+
+2. Only move your ANOIEU_REV pin to a commit where anoieu's CI is green at that
+   commit, and refuse the bump otherwise. D16 says why, and ships the check.
+   It must not run in your CI.
 
 Everything else in D14 is notice and needs no reply.
 ```
 
 The bare file URL rather than an anchor is deliberate and only works while `D14`
 holds the pin, which puts it at the top of the file.
+
+**Revised, before it was sent to anybody.** The first version of this prompt said
+*one thing is asked of you*, which was true when it was written and stopped being
+true when `D16` landed. Recorded rather than quietly corrected, because a log
+whose entries are silently updated to stay right is not a log.
 
 **What was rejected:**
 

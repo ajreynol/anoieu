@@ -45,6 +45,21 @@ The levels below and above are real and switching between them costs nothing, so
 none of this is a commitment. If the default is wrong, the fix is one line in
 this file.
 
+**A second, separate conjecture: how much of this a downstream repository should
+know.** *Epoch* is our word for our planning unit; *global announcement* is the
+interface. Today they coincide one-to-one, which is exactly why the leak is hard
+to see — and it has already happened once, in a topic addressed to members that
+stated a rule about *their* build in terms of *our* calendar. What a member
+demonstrably needs looks like two things and neither requires the word.
+
+That question is open, it is recorded as open in
+[`epoch-policy.md`](epoch-policy.md), and `D16` asks the members directly, since
+a protocol's defects are visible where it is received rather than where it is
+written. **The practical rule while it is open: text addressed to members states
+the rule without the word.** Adding a vocabulary later costs a sentence;
+withdrawing one other repositories have written into their own documents costs a
+great deal more.
+
 ## The contract
 
 **What you supply:** direction, and the decisions that are nobody else's to make.
@@ -75,7 +90,26 @@ it is almost always waiting on one of these:
 - **naming which discussion topic** is to be acted on. The response gate needs
   the name, so "handle the koine topics" stalls where "answer `koine-D9`" does
   not;
-- **a stance on publishing**, for this repository and for each child project.
+- **a stance on publishing**, for this repository and for each child project;
+- **who actually gets notified of an epoch.** The log lists which tools an epoch
+  *involved* and suggests which of them a person might tell — those are two
+  different questions, the first a fact and the second a judgement. The judgement
+  is yours entirely: all of them, some, one, or none, in whatever words. Nothing
+  records what you chose, and a tool never told has not been wronged.
+
+### The one thing that is not a decision
+
+**An epoch may only be adopted at a commit where this repository's CI is green,
+and a downstream tool must refuse it otherwise.** That is a hard constraint
+rather than a judgement call, it is stated in
+[`epoch-policy.md`](epoch-policy.md#the-hard-constraint-a-red-epoch-is-not-deployable),
+and `python3 tools/bump_check.py --rev <sha>` decides it.
+
+The practical consequence for you: **an epoch is not finished when the documents
+are written.** It is finished when they are committed and the build is green at
+that commit, and until then the entry in [`epochs.md`](epochs.md) says so and the
+epoch is adoptable by nobody. Asking *is this epoch deployable yet* is a
+reasonable end-of-session question and has a one-command answer.
 
 ## Session shapes
 

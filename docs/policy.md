@@ -1229,6 +1229,33 @@ good. The rest of this policy asks you to fetch and pin your dependencies and to
 let your build go red for its own reasons only; this is a dependency like any
 other, and it is the one every member has.
 
+**And only move it to a commit where our CI is green — this one is a
+requirement, not a suggestion.** Moving your pin is how you take on whatever we
+have changed, and work we could not get past our own build is not work to take
+on. So before a bump lands, ask whether `ajreynol/anoieu` is green **at the
+commit you are moving to**, and refuse the bump if it is not, or if you could not
+find out.
+
+*We plan in stretches and call one an **epoch**, and internally this is the rule
+that makes an epoch deployable. That is our vocabulary and you do not need it:
+the rule here is about your bump, and it holds whether or not anybody upstream
+plans in anything. Whether the word should cross this boundary at all is an open
+question — see the boundary section in [`epoch-policy.md`](epoch-policy.md).*
+
+Three properties of that question, and each is the answer to an obvious
+objection. It is asked **about that commit and never about our tip**, so the
+answer never changes after you have taken it. It **fails closed** — unverified
+refuses — which is affordable precisely because bumping is optional and
+deferring costs you one later attempt. And it **must not run in your CI**: it
+reads a remote, so a build that called it could go red for a network you do not
+own, which is the failure the paragraph above is about.
+
+[`../tools/bump_check.py`](../tools/bump_check.py) is that check, published so
+that every member does not write it separately —
+`python3 tools/bump_check.py --root .` reads your own pin and decides. It exits
+`0` to adopt, `1` to refuse, and `2` to refuse as unverified. Nothing obliges you
+to use ours; the requirement is the refusal, not the program.
+
 Cloning the repository rather than downloading the one file is deliberate: it
 pins the checker and this page *together*, so the rules you are held to and the
 program that decides them are the same version.

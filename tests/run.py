@@ -656,6 +656,63 @@ def protocol_report() -> int:
     return failures
 
 
+def epoch_gate() -> int:
+    """`tools/bump_check.py` refuses everything that is not a finished green run.
+
+    This is the gate a downstream member puts in front of adopting an epoch, so
+    the expensive direction is **letting something through**: a member that
+    refuses wrongly tries again tomorrow, and one that adopts wrongly has pinned
+    itself to a commit our own CI rejected. Every case below that is not an
+    unambiguous pass is therefore asserted to refuse.
+
+    Offline in full. The real thing reads a remote, and a test that needed the
+    network is a test nobody runs.
+    """
+    root = os.path.dirname(HERE)
+    sys.path.insert(0, os.path.join(root, "tools"))
+    import bump_check  # noqa: PLC0415
+
+    def run(name, status="completed", conclusion="success"):
+        return {"name": name, "status": status, "conclusion": conclusion}
+
+    cases = [
+        ("a finished green run", [run("policy")], 0),
+        ("green with a skipped job", [run("policy"), run("x", conclusion="skipped")], 0),
+        ("a neutral job", [run("policy"), run("x", conclusion="neutral")], 0),
+        ("one failing job", [run("policy"), run("x", conclusion="failure")], 1),
+        ("a cancelled job", [run("policy", conclusion="cancelled")], 1),
+        ("a job still running", [run("policy"), run("x", status="in_progress")], 2),
+        ("a queued job", [run("policy", status="queued")], 2),
+        ("no runs at all", [], 2),
+    ]
+    failures = 0
+    for label, runs, want in cases:
+        got, why = bump_check.verdict(runs)
+        ok = got == want
+        failures += 0 if ok else 1
+        verb = {0: "adopts", 1: "refuses", 2: "refuses as unverified"}[want]
+        print(("ok   " if ok else "FAIL ") + f"bump_check {verb} {label}"
+              + ("" if ok else f" -- got {got}: {why}"))
+
+    import tempfile  # noqa: PLC0415
+
+    tmp = tempfile.mkdtemp(prefix="anoieu-epoch-")
+    wf = os.path.join(tmp, ".github", "workflows")
+    os.makedirs(wf)
+    open(os.path.join(wf, "anoieu.yml"), "w").write(
+        "jobs:\n  policy:\n    steps:\n      - env:\n          ANOIEU_REV: 441b562\n")
+    rev, why = bump_check.pinned_rev(tmp)
+    for label, ok in (("reads a member's pinned commit", rev == "441b562" and not why),
+                      ("says so when a member pins nothing",
+                       bump_check.pinned_rev(HERE)[0] == ""
+                       and bool(bump_check.pinned_rev(HERE)[1]))):
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
+
+    print(f"-- the epoch gate: {failures} failure(s)")
+    return failures
+
+
 def adoption_interface() -> int:
     """`policy_check.py --root` is what another repository runs in its own CI.
 
@@ -793,6 +850,7 @@ def main() -> int:
     failures += join_prompt_agrees()
     failures += note_forms()
     failures += protocol_report()
+    failures += epoch_gate()
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += install_commands()

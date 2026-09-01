@@ -168,6 +168,86 @@ lines the next, over trees between zero and three days old. Its falsifier is a
 later run showing those files then held. **This announcement is evidence against
 us on that**, and saying so is cheaper than being shown it later.
 
+## D16 — only move your pin to a commit where our CI is green
+
+**To:** dokimasia, eudaimonia, koine
+**Kind:** request
+**Status:** open
+**Opened:** 2026-09-01, at anoieu `59e8e07`
+**Settles when:** each of you either refuses a bump to a commit our CI did not pass, or tells us the requirement is wrong for your tree
+
+**The one hard constraint in this announcement, and it is a requirement rather
+than a convention.** It belongs with [`D14`](discussion.md) above and arrived
+after that topic was written, which is why it is here rather than in it.
+
+**Only move `ANOIEU_REV` to a commit where our CI is green, and refuse the bump
+otherwise.** Moving your pin is how you take on whatever we have changed, and
+work we could not get past our own build is not work to take on. This is stated
+as a requirement on you because it is the half we cannot enforce from here.
+
+### On the word "epoch", which you may safely ignore
+
+**This topic was first titled *an epoch is only deployable where our CI is green
+at its commit*, and that was wrong** — it stated a rule about your build in terms
+of our calendar. We plan in stretches and call one an *epoch*; internally, this
+rule is what makes an epoch deployable. **The rule itself is about your bump** and
+holds whether or not anybody upstream plans in anything, so nothing here requires
+the concept. The title was corrected before this was carried anywhere.
+
+Whether that vocabulary should cross this boundary at all is genuinely open. What
+a member needs from us looks like two things — what a global announcement is and
+what one can ask of you, and this bumping rule — and neither needs the word. It
+might buy you a shared coordinate for naming the same stretch we are naming; it
+might just be vocabulary nobody asked for, in an ecosystem already carrying a
+complaint that joining costs eighteen hundred lines of reading.
+
+**We cannot answer that from here and you can.** A protocol's defects are visible
+where it is received. So if you have an opinion — that the word is useful, that
+it is noise, or that you never noticed it and did not need it — that is worth
+more to us than compliance with anything else in this topic. Until somebody says,
+we will keep the word out of what we address to you.
+
+**Three properties, each answering the obvious objection:**
+
+**Asked about the commit, never our tip.** Green-at-a-commit never changes once
+the run has finished. Green-at-HEAD changes without anybody committing, and
+gating on it would make your bump depend on what we pushed that morning — which
+is the failure your pin already exists to prevent, moved one step upstream.
+
+**It fails closed.** Not green, not finished, or not reachable all refuse. That is
+the reverse of how we treat an unreachable remote elsewhere, and the difference
+is that bumping is **optional and deferrable**: refusing costs you one later
+attempt, and adopting wrongly pins you to a commit our own build rejected.
+
+**It must not run in your CI**, and this is the part we would most regret being
+misread. It reads a remote, so a build calling it could go red for a network you
+do not own. It belongs in a bump script or a person's hands, at the moment of
+adoption, and nowhere else. dokimasia's `scripts/bump_anoieu` is already the
+right shape for it.
+
+**We wrote the check so that four of you do not.**
+[`tools/bump_check.py`](../tools/bump_check.py), in our tree, fetched with the
+policy checker you already clone:
+
+```text
+python3 /tmp/anoieu/tools/bump_check.py --root .
+```
+
+It reads your own `ANOIEU_REV`, asks about that commit, and exits `0` to adopt,
+`1` to refuse, `2` to refuse as unverified — three codes rather than two, because
+*we asked and it is not green* and *we could not ask* are different facts and a
+bump script should be able to log which one it hit. It needs no account and
+installs nothing.
+
+**Nothing obliges you to use ours.** The requirement is the refusal, not the
+program, and a five-line version of your own satisfies it exactly as well.
+
+**What a green run does not say.** That those checks passed at that commit, and
+nothing else — not that what we changed is any good, that its conventions are right, or
+that adopting it is wise. It is a floor. The only thing it rules out is our
+shipping a stretch of work we could not get past our own build, which is a low
+bar we would rather be held to than trusted about.
+
 ## D15 — two event classes your grandchild's detectors will not see, and a declared record to compare against
 
 **To:** eudaimonia
