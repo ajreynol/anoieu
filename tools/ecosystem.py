@@ -357,6 +357,73 @@ def protocol(inv: dict) -> int:
     return 0
 
 
+#: A health summary is a small, fixed list of **indicators**. Each is a name, a
+#: value a person can read, and one of three verdicts. The set is deliberately
+#: short and is expected to grow; adding one is a decision rather than a
+#: convenience, because every renderer shows all of them.
+#:
+#: `unknown` is a verdict and not a missing value. It sits with `attention`
+#: rather than with `ok`, for the same reason the bump gate has three exit codes:
+#: *we asked and it is wrong* and *we could not ask* are different facts, and
+#: neither is a pass.
+VERDICTS = ("ok", "attention", "unknown")
+
+
+def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
+    """The ecosystem's health, as (indicator, value, verdict).
+
+    **Offline and cheap on purpose.** Everything here is read off this disk, so
+    any surface can render it without deciding whether it can afford to. What
+    costs a network call -- whether our build is green at a commit -- is
+    deliberately not here: that is the bump gate's question and `epoch dry run`
+    is where it is asked.
+
+    Returned as data rather than printed, because several surfaces render it and
+    a second implementation of the rendering is how they drift apart.
+    """
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import bump_check  # noqa: PLC0415
+
+    if inv is None:
+        inv = {k: v for k, v in json.load(open(INVENTORY, encoding="utf-8")).items()
+               if not k.startswith("_")}
+    members = [k for k, v in inv.items() if v.get("status") == "member"]
+
+    passing, unknown, owed = 0, 0, 0
+    for name in members:
+        path = locate(inv[name].get("repo", name))
+        if not path:
+            unknown += 1
+            continue
+        verdict, _ = check(path)
+        passing += 1 if verdict == "ok" else 0
+        disc = os.path.join(path, "docs", "discussion.md")
+        if os.path.isfile(disc):
+            owed += open(disc, encoding="utf-8").read().count("**To:** anoieu")
+
+    epoch = bump_check.current_epoch() or "?"
+    status = bump_check.current_status() or "?"
+
+    def verdict(ok, unsure=False):
+        return "unknown" if unsure else ("ok" if ok else "attention")
+
+    return [
+        ("members", str(len(members)), "ok"),
+        ("policy", f"{passing} of {len(members)} passing",
+         verdict(passing == len(members), unknown > 0)),
+        ("topics owed to us", str(owed), verdict(owed == 0)),
+        ("epoch", f"{epoch}, {status}", verdict(status == "deployed", status == "?")),
+    ]
+
+
+def render_health(rows: list[tuple[str, str, str]]) -> str:
+    """One rendering, used everywhere a health summary appears."""
+    w = max(len(n) for n, _, _ in rows)
+    mark = {"ok": " ", "attention": "!", "unknown": "?"}
+    return "\n".join(f"  {m} {n:<{w}}  {v}"
+                      for n, v, k in rows for m in [mark[k]])
+
+
 def audit(online: bool) -> int:
     """`--check`: the inventory as a document, and optionally as a claim.
 
@@ -397,6 +464,9 @@ def audit(online: bool) -> int:
 def main() -> int:
     if "--check" in sys.argv:
         return audit("--online" in sys.argv)
+    if "--health" in sys.argv:
+        print(render_health(health()))
+        return 0
     if "--protocol" in sys.argv:
         inv = json.load(open(INVENTORY, encoding="utf-8"))
         return protocol({k: v for k, v in inv.items() if not k.startswith("_")})

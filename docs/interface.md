@@ -123,10 +123,10 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 | command | what it does |
 | --- | --- |
 | `make epoch` | **not yet supported.** Would mean: make it better, and stage a deployment. The one command not of the form `epoch <verb>` |
-| `epoch help` | print the commands. Reads nothing, runs nothing |
+| `epoch help` | print the commands, and the ecosystem's health |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
-| `epoch double check` | after a deployment: did it land. What that means is [an open question](epoch-policy.md#after-deploying-epoch-double-check) |
+| `epoch double check` | **not yet supported.** Would mean: was a deployment received. [What that means is undefined](epoch-policy.md#after-deploying-epoch-double-check), which is why |
 
 ### `epoch help`
 
@@ -139,10 +139,18 @@ usage: epoch <command>
 
 commands:
   make epoch           make it better, and stage a deployment   (NOT YET SUPPORTED)
-  epoch help           print this list
+  epoch help           print this list and the ecosystem's health
   epoch dry run        evaluate every gate; print the summary and the block; change nothing
   epoch deploy         move the epoch's status
-  epoch double check   after a deployment: was it received (open question)
+  epoch double check   was a deployment received                (NOT YET SUPPORTED)
+
+health:  rendered at run time by `tools/ecosystem.py --health` — the values below
+         are an example and are never the values
+
+    members            4
+  ! policy             3 of 4 passing
+  ! topics owed to us  16
+  ! epoch              E1, planned
 
 status:  planned -> staging -> deployed -> installed
          only the build system moves an epoch to `deployed`
@@ -153,10 +161,21 @@ see:     docs/epoch-analogy.md   the short way in
          docs/epoch-policy.md    what an epoch is, and the gates
 ```
 
-**It reads nothing and runs nothing**, which makes it the one command with an
-empty read set and therefore the only one instant by construction. It does not
-report which epoch is current or where it stands — that is `epoch dry run`, and
-keeping the two apart is what stops `help` acquiring a cost.
+**It no longer reads nothing, and that was a deliberate trade.** `help` used to
+have an empty read set, which made it instant by construction; carrying the
+health summary costs it one local command, measured at **1.3s** and entirely
+offline. The trade was taken because a help text that tells you what you *could*
+type while saying nothing about the state you are in is the less useful half of
+the page.
+
+**What it still does not do is ask the network.** Whether our build is green at a
+commit is the bump gate's question and costs a round trip; that stays in
+`epoch dry run`. The line is *cheap and local* rather than *free*.
+
+**The health values are rendered, never stored.** The block in this document is an
+example of the shape and is not the values — a help text carrying yesterday's
+numbers would be the stale cache this repository keeps warning about, and the
+only safe version is the one computed when the command runs.
 
 **It is a cache, and that is why it is fast.** The text above is a precomputed
 answer to *what can I do here*, written once instead of derived from four
@@ -265,6 +284,40 @@ disagree, the protocols are what deploys — so **a summary that has drifted fro
 them is the most dangerous defect this interface can have.** A person approving a
 summary that overstates or understates the epoch has approved something that is
 not going to happen.
+
+### The health summary — one abstraction, several surfaces
+
+**A health summary is a short, fixed list of *indicators*.** Each is a name, a
+value a person can read, and one of three verdicts. `tools/ecosystem.py --health`
+computes it; `health()` returns it as data and `render_health()` draws it, so a
+second surface adds a call rather than a second implementation.
+
+| verdict | mark | means |
+| --- | --- | --- |
+| `ok` | *(blank)* | nothing to look at |
+| `attention` | `!` | somebody should look |
+| `unknown` | `?` | we could not find out |
+
+**`unknown` sits with `attention`, never with `ok`** — the same reasoning as the
+bump gate's three exit codes. *We asked and it is wrong* and *we could not ask*
+are different facts, and neither is a pass. A summary that rendered an unknown as
+a blank would be the most misleading thing this interface could print.
+
+**Kept deliberately abstract, and short.** The indicator set today is four —
+members, policy, topics owed, epoch — and it is expected to grow. Adding one is a
+decision rather than a convenience, because **every surface shows all of them**:
+a cheap indicator added here is paid for on every command that renders a summary.
+
+**Everything in it is offline.** That is what lets any surface render it without
+first deciding whether it can afford to. What costs a network round trip —
+whether our build is green at a commit — is deliberately absent: that is the bump
+gate's question, and `epoch dry run` is where it is asked.
+
+**Where it is meant to appear**, beyond `epoch help`: the dry run's output, any
+later command that reports state, and `ecosystem.py`'s own table. It is written
+as shared infrastructure because it will be rendered in several places, and the
+one thing that must not happen is two of them disagreeing about what *healthy*
+means.
 
 ### The epoch feedback communication protocol
 

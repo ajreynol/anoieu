@@ -390,9 +390,16 @@ same sentence that raised it — which is the intended shape.
 
 ## After deploying: `epoch double check`
 
-**Run after a deployment to find out whether it was properly received.** What
-*properly received* means is an **open research question**, and this section is
-the question rather than the answer.
+**Not yet supported**, and it will stay that way until *properly received* means
+something. The command is registered and named so its shape is fixed before
+anything implements it — the same treatment `make epoch` gets, and for the same
+reason. Typing it says so rather than running anything.
+
+**What it would do: run after a deployment to find out whether it was properly
+received.** What that means is an **open research question**, and this section is
+the question rather than the answer. **The question being open is precisely why
+the command is unsupported** — building it first would mean choosing an answer by
+implementation, and the likeliest choice is the wrong one below.
 
 **Received is not the same as sent, delivered, or acted on**, and the difficulty
 is that only the last of those leaves a trace we may look at:

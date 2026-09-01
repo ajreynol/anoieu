@@ -151,6 +151,19 @@ def current_epoch(root: str = "") -> str:
     return m.group(1) if m else ""
 
 
+def current_status(root: str = "") -> str:
+    """The status of the newest epoch in `docs/epochs.md`, or "" if unreadable."""
+    path = os.path.join(root or os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "docs", "epochs.md")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            text = fh.read()
+    except OSError:
+        return ""
+    m = re.search(r"^##\s+E\d+\b.*?^\*\*Status:\*\*\s*`?(\w+)`?", text, re.M | re.S)
+    return m.group(1) if m else ""
+
+
 def ask(rev: str, timeout: int = 20) -> tuple[list[dict], str]:
     url = API.format(repo=REPO, rev=rev)
     req = urllib.request.Request(url, headers={
