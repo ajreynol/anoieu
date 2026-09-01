@@ -662,7 +662,9 @@ readiness for us; somebody has to look.
    status view is the fastest way to see what the ecosystem currently is.
 2. Read [`board.md`](board.md) for what is outstanding and in what
    order — it is the shortest answer to *what should I do next*, and the only
-   page that carries one.
+   page that carries one. [`roles.md`](roles.md) sits beside it and answers the
+   other question the board assumes you can already answer: *whose is this, and
+   whose is it not*. Read it before anything that touches a second repository.
 3. Read this page, then [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow)
    if you are working a finding, or [`notes.md`](notes.md#the-design) if you are
    working on the tool.

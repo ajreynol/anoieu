@@ -37,6 +37,8 @@ So: write it down, make the strongest case against it, and see which survives.
    *arrangement* and which are merely about its *current state* is to name the
    work that would move each one. Some of those names have since been taken up
    as real projects, which is the closest thing this project has to a result.
+   The register of the ones that have not, in priority order, is
+   [`tools.md`](tools.md); the arguments stay in the account.
 
 3. **The names.** Naming work that does not exist is most of what goal 2
    produces, so the register lives on its own page: what each reserved name was
@@ -109,3 +111,5 @@ convergence is not something this project can establish about itself.
 | [`why-eunoia.md`](why-eunoia.md) | the account: the case, the case against, the objections, six arrangements, the projects that do not exist, and what would change our minds |
 | [`names.md`](names.md) | the register of names: taken, reserved, and how to pick one. Goal 3 |
 | [`proposals.md`](proposals.md) | should this become a repository? The standard, and one section per proposal. Goal 4 |
+| [`requests.md`](requests.md) | work the ecosystem wants that needs no repository of its own, and whose tree it would live in instead. Goal 4 |
+| [`tools.md`](tools.md) | the tools that do not exist, in priority order — most promising first. Goal 2 |

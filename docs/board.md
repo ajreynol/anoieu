@@ -386,5 +386,5 @@ field on an item, and a tool that overwrites one has misread the page.
 **HUMAN FEEDBACK:**
 ---
 
-*Seventeen itemsthis page should usually be in — a full board is one that has stopped being
-prioritised.*
+*Seventeen items, which is about where this page should usually be — a full
+board is one that has stopped being prioritised.*
