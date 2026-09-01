@@ -118,6 +118,23 @@ as a child project of eudaimonia, and the register in
 repository picks a name. Whether that is this account's doing or
 convergence is not something this project can establish about itself.
 
+## Is there a paper in this?
+
+**No, and this project says so about itself first** so that the verdicts it
+returns about other people's work read as judgements rather than as modesty spent
+on others.
+
+This project's output is **argument**, and it has taken no measurement. A paper
+assembled from it would be a position piece about how to arrange an ecosystem,
+written by the ecosystem, with nothing in it a reader could check. The account is
+worth reading and worth disagreeing with; neither of those makes it a result.
+
+Stated because [`../../docs/policy.md`](../../docs/policy.md) asks every child
+project to say whether a paper exists for it, what the plan is, or that there is
+nothing in it worth writing up. This is the third answer, and it is the
+commonest. [`papers.md`](papers.md) is where the same question is asked of every
+other tool.
+
 ## Layout
 
 | file | what it is |

@@ -126,3 +126,19 @@ exists; the ones on desugaring, evaluation and the type system are the ones
 worth reading, and the chapters on files and on the grammar are thin. Nothing
 here has been checked by anybody who knows Eunoia. The feedback ledger has
 entries and none of them has been carried anywhere.
+
+## Is there a paper in this?
+
+**Not yet.** The shape is there — what two independent descriptions of one
+language disagree about, and what that says about where the language is actually
+undefined — and the evidence is not. A second reading becomes a result when the
+disagreements are enumerated, carried to whoever owns the first reading, and
+answered; an unfiled disagreement is one project's opinion of another's prose.
+
+**What would change it:** a counted set of divergences between the manual and
+this account, with the answers that came back. The ledger is the raw material and
+is currently fifteen rows that have gone nowhere.
+
+Stated because [`../../docs/policy.md`](../../docs/policy.md) asks every child
+project to say whether a paper exists for it, what the plan is, or that there is
+nothing in it worth writing up. This is the second answer.

@@ -161,6 +161,45 @@ word.** That is the reversible choice: adding a vocabulary later costs a
 sentence, and withdrawing one that other repositories have written into their own
 documents costs considerably more.
 
+## anoieu is a target of its own epoch
+
+**Whatever an epoch asks of members, it asks of this repository first.** We are
+not the author of an epoch standing outside it; we are one of the trees it lands
+on, and usually the first. That is not modesty — it is where most of what an
+epoch teaches actually comes from.
+
+**We appear in our own `Involved` list**, and the entry carries an **Of us** row
+saying what the epoch required here and whether it has been done. An epoch that
+names four members and forgets the tree it was designed in has already made the
+mistake this section exists to prevent.
+
+**Applying a rule to ourselves is the cheapest test it will ever get.** A
+convention is written by somebody with one tree in mind; running it against that
+tree finds what is wrong with it before it costs anybody else an afternoon. The
+policy already states the outward half of this — *a policy that fits only the
+repository that wrote it is not a policy*. The inward half is the mirror image
+and is the one to watch for here: **a convention that exempts the repository that
+wrote it.** It is easy to write, it never fails a check, and the exemption is
+invisible from every side except this one.
+
+**The recursion is the point.** What being subject to an epoch costs us is the
+main input to the next one: design it, apply it here, find out what it actually
+cost, and let that cost be the material for the following epoch's *what comes
+out*. A stretch of work that ends without anything having been learned in this
+tree has been announced rather than run.
+
+**Some asks genuinely do not apply here, and saying which is part of designing an
+epoch rather than an escape from it.** anoieu pins nothing of its own, so a rule
+about moving `ANOIEU_REV` is vacuous in this tree — that is a fact about the ask,
+not an exemption, and the entry says so in those terms. The distinction matters
+because *does not apply* and *has not been done* look identical in a register that
+records neither.
+
+**The test:** an entry whose **Of us** row says nothing was required is either a
+very small epoch or an unexamined one, and the second is far likelier. The
+honest failure to expect is the one `E1` records — the epoch's own ask went unmet
+in this tree while being asked of three others.
+
 ## Designing the next epoch
 
 **Deciding what the ecosystem's next stretch of work is *for*.** It is a

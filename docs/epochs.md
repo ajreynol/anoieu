@@ -25,13 +25,14 @@ to; it has never said who must be contacted, and neither does this page.
 [`discussion.md`](discussion.md), which is the record. This holds the covering
 note somebody would paste when handing one over.
 
-Seven parts per entry, and the last is the one worth the space:
+Eight parts per entry, and the last is the one worth the space:
 
 | part | what it holds |
 | --- | --- |
 | **Announcement** | the topic id or ids in [`discussion.md`](discussion.md) |
 | **At** | the commit this epoch is adopted at, and whether our CI was green there |
-| **Involved** | every tool the epoch actually touched, and in what way. A fact about the epoch |
+| **Involved** | every tool the epoch actually touched, and in what way. A fact about the epoch — and **anoieu is always one of them** |
+| **Of us** | what the epoch required in *this* tree, and whether it has been done. Distinguishing *does not apply* from *not done*, because a register that records neither makes them look identical |
 | **Suggested notifications** | which of those a person might tell, and why each. **A suggestion and never a list of obligations** |
 | **What it carried** | a few lines. The topic is the authority; this is the reminder |
 | **The prompt** | verbatim, in a fenced block, so it can be pasted without editing |
@@ -65,12 +66,34 @@ for the hard constraint, which arrived after `D14` was written.
 documents, and it is deployable only if `python3 tools/bump_check.py --rev <sha>`
 says our CI is green there. **This row is filled in when the commit exists**, and
 until it does the epoch is not adoptable by anybody.
-**Involved:** `dokimasia`, `eudaimonia`, `koine` — members, and the ask lands on
-all three. `ethos`, `logos` — named in the footings work, and their own question
-is [`D11`](discussion.md#d11--we-have-a-footing-for-you-and-no-protocol-to-put-you-in-it),
+**Involved:** `anoieu` — the tree it was designed in, and a target like any
+other; see **Of us**. `dokimasia`, `eudaimonia`, `koine` — members, and the ask
+lands on all three. `ethos`, `logos` — named in the footings work, and their own
+question is
+[`D11`](discussion.md#d11--we-have-a-footing-for-you-and-no-protocol-to-put-you-in-it),
 not this. `cvc5` — its footing changed to `foundation`, which constrains it with
 nothing and asks it for nothing. `epikrisis`, through `eudaimonia` — two event
 classes it cannot derive, and a question about where it sits.
+**Of us:** three things, and the first is the one this epoch got wrong.
+
+- **A publishing stance, per repository and per child project — the epoch's own
+  ask, and it was unmet here while being asked of three other trees.** Both child
+  projects have since stated one, in their own READMEs, agreeing with what
+  [`papers.md`](../tools/ynoia/papers.md) had argued: sapheneia **not yet**,
+  ynoia **no**. **anoieu's own stance is still unstated**, and it is the
+  maintainer's to write — the register says *write it* and a repository outranks
+  the register about its own work, so nobody here can settle it. That this
+  repository keeps the page asking for one makes the gap worse rather than
+  excusable.
+- **The bumping rule: does not apply.** anoieu pins nothing of its own, so a rule
+  about moving `ANOIEU_REV` is vacuous in this tree. Recorded as *does not apply*
+  rather than left blank, because blank reads as *not done*.
+- **Everything the epoch changed landed here first** — the footings in our
+  inventory, the misaddressing paragraph in our discussion file, the child-project
+  rule in our policy — which is how three of its defects were found before it was
+  carried anywhere: a footing recorded before its protocol existed, a pinned topic
+  that was not first in the file, and a checker whose field window was exactly one
+  line too small for the fields this epoch added.
 **Suggested notifications:** the three members, because the ask is theirs and the
 CI constraint changes how they bump. `eudaimonia` twice over, since the epikrisis
 question is theirs to settle. **Not** `ethos` or `logos` — they are held to none
