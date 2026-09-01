@@ -316,7 +316,7 @@ needs a person, and asking for that is a different block with a different header
 | status | what it means | scrutiny |
 | --- | --- | --- |
 | `brainstorm` | the outer rings only: ideas, discussions, registers. **Nothing critical is touched** | lowest |
-| `planned` | **says nothing about the epoch.** What it does say is that brainstorming has ended and the protected rings are open again | a person decides |
+| `planned` | **on deck.** Brainstorming is over, the protected rings are open, and staging is expected to be next. Not a resting place | a person decides |
 | `staged` | an agent is being given instructions to stage it — the announcement, the covering note, the register edits | the gates are being worked |
 | `deployed` | members should consider it **available to consume** | every gate passes |
 | `installed` | every member upholds the contracts it set out | highest, and not ours to assert |
@@ -356,10 +356,15 @@ scrutiny rising:
 | transition | command | what decides it |
 | --- | --- | --- |
 | `brainstorm` → `planned` | `epoch plan` | **a person, and that is sufficient** — all that is at stake is which files we may touch |
-| `planned` → `staged` | `make epoch` *(not yet supported)* | a person's direction, and an epoch with a subject to stage |
+| `planned` → `staged` | `epoch stage` | a person's direction **and an epoch with content** — there must be something to stage |
 | `staged` → `deployed` | `epoch deploy` | **the gates, and nobody's say-so** — what is at stake is other people's trees |
 | `deployed` → `installed` | *no command* | other people, observed. Not ours to assert at all |
 | anything → `brainstorm` | `epoch brainstorm` | nobody. Down is free |
+
+**`make epoch` is the composite, not a transition.** It would do the work *and*
+stage the result — `epoch stage` is the bare transition, and the one that
+exists. Splitting them is what lets a person stage an epoch they wrote
+themselves without asking anything to improve it first.
 
 **At the bottom a person's decision is the whole of the criterion; at the top it
 counts for nothing.** That is not inconsistency — it is what *rising scrutiny*
@@ -403,6 +408,26 @@ is over. If it helps to have a test, the useful one is whether the brainstorm
 produced anything in the outer rings — a topic, a board item, a register edit. A
 brainstorm that changed none of them was a planning meeting, and moving it up a
 level does not make it one.
+
+### `planned` is on deck, not a resting place
+
+**Reaching `planned` means the next move is expected to be `epoch stage`.** It is
+the short gap between having decided what an epoch is for and beginning to
+assemble it — the protected rings are open, a person is about to touch them, and
+the epoch is waiting rather than parked.
+
+**An epoch that sits in `planned` is telling you something.** Either it should go
+back down, because what looked like a subject was still an idea, or it should be
+staged, because it was ready. Both are one command and neither is expensive; what
+is expensive is a level that quietly becomes where epochs live.
+
+**`epoch stage` is what leaves it, and its bar is higher than `epoch plan`'s by
+exactly one thing: there has to be something to stage.** A person's word alone
+was enough to open the protected rings; it is not enough to begin writing an
+announcement, because an announcement about an epoch with no content is a
+covering note for nothing. The log entry has to say what the epoch carries and
+what, if anything, it asks — and *nothing* is a legitimate answer to the second,
+which is why the bar is content rather than an ask.
 
 ### `brainstorm` — and why `vision.md` is the kernel
 
