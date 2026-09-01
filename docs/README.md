@@ -107,6 +107,18 @@ than a defect. Which repositories are actually contacted, and whether any are, i
 a person's decision: see *Who gets pinged* in
 [`policy.md`](policy.md#who-gets-pinged).
 
+[`linker.md`](linker.md) and [`ai-novelty.md`](ai-novelty.md) are
+**experimental and new**, a pair, and in the table above least of all. The
+first is every rule this repository holds, each resolved to the file that
+defines it and none of them restated — one page an agent can load before
+starting work, so that the corpus gets read on demand rather than in advance.
+It is derived and never authoritative: where a line disagrees with the file it
+names, the file wins. The second is the account of why an artifact of that
+shape is worth having — what the moving parts are and why each is shaped the
+way it is, with what would show each claim false. Neither governs anything,
+nothing consumes either, and both say on the page what would show they are not
+worth keeping.
+
 [`roles.md`](roles.md) is the companion to it and is not in the table either:
 **one entry per responsibility**, each with a permanent id, what it owns, and —
 the field that does most of the work — the nearest thing that is *not* it. The
