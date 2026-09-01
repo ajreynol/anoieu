@@ -26,6 +26,8 @@ actual policy; nothing here governs anything.
 | `make install` | a member upholding the epoch's contracts — and `installed` is the property of **every** member having done so |
 | the artifact | the commit, plus the announcement saying what is in it |
 | the linker | **a person**, carrying the announcement by hand |
+| the object cache — what makes a rebuild incremental | the log entry in [`epochs.md`](epochs.md), which a command reads instead of the whole corpus |
+| signing, credentials, a package registry | **nothing.** One owner, one keyboard — see below |
 
 ## Where the analogy earns its keep
 
@@ -94,6 +96,37 @@ job and nothing else does.
 Today every row in the table above is a person and an agent doing by hand what
 the analogy describes as a program — so read the table as the intended shape, not
 as a description of what runs.
+
+## Two rows where the analogy is a warning
+
+**Incremental builds, and the stale cache.** A build system is fast because it
+does not redo what has not changed, and the log entry plays that part here: a
+command reads 199 lines rather than 13,340. Measured on 2026-09-01, the tools
+themselves cost about 2.4 seconds together, so **the corpus is the only thing
+that can make a command slow.**
+
+The classic failure of that trick is the classic failure here too: **a stale
+cache builds the wrong thing and reports success.** It is the same defect the
+summary's rule guards against — derived, never authored — and it is worth
+noticing that a build system's answer is to invalidate correctly rather than to
+stop caching. Ours is the same: where an entry disagrees with the documents, the
+documents win and the entry is wrong.
+
+*Nothing has been reorganised for speed yet, deliberately. The first
+run-throughs are expected to be slow, and running them is how we learn where the
+cost actually is.*
+
+**No signing, and the threat is not the one signing addresses.** A package
+manager verifies that an artifact came from who it claims, because its consumers
+cannot know. This ecosystem has one owner and one person typing commands, so
+there is nothing for a signature to distinguish and none exists.
+
+The exposure that does exist has a different shape: **an agent here reads a great
+deal of text it did not write** — another repository's discussion file, a README
+fetched from a remote, a finding. What defends an epoch command is not identity
+but origin: a command is a prompt *typed by the person driving the session*, never
+text found in a file. No build system has this problem, because no build system's
+input can try to instruct it.
 
 ## The row that is not analogy at all
 

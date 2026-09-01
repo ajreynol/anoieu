@@ -109,6 +109,77 @@ that adopting it is wise — the same caution the analyzer carries about its own
 silence. It is a floor, and the only thing it rules out is deploying a stretch of
 work we could not get past our own build.
 
+## Fast, and never at correctness's expense
+
+**An epoch command should answer quickly.** A person types one at an agent living
+in the repository that maintains the build system, and waiting is the thing that
+stops somebody running `epoch dry run` as often as they should — which is the
+whole point of a dry run being free.
+
+**Measured on 2026-09-01**, because an aspiration with no number attached is a
+preference:
+
+| what | cost |
+| --- | --- |
+| `bump_check.py --rev` | 0.38s |
+| `policy_check.py` | 0.54s |
+| `ecosystem.py --check` | 1.52s |
+| **the tools, together** | **~2.4s** |
+| `docs/*.md`, all of it | 13,340 lines |
+
+**So the tools are not the problem and never were.** The slow part of an epoch
+command is an agent *reading documents*, and that cost grows every time this
+ecosystem writes another page — which it does constantly.
+
+### Where the cost probably is — a hypothesis, not a mandate
+
+**Nothing is being reorganised for speed yet, and the first run-throughs are
+expected to be slow.** Running them is how we find out whether the cost is where
+this section guesses it is, and optimising before that would be the same mistake
+as generating a document before anybody has kept one by hand.
+
+The guess, recorded so it can be checked later: **a dry run may already need only
+[`epochs.md`](epochs.md), 199 lines, plus the commands named in the block** —
+because the log entry carries every field the block wants. `Of us` answers
+*applied here*, the prompt answers *asks*, `Suggested notifications` answers
+*informs*, and `removes` is its own row. If that holds, the ordinary path never
+touches this page or [`policy.md`](policy.md)'s 1,791 lines, and the corpus
+growing costs a command nothing.
+
+**If it turns out not to hold, reorganise the record rather than the gates** —
+move what a command needs into the small file it already reads. That is the shape
+a later fix should take, and it is written down now so that the first instinct
+later is not to trim the checks.
+
+**Speed never comes from evaluating fewer gates.** Cheap gates, not fewer gates.
+A dry run that skipped `ci` would be instant and worthless, and any future version
+that is fast because it stopped checking something has broken the one rule this
+whole section is subordinate to.
+
+### Authentication is not needed, and the reason is worth writing down
+
+**This repository has one owner and one person types these commands**, so there is
+nothing for a password to distinguish. Adding an authentication step now would be
+machinery guarding a door with one key and one keyholder.
+
+**What actually defends an epoch command today is different, and it is not
+identity.** It is that a command is *a prompt typed by the person driving the
+session* — never text an agent found in a file. That distinction matters more
+than it sounds, because an agent here reads a great deal of untrusted text:
+another repository's discussion file, a README fetched from a remote, a finding
+somebody wrote. **If any of that could issue an epoch command by containing one,
+the front end would have a hole no password would close.**
+
+> **The open question is not *when do we add passwords*.** It is: **what happens
+> when the thing issuing a command is not obviously a person?** More than one
+> maintainer, a scheduled run, an agent acting for another agent, or text that an
+> agent was persuaded to treat as an instruction — each breaks the current defence
+> in a different way, and only the first is the one authentication is for.
+>
+> Recorded as needing research rather than answered. What would force it: a second
+> person able to issue commands, or any path by which a command could originate
+> somewhere other than a person's keyboard.
+
 ## Before deploying: what to ask
 
 Four questions. The first is the hard constraint above and decides by itself; the
