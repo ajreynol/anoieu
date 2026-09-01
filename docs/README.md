@@ -76,13 +76,14 @@ of them. It is kept by hand, `HUMAN FEEDBACK` on an item outranks everything els
 on it, and nothing consumes the file yet.
 
 [`roles.md`](roles.md) is the companion to it and is not in the table either:
-**one entry per responsibility**, each with a permanent id, the tool accountable
-for it, what it owns, and — the field that does most of the work — the nearest
-thing that is *not* it. A tool holds as many roles as it holds, and no role is
-too small: a clear seam between two responsibilities is worth more than a short
-page, so a long list against one name is a measurement rather than an
-untidiness. The board says what is outstanding and in what order; this says what
-everything is for, in no order at all. Kept by hand, and nothing consumes it
+**one entry per responsibility**, each with a permanent id, what it owns, and —
+the field that does most of the work — the nearest thing that is *not* it. The
+page is stratified by the tool that holds each one, and no role is too small: a
+clear seam between two responsibilities is worth more than a short page, so a
+long section is a measurement rather than an untidiness, and an empty one is a
+tool looking for work. Within a section position is the priority; across
+sections nothing is ranked. The board says what is outstanding and in what
+order; this says what everything is for. Kept by hand, and nothing consumes it
 either.
 
 [`coherence.md`](coherence.md) is not in the table above and is not written for
