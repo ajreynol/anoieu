@@ -111,13 +111,14 @@ of this and telling them would blur a boundary the epoch spent its length
 drawing. **Not** `cvc5`, ever, by the same reasoning the `foundation` footing is
 written under. *All of that is a suggestion; who is actually told is the human's
 decision and is not recorded here.*
-**Approval:** not yet given. The most recent block:
+**Approval:** not yet given, and not yet asked for. The most recent block is a
+dry run:
 
 ```text
-EPOCH E1 · approval requested
-  commit .......... 6473955
-  ci .............. FAIL   oracle red since cf4ad2c (2026-08-30)
-  applied here .... FAIL   publishing stance unstated
+EPOCH E1 · dry run
+  commit .......... 8a71253
+  ci .............. FAIL   oracle red since cf4ad2c (2026-08-30), 100+ commits
+  applied here .... FAIL   anoieu's own publishing stance unstated
   asks ............ publishing stance; bump only to a green commit
   informs ......... dokimasia, eudaimonia, koine
   removes ......... nothing

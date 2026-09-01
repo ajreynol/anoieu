@@ -124,6 +124,7 @@ of them needs to be typed exactly.
 | **a finding carried** | *file `ethos-8` and `ethos-9`* — and expect to be told it stops at a person |
 | **a judgement, with nothing changed** | *take no action, just judge: <the thing>* |
 | **a readiness pass before something goes out** | *are we ready to advertise `D14`? review it* |
+| **a dry run** — where does the epoch stand, changing nothing | *do an epoch dry run* — evaluates every gate, deploys nothing, tells nobody |
 | **ordinary work** | just ask. A check, a document, a test, a bug — no framing needed |
 
 **The judgement shape is underused and is the cheapest one.** *Take no action,

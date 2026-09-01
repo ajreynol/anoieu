@@ -200,6 +200,33 @@ mentions.
 the ones that said `BLOCKED`. An epoch that took three attempts to pass its own
 gates is a more useful record than one that appears to have passed first time.
 
+### The dry run
+
+**`EPOCH <id> · dry run` evaluates every gate, produces the block, and changes
+nothing.** It carries nothing, tells nobody, edits no register, deploys nothing,
+and is safe to run at any moment.
+
+This is the form the rest of this ecosystem already takes wherever an action
+costs somebody something: every prompt takes `--show-prompt`, which prints what
+it would send and runs nothing; `install_eo --dry-run` prints exactly the
+commands a run would execute. **Deploying an epoch is the largest outward-facing
+act here and had no such form until it was asked for.**
+
+**The header says which kind of block it is**, and that is the whole reason the
+header carries a suffix. A block ending `· dry run` was somebody checking; one
+ending `· approval requested` was somebody asking for a decision. Both are kept
+in the log, so the distinction has to survive in the text — otherwise a recorded
+`BLOCKED` cannot be told apart from a request that was refused.
+
+**It should be the ordinary way to find out where an epoch stands**, and cheap
+enough that running it is not itself a decision. A readiness check that costs
+something is one people skip, and then the first time anybody evaluates the gates
+is the moment they most want the answer to be yes.
+
+**A dry run is not an approval and never becomes one.** `READY` in a dry run
+means the gates pass today and nothing follows from it. The deployment still
+needs a person, and asking for that is a different block with a different header.
+
 ## How much of this crosses the boundary — open
 
 **`epoch` is our word for our planning unit. `global announcement` is the
