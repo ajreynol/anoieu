@@ -113,15 +113,61 @@ reasonable end-of-session question and has a one-command answer.
 
 ## The commands
 
-**Three today**, each a prompt on its own, typed as it appears here. **The set is
+**Four today**, each a prompt on its own, typed as it appears here. **The set is
 expected to grow** — adding one is `R29`'s to propose and a person's to accept,
 and a new command arrives with its output shape defined, not discovered.
 
+**This table is the ground truth for the command set.** Everything below that
+lists commands is a copy of it, and `tests/run.py` compares them.
+
 | command | what it does |
 | --- | --- |
-| `epoch dry run` | evaluates every gate, emits the block, **changes nothing** |
+| `epoch help` | print the commands. Reads nothing, runs nothing |
+| `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
 | `epoch double check` | after a deployment: did it land. What that means is [an open question](epoch-policy.md#after-deploying-epoch-double-check) |
+
+### `epoch help`
+
+Printed as a command line prints it — terse, aligned, no prose:
+
+```text
+epoch — the Eunoia epoch build system
+
+usage: epoch <command>
+
+commands:
+  help           print this list
+  dry run        evaluate every gate; print the summary and the block; change nothing
+  deploy         move the epoch's status
+  double check   after a deployment: was it received (open question)
+
+status:  planned -> staging -> deployed -> installed
+         only the build system moves an epoch to `deployed`
+         `installed` is read out of members' trees and may never be true
+
+see:     docs/epoch-analogy.md   the short way in
+         docs/interface.md       these commands
+         docs/epoch-policy.md    what an epoch is, and the gates
+```
+
+**It reads nothing and runs nothing**, which makes it the one command with an
+empty read set and therefore the only one instant by construction. It does not
+report which epoch is current or where it stands — that is `epoch dry run`, and
+keeping the two apart is what stops `help` acquiring a cost.
+
+**It is a cache, and that is why it is fast.** The text above is a precomputed
+answer to *what can I do here*, written once instead of derived from four
+documents each time somebody asks. Caching is what makes a command quick — and
+the price of every cache is that it can go stale, so this one is compared against
+its ground truth by `tests/run.py` on every run.
+
+**The maintenance question, which is the one to actually ask:** *is the help
+output still an accurate reflection of what these things do?* The comparison
+answers only half of that — that the same commands are named in both places. It
+cannot tell whether `deploy` still does what its one line says. That half is
+read by a person, and it is worth asking whenever a command's behaviour changes
+rather than only when its name does.
 
 **Recognise them consistently, and do not invent variants.** The same prompt gets
 the same reading every time.
@@ -132,7 +178,7 @@ typed, name what is accepted, stop:
 
 ```text
 epoch: unrecognised command "dry-run"
-       accepted: dry run | deploy | double check
+       accepted: help | dry run | deploy | double check
        nothing was run
 ```
 

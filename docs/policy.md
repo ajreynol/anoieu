@@ -224,6 +224,37 @@ procedure is worth automating, the document stays the definition and the script
 is one way of running it; where both exist, CI checks that the script's copy of
 the text has not drifted from the document it came from.
 
+**A surface that restates a register declares its ground truth and is compared to
+it.** The rule above is one instance; this is the general form, and it applies
+the moment anything is written that *lists* what is defined somewhere else — a
+help output naming the commands, an error message naming what it accepts, a table
+of statuses appearing in a second document, a summary of an epoch. Each is a
+**copy**, and copies are fine: a protocol is read where somebody is working, not
+where it is decided, so the copies should exist.
+
+What is not fine is ambiguity about which one is right. So, three things, and the
+third is the one that gets skipped:
+
+1. **The register says it is the ground truth**, in the document, not by being
+   longer or older.
+2. **The copy is named by it** — the register says what carries a copy, because a
+   copy nobody wrote down is a copy nothing will ever check.
+3. **Something that runs compares them.** Without it the copy is drift that has
+   not happened yet, and *a declared ground truth with copies and no comparison*
+   is the worst of the three failures rather than the mildest, because the
+   arrangement looks right and only the enforcement is missing.
+
+**A comparison answers half the question, and the half it answers is the easy
+one.** It can tell you the same names appear in both places. It cannot tell you
+the description is still true of the behaviour. **The maintenance question is
+always *is this still an accurate reflection of what the thing does*** — a person
+asks it when behaviour changes, not only when a name does, and no check will ever
+ask it for them.
+
+**Where no comparison exists, say so where the copy is**, rather than leaving a
+reader to assume one. An unchecked copy that admits it is unchecked is an honest
+risk; one that does not is a trap.
+
 **Working space is untracked, and says so.** `scratch/` for anything transient,
 and the `*.local.md` suffix for a document that is deliberately not committed. A
 file kept out of git carries a line at the top saying so and why, so that a

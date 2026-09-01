@@ -45,6 +45,10 @@ UNCHECKED = [
     ("`tools/` is the harness, not the product", "no mechanical test separates the two"),
     ("`tests/` holds the evidence, not only the tests", "readability in a minute is not measurable"),
     ("a workflow is defined in prose", "checked elsewhere: `prompts_agree` in tests/run.py"),
+    ("a surface that restates a register is compared to it",
+     "the comparison is per-surface and lives with the surface: `prompts_agree`, "
+     "`join_prompt_agrees` and `epoch_surfaces_agree` in tests/run.py. Whether one "
+     "exists for a *new* surface is not decidable from here"),
     ("coding style", "encouraged and never blocking, so nothing here checks it -- by design"),
     ("a topic is never about somebody else's discussion file",
      "what a topic is *about* is semantic; a heuristic here would misfire on legitimate notices"),

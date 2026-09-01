@@ -713,6 +713,62 @@ def epoch_gate() -> int:
     return failures
 
 
+def epoch_surfaces_agree() -> int:
+    """Every place that restates the epoch commands or statuses says the same
+    thing as the register it copies.
+
+    `epoch help` prints the command set; the syntax-error example prints it
+    again; the help block prints the status vocabulary a third time. Each is a
+    **copy**, and this repository's own position is that a declared ground truth
+    with copies and no comparison is the worst of the three ways it goes wrong,
+    because it looks safe. So the comparison exists, and it is this.
+
+    Ground truth is the command table in `docs/interface.md` and the status table
+    in `docs/epoch-policy.md`. Where a copy disagrees, the table is right.
+    """
+    root = os.path.dirname(HERE)
+    iface = open(os.path.join(root, "docs", "interface.md")).read()
+    policy = open(os.path.join(root, "docs", "epoch-policy.md")).read()
+
+    truth_cmds = set(re.findall(r"^\| `epoch ([a-z]+(?: [a-z]+)?)` \|", iface, re.M))
+    block = re.search(r"```text\n(epoch \u2014 .*?)\n```", iface, re.S)
+    truth_stat = set(re.findall(r"^\| `(planned|staging|deployed|installed)` \|",
+                                policy, re.M))
+
+    failures = 0
+
+    def case(label, got, want):
+        nonlocal failures
+        ok = got == want
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ") + label
+              + ("" if ok else f"\n     copy has {sorted(got)}\n     table has {sorted(want)}"))
+
+    if not block:
+        print("FAIL the `epoch help` output block is not in docs/interface.md")
+        print("-- the epoch surfaces: 1 failure(s)")
+        return 1
+    helptext = block.group(1)
+
+    def part(head):
+        m = re.search(rf"^{head}(.*?)(?:\n\n|\Z)", helptext, re.S | re.M)
+        return m.group(1) if m else ""
+
+    case("`epoch help` lists exactly the commands the table defines",
+         set(re.findall(r"^  ([a-z]+(?: [a-z]+)?)\s{2,}\S", part("commands:"), re.M)),
+         truth_cmds)
+    case("the syntax-error example accepts exactly those commands",
+         {c.strip() for c in re.search(r"accepted: (.+)", iface).group(1).split("|")},
+         truth_cmds)
+    case("`epoch help` names exactly the statuses the policy defines",
+         set(re.findall(r"[a-z]+", re.search(r"^status:(.*)$", helptext, re.M).group(1)))
+         & {"planned", "staging", "deployed", "installed"},
+         truth_stat)
+
+    print(f"-- the epoch surfaces: {failures} failure(s)")
+    return failures
+
+
 def adoption_interface() -> int:
     """`policy_check.py --root` is what another repository runs in its own CI.
 
@@ -851,6 +907,7 @@ def main() -> int:
     failures += note_forms()
     failures += protocol_report()
     failures += epoch_gate()
+    failures += epoch_surfaces_agree()
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += install_commands()
