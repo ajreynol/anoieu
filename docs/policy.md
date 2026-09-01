@@ -202,16 +202,33 @@ it easy for a real result to sit unread in a tree nobody clones, and where a
 paper is the one artifact that cannot be reached by accumulating commits — it
 has to be argued to a person.
 
-**And a repository may state its stance on publishing.** *There is nothing here
-worth a paper* is a legitimate answer, it is the right answer for most tools most
-of the time, and a repository that has said so has applied this convention rather
-than failed it. Say it in a sentence where a reader already is — the maintenance
-note, or the documentation index — and it settles the question for that
-repository. Nobody else's judgement overrides it: what other tools in this
-ecosystem think is worth writing up is an argument they may have, and it is not a
-claim on anybody's tree. Nothing checks any of this, and nothing should: whether
-work is worth writing up for a human is exactly the kind of judgement
-[`vision.md`](vision.md) reserves for people.
+### Every tool must have a publishing stance
+
+**A stance is required. A paper is not.** Every tool in this ecosystem states
+whether there is a paper in it — that one exists, that one is planned, or that
+there is nothing here worth writing up. The third is a real answer, it is the
+right one for most tools most of the time, and a repository that gives it has
+satisfied this in full.
+
+**We do not say when.** Writing it is the repository owner's, at a moment of
+their choosing, and a tool that has not got to it yet is not in breach — it has
+an obligation with no deadline attached, which is the only honest shape for a
+requirement whose whole content is a judgement about somebody's own work.
+
+**Say it where a reader already is** — the maintenance note, the front page, or
+the documentation index. One sentence settles it.
+
+**Nobody else's judgement overrides it.** What other tools here think is worth
+writing up is an argument they may have among themselves; it is not a claim on
+anybody's tree, and where a register disagrees with a repository about its own
+work, **the repository is right**.
+
+> **A formal check is planned and does not exist.** It would decide only that a
+> stance is *present*, never whether it is the right one — whether work is worth
+> writing up is exactly the kind of judgement [`vision.md`](vision.md) reserves
+> for people, and no check here may ever acquire an opinion about it. Until it
+> exists this is a requirement nothing enforces, which is worth saying rather than
+> implying otherwise.
 
 **Dependencies are fetched and pinned, never vendored.** A manifest and a lock
 in `tools/`, restored by the run that needs them. Two consequences worth having:
