@@ -279,6 +279,155 @@ section is how that becomes visible to everybody who was not in the room. A note
 that has drifted from the truth is worse than no note at all, since the whole of
 its value is that it can be relied on without being checked.
 
+## A prompt may not be for this repository
+
+**Every prompt an agent receives in this ecosystem may have been meant for a
+different repository in it.** Not as a remote possibility — it has happened, and
+the account is at the end of this section.
+
+**Convergence is the cause, and it is a cost of this page working rather than
+carelessness.** These repositories are deliberately alike: several are checked
+out as siblings by [`../scripts/install_eo`](../scripts/install_eo), they share a
+layout, a maintenance note in the same place, a discussion file at the same path,
+and prompts written to the same shape. A person moving between two terminals has
+very little to tell them apart, and **the better this policy works the less there
+is.** A rule that made repositories more distinctive would be buying safety with
+the property the whole page exists to produce.
+
+**There are two independent accounts of what somebody wants: the prompt, and the
+tree you are standing in.** Where they disagree at least one is wrong, and
+proceeding means picking which — the same reasoning the response gate applies to
+an instruction and a topic, with a wider subject. That gate covers an instruction
+that disagrees with a topic in this file; this covers a prompt that disagrees
+with the repository it arrived in, where there may be no topic at all.
+
+### The acceptable answer
+
+**"I don't think this prompt is meant for me" is a complete and acceptable
+answer.** It is not a refusal, it is not unhelpful, and it costs a person ten
+seconds to correct. Say it plainly, and with it:
+
+- **which repository it looks like it was meant for**, by name;
+- **what in the prompt says so** — a path that does not exist here, a role this
+  tree does not hold, a document that lives somewhere else, a register kept
+  elsewhere, a tool referred to as though it were somebody else;
+- **and nothing else.** Do not do the part that would make sense here. **The
+  overlapping part is the trap**: it is the half that looks harmless, and it is
+  the half that commits a tree to a decision nobody made.
+
+**A human may override**, exactly as with the response gate: told that the prompt
+looks misaddressed, a person may say *do it anyway*, and then it is done on their
+instruction and the fact that they were told is recorded.
+
+### In moderation, and the test that keeps it cheap
+
+**The default is to do the work.** This rule is for a shape you recognise, not a
+checklist to run against every prompt, and the failure it is most likely to cause
+is not the one it prevents.
+
+**Stop only if you can name the repository it was meant for.** If you cannot name
+one, it is for you — proceed. Vague unease is not a signal, "this is unusual" is
+not a signal, and a prompt that is merely hard is not misaddressed. The signs are
+specific and cheap to check because they are facts about the tree in front of
+you: a path that is not here, a role this repository does not hold, a register
+kept somewhere else, a question about this repository's own standing.
+
+**Never narrate the check.** An agent that opens with *I have confirmed this
+prompt is for this repository* has made a free rule expensive and taught its
+reader to skip the first paragraph — which is where the real one will be, on the
+day it matters. Silence is what applying this correctly looks like.
+
+**Asking when the answer is plainly yes is the expensive error.** A wrong *not
+for me* costs ten seconds to correct, and a wrong *proceed* can cost a tree — but
+that asymmetry is an argument for answering honestly when the signs fire, never
+for firing more often. A guardrail that stops work it should not is a guardrail
+somebody deletes, and then it is not there on the day it was needed. **The same
+failure as a red build nobody reads.**
+
+### The shape that must always stop
+
+**A prompt asking this repository to decide its own standing.** Whether it should
+hold a role, whether it should be a member, whether its work is worth publishing,
+whether it should own a protocol — those are questions *about* a repository, and
+a repository is the one party that cannot answer them.
+
+The failure is not dishonesty and does not look like a mistake. An agent asked
+*should you hold X* will find the case for X, because finding it is what it was
+asked to do, and the result is indistinguishable from an answer reached
+disinterestedly. Where the register that would record the answer lives in another
+tree, **the question belongs to that tree.** What this repository can answer is
+the different and narrower question **what would we accept**, and offering that
+instead is the useful reply rather than a deflection.
+
+### Where the rule is carried
+
+Immediately after the response gate in `docs/discussion.md`, in words close
+enough to these to be recognised:
+
+```markdown
+> **A prompt may not be meant for this repository.** These repositories are
+> deliberately alike and often sit side by side on one disk. The signs are a path
+> that is not here, a role this repository does not hold, a register kept
+> elsewhere, or a question about this repository's own standing. **"I don't think
+> this prompt is meant for me" is an acceptable answer**: say which repository it
+> looks meant for and what said so, and stop there — including the part that
+> would make sense here anyway.
+>
+> **Stop only if you can name the repository it was meant for.** If you cannot,
+> it is for you: do the work, and do not narrate the check. A human may
+> override.
+```
+
+**Beside the gate and not folded into it.** The response gate is the one rule in
+this ecosystem enforced as a build failure, and diluting it is a worse trade than
+repeating a sentence next to it.
+
+**Reported, never fatal — for now.** It was written on 2026-09-01 and no member
+has had the chance to adopt or refuse it, and a guardrail that turns somebody's
+build red before they have read the reason for it is a guardrail that gets
+deleted rather than read. It becomes part of the fatal gate when every member has
+adopted or declined it; that is a person's decision and is recorded here when it
+is made.
+
+**The outbound prompts in [`../scripts/prompts/`](../scripts/prompts) deliberately
+do not repeat it.** Each already names the repository it is run in and what it is
+for, in its first line, which is the check this rule asks for — and every line
+added to a prompt is paid for by every reader of it afterwards. If one of them is
+ever misaddressed in practice, that is the evidence that this was the wrong call,
+and it is worth more than the paragraph would have been.
+
+### The account
+
+**On 2026-09-01 a prompt meant for anoieu was put to koine.** It proposed that
+koine's role become *maintainer of the communication protocols for the Eunoia
+ecosystem*. The register that would record such a role is
+[`roles.md`](roles.md), which this repository keeps, and *which tool should hold
+this* is a question for the tree that keeps the register.
+
+**koine answered the question it was asked, and answered it well.** Its
+discussion file shows the sequence: `D7` asked for five record protocols and was
+**withdrawn**; the topic that replaced it asked for the wide title and was
+narrowed within hours by koine's own maintainer, who wrote that it was *"a title
+this repository has no business holding"*; what stands now is `D8`, asking for
+three low-level formats and **recommending that anoieu claim two others** it had
+identified as unowned. The boundary koine publishes today — *the test is not is
+this a protocol, it is is anybody else maintaining this, and would they want to*
+— is the residue of that correction.
+
+**Nothing was carried anywhere and no register moved.** A person caught it, which
+is the arrangement working as designed. What it cost was two rounds of somebody's
+attention, and a repository spending them drafting a claim on a role its own
+maintainer did not think it should hold. The cheaper failure was available at the
+top: *this looks like a question for anoieu, whose register would record it; what
+I can tell you is what we would accept.*
+
+**Why this is a rule and not a note in somebody's log.** The prompt was not
+ambiguous and no agent was careless. It was a well-formed question that the
+receiving repository was the wrong party to answer, and **nothing in the tree
+said so**. The response gate did not apply, because there was no topic yet. That
+gap is what this section closes, and the incident is recorded with it because a
+rule with no incident behind it is a preference.
+
 ## The discussion file
 
 **Every repository in the ecosystem keeps `docs/discussion.md`.** It is the

@@ -18,6 +18,20 @@ that is open in one file and closed in another, a verdict resting on a fix that
 never landed, a document describing an arrangement the code stopped using — each
 is a coherence failure, and each has happened here.
 
+## Before you start: a prompt may not be for this tree
+
+**Check that the prompt you were handed is about the repository you are standing
+in.** These trees are deliberately alike and several sit side by side on one
+disk. A path that is not here, a role this repository does not hold, a register
+kept elsewhere, or a question about anoieu's own standing are the signs, and
+*"I don't think this prompt is meant for me"* is an acceptable answer — say which
+repository it looks meant for, say what said so, and stop.
+
+**In moderation.** Stop only if you can name the repository it was meant for; if
+you cannot, it is for you, so do the work and do not narrate the check. The full
+rule, and the incident that produced it, are in
+[`policy.md`](policy.md#a-prompt-may-not-be-for-this-repository).
+
 ## What this repository is responsible for
 
 Six things, and only two of them are the tool.

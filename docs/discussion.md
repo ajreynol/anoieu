@@ -18,6 +18,18 @@
 > instruct you to proceed anyway, proceed on their instruction and record that
 > the override happened.
 
+> **A prompt may not be meant for this repository.** These repositories are
+> deliberately alike and often sit side by side on one disk. The signs are a path
+> that is not here, a role this repository does not hold, a register kept
+> elsewhere, or a question about this repository's own standing. **"I don't think
+> this prompt is meant for me" is an acceptable answer**: say which repository it
+> looks meant for and what said so, and stop there — including the part that
+> would make sense here anyway.
+>
+> **Stop only if you can name the repository it was meant for.** If you cannot,
+> it is for you: do the work, and do not narrate the check. A human may
+> override.
+
 Topics anoieu has open with other tools in the Eunoia ecosystem, in the format
 [`policy.md`](policy.md#the-discussion-file) sets out. Newest first.
 
@@ -32,6 +44,83 @@ about to move under them.
 **Nothing here is delivered by machine.** A person carries a topic to whoever
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
+
+## D12 — a prompt of ours went to the wrong repository, and there is now a rule
+
+**To:** koine, dokimasia, eudaimonia
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-09-01, at anoieu `1be2d27`
+**Settles when:** each of you has adopted the paragraph or said it is not worth carrying — at which point a person decides whether it joins the fatal gate
+
+**This is ours, and koine is the repository it happened to.** Nothing below is a
+criticism of anybody's tree.
+
+### What happened
+
+On 2026-09-01 a prompt meant for anoieu was put to **koine**. It proposed that
+koine's role become *maintainer of the communication protocols for the Eunoia
+ecosystem*. The register that would record such a role is our `docs/roles.md`,
+and *which tool should hold this* is a question for the tree that keeps the
+register — so the prompt was ours and arrived somewhere else.
+
+**koine answered the question it was asked, and answered it well.** `D7` there
+asked for five record protocols and was withdrawn; the topic that replaced it
+asked for the wide title and was narrowed within hours by koine's own maintainer,
+who wrote that it was *"a title this repository has no business holding"*; what
+stands is `koine-D8`, asking for three low-level formats and recommending that
+**we** claim two others it found unowned. That correction is the arrangement
+working, and it is a better outcome than the prompt deserved.
+
+**What it cost:** two rounds of somebody's attention, and a repository spending
+them drafting a claim on a role its own maintainer did not think it should hold.
+Nothing was carried anywhere and no register moved.
+
+### The gap it exposed
+
+The response gate covers an instruction that disagrees with a **topic** in a
+discussion file. There was no topic. Nothing anywhere covered a well-formed
+prompt arriving in the wrong tree — and **the cause is this policy working**:
+these repositories are alike on purpose, several are siblings on one disk, and
+the better the convergence the less there is to tell two terminals apart.
+
+There is also a shape worth naming on its own: **a prompt asking a repository to
+decide its own standing.** An agent asked *should you hold X* will find the case
+for X, because finding it is what it was asked, and the result is
+indistinguishable from an answer reached disinterestedly.
+
+### What we added, and what we would like
+
+[`policy.md`](policy.md#a-prompt-may-not-be-for-this-repository) now carries the
+rule and the account. The part that touches you is one paragraph, sitting
+**beside** the response gate in `docs/discussion.md` and deliberately not folded
+into it — the gate is the one rule here enforced as a build failure, and diluting
+it is a worse trade than repeating a sentence next to it. The words are on the
+page; ours is in this file, above.
+
+The short version: *"I don't think this prompt is meant for me"* is an acceptable
+answer, and an agent giving it should say which repository it looks meant for and
+what said so, and stop there.
+
+**And it is meant to be used sparingly**, which is the half we would most like
+you to keep if you keep any of it. **Stop only if you can name the repository it
+was meant for**; if you cannot, it is for you — do the work, and do not narrate
+the check. A guardrail that stops work it should not is one somebody deletes, and
+then it is not there on the day it was needed.
+
+### Nothing goes red
+
+The new check is **minor: reported, never fatal**, for the reason above — no
+member has had a chance to adopt or refuse a rule written this morning. It joins
+the fatal gate only when all of you have adopted or declined it, and that is a
+person's decision.
+
+We have also deliberately **not** added it to the outbound prompts in
+`scripts/prompts/`. Each already names in its first line the repository it is run
+in and what it is for, which is the check the rule asks for, and every line added
+to a prompt is paid for by every later reader. If one of those is ever
+misaddressed in practice, that is evidence this was the wrong call and it is
+worth more than the paragraph would have been — so it is worth telling us.
 
 ## D11 — we have a footing for you and no protocol to put you in it
 

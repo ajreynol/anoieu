@@ -80,6 +80,24 @@ BANNER = [
 ]
 
 
+#: The misaddressing rule, clause by clause -- *A prompt may not be for this
+#: repository*. Reported and never fatal while it is new: a guardrail that turns
+#: somebody's build red before they have read the reason for it is one they
+#: delete. It joins BANNER when every member has adopted or declined it.
+PROMPT_GATE = [
+    ("that a prompt may have come to the wrong repository",
+     ["meant for this repository", "meant for me", "misaddress"]),
+    ("that saying so is an acceptable answer",
+     ["acceptable answer", "not meant for me"]),
+    # Not "does it say stop" -- the response gate above it already says that, so
+    # such a clause would be satisfied by text that is not this rule at all. The
+    # clause worth carrying is the half that keeps the rule cheap.
+    ("that it stops only where the right addressee can be named",
+     ["stop only if you can name", "cannot, it is for you",
+      "name the repository it was meant for"]),
+]
+
+
 def version() -> str:
     """The commit of *this checker*, so a build log records what it was checked
     against. A member pins a commit; the run should say which one it got."""
@@ -613,6 +631,21 @@ def check_discussion() -> list[str]:
     return bad
 
 
+def check_prompt_gate() -> list[str]:
+    """*A prompt may not be for this repository* -- carried beside the response
+    gate, and reported rather than enforced while it is new.
+
+    Beside the gate and never folded into it: the response gate is the one rule
+    here enforced as a build failure, and diluting it is a worse trade than
+    repeating a sentence next to it.
+    """
+    low = prose(read("docs/discussion.md")).lower()
+    if not low:
+        return []                      # the discussion check owns that failure
+    return [f"docs/discussion.md does not carry {what}"
+            for what, forms in PROMPT_GATE if not any(f in low for f in forms)]
+
+
 def has(*rel):
     """Applicability: the check runs only where the thing it is about exists."""
     def applies():
@@ -656,6 +689,7 @@ CHECKS = [
 MINOR = [
     ("the discussion file is present and well-formed", check_discussion, None),
     ("the README explains the repository's name", check_name_explained, None),
+    ("the discussion file says a prompt may be misaddressed", check_prompt_gate, None),
 ]
 
 
