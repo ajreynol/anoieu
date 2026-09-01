@@ -579,7 +579,7 @@ def check_local_paths_data() -> list[str]:
     members, it passes two and fails a third on files it has every right to have
     committed before anybody wrote this down. Promoting it to fatal now would
     turn somebody's build red on the day they bump for an unrelated reason, and
-    the announcement carrying this epoch says in terms that nothing goes red on
+    the announcement carrying this stretch says in terms that nothing goes red on
     anybody. It becomes fatal when the trees it applies to are clear of it, which
     is a decision for a person and not a date.
     """

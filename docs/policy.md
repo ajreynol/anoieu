@@ -60,7 +60,7 @@ rather than to what they are. This is a small rule and nothing enforces it.
 
 **Coding style is encouraged, and never blocks.** A house style is worth having
 — it makes a tree readable by whoever arrives next, which matters more the less
-that person remembers of the last stretch of work. So follow the style of the
+that person remembers of the work that came before. So follow the style of the
 file you are in, take the ecosystem's conventions where they exist, and format
 what you write.
 
@@ -245,7 +245,7 @@ the text has not drifted from the document it came from.
 it.** The rule above is one instance; this is the general form, and it applies
 the moment anything is written that *lists* what is defined somewhere else — a
 help output naming the commands, an error message naming what it accepts, a table
-of statuses appearing in a second document, a summary of an epoch. Each is a
+of statuses appearing in a second document, a summary of a stretch. Each is a
 **copy**, and copies are fine: a protocol is read where somebody is working, not
 where it is decided, so the copies should exist.
 
@@ -333,7 +333,7 @@ outbound prompt, in no announcement, and in nothing published about somebody
 else's code. This page is the one place, exactly as it is the one place a specific
 AI may be named, and for a related reason. **Checked.**
 
-### Propagating this is a future epoch's goal, not this one
+### Propagating this is a later stretch's job, not this one
 
 **Nothing currently announced asks any member anything about ownership.** What is
 above describes what *we* claim and is deliberately not carried anywhere yet,
@@ -569,7 +569,7 @@ of it takes precedence over whatever rule produced it.
 
 **Every gate here fails closed, and each one is right to.** The bump gate refuses
 when it cannot verify. The response gate refuses without a named topic. Nothing
-creates a repository, sends a message, or moves an epoch to `deployed`. A child
+creates a repository, sends a message, or moves a stretch to `deployed`. A child
 project may not be started by an agent. Each of those is individually correct and
 each was argued for.
 
@@ -580,9 +580,9 @@ composition is the hazard, not any member of it.
 
 **This has already happened twice, which is why the section exists.**
 
-- **The bootstrap.** Moving an epoch to `deployed` was briefly vested in a *tool*
+- **The bootstrap.** Moving a stretch to `deployed` was briefly vested in a *tool*
   rather than in the role that owns the transition — and the tool does not exist,
-  so no epoch could ever deploy, including the one that would build it. Caught
+  so no stretch could ever deploy, including the one that would build it. Caught
   while writing it, and fixed by vesting the authority in the role instead, which
   has no bootstrap to patch.
 - **The live one, and its cause is the hazard's shape exactly.** The rule says a
@@ -608,7 +608,7 @@ failure that the design cannot see.
 **A person may override any gate in this ecosystem, at any time, by saying so.**
 That is the hatch. It has three properties and no others:
 
-1. **It always exists.** No policy, epoch, protocol or check may remove it, and a
+1. **It always exists.** No policy, stretch, protocol or check may remove it, and a
    rule that would is void on its face rather than requiring an argument.
 2. **It is a person's, never an agent's.** An agent may *point out* that a
    deadlock exists and that the hatch is the way out. It may not take it, and
@@ -637,7 +637,7 @@ that is almost nothing.**
 | when | what an override takes |
 | --- | --- |
 | **now** — four members, nothing deployed, no member has adopted anything | a person says so, and it is written down |
-| once members have adopted epochs and depend on them | the above, and a notice saying what was overridden and what it means for them |
+| once members have adopted stretches and depend on them | the above, and a notice saying what was overridden and what it means for them |
 | once a wrong override would cost somebody a red build in a week they had planned otherwise | the above, and a way for a member to decline its consequences |
 
 **The trigger for moving down that table is the same one the role-handoff
@@ -664,8 +664,8 @@ the end, in the same shape every time.
 single line at the bottom saying whether the gates pass. That shape is chosen
 because it is scannable in three seconds, it is diffable between two runs, and it
 makes a *specific* claim rather than a summary. The fields and their order are
-fixed per kind of approval; the epoch form is in
-[`epoch-policy.md`](epoch-policy.md).
+fixed per kind of approval; the stretch form is in
+[`stretch-policy.md`](stretch-policy.md).
 
 **The block reports the gates; it does not grant the approval.** A bottom line of
 `READY` means the mechanical checks pass, never that anybody has agreed. Approval
@@ -675,7 +675,7 @@ is the person's reply and exists nowhere else.
 which means **we are not actually verifying anything.** There is no proof, no
 check, and no chain from a tool's output to the truth of a sentence. The word
 *verification* is used loosely, and the honest description is different: **we
-rely on learning to keep us inside the guardrails.** Each epoch runs the
+rely on learning to keep us inside the guardrails.** Each stretch runs the
 protocol, something turns out to be wrong with it, and the next one is run
 better. That is what holds, and it holds because the loop keeps running rather
 than because anything has been established.
@@ -734,10 +734,10 @@ the property that makes it worth having: **a specific, sourced claim can be
 refuted in one command**, where a paragraph of prose cannot.
 
 **And it is recorded.** The block goes into the artifact the approval was for —
-for an epoch, the log entry. Elsewhere on this page it is noted that a person
+for a stretch, the log entry. Elsewhere on this page it is noted that a person
 pointing the work in a direction *leaves no artifact*, which is worth remembering
 when reading the result. This is the one case where that gap is worth closing,
-because deploying an epoch is the act with the widest blast radius and the least
+because deploying a stretch is the act with the widest blast radius and the least
 evidence attached.
 
 ## The discussion file
@@ -924,10 +924,10 @@ automatically* — said in the one place it is easiest to forget, because an
 announcement written to everybody reads like a mailing that has already gone out.
 It has not. Nothing here sends anything.
 
-**The covering note is logged and not maintained.** What an epoch is, what counts
+**The covering note is logged and not maintained.** What a stretch is, what counts
 as a major event in one, and what designing the next one involves are in
-[`epoch-policy.md`](epoch-policy.md); the covering notes themselves are logged in
-[`epochs.md`](epochs.md), one entry per epoch. They are two files because they are
+[`stretch-policy.md`](stretch-policy.md); the covering notes themselves are logged in
+[`stretches.md`](stretches.md), one entry per stretch. They are two files because they are
 held to opposite standards — the policy has to be current and **the log
 explicitly does not.** A stale prompt in the log is a record rather than a defect,
 which is the reverse of the prompts under
@@ -1126,17 +1126,24 @@ draws on: *eunoia*, *ethos*, *logos*, *eudaimonia* are the tools that exist;
 spoken for as code names for future projects. Pick a word that **describes the
 work** rather than decorating it, and write the etymology down in the project's
 own README, in a sentence somebody can disagree with. A name that needs no
-explanation is not fitting the convention; a name whose explanation is a stretch
+explanation is not fitting the convention; a name whose explanation is strained
 is a sign the project's scope has not been decided yet.
 
 **5. It carries a charter, and the charter names what it will not do.** The
 project's README states, before anything else: the question it is trying to
-answer, the goals in order, the **stretch goal** if there is one, and — the part
+answer, the goals in order, the **wishue** if there is one, and — the part
 that does the work — an explicit list of what is *out of scope*. A research
 project with no stated boundary expands until it is a second tool, at which
 point it is neither research nor a tool. The charter is the thing a human agreed
 to in rule 1, so changing its scope is a decision for a human, exactly like
 starting one.
+
+**A *wishue* is the goal you would take if the work went unusually well, and are
+not committing to** — a wish written down as an issue, which is where the word
+comes from. It was called a *stretch goal* until `stretch` became this
+ecosystem's name for the span between two announcements. The rename removes a
+collision and adds no concept: a charter that had one before has the same one
+now.
 
 **6. It is additive, never authoritative.** A research project may produce an
 account of something that already has an account — a second manual, a second
@@ -1564,11 +1571,12 @@ on. So before a bump lands, ask whether `ajreynol/anoieu` is green **at the
 commit you are moving to**, and refuse the bump if it is not, or if you could not
 find out.
 
-*We plan in stretches and call one an **epoch**, and internally this is the rule
-that makes an epoch deployable. That is our vocabulary and you do not need it:
-the rule here is about your bump, and it holds whether or not anybody upstream
-plans in anything. Whether the word should cross this boundary at all is an open
-question — see the boundary section in [`epoch-policy.md`](epoch-policy.md).*
+*We plan in stretches, and internally this is the rule that makes one
+deployable. That is our vocabulary and you do not need it: the rule here is
+about your bump, and it holds whether or not anybody upstream plans in
+anything. How much of our planning vocabulary should cross this boundary at all
+is an open question — see the boundary section in
+[`stretch-policy.md`](stretch-policy.md).*
 
 Three properties of that question, and each is the answer to an obvious
 objection. It is asked **about that commit and never about our tip**, so the
@@ -1586,7 +1594,7 @@ to use ours; the requirement is the refusal, not the program.
 
 ### Say which advice you built against — encouraged, never required
 
-**A second marker, beside the pin, saying which *epoch* of this ecosystem's
+**A second marker, beside the pin, saying which *stretch* of this ecosystem's
 advice your development was done against:**
 
 ```yaml
@@ -1596,7 +1604,7 @@ advice your development was done against:**
 ```
 
 **These are two different facts and they are allowed to disagree.** The pin says
-what mechanically checks you and is a hard dependency. The epoch says which
+what mechanically checks you and is a hard dependency. The stretch says which
 version of the *overall advice we maintain* — the conventions, the guidance, the
 announcements — you were working from. You can pin an old commit having read the
 current advice, or the reverse, and both are ordinary rather than a mistake to
@@ -1609,9 +1617,9 @@ which set of conventions its author had in front of them, which is otherwise
 unrecoverable and is the first thing that makes an old repository confusing.
 
 **It is a coordinate and nothing more.** It does not enrol you in anything, does
-not oblige you to adopt that epoch, and carries none of the machinery behind the
-word — see [`epoch-analogy.md`](epoch-analogy.md) for what an epoch is by analogy
-to a build, and [`epoch-policy.md`](epoch-policy.md) if you want the rest, which
+not oblige you to adopt that stretch, and carries none of the machinery behind the
+word — see [`epoch-analogy.md`](epoch-analogy.md) for what a stretch is by analogy
+to a build, and [`stretch-policy.md`](stretch-policy.md) if you want the rest, which
 you are not expected to want.
 
 Cloning the repository rather than downloading the one file is deliberate: it

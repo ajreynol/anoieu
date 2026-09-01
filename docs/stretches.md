@@ -1,9 +1,9 @@
-# The epoch log
+# The stretch log
 
-**One entry per epoch, newest first: what it carried, and the covering note we
+**One entry per stretch, newest first: what it carried, and the covering note we
 recommended for handing it downstream.**
 
-[`epoch-policy.md`](epoch-policy.md) is the policy — what an epoch is, what counts
+[`stretch-policy.md`](stretch-policy.md) is the policy — what a stretch is, what counts
 as a major event, and what designing the next one involves. This file is only the
 log.
 
@@ -29,26 +29,26 @@ Ten parts per entry, and the last is the one worth the space:
 
 | part | what it holds |
 | --- | --- |
-| **Status** | `brainstorm`, `planned`, `staged`, `deployed` or `installed` — five levels of rising scrutiny; see [`epoch-policy.md`](epoch-policy.md#the-status-of-an-epoch). Only `deployed` means anything outside this tree and only the epoch build system role moves it there; `installed` is read out of other people's trees and may never become true |
+| **Status** | `brainstorm`, `planned`, `staged`, `deployed` or `installed` — five levels of rising scrutiny; see [`stretch-policy.md`](stretch-policy.md#the-status-of-a-stretch). Only `deployed` means anything outside this tree and only the epoch build system role moves it there; `installed` is read out of other people's trees and may never become true |
 | **Announcement** | the topic id or ids in [`discussion.md`](discussion.md) |
-| **At** | the commit this epoch is adopted at, and whether our CI was green there |
-| **Involved** | every tool the epoch actually touched, and in what way. A fact about the epoch — and **anoieu is always one of them** |
-| **Of us** | what the epoch required in *this* tree, and whether it has been done. Distinguishing *does not apply* from *not done*, because a register that records neither makes them look identical |
+| **At** | the commit this stretch is adopted at, and whether our CI was green there |
+| **Involved** | every tool the stretch actually touched, and in what way. A fact about the stretch — and **anoieu is always one of them** |
+| **Of us** | what the stretch required in *this* tree, and whether it has been done. Distinguishing *does not apply* from *not done*, because a register that records neither makes them look identical |
 | **Suggested notifications** | which of those a person might tell, and why each. **A suggestion and never a list of obligations** |
 | **What it carried** | a few lines. The topic is the authority; this is the reminder |
 | **The prompt** | verbatim, in a fenced block, so it can be pasted without editing |
-| **Approval** | the approval block, verbatim, from the session that proposed deploying it — including the ones that said `BLOCKED`. See [`epoch-policy.md`](epoch-policy.md#the-approval-block) |
+| **Approval** | the approval block, verbatim, from the session that proposed deploying it — including the ones that said `BLOCKED`. See [`stretch-policy.md`](stretch-policy.md#the-approval-block) |
 | **What was rejected** | the wording considered and turned down, and why |
 
 **Involved and suggested are two different questions, which is why they are two
-rows.** A tool is *involved* if the epoch changed something that touches it —
+rows.** A tool is *involved* if the stretch changed something that touches it —
 that is a fact, and getting it wrong is an error. Whether anybody *tells* it is a
 judgement, and it is **entirely the human's**: they may notify all of them, some,
 one, or none, in whatever words they like, and none of that is recorded here.
 
-**An epoch is only deployable where our CI is green at its commit**, which is why
+**A stretch is only deployable where our CI is green at its commit**, which is why
 **At** is a row rather than a footnote — see *The hard constraint* in
-[`epoch-policy.md`](epoch-policy.md#the-hard-constraint-a-red-epoch-is-not-deployable).
+[`stretch-policy.md`](stretch-policy.md#the-hard-constraint-a-red-stretch-is-not-deployable).
 The value here is what we assert; `python3 tools/bump_check.py --rev <sha>` is
 how somebody checks it without taking our word for it.
 
@@ -71,10 +71,10 @@ role who makes it, and this row will say so when it happens.
 **Announcement:** [`D14`](discussion.md#d14--global-announcement-what-changed-this-week-and-the-one-thing-we-are-asking-of-everybody),
 and [`D16`](discussion.md#d16--only-move-your-pin-to-a-commit-where-our-ci-is-green)
 for the hard constraint, which arrived after `D14` was written.
-**At:** not yet fixed. The epoch is adopted at whatever commit carries these
+**At:** not yet fixed. The stretch is adopted at whatever commit carries these
 documents, and it is deployable only if `python3 tools/bump_check.py --rev <sha>`
 says our CI is green there. **This row is filled in when the commit exists**, and
-until it does the epoch is not adoptable by anybody.
+until it does the stretch is not adoptable by anybody.
 **Involved:** `anoieu` — the tree it was designed in, and a target like any
 other; see **Of us**. `dokimasia`, `eudaimonia`, `koine` — members, and the ask
 lands on all three. `ethos`, `logos` — named in the footings work, and their own
@@ -83,9 +83,9 @@ question is
 not this. `cvc5` — its footing changed to `foundation`, which constrains it with
 nothing and asks it for nothing. `epikrisis`, through `eudaimonia` — two event
 classes it cannot derive, and a question about where it sits.
-**Of us:** three things, and the first is the one this epoch got wrong.
+**Of us:** three things, and the first is the one this stretch got wrong.
 
-- **A publishing stance, per repository and per child project — the epoch's own
+- **A publishing stance, per repository and per child project — the stretch's own
   ask, and it was unmet here while being asked of three other trees.** Both child
   projects have since stated one, in their own READMEs, agreeing with what
   [`papers.md`](../tools/ynoia/papers.md) had argued: sapheneia **not yet**,
@@ -97,25 +97,25 @@ classes it cannot derive, and a question about where it sits.
 - **The bumping rule: does not apply.** anoieu pins nothing of its own, so a rule
   about moving `ANOIEU_REV` is vacuous in this tree. Recorded as *does not apply*
   rather than left blank, because blank reads as *not done*.
-- **A deliberate defect, taken to get the epoch out.** The `oracle` job tracked
+- **A deliberate defect, taken to get the stretch out.** The `oracle` job tracked
   `ethosEoc3` — a branch about to merge and be deleted — and was red at every
-  commit of this epoch. It is now pinned to the commit `deps.lock` records, which
+  commit of this stretch. It is now pinned to the commit `deps.lock` records, which
   writes the ethos revision in **two places with nothing comparing them**: exactly
   the drift this repository has a discipline about, chosen over the version that
-  reads the lock because holding a finished epoch for the elegant fix is the
+  reads the lock because holding a finished stretch for the elegant fix is the
   dogmatic position `coherence.md` warns against. `B20` carries it, and **what
-  the duplicate costs is the thing this epoch expects to learn in its own tree**
+  the duplicate costs is the thing this stretch expects to learn in its own tree**
   rather than in somebody else's.
-- **Everything the epoch changed landed here first** — the footings in our
+- **Everything the stretch changed landed here first** — the footings in our
   inventory, the misaddressing paragraph in our discussion file, the child-project
   rule in our policy — which is how three of its defects were found before it was
   carried anywhere: a footing recorded before its protocol existed, a pinned topic
   that was not first in the file, and a checker whose field window was exactly one
-  line too small for the fields this epoch added.
+  line too small for the fields this stretch added.
 **Suggested notifications:** the three members, because the ask is theirs and the
 CI constraint changes how they bump. `eudaimonia` twice over, since the epikrisis
 question is theirs to settle. **Not** `ethos` or `logos` — they are held to none
-of this and telling them would blur a boundary the epoch spent its length
+of this and telling them would blur a boundary the stretch spent its length
 drawing. **Not** `cvc5`, ever, by the same reasoning the `foundation` footing is
 written under. *All of that is a suggestion; who is actually told is the human's
 decision and is not recorded here.*
@@ -179,7 +179,7 @@ Four reasons, and the first two are the ones that would have cost something.
 **It misdescribes the announcement in the direction that flatters us.** `D14` is
 one small ask, a set of notices, a list of our own failures and a question we are
 putting to somebody else. Calling that *how to improve your repo* claims a
-standing we had spent the epoch disclaiming — the footings are written as facts
+standing we had spent the stretch disclaiming — the footings are written as facts
 about our arrangement rather than statuses conferred on theirs, and
 [`../tools/ynoia/papers.md`](../tools/ynoia/papers.md) says in terms that where
 the register disagrees with a repository about its own work, the repository is

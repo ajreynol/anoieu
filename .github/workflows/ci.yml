@@ -117,7 +117,7 @@ jobs:
       # so the ethos revision is now written in two places and nothing compares
       # them. That is the failure this repository has a whole discipline about,
       # and we are taking it deliberately rather than building the version that
-      # reads deps.lock here: the epoch is otherwise finished, and holding it up
+      # reads deps.lock here: the stretch is otherwise finished, and holding it up
       # for the elegant fix would be the dogmatic position docs/coherence.md
       # warns about. B20 carries it, and what the drift costs is the thing we
       # expect to learn.

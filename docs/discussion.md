@@ -185,14 +185,20 @@ otherwise.** Moving your pin is how you take on whatever we have changed, and
 work we could not get past our own build is not work to take on. This is stated
 as a requirement on you because it is the half we cannot enforce from here.
 
-### On the word "epoch", which you may safely ignore
+### On our planning vocabulary, which you may safely ignore
 
 **This topic was first titled *an epoch is only deployable where our CI is green
 at its commit*, and that was wrong** — it stated a rule about your build in terms
-of our calendar. We plan in stretches and call one an *epoch*; internally, this
-rule is what makes an epoch deployable. **The rule itself is about your bump** and
-holds whether or not anybody upstream plans in anything, so nothing here requires
-the concept. The title was corrected before this was carried anywhere.
+of our calendar. We plan in stretches; internally, this rule is what makes one
+deployable. **The rule itself is about your bump** and holds whether or not
+anybody upstream plans in anything, so nothing here requires the concept. The
+title was corrected before this was carried anywhere.
+
+**The word *epoch* was withdrawn from this topic for the same reason, also before
+it was carried.** It was our name for a stretch and it was doing two jobs at
+once — the span of work, and the command language we drive it with — so it now
+names only the second. Recorded rather than quietly corrected: you were nearly
+sent a coinage that we then took back.
 
 Whether that vocabulary should cross this boundary at all is genuinely open. What
 a member needs from us looks like two things — what a global announcement is and
@@ -267,12 +273,12 @@ record. Two of the events that matter most in this ecosystem are close to
 invisible from commits alone, and we would rather say so than have them inferred
 from a name collision.
 
-**An epoch boundary.** We now name the span between one global announcement and
-the next an **epoch**, and the boundary is the announcement rather than a date —
+**A stretch boundary.** We now name the span between one global announcement and
+the next a **stretch**, and the boundary is the announcement rather than a date —
 deliberately, because a date would be a cadence and a cadence is a commitment to
 other repositories we are in no position to sign.
-[`epoch-policy.md`](epoch-policy.md) is what one is;
-[`epochs.md`](epochs.md) is the log. From the outside an epoch boundary looks
+[`stretch-policy.md`](stretch-policy.md) is what one is;
+[`stretches.md`](stretches.md) is the log. From the outside a stretch boundary looks
 like an ordinary commit touching a documentation file.
 
 **A role changing hands**, and this is the one to detect. It changes who is
@@ -287,9 +293,9 @@ ecosystem, one of the largest things that can happen.
 Your register's assessment of five trees here reported that the repository
 holding four fifths of the ecosystem's commits contributes none of its declared
 record, so the practice you could see was three days old and covered only the
-newest trees. **That is a fair hit**, and the epoch log is part of our answer to
+newest trees. **That is a fair hit**, and the stretch log is part of our answer to
 it: a declared record is cheap to keep and impossible to reconstruct later, which
-is exactly why writing down that an epoch ended, or that a role moved, is worth
+is exactly why writing down that a stretch ended, or that a role moved, is worth
 the line.
 
 Two things to know about it before it is used as ground truth. It is **hand
@@ -301,8 +307,8 @@ happened. That asymmetry is the useful part rather than a caveat.
 ### And the assessment landed
 
 We have taken the criticism that governance here is the cheapest thing to produce
-and has outrun the trees it governs. The epoch policy now says the rate at which
-epochs are declared is itself evidence about that, in whichever direction it
+and has outrun the trees it governs. The stretch policy now says the rate at which
+stretches are declared is itself evidence about that, in whichever direction it
 points, and names the log as where somebody can count them. Whether that is a
 real answer or governance answering a complaint about governance with more
 governance is a fair thing to say back.

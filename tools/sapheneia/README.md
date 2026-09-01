@@ -37,11 +37,11 @@ analyzer needs, and it is what this project tries to supply.
    and are carried upstream — if at all — by a person, under the host
    repository's ordinary reporting discipline. Nothing here is filed by machine.
 
-3. **Stretch: a formal semantics.** Judgement forms and rules for the type
+3. **Wishue: a formal semantics.** Judgement forms and rules for the type
    system, the desugaring, and evaluation, at the level of detail where two
    people could implement from them and agree. [`semantics.md`](semantics.md)
    holds what the shape would have to be and what currently blocks it. This is a
-   stretch goal and is expected to remain one for a while.
+   wishue and is expected to remain one for a while.
 
 ## What this project does not do
 
@@ -116,7 +116,7 @@ convention.
 | --- | --- |
 | [`manual.md`](manual.md) | the account. Goal 1 |
 | [`feedback.md`](feedback.md) | candidate feedback to the ethos manual, as a ledger. Goal 2 |
-| [`semantics.md`](semantics.md) | the formalization: shape, judgement forms, blockers. Goal 3, stretch |
+| [`semantics.md`](semantics.md) | the formalization: shape, judgement forms, blockers. Goal 3, wishue |
 
 ## Status
 

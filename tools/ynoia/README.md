@@ -67,10 +67,10 @@ So: write it down, make the strongest case against it, and see which survives.
    project returns it about itself first, and a repository's own stance on
    publishing outranks anything on the page.
 
-6. **Stretch: what would settle it.** An argument that cannot be lost is not
+6. **Wishue: what would settle it.** An argument that cannot be lost is not
    worth having. The account carries what would change our minds and one
    experiment that would settle more than any further argument. Turning that into
-   something somebody could actually run is the stretch goal, and it remains one.
+   something somebody could actually run is the wishue, and it remains one.
 
 ## What this project does not do
 

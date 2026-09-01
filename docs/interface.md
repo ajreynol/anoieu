@@ -13,18 +13,18 @@ done here, and what comes back.
 
 ## The interface, in one sentence
 
-> **Work with anoieu to develop the next epoch.**
+> **Work with anoieu to develop the next stretch.**
 
 That is the whole of it, and the shortness is the design rather than an
-omission. An **epoch** is the span between one global announcement and the next
-— [`epoch-policy.md`](epoch-policy.md) — and designing one is a role this
+omission. A **stretch** is the span between one global announcement and the next
+— [`stretch-policy.md`](stretch-policy.md) — and designing one is a role this
 repository holds. Everything else a person asks for is either ordinary work that
 needs no framing at all, or one of the named session shapes below, which are
 specialisations of that sentence rather than alternatives to it.
 
-**And this boundary is a conjecture.** We are guessing that the epoch is the
+**And this boundary is a conjecture.** We are guessing that the stretch is the
 right level of abstraction to drive this repository from — not concluding it. The
-guess has an argument behind it: the epoch is the unit at which change gets
+guess has an argument behind it: the stretch is the unit at which change gets
 announced, so it is the unit at which cost lands on somebody who did not ask for
 it, and framing work that way forces the question *what comes out* alongside
 *what goes in*. It is also the smallest unit with a boundary anybody outside this
@@ -32,12 +32,12 @@ tree can see.
 
 **What would show the guess is wrong**, in rough order of how likely each is:
 
-- **Most sessions turn out to be single-artifact work anyway**, and the epoch
+- **Most sessions turn out to be single-artifact work anyway**, and the stretch
   framing is ceremony wrapped around a one-file change.
-- **Epochs get declared faster than the trees move.** That is already the live
+- **Stretches get declared faster than the trees move.** That is already the live
   criticism of this ecosystem from outside, and an abstraction whose main output
   is governance is confirming it rather than answering it. The rate is countable
-  in [`epochs.md`](epochs.md).
+  in [`stretches.md`](stretches.md).
 - **A person finds themselves fighting the framing** to get ordinary work done,
   which is the cheapest signal and the one to say out loud.
 
@@ -46,14 +46,14 @@ none of this is a commitment. If the default is wrong, the fix is one line in
 this file.
 
 **A second, separate conjecture: how much of this a downstream repository should
-know.** *Epoch* is our word for our planning unit; *global announcement* is the
+know.** *Stretch* is our word for our planning unit; *global announcement* is the
 interface. Today they coincide one-to-one, which is exactly why the leak is hard
 to see — and it has already happened once, in a topic addressed to members that
 stated a rule about *their* build in terms of *our* calendar. What a member
 demonstrably needs looks like two things and neither requires the word.
 
 That question is open, it is recorded as open in
-[`epoch-policy.md`](epoch-policy.md), and `D16` asks the members directly, since
+[`stretch-policy.md`](stretch-policy.md), and `D16` asks the members directly, since
 a protocol's defects are visible where it is received rather than where it is
 written. **The practical rule while it is open: text addressed to members states
 the rule without the word.** Adding a vocabulary later costs a sentence;
@@ -91,7 +91,7 @@ it is almost always waiting on one of these:
   the name, so "handle the koine topics" stalls where "answer `koine-D9`" does
   not;
 - **a stance on publishing**, for this repository and for each child project;
-- **who actually gets notified of an epoch.** The log lists which tools an epoch
+- **who actually gets notified of a stretch.** The log lists which tools a stretch
   *involved* and suggests which of them a person might tell — those are two
   different questions, the first a fact and the second a judgement. The judgement
   is yours entirely: all of them, some, one, or none, in whatever words. Nothing
@@ -99,16 +99,16 @@ it is almost always waiting on one of these:
 
 ### The one thing that is not a decision
 
-**An epoch may only be adopted at a commit where this repository's CI is green,
+**A stretch may only be adopted at a commit where this repository's CI is green,
 and a downstream tool must refuse it otherwise.** That is a hard constraint
 rather than a judgement call, it is stated in
-[`epoch-policy.md`](epoch-policy.md#the-hard-constraint-a-red-epoch-is-not-deployable),
+[`stretch-policy.md`](stretch-policy.md#the-hard-constraint-a-red-stretch-is-not-deployable),
 and `python3 tools/bump_check.py --rev <sha>` decides it.
 
-The practical consequence for you: **an epoch is not finished when the documents
+The practical consequence for you: **a stretch is not finished when the documents
 are written.** It is finished when they are committed and the build is green at
-that commit, and until then the entry in [`epochs.md`](epochs.md) says so and the
-epoch is adoptable by nobody. Asking *is this epoch deployable yet* is a
+that commit, and until then the entry in [`stretches.md`](stretches.md) says so and the
+stretch is adoptable by nobody. Asking *is this stretch deployable yet* is a
 reasonable end-of-session question and has a one-command answer.
 
 ## The commands
@@ -124,14 +124,14 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 | --- | --- |
 | `make epoch` | **not yet supported.** Would mean: make it better, *then* stage — the composite of doing the work and `epoch stage`. The one command not of the form `epoch <verb>` |
 | `epoch help` | print the commands, and the ecosystem's health |
-| `epoch status` | which level this epoch is at, and what the next one would take |
-| `epoch advice` | what the agent thinks the most promising work for the next epoch is |
+| `epoch status` | which level this stretch is at, and what the next one would take |
+| `epoch advice` | what the agent thinks the most promising work for the next stretch is |
 | `epoch plan` | attempt `brainstorm` → `planned`. Opens the protected rings again |
-| `epoch stage` | attempt `planned` → `staged`. Needs an epoch with content |
+| `epoch stage` | attempt `planned` → `staged`. Needs a stretch with content |
 | `epoch brainstorm` | drop to `brainstorm`. Always available, needs nobody |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
-| `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
-| `epoch double check` | **not yet supported.** Would mean: was a deployment received. [What that means is undefined](epoch-policy.md#after-deploying-epoch-double-check), which is why |
+| `epoch deploy` | moves the stretch's status — and only to `deployed` on the build system's authority |
+| `epoch double check` | **not yet supported.** Would mean: was a deployment received. [What that means is undefined](stretch-policy.md#after-deploying-epoch-double-check), which is why |
 
 ### `epoch status`
 
@@ -217,11 +217,11 @@ next hour looks like:
 
 | entering | what we are now doing |
 | --- | --- |
-| `brainstorm` | working out what the next epoch should be. Nothing load-bearing moves, and the protected files are shut |
+| `brainstorm` | working out what the next stretch should be. Nothing load-bearing moves, and the protected files are shut |
 | `planned` | done exploring, about to assemble. **The protected files are open again** |
 | `staged` | **discussing whether we are ready to deploy** |
 | `deployed` | waiting on members. Nothing further happens here until they act |
-| `installed` | finished. There is nothing left to do for this epoch |
+| `installed` | finished. There is nothing left to do for this stretch |
 
 **Then what is now open or shut, and what the next move would take.** Those two
 are the practical consequences and they are what somebody actually needs; the
@@ -247,9 +247,9 @@ commands:
   make epoch           make it better, and stage a deployment   (NOT YET SUPPORTED)
   epoch help           print this list and the ecosystem's health
   epoch dry run        evaluate every gate; print the summary and the block; change nothing
-  epoch deploy         move the epoch's status
-  epoch status         which level this epoch is at
-  epoch advice         what looks most promising for the next epoch
+  epoch deploy         move the stretch's status
+  epoch status         which level this stretch is at
+  epoch advice         what looks most promising for the next stretch
   epoch plan           attempt brainstorm -> planned; opens the protected rings
   epoch stage          attempt planned -> staged; needs something to stage
   epoch brainstorm     drop to `brainstorm` — always available
@@ -261,17 +261,17 @@ health:  rendered at run time by `tools/ecosystem.py --health` — the values be
     members            4
   ! policy             3 of 4 passing
   ! topics owed to us  16
-  ! epoch              E1, planned
+  ! stretch              E1, planned
 
 status:  brainstorm -> planned -> staged -> deployed -> installed
          scrutiny rises left to right; `planned` says nothing
          up is earned and never asked for; down is free and needs nobody
-         only the epoch build system role moves an epoch to `deployed`
+         only the epoch build system role moves a stretch to `deployed`
          `installed` is read out of members' trees and may never be true
 
 see:     docs/epoch-analogy.md   the short way in
          docs/interface.md       these commands
-         docs/epoch-policy.md    what an epoch is, and the gates
+         docs/stretch-policy.md    what a stretch is, and the gates
 ```
 
 **It no longer reads nothing, and that was a deliberate trade.** `help` used to
@@ -327,11 +327,11 @@ that. One documented exception is affordable where a silent one would not be —
 and it is why the scoping rule below is *a prompt that plainly meant to be a
 command*, rather than *a prompt beginning with `epoch`*.
 
-**It does not design the epoch.** Designing one is the person's and is not a role
+**It does not design the stretch.** Designing one is the person's and is not a role
 here; `make epoch` assembles inside a direction already set, and everything it
 produces goes through the feedback protocol below. Whether the designing could
 ever be automated is [an open research
-question](epoch-policy.md#make-epoch--and-the-research-question-it-is-a-probe-for),
+question](stretch-policy.md#make-epoch--and-the-research-question-it-is-a-probe-for),
 and every run of this command is a data point for it.
 
 **When a prompt plainly meant to be one of these and is not, say so and do
@@ -381,7 +381,7 @@ approval block as a verification. What is being asked for is **consistency**: on
 reading per prompt, a near miss named rather than guessed at, and no command ever
 half-run.
 
-**What is not a command is ordinary work.** A prompt that discusses epochs, asks
+**What is not a command is ordinary work.** A prompt that discusses stretches, asks
 a question about one, or happens to mention a command inside a sentence is not a
 command and gets no error — it gets answered. The error exists for the case where
 somebody clearly meant to run one and it did not match, because that is where
@@ -392,7 +392,7 @@ act on.** Same rule as the misaddressed-prompt paragraph and the response gate �
 do not do the plausible thing.
 
 **The one transition that matters is not protected by any of this.** Even a
-perfectly typed `epoch deploy` cannot move an epoch to `deployed` on the front
+perfectly typed `epoch deploy` cannot move a stretch to `deployed` on the front
 end's say-so; that authority belongs to the build system alone. The commands are
 a convenience for a person, not a source of permission.
 
@@ -411,7 +411,7 @@ would be useful.
 
 ### `epoch advice`
 
-**What the agent thinks the most promising work for the next epoch is.** A few
+**What the agent thinks the most promising work for the next stretch is.** A few
 candidates, ranked, each with why it is promising and what would move it.
 
 Four things it must do:
@@ -445,11 +445,11 @@ conflict of interest above predicts.
 | `planned` | what has to be **settled** before this could be staged |
 | `staged` | **how to clear the gates.** Almost always: how to fix CI |
 | `deployed` | **how it gets installed** — what members would need, and what is standing in the way |
-| `installed` | **nothing.** There is no advice to give about a finished epoch |
+| `installed` | **nothing.** There is no advice to give about a finished stretch |
 
-**`installed` returning nothing is not a gap.** The epoch is done, and there is
+**`installed` returning nothing is not a gap.** The stretch is done, and there is
 nothing useful to say about a finished one — the next thing worth anybody's
-attention is what the next epoch should be, and that is a question for the
+attention is what the next stretch should be, and that is a question for the
 person, not advice about this one.
 
 In `staged` it is the one thing that may exceed a simple actionable request,
@@ -467,7 +467,7 @@ been decided; what remains is a person doing specific things. One thing at a
 time, in the fewest words that make it doable, with **no implementation detail**,
 no account of what changed, and no reasoning unless it is asked for.
 
-**A staged epoch that starts producing paragraphs has slipped a level without
+**A staged stretch that starts producing paragraphs has slipped a level without
 saying so.** The honest response is `epoch brainstorm` — drop, explain, come back
 up — rather than keep explaining from a level that is supposed to be past
 explaining.
@@ -476,11 +476,11 @@ explaining.
 
 Two things, in this order:
 
-1. **The summary** — what this epoch is, in a form a person can argue with.
+1. **The summary** — what this stretch is, in a form a person can argue with.
 2. **The block** — where it stands against its gates.
 
 The summary comes first because it is the part worth disagreeing with. Where the
-epoch stands is only interesting once you accept it is the right epoch.
+stretch stands is only interesting once you accept it is the right stretch.
 
 ### The summary
 
@@ -491,7 +491,7 @@ it cannot be followed without one it has failed — and the fix is the summary,
 never the reader.
 
 **Brief, and linked.** It stays short by *pointing* rather than explaining: each
-contract names where it is defined, so the summary carries the shape of the epoch
+contract names where it is defined, so the summary carries the shape of the stretch
 and the documents carry its content. A summary that grows until it is complete has
 become a second copy of the announcement, which is the drift this repository
 spends most of its discipline avoiding. **If a claim in it needs a paragraph, it
@@ -501,7 +501,7 @@ needs a link.**
 actually receive; the summary is a compressed view of them. Where the two
 disagree, the protocols are what deploys — so **a summary that has drifted from
 them is the most dangerous defect this interface can have.** A person approving a
-summary that overstates or understates the epoch has approved something that is
+summary that overstates or understates the stretch has approved something that is
 not going to happen.
 
 ### The health summary — one abstraction, several surfaces
@@ -523,7 +523,7 @@ are different facts, and neither is a pass. A summary that rendered an unknown a
 a blank would be the most misleading thing this interface could print.
 
 **Kept deliberately abstract, and short.** The indicator set today is four —
-members, policy, topics owed, epoch — and it is expected to grow. Adding one is a
+members, policy, topics owed, stretch — and it is expected to grow. Adding one is a
 decision rather than a convenience, because **every surface shows all of them**:
 a cheap indicator added here is paid for on every command that renders a summary.
 
@@ -538,16 +538,16 @@ as shared infrastructure because it will be rendered in several places, and the
 one thing that must not happen is two of them disagreeing about what *healthy*
 means.
 
-### The epoch feedback communication protocol
+### The stretch feedback communication protocol
 
 **Arguing with the summary is the named protocol by which a person gives feedback
-on an epoch**, and it runs from here to the end of this section.
+on a stretch**, and it runs from here to the end of this section.
 
 **This is why the summary is printed.** The front end is where a person gives
-feedback on the epoch under consideration, and the summary is the handle: it lets
+feedback on the stretch under consideration, and the summary is the handle: it lets
 somebody steer a few thousand lines of protocol without reading them.
 
-It is a **communication protocol** in the same sense as the others in the epoch
+It is a **communication protocol** in the same sense as the others in the stretch
 build system — a shape a message takes and a defined thing that happens next —
 except that this one runs between a person and an agent rather than between two
 repositories. That is the whole reason it is fussy about interpretation: the
@@ -558,14 +558,14 @@ Two kinds of argument, and telling them apart is the front end's first job:
 
 | the argument is about | what it means | what changes |
 | --- | --- | --- |
-| **phrasing** | the description is unclear, mistoned, or misleading *as text* | the summary. The epoch itself does not change |
-| **content** | you disagree with what the epoch **does** | **the communication protocols change**, so the agents who carry the epoch out receive it differently |
+| **phrasing** | the description is unclear, mistoned, or misleading *as text* | the summary. The stretch itself does not change |
+| **content** | you disagree with what the stretch **does** | **the communication protocols change**, so the agents who carry the stretch out receive it differently |
 
 **A content argument is not a request to rewrite the summary.** It is an
 instruction to change what agents are *told* — the announcement, the policy text,
 the covering prompt — so that what they *do* is different. Rewriting the summary
 in response is the worst outcome available: the description would change, the
-epoch would not, and the two would then disagree in exactly the way the section
+stretch would not, and the two would then disagree in exactly the way the section
 above calls the most dangerous defect here.
 
 ### Before acting on a content argument, say how you read it
@@ -598,13 +598,13 @@ of them needs to be typed exactly.
 
 | you want | say something like |
 | --- | --- |
-| **the default** — decide and build the next stretch of work | *work with anoieu to develop the next epoch* |
+| **the default** — decide and build the next stretch of work | *work with anoieu to develop the next stretch* |
 | **an inventory** — where the ecosystem stands, what is owed to us | *take an inventory of the ecosystem; check the children and what action items are given to us* |
 | **one topic answered** | *answer `koine-D9`* — the id is what makes this legal |
 | **a finding carried** | *file `ethos-8` and `ethos-9`* — and expect to be told it stops at a person |
 | **a judgement, with nothing changed** | *take no action, just judge: <the thing>* |
 | **a readiness pass before something goes out** | *are we ready to advertise `D14`? review it* |
-| **anything to do with an epoch** | one of the three commands below, typed exactly |
+| **anything to do with a stretch** | one of the three commands below, typed exactly |
 | **ordinary work** | just ask. A check, a document, a test, a bug — no framing needed |
 
 **The judgement shape is underused and is the cheapest one.** *Take no action,
@@ -614,23 +614,23 @@ shape that has most often changed what got built.
 
 ## The levels, and how to drop to a lower one
 
-The epoch is the **default**, not the only altitude. Six levels, highest first,
+The stretch is the **default**, not the only altitude. Six levels, highest first,
 and moving between them costs nothing — **you switch by saying so**, and no
 session is committed to the level it started at.
 
 | level | the unit | say something like | when it is the right one |
 | --- | --- | --- | --- |
 | **the vision** | what the work is *for* | *is this ecosystem aiming at the right thing* | rarely, and it is argued rather than decided here — a person has the most standing at this level and an agent the least |
-| **the epoch** | a stretch, ending in one announcement | *develop the next epoch* | several things should change together, and somebody outside will need telling |
+| **the stretch** | a stretch, ending in one announcement | *develop the next stretch* | several things should change together, and somebody outside will need telling |
 | **the board** | one outstanding item | *work `B3`* | the work is already identified and queued, and you want it done rather than reconsidered |
 | **the role** | one responsibility | *work on the fuzzer* | a whole area needs attention and the items for it do not exist yet |
 | **the artifact** | one document, check or witness | *add a check that a semantics block declares its sort* | most ordinary work |
 | **the code** | a function, a test, a bug | just describe it | the majority of real sessions, and it needs no framing at all |
 
-**Dropping down needs no permission and no ceremony.** *Forget the epoch, just
+**Dropping down needs no permission and no ceremony.** *Forget the stretch, just
 fix this* is a complete instruction. The lower levels are not a lesser use of the
 repository — the bottom two are where anything gets built, and a week of them
-with no epoch declared is a good week, not a stalled one.
+with no stretch declared is a good week, not a stalled one.
 
 **Going up is the expensive direction**, because the higher two levels produce
 prose by construction. Ask for them when you want a decision or an argument, and
@@ -655,8 +655,8 @@ Three concrete routes in, none of which involves this page's framing:
 ### Signals you are at the wrong level
 
 **Too high:** the diff is entirely documents and the summary is longer than the
-change. If you asked for an epoch and got five pages and no code, either the
-level was wrong or the epoch was empty and should have been declined.
+change. If you asked for a stretch and got five pages and no code, either the
+level was wrong or the stretch was empty and should have been declined.
 
 **Too low:** a correct change that quietly contradicts a convention nobody
 re-read — a check added without anybody asking whether it should be checkable at
@@ -731,8 +731,8 @@ hand-kept and a check does not exist for most of them.
 ## Where this goes next
 
 The interface is one sentence because the ecosystem is small and one repository
-holds the governance. Designing the next epoch is `R27` in
+holds the governance. Designing the next stretch is `R27` in
 [`roles.md`](roles.md), and it is listed as moving to the governance repository
 when that exists — at which point this page describes an interface to a tree that
-no longer decides what the next epoch is, and it should be rewritten or moved
+no longer decides what the next stretch is, and it should be rewritten or moved
 rather than quietly left standing.

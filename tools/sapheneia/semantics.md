@@ -1,6 +1,6 @@
 # Formalizing Eunoia
 
-*Goal 3 of this project, and a stretch goal. **Not started.** This file records
+*Goal 3 of this project, and a wishue. **Not started.** This file records
 what the work would have to be, what already exists to build on, and what
 currently blocks it — so that the next person to look at it starts from a
 position rather than from a blank page.*

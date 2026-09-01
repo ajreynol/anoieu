@@ -315,16 +315,16 @@ the checkable half is `R4`.
 ### R29 — the epoch command front end
 
 **Held by:** `anoieu`
-**Role:** the surface a person drives an epoch through — the commands, how they
-are recognised, what a command prints, and **the epoch feedback communication
-protocol**: the summary a person argues with, and what happens to the epoch when
+**Role:** the surface a person drives a stretch through — the commands, how they
+are recognised, what a command prints, and **the stretch feedback communication
+protocol**: the summary a person argues with, and what happens to the stretch when
 they argue with its content rather than its wording.
 **Owns:** `docs/interface.md` — the commands, the summary's shape, and the
 feedback protocol.
 **Not this role:** the machinery the commands invoke, which is `R28` — the
 feedback protocol sits here because it runs between a person and an agent, where
-the rest of that family runs between repositories; what an epoch is *for*, which is
-nobody's role and is the human's; and **the authority to move an epoch to
+the rest of that family runs between repositories; what a stretch is *for*, which is
+nobody's role and is the human's; and **the authority to move a stretch to
 `deployed`**, which is the build system's alone — the front end may carry that
 transition but never originate it.
 
@@ -343,16 +343,16 @@ transition but never originate it.
 ### R28 — the epoch build system
 
 **Held by:** `anoieu`
-**Role:** the family of communication protocols by which an epoch is verified,
+**Role:** the family of communication protocols by which a stretch is verified,
 announced, approved and adopted — the global announcement, the approval block and
 its dry run, the bump gate, and the shape of the log entry. Taken together they
 are this ecosystem's **main verification system for its own governance**, which
-is a claim worth stating plainly because it is unusual: what verifies an epoch is
+is a claim worth stating plainly because it is unusual: what verifies a stretch is
 a protocol, not a test suite.
 **Owns:** `tools/bump_check.py`, the approval protocol in `docs/policy.md`,
-`docs/epoch-policy.md` and `docs/epochs.md` — the gates, the block template,
+`docs/stretch-policy.md` and `docs/stretches.md` — the gates, the block template,
 the dry run, the statuses, and the log's entry format.
-**Not this role:** **deciding what an epoch is *for*, which is not a role here
+**Not this role:** **deciding what a stretch is *for*, which is not a role here
 at all** — it is the human's, and `R27` was allocated to this repository for it
 in error and has been deleted; whether it could ever be automated is an open
 research question this role carries rather than answers; the policy a member is checked against and the
@@ -381,7 +381,7 @@ the reporting loop, which koine has asked for and this must not quietly absorb.
 > **And the tool for it does not exist.** What is held here is run by hand across
 > four documents. Its **planned maintainer** is registered with
 > `ynoia` as [`tekton`](../tools/ynoia/tools.md), at the top of the priority
-> order, and it is deliberately **not** work for the current epoch.
+> order, and it is deliberately **not** work for the current stretch.
 
 `R26` is deliberately not allocated here: koine's `D8` proposes it for the
 low-level formats of the reporting loop, and that request is open. An id claimed

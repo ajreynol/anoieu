@@ -659,7 +659,7 @@ def protocol_report() -> int:
 def epoch_gate() -> int:
     """`tools/bump_check.py` refuses everything that is not a finished green run.
 
-    This is the gate a downstream member puts in front of adopting an epoch, so
+    This is the gate a downstream member puts in front of adopting a stretch, so
     the expensive direction is **letting something through**: a member that
     refuses wrongly tries again tomorrow, and one that adopts wrongly has pinned
     itself to a commit our own CI rejected. Every case below that is not an
@@ -715,8 +715,8 @@ def epoch_gate() -> int:
         ("reads a recorded epoch marker", bump_check.epoch_marker(tmp) == "E7"),
         ("reports no marker as absent, never as a failure",
          bump_check.epoch_marker(HERE) == ""),
-        ("reads the current epoch from the log",
-         re.fullmatch(r"E\d+", bump_check.current_epoch(root) or "") is not None),
+        ("reads the current stretch from the log",
+         re.fullmatch(r"E\d+", bump_check.current_stretch(root) or "") is not None),
     ]
     for label, ok in marks:
         failures += 0 if ok else 1
@@ -737,11 +737,11 @@ def epoch_surfaces_agree() -> int:
     because it looks safe. So the comparison exists, and it is this.
 
     Ground truth is the command table in `docs/interface.md` and the status table
-    in `docs/epoch-policy.md`. Where a copy disagrees, the table is right.
+    in `docs/stretch-policy.md`. Where a copy disagrees, the table is right.
     """
     root = os.path.dirname(HERE)
     iface = open(os.path.join(root, "docs", "interface.md")).read()
-    policy = open(os.path.join(root, "docs", "epoch-policy.md")).read()
+    policy = open(os.path.join(root, "docs", "stretch-policy.md")).read()
 
     truth_cmds = set(re.findall(r"^\| `((?:epoch|make) [a-z]+(?: [a-z]+)?)` \|",
                                 iface, re.M))

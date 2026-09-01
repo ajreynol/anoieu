@@ -1,15 +1,15 @@
-# The epoch policy
+# The stretch policy
 
-What an epoch is, what ends one, and what designing the next one involves.
+What a stretch is, what ends one, and what designing the next one involves.
 
-[`epochs.md`](epochs.md) is the **log** and this is the **policy**, and they are
+[`stretches.md`](stretches.md) is the **log** and this is the **policy**, and they are
 two files because they are held to opposite standards: a policy has to be current
 and the log explicitly does not. One file carrying both would make the licence to
 be stale look like it covered the rules as well.
 
-## What an epoch is
+## What a stretch is
 
-**The stretch of work between one global announcement and the next.** Not a
+**The work between one global announcement and the next.** Not a
 release, nothing is versioned against it, and it has no schedule — it is the span
 a single announcement turned out to cover, named after the fact.
 
@@ -21,7 +21,7 @@ the boundary adds no machinery at all, which is most of the argument for it.
 
 ## What counts as a major event
 
-An epoch is made of these. The list is short deliberately — a register of events
+A stretch is made of these. The list is short deliberately — a register of events
 that counts everything is a commit log, and there is one of those already.
 
 | event | where it is recorded |
@@ -58,18 +58,18 @@ that assessment could see was three days old and covered only the newest trees.
 
 **That is a fair hit and this is part of the answer to it.** A declared record is
 cheap to keep and impossible to reconstruct later; the reason to write down that
-an epoch ended, or that a role moved, is precisely that neither is legible from a
+a stretch ended, or that a role moved, is precisely that neither is legible from a
 diff. Nothing here is generated, and nothing should be: a derived record that
 agrees with itself proves nothing.
 
-## The hard constraint: a red epoch is not deployable
+## The hard constraint: a red stretch is not deployable
 
-**An epoch may only be adopted at a commit where anoieu's own CI is green, and a
+**A stretch may only be adopted at a commit where anoieu's own CI is green, and a
 downstream tool must refuse it otherwise.** This is the one thing on this page
 that is not a convention, and it is stated as a requirement on *them* because it
 is the only half we cannot enforce from here.
 
-**Adoption means moving a pin.** A member adopts an epoch by moving `ANOIEU_REV`
+**Adoption means moving a pin.** A member adopts a stretch by moving `ANOIEU_REV`
 in its `anoieu / policy` workflow to a commit of this repository. That is the act
 this constrains — not reading the announcement, not agreeing with it, and not
 doing anything the announcement asks for.
@@ -82,7 +82,7 @@ prevent, moved one step upstream.
 
 **It fails closed.** Not green, not finished, or not reachable all refuse. That is
 the reverse of how the inventory treats an unreachable remote, and the difference
-is worth stating: **adopting an epoch is optional and deferrable.** Refusing costs
+is worth stating: **adopting a stretch is optional and deferrable.** Refusing costs
 a member one later attempt; adopting wrongly pins them to a commit our own build
 rejected. Where the cheap error is obvious, take it.
 
@@ -95,7 +95,7 @@ the moment of adoption, in a bump script or a person's hands, and nowhere else.
 that four members do not each write it:
 
 ```
-python3 tools/bump_check.py --rev <sha>    # may this epoch be adopted?
+python3 tools/bump_check.py --rev <sha>    # may this stretch be adopted?
 python3 tools/bump_check.py --root PATH    # read the pin out of a member's workflow
 ```
 
@@ -104,7 +104,7 @@ two, because *we asked and it is not green* and *we could not ask* are different
 facts and a bump script should be able to log which one it hit.
 
 **What this does not say.** A green run means those checks passed at that commit.
-It is not a claim that the epoch is any good, that its conventions are right, or
+It is not a claim that the stretch is any good, that its conventions are right, or
 that adopting it is wise — the same caution the analyzer carries about its own
 silence. It is a floor, and the only thing it rules out is deploying a stretch of
 work we could not get past our own build.
@@ -127,7 +127,7 @@ preference:
 | **the tools, together** | **~2.4s** |
 | `docs/*.md`, all of it | 13,340 lines |
 
-**So the tools are not the problem and never were.** The slow part of an epoch
+**So the tools are not the problem and never were.** The slow part of a stretch
 command is an agent *reading documents*, and that cost grows every time this
 ecosystem writes another page — which it does constantly.
 
@@ -139,7 +139,7 @@ this section guesses it is, and optimising before that would be the same mistake
 as generating a document before anybody has kept one by hand.
 
 The guess, recorded so it can be checked later: **a dry run may already need only
-[`epochs.md`](epochs.md), 199 lines, plus the commands named in the block** —
+[`stretches.md`](stretches.md), 199 lines, plus the commands named in the block** —
 because the log entry carries every field the block wants. `Of us` answers
 *applied here*, the prompt answers *asks*, `Suggested notifications` answers
 *informs*, and `removes` is its own row. If that holds, the ordinary path never
@@ -193,8 +193,8 @@ No, or unverified, means no.
 repository we depend on and do not control — a branch about to merge, a release
 about to land, a file about to be renamed. Three things to ask about each:
 
-- does anything **in this epoch** depend on it;
-- does anything **in the epoch's record** describe it;
+- does anything **in this stretch** depend on it;
+- does anything **in the stretch's record** describe it;
 - would deploying now make members adopt something that is about to be wrong.
 
 Usually all three are no and the answer takes a minute. When one is yes, it is
@@ -203,7 +203,7 @@ better to know before the announcement is carried than after.
 **A branch name is a claim with an expiry date.** That is the sharpest form of
 this question and it is mechanically checkable: anything in the tree naming a
 *branch* rather than a *commit* is a sentence that becomes false without anybody
-editing it, and an epoch is the wrong moment to be shipping one. Grep for the
+editing it, and a stretch is the wrong moment to be shipping one. Grep for the
 branch names you depend on before deploying; a commit sha outlives the branch
 that carried it and a `ref:` does not.
 
@@ -221,16 +221,16 @@ that carried it and a `ref:` does not.
 > and not applied to its neighbour is the ordinary shape of this**, and it is why
 > the question is on this list rather than left to somebody remembering.
 
-**3. Has the epoch been applied here?** The **Of us** row, and it is a question
+**3. Has the stretch been applied here?** The **Of us** row, and it is a question
 about this tree rather than about the announcement — see the section on being a
-target of your own epoch.
+target of your own stretch.
 
-**4. What comes out?** An epoch that only adds has not been designed, and the
+**4. What comes out?** A stretch that only adds has not been designed, and the
 last honest moment to notice is before it is carried.
 
 ## The approval block
 
-**A session that proposes deploying an epoch ends with this**, under
+**A session that proposes deploying a stretch ends with this**, under
 [the approval protocol](policy.md#the-approval-protocol). A suffix after it is
 fine; the same seven fields in the same order every time is the part that
 matters.
@@ -240,7 +240,7 @@ EPOCH E1 · dry run
   commit ....... 9942149       git rev-parse --short HEAD
   ci ........... FAIL          tools/bump_check.py --rev 9942149 -> exit 1
   applied here . FAIL          grep -rl "Is there a paper in this" README.md docs/
-  asks ......... 2             docs/epochs.md, E1 - the prompt
+  asks ......... 2             docs/stretches.md, E1 - the prompt
   informs ...... 3             tools/ecosystem.py -- members
   removes ...... nothing       -
   ---------------------------------------------------------------
@@ -255,21 +255,21 @@ counts with the failures and never with the passes.
 
 **And none of this verifies anything** -- see
 [the approval protocol](policy.md#the-approval-protocol). Nothing is proved. What
-keeps an epoch inside its guardrails is that each one teaches the next, which is
-the same recursion as *anoieu is a target of its own epoch* below.
+keeps a stretch inside its guardrails is that each one teaches the next, which is
+the same recursion as *anoieu is a target of its own stretch* below.
 
 | field | what it holds |
 | --- | --- |
 | **commit** | what would be adopted. Not a branch, and not *HEAD* |
 | **ci** | `PASS`/`FAIL` from `bump_check --rev` at that commit, with the reason when it fails |
-| **applied here** | the **Of us** row reduced to a verdict: has this epoch been done in this tree |
+| **applied here** | the **Of us** row reduced to a verdict: has this stretch been done in this tree |
 | **asks** | what a member is asked for, in one line, or `nothing` |
 | **informs** | the suggested notifications — a suggestion, never a list of obligations |
 | **removes** | what comes out to pay for what went in, or `nothing`, which is a finding rather than a blank |
 | **DEPLOY** | `READY` or `BLOCKED`, with the count of failing fields |
 
 **`READY` is a statement about the gates and never about the decision.** It means
-the mechanical checks pass. Whether the epoch is deployed is the person's reply
+the mechanical checks pass. Whether the stretch is deployed is the person's reply
 and lives nowhere else, and an agent that treats its own `READY` as permission
 has misread the whole protocol.
 
@@ -279,7 +279,7 @@ list as the CI verdict is the cheapest way to stop it being the field nobody
 mentions.
 
 **The block goes into the log entry verbatim**, in its `Approval` row — including
-the ones that said `BLOCKED`. An epoch that took three attempts to pass its own
+the ones that said `BLOCKED`. A stretch that took three attempts to pass its own
 gates is a more useful record than one that appears to have passed first time.
 
 ### The dry run
@@ -291,7 +291,7 @@ and is safe to run at any moment.
 This is the form the rest of this ecosystem already takes wherever an action
 costs somebody something: every prompt takes `--show-prompt`, which prints what
 it would send and runs nothing; `install_eo --dry-run` prints exactly the
-commands a run would execute. **Deploying an epoch is the largest outward-facing
+commands a run would execute. **Deploying a stretch is the largest outward-facing
 act here and had no such form until it was asked for.**
 
 **The header says which kind of block it is**, and that is the whole reason the
@@ -300,7 +300,7 @@ ending `· approval requested` was somebody asking for a decision. Both are kept
 in the log, so the distinction has to survive in the text — otherwise a recorded
 `BLOCKED` cannot be told apart from a request that was refused.
 
-**It should be the ordinary way to find out where an epoch stands**, and cheap
+**It should be the ordinary way to find out where a stretch stands**, and cheap
 enough that running it is not itself a decision. A readiness check that costs
 something is one people skip, and then the first time anybody evaluates the gates
 is the moment they most want the answer to be yes.
@@ -309,7 +309,7 @@ is the moment they most want the answer to be yes.
 means the gates pass today and nothing follows from it. The deployment still
 needs a person, and asking for that is a different block with a different header.
 
-## The status of an epoch
+## The status of a stretch
 
 **Five levels, and each is a higher bar of scrutiny than the one before it.**
 
@@ -356,14 +356,14 @@ scrutiny rising:
 | transition | command | what decides it |
 | --- | --- | --- |
 | `brainstorm` → `planned` | `epoch plan` | **a person, and that is sufficient** — all that is at stake is which files we may touch |
-| `planned` → `staged` | `epoch stage` | a person's direction **and an epoch with content** — there must be something to stage |
+| `planned` → `staged` | `epoch stage` | a person's direction **and a stretch with content** — there must be something to stage |
 | `staged` → `deployed` | `epoch deploy` | **the gates, and nobody's say-so** — what is at stake is other people's trees |
 | `deployed` → `installed` | *no command* | other people, observed. Not ours to assert at all |
 | anything → `brainstorm` | `epoch brainstorm` | nobody. Down is free |
 
 **`make epoch` is the composite, not a transition.** It would do the work *and*
 stage the result — `epoch stage` is the bare transition, and the one that
-exists. Splitting them is what lets a person stage an epoch they wrote
+exists. Splitting them is what lets a person stage a stretch they wrote
 themselves without asking anything to improve it first.
 
 **At the bottom a person's decision is the whole of the criterion; at the top it
@@ -398,8 +398,8 @@ Nothing outside this tree is affected either way; what is being decided is
 whether we are done playing with ideas and ready to touch load-bearing files. No
 program can decide that, and no gate should pretend to.
 
-**`planned` still says nothing about the epoch itself**, which is worth keeping
-straight: it is not a claim that the epoch is good, ready, or agreed. It is a
+**`planned` still says nothing about the stretch itself**, which is worth keeping
+straight: it is not a claim that the stretch is good, ready, or agreed. It is a
 claim about our own posture, and the only thing that follows from it is that the
 kernel-adjacent files stop being off limits.
 
@@ -412,27 +412,27 @@ level does not make it one.
 ### `planned` is on deck, not a resting place
 
 **Reaching `planned` means the next move is expected to be `epoch stage`.** It is
-the short gap between having decided what an epoch is for and beginning to
+the short gap between having decided what a stretch is for and beginning to
 assemble it — the protected rings are open, a person is about to touch them, and
-the epoch is waiting rather than parked.
+the stretch is waiting rather than parked.
 
-**An epoch that sits in `planned` is telling you something.** Either it should go
+**A stretch that sits in `planned` is telling you something.** Either it should go
 back down, because what looked like a subject was still an idea, or it should be
 staged, because it was ready. Both are one command and neither is expensive; what
-is expensive is a level that quietly becomes where epochs live.
+is expensive is a level that quietly becomes where stretches live.
 
 **`epoch stage` is what leaves it, and its bar is higher than `epoch plan`'s by
 exactly one thing: there has to be something to stage.** A person's word alone
 was enough to open the protected rings; it is not enough to begin writing an
-announcement, because an announcement about an epoch with no content is a
-covering note for nothing. The log entry has to say what the epoch carries and
+announcement, because an announcement about a stretch with no content is a
+covering note for nothing. The log entry has to say what the stretch carries and
 what, if anything, it asks — and *nothing* is a legitimate answer to the second,
 which is why the bar is content rather than an ask.
 
 ### `brainstorm` — and why `vision.md` is the kernel
 
 **In `brainstorm` we do not touch critical infrastructure, and we edit
-discussions aggressively.** It is the mode for working out what the next epoch
+discussions aggressively.** It is the mode for working out what the next stretch
 should be, and the point of naming it is that ideas are cheap exactly when
 nothing load-bearing is moving underneath them.
 
@@ -451,12 +451,12 @@ analyzer, by comparison, is cheap: it can be rewritten on a Tuesday.
 | `vision.md` — the kernel | **no**, and not in any status without a person |
 | `policy.md`, the checker, the prompts | **no** |
 | the reporting positions and workflow | **no** |
-| `discussion.md`, `board.md`, the `ynoia` registers | **yes — aggressively.** This is where the next epoch gets worked out |
+| `discussion.md`, `board.md`, the `ynoia` registers | **yes — aggressively.** This is where the next stretch gets worked out |
 | notes, drafts, anything untracked | yes |
 
 **Aggressively is meant.** Open topics, rewrite the board, reorder the registers,
 argue with the accounts. None of it is load-bearing, all of it is where a good
-epoch comes from, and a brainstorm that produced no changes to any of it was
+stretch comes from, and a brainstorm that produced no changes to any of it was
 probably a planning meeting.
 
 ### What to say in `staged`
@@ -468,31 +468,31 @@ them doable.
 
 Not *here is what I changed and why*; not the reasoning, the trade-offs, or the
 files. Those belong in `brainstorm`, where they are the entire point. **A staged
-epoch that produces paragraphs has slipped back a level without saying so**, and
+stretch that produces paragraphs has slipped back a level without saying so**, and
 the honest response is to drop to `brainstorm` rather than to keep explaining.
 
 ### `installed`, and why it is not a goal
 
-**It holds when every member upholds the contracts an epoch set out** — the
+**It holds when every member upholds the contracts a stretch set out** — the
 things it asked for and required, not the notices. It is the build analogy's
 `install` step, and it is the one row where that analogy is exactly right:
 deploying makes a thing available, installing is what a consumer does, and **the
 consumer decides.**
 
-**Observed, never declared.** Nobody here moves an epoch to `installed` by
+**Observed, never declared.** Nobody here moves a stretch to `installed` by
 deciding to; it becomes true, or does not, in other people's trees, and we read
 it. That is the reverse of every other status on this page.
 
 **It may never be true, and that is a legitimate ending.** A member may decline a
 contract — this ecosystem has said in a dozen places that members owe us nothing
-— and an epoch that stays `deployed` forever because somebody said no has not
+— and a stretch that stays `deployed` forever because somebody said no has not
 failed at anything. **`deployed` is the ordinary terminal state; `installed` is a
 bonus.**
 
 **Whether it is observable at all depends on the contracts, not on us.** `E1`'s
 two happen to be visible from outside: a publishing stance is a section in a
 README, and *bump only to a green commit* is their pin plus
-[`../tools/bump_check.py`](../tools/bump_check.py). A future epoch may set a
+[`../tools/bump_check.py`](../tools/bump_check.py). A future stretch may set a
 contract nothing outside can see, and then `installed` is **unknown** — recorded
 as unknown, never assumed in either direction.
 
@@ -504,9 +504,9 @@ politer.
 
 ### Who may move it
 
-**Moving an epoch to `deployed` belongs to the epoch build system — `R28` in
+**Moving a stretch to `deployed` belongs to the epoch build system — `R28` in
 [`roles.md`](roles.md) — and to nothing else.** Not the announcement, not a
-member, not the agent that wrote the epoch, and not enthusiasm about having
+member, not the agent that wrote the stretch, and not enthusiasm about having
 finished. Centralising that one transition is what stops the status being flipped
 by whoever happens to be editing the log at the time.
 
@@ -517,7 +517,7 @@ machinery `R28` owns, and when it exists the authority does not move — the rol
 does not change hands merely because a program starts implementing part of it.
 
 Writing it the other way round was the first draft and it was wrong: an authority
-vested in a tool that does not exist means no epoch can ever deploy, including the
+vested in a tool that does not exist means no stretch can ever deploy, including the
 one that would build the tool. **Vesting it in the role has no bootstrap problem
 to patch**, which is why it is the version that survived.
 
@@ -578,15 +578,15 @@ measurement.
 
 ## How much of this crosses the boundary — open
 
-**`epoch` is our word for our planning unit. `global announcement` is the
+**`stretch` is our word for our planning unit. `global announcement` is the
 interface.** Which of the two a downstream repository should ever have to know
 about is an open research question, and it is recorded here as one rather than
 answered.
 
-**Today they coincide exactly** — one epoch, one announcement — and that is
-precisely why the leak is hard to see: every sentence about an epoch can be read
+**Today they coincide exactly** — one stretch, one announcement — and that is
+precisely why the leak is hard to see: every sentence about a stretch can be read
 as a sentence about an announcement and stays true. The coincidence is a fact
-about there having been one epoch, not a property of the design, and it will stop
+about there having been one stretch, not a property of the design, and it will stop
 holding the first time a stretch of work produces two announcements or none.
 
 **What a member demonstrably needs is two things**, and this is the whole list:
@@ -596,8 +596,8 @@ holding the first time a stretch of work produces two announcements or none.
    nothing. [`policy.md`](policy.md#a-global-announcement) is that interface.
 2. **only bump a pin to a commit where our CI is green at that commit.**
 
-**Neither requires the word *epoch*.** The second is a good rule about bumping
-whether or not anybody plans in stretches, and phrasing it as *an epoch is only
+**Neither requires the word *stretch*.** The second is a good rule about bumping
+whether or not anybody plans in stretches, and phrasing it as *a stretch is only
 deployable…* makes a rule about their build sound like a rule about our calendar.
 That is the leak, and it has already happened once, in `D16`.
 
@@ -615,7 +615,7 @@ somebody else's document changes under them.
 | position | what crosses | the case against |
 | --- | --- | --- |
 | **internal only** | announcements, and the bumping rule | loses the coordinate; two ends with no shared name for the same stretch |
-| **a coordinate and nothing more** | an epoch id on each announcement | an id for a concept they are not told the rest of is its own small confusion |
+| **a coordinate and nothing more** | a stretch id on each announcement | an id for a concept they are not told the rest of is its own small confusion |
 | **shared** | the concept, this page | asks members to carry our planning vocabulary for a benefit nothing has shown they want |
 
 **What would settle it: a member saying which.** This is exactly the kind of
@@ -625,8 +625,8 @@ never noticed the word and did not need it* settles it as firmly as any other.
 
 > **Partly settled, 2026-09-01, by the maintainer, and not by a member.** The
 > versioning convention in [`policy.md`](policy.md#say-which-advice-you-built-against--encouraged-never-required)
-> asks a downstream tool to record which epoch of our advice it was built
-> against — which chooses the **middle position above**: an epoch id crosses the
+> asks a downstream tool to record which stretch of our advice it was built
+> against — which chooses the **middle position above**: a stretch id crosses the
 > boundary as a coordinate, and nothing else about the concept does.
 >
 > **The word now crosses, so the interim rule above is superseded** for that one
@@ -643,15 +643,14 @@ word.** That is the reversible choice: adding a vocabulary later costs a
 sentence, and withdrawing one that other repositories have written into their own
 documents costs considerably more.
 
-## anoieu is a target of its own epoch
+## anoieu is a target of its own stretch
 
-**Whatever an epoch asks of members, it asks of this repository first.** We are
-not the author of an epoch standing outside it; we are one of the trees it lands
-on, and usually the first. That is not modesty — it is where most of what an
-epoch teaches actually comes from.
+**Whatever a stretch asks of members, it asks of this repository first.** We are
+not the author of a stretch standing outside it; we are one of the trees it lands
+on, and usually the first. That is not modesty — it is where most of what a stretch teaches actually comes from.
 
 **We appear in our own `Involved` list**, and the entry carries an **Of us** row
-saying what the epoch required here and whether it has been done. An epoch that
+saying what the stretch required here and whether it has been done. A stretch that
 names four members and forgets the tree it was designed in has already made the
 mistake this section exists to prevent.
 
@@ -664,25 +663,24 @@ and is the one to watch for here: **a convention that exempts the repository tha
 wrote it.** It is easy to write, it never fails a check, and the exemption is
 invisible from every side except this one.
 
-**The recursion is the point.** What being subject to an epoch costs us is the
+**The recursion is the point.** What being subject to a stretch costs us is the
 main input to the next one: design it, apply it here, find out what it actually
-cost, and let that cost be the material for the following epoch's *what comes
+cost, and let that cost be the material for the following stretch's *what comes
 out*. A stretch of work that ends without anything having been learned in this
 tree has been announced rather than run.
 
-**Some asks genuinely do not apply here, and saying which is part of designing an
-epoch rather than an escape from it.** anoieu pins nothing of its own, so a rule
+**Some asks genuinely do not apply here, and saying which is part of designing a stretch rather than an escape from it.** anoieu pins nothing of its own, so a rule
 about moving `ANOIEU_REV` is vacuous in this tree — that is a fact about the ask,
 not an exemption, and the entry says so in those terms. The distinction matters
 because *does not apply* and *has not been done* look identical in a register that
 records neither.
 
 **The test:** an entry whose **Of us** row says nothing was required is either a
-very small epoch or an unexamined one, and the second is far likelier. The
-honest failure to expect is the one `E1` records — the epoch's own ask went unmet
+very small stretch or an unexamined one, and the second is far likelier. The
+honest failure to expect is the one `E1` records — the stretch's own ask went unmet
 in this tree while being asked of three others.
 
-## Designing the next epoch is the human's
+## Designing the next stretch is the human's
 
 **It is not a role in [`roles.md`](roles.md) and it is not this repository's.**
 Deciding what the next stretch of work is *for* — what changes, what is left
@@ -696,8 +694,8 @@ log entry; what it does not do is decide that the ecosystem should be asked for
 something, because that is a claim on other people's attention and the standing
 to make it is not a thing this repository has.
 
-**What an epoch that only adds tells you** is still the sharpest single test, and
-it is a question for the person: an epoch with `removes ... nothing` was probably
+**What a stretch that only adds tells you** is still the sharpest single test, and
+it is a question for the person: a stretch with `removes ... nothing` was probably
 not designed, it was accumulated.
 
 ### `make epoch` — and the research question it is a probe for
@@ -712,14 +710,14 @@ Naming a command before building it is cheap here and is the same discipline as
 naming a tool before building it — the register of tools that do not exist is
 next door and works the same way.
 
-**It does not design the epoch.** It works inside a direction the person has
+**It does not design the stretch.** It works inside a direction the person has
 already set, and everything it produces goes through
-[the feedback protocol](interface.md#the-epoch-feedback-communication-protocol),
+[the feedback protocol](interface.md#the-stretch-feedback-communication-protocol),
 where arguing with the content changes what agents receive. The person steers by
 arguing; the command does the assembling.
 
 > **The open research question, and this command is how evidence for it
-> accumulates: can designing an epoch be automated at all?**
+> accumulates: can designing a stretch be automated at all?**
 >
 > Every `make epoch` is a data point. If what comes back is repeatedly a stretch
 > of work the person would have chosen, the answer is trending yes and the role
@@ -728,7 +726,7 @@ arguing; the command does the assembling.
 > answer the outside criticism of this ecosystem currently predicts.
 >
 > **What would settle it is not an argument.** It is the ratio, over several
-> epochs, of what a person had to overrule. Nobody is counting that yet, and
+> stretches, of what a person had to overrule. Nobody is counting that yet, and
 > starting to count it is cheaper than deciding the question.
 
 ## Frequency, and the honest position
@@ -736,9 +734,8 @@ arguing; the command does the assembling.
 There is no target. One pinned announcement at a time is the whole of the rate
 limit, and it works by making a second one cost the first one's visibility.
 
-**Two epochs in a week would be a symptom rather than progress.** The criticism
+**Two stretches in a week would be a symptom rather than progress.** The criticism
 this ecosystem has already been given from outside is that governance is the
-cheapest thing here to produce and that it has outrun the trees it governs. An
-epoch is a governance artifact. The rate at which they are declared is therefore
+cheapest thing here to produce and that it has outrun the trees it governs. A stretch is a governance artifact. The rate at which they are declared is therefore
 evidence about that criticism, in whichever direction it happens to point, and
-[`epochs.md`](epochs.md) is where somebody can count them.
+[`stretches.md`](stretches.md) is where somebody can count them.

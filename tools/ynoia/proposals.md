@@ -435,7 +435,7 @@ creating it.
 Five candidates, none taken. All are free in [`names.md`](names.md), and a name
 is claimed when a person approves one — not when a document suggests it. Each
 etymology below is written to be disagreed with, which is the test: if the
-sentence explaining a name is a stretch, the scope is what is unclear.
+sentence explaining a name is strained, the scope is what is unclear.
 
 | name | Greek | the claim it makes | the objection to it |
 | --- | --- | --- | --- |

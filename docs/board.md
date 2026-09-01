@@ -99,7 +99,7 @@ who decides.
 **Task:** `.github/workflows/ci.yml` and `tools/deps.lock` both name the ethos
 commit the `oracle` job builds, and nothing compares them. Taken deliberately
 rather than building the version that reads the lock, because the alternative was
-holding up a finished epoch for an elegant fix.
+holding up a finished stretch for an elegant fix.
 **Entities:** `anoieu`
 **Status:** ready — the duplicate is one line and the fix is about six.
 **Channel:** **internal** — nothing to send.

@@ -99,8 +99,8 @@ An **internal** project is one this ecosystem would build, host or depend on —
 a child project in somebody's tree, a tool a member would fetch, a piece of
 shared machinery. For these the recommendation is strong, and it costs nothing,
 because **the vision is already owed elsewhere**. The policy asks a child project
-to open with the question it is trying to answer, the goals in order, the stretch
-goal, and an explicit list of what is out of scope; the ecosystem's vision asks
+to open with the question it is trying to answer, the goals in order, the
+wishue, and an explicit list of what is out of scope; the ecosystem's vision asks
 that the consumer be named before the work starts, by tool and by artifact. A
 request that arrives with those answered can be judged the day it arrives.
 
@@ -175,14 +175,14 @@ recommendation is worth making at all.
 
 ## tekton — the epoch build system
 
-**What:** one program behind the family of protocols by which an epoch is
+**What:** one program behind the family of protocols by which a stretch is
 verified, announced, approved and adopted — it evaluates every gate, runs the
 tool for each, and delivers the evidence an agent composes the approval block
-from. It also **holds the one authority nothing else may hold: moving an epoch's
+from. It also **holds the one authority nothing else may hold: moving a stretch's
 status to `deployed`**, which is what tells the ecosystem the work is available
 to consume.
 **State:** `named` — requested by anoieu on 2026-09-01 as its highest priority,
-and to be built and used in the **second** epoch, explicitly not this one. Until
+and to be built and used in the **second** stretch, explicitly not this one. Until
 it exists, the `deployed` transition is made by whoever holds `R28` on its behalf,
 which is a stated bootstrap exception that ends when this ships. The vision was written down
 first: the protocols exist, are in use, and are run by hand, so what is being
@@ -216,7 +216,7 @@ than run. `nothing` else.
 of six; `git`, `grep` and a person for the rest; and the block typed out by hand.
 **Why here:** **first, displacing `kanon`, and the two are not close.** Every
 other entry on this page is work whose consumer does not exist yet. This one has
-a consumer today, running the thing by hand, every time an epoch is considered —
+a consumer today, running the thing by hand, every time a stretch is considered —
 and the cost of its absence is paid on exactly the occasions when getting it
 wrong is most expensive. `kanon` remains parked by a person and its position
 below is a statement about *when*, not about merit.

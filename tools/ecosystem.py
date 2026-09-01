@@ -401,7 +401,7 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
         if os.path.isfile(disc):
             owed += open(disc, encoding="utf-8").read().count("**To:** anoieu")
 
-    epoch = bump_check.current_epoch() or "?"
+    epoch = bump_check.current_stretch() or "?"
     status = bump_check.current_status() or "?"
 
     def verdict(ok, unsure=False):
@@ -412,7 +412,7 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
         ("policy", f"{passing} of {len(members)} passing",
          verdict(passing == len(members), unknown > 0)),
         ("topics owed to us", str(owed), verdict(owed == 0)),
-        ("epoch", f"{epoch}, {status}",
+        ("stretch", f"{epoch}, {status}",
          verdict(status in ("deployed", "installed"), status == "?")),
     ]
 
@@ -525,9 +525,9 @@ def main() -> int:
         for n in notes:
             print(f"note: {n}")
     print()
-    here = bump_check.current_epoch()
+    here = bump_check.current_stretch()
     if here:
-        print(f"Epoch here: {here}. The `epoch` column is what a tree records "
+        print(f"Stretch here: {here}. The `epoch` column is what a tree records "
               f"about which advice it\nwas built against -- encouraged and never "
               "required, so `-` is the ordinary case\nand is not a finding. It is "
               "not a compliance column and must not be read as one.")

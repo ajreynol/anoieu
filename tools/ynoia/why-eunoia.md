@@ -744,7 +744,7 @@ of taste about a proof somebody else maintains. Same reporting system, a
 different burden — and the same refusal at the end of it, because a development
 euthyna has nothing to say about is not thereby a development that is good.
 
-**The stretch goal** is the same service for whatever eudaimonia builds next: a
+**The wishue** is the same service for whatever eudaimonia builds next: a
 development the tool has not seen, for a calculus it does not know. That is also
 the honest test of the first goal — whether what euthyna learns on logos is
 about logos, or about generated proof developments in general.

@@ -80,7 +80,7 @@ on it, and nothing consumes the file yet.
 **first if you are the person driving this repository** rather than reading about
 it. What to say, what comes back, what never comes back, and the decisions that
 are nobody's but yours. Its stated default — *work with anoieu to develop the
-next epoch* — is a **conjecture about the right level of abstraction**, said so on
+next stretch* — is a **conjecture about the right level of abstraction**, said so on
 the page, with what would show it wrong and five other levels to drop to,
 including the two where anything actually gets built. Distinct from
 [`usage.md`](usage.md), which is the analyzer's command line, and from
@@ -93,12 +93,12 @@ sources, a dry run, a gate, an exit code, a version — and then the longer half
 not; nothing type-checks; there is no linker; and `deployed` is not `installed`,
 because every downstream effect is somebody else's voluntary act.
 
-[`epoch-policy.md`](epoch-policy.md) and [`epochs.md`](epochs.md) are a pair and
-are not in the table either. An **epoch** is the span between one global
+[`stretch-policy.md`](stretch-policy.md) and [`stretches.md`](stretches.md) are a pair and
+are not in the table either. A **stretch** is the span between one global
 announcement and the next. The policy says what one is, what counts as a major
 event within it — a global announcement, and **a role changing hands**, which is
 the one a reader reconstructing history from commits will not see — and what
-*designing the next epoch* involves, which is a role here and is destined for the
+*designing the next stretch* involves, which is a role here and is destined for the
 governance repository. The log is the other half and is **the one document here
 allowed to be out of date**: the covering note recommended for handing each
 announcement downstream, with the wording that was rejected, which is the part

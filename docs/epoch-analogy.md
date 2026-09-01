@@ -6,7 +6,7 @@ release is something you cut rather than something that happens. Borrowing that
 costs nothing and saves a page of explanation.
 
 This file is the mapping, and then the longer and more useful half: where the
-analogy stops being flattering. [`epoch-policy.md`](epoch-policy.md) is the
+analogy stops being flattering. [`stretch-policy.md`](stretch-policy.md) is the
 actual policy; nothing here governs anything.
 
 ## The mapping
@@ -15,24 +15,24 @@ actual policy; nothing here governs anything.
 | --- | --- |
 | the sources | the documents members read — [`policy.md`](policy.md), the announcement, the covering prompt |
 | the compiler | an agent |
-| the target | an **epoch** |
+| the target | a **stretch** |
 | `make -n` | `epoch dry run` |
 | `make` | `epoch deploy` |
 | the test suite, run before release | anoieu's own CI, at the commit being adopted |
 | the exit code | the `DEPLOY` line of the approval block |
-| the build log | [`epochs.md`](epochs.md) |
-| a version | the epoch id — `E1` |
+| the build log | [`stretches.md`](stretches.md) |
+| a version | the stretch id — `E1` |
 | a lockfile | `ANOIEU_REV`, and [`../tools/deps.lock`](../tools/deps.lock) |
-| `make install` | a member upholding the epoch's contracts — and `installed` is the property of **every** member having done so |
+| `make install` | a member upholding the stretch's contracts — and `installed` is the property of **every** member having done so |
 | the artifact | the commit, plus the announcement saying what is in it |
-| the linker | **a person**, carrying the announcement by hand |
-| the object cache — what makes a rebuild incremental | the log entry in [`epochs.md`](epochs.md), which a command reads instead of the whole corpus |
+| the linker | **nothing.** No reference an announcement makes is ever resolved — see below |
+| the loader | **a person**, carrying the announcement by hand |
+| the object cache — what makes a rebuild incremental | the log entry in [`stretches.md`](stretches.md), which a command reads instead of the whole corpus |
 | signing, credentials, a package registry | **nothing.** One owner, one keyboard — see below |
 
 ## Where the analogy earns its keep
 
-**The gate comes before the release.** A build that fails does not ship, and an
-epoch whose CI is red is not deployable. Putting the two in the same shape is
+**The gate comes before the release.** A build that fails does not ship, and a stretch whose CI is red is not deployable. Putting the two in the same shape is
 what made that rule obvious rather than arbitrary.
 
 **A dry run is free, and running one is not a decision.** Every build system has
@@ -54,14 +54,14 @@ obvious without a paragraph.
 The longer half, and the reason this is a file rather than a footnote.
 
 **A build is a function; this is not.** `make` over the same sources gives the
-same output. An agent composing an epoch from the same documents gives different
+same output. An agent composing a stretch from the same documents gives different
 text every time. A child project in eudaimonia's tree makes exactly this
 criticism of its own analogy — *a template rendered by `sed` is a function; a
 prompt handed to an agent is not* — and it transfers here without a word changed.
 
 **Nothing type-checks.** A compiler rejects programs that are wrong in ways it
-can see. Nothing here rejects an epoch for being false, incoherent, or a bad
-idea. The gates decide whether the *tree* is healthy, never whether the epoch is
+can see. Nothing here rejects a stretch for being false, incoherent, or a bad
+idea. The gates decide whether the *tree* is healthy, never whether the stretch is
 *right*, and the approval block is a target rather than a proof.
 
 **There is no linker, and that is the sharpest gap.** Undefined-symbol errors are
@@ -71,6 +71,33 @@ does not have, a file that moved, or a rule that was withdrawn, **nothing catche
 it** — and the first reader to notice is somebody in another repository, which is
 the most expensive place to find out.
 
+**A person is the loader, not the linker**, which is why the two are separate
+rows above. Carrying an announcement places it in somebody's hands; it resolves
+nothing on the way.
+
+**What a linker would be here: the check that every reference an announcement
+makes resolves in the tree that will receive it** — every `Dnn`, `Rnn` and `Bnn`
+it cites, every path and anchor at the adopted commit, every convention it names.
+And it would be *dynamic* linking rather than static, because each member pins
+`ANOIEU_REV` independently: the same announcement resolves against a different
+version in every tree, which makes the pin a soname rather than only a lockfile.
+
+**Three failures already in the record are linker errors under other names.** The
+`oracle` job's `ref: ethosEoc3` is a dangling reference with an expiry date. The
+ethos revision written in two places with nothing comparing them is a duplicate
+definition, which a linker fails the build on. A prompt arriving in the wrong one
+of several deliberately-alike trees is the wrong library on the search path, and
+[`../scripts/repos.local`](../scripts/repos.local) is that search path.
+
+**Half of it already exists and is not called this.** The comparisons in
+`tests/run.py` — the prompts against their document, the `epoch help` surfaces
+against their tables — resolve copies against a declared ground truth, which is
+symbol resolution for *internal* symbols. Nothing does it for external ones, and
+dokimasia's `D3` reported exactly that from outside: a link into anoieu is the
+one link no checker validates. **Where it would run is settled by the same rule
+as the bump gate** — it reads other people's trees, so it can never run in our
+CI, and it belongs at the moment of deploying.
+
 **`deployed` is not `installed`, and this is the row the analogy gets exactly
 right.** A build system that finished can put the artifact somewhere; we cannot.
 `deployed` means *available to consume*, and nothing happens until a member
@@ -79,7 +106,7 @@ in other people's trees rather than declared in ours.
 
 Where it goes further than any build system: **`installed` may never be true, and
 that is a legitimate ending.** A member who reads a contract and declines it has
-done nothing wrong, and an epoch that sits at `deployed` forever has not failed.
+done nothing wrong, and a stretch that sits at `deployed` forever has not failed.
 No build system has a state meaning *the consumer considered this and said no*,
 because no build system's consumer is entitled to.
 
@@ -88,7 +115,7 @@ way on every machine. An announcement is read by agents that may reasonably do
 something other than what it expected. *May reasonably* is the design rather than
 a defect, and it is why the announcement is written to be arguable.
 
-**Nothing is reproducible.** Re-running an epoch from the same inputs produces
+**Nothing is reproducible.** Re-running a stretch from the same inputs produces
 different text. There is no `--rebuild` that returns what shipped; git does that
 job and nothing else does.
 

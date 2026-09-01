@@ -8,8 +8,8 @@ is the program that decides it. Published so that four members do not each write
 it; nothing obliges anybody to use this one, and the requirement is the refusal
 rather than the program.
 
-*Internally we plan in stretches called epochs and this is what makes one
-deployable -- `docs/epoch-policy.md`. That vocabulary is ours and a member does
+*Internally we plan in stretches and this is what makes one
+deployable -- `docs/stretch-policy.md`. That vocabulary is ours and a member does
 not need it: the rule below is about a bump, and it holds whether or not anybody
 upstream plans in anything.*
 
@@ -23,7 +23,7 @@ exists to prevent.
 
 **It fails closed.** Not green, not finished, or not reachable -- all refuse.
 That is the opposite of how `tools/ecosystem.py --check --online` treats an
-unreachable remote, and the difference is that adopting an epoch is *optional and
+unreachable remote, and the difference is that adopting a stretch is *optional and
 deferrable*: refusing costs a member nothing but a later attempt, where a
 fail-closed check inside a build would turn somebody's tree red for a network
 they do not own.
@@ -34,7 +34,7 @@ and a build that can change colour on its own cannot be evidence that a commit
 was good. It is a command a person or a bump script runs at the moment of
 adoption, and nothing else.
 
-    python3 tools/bump_check.py --rev 59e8e07     # may this epoch be adopted?
+    python3 tools/bump_check.py --rev 59e8e07     # may this stretch be adopted?
     python3 tools/bump_check.py --root PATH       # read the pin from a member's workflow
     python3 tools/bump_check.py --rev X --dry-run # print what it would ask, ask nothing
 
@@ -69,7 +69,7 @@ def verdict(runs: list[dict]) -> tuple[int, str]:
 
     A commit with no check runs at all is `2` and never `0`: *no runs* and *all
     runs passed* are indistinguishable from an empty list, and guessing in the
-    permissive direction here would let an epoch through on a commit CI never
+    permissive direction here would let a stretch through on a commit CI never
     looked at.
     """
     if not runs:
@@ -111,7 +111,7 @@ def pinned_rev(root: str) -> tuple[str, str]:
 def epoch_marker(root: str) -> str:
     """The `EUNOIA_EPOCH` a repository records, or "" if it records none.
 
-    The marker says which epoch of this ecosystem's *advice* a tree was built
+    The marker says which stretch of this ecosystem's *advice* a tree was built
     against; `pinned_rev` above says which commit of the *checker* it is held to.
     Two different facts, allowed to disagree, read from the same file because
     that is where somebody already looks.
@@ -133,16 +133,16 @@ def epoch_marker(root: str) -> str:
     return ""
 
 
-def current_epoch(root: str = "") -> str:
-    """The newest epoch in `docs/epochs.md`, or "" if there is none.
+def current_stretch(root: str = "") -> str:
+    """The newest stretch in `docs/stretches.md`, or "" if there is none.
 
     The log is newest-first, so the first `## E<n>` heading is the current one.
     Read from the prose rather than from a second file on purpose: a machine-
     readable copy would be one more thing to keep in step with the log, and the
-    log is already the ground truth for what an epoch is.
+    log is already the ground truth for what a stretch is.
     """
     path = os.path.join(root or os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))), "docs", "epochs.md")
+        os.path.abspath(__file__))), "docs", "stretches.md")
     try:
         with open(path, encoding="utf-8") as fh:
             m = re.search(r"^##\s+(E\d+)\b", fh.read(), re.M)
@@ -152,9 +152,9 @@ def current_epoch(root: str = "") -> str:
 
 
 def current_status(root: str = "") -> str:
-    """The status of the newest epoch in `docs/epochs.md`, or "" if unreadable."""
+    """The status of the newest stretch in `docs/stretches.md`, or "" if unreadable."""
     path = os.path.join(root or os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))), "docs", "epochs.md")
+        os.path.abspath(__file__))), "docs", "stretches.md")
     try:
         with open(path, encoding="utf-8") as fh:
             text = fh.read()
@@ -208,7 +208,7 @@ def main() -> int:
     runs, why = ask(rev)
     if why:
         print(f"-- REFUSE: {why}")
-        print("   Unverified is refused rather than allowed: adopting an epoch is "
+        print("   Unverified is refused rather than allowed: adopting a stretch is "
               "optional and\n   deferring costs nothing, so the cautious answer is "
               "the cheap one.")
         return 2
@@ -217,7 +217,7 @@ def main() -> int:
     print(f"-- {'ADOPT' if code == 0 else 'REFUSE'}: {REPO} at {rev} is {reason}")
     if code == 0:
         print("   This says those checks passed at that commit, and nothing about "
-              "whether the\n   epoch is any good -- see docs/reports/"
+              "whether the\n   stretch is any good -- see docs/reports/"
               "reporting-policy.md on silence.")
     return code
 
