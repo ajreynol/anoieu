@@ -113,7 +113,7 @@ reasonable end-of-session question and has a one-command answer.
 
 ## The commands
 
-**Eight today**, each a prompt on its own, typed as it appears here. **The set is
+**Nine today**, each a prompt on its own, typed as it appears here. **The set is
 expected to grow** — adding one is `R29`'s to propose and a person's to accept,
 and a new command arrives with its output shape defined, not discovered.
 
@@ -126,6 +126,7 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 | `epoch help` | print the commands, and the ecosystem's health |
 | `epoch status` | which level this epoch is at, and what the next one would take |
 | `epoch advice` | what the agent thinks the most promising work for the next epoch is |
+| `epoch plan` | attempt `brainstorm` → `planned`. Opens the protected rings again |
 | `epoch brainstorm` | drop to `brainstorm`. Always available, needs nobody |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
@@ -147,6 +148,7 @@ commands:
   epoch deploy         move the epoch's status
   epoch status         which level this epoch is at
   epoch advice         what looks most promising for the next epoch
+  epoch plan           attempt brainstorm -> planned; opens the protected rings
   epoch brainstorm     drop to `brainstorm` — always available
   epoch double check   was a deployment received                (NOT YET SUPPORTED)
 
@@ -235,7 +237,7 @@ typed, name what is accepted, stop:
 
 ```text
 epoch: unrecognised command "dry-run"
-       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch status | epoch advice | epoch brainstorm | epoch double check
+       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch status | epoch advice | epoch plan | epoch brainstorm | epoch double check
        did you mean: epoch dry run
        nothing was run
 ```

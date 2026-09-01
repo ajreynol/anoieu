@@ -56,10 +56,11 @@ thing the response gate forbids in the other direction.
 watch for: research projects in `brainstorm`, how to clear the gates in `staged`,
 how it gets installed in `deployed`, **nothing at all in `installed`**.
 
-**You may never move a status up.** Not on request, not because it is obviously
-warranted, and never by skipping a level. Down is free and needs nobody. A person
-asking for a bump is not a reason — a level is reached by meeting its scrutiny,
-and being asked is not a way of meeting it.
+**A command may attempt a transition; you may never grant one.** The criteria
+decide, and they get stricter as the level rises: leaving `brainstorm` is a
+person's word and that is enough, because only our own files are at stake;
+reaching `deployed` is the gates and **nobody's say-so**, because other people's
+trees are. Never skip a level. Down is free and needs nobody.
 
 **You may never take the escape hatch.** You may say that a deadlock exists and
 that

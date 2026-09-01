@@ -316,7 +316,7 @@ needs a person, and asking for that is a different block with a different header
 | status | what it means | scrutiny |
 | --- | --- | --- |
 | `brainstorm` | the outer rings only: ideas, discussions, registers. **Nothing critical is touched** | lowest |
-| `planned` | **says nothing.** The null status: an epoch exists and no claim is being made about it | none |
+| `planned` | **says nothing about the epoch.** What it does say is that brainstorming has ended and the protected rings are open again | a person decides |
 | `staged` | an agent is being given instructions to stage it — the announcement, the covering note, the register edits | the gates are being worked |
 | `deployed` | members should consider it **available to consume** | every gate passes |
 | `installed` | every member upholds the contracts it set out | highest, and not ours to assert |
@@ -343,12 +343,29 @@ three describe our own work in progress and oblige nobody.
 
 ### Up is earned; down is free
 
-**A status never advances because somebody asks for it**, and that includes the
-person driving. *Move it to staged* is not an instruction the front end can carry
-out — a level is reached when its scrutiny has been met, and asking is not a way
-of meeting it. **Skipping a level is not available at all**: `brainstorm` to
-`staged` is two bars in one step, and the middle one is where the thing being
-skipped would have been noticed.
+**A status advances when its scrutiny is met, never because somebody asked.** The
+commands *attempt* a transition; the criteria decide it. `epoch deploy` on a red
+build moves nothing and says why, exactly as `make` on a broken tree prints an
+error rather than shipping. **Skipping a level is not available at all**:
+`brainstorm` to `staged` is two bars in one step, and the middle one is where the
+thing being skipped would have been noticed.
+
+**Whose say-so counts falls as the level rises**, which is the same thing as
+scrutiny rising:
+
+| transition | command | what decides it |
+| --- | --- | --- |
+| `brainstorm` → `planned` | `epoch plan` | **a person, and that is sufficient** — all that is at stake is which files we may touch |
+| `planned` → `staged` | `make epoch` *(not yet supported)* | a person's direction, and an epoch with a subject to stage |
+| `staged` → `deployed` | `epoch deploy` | **the gates, and nobody's say-so** — what is at stake is other people's trees |
+| `deployed` → `installed` | *no command* | other people, observed. Not ours to assert at all |
+| anything → `brainstorm` | `epoch brainstorm` | nobody. Down is free |
+
+**At the bottom a person's decision is the whole of the criterion; at the top it
+counts for nothing.** That is not inconsistency — it is what *rising scrutiny*
+means, read as a statement about who is exposed. Leaving `brainstorm` risks
+nothing but our own files. Reaching `deployed` puts something in front of
+repositories that did not ask for it.
 
 **Going down needs nobody.** `epoch brainstorm` drops to the bottom from
 anywhere, immediately, and costs one line in the log. That asymmetry is the whole
@@ -363,6 +380,29 @@ about taking it.
 > The tell is simple: an override is recorded and says what would have to be true
 > for it not to be needed again. A bump because somebody would like it bumped has
 > no such sentence to write.
+
+### Leaving `brainstorm`: what `epoch plan` decides
+
+**`epoch plan` moves `brainstorm` → `planned`, and the thing it actually changes
+is what may be edited.** `brainstorm` holds the protected rings shut —
+[`vision.md`](vision.md), [`policy.md`](policy.md), the checker, the prompts, the
+reporting positions. `planned` opens them again.
+
+**That is why the transition is a person's and why a person's word is enough.**
+Nothing outside this tree is affected either way; what is being decided is
+whether we are done playing with ideas and ready to touch load-bearing files. No
+program can decide that, and no gate should pretend to.
+
+**`planned` still says nothing about the epoch itself**, which is worth keeping
+straight: it is not a claim that the epoch is good, ready, or agreed. It is a
+claim about our own posture, and the only thing that follows from it is that the
+kernel-adjacent files stop being off limits.
+
+**The honest criterion, and it is thin on purpose:** a person says the brainstorm
+is over. If it helps to have a test, the useful one is whether the brainstorm
+produced anything in the outer rings — a topic, a board item, a register edit. A
+brainstorm that changed none of them was a planning meeting, and moving it up a
+level does not make it one.
 
 ### `brainstorm` — and why `vision.md` is the kernel
 
