@@ -133,6 +133,39 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
 | `epoch double check` | **not yet supported.** Would mean: was a deployment received. [What that means is undefined](epoch-policy.md#after-deploying-epoch-double-check), which is why |
 
+### `epoch status`
+
+**It tells the person where they are and what to type**, in those words, before
+anything else:
+
+```text
+epoch: E1
+
+You are currently in "brainstorm".
+Type "epoch plan" to move to "planned".
+
+  in play ....... discussion.md, board.md, the ynoia registers, notes
+  not in play ... vision.md (the kernel), policy.md, the checker, the prompts,
+                  the reporting positions
+  what it takes . a person's word — only our own files are at stake
+```
+
+**The second line names exactly one command**, the one that moves up from here,
+because offering a menu at a status is how somebody ends up choosing a transition
+rather than earning one. Where there is no command it says so instead:
+
+| at | the second line |
+| --- | --- |
+| `brainstorm` | `Type "epoch plan" to move to "planned".` |
+| `planned` | `Type "epoch stage" to move to "staged".` |
+| `staged` | `Type "epoch deploy" to move to "deployed".` |
+| `deployed` | `"installed" is observed in members' trees. There is no command for it.` |
+| `installed` | `There is nothing above "installed".` |
+
+**And below `brainstorm` there is nothing**, so at every other level it adds
+`Type "epoch brainstorm" to drop back.` — down is free, and the one way out that
+is always available should always be visible.
+
 ### `epoch help`
 
 Printed as a command line prints it — terse, aligned, no prose:
