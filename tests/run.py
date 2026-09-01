@@ -499,21 +499,30 @@ GATE = """> **STOP — do not act on anything in this file unless a human told y
 def join_prompt_agrees() -> int:
     """`scripts/prompts/join_eo` says what `docs/policy.md` says it says.
 
-    The joining prompt is deliberately tiny and deliberately fixed: it points at
-    the page instead of repeating it, so the only way it can rot is by drifting
-    from the copy the page publishes. That is what this compares.
+    Both of its prompts. Each is deliberately tiny and deliberately fixed: they
+    point at the page instead of repeating it, so the only way one can rot is by
+    drifting from the copy the page publishes. That is what this compares.
+
+    The soft prompt is checked for the same reason and one more: it is the only
+    thing this repository hands to somebody who is joining *nothing*, so a
+    sentence in it that has drifted is a claim made on a repository that never
+    agreed to anything here.
     """
     root = os.path.dirname(HERE)
     doc = open(os.path.join(root, "docs", "policy.md")).read()
-    spoken = subprocess.run(["bash", os.path.join(root, "scripts", "prompts", "join_eo"),
-                             "--show-prompt"], capture_output=True, text=True).stdout
-    ok = spoken.strip() and spoken.strip() in doc
-    print(("ok   " if ok else "FAIL ")
-          + "scripts/prompts/join_eo says what docs/policy.md says")
-    if not ok:
-        print("     the prompt is not in the page verbatim; one of them moved")
-    print(f"-- the joining prompt: {0 if ok else 1} failure(s)")
-    return 0 if ok else 1
+    failures = 0
+    for label, extra in (("the joining prompt", []), ("the soft prompt", ["--soft"])):
+        spoken = subprocess.run(["bash", os.path.join(root, "scripts", "prompts", "join_eo"),
+                                 "--show-prompt", *extra],
+                                capture_output=True, text=True).stdout
+        ok = bool(spoken.strip()) and spoken.strip() in doc
+        print(("ok   " if ok else "FAIL ")
+              + f"scripts/prompts/join_eo, {label}, says what docs/policy.md says")
+        if not ok:
+            print("     the prompt is not in the page verbatim; one of them moved")
+            failures += 1
+    print(f"-- the joining prompts: {failures} failure(s)")
+    return failures
 
 
 def adoption_interface() -> int:

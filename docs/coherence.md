@@ -73,7 +73,7 @@ itself.
 | --- | --- | --- |
 | `init_eo new` <br> `init_eo from-child <path>` | the **new** repository | the README that says what the tool is for: what it answers, the question it does not, the name explained. `new` writes it from the name register; `from-child` writes it from an existing child project's charter and from what that project delivered. The mode is required, never guessed. Complies with nothing, deliberately |
 | `welcome_eo <id> <path>` | here | records the checkout, syncs the ecosystem's list, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one |
-| `join_eo` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. Its prompt is fixed and drift-checked against [`policy.md`](policy.md) |
+| `join_eo` <br> `join_eo --soft` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. `--soft` is a different act rather than a smaller one: the maintenance note alone, declaring no membership, linking nowhere, adding no workflow and running no checker — for a repository that should not join and is still worth a note. Both prompts are fixed and drift-checked against [`policy.md`](policy.md) |
 | `check_join_eo <id>` | here | joined, ready, misconfigured or not ready — and whether the obstacle is ours |
 | `process_discussion <id> [Dn]` | here | works what another repository has addressed to us. **Read-only until a person names a topic** |
 | `check_anoieu [id]` | the project a **finding** is about | answers our findings there, and drafts a reply for its maintainer |

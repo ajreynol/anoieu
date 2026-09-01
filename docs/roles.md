@@ -216,9 +216,9 @@ number worth looking at, in both directions.
 | `logos` | candidate | 3 |
 | `sapheneia` | child of `anoieu` | 1 |
 | `workflow-launcher` | child of `eudaimonia` | 0 |
-| `ynoia` | child of `anoieu` | 4 |
+| `ynoia` | child of `anoieu` | 5 |
 
-Twenty-four roles across twelve tools, and one section empty:
+Twenty-five roles across twelve tools, and one section empty:
 `workflow-launcher` holds nothing, which is not an omission — its own front page
 says it has no responsibilities, nothing depends on it, and it owes nobody an
 artifact. The rows worth reading are the longest and the empty one, and both are
@@ -510,3 +510,15 @@ can be disagreed with.
 **Owns:** `tools.md`.
 **Not this role:** committing anybody to build one, and ranking work that
 already exists — that is the board's.
+
+### R25 — which projects are worth a paper
+
+**Held by:** `ynoia`
+**Role:** whether the work in a repository has a result worth writing up for a
+human, in the `report/` the policy asks for — one entry per tool, against a
+stated standard, with `no` as the commonest verdict.
+**Owns:** `papers.md`.
+**Not this role:** deciding whether anybody writes one. A repository's own stance
+on publishing settles that for itself and outranks the register, which records
+the disagreement rather than resolving it. Nor is it the findings ledger: that is
+`R1`, it is about somebody else's code, and this is about our own.

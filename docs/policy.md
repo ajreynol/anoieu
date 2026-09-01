@@ -27,6 +27,7 @@ renumber. Retire either in place, with a line saying why.
 | `README.md` | the front page, and the whole of what any other document may assume has been read |
 | `docs/` | every written document, indexed by `docs/README.md` |
 | `docs/reports/` | everything about the record: the findings ledgers, what was measured, the reporting policy and workflow, the log |
+| `report/` | the paper, where there is one: a LaTeX document written for a human who will never clone this repository. Encouraged, never required, and its absence may be a stated position rather than an omission |
 | `tools/` | the harness: generators, the runner, the dependency manifest — and child projects |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
 | `scripts/` | executable versions of workflows the documents define. anoieu keeps the ones that hand context to an assistant in `scripts/prompts/`, so that running a command never means deciding to spend a turn; the split is a convention worth copying and is not required |
@@ -173,6 +174,44 @@ run rather than written from memory, a committed baseline that fails *this*
 repository's build when a change invents a false positive. Evidence that exists
 only as a passing assertion is evidence nobody can read, and every claim the
 front page makes should be traceable to a file somebody could open.
+
+**A repository with a result writes it up, in `report/` — encouraged, never
+required.** One or more `*.tex` files, and the built PDF is the repository's own
+call. It is addressed to **a human who will not clone this tree**: somebody who
+does not carry the ecosystem in their head, who is reading to find out whether
+the result is true and whether it matters, and who has no other document here
+written for them. The front page is for somebody deciding whether to run the
+tool. The maintenance entry point is for whoever is doing the work. The ledgers
+are for whoever owns the code a finding is about. That audience is the gap, and
+it is the one whose opinion the work eventually has to survive.
+
+It reads like a research paper and runs to roughly **eight to twenty pages**.
+Both bounds are doing work. Under eight it is an extended abstract, and the
+README already covers what an extended abstract would say. Over twenty nobody
+outside the project reads it, and a document written to be unread is a worse
+outcome than none. In between is the length at which a result has to be stated,
+defended, bounded and situated against what other people have done — which is
+the discipline being asked for, rather than the file format.
+
+**Nothing generates it.** No tool writes into `report/`, and a paper assembled
+from the findings ledger is the ledger with worse typesetting. What it may
+inherit is the ledger's discipline: every quantity in it names the commits it was
+measured at, so a reader can re-take it without asking anybody. This is aimed
+particularly at repositories written by agents, where the volume of output makes
+it easy for a real result to sit unread in a tree nobody clones, and where a
+paper is the one artifact that cannot be reached by accumulating commits — it
+has to be argued to a person.
+
+**And a repository may state its stance on publishing.** *There is nothing here
+worth a paper* is a legitimate answer, it is the right answer for most tools most
+of the time, and a repository that has said so has applied this convention rather
+than failed it. Say it in a sentence where a reader already is — the maintenance
+note, or the documentation index — and it settles the question for that
+repository. Nobody else's judgement overrides it: what other tools in this
+ecosystem think is worth writing up is an argument they may have, and it is not a
+claim on anybody's tree. Nothing checks any of this, and nothing should: whether
+work is worth writing up for a human is exactly the kind of judgement
+[`vision.md`](vision.md) reserves for people.
 
 **Dependencies are fetched and pinned, never vendored.** A manifest and a lock
 in `tools/`, restored by the run that needs them. Two consequences worth having:
@@ -355,6 +394,21 @@ It asks somebody to spend their afternoon for our benefit while implying the
 benefit is theirs, and a maintainer who notices — they will — has learned
 something about how to read everything else we send. When in doubt it is a
 request: claiming less standing costs us nothing.
+
+**A topic may be pinned, and at most one is.** Some notices are addressed to
+every member at once and are acted on at each member's own pace — a convention
+that changed, a script that grew an option, a page that now says something new.
+Newest-first buries one of those within a fortnight, and a topic nobody found is
+indistinguishable from one nobody was sent. So a topic may carry a sixth field,
+`**Pinned:**`, naming what un-pins it — a date, a condition, or both — and it
+sits above every other topic until then, in a `## D<n>` section like any other.
+
+Three constraints, and they are what stop this becoming a noticeboard. **One at
+a time**, because a file with three pinned topics has none. **The field names
+what ends it**, so that un-pinning is a fact rather than a decision somebody has
+to make afresh. And **un-pinning is deleting the field and moving the section
+back into date order** — the topic is not closed by being un-pinned, and its
+status is whatever its status is.
 
 **Ids** are `D<n>`, allocated once and never reused; another repository's topic is
 cited as `<repo>-D<n>`. **Append; do not rewrite.** A topic's body is what was
@@ -866,6 +920,67 @@ never made.
   a standard: one script we maintained on everybody's behalf would be a
   maintenance contract, and this repository is in no position to sign one.
 
+### The soft form: the note without the membership
+
+Some repositories should not join, and this page is better for saying so. A tool
+with conventions of its own, a repository whose maintainers have agreed to none
+of this, one that our tools merely *read* — each is worse off adopting a policy
+it did not choose, and none of them owes us a declaration. The answer to *should
+they join* is often no, and nothing here is diminished by it.
+
+What is worth having from any repository, member or not, is the **maintenance
+note**: one short section saying who writes it and under what supervision. That
+convention is not ours and never was. It is what a reader needs in order to weigh
+everything above it, and it is worth writing whether or not the repository has
+anything to do with this ecosystem.
+
+So the note may be adopted on its own.
+[`join_eo --soft`](../scripts/prompts/join_eo) is that, and it is **a different
+act rather than a partial one**:
+
+- **It declares no membership, and links nowhere.** The repository is not in the
+  ecosystem, does not adopt this policy, and is not checked against it. A note
+  that gestures at us without joining is the one outcome worse than either, since
+  a reader cannot tell which of the two it means.
+- **No workflow, and no checker.** The `anoieu / policy` job fails a repository
+  that declares nothing, correctly, so it is not offered. There is nothing to
+  pin and nothing that can go red.
+- **The default claim is human maintenance.** *Written and maintained by people*
+  is what the note says unless the tree shows otherwise. The default runs this
+  way round because it is the reading a reader already has, and because
+  overstating the human share of the work is the error this whole convention
+  exists to prevent.
+- **It disclaims other people's assessments of it.** A repository that our tools
+  read may find itself the subject of a published candidate, a report card row,
+  or an argument in somebody's account. The note says plainly that such a thing
+  is its author's and not the repository's — *their opinions are not necessarily
+  our own* — which costs us nothing and is simply true.
+
+The section, in full:
+
+```markdown
+## How this repository is maintained
+
+**This repository is written and maintained by people.** <who does the work,
+under what supervision, and what that supervision does not cover>
+
+It is independent. It is not part of any other project's ecosystem, it adopts no
+other project's repository conventions, and it speaks only for itself. Where
+another project's tooling reads this repository and publishes an assessment of
+it, that assessment is that project's own work and not ours: their opinions are
+not necessarily our own, and nothing here is to be read as endorsing them.
+```
+
+The register is deliberately formal. This paragraph is the one a maintainer may
+one day have to stand behind in front of somebody who has read a finding about
+their code and drawn a conclusion from it, and a sentence written to sound
+relaxed is a sentence that has to be reissued at exactly that moment.
+
+**A repository that later joins rewrites the section rather than adding to it.**
+The independence paragraph and the membership declaration are contradictory
+claims, and a note carrying both says nothing. Joining is the ordinary two steps
+above, starting from a README that already has the note the second step wants.
+
 ### If you want an assistant to do it
 
 [`scripts/prompts/join_eo`](../scripts/prompts/join_eo) in the anoieu repository starts one with
@@ -903,6 +1018,41 @@ change — what the declaration says, which checks run, what gets skipped — is
 this page, and the prompt links here rather than repeating any of it. A prompt
 that restates a policy is a second copy of the policy that nobody remembers to
 update.
+
+`--soft` sends a different prompt, held to the same discipline and drift-checked
+the same way. It is the whole of what the soft form does:
+
+```text
+This repository is adopting one convention and joining nothing. One page defines
+it, and it is the authority:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#the-soft-form-the-note-without-the-membership
+
+Read it, then do this here, and nothing else:
+
+1. Add a "How this repository is maintained" section as the last section of
+   README.md, creating it if there is not one, from the template that page
+   gives.
+2. State who maintains this repository. The default is that it is written and
+   maintained by people; depart from that only where the tree itself shows
+   otherwise. Say what the supervision does not cover.
+3. Keep the paragraph declaring this repository independent: it is part of no
+   other project's ecosystem, it adopts nobody else's repository conventions,
+   and an assessment of it published by another project's tooling is that
+   project's own and not this repository's.
+
+Add no workflow file, run no checker, declare membership of nothing, and change
+no file other than README.md. This repository is not joining the Eunoia
+ecosystem and the section must not say or imply that it is. Where the page and
+this prompt disagree, the page is right.
+
+Leave the work staged and not committed: `git add README.md` and stop there, so
+a maintainer reviews a diff rather than a history. Then say, in one paragraph:
+what the section now claims about who maintains this repository, and what you
+could not establish from the tree and left for a person to write.
+```
+
+Both prompts are run in the repository that is adopting something, never here.
 
 ### Checking a repository from this side
 

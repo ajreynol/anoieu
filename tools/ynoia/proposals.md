@@ -78,6 +78,13 @@ that makes its owner the de facto maintainer of everybody's, which is a larger
 commitment than a separate repository, not a smaller one. Ask who ends up
 holding it, not only how many use it.
 
+All four want something written down before they can be asked, which is why
+*Best practices for requesting a listing* in [`tools.md`](tools.md) recommends
+that the vision exist first — strongly for a tool this ecosystem would depend on,
+and much more weakly for one somebody else would own. A proposal wants more of it
+than a listing does, not less: an audit run against a scope nobody has stated
+returns *not yet* by default, which looks like a judgement and is not one.
+
 The likeliest right answer is often **not yet, and here is what would change
 that** — a threshold somebody can watch for rather than a refusal. It is not the
 default answer, and a standard that reaches it every time is a standard that has

@@ -648,6 +648,52 @@ was split out because it is the half that moves: the tenets are stable, and the
 grading is re-done every round against the commits
 [`deps.lock`](../tools/deps.lock) records.
 
+## The paper, and the reader nobody here writes for
+
+[`policy.md`](policy.md) asks a repository with a result to write it up as a
+LaTeX document in `report/`, eight to twenty pages, addressed to a human. That is
+the arrangement; this is the argument for it, which is where it belongs, because
+whether a repository has a result is exactly the sort of question nobody has the
+authority to settle.
+
+**Every document in these trees is written for somebody who is already here.**
+The front page is for a reader deciding whether to run the tool. The maintenance
+entry point is for whoever is doing the work next. The findings ledger is for the
+person who owns the file a finding is about. The accounts a child project keeps
+are for whoever comes to argue with them. Each of those readers has already
+arrived — they have the repository open, or a finding in their inbox, and the
+document meets them where they are. The reader who has *not* arrived, who will
+never clone anything, and who would want to know whether the result is true and
+whether it matters, has nothing here addressed to them at all.
+
+**That reader is the one whose opinion the work eventually has to survive**, and
+the tenets already say why. A tool aims at being useful to another tool, and the
+record is the evidence that it happened; but a record of exchanges is a claim
+that the arrangement worked, made by the people who arranged it, in a vocabulary
+they invented. A paper is that claim restated for somebody who owes it nothing —
+who has not agreed that a derived Lean development is worth having, does not
+know what a semantics set is, and will not accept a number without being told how
+to re-take it.
+
+**A paper is the artifact that cannot be reached by accumulating commits.** This
+is the part specifically about agents, and it is the reason the convention is
+aimed at repositories written by them. Agents are extremely good at producing
+tree-shaped work — more checks, more rows, more pages, each locally justified —
+and a real result is easily buried under it rather than stated. Writing eight
+pages for an outsider forces the three questions the volume hides: what is
+actually new, what does it rest on, and who else has done this. A repository that
+cannot answer them has learned something more useful than the paper would have
+been.
+
+**Most repositories have no paper in them, and should say so.** That is not a
+failure and it is the common case: a template, a shared library, a checker that
+works are all successes with nothing publishable in them. The convention gives a
+repository the right to say it in a sentence and be done, and the sentence is
+worth more than a thin paper written to satisfy a convention. Nothing checks any
+of this. What other tools think is worth writing up is an argument they may have
+among themselves — [ynoia](../tools/ynoia/papers.md) keeps one — and, like every
+other judgement on this page, it binds nobody.
+
 ## Child projects
 
 A **child project** is a subdirectory of `tools/` in some **parent project**,

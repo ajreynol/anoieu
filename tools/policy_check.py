@@ -49,6 +49,10 @@ UNCHECKED = [
     ("a topic is never about somebody else's discussion file",
      "what a topic is *about* is semantic; a heuristic here would misfire on legitimate notices"),
     ("do not add a file per assistant", "a convention about what not to create"),
+    ("a repository with a result writes it up in `report/`",
+     "whether work is worth a paper is a judgement, and the vision may never acquire a checker"),
+    ("the soft form of the maintenance note",
+     "adopted by repositories that join nothing, so nothing here ever runs against one"),
 ]
 
 # Written by a run. `closed-findings.md` is deliberately absent: it is written by

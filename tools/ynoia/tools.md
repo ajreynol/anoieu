@@ -23,6 +23,7 @@ disagree is moving a block.
 | [`names.md`](names.md) | what does this name mean, and is it free |
 | [`proposals.md`](proposals.md) | should this be a repository of its own |
 | [`requests.md`](requests.md) | whose tree should this work live in |
+| [`papers.md`](papers.md) | which tool that *does* exist has a result worth writing up |
 | **this page** | **which of them is worth building first** |
 
 **A tool is on this page when it does not exist and would be its own artifact.**
@@ -73,6 +74,102 @@ field with nothing in it says `nothing` rather than being left out.
 | **Before it** | what has to be decided or built first, or `nothing` |
 | **Today** | what stands in its place, or `nothing` |
 | **Why here** | the argument for this position, which is the field that changes when the entry moves |
+
+## Best practices for requesting a listing
+
+**Somebody wants a tool named here.** Sometimes it is a person with an
+afternoon; more often it is a repository that has noticed a hole next to itself
+and wants the hole registered. Either is welcome, and none of what follows is a
+gate — a request that arrives with none of it is still read, and the worst
+outcome is an entry whose fields say `nothing` in several places, which is
+information rather than a rejection.
+
+**The one thing worth having first is the vision.** Not the code, not a design,
+not a schedule: a written statement of what the tool is *for* — the artifact it
+would produce, the consumer that would read that artifact, what it refuses to
+answer, and what would show the idea was wrong. This page judges *which of these
+is worth starting*, and the judgement is made against the vision. Where there is
+none, the audit has to invent one in order to have something to weigh, and an
+audit that invents what it is judging is grading its own work. That is the whole
+of the argument, and everything below is it applied to two different situations.
+
+### An internal project: have it hashed out already
+
+An **internal** project is one this ecosystem would build, host or depend on —
+a child project in somebody's tree, a tool a member would fetch, a piece of
+shared machinery. For these the recommendation is strong, and it costs nothing,
+because **the vision is already owed elsewhere**. The policy asks a child project
+to open with the question it is trying to answer, the goals in order, the stretch
+goal, and an explicit list of what is out of scope; the ecosystem's vision asks
+that the consumer be named before the work starts, by tool and by artifact. A
+request that arrives with those answered can be judged the day it arrives.
+
+What it buys, concretely:
+
+- **The verdict is about the idea rather than about the request.** Every field
+  on this page is a summary of something settled elsewhere. When nothing has been
+  settled, the entry becomes a paraphrase of a conversation, and the first person
+  to disagree with it has to reconstruct what was actually proposed.
+- **It survives being audited as a repository.** The standard in
+  [`proposals.md`](proposals.md) opens by asking whether the thing exists
+  anywhere yet and how many consumers it really has. Both are unanswerable
+  without a stated scope, and an audit that reaches them with nothing to read
+  produces *not yet* by default — which looks like a judgement and is not one.
+- **It is the cheapest place to find out the scope is undecided.** A vision that
+  is hard to write is not a writing problem. Where the name needs a paragraph of
+  explanation and the paragraph does not come, what is unclear is what the tool
+  does, and finding that out before a repository exists costs an afternoon rather
+  than a namespace.
+
+### A standalone project: less clear, deliberately
+
+A **standalone** project is one that would be its own repository with its own
+maintainer, possibly somebody who has never heard of this ecosystem and owes it
+nothing. Here the recommendation is much weaker, and the asymmetry is on purpose.
+
+**The vision would be theirs to write, and asking for it first inverts the
+order.** A person who is going to build a thing finds out what it is by starting
+it; requiring a settled scope before the repository exists asks them to commit to
+a shape before they have the artifact that would tell them which shape is right.
+Several entries on this page were named with no vision at all — a Greek word, a
+paragraph in an account, and an argument that their absence distorts something —
+and they are better for it. What is registered in that case is **a name and a
+claim about priority**, not a plan, and the `named` state says exactly that.
+
+So for a standalone tool the honest minimum is smaller: one line on the artifact,
+and one line on what its existence would change. If the requester can also say
+what stands in its place today, the entry is complete enough to be argued with.
+Anything more is welcome and nothing more is expected.
+
+The line between the two cases is **who ends up holding it**, which is the same
+question the proposals standard has learned to ask last and should ask first. A
+tool this ecosystem would depend on is one we are committing to read, pin and
+live with, and we are entitled to have read its scope before doing that. A tool
+somebody else is going to build for their own reasons is theirs, and a register
+that demanded a business case from them would be a register nobody sends anything
+to.
+
+### What a request carries
+
+Enough to fill the seven fields, or an honest gap where it cannot:
+
+- **A name**, taken from [`names.md`](names.md) or proposed there. Never a
+  second name for work already listed under one.
+- **One line on the artifact** — what would exist that does not. Not the case
+  for it; that goes somewhere it can be disagreed with.
+- **What it would settle**, by the ids in [`why-eunoia.md`](why-eunoia.md) where
+  it touches the account, and in words where it does not.
+- **What stands in its place today**, including `nothing`. This is the field
+  requests most often omit and the one that most often changes the position.
+- **Where the vision is written down** — a charter, a README, a proposal, a
+  message — or `nothing`, said plainly.
+
+**A request with no vision is still listed**, as `named`, with the missing
+statement recorded as the first thing standing in the way. What it cannot be is
+*audited*: [`proposals.md`](proposals.md) asks four questions that a scope has to
+exist to answer, and an audit run against a gap would return a verdict about this
+project's imagination. That is the concrete consequence, and it is the reason the
+recommendation is worth making at all.
 
 ---
 

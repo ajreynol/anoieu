@@ -10,6 +10,10 @@ a report nobody generates; the useful answer is usually *yes, and it belongs in
 that tree over there*. Recording those in the proposals page would either inflate
 them into repositories or lose them, and both have happened elsewhere.
 
+What a request should arrive with is the same as for anything else registered
+here, and *Best practices for requesting a listing* in [`tools.md`](tools.md) is
+the one place it is written down.
+
 So they are here, and the page tracks two things a proposal does not:
 
 **Where** — the tree it would live in, argued rather than assumed. A request

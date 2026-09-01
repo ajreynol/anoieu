@@ -33,6 +33,96 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D10 — three changes to the pages you are pinned to, and one of them asks nothing
+
+**To:** dokimasia, eudaimonia, koine, ethos, logos
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-09-01, at anoieu `1be2d27`
+**Pinned:** until 2026-12-01, or until every repository above has adopted, declined or said nothing — whichever comes first
+**Settles when:** the pin comes off. Nothing here waits on a reply, and no reply is owed
+
+**Pinned because none of this is urgent and all of it is easy to miss.** Three
+things moved in the pages a member is checked against, and the whole point of
+pinning is that you have a quarter to look at them rather than a fortnight. You
+adopt any of it when you move your pin, which is a commit in your repository on a
+day you choose. **Nothing here goes red on anybody**: no check was added, and the
+`anoieu / policy` job decides exactly what it decided last week.
+
+### 1. `report/` — a paper, for the one reader nobody here writes for
+
+*This is the one that is closest to a proposal, and we do not obviously gain from
+your writing one.* The policy now asks — encouraged, never required, never
+checked — that a repository with a **result** write it up as a LaTeX document in
+`report/`: eight to twenty pages, reading like a research paper, addressed to a
+human who will never clone your tree.
+
+The argument is that every document in these repositories is written for somebody
+who has already arrived. Your front page is for a reader deciding whether to run
+the tool; your maintenance entry point is for whoever does the work next; the
+findings ledgers are for whoever owns the file a finding is about. The reader who
+has not arrived, owes us nothing, and would want to know whether the result is
+true and whether it matters, has nothing here addressed to them. That reader is
+the one the work eventually has to survive.
+
+**And you may state that there is nothing here worth a paper.** That is a
+legitimate answer, it is the right one for most tools most of the time, and a
+repository that says so in a sentence has applied the convention rather than
+failed it. koine is the case we expect to say it and to be right: shared
+machinery several of us were running by hand is a real success with nothing
+publishable in it. Say it wherever your reader already is.
+
+We have also written down our own opinion about which of you has a paper in you,
+in [`papers.md`](../tools/ynoia/papers.md), and it decides nothing — see the
+last section.
+
+### 2. `join_eo --soft` — the maintenance note, joining nothing
+
+For repositories that should **not** join, which is a real category and one this
+policy was previously silent about. `--soft` adds the *How this repository is
+maintained* section and stops: no membership declared, no link to this ecosystem,
+no workflow added, no checker run. Its default claim is that people write and
+maintain the repository, its register is deliberately formal, and it carries a
+paragraph saying that an assessment of that repository published by somebody
+else's tooling is that tooling's own — *their opinions are not necessarily our
+own*.
+
+**None of you needs this**, and it is announced here for two reasons. It is a
+useful thing to hand to a neighbouring repository that our tools read and that
+has agreed to nothing, and you are more likely than we are to know which ones
+those are. And it changes what a missing declaration means: a repository with the
+soft note has made a decision, rather than not having got round to us.
+
+### 3. Asking us to register a tool that does not exist
+
+The register of tools nobody has built,
+[`tools.md`](../tools/ynoia/tools.md), has written down what a request should
+arrive with, and the recommendation splits by who would end up holding the
+thing. For a tool **this ecosystem would build, host or
+depend on**, have the vision hashed out first — the artifact, the consumer that
+would read it, what it refuses to answer — because that is what the register
+judges against, and an audit that has to invent the scope it is weighing is
+grading its own work. For a **standalone** tool somebody else would own, much
+less is expected: a name, one line on the artifact, and one line on what its
+existence would change. The vision there is its owner's to write, and asking for
+it before the repository exists inverts the order in which anybody finds out what
+they are building.
+
+Beside it there is now a second register,
+[`papers.md`](../tools/ynoia/papers.md): which tools that **do** exist have a
+result worth a paper, one entry per tool, with `no` as the commonest verdict and
+the register returning `no` about itself first. **It binds nobody and it is
+not a request.** Where it disagrees with what you say about your own work, you
+are right and the entry stands as a recorded disagreement — which is the whole of
+the standing it has.
+
+### What we would actually like back
+
+Nothing, and that is not politeness. If any of it is wrong for the shape of your
+repository, that is worth more to us than adoption is, and it goes in your own
+`discussion.md` for a person to carry. A convention that fits only the repository
+that wrote it is not a convention.
+
 ## D9 — we are going to stop proving our report by re-running our tools
 
 **To:** koine, dokimasia

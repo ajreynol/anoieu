@@ -6,27 +6,38 @@
 # and at the checker; it does not carry the instructions itself.
 #
 #   join_eo                 # do it
+#   join_eo --soft          # the maintenance note only, joining nothing
 #   join_eo --show-prompt   # print the prompt and exit
 #   join_eo --print         # run non-interactively and print the result
 #
-# The prompt is deliberately tiny and deliberately stable. Everything that can
-# change -- what the declaration says, which checks run, what is skipped -- lives
-# on one page in the anoieu repository, and the prompt links to it rather than
-# repeating it. If the page and this text ever disagree, the page is right.
+# --soft is a different act rather than a smaller one. It adds the maintenance
+# note and stops: no membership is declared, nothing links to this ecosystem, no
+# workflow is added and no checker is run, the default claim is that people
+# maintain the repository, and the note disclaims any assessment of it published
+# by somebody else's tooling. A repository that has not agreed to this policy is
+# better off with that note than with a declaration it did not choose.
 #
-# The canonical copy of the prompt is the fenced block under "Joining the Eunoia
-# ecosystem" in docs/policy.md; tests/run.py fails when the two drift apart.
+# The prompts are deliberately tiny and deliberately stable. Everything that can
+# change -- what the declaration says, which checks run, what is skipped -- lives
+# on one page in the anoieu repository, and they link to it rather than repeating
+# it. If the page and this text ever disagree, the page is right.
+#
+# The canonical copy of both is under "Joining the Eunoia ecosystem" in
+# docs/policy.md; tests/run.py fails when a script's copy drifts from the page.
 
 set -euo pipefail
 
 AGENT=claude
 PRINT=0
 SHOW=0
+SOFT=0
 
 usage() {
   cat >&2 <<'USAGE'
-usage: join_eo [--codex] [--print] [--show-prompt]
+usage: join_eo [--soft] [--codex] [--print] [--show-prompt]
 
+  --soft          add the maintenance note only: no membership declared, no
+                  link to the ecosystem, no workflow, no checker run
   --codex         run codex instead of claude
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
@@ -38,6 +49,7 @@ USAGE
 
 while [ $# -gt 0 ]; do
   case "$1" in
+    --soft) SOFT=1; shift ;;
     --codex) AGENT=codex; shift ;;
     --claude) AGENT=claude; shift ;;
     --print) PRINT=1; shift ;;
@@ -73,6 +85,38 @@ the check still reports, and anything the page asked for that does not fit this
 repository -- that last one is worth more to us than a clean run.
 PROMPT_END
 
+read -r -d '' SOFT_PROMPT <<'SOFT_PROMPT_END' || true
+This repository is adopting one convention and joining nothing. One page defines
+it, and it is the authority:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#the-soft-form-the-note-without-the-membership
+
+Read it, then do this here, and nothing else:
+
+1. Add a "How this repository is maintained" section as the last section of
+   README.md, creating it if there is not one, from the template that page
+   gives.
+2. State who maintains this repository. The default is that it is written and
+   maintained by people; depart from that only where the tree itself shows
+   otherwise. Say what the supervision does not cover.
+3. Keep the paragraph declaring this repository independent: it is part of no
+   other project's ecosystem, it adopts nobody else's repository conventions,
+   and an assessment of it published by another project's tooling is that
+   project's own and not this repository's.
+
+Add no workflow file, run no checker, declare membership of nothing, and change
+no file other than README.md. This repository is not joining the Eunoia
+ecosystem and the section must not say or imply that it is. Where the page and
+this prompt disagree, the page is right.
+
+Leave the work staged and not committed: `git add README.md` and stop there, so
+a maintainer reviews a diff rather than a history. Then say, in one paragraph:
+what the section now claims about who maintains this repository, and what you
+could not establish from the tree and left for a person to write.
+SOFT_PROMPT_END
+
+if [ "$SOFT" = 1 ]; then PROMPT=$SOFT_PROMPT; fi
+
 if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
 
 command -v "$AGENT" >/dev/null 2>&1 || {
@@ -84,7 +128,9 @@ if ! ROOT=$(git rev-parse --show-toplevel 2>/dev/null); then
   exit 2
 fi
 
-echo "-- join_eo: $(basename "$ROOT") ($ROOT), via $AGENT" >&2
+WHAT=joining
+if [ "$SOFT" = 1 ]; then WHAT="the note only"; fi
+echo "-- join_eo: $(basename "$ROOT") ($ROOT), $WHAT, via $AGENT" >&2
 
 cd "$ROOT"
 if [ "$AGENT" = codex ]; then

@@ -59,7 +59,15 @@ So: write it down, make the strongest case against it, and see which survives.
    reserves that for a person. anoieu carries proposals in, because it is the
    only tool that may address a child project directly.
 
-5. **Stretch: what would settle it.** An argument that cannot be lost is not
+5. **Which projects have a paper in them.** The ecosystem's policy asks a
+   repository with a result to write it up for a human, in `report/`, and its
+   vision argues why. Neither says which repositories have one, because that is
+   a judgement — so it is made here, against a stated standard, one entry per
+   tool, in [`papers.md`](papers.md). The commonest verdict is **no**, this
+   project returns it about itself first, and a repository's own stance on
+   publishing outranks anything on the page.
+
+6. **Stretch: what would settle it.** An argument that cannot be lost is not
    worth having. The account carries what would change our minds and one
    experiment that would settle more than any further argument. Turning that into
    something somebody could actually run is the stretch goal, and it remains one.
@@ -88,7 +96,13 @@ The boundary matters more than the goals, so it is stated first.
 
 ## Status
 
-**Now also the place proposals are audited**, which is the first thing this
+**Now also the place it is argued which projects are worth a paper**, which is
+the second thing this project has been asked to produce for somebody else. It is
+the same judgement the account makes about work that does not exist, pointed at
+work that does, and it is the page most likely to be wrong in a way somebody
+notices — which is an improvement on being unread.
+
+**Also the place proposals are audited**, which is the first thing this
 project has been asked to produce for somebody else rather than for itself. Its
 first audit, `P1`, was carried to a decision and a repository was approved on the
 strength of it — which is a deliverable in the sense the vision means, and would
@@ -112,4 +126,5 @@ convergence is not something this project can establish about itself.
 | [`names.md`](names.md) | the register of names: taken, reserved, and how to pick one. Goal 3 |
 | [`proposals.md`](proposals.md) | should this become a repository? The standard, and one section per proposal. Goal 4 |
 | [`requests.md`](requests.md) | work the ecosystem wants that needs no repository of its own, and whose tree it would live in instead. Goal 4 |
-| [`tools.md`](tools.md) | the tools that do not exist, in priority order — most promising first. Goal 2 |
+| [`tools.md`](tools.md) | the tools that do not exist, in priority order — most promising first, and what a request for a listing should arrive with. Goal 2 |
+| [`papers.md`](papers.md) | which tool that *does* exist has a result worth writing up as a paper. Goal 5 |
