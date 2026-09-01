@@ -76,13 +76,14 @@ of them. It is kept by hand, `HUMAN FEEDBACK` on an item outranks everything els
 on it, and nothing consumes the file yet.
 
 [`roles.md`](roles.md) is the companion to it and is not in the table either:
-**who is responsible for what**, one entry per row of
-[`../tools/ecosystem.json`](../tools/ecosystem.json), four labelled fields, and
-no ordering — it is alphabetical, deliberately, because a register of
-responsibilities that is ranked is making a claim it has not argued. The board
-says what is outstanding and in what order; this says what each tool is for and,
-in the field that does most of the work, what it is not. Kept by hand, and
-nothing consumes it either.
+**one entry per responsibility**, each with a permanent id, the tool accountable
+for it, what it owns, and — the field that does most of the work — the nearest
+thing that is *not* it. A tool holds as many roles as it holds, and no role is
+too small: a clear seam between two responsibilities is worth more than a short
+page, so a long list against one name is a measurement rather than an
+untidiness. The board says what is outstanding and in what order; this says what
+everything is for, in no order at all. Kept by hand, and nothing consumes it
+either.
 
 [`coherence.md`](coherence.md) is not in the table above and is not written for
 a reader of the tool: it is the **maintenance entry point**, for whoever is
