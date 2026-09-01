@@ -1442,6 +1442,36 @@ that every member does not write it separately —
 `0` to adopt, `1` to refuse, and `2` to refuse as unverified. Nothing obliges you
 to use ours; the requirement is the refusal, not the program.
 
+### Say which advice you built against — encouraged, never required
+
+**A second marker, beside the pin, saying which *epoch* of this ecosystem's
+advice your development was done against:**
+
+```yaml
+        env:
+          ANOIEU_REV: 441b562     # the checker this repository is held to
+          EUNOIA_EPOCH: E1        # the advice this repository was built against
+```
+
+**These are two different facts and they are allowed to disagree.** The pin says
+what mechanically checks you and is a hard dependency. The epoch says which
+version of the *overall advice we maintain* — the conventions, the guidance, the
+announcements — you were working from. You can pin an old commit having read the
+current advice, or the reverse, and both are ordinary rather than a mistake to
+reconcile.
+
+**Nothing reads it and nothing ever should.** No check requires it, no build
+fails without it, and a repository that never adds it has done nothing wrong. It
+is provenance for a **reader** — somebody looking at a tree and wanting to know
+which set of conventions its author had in front of them, which is otherwise
+unrecoverable and is the first thing that makes an old repository confusing.
+
+**It is a coordinate and nothing more.** It does not enrol you in anything, does
+not oblige you to adopt that epoch, and carries none of the machinery behind the
+word — see [`epoch-analogy.md`](epoch-analogy.md) for what an epoch is by analogy
+to a build, and [`epoch-policy.md`](epoch-policy.md) if you want the rest, which
+you are not expected to want.
+
 Cloning the repository rather than downloading the one file is deliberate: it
 pins the checker and this page *together*, so the rules you are held to and the
 program that decides them are the same version.

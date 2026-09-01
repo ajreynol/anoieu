@@ -86,6 +86,13 @@ including the two where anything actually gets built. Distinct from
 [`usage.md`](usage.md), which is the analyzer's command line, and from
 [`coherence.md`](coherence.md), which is the standards the work is held to.
 
+[`epoch-analogy.md`](epoch-analogy.md) is the shortest way in if the two below
+look like a lot: the epoch build system mapped onto an ordinary build system —
+sources, a dry run, a gate, an exit code, a version — and then the longer half,
+**where the analogy stops being flattering**. A build is a function and this is
+not; nothing type-checks; there is no linker; and `deployed` is not `installed`,
+because every downstream effect is somebody else's voluntary act.
+
 [`epoch-policy.md`](epoch-policy.md) and [`epochs.md`](epochs.md) are a pair and
 are not in the table either. An **epoch** is the span between one global
 announcement and the next. The policy says what one is, what counts as a major

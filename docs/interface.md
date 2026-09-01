@@ -113,8 +113,9 @@ reasonable end-of-session question and has a one-command answer.
 
 ## The commands
 
-**Three, and they are the whole set.** Each is a prompt on its own, typed as it
-appears here.
+**Three today**, each a prompt on its own, typed as it appears here. **The set is
+expected to grow** — adding one is `R29`'s to propose and a person's to accept,
+and a new command arrives with its output shape defined, not discovered.
 
 | command | what it does |
 | --- | --- |
@@ -156,6 +157,91 @@ do not do the plausible thing.
 perfectly typed `epoch deploy` cannot move an epoch to `deployed` on the front
 end's say-so; that authority belongs to the build system alone. The commands are
 a convenience for a person, not a source of permission.
+
+## What a command prints
+
+Two things, in this order:
+
+1. **The summary** — what this epoch is, in a form a person can argue with.
+2. **The block** — where it stands against its gates.
+
+The summary comes first because it is the part worth disagreeing with. Where the
+epoch stands is only interesting once you accept it is the right epoch.
+
+### The summary
+
+**Commit-message shaped**: a subject line somebody can scan, then a short body
+saying what members are asked for, what is only notice, and what changes for
+nobody. It is written for **a person who has not read the announcement**, and if
+it cannot be followed without one it has failed — and the fix is the summary,
+never the reader.
+
+**Brief, and linked.** It stays short by *pointing* rather than explaining: each
+contract names where it is defined, so the summary carries the shape of the epoch
+and the documents carry its content. A summary that grows until it is complete has
+become a second copy of the announcement, which is the drift this repository
+spends most of its discipline avoiding. **If a claim in it needs a paragraph, it
+needs a link.**
+
+**It is derived, not authored.** The protocols are what downstream agents
+actually receive; the summary is a compressed view of them. Where the two
+disagree, the protocols are what deploys — so **a summary that has drifted from
+them is the most dangerous defect this interface can have.** A person approving a
+summary that overstates or understates the epoch has approved something that is
+not going to happen.
+
+### The epoch feedback communication protocol
+
+**Arguing with the summary is the named protocol by which a person gives feedback
+on an epoch**, and it runs from here to the end of this section.
+
+**This is why the summary is printed.** The front end is where a person gives
+feedback on the epoch under consideration, and the summary is the handle: it lets
+somebody steer a few thousand lines of protocol without reading them.
+
+It is a **communication protocol** in the same sense as the others in the epoch
+build system — a shape a message takes and a defined thing that happens next —
+except that this one runs between a person and an agent rather than between two
+repositories. That is the whole reason it is fussy about interpretation: the
+other protocols move text, and this one moves *intent*, which does not survive
+paraphrase.
+
+Two kinds of argument, and telling them apart is the front end's first job:
+
+| the argument is about | what it means | what changes |
+| --- | --- | --- |
+| **phrasing** | the description is unclear, mistoned, or misleading *as text* | the summary. The epoch itself does not change |
+| **content** | you disagree with what the epoch **does** | **the communication protocols change**, so the agents who carry the epoch out receive it differently |
+
+**A content argument is not a request to rewrite the summary.** It is an
+instruction to change what agents are *told* — the announcement, the policy text,
+the covering prompt — so that what they *do* is different. Rewriting the summary
+in response is the worst outcome available: the description would change, the
+epoch would not, and the two would then disagree in exactly the way the section
+above calls the most dangerous defect here.
+
+### Before acting on a content argument, say how you read it
+
+**The translation from *I disagree with this sentence* to *these four documents
+change* is where meaning gets lost**, so it happens out loud and is confirmed
+before anything is edited. State, explicitly:
+
+- **which kind** of argument it was taken to be, and why;
+- **what the objection was understood to be**, in your own words rather than a
+  paraphrase of theirs, so that a misreading is visible rather than agreeable;
+- **which documents would change**, and what each would then say;
+- **what a downstream agent would do differently** as a result — the actual test
+  of whether the change is the one being asked for;
+- **what would not change**, because a content argument usually touches less than
+  it first appears to.
+
+Then stop and wait. A misreading is cheap here and expensive one step later,
+where the edits land in the documents members read.
+
+**Afterwards, re-derive the summary and print it again.** Not *edit* it — derive
+it from the changed protocols, so the round trip is what shows they changed in
+the way the argument asked for. **A summary hand-edited to match an argument is a
+wish; one re-derived from the documents is a description.**
 
 ## Session shapes
 

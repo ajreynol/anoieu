@@ -249,10 +249,42 @@ out where an epoch stands without reconstructing it from the announcement.
 | `planned` | we are not close. Gates are failing, or the shape is still moving | nothing, and nothing is expected |
 | `staging` | an agent is being given instructions to stage it — the announcement, the covering note, the register edits | nothing yet |
 | `deployed` | tools in the Eunoia ecosystem should now consider it **available to consume** | bump when they choose, subject to the green-commit rule |
+| `installed` | **every member upholds the contracts the epoch set out.** A fact about the ecosystem, observed rather than declared | nothing — it describes them, it does not demand of them |
 
 **Only `deployed` means anything to anybody outside this tree.** The first two
 describe our own work in progress; they are written down so that *where we are*
 is a fact rather than an impression, and they oblige nobody.
+
+### `installed`, and why it is not a goal
+
+**It holds when every member upholds the contracts an epoch set out** — the
+things it asked for and required, not the notices. It is the build analogy's
+`install` step, and it is the one row where that analogy is exactly right:
+deploying makes a thing available, installing is what a consumer does, and **the
+consumer decides.**
+
+**Observed, never declared.** Nobody here moves an epoch to `installed` by
+deciding to; it becomes true, or does not, in other people's trees, and we read
+it. That is the reverse of every other status on this page.
+
+**It may never be true, and that is a legitimate ending.** A member may decline a
+contract — this ecosystem has said in a dozen places that members owe us nothing
+— and an epoch that stays `deployed` forever because somebody said no has not
+failed at anything. **`deployed` is the ordinary terminal state; `installed` is a
+bonus.**
+
+**Whether it is observable at all depends on the contracts, not on us.** `E1`'s
+two happen to be visible from outside: a publishing stance is a section in a
+README, and *bump only to a green commit* is their pin plus
+[`../tools/bump_check.py`](../tools/bump_check.py). A future epoch may set a
+contract nothing outside can see, and then `installed` is **unknown** — recorded
+as unknown, never assumed in either direction.
+
+**It is not a compliance metric and must never be reported as one.** The
+distinction is the same one `epoch double check` turns on: a member who
+considered a contract and declined is not a member who ignored us, and a number
+that scored them the same would be measuring obedience while calling it something
+politer.
 
 ### Who may move it
 
@@ -365,6 +397,21 @@ somebody else's document changes under them.
 question the far end can answer and we cannot — a protocol's defects are visible
 where it is received, not where it is written. `D16` asks, and an answer of *we
 never noticed the word and did not need it* settles it as firmly as any other.
+
+> **Partly settled, 2026-09-01, by the maintainer, and not by a member.** The
+> versioning convention in [`policy.md`](policy.md#say-which-advice-you-built-against--encouraged-never-required)
+> asks a downstream tool to record which epoch of our advice it was built
+> against — which chooses the **middle position above**: an epoch id crosses the
+> boundary as a coordinate, and nothing else about the concept does.
+>
+> **The word now crosses, so the interim rule above is superseded** for that one
+> use and holds everywhere else: `E1` may appear in a member's tree as a marker,
+> and rules addressed to members are still stated without the concept behind it.
+>
+> **What is still open** is whether the coordinate is any use to them. Nobody has
+> asked for it, it is encouraged rather than required precisely because of that,
+> and a member saying *we never filled it in* remains the answer that settles the
+> rest.
 
 **Until it is settled, text addressed to members states the rule without the
 word.** That is the reversible choice: adding a vocabulary later costs a

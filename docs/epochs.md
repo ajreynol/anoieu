@@ -29,7 +29,7 @@ Ten parts per entry, and the last is the one worth the space:
 
 | part | what it holds |
 | --- | --- |
-| **Status** | `planned`, `staging` or `deployed` — see [`epoch-policy.md`](epoch-policy.md#the-status-of-an-epoch). Only `deployed` means anything outside this tree, and only tekton moves it there |
+| **Status** | `planned`, `staging`, `deployed`, or `installed` — see [`epoch-policy.md`](epoch-policy.md#the-status-of-an-epoch). Only `deployed` means anything outside this tree and only tekton moves it there; `installed` is read out of other people's trees and may never become true |
 | **Announcement** | the topic id or ids in [`discussion.md`](discussion.md) |
 | **At** | the commit this epoch is adopted at, and whether our CI was green there |
 | **Involved** | every tool the epoch actually touched, and in what way. A fact about the epoch — and **anoieu is always one of them** |

@@ -307,13 +307,16 @@ the checkable half is `R4`.
 ### R29 — the epoch command front end
 
 **Held by:** `anoieu`
-**Role:** the surface a person drives an epoch through — the three commands, how
-they are recognised, and what is said back when a prompt plainly meant to be one
-and was not. It reads the command and runs the protocol that command names; it
-decides nothing about the epoch itself.
-**Owns:** `docs/interface.md`, and the commands defined in it.
-**Not this role:** the machinery the commands invoke, which is `R28`; what an
-epoch is *for*, which is `R27`; and **the authority to move an epoch to
+**Role:** the surface a person drives an epoch through — the commands, how they
+are recognised, what a command prints, and **the epoch feedback communication
+protocol**: the summary a person argues with, and what happens to the epoch when
+they argue with its content rather than its wording.
+**Owns:** `docs/interface.md` — the commands, the summary's shape, and the
+feedback protocol.
+**Not this role:** the machinery the commands invoke, which is `R28` — the
+feedback protocol sits here because it runs between a person and an agent, where
+the rest of that family runs between repositories; what an epoch is *for*, which
+is `R27`; and **the authority to move an epoch to
 `deployed`**, which is the build system's alone — the front end may carry that
 transition but never originate it.
 
