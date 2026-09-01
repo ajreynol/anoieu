@@ -51,6 +51,7 @@ stated relative to its absence. None has a repository or a line of code.
 
 | name | Greek | what it would be |
 | --- | --- | --- |
+| **tekton** | τέκτων, the builder — the joiner who makes one thing out of parts | the **epoch build system**: the program behind the protocols by which an epoch is verified, announced, approved and adopted. Requested by anoieu, 2026-09-01, and the one name here whose subject already exists — the protocols are running by hand and the tool is what is missing. *Not a verb of examination, which most of this register is; `apodeixis` — ἀπόδειξις, demonstration — was the alternative considered, and is the better name if the thing turns out to be a prover of gates rather than an assembler of an epoch.* |
 | **pathos** | πάθος, the third mode of persuasion | an efficient *verified* proof checker — the one that would let the ecosystem ship what it proves rather than a second implementation |
 | **hermeneia** | ἑρμηνεία, interpretation | carrying the embedded semantics into Lean's own logic, so a theorem about a proof becomes a theorem about the thing proved |
 | **noesis** | νόησις, the act of understanding | the semantics and the compiler defined *in* Lean rather than compiled into it |

@@ -207,7 +207,7 @@ number worth looking at, in both directions.
 
 | tool | footing | how many |
 | --- | --- | --- |
-| `anoieu` | member | 7 |
+| `anoieu` | member | 8 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
 | `ethos` | candidate | 2 |
@@ -220,7 +220,7 @@ number worth looking at, in both directions.
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 
-Twenty-six roles across twelve tools, and one section empty:
+Twenty-seven roles across twelve tools, and one section empty:
 `workflow-launcher` holds nothing, which is not an omission — its own front page
 says it has no responsibilities, nothing depends on it, and it owes nobody an
 artifact. The rows worth reading are the longest and the empty one, and both are
@@ -303,6 +303,47 @@ that is re-graded every round.
 **Not this role:** anything mechanical. Nothing may ever check this one, which
 is the single rule in this ecosystem that forbids work rather than requiring it;
 the checkable half is `R4`.
+
+### R28 — the epoch build system
+
+**Held by:** `anoieu`
+**Role:** the family of communication protocols by which an epoch is verified,
+announced, approved and adopted — the global announcement, the approval block and
+its dry run, the bump gate, and the shape of the log entry. Taken together they
+are this ecosystem's **main verification system for its own governance**, which
+is a claim worth stating plainly because it is unusual: what verifies an epoch is
+a protocol, not a test suite.
+**Owns:** `tools/bump_check.py`, the approval protocol in `docs/policy.md`, and
+the machinery half of `docs/epoch-policy.md` — the gates, the block template, the
+dry run, and the entry format `docs/epochs.md` is written to.
+**Not this role:** deciding what an epoch is *for*, which is `R27` and is
+judgement rather than machinery; the policy a member is checked against and the
+discussion protocol with its safety gate, both `R4`; and the low-level formats of
+the reporting loop, which koine has asked for and this must not quietly absorb.
+
+> **The standing goal, which outranks everything else this role does and always
+> will.** The protocols exist so that **the tools give evidence to the agent, and
+> the agent is properly informed** before it writes anything. Every other
+> verification here checks an artifact; this is the only one aimed at whether the
+> agent doing the work knows what it is talking about, and since agents do the
+> work it sits upstream of all of them.
+>
+> It is **not verification** and the role's holder should never let it be
+> described as such — nothing is proved, and what keeps the work inside its
+> guardrails is that the loop keeps teaching us. The failure it guards against is
+> **fluency substituting for knowledge**, which is invisible from outside: a block
+> written from evidence and one written from memory read identically.
+>
+> Whatever else changes about the machinery, this does not get displaced.
+
+> **Destined for `kanon`, with `R27`.** The protocols by which every member is
+> told what is expected of them are governance, and they should not stay in the
+> tree that also files findings against them.
+>
+> **And the tool for it does not exist.** What is held here is run by hand across
+> four documents. It is registered with `ynoia` as
+> [`tekton`](../tools/ynoia/tools.md), at the top of the priority order, and it is
+> deliberately **not** work for the current epoch.
 
 ### R27 — designing the next epoch
 

@@ -165,16 +165,27 @@ fine; the same seven fields in the same order every time is the part that
 matters.
 
 ```text
-EPOCH E1 · approval requested
-  commit .......... 6473955
-  ci .............. FAIL   oracle red since cf4ad2c (2026-08-30)
-  applied here .... FAIL   publishing stance unstated
-  asks ............ publishing stance; bump only to a green commit
-  informs ......... dokimasia, eudaimonia, koine
-  removes ......... nothing
-  ------------------------------------------------------------
-  DEPLOY .......... BLOCKED  2 failing
+EPOCH E1 · dry run
+  commit ....... 9942149       git rev-parse --short HEAD
+  ci ........... FAIL          tools/bump_check.py --rev 9942149 -> exit 1
+  applied here . FAIL          grep -rl "Is there a paper in this" README.md docs/
+  asks ......... 2             docs/epochs.md, E1 - the prompt
+  informs ...... 3             tools/ecosystem.py -- members
+  removes ...... nothing       -
+  ---------------------------------------------------------------
+  DEPLOY ....... BLOCKED  2 failing
 ```
+
+**The right-hand column is not decoration.** The block is the **target**, and the
+right-hand column is how the agent writing it was informed: every line names the
+command that produced it, and every one of those was run in the session that
+emitted the block. A line whose evidence column is `-` is **unverified**, which
+counts with the failures and never with the passes.
+
+**And none of this verifies anything** -- see
+[the approval protocol](policy.md#the-approval-protocol). Nothing is proved. What
+keeps an epoch inside its guardrails is that each one teaches the next, which is
+the same recursion as *anoieu is a target of its own epoch* below.
 
 | field | what it holds |
 | --- | --- |

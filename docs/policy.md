@@ -529,12 +529,67 @@ fixed per kind of approval; the epoch form is in
 `READY` means the mechanical checks pass, never that anybody has agreed. Approval
 is the person's reply and exists nowhere else.
 
-**Nothing verifies it, and it is a policy rather than a control.** No check reads
-the block, and an agent could write `PASS` beside a red build. That is worth
-saying plainly rather than implying a guarantee. What the shape buys is different
-and smaller: **a specific claim can be refuted in one command**, where a
-paragraph of prose cannot. A wrong field is a thing somebody can catch; a vague
-summary is not.
+**The text is the verification *target*, and the verification is informal** —
+which means **we are not actually verifying anything.** There is no proof, no
+check, and no chain from a tool's output to the truth of a sentence. The word
+*verification* is used loosely, and the honest description is different: **we
+rely on learning to keep us inside the guardrails.** Each epoch runs the
+protocol, something turns out to be wrong with it, and the next one is run
+better. That is what holds, and it holds because the loop keeps running rather
+than because anything has been established.
+
+Saying so costs nothing and prevents the expensive misreading, which is somebody
+treating a clean block as an assurance. It is the caution the analyzer already
+carries about its own silence, turned on our own governance: a block reporting
+that everything passed means **those commands were run and said that**, and never
+that deploying is safe.
+
+What the protocol does do is make the **agent** that writes the block informed:
+the tools produce evidence, the evidence reaches the agent, and the block is the
+target that evidence has to add up to. So **every field must be produced by
+running a tool in the session that emits it**, and must carry the command that
+produced it, on the line.
+
+**The goal is the agent's state, not the reader's impression**, and getting this
+backwards is the whole failure. An agent can become steadily better at producing
+well-formed blocks without ever becoming better informed, and the shape carries
+the same authority either way. **Fluency substituting for knowledge** is what this
+exists to prevent, and it is invisible from outside: a block written from evidence
+and a block written from memory are indistinguishable on the page.
+
+**This is the standing goal of whoever maintains the epoch build system, and it is
+not displaced by anything.** Every other verification in this ecosystem checks an
+*artifact* — CI checks a commit, the policy checker checks a tree, the suite checks
+the analyzer. This is the only one aimed at whether the agent doing the work knows
+what it is talking about, and since agents do the work it sits upstream of all of
+them. A misinformed agent produces confident, well-shaped, wrong output, and
+every artifact downstream inherits it without anything going red.
+
+**Which is why the tool must not emit the finished block.** A program that printed
+one would let an agent pass it through untouched — identical output, an agent
+exactly as uninformed as before, and the appearance of verification automated. The
+tool's job is to **deliver evidence to the agent**; composing the target is the
+agent's, because composing it is where being informed actually happens.
+
+Four rules, and the last is the one that makes the shape worth anything:
+
+- **Run it; do not remember it.** A value carried forward from an earlier turn is
+  not evidence, however true it was an hour ago.
+- **Every line names its command.** A reader must be able to re-take any field
+  without asking, which is the same standard the reporting positions already hold
+  every published number to.
+- **A field with no command is not a pass.** Write `—` and count it as
+  unverified, on the same side of the ledger as a failure.
+- **An unevidenced `PASS` is worse than a `FAIL`.** A failure is information. A
+  pass that nothing produced borrows the authority of the shape without doing any
+  of the work behind it, and it is the one output of this protocol that could
+  actively mislead a person into deploying.
+
+**Nothing enforces any of that**, which is why it is a protocol and not a check.
+No program reads the block, and an agent could still type `PASS` beside a red
+build. Stating the discipline plainly is the whole of the defence, together with
+the property that makes it worth having: **a specific, sourced claim can be
+refuted in one command**, where a paragraph of prose cannot.
 
 **And it is recorded.** The block goes into the artifact the approval was for —
 for an epoch, the log entry. Elsewhere on this page it is noted that a person

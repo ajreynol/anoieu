@@ -173,6 +173,44 @@ recommendation is worth making at all.
 
 ---
 
+## tekton — the epoch build system
+
+**What:** one program behind the family of protocols by which an epoch is
+verified, announced, approved and adopted — it evaluates every gate, runs the
+tool for each, and emits the approval block that is the verification.
+**State:** `named` — requested by anoieu on 2026-09-01 as its highest priority,
+and explicitly **not** work for the current epoch. The vision was written down
+first: the protocols exist, are in use, and are run by hand, so what is being
+asked for is a tool and not a design.
+**Settles:** nothing in [`why-eunoia.md`](why-eunoia.md) — it is not an argument
+about the proof pipeline. What it settles is that this ecosystem's **main
+verification system for its own governance** is currently four documents and one
+person's attention, and that the artifact a person actually reads is assembled by
+hand each time.
+**Costs:** **it must not emit the finished block**, and that constraint is the
+whole design. A program that printed one would let an agent pass it through
+untouched -- identical output, an agent exactly as uninformed as before, and the
+appearance of verification automated. Its job is to *deliver evidence to the
+agent*; composing the target is the agent's, because composing it is where being
+informed happens. A tool built the obvious way would defeat its own purpose.
+
+Beyond that, the mechanical gates are cheap and the judgement fields are not.
+*What comes out* and *has this been applied here* are decided by a person, and a
+tool that guessed them would emit something that reads like a check and is not
+one — which is worse than emitting nothing, because the shape carries authority
+the content would not have earned.
+**Before it:** the block's fields settling. They have changed twice in a day, and
+a program written against a template still moving would be rewritten more often
+than run. `nothing` else.
+**Today:** [`../../tools/bump_check.py`](../../tools/bump_check.py) for one gate
+of six; `git`, `grep` and a person for the rest; and the block typed out by hand.
+**Why here:** **first, displacing `kanon`, and the two are not close.** Every
+other entry on this page is work whose consumer does not exist yet. This one has
+a consumer today, running the thing by hand, every time an epoch is considered —
+and the cost of its absence is paid on exactly the occasions when getting it
+wrong is most expensive. `kanon` remains parked by a person and its position
+below is a statement about *when*, not about merit.
+
 ## kanon — the ecosystem's governance, out of the analyzer
 
 **What:** the policy, its checker, the inventory and the joining scripts, in a
