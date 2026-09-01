@@ -324,6 +324,23 @@ needs a person, and asking for that is a different block with a different header
 **Only `deployed` and `installed` mean anything outside this tree.** The first
 three describe our own work in progress and oblige nobody.
 
+> **Aspired, and deliberately not built: `broken`.** A state meaning
+> [`vision.md`](vision.md) contradicts itself — the kernel being unsound, and with
+> it everything derived: the policy, the protocols, the gates, every judgement any
+> of them expresses. Dropped for now as more machinery than the problem has
+> earned; no instance has occurred, and a fault nobody has ever hit is a fault
+> whose handling is guesswork.
+>
+> **Two things worth keeping from the design, because they were not obvious.** It
+> could never be *detected*: *nothing may check `vision.md`* is the one rule here
+> that forbids work rather than requiring it, so a program deciding the vision was
+> inconsistent would be that forbidden check wearing a fault's clothes. It would
+> have to be **declared** by a person, with an agent's contribution limited to
+> naming the two statements that contradict. And recovery would mean **booting the
+> tools that do not consult the kernel** — `policy_check.py`, `ecosystem.py
+> --check`, `tests/run.py`, `git log`, all of which decide facts about the tree
+> and hold no opinion about what the work is for.
+
 ### Up is earned; down is free
 
 **A status never advances because somebody asks for it**, and that includes the

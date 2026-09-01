@@ -113,7 +113,7 @@ reasonable end-of-session question and has a one-command answer.
 
 ## The commands
 
-**Seven today**, each a prompt on its own, typed as it appears here. **The set is
+**Eight today**, each a prompt on its own, typed as it appears here. **The set is
 expected to grow** — adding one is `R29`'s to propose and a person's to accept,
 and a new command arrives with its output shape defined, not discovered.
 
@@ -125,6 +125,7 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 | `make epoch` | **not yet supported.** Would mean: make it better, and stage a deployment. The one command not of the form `epoch <verb>` |
 | `epoch help` | print the commands, and the ecosystem's health |
 | `epoch status` | which level this epoch is at, and what the next one would take |
+| `epoch advice` | what the agent thinks the most promising work for the next epoch is |
 | `epoch brainstorm` | drop to `brainstorm`. Always available, needs nobody |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
@@ -145,6 +146,7 @@ commands:
   epoch dry run        evaluate every gate; print the summary and the block; change nothing
   epoch deploy         move the epoch's status
   epoch status         which level this epoch is at
+  epoch advice         what looks most promising for the next epoch
   epoch brainstorm     drop to `brainstorm` — always available
   epoch double check   was a deployment received                (NOT YET SUPPORTED)
 
@@ -233,7 +235,7 @@ typed, name what is accepted, stop:
 
 ```text
 epoch: unrecognised command "dry-run"
-       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch status | epoch brainstorm | epoch double check
+       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch status | epoch advice | epoch brainstorm | epoch double check
        did you mean: epoch dry run
        nothing was run
 ```
@@ -264,6 +266,66 @@ do not do the plausible thing.
 perfectly typed `epoch deploy` cannot move an epoch to `deployed` on the front
 end's say-so; that authority belongs to the build system alone. The commands are
 a convenience for a person, not a source of permission.
+
+## A command does its one thing
+
+**Every command does what it says and stops.** A mode switch prints the
+transition and nothing else; it does not also survey the ecosystem, list what is
+outstanding, or say what should happen next. Those are answers to questions
+nobody asked, arriving attached to a command that was asked — which makes them
+hard to decline and easy to mistake for output.
+
+**Advice in particular is never volunteered.** It has a command, and the command
+is how it is requested. An agent that offers it unprompted is doing the thing the
+response gate forbids in the other direction: acting on its own reading of what
+would be useful.
+
+### `epoch advice`
+
+**What the agent thinks the most promising work for the next epoch is.** A few
+candidates, ranked, each with why it is promising and what would move it.
+
+Four things it must do:
+
+- **Say it is a judgement**, because it is one. Nothing here is measured, and the
+  ranking is an opinion of the same kind [`vision.md`](vision.md) reserves for
+  people — offered so it can be argued with, not settled.
+- **Cite what it read.** Every candidate names the evidence behind it, so a
+  ranking can be checked rather than taken.
+- **Name what it is not recommending, and why.** Advice that lists everything is
+  a survey wearing a recommendation's clothes, and the omissions are where the
+  judgement actually lives.
+- **Say what would change the order.** A ranking with no falsifier is a
+  preference.
+
+> **It is not disinterested, and the command says so every time.** The agent
+> giving the advice is the one that would do the work, so it will tend to favour
+> what it finds tractable over what is most valuable — the same failure as asking
+> a repository whether it should hold a role. **The reader should discount
+> accordingly**, and the strongest correction available is that the advice names
+> its omissions, which is the part hardest to fake.
+
+**It changes nothing and starts nothing**, and it **works at every status** —
+because it means something different at each. Advice that ignored the level would
+wander into whatever the agent found interesting, which is exactly the failure the
+conflict of interest above predicts.
+
+| at | advise on |
+| --- | --- |
+| `brainstorm` | **research projects** — open questions worth pursuing, and which would change something if answered |
+| `planned` | what has to be **settled** before this could be staged |
+| `staged` | **how to clear the gates.** Almost always: how to fix CI |
+| `deployed` | **how it gets installed** — what members would need, and what is standing in the way |
+| `installed` | **nothing.** There is no advice to give about a finished epoch |
+
+**`installed` returning nothing is not a gap.** The epoch is done, and there is
+nothing useful to say about a finished one — the next thing worth anybody's
+attention is what the next epoch should be, and that is a question for the
+person, not advice about this one.
+
+In `staged` it is the one thing that may exceed a simple actionable request,
+because it was asked for — and even there it stays inside the level: **how to fix
+the build, not what the build ought to have been.**
 
 ## How much is said depends on the level
 

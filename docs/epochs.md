@@ -61,8 +61,11 @@ the next person could not have guessed.
 
 ## E1 — through 2026-09-01
 
-**Status:** `planned`. Not `staged`: nobody is being given instructions to stage
-it, and a gate is failing. The move to `deployed` belongs to `R28`, the
+**Status:** `brainstorm`, dropped from `planned` on 2026-09-01 by `epoch
+brainstorm`. Down needs nobody and costs one line, which is this one. Nothing
+critical is in play while it stays here; the registers and the discussion file
+are. Not `staged`: nobody is being given instructions to stage it, and a gate
+is failing. The move to `deployed` belongs to `R28`, the
 epoch build system role, which anoieu holds — so it is a person acting for that
 role who makes it, and this row will say so when it happens.
 **Announcement:** [`D14`](discussion.md#d14--global-announcement-what-changed-this-week-and-the-one-thing-we-are-asking-of-everybody),

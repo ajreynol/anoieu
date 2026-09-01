@@ -776,7 +776,9 @@ def epoch_surfaces_agree() -> int:
          {c.strip() for c in re.search(r"accepted: (.+)", iface).group(1).split("|")},
          truth_cmds)
     case("`epoch help` names exactly the statuses the policy defines",
-         set(re.findall(r"[a-z]+", re.search(r"^status:(.*)$", helptext, re.M).group(1)))
+         # the whole `status:` block, not just its first line -- a status named
+         # on a continuation line is still a copy and still has to agree
+         set(re.findall(r"[a-z]+", part("status:")))
          & {"brainstorm", "planned", "staged", "deployed", "installed"},
          truth_stat)
 

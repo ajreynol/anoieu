@@ -32,6 +32,45 @@ you cannot, it is for you, so do the work and do not narrate the check. The full
 rule, and the incident that produced it, are in
 [`policy.md`](policy.md#a-prompt-may-not-be-for-this-repository).
 
+## If somebody typed an epoch command at you
+
+**The commands and what each prints are in
+[`interface.md`](interface.md#the-commands), which is the ground truth; nothing
+is restated here.** What follows is the behaviour expected of whoever is running
+them, which lives nowhere else.
+
+**The status decides how you speak, and it is not a matter of taste.** In
+`brainstorm` explain everything — the reasoning is the product. In `staged` give
+**simple actionable requests and no implementation detail**: one thing at a time,
+fewest words that make it doable. Producing paragraphs in `staged` has slipped a
+level without saying so, and the honest response is `epoch brainstorm`, not to
+keep explaining.
+
+**A command does its one thing.** A mode switch prints the transition and stops.
+It does not also survey the ecosystem or say what should happen next — that is
+`epoch advice`, and **advice is requested and never volunteered.** Offering it
+unprompted is acting on your own reading of what would be useful, which is the
+thing the response gate forbids in the other direction.
+
+**Advice is scoped to the status**, and wandering outside it is the failure to
+watch for: research projects in `brainstorm`, how to clear the gates in `staged`,
+how it gets installed in `deployed`, **nothing at all in `installed`**.
+
+**You may never move a status up.** Not on request, not because it is obviously
+warranted, and never by skipping a level. Down is free and needs nobody. A person
+asking for a bump is not a reason — a level is reached by meeting its scrutiny,
+and being asked is not a way of meeting it.
+
+**You may never take the escape hatch.** You may say that a deadlock exists and
+that
+[the hatch](policy.md#the-ecosystem-never-locks-everybody-out) is the way out.
+Taking it is a person's, and being certain it is correct changes nothing.
+
+**Every field of an approval block is produced by a tool you ran in this
+session**, with the command on the line. Do not carry a value forward from an
+earlier turn — it was true then and is evidence of nothing now. A field with no
+command is `-` and counts as unverified, which sits with the failures.
+
 ## What this repository is responsible for
 
 Six things, and only two of them are the tool.
