@@ -109,6 +109,54 @@ that adopting it is wise — the same caution the analyzer carries about its own
 silence. It is a floor, and the only thing it rules out is deploying a stretch of
 work we could not get past our own build.
 
+## Before deploying: what to ask
+
+Four questions. The first is the hard constraint above and decides by itself; the
+rest are judgement, and the second is the one that is easy to skip because
+nothing in this tree reports it.
+
+**1. Is our build green at the commit?** `python3 tools/bump_check.py --rev <sha>`.
+No, or unverified, means no.
+
+**2. What is in flight upstream?** Something is usually about to move in a
+repository we depend on and do not control — a branch about to merge, a release
+about to land, a file about to be renamed. Three things to ask about each:
+
+- does anything **in this epoch** depend on it;
+- does anything **in the epoch's record** describe it;
+- would deploying now make members adopt something that is about to be wrong.
+
+Usually all three are no and the answer takes a minute. When one is yes, it is
+better to know before the announcement is carried than after.
+
+**A branch name is a claim with an expiry date.** That is the sharpest form of
+this question and it is mechanically checkable: anything in the tree naming a
+*branch* rather than a *commit* is a sentence that becomes false without anybody
+editing it, and an epoch is the wrong moment to be shipping one. Grep for the
+branch names you depend on before deploying; a commit sha outlives the branch
+that carried it and a `ref:` does not.
+
+> **The incident.** `cvc5/ethos` is close to merging the essential features of
+> `ethosEoc3` into `main`. Nothing in `E1` depends on that branch — but the
+> `oracle` job in our own CI checks out `ref: ethosEoc3` rather than the commit
+> `tools/deps.lock` records, so a normal end-of-feature-branch deletion would take
+> that job from *red for an unread reason* to *cannot run at all*.
+>
+> The same defect had already been found and fixed once, in `tools/deps.py`,
+> whose comment records it: *"it used to clone the ref first, which made the pin
+> only as durable as the branch it happened to be on — logos's went away… and
+> every build went red for a reason none of them was measuring."* Fixed in the
+> restore path and left standing in the workflow. **A lesson learned in one file
+> and not applied to its neighbour is the ordinary shape of this**, and it is why
+> the question is on this list rather than left to somebody remembering.
+
+**3. Has the epoch been applied here?** The **Of us** row, and it is a question
+about this tree rather than about the announcement — see the section on being a
+target of your own epoch.
+
+**4. What comes out?** An epoch that only adds has not been designed, and the
+last honest moment to notice is before it is carried.
+
 ## How much of this crosses the boundary — open
 
 **`epoch` is our word for our planning unit. `global announcement` is the
