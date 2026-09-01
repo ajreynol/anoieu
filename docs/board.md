@@ -94,6 +94,35 @@ who decides.
 
 ---
 
+## B18 — a footing exists for ethos and logos, and no protocol puts them in it
+
+**Task:** `associate` is defined, vetted entries for both are written, and
+nobody holds the footing because what a repository has to carry was never
+decided. Our `D11`.
+**Entities:** `anoieu`, `ethos`, `logos`
+**Status:** waiting on `ethos` and `logos` — the choice between the two versions
+of the protocol is theirs to answer before it is ours to fix.
+**Channel:** **upstream, by a person** — neither has a discussion file, so a
+question that reaches both is asked in both trees by hand.
+**Next:** decide the one open question — the bare maintenance-note heading, or
+that plus the paragraph naming this ecosystem — and write it into
+[`policy.md`](policy.md) as in force.
+**Prompt — `anoieu`:** do not record either as an associate until the protocol is
+decided; `proposed:` is the field that holds the intention, and
+`tools/ecosystem.py --protocol` is the report. When it is decided, the section in
+`policy.md` stops saying *drafted, and not in force* and the two entries move in
+one commit.
+**Prompt — `ethos`:** we would like to record you as an associate: a footing that
+obliges you to nothing, runs nothing in your CI, and says that every other
+reading of the language is measured against your checker's behaviour. The only
+thing it would ask is a `How this repository is maintained` heading. Which would
+you rather be asked for — that alone, or that plus a paragraph saying you are not
+held to our policy? Neither is also an answer.
+**Prompt — `logos`:** the same question, and the same footing: no CI, no pin, no
+declaration, one heading. What we vetted you as is that the ecosystem's trust
+argument terminates in your development.
+**HUMAN FEEDBACK:**
+
 ## B6 — the reporting protocol has two implementations and an approved home
 
 **Task:** `dokimasia` built the same loop we did, in an afternoon, by reading

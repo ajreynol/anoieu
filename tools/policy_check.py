@@ -178,6 +178,31 @@ def maintenance_note(text: str) -> str:
     return note
 
 
+def note_in(text: str) -> list[str]:
+    """What is missing from a bare maintenance note: the *whole* of the
+    associate protocol as currently drafted, and it is drafted rather than
+    decided.
+
+    A heading saying how the repository is run, and something under it. No
+    declaration, no link to us, no workflow, no pin, and nothing about the shape
+    of the tree — see *The associate protocol* in `docs/policy.md`, which says
+    what is still undecided and what would settle it.
+
+    Read for a **report** and never for a verdict. Nothing in `CHECKS` calls it,
+    nothing fails on it, and the repositories it is asked about are held to none
+    of this. `tools/ecosystem.py --protocol` is what runs it, so that a person
+    deciding the protocol can see who would satisfy which version of it today.
+    """
+    if not text:
+        return ["no README.md, so nothing says how the repository is maintained"]
+    note = maintenance_note(text)
+    if not note:
+        return ["README.md has no `How this repository is maintained` heading"]
+    if len(prose(note).split()) < 12:
+        return ["the maintenance note is a heading with nothing under it"]
+    return []
+
+
 def declaration_in(text: str) -> list[str]:
     """What is missing from a README's declaration of membership, if anything.
 

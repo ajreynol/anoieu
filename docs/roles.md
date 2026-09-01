@@ -208,12 +208,12 @@ number worth looking at, in both directions.
 | `anoieu` | member | 6 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
-| `ethos` | associate | 2 |
+| `ethos` | candidate | 2 |
 | `ethos-eoc` | child of `ethos` | 2 |
 | `eudaimonia` | member | 1 |
 | `euthyna` | child of `eudaimonia` | 1 |
 | `koine` | member | 1 |
-| `logos` | associate | 3 |
+| `logos` | candidate | 3 |
 | `sapheneia` | child of `anoieu` | 1 |
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |

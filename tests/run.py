@@ -18,7 +18,9 @@ suite so that neither ethos nor logos has to be on the machine.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import difflib
+import io
 import json
 import os
 import re
@@ -534,11 +536,15 @@ def note_forms() -> int:
     """The three maintenance notes `docs/policy.md` publishes, read by the two
     readers that decide a footing.
 
-    A member's declaration and an associate's affiliating note are both a
-    paragraph in somebody else's README, and `tools/ecosystem.py --check
-    --online` tells them apart from a remote. Getting that wrong is not a failed
-    build: it is this repository recording a footing that is not true, about a
-    repository that never agreed to anything.
+    A member's declaration and the two things a prospective associate might be
+    asked for are all a paragraph in somebody else's README, and
+    `tools/ecosystem.py` tells them apart from a remote. Getting that wrong is
+    not a failed build: it is this repository recording a footing that is not
+    true, about a repository that never agreed to anything.
+
+    `note_in` is the drafted associate protocol and is the loosest of the three,
+    so the case that matters is the bare note -- accepted by it, and refused by
+    both of the others.
 
     The templates are pulled from the page rather than typed here, so editing one
     of them fails this test rather than silently changing what a footing means.
@@ -557,24 +563,96 @@ def note_forms() -> int:
     independent = template("### The soft form: the note without the membership")
     affiliating = template("**There is a second form, for a repository that is happy")
 
-    # (label, text, declares a member?, carries the affiliating note?)
+    bare = ("# A tool\n\n## How this repository is maintained\n\nWritten by one "
+            "person in their own time, reviewed by nobody, and nothing here has "
+            "been checked by a second reader.\n")
+
+    # (label, text, is a member's declaration?, the affiliating note?, any note?)
     cases = [
-        ("the membership declaration", joined, True, False),
-        ("the independent soft note", independent, False, False),
-        ("the affiliating soft note", affiliating, False, True),
-        ("no maintenance note at all", "# A tool\n\nWhat it does.\n", False, False),
+        ("the membership declaration", joined, True, False, True),
+        ("the independent soft note", independent, False, False, True),
+        ("the affiliating soft note", affiliating, False, True, True),
+        ("a bare maintenance note", bare, False, False, True),
+        ("no maintenance note at all", "# A tool\n\nWhat it does.\n", False, False, False),
     ]
     failures = 0
-    for label, text, want_member, want_assoc in cases:
+    for label, text, want_member, want_assoc, want_note in cases:
         is_member = not policy_check.declaration_in(text)
         is_assoc = not policy_check.affiliation_in(text)
+        has_note = not policy_check.note_in(text)
         for got, want, reader in ((is_member, want_member, "declaration_in"),
-                                  (is_assoc, want_assoc, "affiliation_in")):
+                                  (is_assoc, want_assoc, "affiliation_in"),
+                                  (has_note, want_note, "note_in")):
             ok = got == want
             failures += 0 if ok else 1
             print(("ok   " if ok else "FAIL ")
                   + f"{reader} {'accepts' if want else 'refuses'} {label}")
     print(f"-- the maintenance notes a footing rests on: {failures} failure(s)")
+    return failures
+
+
+def protocol_report() -> int:
+    """`tools/ecosystem.py --protocol` reports the right column for each tree.
+
+    The readers are witnessed above; this is the wiring around them, which is the
+    half that had never produced a `yes` when it was written. It runs offline
+    against three synthetic READMEs, because the real one reads somebody else's
+    repository and a test that needed the network would be a test nobody runs.
+
+    It also pins the property the report exists for: **it never fails.** A tool
+    in this table is held to none of this repository's policy and the protocol it
+    is being read against is not decided, so a non-zero exit would be this
+    repository grading somebody against a rule that does not exist.
+    """
+    root = os.path.dirname(HERE)
+    sys.path.insert(0, os.path.join(root, "tools"))
+    import ecosystem  # noqa: PLC0415
+
+    doc = open(os.path.join(root, "docs", "policy.md")).read()
+
+    def template(after: str) -> str:
+        chunk = doc[doc.index(after):]
+        return re.search(r"```markdown\n(.*?)\n```", chunk, re.S).group(1)
+
+    trees = {
+        "nothing": "# A tool\n\nWhat it does.\n",
+        "affiliated": template("**There is a second form, for a repository that is happy"),
+        "joined": template("### 1. Declare it, at the top of your maintenance note"),
+    }
+    inv = {n: {"status": "candidate", "proposed": "associate", "repo": n,
+               "url": f"https://github.com/x/{n}", "vetted": "2026-09-01",
+               "what": "-", "why": "-"} for n in trees}
+    # `ignored` must not appear: it is neither an associate nor proposed as one.
+    inv["ignored"] = {"status": "candidate", "repo": "ignored",
+                      "url": "https://github.com/x/ignored", "what": "-"}
+
+    want = {"nothing": ("no", "no", "no"), "affiliated": ("yes", "yes", "no"),
+            "joined": ("yes", "no", "yes")}
+
+    real, buf = ecosystem.readme_for, io.StringIO()
+    ecosystem.readme_for = lambda name, e: (trees.get(name, ""), "checkout")
+    try:
+        with contextlib.redirect_stdout(buf):
+            code = ecosystem.protocol(inv)
+    finally:
+        ecosystem.readme_for = real
+    out = buf.getvalue()
+
+    failures = 0
+    for name, cols in want.items():
+        row = next((l for l in out.splitlines() if l.startswith(name)), "")
+        got = tuple(row.split()[3:6])
+        ok = got == cols
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ")
+              + f"--protocol reads {name} as note={cols[0]} "
+                f"affiliating={cols[1]} declares={cols[2]}"
+              + ("" if ok else f" -- got {got}"))
+    for label, ok in (("it never fails", code == 0),
+                      ("a tool that is neither is left out", "ignored" not in out)):
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ") + f"--protocol: {label}")
+    print(f"-- the associate protocol report: {failures} failure(s)")
     return failures
 
 
@@ -714,6 +792,7 @@ def main() -> int:
     failures += prompts_agree()
     failures += join_prompt_agrees()
     failures += note_forms()
+    failures += protocol_report()
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += install_commands()

@@ -195,7 +195,7 @@ that tree's evidence. So does the policy's own description of what a research
 project is for — a subject outside the host tool, which the host is well
 positioned to ask about because of what building it taught, and badly positioned
 to answer inside its own source tree. Two things kill it. `ethos` is `cvc5/ethos`
-and its footing is **associate**: it is the only tree in this argument the
+and its footing is **candidate**: it is the only tree in this argument the
 ecosystem does not own, and the speculation space is `anoieu` and `eudaimonia`,
 both members. And **the refusal to advertise cannot be honoured there.** Not
 borrowing the host tool's credibility works in a personal analyzer; it cannot

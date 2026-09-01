@@ -75,6 +75,12 @@ REQUIRED = {
     "child": ("parent",),
 }
 
+#: A footing an entry says we *intend*, in `proposed`, while its `status` stays
+#: what is true today. It exists because the associate protocol is drafted and
+#: not decided: recording the intention as the fact would be this file asserting
+#: something nobody has agreed to, and recording nothing would lose it.
+PROPOSABLE = ("associate",)
+
 #: The statuses whose entry asserts something about a README somebody else
 #: keeps, and which `--online` therefore reads. `foundation` is deliberately not
 #: here: its entry is a fact about *our* arrangement, asserts nothing about their
@@ -165,6 +171,22 @@ def well_formed(inv: dict) -> list[str]:
                 bad.append(f"{name}: its parent `{parent}` is not in this file")
             elif inv[parent].get("status") == "child":
                 bad.append(f"{name}: its parent `{parent}` is itself a child project")
+        proposed = e.get("proposed", "")
+        if proposed:
+            if proposed not in PROPOSABLE:
+                bad.append(f"{name}: `proposed` is {proposed!r}, and the only "
+                           f"footing that may be proposed is {PROPOSABLE[0]!r}")
+            elif proposed == status:
+                bad.append(f"{name}: proposes the footing it already holds; "
+                           "`proposed` records an intention, not the fact")
+            else:
+                # An intention nobody has read the tree for is a wish. The same
+                # two fields the footing itself requires are required to propose
+                # it, which is what stops `proposed` becoming a cheaper way in.
+                for field in ("vetted", "why"):
+                    if not e.get(field):
+                        bad.append(f"{name}: proposing `{proposed}` needs `{field}`, "
+                                   "the same as holding it")
         url = e.get("url", "")
         if url and not url.startswith("https://"):
             bad.append(f"{name}: `{url}` is not an https url")
@@ -229,6 +251,15 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
         if status == "member" and not declares:
             bad.append(f"{name} is recorded here as a member and its README does "
                        f"not declare it: {missing[0]}")
+        if e.get("proposed") == "associate" and status != "associate":
+            # Reported through the return value's second channel, which is what
+            # `unreachable` uses: this is not a stale inventory. The file says we
+            # intend something and it has not happened, which is exactly true.
+            if policy_check.note_in(text):
+                unseen.append(f"{name}: proposed as an associate and its README "
+                              "carries no maintenance note -- `--protocol` is the "
+                              "report, and nothing here is owed")
+            continue
         if status == "associate":
             # The affiliating note is asked about first, and a tree that carries
             # one is settled: its refusal clause is what stops `declaration_in`
@@ -245,6 +276,85 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
                 bad.append(f"{name} is recorded here as an associate and its "
                            f"README does not carry the affiliating note: {gone[0]}")
     return bad, unseen
+
+
+def readme_for(name: str, e: dict) -> tuple[str, str]:
+    """A tool's README, from its checkout if there is one and from its remote
+    otherwise. Returns (text, source), where source is what to print.
+
+    The checkout is preferred because this report is run while somebody is
+    deciding something and a network round trip per tool makes it a job rather
+    than a command. Which one answered is printed, because a stale checkout and
+    a published README are different claims and the difference matters here.
+    """
+    path = locate(e.get("repo", name))
+    if path:
+        rel = os.path.join(path, "README.md")
+        if os.path.isfile(rel):
+            return open(rel, encoding="utf-8").read(), "checkout"
+    text, why = readme_of(e.get("url", ""))
+    return (text, "remote") if not why else ("", "unreachable")
+
+
+def protocol(inv: dict) -> int:
+    """`--protocol`: who would satisfy the associate protocol, in each of the
+    versions of it that is still on the table.
+
+    **It reports and it never fails.** Every repository in it is held to none of
+    this, most of them have not been asked, and the protocol itself is drafted
+    rather than decided -- see *The associate protocol* in `docs/policy.md`. A
+    non-zero exit here would be this repository grading somebody for failing to
+    comply with a rule that does not exist yet.
+
+    Three columns, because the undecided question is *which* of them we would
+    require, and a person deciding that should be able to see what each would
+    cost today rather than predict it:
+
+      note          a `How this repository is maintained` heading, with
+                    something under it. The drafted protocol, and the whole of it
+      affiliating   that, and a paragraph naming the ecosystem and saying the
+                    repository is not held to its policy. The stronger option
+      declares      a full membership declaration, which no associate needs and
+                    which would mean the footing is the wrong one
+    """
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import policy_check  # noqa: PLC0415
+
+    rows = []
+    for name, e in inv.items():
+        status, want = e.get("status", ""), e.get("proposed", "")
+        if "associate" not in (status, want):
+            continue
+        text, source = readme_for(name, e)
+        if source == "unreachable":
+            rows.append((name, status, want, "?", "?", "?", "unreachable"))
+            continue
+        yes = lambda missing: "no" if missing else "yes"  # noqa: E731
+        rows.append((name, status, want,
+                     yes(policy_check.note_in(text)),
+                     yes(policy_check.affiliation_in(text)),
+                     yes(policy_check.declaration_in(text)),
+                     source))
+
+    if not rows:
+        print("-- nobody holds or is proposed for `associate`, so there is "
+              "nothing to report")
+        return 0
+
+    w = max(len(r[0]) for r in rows) + 2
+    print(f"{'tool':<{w}}{'footing':<12}{'proposed':<11}"
+          f"{'note':<7}{'affiliating':<13}{'declares':<10}read from")
+    for name, status, want, a, b, c, source in rows:
+        print(f"{name:<{w}}{status:<12}{want or '-':<11}{a:<7}{b:<13}{c:<10}{source}")
+
+    print()
+    print("The protocol is drafted, not decided: docs/policy.md, "
+          "`The associate protocol`.")
+    print("Nothing here is a verdict and nothing here fails. Every tool in this "
+          "table is held")
+    print("to none of this repository's policy, and most of them have not been "
+          "asked to be.")
+    return 0
 
 
 def audit(online: bool) -> int:
@@ -287,6 +397,9 @@ def audit(online: bool) -> int:
 def main() -> int:
     if "--check" in sys.argv:
         return audit("--online" in sys.argv)
+    if "--protocol" in sys.argv:
+        inv = json.load(open(INVENTORY, encoding="utf-8"))
+        return protocol({k: v for k, v in inv.items() if not k.startswith("_")})
     verbose = "--verbose" in sys.argv
     inv = json.load(open(INVENTORY, encoding="utf-8"))
     rows, notes = [], []

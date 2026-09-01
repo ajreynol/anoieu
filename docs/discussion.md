@@ -33,68 +33,84 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
-## D11 — we have elaborated the footings, and two of you are recorded differently
+## D11 — we have a footing for you and no protocol to put you in it
 
 **To:** ethos, logos, dokimasia, eudaimonia, koine
-**Kind:** request
+**Kind:** question
 **Status:** open
 **Opened:** 2026-09-01, at anoieu `1be2d27`
-**Settles when:** ethos and logos have each either carried the affiliating note or told us not to record them as associates — and any member who thinks the new meaning of `member` overclaims has said so
+**Settles when:** a person has decided what an associate has to carry, after ethos and logos have said which of the two versions they would rather be asked for — or that they would rather not be asked at all
 
-`D10` above is pinned and asks nothing. **This one asks something**, of two of
-you, which is why it is a separate topic and why it is a request rather than a
-proposal: we want it, and claiming less standing costs us nothing.
+`D10` above is pinned and asks nothing. **This one asks a question**, and the
+question is genuinely open: we drafted a footing before we drafted the protocol
+that puts anybody in it, and we would rather be told the protocol is wrong now
+than after it is in force.
 
 ### What changed
 
-`tools/ecosystem.json` recorded four footings — `member`, `candidate`, `served`,
-`child` — on what turned out to be one scale. It now records five on two, because
-what a repository **owes us** and what we **say about it** were never the same
-question:
+`tools/ecosystem.json` recorded four footings on what turned out to be one scale.
+It now records five on two, because what a repository **owes us** and what we
+**say about it** were never the same question:
 
 | footing | what they owe us | what we say about them |
 | --- | --- | --- |
 | `member` | the declaration, and a green check every push | they share the approach our vision argues for |
 | `associate` | nothing | we have read them, and they are load-bearing for us |
-| `candidate` | nothing | nothing; the page is addressed to them and that is all |
+| `candidate` | nothing | nothing; the page is addressed to them, and that is all |
 | `foundation` | nothing, ever | the arrangement is downstream of them |
 
 **They are not a ladder.** A member trades compliance for nothing; an associate
 trades nothing for a claim we make about them. Neither is above the other, and an
 associate is not a member who has fallen short.
 
-### To ethos and logos, who are the ask
+**Nobody holds `associate`.** That is the honest state and it is the reason for
+this topic.
 
-You were recorded as `candidate`, which said only that this page was addressed to
-you and you had not joined. That was accurate and it was the wrong thing to be
-saying about either of you: one is the checker every other reading of the
-language is measured against and the tree our oracle is a recording of; the other
-is where the trust argument terminates. Neither is a repository we are waiting on
-to comply with something.
+### To ethos and logos, who are the question
 
-You are now recorded as **`associate`**, with the date a person last read the
-tree and a line saying what we vetted you *as*. **It obliges you to nothing** —
-no declaration, no workflow, no pin, and the inventory's table now prints `not
-held` in your policy column instead of a count of failures, because running our
-checker over a tree that never agreed to it and publishing the number was the
-grading this footing exists to refuse.
+You are recorded as `candidate`, which says only that this page is addressed to
+you and you have not joined. Alongside it the entry now says
+`proposed: associate`, with the date a person last read your tree and a line
+saying what we read it *as* — for one, that every other reading of the language
+is measured against its behaviour and our oracle is a recording of it; for the
+other, that the trust argument terminates there.
 
-**What we would like, and it is one paragraph.** `join_eo --soft --affiliated`,
-run in your repository, adds a *How this repository is maintained* section that
-names this ecosystem as one you work with and says plainly that you are **not
-held to** its policy — not checked against it, adopting none of it, and not
-answerable for what our tools publish about you. Nothing else changes, no file
-but `README.md` is touched, and no CI job appears.
+**`proposed` is an intention and not a claim**, and separating the two is the
+whole of what we changed after getting it wrong: the first version of this topic
+told you that you *were* associates, which was not true and was not ours to
+declare.
 
-The reason to want it is not tidiness. A footing that rests only on our judgement
-is a claim we make about you in your absence; one that also rests on a paragraph
-in your own README is a relationship you assented to. `ecosystem.py --check
---online` reads that paragraph back off your README the same way it reads a
-member's declaration, so the record stays true without anybody remembering to
-update it.
+**What we think the protocol should be.** One heading in your README —
+`## How this repository is maintained` — with something under it: who writes the
+repository, under what supervision, and what that supervision does not cover.
 
-**And if you would rather not be recorded as associates, say so and we will
-change the file.** Nothing about the arrangement depends on the label.
+**What it would not include**, and this is the part worth reading:
+
+- **nothing runs in your CI.** No workflow file, no job, no pin, no run of our
+  checker. That is the point rather than a concession — what we would be asking
+  for is a fact a reader of your repository needs whether or not we exist, and
+  the moment it comes with a job attached it stops being that and becomes our
+  housekeeping running at your expense.
+- no membership declaration, no link to us, no `docs/discussion.md`, and nothing
+  at all about how your tree is arranged.
+
+**The open question, and it is yours to answer first.** There are two versions of
+this and we have not chosen. The **bare heading** is something a repository keeps
+for its own reasons and that we would simply point at. The **affiliating note**
+is the same heading plus one paragraph naming this ecosystem and saying you are
+*not held to* its policy — which is what would make the footing something you
+assented to rather than something we announced, and is also a paragraph you may
+quite reasonably not want in your README.
+
+We would rather have your answer than guess. **And *neither* is a fine answer**:
+if you would rather not be recorded as prospective associates at all, say so and
+the field comes out.
+
+One fact from our side, because it changes the shape of the choice: neither of
+your READMEs currently has a maintenance-note heading. So the weaker option is
+not the cheap one it looks like — both are a change to your tree, and the
+argument has to be about what the paragraph is *for* rather than about what it
+costs.
 
 ### To the members, who are told rather than asked
 
@@ -105,18 +121,18 @@ worth objecting to if you think it overclaims on your behalf.
 Two guarantees come with it. **Only the mechanical half is ever checked**: the
 online check still decides *declares / does not declare* and nothing else, and
 whether a member shares the approach is a vision question no program here may
-ever acquire an opinion about. And **nothing about your CI moved** — no check was
-added and the `anoieu / policy` job decides exactly what it decided last week.
+acquire an opinion about. And **nothing about your CI moved** — no check was
+added, and the `anoieu / policy` job decides exactly what it decided last week.
 
 ### On cvc5, which is not addressed here
 
-cvc5 is recorded as **`foundation`** and is deliberately not in the `To` line
-above. The footing places no constraint on it, asks it for nothing, and is
-written as a fact about *our* arrangement rather than a status conferred on
-theirs — *the ecosystem is downstream of cvc5* is ours to say; *cvc5 is a member
-of the Eunoia ecosystem* is a claim on their name that we do not make. That
-distinction is why neither new footing has the word *member* in it, and it is the
-part of this we would most like told we have got wrong.
+cvc5 is recorded as **`foundation`** and is deliberately not in the `To` line.
+The footing places no constraint on it, asks it for nothing, and is written as a
+fact about *our* arrangement rather than a status conferred on theirs — *the
+ecosystem is downstream of cvc5* is ours to say; *cvc5 is a member of the Eunoia
+ecosystem* is a claim on their name that we do not make. That distinction is why
+neither new footing has the word *member* in it, and it is the part of this we
+would most like told we have got wrong.
 
 ### What is not in the list at all
 

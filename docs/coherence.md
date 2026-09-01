@@ -56,7 +56,7 @@ to it — the first for everything on the list, the second when a tool arrives.
 | command | run in | what it does |
 | --- | --- | --- |
 | `install_eo` | here, **first** | the rest of the ecosystem, cloned beside this checkout with `git clone` and nothing else — audited by `tests/run.py`. `--dry-run` prints what it would run; `--status` reads the rows back. [The options](usage.md#the-rest-of-the-ecosystem) |
-| `status_eo` | here | who is in the ecosystem and how each looks: declared or not, whether the policy check passes, whether there is a channel, how long since anything moved. `--check` decides whether the inventory itself is still true, and is what CI runs |
+| `status_eo` | here | who is in the ecosystem and how each looks: declared or not, whether the policy check passes, whether there is a channel, how long since anything moved. `--check` decides whether the inventory itself is still true, and is what CI runs. `python3 tools/ecosystem.py --protocol` is the other report: where each tool proposed for the `associate` footing stands against each version of that drafted protocol, read from a checkout where there is one. It reports and never fails |
 | `harvest_cpc_proofs` | here | collects real CPC proofs to seed the fuzzer with |
 
 `status_eo` is a wrapper around `tools/ecosystem.py`, and `tools/policy_check.py`

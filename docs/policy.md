@@ -761,7 +761,7 @@ are not a single scale.
 | footing | what they owe us | what we say about them | backed by |
 | --- | --- | --- | --- |
 | **member** | the declaration, and a green `anoieu / policy` on every push | they share the approach [`vision.md`](vision.md) argues for | their README, checkably |
-| **associate** | nothing | we have read them, and they are load-bearing for us | the affiliating note in their README, and our dated vetting |
+| **associate** | nothing | we have read them, and they are load-bearing for us | *undecided* — see the next section. **Nobody holds it yet** |
 | **candidate** | nothing | nothing. This page is addressed to them, and that is all | nothing |
 | **foundation** | nothing, ever | the arrangement is downstream of them | nothing, deliberately |
 | **child** | — | not a footing: it is not a repository | its parent's tree |
@@ -799,6 +799,12 @@ with no date is a claim that only ever accumulates, and a register that only eve
 accumulates is a marketing page. Nothing expires on its own: the date is there so
 that a stale vetting is a fact somebody can point at rather than an impression.
 
+**And `associate` is currently held by nobody.** The footing is defined and the
+protocol that would put somebody in it is not. Where we intend one, the entry
+says `proposed: associate` and its `status` stays what is true today — the next
+section is why, and `python3 tools/ecosystem.py --protocol` is what reports where
+each proposed associate actually stands.
+
 **Nothing runs against an associate.** The inventory's table prints `not held` in
 their policy column rather than a count of failures, because running the checker
 over a tree that is held to none of this and publishing the number would be the
@@ -809,6 +815,56 @@ and they have not joined — no vetting, no claim, and no obligation on anybody
 including us. If the tier is ever empty that is worth noticing rather than
 tidying away: it would mean every tool we have addressed has either joined or
 been vetted, which is a fact about our reach and not about them.
+
+### The associate protocol
+
+**Drafted, and not in force.** Nobody holds the footing, nothing below is
+required of anybody, and this section is written so that the decision can be
+argued about rather than arrived at by drift.
+
+**What it would require, in full:** a `## How this repository is maintained`
+heading in the README, with something under it — who writes the repository,
+under what supervision, and what that supervision does not cover.
+
+**What it would not require, and this list is the substance rather than the
+caveats:** no CI job and no workflow file, no pin, no run of our checker, no link
+to us, no membership declaration, no `docs/discussion.md`, and nothing whatever
+about how their tree is arranged. **In particular, nothing runs in their CI.**
+That is the point and not a concession. The thing being asked for is a fact a
+reader of their repository needs whether or not this ecosystem exists, and the
+moment it arrives with a job attached it stops being that and becomes our
+housekeeping, running on their machine, at their expense.
+
+**Why so little.** An associate footing is a claim we make about somebody. The
+only thing that turns it from an announcement into a relationship is a paragraph
+they wrote themselves, and one paragraph is all that takes. Asking for more would
+be charging them for our record-keeping.
+
+**What is undecided, which is why it is not in force:**
+
+1. **The bare heading, or the affiliating paragraph?** The heading is something
+   many repositories keep for their own reasons and costs them nothing to point
+   at. The affiliating note names *us*, which is what makes the footing mutual —
+   and is also the part a repository may quite reasonably not want in its README.
+2. **May we record an associate who has carried nothing?** In other words is the
+   footing ours to assert or theirs to accept. Recording it unilaterally is
+   faster and is the thing this page has just spent a section arguing against.
+3. **Who vets, how often, and what a stale `vetted` obliges.** Nothing expires on
+   its own today, which is a decision by default rather than a decision.
+4. **What happens when a repository we have vetted declines.** Probably it stays
+   a candidate and we say why; nobody has decided that either.
+
+**What would settle it:** the repositories it is aimed at answering, and a person
+deciding. Until then the inventory records the intention as an intention.
+
+**The evidence, and it is worth having before deciding.** `--protocol` reports
+each proposed associate against all three readings — the bare note, the
+affiliating note, and a full declaration — from their checkout where there is one
+and their remote otherwise. As of 2026-09-01 both proposed associates have **no
+maintenance note at all**, which is the fact that matters for question 1: since
+either option is a change to both trees, the weaker one is not the cheaper ask it
+looks like, and the argument has to be made on what the paragraph is *for* rather
+than on what it costs.
 
 ### What is not in this list
 
@@ -1074,11 +1130,12 @@ made here.** That distinction is the whole of the paragraph's job, which is why
 the refusal is stated rather than implied: a note that named us and said nothing
 else would be read as a declaration by everybody who has seen one.
 
-This is the note an **associate** carries, and it is the only thing an associate
-is ever asked for. It is what lets a footing that rests on our judgement also
-rest on something in their tree, so that we are recording a relationship they
-assented to rather than announcing one — and it is read from their README by
-`tools/ecosystem.py --check --online`, exactly as a declaration is.
+This is the note an **associate** would carry under the stronger of the two
+readings still on the table — see *The associate protocol* above, which is
+drafted and not in force. What it is for is letting a footing that rests on our
+judgement also rest on something in their tree, so that we record a relationship
+they assented to rather than announcing one. It is read back from their README by
+`tools/ecosystem.py`, exactly as a declaration is.
 
 **A repository that later joins rewrites the section rather than adding to it.**
 The independence paragraph and the membership declaration are contradictory
