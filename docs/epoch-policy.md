@@ -359,20 +359,22 @@ politer.
 
 ### Who may move it
 
-**Moving an epoch to `deployed` is tekton's decision and nobody else's.** Not the
-announcement, not a member, not the agent that wrote the epoch, and not
-enthusiasm about having finished. Centralising that one transition in the build
-system is what stops the status being flipped by whoever happens to be editing
-the log at the time.
+**Moving an epoch to `deployed` belongs to the epoch build system — `R28` in
+[`roles.md`](roles.md) — and to nothing else.** Not the announcement, not a
+member, not the agent that wrote the epoch, and not enthusiasm about having
+finished. Centralising that one transition is what stops the status being flipped
+by whoever happens to be editing the log at the time.
 
-> **The bootstrap, stated rather than tripped over.** tekton does not exist and
-> arrives in the **second** epoch. Read literally, the rule above means no epoch
-> can ever reach `deployed` — including the one that would ship tekton. That is a
-> procedural bug of exactly the kind the next section forbids, so it is resolved
-> here rather than discovered later: **until tekton exists the transition is made
-> by whoever holds `R28`, explicitly on tekton's behalf, and the log entry says
-> so.** The exception ends when tekton ships, covers one transition, and is not a
-> general licence.
+**The authority is the role's, not a tool's**, which is the form that makes it
+work today: `R28` is held by anoieu, so the transition is made here, now, by a
+person acting for that role. `tekton` is the **planned maintainer** of the
+machinery `R28` owns, and when it exists the authority does not move — the role
+does not change hands merely because a program starts implementing part of it.
+
+Writing it the other way round was the first draft and it was wrong: an authority
+vested in a tool that does not exist means no epoch can ever deploy, including the
+one that would build the tool. **Vesting it in the role has no bootstrap problem
+to patch**, which is why it is the version that survived.
 
 ### Procedural bugs do not get to block anything
 

@@ -542,6 +542,100 @@ said so**. The response gate did not apply, because there was no topic yet. That
 gap is what this section closes, and the incident is recorded with it because a
 rule with no incident behind it is a preference.
 
+## The ecosystem never locks everybody out
+
+**No arrangement here may reach a state where nobody can proceed.** Not the
+members, not the maintainer, not an agent — and where one is reached, getting out
+of it takes precedence over whatever rule produced it.
+
+### Why this is a real risk and not a precaution
+
+**Every gate here fails closed, and each one is right to.** The bump gate refuses
+when it cannot verify. The response gate refuses without a named topic. Nothing
+creates a repository, sends a message, or moves an epoch to `deployed`. A child
+project may not be started by an agent. Each of those is individually correct and
+each was argued for.
+
+**Fail-closed is safe locally and dangerous in aggregate.** Ten gates that each
+refuse when in doubt compose into a system whose default is refusal, and no
+single one of them looks wrong at the moment the whole thing stops. The
+composition is the hazard, not any member of it.
+
+**This has already happened twice, which is why the section exists.**
+
+- **The bootstrap.** Moving an epoch to `deployed` was briefly vested in a *tool*
+  rather than in the role that owns the transition — and the tool does not exist,
+  so no epoch could ever deploy, including the one that would build it. Caught
+  while writing it, and fixed by vesting the authority in the role instead, which
+  has no bootstrap to patch.
+- **The live one, and its cause is the hazard's shape exactly.** The rule says a
+  member may only bump to a commit where our CI is green. The `oracle` job was red
+  for over a hundred commits, so **there was no commit any member could
+  legitimately bump to** — a freeze on every member, produced by our own rule. The
+  cause turned out to be a build cache keyed on a commit, restored from a run that
+  had failed part way, with the step that would have rebuilt it skipped *because
+  the cache hit*. **A cache that cannot be invalidated is a lockout**, and nothing
+  in anybody's code was wrong. Nobody noticed until a gate refused and somebody
+  asked why.
+
+**And the largest one is structural rather than accidental.** This ecosystem
+deliberately reserves a long list of acts for a person — creating a repository,
+granting a role, approving a prompt, carrying anything outward, deciding a
+footing. There is one such person. If they are unavailable, every one of those
+freezes at once, permanently, and no agent here may unfreeze any of it. That is
+the arrangement working exactly as designed, and it is also a single point of
+failure that the design cannot see.
+
+### The escape hatch
+
+**A person may override any gate in this ecosystem, at any time, by saying so.**
+That is the hatch. It has three properties and no others:
+
+1. **It always exists.** No policy, epoch, protocol or check may remove it, and a
+   rule that would is void on its face rather than requiring an argument.
+2. **It is a person's, never an agent's.** An agent may *point out* that a
+   deadlock exists and that the hatch is the way out. It may not take it, and
+   being certain the override is correct changes nothing about that.
+3. **It is recorded.** What was overridden, what was known at the time, and what
+   would have to be true for the override not to be needed again. An override
+   nobody wrote down is indistinguishable afterwards from a rule that was never
+   really enforced.
+
+**It does not depend on any of this machinery working**, which is the point. It
+is prose and a person, so it survives the checker being broken, the network being
+down, the log being wrong and the build being red. **A hatch implemented as a tool
+is not a hatch**, because the thing it exists to escape may be the tool.
+
+**Not to be taken lightly**, and the reason is specific: an override that goes
+unrecorded, or that becomes routine, converts a fail-closed system into one that
+merely looks like it. The check is not on the person's authority — they have it —
+it is on whether the record shows the same gate being overridden repeatedly, which
+is evidence the gate is wrong rather than evidence the overrides were.
+
+### The bar rises as the ecosystem does
+
+**The rigor is scaled to how much an override can cost somebody else, and today
+that is almost nothing.**
+
+| when | what an override takes |
+| --- | --- |
+| **now** — four members, nothing deployed, no member has adopted anything | a person says so, and it is written down |
+| once members have adopted epochs and depend on them | the above, and a notice saying what was overridden and what it means for them |
+| once a wrong override would cost somebody a red build in a week they had planned otherwise | the above, and a way for a member to decline its consequences |
+
+**The trigger for moving down that table is the same one the role-handoff
+procedure uses**, and it is deliberately the same sentence: when the ecosystem is
+stable enough that an unasked change costs somebody real time. Raising the bar is
+a decision, made once, and recorded here when it is made.
+
+### Every gate names its way out
+
+**A gate that refuses must say how a person gets past it.** That is the general
+rule this section produces, and it applies to anything added later: a check, a
+protocol, a status transition, a required field. A gate with no stated way past it
+is a lockout that has not happened yet, and the cost of writing the sentence is
+one sentence.
+
 ## The approval protocol
 
 **Where an agent is asking a person to approve something, it ends its response

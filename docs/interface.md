@@ -228,8 +228,14 @@ typed, name what is accepted, stop:
 ```text
 epoch: unrecognised command "dry-run"
        accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch double check
+       did you mean: epoch dry run
        nothing was run
 ```
+
+**Where the typo is far enough off that no command is an obvious match**, drop
+the guess and point at the list instead — *it looks like you were trying to use
+the epoch build system; try `epoch help`*. One line, no speculation about which
+command was meant, and still nothing run.
 
 **The compiler is an aspiration, not an implementation**, and taking it literally
 would be the mistake. Nothing parses these, no program enforces a grammar, and

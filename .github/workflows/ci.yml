@@ -138,8 +138,14 @@ jobs:
         with:
           path: corpus/ethos/build
           key: ethos-${{ runner.os }}-${{ steps.ethos.outputs.sha }}
+      # Also rebuild when the cache hit but the binary is not in it. A cache keyed
+      # on the ethos commit never changes while the pin does not, so a directory
+      # saved from a build that failed part way is restored forever and the step
+      # that would fix it is the one being skipped -- a job red with no cause in
+      # anybody's code, which is what this was. A cache that cannot be invalidated
+      # is a lockout; docs/policy.md, "The ecosystem never locks everybody out".
       - name: build ethos
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' || hashFiles('corpus/ethos/build/src/ethos') == ''
         run: |
           cmake -S corpus/ethos -B corpus/ethos/build -DCMAKE_BUILD_TYPE=Release
           cmake --build corpus/ethos/build -j"$(nproc)"

@@ -335,8 +335,8 @@ transition but never originate it.
 >
 > **This is a separate role from `R28` because the two are separable, and today
 > they are not separated.** anoieu holds both: it is the front end a person types
-> at *and* the build system the commands drive. When `tekton` exists it takes the
-> machinery, and the front end stays wherever a person is actually working — which
+> at *and* the build system the commands drive. When its planned maintainer `tekton` exists it
+> takes the machinery, and the front end stays wherever a person is actually working — which
 > may be neither this repository nor that one. Writing them as two entries now is
 > what makes that a move rather than a rewrite.
 
@@ -379,9 +379,9 @@ the reporting loop, which koine has asked for and this must not quietly absorb.
 > tree that also files findings against them.
 >
 > **And the tool for it does not exist.** What is held here is run by hand across
-> four documents. It is registered with `ynoia` as
-> [`tekton`](../tools/ynoia/tools.md), at the top of the priority order, and it is
-> deliberately **not** work for the current epoch.
+> four documents. Its **planned maintainer** is registered with
+> `ynoia` as [`tekton`](../tools/ynoia/tools.md), at the top of the priority
+> order, and it is deliberately **not** work for the current epoch.
 
 `R26` is deliberately not allocated here: koine's `D8` proposes it for the
 low-level formats of the reporting loop, and that request is open. An id claimed

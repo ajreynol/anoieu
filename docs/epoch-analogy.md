@@ -92,8 +92,8 @@ a defect, and it is why the announcement is written to be arguable.
 different text. There is no `--rebuild` that returns what shipped; git does that
 job and nothing else does.
 
-**The build system does not exist yet.** `tekton` arrives in the second epoch.
-Today every row in the table above is a person and an agent doing by hand what
+**The build system does not exist yet.** `tekton` is its **planned maintainer**
+and is not built. Today every row in the table above is a person and an agent doing by hand what
 the analogy describes as a program — so read the table as the intended shape, not
 as a description of what runs.
 
