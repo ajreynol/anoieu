@@ -511,6 +511,38 @@ said so**. The response gate did not apply, because there was no topic yet. That
 gap is what this section closes, and the incident is recorded with it because a
 rule with no incident behind it is a preference.
 
+## The approval protocol
+
+**Where an agent is asking a person to approve something, it ends its response
+with a block stating, in a fixed template, exactly what is being approved.** A
+suffix after the block is fine; what matters is that the statement is there, at
+the end, in the same shape every time.
+
+**It reads like a CI check** — one field per line, a verdict beside each, and a
+single line at the bottom saying whether the gates pass. That shape is chosen
+because it is scannable in three seconds, it is diffable between two runs, and it
+makes a *specific* claim rather than a summary. The fields and their order are
+fixed per kind of approval; the epoch form is in
+[`epoch-policy.md`](epoch-policy.md).
+
+**The block reports the gates; it does not grant the approval.** A bottom line of
+`READY` means the mechanical checks pass, never that anybody has agreed. Approval
+is the person's reply and exists nowhere else.
+
+**Nothing verifies it, and it is a policy rather than a control.** No check reads
+the block, and an agent could write `PASS` beside a red build. That is worth
+saying plainly rather than implying a guarantee. What the shape buys is different
+and smaller: **a specific claim can be refuted in one command**, where a
+paragraph of prose cannot. A wrong field is a thing somebody can catch; a vague
+summary is not.
+
+**And it is recorded.** The block goes into the artifact the approval was for —
+for an epoch, the log entry. Elsewhere on this page it is noted that a person
+pointing the work in a direction *leaves no artifact*, which is worth remembering
+when reading the result. This is the one case where that gap is worth closing,
+because deploying an epoch is the act with the widest blast radius and the least
+evidence attached.
+
 ## The discussion file
 
 **Every repository in the ecosystem keeps `docs/discussion.md`.** It is the

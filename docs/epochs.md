@@ -25,7 +25,7 @@ to; it has never said who must be contacted, and neither does this page.
 [`discussion.md`](discussion.md), which is the record. This holds the covering
 note somebody would paste when handing one over.
 
-Eight parts per entry, and the last is the one worth the space:
+Nine parts per entry, and the last is the one worth the space:
 
 | part | what it holds |
 | --- | --- |
@@ -36,6 +36,7 @@ Eight parts per entry, and the last is the one worth the space:
 | **Suggested notifications** | which of those a person might tell, and why each. **A suggestion and never a list of obligations** |
 | **What it carried** | a few lines. The topic is the authority; this is the reminder |
 | **The prompt** | verbatim, in a fenced block, so it can be pasted without editing |
+| **Approval** | the approval block, verbatim, from the session that proposed deploying it — including the ones that said `BLOCKED`. See [`epoch-policy.md`](epoch-policy.md#the-approval-block) |
 | **What was rejected** | the wording considered and turned down, and why |
 
 **Involved and suggested are two different questions, which is why they are two
@@ -110,6 +111,20 @@ of this and telling them would blur a boundary the epoch spent its length
 drawing. **Not** `cvc5`, ever, by the same reasoning the `foundation` footing is
 written under. *All of that is a suggestion; who is actually told is the human's
 decision and is not recorded here.*
+**Approval:** not yet given. The most recent block:
+
+```text
+EPOCH E1 · approval requested
+  commit .......... 6473955
+  ci .............. FAIL   oracle red since cf4ad2c (2026-08-30)
+  applied here .... FAIL   publishing stance unstated
+  asks ............ publishing stance; bump only to a green commit
+  informs ......... dokimasia, eudaimonia, koine
+  removes ......... nothing
+  ------------------------------------------------------------
+  DEPLOY .......... BLOCKED  2 failing
+```
+
 **What it carried:** footings recorded on two axes instead of one; the
 `associate` footing, defined and held by nobody; the `report/` convention and the
 rule that a child project states whether there is a paper in it; `join_eo --soft`

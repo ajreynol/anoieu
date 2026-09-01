@@ -157,6 +157,49 @@ target of your own epoch.
 **4. What comes out?** An epoch that only adds has not been designed, and the
 last honest moment to notice is before it is carried.
 
+## The approval block
+
+**A session that proposes deploying an epoch ends with this**, under
+[the approval protocol](policy.md#the-approval-protocol). A suffix after it is
+fine; the same seven fields in the same order every time is the part that
+matters.
+
+```text
+EPOCH E1 · approval requested
+  commit .......... 6473955
+  ci .............. FAIL   oracle red since cf4ad2c (2026-08-30)
+  applied here .... FAIL   publishing stance unstated
+  asks ............ publishing stance; bump only to a green commit
+  informs ......... dokimasia, eudaimonia, koine
+  removes ......... nothing
+  ------------------------------------------------------------
+  DEPLOY .......... BLOCKED  2 failing
+```
+
+| field | what it holds |
+| --- | --- |
+| **commit** | what would be adopted. Not a branch, and not *HEAD* |
+| **ci** | `PASS`/`FAIL` from `bump_check --rev` at that commit, with the reason when it fails |
+| **applied here** | the **Of us** row reduced to a verdict: has this epoch been done in this tree |
+| **asks** | what a member is asked for, in one line, or `nothing` |
+| **informs** | the suggested notifications — a suggestion, never a list of obligations |
+| **removes** | what comes out to pay for what went in, or `nothing`, which is a finding rather than a blank |
+| **DEPLOY** | `READY` or `BLOCKED`, with the count of failing fields |
+
+**`READY` is a statement about the gates and never about the decision.** It means
+the mechanical checks pass. Whether the epoch is deployed is the person's reply
+and lives nowhere else, and an agent that treats its own `READY` as permission
+has misread the whole protocol.
+
+**`removes ... nothing` is deliberately visible.** It is the field this ecosystem
+is worst at, the counter says so three rounds running, and putting it on the same
+list as the CI verdict is the cheapest way to stop it being the field nobody
+mentions.
+
+**The block goes into the log entry verbatim**, in its `Approval` row — including
+the ones that said `BLOCKED`. An epoch that took three attempts to pass its own
+gates is a more useful record than one that appears to have passed first time.
+
 ## How much of this crosses the boundary — open
 
 **`epoch` is our word for our planning unit. `global announcement` is the

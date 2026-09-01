@@ -62,6 +62,8 @@ UNCHECKED = [
 # the review step and *read* by the generator, so it is a hand-maintained file.
 GENERATED = ["reports/open-findings.md", "reports/corpus.md", "checks.md"]
 #: Extensions read as bytes rather than text; the path check skips them.
+#: An absolute path out of somebody's home directory.
+HOME_PATH = r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/"
 BINARY = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".ico", ".pyc", ".zip", ".gz"}
 INDEX_EXEMPT = {"README.md"}
 COMPETING_ENTRY = ["INTRODUCTION.md", "OVERVIEW.md", "ABOUT.md", "GUIDE.md", "START.md"]
@@ -553,12 +555,37 @@ def check_local_paths() -> list[str]:
     leak arrives through a generator rather than through somebody typing.
     """
     bad = []
+    for rel in tracked("*.md"):
+        for m in re.finditer(HOME_PATH, prose(read(rel))):
+            bad.append(f"{rel} carries the absolute path {m.group(1)}/…, "
+                       "which names one machine")
+            break
+    return bad
+
+
+def check_local_paths_data() -> list[str]:
+    """The same rule, over committed **data** -- reported, never fatal.
+
+    Two promoted fuzz reproducers here recorded the absolute seed path they were
+    shrunk from, which is how a home directory reaches a tree that forbids one in
+    prose: through a generator rather than through somebody typing. So the rule
+    is worth applying to data, and the surface is new.
+
+    **Minor on purpose, and this one is not about being new.** Run against the
+    members, it passes two and fails a third on files it has every right to have
+    committed before anybody wrote this down. Promoting it to fatal now would
+    turn somebody's build red on the day they bump for an unrelated reason, and
+    the announcement carrying this epoch says in terms that nothing goes red on
+    anybody. It becomes fatal when the trees it applies to are clear of it, which
+    is a decision for a person and not a date.
+    """
+    bad = []
     for rel in tracked("*"):
-        if rel.startswith("deps/") or os.path.splitext(rel)[1] in BINARY:
+        if rel.endswith(".md") or rel.startswith("deps/"):
             continue
-        text = read(rel)
-        text = prose(text) if rel.endswith(".md") else text
-        for m in re.finditer(r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/", text):
+        if os.path.splitext(rel)[1] in BINARY:
+            continue
+        for m in re.finditer(HOME_PATH, read(rel)):
             bad.append(f"{rel} carries the absolute path {m.group(1)}/…, "
                        "which names one machine")
             break
@@ -742,6 +769,7 @@ CHECKS = [
 MINOR = [
     ("the discussion file is present and well-formed", check_discussion, None),
     ("the README explains the repository's name", check_name_explained, None),
+    ("committed data carries no path out of a home directory", check_local_paths_data, None),
     ("the discussion file says a prompt may be misaddressed", check_prompt_gate, None),
 ]
 
