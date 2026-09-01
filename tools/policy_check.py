@@ -613,8 +613,24 @@ def check_discussion() -> list[str]:
         if tid in seen:
             bad.append(f"{tid} is used twice; ids are allocated once and never reused")
         seen.add(tid)
-        block = "\n".join(lines[i + 1:i + 9])
-        got = dict(re.findall(r"^\*\*([A-Za-z ]+):\*\*\s*(.*)$", block, re.M))
+        # The whole contiguous field block, however long it is -- not a fixed
+        # window. It used to read eight lines, which was one more than the five
+        # required fields needed and exactly as many as a topic carrying both
+        # `Pinned:` and `Global:` produces. A seventh field, or any field value
+        # wrapping onto a second line, pushed a required one out of the window
+        # and this reported it missing when it was there.
+        block = []
+        for line in lines[i + 1:]:
+            if line.startswith("## "):
+                break
+            if not line.strip():
+                if block:
+                    break
+                continue              # the blank between heading and fields
+            if not re.match(r"^\*\*[A-Za-z ]+:\*\*", line) and not block:
+                break                 # no field block at all
+            block.append(line)
+        got = dict(re.findall(r"^\*\*([A-Za-z ]+):\*\*\s*(.*)$", "\n".join(block), re.M))
         for f in FIELDS:
             if f not in got or not got[f].strip():
                 bad.append(f"{tid} has no **{f}:**")

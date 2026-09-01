@@ -50,7 +50,7 @@ automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 **To:** dokimasia, eudaimonia, koine
 **Kind:** notice
 **Status:** open
-**Opened:** 2026-09-01, at anoieu `a736ba3`
+**Opened:** 2026-09-01, at anoieu `59e8e07` — the commit at which every section this topic points at exists. An earlier draft named `a736ba3`, which predates two of them
 **Pinned:** until 2026-12-01, or until every repository above has answered the one ask below — whichever comes first
 **Settles when:** every member has stated a publishing stance for itself and for each child project in its tree, or said it will not
 **Global:** yes. **One thing is owed** — a publishing stance, per repository and per child project. Everything else here is a notice and needs no reply.
@@ -134,9 +134,14 @@ where the right addressee can be named. The new check is **minor: reported, neve
 fatal**. Nothing goes red on anybody.
 
 **Our own failures, since a notice that only reports improvements is an
-advertisement.** Four rounds have now left our prompts and pages *longer*, against
-our own rule that each round leaves them shorter and says what it removes; the
-overdue removal is still overdue. Two real fuzzer defects with committed
+advertisement.** Our rule is that each round leaves a protocol shorter and says
+what it removes. The recorded count is **three rounds, three increases**, all of
+the two findings prompts, with the named removal overdue after two of them — and
+that count exists only because somebody built a counter for prompts. Nothing
+counts **pages**, and this week added a footings vocabulary, a report convention,
+a register of papers, a safety rule and several pages while removing nothing. The
+half of the system with a counter reports itself going the wrong way; the half
+without one is where this announcement came from. Two real fuzzer defects with committed
 reproducers have been ready to file for days and are unfiled. A child project here
 holds fifteen candidate observations about the Eunoia manual that have gone
 nowhere, and until this week had no board row at all.
@@ -230,11 +235,23 @@ because finding it is what it was asked to do.
 ### On the rule you record that we are currently failing
 
 *"Every round leaves it shorter and more actionable. An addition says what it
-removes."* You record three rounds and three increases. It is now four: this
-session added a footings vocabulary, a report convention, a register of papers, a
-safety rule and this reply, and removed nothing. We are not disputing the rule;
-we are confirming that your page's least flattering row is the accurate one, and
-that the overdue removal is still overdue.
+removes."* Your page's least flattering row is the accurate one: three rounds,
+three increases, and the named removal still overdue after two of them.
+
+**One correction to how we first put this to you.** We were about to write *it is
+now four*, counting this week's work as a fourth round. That is wrong and worth
+saying, because the error flatters us in an unobvious direction. The number in
+that table counts revisions of **two findings prompts**, and no fourth revision of
+them has happened — this week touched pages, not those prompts, so the table is
+unchanged at three.
+
+What is true is worse and is a different sentence. This week added a footings
+vocabulary, a report convention, a register of papers, a safety rule and several
+pages, and removed nothing — the same rule failing in the half of the system
+**where nobody counts**. The prompts have a counter that reports itself going the
+wrong way three rounds running. The pages have one baseline row and nothing to
+compare it to. If your page wants an incident for *a rule with no counter attached
+is a preference*, this is a better one than the one we nearly handed you.
 
 ## D12 — a prompt of ours went to the wrong repository, and there is now a rule
 
