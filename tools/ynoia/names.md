@@ -28,14 +28,21 @@ an account — `anoieu_fuzz` is one — but the burden is on the name to earn it
 | --- | --- |
 | **eunoia** | the language itself — εὔνοια, *good thinking* |
 | **ethos** | the proof checker |
-| **logos** | the Lean development |
+| **logos** | the **L**ean development — the initial is load-bearing, and is what makes `iogos` below a joke |
 | **eudaimonia** | the calculus template |
 | **anoieu** | the analyzer; *eunoia* read backwards |
 | **dokimasia** | δοκιμασία, the scrutiny before office: what no proof step covers |
-| **sapheneia** | σαφήνεια, clarity of an account: Eunoia as a language definition |
-| **ynoia** | *why Eunoia*: whether the arrangement earns its machinery |
+| **sapheneia** | σαφήνεια, clarity of an account: Eunoia as a language definition. A child project, in anoieu |
+| **ynoia** | *why Eunoia*: whether the arrangement earns its machinery. A child project, in anoieu |
 | **euthyna** | εὔθυνα, the audit at end of term: what logos's proof is made of. **Started**, in eudaimonia |
-| **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Approved**, awaiting its repository; see [`proposals.md`](proposals.md) `P1` |
+| **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Its own repository**, and a member; audited as [`P1`](proposals.md) |
+| **workflow-launcher** | descriptive rather than Greek, and the register's own exception applies: it is a program and not an account. The first hour of a new tool's life, and a register of what this ecosystem's practice turns out to be doing. A child project, in eudaimonia |
+
+**Names chosen outside this ecosystem are not here.** `cvc5` and `ethos-eoc` are
+in [`../ecosystem.json`](../ecosystem.json) and will never be in this table: it
+registers names *we* reserved, and theirs were settled by other people before any
+of this existed. An entry in the inventory with no row here is a gap only when
+the name was ours to choose.
 
 ## Reserved, and free to take
 
@@ -47,7 +54,7 @@ stated relative to its absence. None has a repository or a line of code.
 | **pathos** | πάθος, the third mode of persuasion | an efficient *verified* proof checker — the one that would let the ecosystem ship what it proves rather than a second implementation |
 | **hermeneia** | ἑρμηνεία, interpretation | carrying the embedded semantics into Lean's own logic, so a theorem about a proof becomes a theorem about the thing proved |
 | **noesis** | νόησις, the act of understanding | the semantics and the compiler defined *in* Lean rather than compiled into it |
-| **iogos** | logos, elsewhere | the same calculus and development redone in a second proof assistant, as an independence check |
+| **iogos** | not Greek: `logos` with the **L** of Lean swapped for the **I** of Isabelle. The one joke in the register, and it earns its place by fixing the scope in the name | the same calculus, semantics and soundness development redone against Isabelle/HOL — an Isabelle backend for `ethos-eoc`, and logos rebuilt on it, as an independence check |
 | **elenchos** | ἔλεγχος, cross-examination | differential fuzzing derived from the calculus rather than written by hand — what the fuzzer here is a deliberate baseline for |
 
 ## If none of them fits

@@ -614,6 +614,11 @@ recommending rather than resisting.
 
 ## Iogos — logos in a second proof assistant
 
+*The name is `logos` with its initial swapped: the **L** of Lean for the **I** of
+Isabelle. It is the one joke in the register and it earns its place, because the
+whole of the project's scope is in the substitution — everything else stays the
+same, and that is exactly the claim being tested.*
+
 *A code name, for work not yet started.* An Isabelle/HOL backend for
 `ethos-eoc`, and the logos development redone against it: the same calculus, the
 same semantics and the same soundness argument, carried by a second kernel.

@@ -123,6 +123,39 @@ declaration, one heading. What we vetted you as is that the ecosystem's trust
 argument terminates in your development.
 **HUMAN FEEDBACK:**
 
+## B19 — a child project has fifteen candidates and no route out
+
+**Task:** `sapheneia` holds `EOM-01` … `EOM-15` — candidate feedback on the ethos
+manual, found by writing a second account of the language and noticing where the
+second reading could not recover something from the first. **None has been
+carried anywhere**, and its own status page says so.
+**Entities:** `anoieu`, `ethos`
+**Status:** ready — the ledger is written, read against `user_manual.md` at
+`3cf1c03`, and every row cites the section it is about.
+**Channel:** **upstream, by a person** — `ethos` has no discussion file, and a
+child project has no channel of its own: anything it says leaves through this
+repository, carried by somebody who can answer the follow-up.
+**Next:** pick the two or three rows that are checkable by reading the sentence
+they cite — the grammar ones, `EOM-01` and `EOM-02` — and carry those alone. The
+judgement rows wait until a reader who knows Eunoia has looked at the ledger,
+which nobody has.
+**Prompt — `anoieu`:** these are *candidates* and are to stay labelled as such;
+the ledger's own header says most likely to be wrong are the judgement rows, and
+that caution is the reason it is worth reading. Do not file them as findings —
+they are about a document, not a defect in a file with a line number.
+**Prompt — `ethos`:** a second, independent description of Eunoia was written
+against your manual, and fifteen places came up where the second reading could
+not recover something from the first: a silence, an ambiguity, or a passage that
+does not appear to agree with itself. Two are grammar productions that derive
+nothing; the rest are documentation.
+**HUMAN FEEDBACK:**
+
+**Note.** This is not [`B11`](#b11--seven-language-questions-the-manual-does-not-settle),
+though both end at the same manual. `B11` is `eunoia-1` … `eunoia-7`, found by
+writing the *analyzer*; these were found by writing a *second manual*. Different
+instruments, different rows, and the ledger had no board row at all until the
+inventory of 2026-09-01 went looking.
+
 ## B6 — the reporting protocol has two implementations and an approved home
 
 **Task:** `dokimasia` built the same loop we did, in an afternoon, by reading

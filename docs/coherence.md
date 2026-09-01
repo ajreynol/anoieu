@@ -158,6 +158,34 @@ missing from every other checkout — a state nothing used to report, because ea
 half looked complete from where it stood. `welcome_eo` is where it is caught
 because that is the one moment somebody is already thinking about the new tool.
 
+## Keeping ynoia's registers true when the ecosystem moves
+
+Three files in [`../tools/ynoia/`](../tools/ynoia) are **registers about the
+ecosystem** rather than arguments about it, and they are the ones that go stale
+without anybody noticing, because nothing consumes them and no build reads them.
+The trigger and the edit, in full:
+
+| when | the edit |
+| --- | --- |
+| a name is taken | a row in `names.md`, **saying where it lives** |
+| a tool moves — a child started, a child graduated, a repository created | the *where it lives* clause on its existing row |
+| a tool on `tools.md` starts existing | its block **leaves** `tools.md`. A page that keeps its graduates is a page whose first entries are all finished work |
+| a tool enters [`../tools/ecosystem.json`](../tools/ecosystem.json) | an entry in `papers.md`, even where the verdict is `no` |
+
+**The cross-check is one pass and it is worth doing whenever the inventory
+moves.** `ecosystem.json` is the authority on who exists, so anything in it with
+no row in `names.md` is either a gap or a name somebody else chose — the latter
+being `cvc5` and `ethos-eoc`, which will never be there and which `names.md` now
+says so about. Run on 2026-09-01 it found three: `workflow-launcher` missing
+entirely, `koine` still recorded as awaiting a repository it has had for days,
+and two child projects with no *where it lives* clause.
+
+**Why this is a paragraph and not a check.** A research project is not in the
+test suite, not in CI, and nothing breaks when its directory is deleted — that
+island property is what makes carrying one cheap, and a check here that read
+`names.md` would quietly end it. The registers being stale is a real cost and it
+is the smaller of the two.
+
 ## A finding is about `main`
 
 We report a defect against what a project ships. Every ref in
@@ -272,7 +300,39 @@ alive. Closing a row is a judgement made by the review step, never by a diff.
 [`notes.md`](notes.md), [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), the
 code, the tests. No permission needed; the normal standard applies.
 
-Two rules cut across the whole ladder.
+**What a repository says about itself decides how freely you may work in it.**
+Where the maintenance note says the tree is **written by AI agents**, an agent
+does ordinary work in it without asking step by step — the ladder above still
+orders what needs a person *within* this tree, and that is the whole of the
+constraint. Where the note says people write it, or where there is no note,
+restraint applies: propose, show the diff, and wait.
+[`reporting-policy.md`](reports/reporting-policy.md) already decides the *register
+of address* this way — by what the project says about itself, never by our
+impression of the code — and this is the same test applied to the scope of
+action. **Where there is no note, the cautious reading applies**, because
+guessing wrong in that direction is the cheaper error.
+
+Three gates do not move, whatever the note says: nothing that **creates or
+publishes**, nothing that **crosses a repository boundary**, and the discussion
+file's own gate. The worked example is on the board today — `B3`'s two defects
+are filed into `ethos`, which nobody claims is AI-maintained, so carrying them is
+a person's errand however ready the reproducers are.
+
+**Ramp up gradually, and on evidence rather than on a date.** New latitude starts
+with the reversible things and widens when something has actually been observed
+to work — the same shape koine proposes for handing a protocol over
+(*referenced*, then *mirrored*, then *held*), applied to how much an agent may do
+rather than to where a definition lives. Going back is one revert and needs
+nobody's agreement.
+
+And the counterweight, because that rule is otherwise an invitation: what wants
+ramping up is **work on the thing at the bottom**, not machinery about the work.
+The governance budget below has a baseline and no second row, and the outside
+criticism that produced it says governance is the cheapest thing here to make. A
+session that widens its own latitude and spends it on more documents has answered
+the wrong half.
+
+Three more rules cut across the whole ladder.
 
 **Weakening a claim needs nobody; strengthening one needs a person.** Adding a
 caveat, narrowing a check that fired wrongly, or qualifying a result is ordinary

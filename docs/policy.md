@@ -559,6 +559,44 @@ to make afresh. And **un-pinning is deleting the field and moving the section
 back into date order** — the topic is not closed by being un-pinned, and its
 status is whatever its status is.
 
+### A global announcement
+
+**A topic addressed to every member of the ecosystem at once.** It is the most
+expensive thing this file can do — it spends everybody's attention on the same
+day — so it is a named thing with a field of its own rather than something a
+topic drifts into by adding names to `To:`.
+
+It carries `**Global:**` after `Settles when`, saying in one line what a member
+has to do, or that nothing is owed. Everything else about it is an ordinary
+topic.
+
+**`To:` still enumerates every member by name.** Not *the ecosystem*, not
+*everyone* — both are refused by the checker and should be. Two reasons, and the
+second is the one worth the typing. Naming them keeps the rule that a topic
+addressed to nobody in particular is addressed to nobody. And the list is a
+**record of who existed on that date**: a repository that joins next month was
+not addressed, was not told, and must not be treated later as though it had been.
+
+**What it is for:** something that has already changed on our side that every
+member needs to know — a convention, a check, a vocabulary, a rule. **What it is
+not for** is asking everybody for something at once, which is the reliable way to
+get it from nobody. Where an announcement does carry an ask, it says which
+members it is an ask *of*, and the rest are being told.
+
+It is usually pinned, and the one-pin rule above is what keeps the frequency
+honest: a second global announcement displaces the first, and having to choose is
+the whole of the cost control.
+
+> **Who may make one is not decided, and that is the next thing to settle here.**
+> Today the only control is the one every topic has — nothing crosses a
+> repository boundary by machine, so a person carries it. That is weaker than it
+> sounds, because the drafting is where the cost is incurred and the carrying is
+> a formality by then. What would settle it: whether a global announcement may be
+> opened by any member or only by whoever holds the policy; whether it needs a
+> second member's agreement before it is carried; and what a member's recourse is
+> when one arrives that should not have. Until then, treat the pin as the budget
+> and be embarrassed to spend it.
+
 **Ids** are `D<n>`, allocated once and never reused; another repository's topic is
 cited as `<repo>-D<n>`. **Append; do not rewrite.** A topic's body is what was
 said at the time, and it is amended only to correct something false, visibly.
@@ -810,6 +848,27 @@ drift, and the difference between them is the whole of this rule. The holding
 state is legitimate and is not a licence to go quiet — rule 9 still applies, and
 a project sitting here without a person standing behind it is retired, not
 parked.
+
+**11. It states whether there is a paper in it.** One line in the project's own
+README, alongside the charter: whether a `report/` exists for it, or what the
+plan is, or that there is nothing here worth writing up. All three are answers
+and the third is the commonest — *there is no paper in this* is a position a
+project applies rather than a convention it fails, and stating it costs a
+sentence and settles the question for good.
+
+The reason this is a rule for child projects specifically, when it is only
+*encouraged* for a repository, is that a child project is the case where the
+question goes unasked. It has no users, nothing depends on it, and it is
+advertised nowhere, so nobody ever arrives and asks what came of it — and its
+three endings under rule 9 all turn on whether the work amounted to something.
+A project that has decided it has no paper in it has answered half of that in
+advance; one that has a paper in it and has not said so is the case rule 10 is
+about, wearing different clothes.
+
+**Where the register in [`../tools/ynoia/papers.md`](../tools/ynoia/papers.md)
+says a project should write one and the project disagrees, the project is
+right** — that register argues and decides nothing, and a stance stated here
+outranks it. What the register is for is making sure somebody asked.
 
 The instance here was the fuzzer. It sat in this state for exactly as long as
 it took somebody to look at it: it had earned its keep, and it broke rule 2
