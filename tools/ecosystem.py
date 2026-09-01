@@ -412,7 +412,8 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
         ("policy", f"{passing} of {len(members)} passing",
          verdict(passing == len(members), unknown > 0)),
         ("topics owed to us", str(owed), verdict(owed == 0)),
-        ("epoch", f"{epoch}, {status}", verdict(status == "deployed", status == "?")),
+        ("epoch", f"{epoch}, {status}", verdict(status in ("deployed", "installed"),
+                                                status == "?")),
     ]
 
 

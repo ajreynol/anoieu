@@ -311,20 +311,83 @@ needs a person, and asking for that is a different block with a different header
 
 ## The status of an epoch
 
-**Every epoch carries a written status, and it is one of three words.** It is a
-field in the log entry rather than a mood, and a reader should be able to find
-out where an epoch stands without reconstructing it from the announcement.
+**Five levels, and each is a higher bar of scrutiny than the one before it.**
 
-| status | what it means | what a member does |
+| status | what it means | scrutiny |
 | --- | --- | --- |
-| `planned` | we are not close. Gates are failing, or the shape is still moving | nothing, and nothing is expected |
-| `staging` | an agent is being given instructions to stage it — the announcement, the covering note, the register edits | nothing yet |
-| `deployed` | tools in the Eunoia ecosystem should now consider it **available to consume** | bump when they choose, subject to the green-commit rule |
-| `installed` | **every member upholds the contracts the epoch set out.** A fact about the ecosystem, observed rather than declared | nothing — it describes them, it does not demand of them |
+| `brainstorm` | the outer rings only: ideas, discussions, registers. **Nothing critical is touched** | lowest |
+| `planned` | **says nothing.** The null status: an epoch exists and no claim is being made about it | none |
+| `staged` | an agent is being given instructions to stage it — the announcement, the covering note, the register edits | the gates are being worked |
+| `deployed` | members should consider it **available to consume** | every gate passes |
+| `installed` | every member upholds the contracts it set out | highest, and not ours to assert |
 
-**Only `deployed` means anything to anybody outside this tree.** The first two
-describe our own work in progress; they are written down so that *where we are*
-is a fact rather than an impression, and they oblige nobody.
+**Only `deployed` and `installed` mean anything outside this tree.** The first
+three describe our own work in progress and oblige nobody.
+
+### Up is earned; down is free
+
+**A status never advances because somebody asks for it**, and that includes the
+person driving. *Move it to staged* is not an instruction the front end can carry
+out — a level is reached when its scrutiny has been met, and asking is not a way
+of meeting it. **Skipping a level is not available at all**: `brainstorm` to
+`staged` is two bars in one step, and the middle one is where the thing being
+skipped would have been noticed.
+
+**Going down needs nobody.** `epoch brainstorm` drops to the bottom from
+anywhere, immediately, and costs one line in the log. That asymmetry is the whole
+design: the cheap direction is the safe one, so there is never a reason to argue
+about taking it.
+
+> **This does not conflict with the escape hatch, and the difference is worth
+> stating.** [`policy.md`](policy.md#the-ecosystem-never-locks-everybody-out)
+> says a person may override any gate. That exists for **deadlock** — the
+> machinery has made a level unreachable by any route. It is not for
+> **convenience**, and wanting a status to be further along is not a deadlock.
+> The tell is simple: an override is recorded and says what would have to be true
+> for it not to be needed again. A bump because somebody would like it bumped has
+> no such sentence to write.
+
+### `brainstorm` — and why `vision.md` is the kernel
+
+**In `brainstorm` we do not touch critical infrastructure, and we edit
+discussions aggressively.** It is the mode for working out what the next epoch
+should be, and the point of naming it is that ideas are cheap exactly when
+nothing load-bearing is moving underneath them.
+
+**The inversion worth noticing: here the *documents* are the kernel and the code
+is the outer ring.** In an ordinary system the kernel is what you least want
+churned and the prose is soft. This is the reverse. [`vision.md`](vision.md) is
+the kernel — everything else is derived from it, nothing may ever check it, and
+the party with the least standing to revise it is the agent it governs. The
+analyzer, by comparison, is cheap: it can be rewritten on a Tuesday.
+
+**The rings are already ranked**, by the supervision ladder in
+[`coherence.md`](coherence.md), and `brainstorm` simply says which are in play:
+
+| ring | in `brainstorm`? |
+| --- | --- |
+| `vision.md` — the kernel | **no**, and not in any status without a person |
+| `policy.md`, the checker, the prompts | **no** |
+| the reporting positions and workflow | **no** |
+| `discussion.md`, `board.md`, the `ynoia` registers | **yes — aggressively.** This is where the next epoch gets worked out |
+| notes, drafts, anything untracked | yes |
+
+**Aggressively is meant.** Open topics, rewrite the board, reorder the registers,
+argue with the accounts. None of it is load-bearing, all of it is where a good
+epoch comes from, and a brainstorm that produced no changes to any of it was
+probably a planning meeting.
+
+### What to say in `staged`
+
+**Simple, actionable requests. No implementation details.** In `staged` the work
+has been decided and what remains is a person doing specific things — so the
+front end asks for those things, one at a time, in the fewest words that make
+them doable.
+
+Not *here is what I changed and why*; not the reasoning, the trade-offs, or the
+files. Those belong in `brainstorm`, where they are the entire point. **A staged
+epoch that produces paragraphs has slipped back a level without saying so**, and
+the honest response is to drop to `brainstorm` rather than to keep explaining.
 
 ### `installed`, and why it is not a goal
 

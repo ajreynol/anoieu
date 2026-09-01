@@ -113,7 +113,7 @@ reasonable end-of-session question and has a one-command answer.
 
 ## The commands
 
-**Five today**, each a prompt on its own, typed as it appears here. **The set is
+**Seven today**, each a prompt on its own, typed as it appears here. **The set is
 expected to grow** — adding one is `R29`'s to propose and a person's to accept,
 and a new command arrives with its output shape defined, not discovered.
 
@@ -124,6 +124,8 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 | --- | --- |
 | `make epoch` | **not yet supported.** Would mean: make it better, and stage a deployment. The one command not of the form `epoch <verb>` |
 | `epoch help` | print the commands, and the ecosystem's health |
+| `epoch status` | which level this epoch is at, and what the next one would take |
+| `epoch brainstorm` | drop to `brainstorm`. Always available, needs nobody |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
 | `epoch double check` | **not yet supported.** Would mean: was a deployment received. [What that means is undefined](epoch-policy.md#after-deploying-epoch-double-check), which is why |
@@ -142,6 +144,8 @@ commands:
   epoch help           print this list and the ecosystem's health
   epoch dry run        evaluate every gate; print the summary and the block; change nothing
   epoch deploy         move the epoch's status
+  epoch status         which level this epoch is at
+  epoch brainstorm     drop to `brainstorm` — always available
   epoch double check   was a deployment received                (NOT YET SUPPORTED)
 
 health:  rendered at run time by `tools/ecosystem.py --health` — the values below
@@ -152,8 +156,10 @@ health:  rendered at run time by `tools/ecosystem.py --health` — the values be
   ! topics owed to us  16
   ! epoch              E1, planned
 
-status:  planned -> staging -> deployed -> installed
-         only the build system moves an epoch to `deployed`
+status:  brainstorm -> planned -> staged -> deployed -> installed
+         scrutiny rises left to right; `planned` says nothing
+         up is earned and never asked for; down is free and needs nobody
+         only the epoch build system role moves an epoch to `deployed`
          `installed` is read out of members' trees and may never be true
 
 see:     docs/epoch-analogy.md   the short way in
@@ -227,7 +233,7 @@ typed, name what is accepted, stop:
 
 ```text
 epoch: unrecognised command "dry-run"
-       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch double check
+       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch status | epoch brainstorm | epoch double check
        did you mean: epoch dry run
        nothing was run
 ```
@@ -258,6 +264,22 @@ do not do the plausible thing.
 perfectly typed `epoch deploy` cannot move an epoch to `deployed` on the front
 end's say-so; that authority belongs to the build system alone. The commands are
 a convenience for a person, not a source of permission.
+
+## How much is said depends on the level
+
+**In `brainstorm`, explain everything.** Reasoning, trade-offs, what was
+considered and dropped — that is the entire product of the level, and a
+brainstorm that returned only conclusions has thrown away the part worth having.
+
+**In `staged`, give simple actionable requests and nothing else.** The work has
+been decided; what remains is a person doing specific things. One thing at a
+time, in the fewest words that make it doable, with **no implementation detail**,
+no account of what changed, and no reasoning unless it is asked for.
+
+**A staged epoch that starts producing paragraphs has slipped a level without
+saying so.** The honest response is `epoch brainstorm` — drop, explain, come back
+up — rather than keep explaining from a level that is supposed to be past
+explaining.
 
 ## What a command prints
 

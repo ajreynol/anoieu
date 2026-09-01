@@ -746,8 +746,8 @@ def epoch_surfaces_agree() -> int:
     truth_cmds = set(re.findall(r"^\| `((?:epoch|make) [a-z]+(?: [a-z]+)?)` \|",
                                 iface, re.M))
     block = re.search(r"```text\n(epoch \u2014 .*?)\n```", iface, re.S)
-    truth_stat = set(re.findall(r"^\| `(planned|staging|deployed|installed)` \|",
-                                policy, re.M))
+    truth_stat = set(re.findall(
+        r"^\| `(brainstorm|planned|staged|deployed|installed)` \|", policy, re.M))
 
     failures = 0
 
@@ -777,7 +777,7 @@ def epoch_surfaces_agree() -> int:
          truth_cmds)
     case("`epoch help` names exactly the statuses the policy defines",
          set(re.findall(r"[a-z]+", re.search(r"^status:(.*)$", helptext, re.M).group(1)))
-         & {"planned", "staging", "deployed", "installed"},
+         & {"brainstorm", "planned", "staged", "deployed", "installed"},
          truth_stat)
 
     print(f"-- the epoch surfaces: {failures} failure(s)")
