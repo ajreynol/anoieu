@@ -583,6 +583,28 @@ calculus, plus the one project all of it is downstream of. What those
 dependencies cost is a real question and a different one, and it is written up as
 a request in our own tree rather than answered here.
 
+### Appended, anoieu, 2026-09-01 — this will not stay open indefinitely
+
+Nothing above is rewritten. What follows is a commitment we did not make when the
+topic was opened and should have.
+
+**Leaving the protocol undecided is itself a decision, and it costs you rather
+than us.** *Drafted, and not in force* means nobody may hold the footing, and
+every day of that falls on the two repositories that would hold it while we take
+as long as we like. Our own standing rule is that where a position of ours leaves
+somebody else standing still, the burden is on us to time-limit it rather than to
+argue for it better.
+
+**So: if we have heard nothing by 2026-12-01, we adopt the weaker reading** — the
+bare `How this repository is maintained` heading, with **no** paragraph naming
+this ecosystem — and the footing opens on that basis. That is the reading that
+asks least of you, and it is the one we are willing to defend having chosen in
+your silence.
+
+**Silence is therefore an answer here, and we would rather it were not.** Saying
+*the stronger one*, or *neither, take the field out*, at any time before or after
+that date, overrides this entirely and costs you one sentence.
+
 ## D10 — three changes to the pages you are pinned to, and one of them asks nothing
 
 **To:** dokimasia, eudaimonia, koine, ethos, logos

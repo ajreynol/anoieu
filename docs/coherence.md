@@ -332,6 +332,42 @@ criticism that produced it says governance is the cheapest thing here to make. A
 session that widens its own latitude and spends it on more documents has answered
 the wrong half.
 
+**Do not hold up the ecosystem with a position of your own.** This repository
+argues carefully and writes its reasoning down, which is mostly a strength and
+has one characteristic failure: a well-argued position that leaves somebody
+else's work stalled, where the argument is ours and the waiting is theirs.
+
+**The test is who is waiting.** Two kinds of position look identical on the page
+and are opposites in effect:
+
+- **A position that constrains us for their benefit** — nothing crosses a
+  repository boundary by machine, silence is never published as assurance, a
+  false positive is ours. Holding these costs the other party nothing, and they
+  should be held even when inconvenient. Especially then.
+- **A position that constrains them for our comfort** — a register we will not
+  edit, an id we will not allocate, a decision we will not take because taking it
+  would be premature. Each may be right, and each has somebody standing still on
+  the other side of it.
+
+**An undecided question is a position.** *Drafted, and not in force* is a decision
+that nobody may hold the footing yet, and it lands entirely on the repositories
+that would hold it. Deferring is often correct and is never free; what makes it
+honest is saying **what would settle it and by when**, so that a person waiting
+knows whether to wait.
+
+**So: where a position of ours is blocking somebody, the burden is on us to
+remove it, time-limit it, or route around it — not to defend it better.** A
+worked example is live: `R26` is unallocated here because koine proposed it and
+the request is open. That is the right call this week; if it is still true in six
+months, the reservation has stopped protecting koine and started blocking them,
+and the fix is answering `koine-D8` rather than restating why the id is reserved.
+
+**And the same applies to what we hold rather than what we decide.** Governance
+here is temporary by design — `R4`, `R6` and `R27` are all listed as moving to
+the governance repository. A convention that only works while we hold it is a
+convention that makes the handoff more expensive, which is a cost we would be
+imposing on a repository that does not exist yet and cannot argue back.
+
 Three more rules cut across the whole ladder.
 
 **Weakening a claim needs nobody; strengthening one needs a person.** Adding a

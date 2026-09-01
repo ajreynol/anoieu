@@ -225,11 +225,29 @@ does not say what any of it is for. Not [`vision.md`](vision.md), which says wha
 the work is aiming at in general and is argued rather than decided. Not the
 record. This role decides the *shape of one stretch*, and it is small.
 
-**It goes to kanon.** Deciding what every member is asked for next is governance,
-and it sits in the repository that also files findings against them — the
-arrangement `B15` on the board proposes to undo. When the governance repository
-exists, this moves with the policy and the joining rules rather than staying
-behind, and it is listed among what moves for that reason.
+**It goes to kanon, and this page is written to be handed over.** Deciding what
+every member is asked for next is governance, and it currently sits in the
+repository that also files findings against them — the arrangement `B15` on the
+board proposes to undo. When the governance repository exists, `R27` moves with
+the policy and the joining rules rather than staying behind.
+
+**We hold this temporarily and should say so wherever it might read otherwise.**
+Two things follow that are worth being deliberate about rather than discovering
+later.
+
+**Nothing here should get harder to move because we have been keeping it.** No
+convention on this page depends on the holder being anoieu, no file it owns lives
+outside `docs/`, and the two registers are plain Markdown a person could carry
+across in one commit. If a future addition to epoch design would only work in the
+repository that also runs the analyzer, that is a reason to reject the addition
+rather than a reason to keep the role.
+
+**Being a *target* of an epoch is not the same as owning one, and only the second
+moves.** The section above — anoieu is subject to whatever an epoch asks — is a
+property of being a member, not of being the designer. It survives the handoff
+unchanged: when kanon designs an epoch, anoieu is still one of the trees it lands
+on, and the **Of us** row in the log is still owed. Reading that section as
+evidence that this repository is structurally central would be exactly backwards.
 
 ## Frequency, and the honest position
 

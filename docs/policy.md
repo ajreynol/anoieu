@@ -1094,6 +1094,22 @@ be charging them for our record-keeping.
 **What would settle it:** the repositories it is aimed at answering, and a person
 deciding. Until then the inventory records the intention as an intention.
 
+**And it does not stay open indefinitely, because leaving it open costs them and
+not us.** *Drafted, and not in force* is a decision that nobody may hold the
+footing, and every day of it falls on the two repositories that would. So: **if
+nobody has answered by 2026-12-01, the weaker reading is adopted** — the bare
+maintenance-note heading, without the paragraph naming this ecosystem — and the
+footing opens on that basis. That is the reading that asks least of them and is
+the one we can defend having chosen in their silence; a repository that wants the
+stronger one can say so at any time, and one that wants neither can say that too
+and the `proposed` field comes out.
+
+The general form of this is in
+[`coherence.md`](coherence.md): where a position of ours leaves somebody else
+standing still, the burden is on us to time-limit it rather than to defend it
+better. This is that rule applied to the one place in this page where two
+repositories are currently waiting on a decision of ours.
+
 **The evidence, and it is worth having before deciding.** `--protocol` reports
 each proposed associate against all three readings — the bare note, the
 affiliating note, and a full declaration — from their checkout where there is one
