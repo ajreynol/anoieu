@@ -122,7 +122,7 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 
 | command | what it does |
 | --- | --- |
-| `make epoch` | **make it better, and stage a deployment.** The one command not of the form `epoch <verb>` |
+| `make epoch` | **not yet supported.** Would mean: make it better, and stage a deployment. The one command not of the form `epoch <verb>` |
 | `epoch help` | print the commands. Reads nothing, runs nothing |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
@@ -138,7 +138,7 @@ epoch — the Eunoia epoch build system
 usage: epoch <command>
 
 commands:
-  make epoch           make it better, and stage a deployment
+  make epoch           make it better, and stage a deployment   (NOT YET SUPPORTED)
   epoch help           print this list
   epoch dry run        evaluate every gate; print the summary and the block; change nothing
   epoch deploy         move the epoch's status
@@ -173,6 +173,21 @@ rather than only when its name does.
 
 **Recognise them consistently, and do not invent variants.** The same prompt gets
 the same reading every time.
+
+**`make epoch` is not yet supported.** It is registered, named and listed so that
+the shape is fixed before anything implements it, and typing it gets a reply
+saying so:
+
+```text
+epoch: `make epoch` is recognised and not yet supported
+       what it will mean: make it better, and stage a deployment
+       nothing was run
+```
+
+**That is a different reply from a syntax error, and the difference matters.**
+*Unrecognised* means the front end does not know what you asked for. *Recognised
+and unsupported* means it does, and the thing is not built — which is
+information, and tells you to stop trying rather than to check your spelling.
 
 **`make epoch` is the one exception to the shape**, and it is deliberate: it is
 what somebody types at a build system, and the whole arrangement is named after

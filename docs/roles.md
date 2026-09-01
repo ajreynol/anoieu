@@ -142,6 +142,16 @@ into somebody else's workflow file. A consumer still pinned to the old holder is
 not behind, it is correct, and that is the structural answer working as
 intended.
 
+**A role over human-authored work is not ours to move.** Where the artifact a
+role covers was written by people who have not adopted
+[`vision.md`](vision.md), no footing, no procedure and no argument here makes
+reassigning it a handoff — it is a claim on somebody's authorship, and this
+register records what tools are accountable for rather than deciding it for them.
+The test is not *are they a member*: a member could employ authors who never
+signed up to any of this, and a non-member's role could be perfectly movable if
+the work is generated. **Ask who wrote it and what they agreed to**, not what
+footing the repository holds. `R11` is the worked example.
+
 **A child project graduating is a handoff, and the commonest one this page will
 see.** The roles do not change; the heading over them does. `init_eo from-child`
 is the step that starts it, and it is told to say the move is owed here rather
@@ -436,17 +446,30 @@ this* is not drawn in it.
 **Not this role:** drawing that boundary. A second reading is `R20`, and it is
 additive: this role governs and that one does not.
 
-> **Future target: `sapheneia`.** The boundary this role does not draw is the
-> whole subject of `R20`, and the shape it would eventually take is that the
-> language definition becomes the account a reader goes to for *what Eunoia
-> requires*, with the manual remaining the authority on what the checker does.
-> Recorded as a direction, not a plan.
+> **Aspired handoff: `R11` to `sapheneia`.** The direction this register hopes
+> for is that this id moves under `sapheneia`'s heading, keeping its number, so
+> that the authority on *what Eunoia requires* is a language definition rather
+> than a manual for one program.
 >
-> **Blocked, and not on anybody's willingness.** `ethos` is a `candidate` — held
-> to none of this ecosystem's policy and owing it nothing — so there is no
-> channel through which this could even be asked, and asking would be the arrows
-> backwards. It unblocks if `ethos` ever takes a footing here, which is its
-> maintainers' decision and nobody else's.
+> **It would invert a boundary both entries currently assert**, and that is the
+> honest size of it. This role says *this role governs and that one does not*;
+> `R20` says *not this role: governing*. A handoff here does not move a
+> responsibility to a better-placed holder — it reverses a stated position, and
+> both entries would have to be rewritten rather than moved.
+>
+> **The blocker is authorship, and it does not clear if `ethos` joins.**
+> `user_manual.md` has **human authors**, and they have not adopted
+> [`vision.md`](vision.md) — the account of AI-assisted development everything in
+> this register is written under. Moving authority over what they wrote to a tree
+> written by agents, under a vision they never agreed to, is not a handoff. It is
+> a claim on somebody's authorship, and a footing would not make it one.
+>
+> **So this stays where it is by right rather than by circumstance.** An earlier
+> version of this note gave the blocker as *`ethos` is a candidate and there is no
+> channel*, which was wrong in a way worth recording: it implied the aspiration
+> unblocks when a repository joins. It does not. What would change it is those
+> authors deciding, and nobody else — and a register kept by agents is the last
+> place with standing to press for that.
 
 ## ethos-eoc
 
@@ -460,18 +483,28 @@ constructor, type rule, evaluator case and verification condition per symbol.
 `R17`, and carrying what a proof establishes into Lean's own terms, which is
 nobody's.
 
-> **Future target: `noesis`.** This role compiles a semantics into a Lean
-> development; `noesis` is that arrangement with the semantics *defined in* Lean
-> instead, so the compiler becomes a metaprogram over definitions rather than a
-> translator into them. It is audited as `P3` in
-> [`../tools/ynoia/proposals.md`](../tools/ynoia/proposals.md) with the verdict
-> **not yet**, it has been written zero times, and it forks with `iogos` — both
-> cannot hold in their strongest forms.
+> **Aspired handoff: `R12` to `noesis`.** The direction hoped for is that this id
+> moves under `noesis`, keeping its number: the semantics *defined in* Lean, and
+> the compiler a metaprogram over those definitions rather than a translator into
+> them.
 >
-> **Blocked for the same reason as `R11`.** `ethos-eoc` is a child of `ethos`,
-> which is a `candidate`. A child project is addressed through its parent, and
-> that parent has joined nothing — so this is a direction recorded on our side
-> and not a request made of theirs.
+> **The gaining tool does not exist**, which by the handoff procedure means it is
+> named in the text and never in an `Entities` field. `noesis` is audited as `P3`
+> in [`../tools/ynoia/proposals.md`](../tools/ynoia/proposals.md) with the verdict
+> **not yet** — written zero times, and forking with `iogos`, which cannot hold in
+> its strongest form at the same time.
+>
+> **Blocked, and the authorship point applies here too**, though less sharply
+> than for `R11`: the compiler is human-written in a tree whose authors have not
+> adopted [`vision.md`](vision.md), so deciding that their compiler stops holding
+> this role is not ours to decide. What is different is that `noesis` would be a
+> *second implementation* rather than a reassignment of the same artifact, and a
+> role following the implementation that actually gets used is an ordinary way for
+> one to move. That does not make it ours to schedule.
+>
+> `ethos-eoc` is also a child of `ethos` and is reached through its parent, which
+> has joined nothing — a second, weaker blocker that would clear on a footing where
+> the first would not.
 
 ### R13 — the shipped semantics sets
 

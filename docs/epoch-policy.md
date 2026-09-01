@@ -548,9 +548,15 @@ not designed, it was accumulated.
 
 ### `make epoch` — and the research question it is a probe for
 
-**`make epoch` means: make it better, and stage a deployment.** It is the
+**`make epoch` will mean: make it better, and stage a deployment.** It is the
 hilariously simple command, and the simplicity is the point — it is what somebody
 would type at a build system, and it asks for exactly what a build asks for.
+
+**It is not yet supported.** Registered and named so that its shape is fixed
+before anything implements it; typing it says so rather than running anything.
+Naming a command before building it is cheap here and is the same discipline as
+naming a tool before building it — the register of tools that do not exist is
+next door and works the same way.
 
 **It does not design the epoch.** It works inside a direction the person has
 already set, and everything it produces goes through
