@@ -24,7 +24,7 @@
   }
  ],
  "owner": "ethos+logos",
- "seed": "/tmp/claude-1000/-home-andrew-reynolds-anoieu/23132b47-a8d8-4e2a-8334-b32ecfa2ccf6/scratchpad/proofs/p19.cpc",
+ "seed": "p19.cpc",
  "source": "seed:p19.cpc",
  "summary": "logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (LPAREN)."
 }

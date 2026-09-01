@@ -236,7 +236,11 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     def fatal(where: str, what: str) -> "Finding":
         return judge(empty, [classify("x", -6, "", f"Fatal failure within f(x) at {where}\n{what}\n", 0)])
 
-    a = fatal("/home/a/src/type_checker.cpp:53", "cannot set type rule for NUMERAL to S2")
+    # Not `/home/<user>/...`, though that is the shape a real ethos build emits:
+    # a committed path under a home directory names one machine, and the policy
+    # check now reads data as well as prose. Any two differing absolute paths
+    # exercise the same thing.
+    a = fatal("/builder/src/type_checker.cpp:53", "cannot set type rule for NUMERAL to S2")
     b = fatal("/elsewhere/build/type_checker.cpp:53", "cannot set type rule for NUMERAL to S9")
     case("two instances of one defect share a bucket", a.bucket == b.bucket,
          f"{a.bucket} / {b.bucket}")

@@ -24,7 +24,7 @@
   }
  ],
  "owner": "ethos+logos",
- "seed": "/home/andrew-reynolds/logos/test/regress/sexp/test-define.cpc",
+ "seed": "logos/test/regress/sexp/test-define.cpc",
  "source": "seed:test-define.cpc",
  "summary": "logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (SYMBOL)."
 }

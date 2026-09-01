@@ -88,6 +88,15 @@ classes it cannot derive, and a question about where it sits.
 - **The bumping rule: does not apply.** anoieu pins nothing of its own, so a rule
   about moving `ANOIEU_REV` is vacuous in this tree. Recorded as *does not apply*
   rather than left blank, because blank reads as *not done*.
+- **A deliberate defect, taken to get the epoch out.** The `oracle` job tracked
+  `ethosEoc3` — a branch about to merge and be deleted — and was red at every
+  commit of this epoch. It is now pinned to the commit `deps.lock` records, which
+  writes the ethos revision in **two places with nothing comparing them**: exactly
+  the drift this repository has a discipline about, chosen over the version that
+  reads the lock because holding a finished epoch for the elegant fix is the
+  dogmatic position `coherence.md` warns against. `B20` carries it, and **what
+  the duplicate costs is the thing this epoch expects to learn in its own tree**
+  rather than in somebody else's.
 - **Everything the epoch changed landed here first** — the footings in our
   inventory, the misaddressing paragraph in our discussion file, the child-project
   rule in our policy — which is how three of its defects were found before it was

@@ -61,6 +61,8 @@ UNCHECKED = [
 # Written by a run. `closed-findings.md` is deliberately absent: it is written by
 # the review step and *read* by the generator, so it is a hand-maintained file.
 GENERATED = ["reports/open-findings.md", "reports/corpus.md", "checks.md"]
+#: Extensions read as bytes rather than text; the path check skips them.
+BINARY = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".ico", ".pyc", ".zip", ".gz"}
 INDEX_EXEMPT = {"README.md"}
 COMPETING_ENTRY = ["INTRODUCTION.md", "OVERVIEW.md", "ABOUT.md", "GUIDE.md", "START.md"]
 
@@ -315,6 +317,30 @@ def check_name_explained() -> list[str]:
     return []
 
 
+def check_owner_unadvertised() -> list[str]:
+    """*Unadvertised is not secret* -- the owner is named on the policy page and
+    nowhere else in this tree.
+
+    The name is read **out of** `policy.md` rather than written here, so this
+    checker is not itself a second copy of the thing it is keeping to one place.
+    Home-only: whether somebody else's repository names a person is entirely
+    their business, and failing their build over it would be absurd.
+    """
+    m = re.search(r"^\*\*Owner:\*\*\s*`[^`]+`\s*[—-]\s*([^.\n]+?)\.", read("docs/policy.md"), re.M)
+    if not m:
+        return ["docs/policy.md does not record an owner, so accountability "
+                "rests on nobody"]
+    name = m.group(1).strip()
+    bad = []
+    for rel in tracked("*"):
+        if rel == "docs/policy.md" or os.path.splitext(rel)[1] in BINARY:
+            continue
+        if name.lower() in read(rel).lower():
+            bad.append(f"{rel} names the owner; the policy page is the one place, "
+                       "and everywhere else is advertising")
+    return bad
+
+
 def check_maintenance_note() -> list[str]:
     """*The maintenance note* — the last section of the README, always."""
     secs = sections(read("README.md"))
@@ -518,11 +544,21 @@ def check_local_paths() -> list[str]:
 
     Always a leak and never useful to a reader: it names a machine that is not
     theirs. Decidable, and the list of things it looks for does not grow.
+
+    Documents *and* committed data. It read `*.md` only until two promoted fuzz
+    reproducers were found recording the absolute seed path they were shrunk
+    from -- one naming a former machine's home directory and one a scratch
+    directory under it. A rule that holds for prose and not for the data beside
+    it is a rule with a hole in it, and this is the shape the hole takes: the
+    leak arrives through a generator rather than through somebody typing.
     """
     bad = []
-    for rel in tracked("*.md"):
-        for m in re.finditer(r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/",
-                             prose(read(rel))):
+    for rel in tracked("*"):
+        if rel.startswith("deps/") or os.path.splitext(rel)[1] in BINARY:
+            continue
+        text = read(rel)
+        text = prose(text) if rel.endswith(".md") else text
+        for m in re.finditer(r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/", text):
             bad.append(f"{rel} carries the absolute path {m.group(1)}/…, "
                        "which names one machine")
             break
@@ -696,6 +732,7 @@ CHECKS = [
     ("no document names one machine's filesystem", check_local_paths, None),
     ("the membership declaration opens the maintenance note", check_declaration_first, None),
     ("every script is listed where the scripts are listed", check_scripts_listed, is_home),
+    ("the owner is named once, and nowhere else", check_owner_unadvertised, is_home),
 ]
 
 

@@ -94,6 +94,31 @@ who decides.
 
 ---
 
+## B20 — the ethos commit is written in two places on purpose
+
+**Task:** `.github/workflows/ci.yml` and `tools/deps.lock` both name the ethos
+commit the `oracle` job builds, and nothing compares them. Taken deliberately
+rather than building the version that reads the lock, because the alternative was
+holding up a finished epoch for an elegant fix.
+**Entities:** `anoieu`
+**Status:** ready — the duplicate is one line and the fix is about six.
+**Channel:** **internal** — nothing to send.
+**Next:** when the ethos pin next moves, watch whether both copies move. That is
+the measurement this item exists for, and it costs nothing to take.
+**Prompt — `anoieu`:** replace the hardcoded `ref:` with a step that reads
+`tools/deps.lock` and passes the commit through — the ground truth stays the
+lock and the workflow follows it. Do it when the pin next moves, or sooner if the
+two are ever found disagreeing, and record which of those prompted it.
+**HUMAN FEEDBACK:**
+
+**Why it is on the board rather than only in a comment.** A known defect that
+lives only in the file it is in gets found by whoever next edits that file, which
+for a CI workflow is rarely. The point of the entry is the *measurement*: this
+repository holds that a copy with no comparison is drift that has not happened
+yet, and it now has one, on purpose, where the cost will be visible. Either the
+copies move together and the discipline was over-strict here, or they do not and
+we will have paid for the lesson in our own tree instead of somebody else's.
+
 ## B18 — a footing exists for ethos and logos, and no protocol puts them in it
 
 **Task:** `associate` is defined, vetted entries for both are written, and

@@ -106,11 +106,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      # A commit, not a branch. `ethosEoc3` is about to merge into main and will
+      # then be deleted, and a `ref:` naming a branch is a claim with an expiry
+      # date: it built whatever cvc5 last pushed, which is why this job could go
+      # red without anybody here committing. tools/deps.py learned this the
+      # expensive way and its comment records it; this is the same lesson applied
+      # to the one place that had not had it.
+      #
+      # KNOWN DUPLICATE, ON PURPOSE. tools/deps.lock also records this commit,
+      # so the ethos revision is now written in two places and nothing compares
+      # them. That is the failure this repository has a whole discipline about,
+      # and we are taking it deliberately rather than building the version that
+      # reads deps.lock here: the epoch is otherwise finished, and holding it up
+      # for the elegant fix would be the dogmatic position docs/coherence.md
+      # warns about. B20 carries it, and what the drift costs is the thing we
+      # expect to learn.
       - name: check out ethos
         uses: actions/checkout@v4
         with:
           repository: cvc5/ethos
-          ref: ethosEoc3
+          ref: 7f4482b7f0656c9dc5cc828820c755c73b2d4bbc
           path: corpus/ethos
       - name: which ethos this is
         id: ethos

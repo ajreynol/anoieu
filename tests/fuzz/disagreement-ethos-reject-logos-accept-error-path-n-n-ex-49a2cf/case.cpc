@@ -1,4 +1,4 @@
-; anoieu-fuzz proof case, seed /home/andrew-reynolds/logos/test/regress/sexp/test-define.cpc (seed:test-define.cpc)
+; anoieu-fuzz proof case, seed logos/test/regress/sexp/test-define.cpc (seed:test-define.cpc)
 (declare-sort U 0)
 (declare-fun f (U U) U)
 (declare-const a U)

@@ -1,4 +1,4 @@
-; anoieu-fuzz proof case, seed /tmp/claude-1000/-home-andrew-reynolds-anoieu/23132b47-a8d8-4e2a-8334-b32ecfa2ccf6/scratchpad/proofs/p19.cpc (seed:p19.cpc)
+; anoieu-fuzz proof case, seed p19.cpc (seed:p19.cpc)
 (
 (declare-const a Bool)
 (define @t1 () (and a true))

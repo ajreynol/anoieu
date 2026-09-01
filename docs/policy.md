@@ -230,6 +230,89 @@ file kept out of git carries a line at the top saying so and why, so that a
 reader who finds it knows they are looking at an intention rather than an
 oversight.
 
+## Ownership, and what is claimed
+
+**Owner:** `ajreynol` — Andrew Reynolds, University of Iowa and AWS.
+
+Recorded here, once, and deliberately not advertised anywhere else.
+
+**Why there is a name at all.** Accountability, and nothing else. This ecosystem
+publishes things about other people's code, and
+[`reports/reporting-policy.md`](reports/reporting-policy.md) already holds that a
+finding delivered by somebody who can answer the follow-up gets read while one
+delivered by a bot gets a bot's welcome. Every maintenance note here says the
+work is done *under light human supervision*, and that phrase means nothing
+unless there is a person it refers to. **The name is not a credit line. It is the
+answer to *who do I take this up with*.**
+
+### What is claimed, and it is narrow
+
+**Collective ownership is claimed over first-class members only.** For everything
+else this ecosystem claims nothing, and says so rather than leaving it to be
+assumed:
+
+| what you are looking at | what is claimed |
+| --- | --- |
+| a **member** | part of the ecosystem. Its own maintainer runs it; the owner above is accountable for the arrangement it belongs to |
+| a **child project** | through its parent, on its parent's footing |
+| an **associate** | **nothing.** We have read it and say it is load-bearing for us — that is a statement about *our* arrangement, and it confers no ownership, no authority, and no say in how it is run |
+| a **candidate** | nothing |
+| a **foundation** | nothing, emphatically. The arrangement is downstream of it, not the other way round |
+| **Eunoia**, and **CPC** | not ours and never were. They are cvc5's, and every tool here is downstream of decisions made before any of this existed |
+| a **reserved name** | nobody's. It is a description somebody wrote down |
+
+**Ownership here is accountability, not control over use.** The work is open
+source and is meant to be: nothing restricts anybody's use of Eunoia, of these
+tools, or of anything built on them. Owning a tree means being answerable for
+what it publishes. It does not mean deciding who may run it, fork it, or build on
+it — and a claim to the second would be worth less than nothing here, since the
+language and the calculus belong to a project that is not ours to speak for.
+
+> **Outstanding, and it is a person's decision: there is no licence file.**
+> Nothing in this tree names a licence, which means the open-source intention
+> above is currently just that — an intention, and by default a public repository
+> with no licence grants no rights beyond looking at it. **The tree does not back
+> the claim.** Choosing a licence is legal, close to irreversible once others have
+> contributed, and not an agent's to make; it is recorded here so that it is not
+> discovered later by somebody who relied on the sentence above.
+
+**Unadvertised is not secret**, and pretending otherwise would be a claim this
+arrangement cannot deliver. This repository is public and anybody who wants the
+name can find it in a commit log. The distinction being drawn is between
+**recording** something so it can be relied on and **placing** it where it works
+as promotion. So the name appears on no front page, in no maintenance note, in no
+outbound prompt, in no announcement, and in nothing published about somebody
+else's code. This page is the one place, exactly as it is the one place a specific
+AI may be named, and for a related reason. **Checked.**
+
+### Propagating this is a future epoch's goal, not this one
+
+**Nothing currently announced asks any member anything about ownership.** What is
+above describes what *we* claim and is deliberately not carried anywhere yet,
+because the question that would have to be settled first is genuinely open.
+
+> **The research question: should files carry ownership annotations in their
+> headers?**
+>
+> **For.** It is the convention every open-source reader already knows, and it is
+> the only form of provenance that **travels with the file** — a page in `docs/`
+> answers nobody who has copied one source file out of this tree into another.
+> It puts the accountability answer where somebody is actually reading.
+>
+> **Against.** It is one fact copied into every file with nothing comparing the
+> copies, which is precisely what this repository calls drift that has not
+> happened yet. It rots — a year, a holder, a licence that moved. It is noise at
+> the top of every file in a tree that keeps a clutter budget. And propagating it
+> would ask members to assert something about ownership in *their* trees, which
+> is a far larger ask than anything asked of them so far.
+>
+> **It is also downstream of the licence.** A header conventionally names one, so
+> the question cannot be answered before the outstanding item above is.
+>
+> **What would settle it:** somebody having actually needed the provenance and
+> failed to find it. Until then a header is an answer to a question nobody has
+> asked, and the cheap position is to record ownership in one place and wait.
+
 ## The maintenance note
 
 **Every repository's README ends with a short section stating how the
