@@ -75,6 +75,23 @@ Nothing is filed by being on this page, a prompt here is a draft rather than a
 message, and a row is not closed by sending — it closes when the artifact it
 names says what happened, which is the rule the findings ledger already keeps.
 
+## A handoff of a role is an ordinary item here
+
+[`roles.md`](roles.md) keeps what each tool is accountable for, and moving one
+of those to another tool is proposed on this page like anything else: the
+entities
+are the holder losing it, the tool gaining it where the inventory has an id for
+it, and every consumer whose pin moves. The channel is **discussion**, because
+the point of writing it here is to be disagreed with by the repositories it
+costs something, and there is one prompt per entity so that each has been asked
+rather than told.
+
+The seven steps are in
+[`roles.md`](roles.md#how-a-role-is-handed-off), and `B15` is the worked example
+— parked, and stated in role ids. **None of it gates anything** while the
+ecosystem is still settling; the same section says what would change that and
+who decides.
+
 ---
 
 ## B6 — the reporting protocol has two implementations and an approved home
@@ -339,17 +356,23 @@ question to settle first is which of those the ecosystem wants, and
 
 ## B15 — governance, out of the analyzer
 
-**Task:** move the policy, its checker, the inventory and the joining scripts
-into a repository that is not also the tool that files findings against members.
-Audited as `P2` in the ynoia proposals page.
+**Task:** hand `R4` — the ecosystem's policy, and joining it — and `R6` — the
+inventory, and getting the ecosystem onto a machine — to a repository that is
+not also the tool that files findings against members. `R1`, `R2`, `R3` and `R5`
+stay. Audited as `P2` in the ynoia proposals page; the roles and the procedure
+are in [`roles.md`](roles.md#how-a-role-is-handed-off).
 **Entities:** `anoieu`, `ynoia`
 **Status:** parked — the maintainer is inclined, and has said explicitly that it
 is not actionable until they raise it again.
 **Channel:** **internal** — parked; the argument is in the ynoia proposals page.
+Unparking it makes the channel **discussion** and adds every member whose pin
+moves as an entity, which is the step that turns this from a decision into
+something they can answer.
 **Next:** nothing. This row exists so that the decision is visible while it is
 being deferred.
 **Prompt — `anoieu`:** do not start. If a rule is written between now and then,
-write it where it will be cheap to move.
+write it where it will be cheap to move — which now has a precise meaning:
+inside `R4`'s artifacts, rather than across the seam between `R4` and `R1`.
 **Prompt — `ynoia`:** the audit is written. If the answer changes, it changes by
 somebody arguing with the page, not by the page being rewritten quietly.
 **HUMAN FEEDBACK:**

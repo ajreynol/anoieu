@@ -83,8 +83,10 @@ clear seam between two responsibilities is worth more than a short page, so a
 long section is a measurement rather than an untidiness, and an empty one is a
 tool looking for work. Within a section position is the priority; across
 sections nothing is ranked. The board says what is outstanding and in what
-order; this says what everything is for. Kept by hand, and nothing consumes it
-either.
+order; this says what everything is for. It also carries the procedure for
+handing a role from one tool to another — proposed on the board so the
+repositories it costs something can disagree with it, and gating nothing while
+the ecosystem is still settling. Kept by hand, and nothing consumes it either.
 
 [`coherence.md`](coherence.md) is not in the table above and is not written for
 a reader of the tool: it is the **maintenance entry point**, for whoever is

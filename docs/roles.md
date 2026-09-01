@@ -92,6 +92,105 @@ Each role carries the same fields, in the same order:
 | **Owns** | the artifacts that are its to change, and therefore nobody else's |
 | **Not this role** | the nearest neighbouring responsibility, and which role it is — or that it is nobody's |
 
+## How a role is handed off
+
+**A handoff is the same role under a different heading.** The id does not
+change, which is the whole reason ids here are permanent: a decision recorded
+against `R4` stays recorded when `R4` moves, and a reader who finds the entry in
+a new section can still tell it is the same responsibility.
+
+Seven steps, in this order because each is cheap to get wrong and expensive to
+discover later. **None of them is a gate** — see the end of this section.
+
+**1. Name the roles, not the files.** A handoff is proposed as a list of ids. If
+it cannot be stated that way, the roles are wrong and splitting them is the work
+that comes first: a proposal phrased as a list of paths is a migration nobody
+can hold an opinion about.
+
+**2. Say what stays.** The losing tool's remaining section is part of the
+proposal and is written out in full. A handoff that lists only what leaves has
+not been thought through, and the line between the two halves is where every
+argument about it is actually going to happen.
+
+**3. Name the consumers.** Every tool that depends on one of the roles moving,
+by its id in [`../tools/ecosystem.json`](../tools/ecosystem.json). Where a role
+carries a CI contract that is *every member*, and the count is the cost: it
+grows with each tool that joins before the handoff happens, which is usually the
+strongest argument for doing it sooner.
+
+**4. Put it on [`board.md`](board.md).** One item, the affected entities, the
+`discussion` channel, and one prompt per entity. That is what makes a handoff
+something other tools can **state an opinion on** rather than something they are
+told about — a prompt written to be answered is a different artifact from an
+announcement, and the board already knows how to carry one. Where the gaining
+tool does not exist yet, it is named in the item's text and not in `Entities`,
+which only takes ids the inventory has.
+
+**5. Collect the opinions, and leave them where they landed.** A reply that
+disagrees stays visible: in the item's `HUMAN FEEDBACK`, which outranks every
+other field on it, or in the discussion topic it came back through. Afterwards,
+a handoff nobody objected to and a handoff nobody was asked about look identical
+unless the asking is on the record.
+
+**6. Move the entry, and only the entry.** When it happens: the role's section
+moves under the new tool's heading, `Held by` changes, `Owns` is re-pointed at
+wherever the artifacts landed, and the id does not move. One commit, so that
+this register is never half-handed-over.
+
+**7. The pins move last, and each consumer picks when.** Nothing here reaches
+into somebody else's workflow file. A consumer still pinned to the old holder is
+not behind, it is correct, and that is the structural answer working as
+intended.
+
+**A role handed off to nobody is deprecated rather than orphaned** — deleted
+from this page, its number never reused. And a tool with an **empty section** is
+where a handoff goes looking for a taker, which is what an empty section is for.
+
+### It is not a gate, yet
+
+**Nothing waits on any of this.** While the ecosystem is still settling, the
+seven steps describe the honest way to hand a role over. They do not stop
+anybody's work, block a commit, or require an answer before something can move,
+and a tool that reorganises itself in an afternoon and writes the register up
+afterwards has done nothing wrong.
+
+What would change that is the ecosystem being **stable**: enough tools, pinned
+deeply enough, that a handoff nobody was asked about costs somebody a red build
+in a week they had planned otherwise. At that point the steps stop being a
+description and become a requirement — and that is a decision for a person, made
+once, and written down here when it is made.
+
+### The worked example: anoieu to kanon
+
+`B15` on the board proposes moving the ecosystem's governance out of the tool
+that also files findings against members; the ynoia proposals page audits it as
+`P2` and recommends it. It is **parked** by the maintainer, and nothing here
+changes that — it is the worked example precisely because a deferred decision is
+easier to read than a live one. In the terms of this page:
+
+- **Moves:** `R4`, the policy and joining, and `R6`, the inventory and the
+  installer.
+- **Stays:** `R1` the bug report system, `R2` the analyzer, `R3` the fuzzer,
+  `R5` the vision.
+- **Gains:** `kanon`, which has no repository, is not in the inventory, and is a
+  name nobody has claimed.
+- **Consumers:** every member, because joining *is* running the checker `R4`
+  owns — four today, and one more with each tool that joins first.
+
+The split falls where it does because the argument is about exactly one thing:
+the repository that writes the rules a member is judged by should not also be
+the one filing findings against them. `R1` is what does the filing, so it stays;
+`R4` is what writes the rules, so it goes. `R6` follows `R4` because the audit
+that reads across both wants the inventory beside the policy rather than beside
+the ledger. And the position on what may be published, which is part of `R1`,
+stays with the tool whose own behaviour it constrains — an answer that took an
+audit to reach, and the reason step 2 is a step.
+
+Two of the seven steps came out of that audit rather than being designed here:
+*what does the losing repository keep* and *is either half left unable to answer
+a question it used to answer alone*. A procedure that could not ask those would
+keep producing confident answers to a question nobody had asked.
+
 ## How many each holds
 
 Summarised from the sections below, which are the authority. The count is the
