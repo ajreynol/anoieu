@@ -48,7 +48,8 @@ somebody has to know to look for.
 | document | its job |
 | --- | --- |
 | [`policy.md`](policy.md) | **how a repository is arranged**: the layout, the maintenance note every README ends with, and the rules for child projects. Machine-checked by `tools/policy_check.py` on every push |
-| [`vision.md`](vision.md) | **what AI-assisted development is aiming at**: six tenets, the record of what the ecosystem's tools have actually delivered to one another, and a report card. Argued, never checked — the dividing line is stated on the page |
+| [`vision.md`](vision.md) | **what AI-assisted development is aiming at**: six tenets, and the record of what the ecosystem's tools have actually delivered to one another. Argued, never checked — the dividing line is stated on the page |
+| [`report-card.md`](report-card.md) | **how each tool stands against those tenets**, in the register its own README chooses, graded at the commits the lock records. Governed by `vision.md` and split out of it because it is the half that moves — a paragraph is still changed by a person, and it binds nobody |
 
 [`discussion.md`](discussion.md) is the standing channel to the rest of the
 ecosystem for anything that is **not** a defect report — a request, a proposal,

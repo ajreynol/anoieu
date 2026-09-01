@@ -208,9 +208,14 @@ number worth looking at, in both directions.
 | `koine` | member | 1 |
 | `logos` | candidate | 3 |
 | `sapheneia` | child of `anoieu` | 1 |
+| `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 4 |
 
-Twenty-four roles across eleven tools, and no section empty today.
+Twenty-four roles across twelve tools, and one section empty:
+`workflow-launcher` holds nothing, which is not an omission — its own front page
+says it has no responsibilities, nothing depends on it, and it owes nobody an
+artifact. The rows worth reading are the longest and the empty one, and both are
+the page working rather than the page being wrong.
 
 ---
 
@@ -284,7 +289,8 @@ and the research-quality successor, which is nobody's — it has a name,
 tenets, the record of what the tools have actually delivered to one another, and
 a report card that is a judgement about somebody else's project. Written for
 every repository, and argued rather than checked.
-**Owns:** `docs/vision.md`, in full, including the report card.
+**Owns:** `docs/vision.md`, and `docs/report-card.md`, which is the half of it
+that is re-graded every round.
 **Not this role:** anything mechanical. Nothing may ever check this one, which
 is the single rule in this ecosystem that forbids work rather than requiring it;
 the checkable half is `R4`.
@@ -452,6 +458,8 @@ language requires and what one implementation happens to do.
 **Not this role:** governing. `R11` remains the authority and this account says
 so on its own front page; where the two disagree, that disagreement is a finding
 and it leaves through `R1`.
+
+## workflow-launcher
 
 ## ynoia
 

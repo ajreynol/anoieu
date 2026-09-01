@@ -129,7 +129,10 @@ in a currency other than trust.
 **What:** `.eos` written as Lean definitions over the model logos already
 carries, the compiler as a Lean metaprogram over those definitions, and a
 theorem relating what it emits to what they say.
-**State:** `named`.
+**State:** `named` — audited as `P3` in [`proposals.md`](proposals.md) with
+the verdict **not yet**: it has been written zero times, and two of its three
+prerequisites already have owners in trees that are not it. The repository
+question returns when they meet.
 **Settles:** **O2**, **O3** and **O6**, each of which currently has a convention
 where it wants a statement; and **open question 3**, by building it. Arrangement
 **B** is the shape.

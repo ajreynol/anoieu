@@ -91,5 +91,11 @@
     "parent": "eudaimonia",
     "path": "tools/euthyna",
     "what": "what the proof in logos is made of, and where its weight sits"
+  },
+  "workflow-launcher": {
+    "status": "child",
+    "parent": "eudaimonia",
+    "path": "tools/workflow-launcher",
+    "what": "the first hour of a new tool's life, and a register of what this ecosystem's practice has turned out to be doing"
   }
 }

@@ -125,9 +125,15 @@ def check_no_vendor() -> list[str]:
 
 
 #: Where each numbering is defined. A number is legible inside its own document
-#: and is a lookup everywhere else, so it is only allowed at home.
-NUMBERED = {"rule": "policy.md", "tenet": "vision.md",
-            "position": "reporting-policy.md"}
+#: and is a lookup everywhere else, so it is only allowed at home. *Home* is a
+#: set rather than one file because a document that has grown may be split
+#: across two -- `report-card.md` is `vision.md`'s grading half, governed by it
+#: and citing its tenets the way any section of it would. Splitting a page is
+#: not the same as citing one, and a check that could not tell them apart would
+#: charge a filename change as a defect.
+NUMBERED = {"rule": ("policy.md",),
+            "tenet": ("vision.md", "report-card.md"),
+            "position": ("reporting-policy.md",)}
 
 
 def check_citations() -> list[str]:
@@ -137,7 +143,7 @@ def check_citations() -> list[str]:
         base = os.path.basename(rel)
         text = prose(read(rel))
         for word, home in NUMBERED.items():
-            if base == home:
+            if base in home:
                 continue
             for m in re.finditer(rf"\b{word}s?\s(\d{{1,2}})\b", text, re.I):
                 bad.append(f"{rel} cites {word} {m.group(1)} by number; say what it says")

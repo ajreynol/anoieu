@@ -83,6 +83,193 @@ that** — a threshold somebody can watch for rather than a refusal. It is not t
 default answer, and a standard that reaches it every time is a standard that has
 stopped being applied.
 
+## P3 — the semantics and the compiler, defined in Lean
+
+**Name:** **`noesis`** — already reserved in [`names.md`](names.md); this audit
+claims nothing
+**What:** the `.eos` semantics written as Lean definitions over the SMT-LIB model
+logos already carries, the compiler as a Lean metaprogram over those
+definitions, and a theorem relating what it emits to what they say
+**Verdict:** **not yet** — the thing does not exist in any form, and two of the
+three prerequisites already have owners who are not it
+**If approved:** it would not be approved into existence; the first three steps
+are the prerequisites below, in three trees that are not this one, and the
+repository question returns when they meet
+**Decided:** **open.** Raised from the compiler side in `ethos`
+`docs/noesis-readiness.md`, which argues the entry's stated blocker is closer to
+discharged than [`tools.md`](tools.md) assumes. Carried in and audited here
+because the *placement* question is this page's and not that document's.
+
+### The name
+
+Unlike `P1` and `P2` there is no name to choose. `noesis` was reserved in
+[`names.md`](names.md) when the account named it, the etymology is written down
+in [`why-eunoia.md`](why-eunoia.md), and nothing here takes it — a name is
+claimed when a person approves one.
+
+Worth saying because it changes what this audit is. `P1` and `P2` were asked
+*should this exist, and what should it be called*. This one is asked *where does
+a thing everybody already has a name for actually live*, which is the question
+the register cannot answer and this page can.
+
+### The proposal
+
+Noesis is not a new tool beside the others. It is **a second implementation of
+`ethos-eoc`'s back half, in a different language, with a theorem attached** —
+and that is what makes its placement hard in a way `koine`'s and `kanon`'s were
+not. Both of those were machinery looking for a home. This is a rival to a
+working tool, proposed while the tool is being actively improved, by the tree
+that maintains it.
+
+The role it would hold is already written down as vacant.
+[`roles.md`](../../docs/roles.md) `R13` — the shipped semantics sets — carries
+this line: *"In the absence of any other definition, what a `.eos` file means is
+what this role makes of it, which is a larger responsibility than it looks"*,
+and its **Not this role** ends *"any account of the semantics that does not
+depend on this compiler, which is **nobody's**."* That is noesis, named as a hole
+by the inventory before this page was asked about it.
+
+### Against the standard
+
+*Does it exist anywhere yet?* **No — written zero times.** The standard's
+weakest evidence is code written once, which it calls a design; this is below
+that floor. Its two halves each exist once, in different trees and different
+languages — the `.eos` sets as `R13`, the Lean SMT model as `R18` — and neither
+is the artifact. This alone settles the verdict, and the standard says a proposal
+failing an early question does not need the later ones answered. They are
+answered anyway, because the *placement* question survives the verdict.
+
+*How many consumers, really?* Two eventually — logos and eudaimonia — and both
+would be **replacing** what they consume rather than adopting something new. That
+is a different and harder shape than `koine`'s four consumers of machinery that
+already existed twice. A consumer that must abandon a working path to adopt yours
+is not a consumer until it says so.
+
+*What does a repository buy that `tools/` does not?* Today, nothing, because
+there is nothing to isolate or release. Later, everything: the moment the Lean
+definitions are something logos and eudaimonia **fetch rather than read**, they
+need a release surface, and no host's `tools/` can give them one: a research
+project writes only inside its own directory, and a directory other trees import
+is not an island.
+
+*Who maintains it when the enthusiasm is gone?* Unanswerable while the fork is
+open. [`why-eunoia.md`](why-eunoia.md) is explicit that noesis and `iogos` "pull
+opposite ways" on where the semantics is defined and that the fork wants settling
+before either starts. A repository whose charter depends on an undecided fork
+is a repository that will be rewritten or abandoned, and this page should not
+recommend one.
+
+### Is it a transfer?
+
+Partly, and `P2` added the two questions that catch it.
+
+*What does the losing repository keep?* `ethos-eoc` keeps `R12` — the compiler
+that produces the SMT-LIB and SyGuS verification conditions, which noesis's own
+account concedes it does not replace, and which arrangement **B** lists as its
+open engineering question. What it would lose is `R13`, and `R13` is the role
+that currently makes *what a `.eos` file means* a compiler's private answer.
+
+*Is either half left unable to answer a question it used to answer alone?* Yes,
+and it is the interesting one: **what does this signature's semantics say** is
+today answered by running the compiler. After noesis it is answered by reading a
+definition, and the compiler becomes accountable to something outside itself. That
+is the whole benefit and it is also the cost — two artifacts that must agree,
+which is `O6` in a new place rather than `O6` removed.
+
+### Where it would live if it is not a repository
+
+Three candidate hosts, and the argument runs between two of the policy's rules
+for a research project: that one which does not use its host's evidence should be
+its own repository, against the refusal to advertise.
+
+**`ethos`. No, and it is the tempting answer.** The evidence test fits: the
+first task is validating the Eunoia embedding against `src/`, which is entirely
+that tree's evidence. So does the policy's own description of what a research
+project is for — a subject outside the host tool, which the host is well
+positioned to ask about because of what building it taught, and badly positioned
+to answer inside its own source tree. Two things kill it. `ethos` is `cvc5/ethos`
+and its footing is **candidate**: it is the only tree in this argument the
+ecosystem does not own, and the speculation space is `anoieu` and `eudaimonia`,
+both members. And **the refusal to advertise cannot be honoured there.** Not
+borrowing the host tool's credibility works in a personal analyzer; it cannot
+work in a repository with outside contributors and review, where a
+`tools/noesis/` inside the compiler's own tree *is* read as the compiler's
+position whatever its README says.
+
+**`anoieu`. No, on the evidence test.** It is where the name was coined and where sapheneia
+and ynoia already sit, which is exactly why it is worth refusing: anoieu's
+evidence is signature analysis, and noesis's is compilation and Lean. Ynoia is
+not the counter-example — its subject is the arrangement, and anoieu is the
+ecosystem's reader. A third child here would make anoieu the ecosystem's
+speculation warehouse, which [`roles.md`](../../docs/roles.md)'s own philosophy
+says to read as a measurement rather than tidy away.
+
+**`eudaimonia`. Yes, if it must start now.** Three reasons, in order of weight.
+Its blocker *is* noesis's prerequisite — the account says open question 7 "has to
+be answered first" and in the same breath that it "is eudaimonia's own blocker",
+and `R14` is that line by definition. It has the child-project precedent in
+`euthyna`. And it is the consumer that would have to absorb the result, on a
+member's footing, at no cost to a shared namespace.
+
+### What has to be true first
+
+The three prerequisites, none of which needs this repository or this name, and
+each of which already has an owner:
+
+| what | tree | why it is theirs |
+| --- | --- | --- |
+| Validate the Eunoia embedding against `src/` — the 1,215 lines of `eo_desugar*.eo` and `native_embed.eo` that are a semantics of Eunoia nothing has compared with the C++ | **ethos** | `R10` is "the implementation every other reading of the language is compared to"; both readings are in that tree and neither has been laid against the other |
+| Answer open question 7 against more than one calculus | **eudaimonia** | `R14` — "the subject here is the shape, never the content" — is that line, and it is the only tool that has run the compiler over more than one calculus |
+| An account of `.eos` that does not depend on the compiler | **sapheneia**, if its charter is extended | `R20` is a second reading of a language whose only description is a manual for a program; `.eos` is the same problem one language over |
+
+The third is the cheapest move available anywhere in this ecosystem and it is not
+this page's to make. Sapheneia excludes `.eos` deliberately — *"folding it in
+would double the scope before the first goal is met. Candidate for later; out of
+scope now"* — and a charter is the thing a human agreed to, so changing its
+scope is a person's decision, exactly like starting a project. **So the live question is not where noesis
+lives. It is whether sapheneia's charter extends to `.eos` once its goal 1
+lands**, and that is a question for the person who started it.
+
+### The threshold
+
+This verdict changes to **welcome** — build it for your own reasons, nothing here
+waits on you — when the fork with `iogos` is decided in noesis's favour, since
+until then a charter cannot be written.
+
+It changes to **needed**, and to a repository rather than a child project, when
+the Lean definitions are something logos and eudaimonia would **fetch rather than
+read**. At that point Q1 is answered by the thing existing, Q2 by two consumers
+that have said so, and Q3 by the island test — a directory other trees import
+is not a research project and has stopped being able to live in anybody's
+`tools/`.
+
+Neither threshold is a schedule and neither is close.
+
+### The risk worth writing down
+
+That this audit is read as *not yet* meaning *not important*. Noesis is the
+highest-leverage entry on [`tools.md`](tools.md) and this page does not dispute
+it. What it disputes is that the thing to start is a repository, when the same
+month's work distributed across three trees that already own the questions would
+move the entry further — and would move it whichever way the fork goes, which no
+work done inside a noesis repository can claim.
+
+The second risk is the mirror of it: three prerequisites in three trees is an
+arrangement with no owner, and the failure mode is that all three stay one
+person's afternoon away forever. `P2`'s parked state is the honest precedent —
+a thing can be *needed* and not actionable, and saying so is better than
+pretending the sequencing is the problem.
+
+### What this audit cannot check about itself
+
+It was drafted from `ethos`, which is the tree whose work it cites as having
+partly discharged the blocker, and whose compiler noesis would replace. Both
+directions of bias are available and they point opposite ways, which is not the
+same as cancelling. The part that is checkable by running something is the
+measurement in `docs/noesis-readiness.md` §2 — 68 agree, 0 disagree, 9 refused,
+over `ethos/tests/` — and that is the part to attack first. The placement
+argument above is judgement and binds nobody, like everything else on this page.
+
 ## P2 — the ecosystem's governance, out of the analyzer
 
 **Names:** **`kanon`**, then `thesmos`, `epistates`, `oikonomia`

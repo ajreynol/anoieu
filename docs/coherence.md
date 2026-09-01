@@ -28,7 +28,7 @@ Six things, and only two of them are the tool.
 | the fuzzer | [`../anoieu_fuzz/`](../anoieu_fuzz) | a second shipped tool: its `FUZ` rows are in the record and two CI steps run it |
 | **the publishing position** | [`reporting-policy.md`](reports/reporting-policy.md) | maintained here, **referenced by [dokimasia](https://github.com/ajreynol/dokimasia)** rather than copied |
 | **the reporting workflow** | [`reporting-workflow.md`](reports/reporting-workflow.md) | [`../scripts/`](../scripts) implement it; other repositories adopt its CI half |
-| **the development vision** | [`../docs/vision.md`](vision.md) | written for *every* repository in the ecosystem |
+| **the development vision** | [`../docs/vision.md`](vision.md), and [`report-card.md`](report-card.md), which it governs | written for *every* repository in the ecosystem |
 | **the repository policy** | [`../docs/policy.md`](policy.md) | written to be copied; governs child projects in any parent |
 
 The four in bold are **not about anoieu**. They are ecosystem documents that
@@ -184,9 +184,11 @@ reason, and wait for a person — do not make it and mention it afterwards.
 **1. [`../docs/vision.md`](vision.md) — ask first, always.** It states
 what AI-assisted development in this ecosystem is for, it is addressed to
 repositories that did not write it, and the party with the least standing to
-revise it is the agent it governs. This includes the report card at the bottom:
-a paragraph there is a judgement about somebody else's project, and softening or
-sharpening one is exactly the edit that should not be made quietly.
+revise it is the agent it governs. This includes
+[`report-card.md`](report-card.md), which was split out of it and is governed by
+it unchanged: a paragraph there is a judgement about somebody else's project,
+and softening or sharpening one is exactly the edit that should not be made
+quietly.
 
 **Nothing may ever check the vision mechanically.** No CI job, no script, no
 generated verdict against a tenet. Whether a tool is fruitful or a claim
@@ -398,7 +400,7 @@ never; evidence that this coordinates two repositories is not evidence that it
 coordinates ten, and the second adopter will find things the first did not.
 `koine` does not exist yet.
 
-**It has not been free.** The report card in [`vision.md`](vision.md) records
+**It has not been free.** [`report-card.md`](report-card.md) records
 that the stretch of work which produced most of this changed nothing about what
 the analyzer finds, and introduced two silent defects into the fuzzer — one of
 which would have let CI pass while verifying nothing at all. Defending the
@@ -458,6 +460,58 @@ readable.
 The anchor check found three dead links on its first run, two of them made that
 same day by the person who added the check. A check that has never fired on
 anything is either perfect or pointless, and the second is the way to bet.
+
+## The governance budget
+
+**The rule exists and nothing counts against it.**
+[`report-card.md`](report-card.md) grades this repository down for exactly this
+and states the rule in the same paragraph: *every further page here has to
+displace a check, a finding, or an hour of somebody else's reading.* Nothing has
+ever measured whether it is kept. A rule with no counter attached is the same
+failure the prompt-length table in [`postmortem.md`](reports/postmortem.md)
+exists to fix in the other half of the system — and it is the criticism that
+came from outside, in `workflow-launcher`'s register of what this ecosystem's
+practice appears to be doing, which reads six checkouts and writes down what is
+wrong with them beside what is not. It is a child project in eudaimonia's tree,
+at `tools/workflow-launcher`, and `docs/ai-workflows.md` is the document.
+
+So: the baseline, measured over this tree on 2026-09-01. Reproducible in three
+commands, and worth nothing until there is a second row.
+
+| what | files | lines |
+| --- | --- | --- |
+| tracked Markdown outside `deps/` | 32 | 15,142 |
+| — generated, written by a tool | 4 | 1,142 |
+| — child projects, shipped by nothing and advertised nowhere | 10 | 4,550 |
+| — **written prose: the number this section is about** | 18 | **9,450** |
+| Python | 54 | 13,382 |
+| `scripts/` and `scripts/prompts/` | 11 | 2,481 |
+| checks with a page in [`checks.md`](checks.md) | | 63 |
+| findings in the ledger | | 39 open, 43 closed |
+
+```
+git ls-files '*.md' | grep -v '^deps/' | xargs wc -l | tail -1
+git ls-files 'tools/*/*.md'           | xargs wc -l | tail -1
+git ls-files '*.py'                   | xargs wc -l | tail -1
+```
+
+**What the row is for, and what it is not.** It is not a limit. Nobody has
+argued what the right ratio is, a budget invented here would be a number to
+game, and a page is not bad for being long. It is for the *next* reading: the
+rule says a page displaces a check, a finding, or an hour of reading, so if
+written prose grows between two rows of this table while the check count and the
+finding count do not, then the rule was not kept — and that becomes a fact
+somebody can point at rather than an impression somebody has to argue for.
+
+**Record the row; do not move the rule to fit it.** That is the discipline the
+prompt-length table already keeps, including the part that makes it worth
+having: it reports its own metric going the wrong way, three rounds running,
+rather than being quietly retired. A counter that only ever confirms is not a
+counter.
+
+And this section is itself the thing it measures. It costs about fifty lines of
+written prose and displaces nothing today, which is the honest accounting; what
+has to pay for it is the second row.
 
 ## The open technical work
 
