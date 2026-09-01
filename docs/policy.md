@@ -684,9 +684,10 @@ the ecosystem is built to support rather than built from.
 Two steps. The first is a sentence; the second is a CI job that checks the
 sentence is true.
 
-Before either of them, if the repository is brand new: nothing is required yet.
-[`scripts/prompts/init_eo`](../scripts/prompts/init_eo) gives a new tool a name and a README
-saying what it is for, and it is told explicitly not to comply with any of this —
+Before either of them, if the repository is new: nothing is required yet.
+[`scripts/prompts/init_eo`](../scripts/prompts/init_eo) gives a new tool a
+README saying what it is for, and it is told explicitly not to comply with any
+of this —
 knowing what you are building is what makes the rest decidable, and that order
 is deliberate. Names come from the register the ecosystem keeps, which lists
 what is taken, what is reserved and what each reserved name was reserved for.
@@ -704,8 +705,31 @@ before it has been taken.
 1. **A person creates the repository on GitHub, by hand**, and decides its name.
    Neither is an agent's to do, and the first is a **security** boundary rather
    than a matter of taste — see below.
-2. **`init_eo`**, run in it. A README from the register: what the tool is for,
-   what it does not answer, and the name explained. It complies with nothing.
+2. **`init_eo`**, run in it, in whichever of its two modes is true. A README:
+   what the tool is for, what it does not answer, and the name explained. It
+   complies with nothing.
+
+   **`init_eo new`** is the case above — a repository with nothing in it, and
+   a README written from the register and from what a person says the scope is.
+
+   **`init_eo from-child <path>`** is the other common case, and it is a
+   different job rather than the same one with more to read. The tool already
+   exists as a child project in some repository here, and a person has decided
+   it graduates — the first of the three endings such a project can have. Its
+   directory already holds a charter, an account, and, if it has been useful, a
+   statement of what it delivered and of which of the rules above stopped being
+   true of it. That statement is the reason the new repository exists, so the
+   README is written from it. The child's own front page does **not** come
+   across: it is written to say the work is speculative, unadvertised and
+   depended on by nobody, and a project that graduates has stopped being at
+   least the last of those.
+
+   Two things fall outside what that run may do, and it is told to say so
+   rather than to do them: the register entry for the name has to say where the
+   name lives now, and any role the project held moves under the new
+   repository's heading in [`roles.md`](roles.md) **keeping its id**. The
+   parent's tree is nobody's to edit from inside the new repository — retiring
+   the old directory is a decision made in the parent, by a person.
 3. **A person points it in a direction**, with whatever prompts that takes. This
    step is invisible afterwards — it leaves no artifact — which is worth
    remembering when reading the result.

@@ -71,7 +71,7 @@ itself.
 
 | command | run in | what it does |
 | --- | --- | --- |
-| `init_eo` | the **new** repository | a README from the name register: what the tool is for, what it does not answer, the name explained. Complies with nothing, deliberately |
+| `init_eo new` <br> `init_eo from-child <path>` | the **new** repository | the README that says what the tool is for: what it answers, the question it does not, the name explained. `new` writes it from the name register; `from-child` writes it from an existing child project's charter and from what that project delivered. The mode is required, never guessed. Complies with nothing, deliberately |
 | `welcome_eo <id> <path>` | here | records the checkout, syncs the ecosystem's list, reads the new tool, drafts a first message. A welcome, never an audit. Refuses a typo rather than recording one |
 | `join_eo` | the **joining** repository | adds the membership declaration and the pinned `anoieu / policy` workflow. Its prompt is fixed and drift-checked against [`policy.md`](policy.md) |
 | `check_join_eo <id>` | here | joined, ready, misconfigured or not ready — and whether the obstacle is ours |
@@ -92,8 +92,20 @@ are `git clone` and nothing else.
 A new tool is a decision, and `welcome_eo` is what turns the decision into the
 files. The sequence, which nothing enforces:
 
-1. Somebody creates the repository, and [`init_eo`](../scripts/prompts/init_eo) gives it
-   a README from the name register.
+1. Somebody creates the repository, and
+   [`init_eo`](../scripts/prompts/init_eo) gives it a README. **There are two
+   ways a tool arrives here and the script makes you say which**, because there
+   is no default that is safe: `init_eo new` for a repository with nothing in
+   it, and `init_eo from-child <path>` when the tool already exists as a child
+   project in somebody's tree and a person has decided it graduates — the
+   first of the three endings a child project can have. The second is not the
+   first with an extra file to read. It writes the README from that directory's
+   charter and from its record of what it delivered, because **that record is
+   the reason the repository exists**, and it is told not to move the child's
+   own front page across: a child project's README is written to say the work
+   is speculative and depended on by nobody, which is the opposite of what
+   graduating means. The register is what the name is checked against in both,
+   rather than where the scope comes from in either.
 2. [`welcome_eo <id> <path>`](../scripts/prompts/welcome_eo) is run here, once there is
    something worth reading. It records the checkout in `scripts/repos.local` —
    the file every other script resolves an id through — **and syncs the

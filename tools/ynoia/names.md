@@ -59,3 +59,9 @@ write the etymology down before writing any code. If the sentence explaining the
 name is hard to write, the scope is what is unclear, not the vocabulary.
 
 Add the name here when you take it, with one line, and say where it lives.
+**Where it lives is part of the entry rather than decoration.** A name that
+starts as a child project and later graduates into a repository of its own keeps
+its entry and changes that clause, and that is the only edit graduating asks of
+this page. `init_eo from-child` reads the entry and is told to report the change
+as owed rather than to make it — this file is in somebody else's tree, and a
+new repository does not edit it.

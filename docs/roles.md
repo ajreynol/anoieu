@@ -142,6 +142,13 @@ into somebody else's workflow file. A consumer still pinned to the old holder is
 not behind, it is correct, and that is the structural answer working as
 intended.
 
+**A child project graduating is a handoff, and the commonest one this page will
+see.** The roles do not change; the heading over them does. `init_eo from-child`
+is the step that starts it, and it is told to say the move is owed here rather
+than to attempt it from inside a repository that cannot see this file: the entry
+moves under the new tool's heading, `Held by` becomes the new id, and the number
+does not change.
+
 **A role handed off to nobody is deprecated rather than orphaned** — deleted
 from this page, its number never reused. And a tool with an **empty section** is
 where a handoff goes looking for a taker, which is what an empty section is for.
