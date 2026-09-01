@@ -141,6 +141,7 @@ Printed as a command line prints it — terse, aligned, no prose:
 epoch — the Eunoia epoch build system
 
 usage: epoch <command>
+       commands may be chained with `;`                       (NOT YET SUPPORTED)
 
 commands:
   make epoch           make it better, and stage a deployment   (NOT YET SUPPORTED)
@@ -243,6 +244,30 @@ epoch: unrecognised command "dry-run"
        did you mean: epoch dry run
        nothing was run
 ```
+
+**Chaining with `;` is planned and not yet supported.** The design is settled so
+that it is fixed before anything implements it: each command runs in order, each
+prints its own output, and a refusal in one does not stop the next — `;` means
+*and then*, not *and only if*, exactly as a shell does. Typing a chain today says
+so and runs nothing.
+
+**Each command will still do its one thing.** The chain is a property of the
+*prompt*, not of the commands: nothing is merged, nothing is half-run, and two
+chained commands produce exactly the two outputs they would have produced
+separately. That is what makes it safe to add later without revisiting anything
+above.
+
+**What was considered and set aside.** Restricting chains to read-only commands
+would have preserved a property worth naming — that a state-changing command is
+typed by somebody who has just looked — but it is weaker than it first appears:
+every consequential transition is gated on its own criteria, so acting on a stale
+read cannot get past a gate that a fresh read would have stopped. The caution
+survives as a caution rather than a rule.
+
+**`&&` is the obvious next form and does not exist.** *Run the next only if this
+one succeeded* is the semantics somebody will eventually want — chaining
+`epoch plan && epoch stage` and meaning it — and adding it is a decision rather
+than an omission.
 
 **Where the typo is far enough off that no command is an obvious match**, drop
 the guess and point at the list instead — *it looks like you were trying to use
