@@ -175,8 +175,10 @@ that also files findings against members; the ynoia proposals page audits it as
 changes that — it is the worked example precisely because a deferred decision is
 easier to read than a live one. In the terms of this page:
 
-- **Moves:** `R4`, the policy and joining, and `R6`, the inventory and the
-  installer.
+- **Moves:** `R4`, the policy and joining; `R6`, the inventory and the
+  installer; and `R27`, designing the next epoch — deciding what every member is
+  asked for next is the same kind of thing as writing the rules they are checked
+  against, and it belongs on the same side of the split.
 - **Stays:** `R1` the bug report system, `R2` the analyzer, `R3` the fuzzer,
   `R5` the vision.
 - **Gains:** `kanon`, which has no repository, is not in the inventory, and is a
@@ -205,7 +207,7 @@ number worth looking at, in both directions.
 
 | tool | footing | how many |
 | --- | --- | --- |
-| `anoieu` | member | 6 |
+| `anoieu` | member | 7 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
 | `ethos` | candidate | 2 |
@@ -218,7 +220,7 @@ number worth looking at, in both directions.
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 
-Twenty-five roles across twelve tools, and one section empty:
+Twenty-six roles across twelve tools, and one section empty:
 `workflow-launcher` holds nothing, which is not an omission — its own front page
 says it has no responsibilities, nothing depends on it, and it owes nobody an
 artifact. The rows worth reading are the longest and the empty one, and both are
@@ -301,6 +303,30 @@ that is re-graded every round.
 **Not this role:** anything mechanical. Nothing may ever check this one, which
 is the single rule in this ecosystem that forbids work rather than requiring it;
 the checkable half is `R4`.
+
+### R27 — designing the next epoch
+
+**Held by:** `anoieu`
+**Role:** deciding what the ecosystem's next stretch of work is *for* — what
+changes, what is deliberately left alone, what is asked of members, when the
+stretch has ended, and what comes out to pay for what goes in. An epoch that only
+adds has not been designed.
+**Owns:** `docs/epoch-policy.md` and `docs/epochs.md`, and the decision to open a
+topic carrying `Global:`.
+**Not this role:** what is outstanding, which is the board and says nothing about
+what any of it is for; what the work aims at in general, which is `R5` and is
+argued rather than decided; and the rules a member is checked against, which are
+`R4` — this decides the shape of one stretch, not the standard.
+
+> **Destined for `kanon`.** Deciding what every member is asked for next is
+> governance sitting in the repository that also files findings against them,
+> which is what `B15` proposes to undo. It moves with `R4` and `R6` rather than
+> staying behind.
+
+`R26` is deliberately not allocated here: koine's `D8` proposes it for the
+low-level formats of the reporting loop, and that request is open. An id claimed
+in a proposal nobody has answered is not free, and taking it would make the reply
+harder to write than skipping a number is.
 
 ## cvc5
 

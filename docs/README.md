@@ -76,6 +76,20 @@ each with the next thing to do, the repositories involved, and a prompt for each
 of them. It is kept by hand, `HUMAN FEEDBACK` on an item outranks everything else
 on it, and nothing consumes the file yet.
 
+[`epoch-policy.md`](epoch-policy.md) and [`epochs.md`](epochs.md) are a pair and
+are not in the table either. An **epoch** is the span between one global
+announcement and the next. The policy says what one is, what counts as a major
+event within it — a global announcement, and **a role changing hands**, which is
+the one a reader reconstructing history from commits will not see — and what
+*designing the next epoch* involves, which is a role here and is destined for the
+governance repository. The log is the other half and is **the one document here
+allowed to be out of date**: the covering note recommended for handing each
+announcement downstream, with the wording that was rejected, which is the part
+worth keeping. Nothing checks the log and a stale prompt in it is a record rather
+than a defect. Which repositories are actually contacted, and whether any are, is
+a person's decision: see *Who gets pinged* in
+[`policy.md`](policy.md#who-gets-pinged).
+
 [`roles.md`](roles.md) is the companion to it and is not in the table either:
 **one entry per responsibility**, each with a permanent id, what it owns, and —
 the field that does most of the work — the nearest thing that is *not* it. The

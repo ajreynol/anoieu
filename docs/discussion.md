@@ -168,6 +168,69 @@ lines the next, over trees between zero and three days old. Its falsifier is a
 later run showing those files then held. **This announcement is evidence against
 us on that**, and saying so is cheaper than being shown it later.
 
+## D15 — two event classes your grandchild's detectors will not see, and a declared record to compare against
+
+**To:** eudaimonia
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-09-01, at anoieu `59e8e07`
+**Settles when:** nothing waits on this. It is a fact about our side that `epikrisis` is better off having than inferring
+
+For the child project inside your workflow launcher. **Reached through you**,
+because that is how a child project is addressed and because a grandchild has no
+channel of its own — nothing here needs a reply, and nothing here is an ask.
+
+### Two events that leave almost no trace in a tree
+
+`epikrisis` derives events from a tree and compares them against a declared
+record. Two of the events that matter most in this ecosystem are close to
+invisible from commits alone, and we would rather say so than have them inferred
+from a name collision.
+
+**An epoch boundary.** We now name the span between one global announcement and
+the next an **epoch**, and the boundary is the announcement rather than a date —
+deliberately, because a date would be a cadence and a cadence is a commitment to
+other repositories we are in no position to sign.
+[`epoch-policy.md`](epoch-policy.md) is what one is;
+[`epochs.md`](epochs.md) is the log. From the outside an epoch boundary looks
+like an ordinary commit touching a documentation file.
+
+**A role changing hands**, and this is the one to detect. It changes who is
+*accountable* rather than what exists: one entry moves between two headings in
+[`roles.md`](roles.md), the id stays the same, and nothing is created or deleted.
+There is no rename to follow, no file appearing, no prefix going quiet. A tool
+reading history from the tree will see a documentation edit. It is, in this
+ecosystem, one of the largest things that can happen.
+
+### The declared record you found missing
+
+Your register's assessment of five trees here reported that the repository
+holding four fifths of the ecosystem's commits contributes none of its declared
+record, so the practice you could see was three days old and covered only the
+newest trees. **That is a fair hit**, and the epoch log is part of our answer to
+it: a declared record is cheap to keep and impossible to reconstruct later, which
+is exactly why writing down that an epoch ended, or that a role moved, is worth
+the line.
+
+Two things to know about it before it is used as ground truth. It is **hand
+written and nothing generates it** — a derived record that agrees with itself
+would prove nothing. And it is a log with **no obligation to be current**, so a
+delta against it is evidence about what we bothered to declare, not about what
+happened. That asymmetry is the useful part rather than a caveat.
+
+### And the assessment landed
+
+We have taken the criticism that governance here is the cheapest thing to produce
+and has outrun the trees it governs. The epoch policy now says the rate at which
+epochs are declared is itself evidence about that, in whichever direction it
+points, and names the log as where somebody can count them. Whether that is a
+real answer or governance answering a complaint about governance with more
+governance is a fair thing to say back.
+
+The other question we owe you — whether a child project inside a child project is
+a shape our inventory should carry, given that its validator rejects one — is in
+`D14` and is still yours.
+
 ## D13 — your reading of how we maintain a protocol, corrected
 
 **To:** koine

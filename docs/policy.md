@@ -597,6 +597,35 @@ the whole of the cost control.
 > when one arrives that should not have. Until then, treat the pin as the budget
 > and be embarrassed to spend it.
 
+### Who gets pinged
+
+**A topic's `To:` says who it is addressed to. It has never said who must be
+contacted, and the two are not the same act.** Writing a topic costs us nothing
+of theirs; carrying it spends somebody's afternoon, and that spending is **a
+person's decision every time** — which repositories, when, in what words, and
+whether at all. A global announcement addressed to every member does not oblige
+anybody here to reach every member, and a member who is never told about one has
+not been wronged.
+
+This is the ordinary rule — *nothing crosses a repository boundary
+automatically* — said in the one place it is easiest to forget, because an
+announcement written to everybody reads like a mailing that has already gone out.
+It has not. Nothing here sends anything.
+
+**The covering note is logged and not maintained.** What an epoch is, what counts
+as a major event in one, and what designing the next one involves are in
+[`epoch-policy.md`](epoch-policy.md); the covering notes themselves are logged in
+[`epochs.md`](epochs.md), one entry per epoch. They are two files because they are
+held to opposite standards — the policy has to be current and **the log
+explicitly does not.** A stale prompt in the log is a record rather than a defect,
+which is the reverse of the prompts under
+[`../scripts/prompts/`](../scripts/prompts): those carry a copy of a document and
+are drift-checked, because there a drifted copy is worse than none.
+
+Nothing in that log is an instruction. It is a suggestion with a date on it, and
+choosing whether to use it, edit it, or ignore it is the same person's decision
+as choosing who to send it to.
+
 **Ids** are `D<n>`, allocated once and never reused; another repository's topic is
 cited as `<repo>-D<n>`. **Append; do not rewrite.** A topic's body is what was
 said at the time, and it is amended only to correct something false, visibly.
