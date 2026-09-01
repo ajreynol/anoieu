@@ -177,9 +177,14 @@ recommendation is worth making at all.
 
 **What:** one program behind the family of protocols by which an epoch is
 verified, announced, approved and adopted — it evaluates every gate, runs the
-tool for each, and emits the approval block that is the verification.
+tool for each, and delivers the evidence an agent composes the approval block
+from. It also **holds the one authority nothing else may hold: moving an epoch's
+status to `deployed`**, which is what tells the ecosystem the work is available
+to consume.
 **State:** `named` — requested by anoieu on 2026-09-01 as its highest priority,
-and explicitly **not** work for the current epoch. The vision was written down
+and to be built and used in the **second** epoch, explicitly not this one. Until
+it exists, the `deployed` transition is made by whoever holds `R28` on its behalf,
+which is a stated bootstrap exception that ends when this ships. The vision was written down
 first: the protocols exist, are in use, and are run by hand, so what is being
 asked for is a tool and not a design.
 **Settles:** nothing in [`why-eunoia.md`](why-eunoia.md) — it is not an argument
@@ -199,6 +204,11 @@ Beyond that, the mechanical gates are cheap and the judgement fields are not.
 tool that guessed them would emit something that reads like a check and is not
 one — which is worse than emitting nothing, because the shape carries authority
 the content would not have earned.
+**Also in its remit, and unsettled:** `epoch double check` — whether a
+deployment was *properly received*. That is an open research question rather than
+a feature: effects in a member's tree are observable and reception is not, and a
+check that scored *no effect* as failure would be measuring compliance while
+calling it something else.
 **Before it:** the block's fields settling. They have changed twice in a day, and
 a program written against a template still moving would be rewritten more often
 than run. `nothing` else.

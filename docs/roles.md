@@ -207,7 +207,7 @@ number worth looking at, in both directions.
 
 | tool | footing | how many |
 | --- | --- | --- |
-| `anoieu` | member | 8 |
+| `anoieu` | member | 9 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
 | `ethos` | candidate | 2 |
@@ -220,7 +220,7 @@ number worth looking at, in both directions.
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 
-Twenty-seven roles across twelve tools, and one section empty:
+Twenty-eight roles across twelve tools, and one section empty:
 `workflow-launcher` holds nothing, which is not an omission — its own front page
 says it has no responsibilities, nothing depends on it, and it owes nobody an
 artifact. The rows worth reading are the longest and the empty one, and both are
@@ -303,6 +303,31 @@ that is re-graded every round.
 **Not this role:** anything mechanical. Nothing may ever check this one, which
 is the single rule in this ecosystem that forbids work rather than requiring it;
 the checkable half is `R4`.
+
+### R29 — the epoch command front end
+
+**Held by:** `anoieu`
+**Role:** the surface a person drives an epoch through — the three commands, how
+they are recognised, and what is said back when a prompt plainly meant to be one
+and was not. It reads the command and runs the protocol that command names; it
+decides nothing about the epoch itself.
+**Owns:** `docs/interface.md`, and the commands defined in it.
+**Not this role:** the machinery the commands invoke, which is `R28`; what an
+epoch is *for*, which is `R27`; and **the authority to move an epoch to
+`deployed`**, which is the build system's alone — the front end may carry that
+transition but never originate it.
+
+> **Consistency here is an aspiration, not an implementation.** Nothing parses a
+> command and no program enforces anything; the role is held by an agent reading a
+> prompt. Saying otherwise would be the same overclaim as calling the approval
+> block a verification.
+>
+> **This is a separate role from `R28` because the two are separable, and today
+> they are not separated.** anoieu holds both: it is the front end a person types
+> at *and* the build system the commands drive. When `tekton` exists it takes the
+> machinery, and the front end stays wherever a person is actually working — which
+> may be neither this repository nor that one. Writing them as two entries now is
+> what makes that a move rather than a rewrite.
 
 ### R28 — the epoch build system
 

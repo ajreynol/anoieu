@@ -238,6 +238,87 @@ is the moment they most want the answer to be yes.
 means the gates pass today and nothing follows from it. The deployment still
 needs a person, and asking for that is a different block with a different header.
 
+## The status of an epoch
+
+**Every epoch carries a written status, and it is one of three words.** It is a
+field in the log entry rather than a mood, and a reader should be able to find
+out where an epoch stands without reconstructing it from the announcement.
+
+| status | what it means | what a member does |
+| --- | --- | --- |
+| `planned` | we are not close. Gates are failing, or the shape is still moving | nothing, and nothing is expected |
+| `staging` | an agent is being given instructions to stage it — the announcement, the covering note, the register edits | nothing yet |
+| `deployed` | tools in the Eunoia ecosystem should now consider it **available to consume** | bump when they choose, subject to the green-commit rule |
+
+**Only `deployed` means anything to anybody outside this tree.** The first two
+describe our own work in progress; they are written down so that *where we are*
+is a fact rather than an impression, and they oblige nobody.
+
+### Who may move it
+
+**Moving an epoch to `deployed` is tekton's decision and nobody else's.** Not the
+announcement, not a member, not the agent that wrote the epoch, and not
+enthusiasm about having finished. Centralising that one transition in the build
+system is what stops the status being flipped by whoever happens to be editing
+the log at the time.
+
+> **The bootstrap, stated rather than tripped over.** tekton does not exist and
+> arrives in the **second** epoch. Read literally, the rule above means no epoch
+> can ever reach `deployed` — including the one that would ship tekton. That is a
+> procedural bug of exactly the kind the next section forbids, so it is resolved
+> here rather than discovered later: **until tekton exists the transition is made
+> by whoever holds `R28`, explicitly on tekton's behalf, and the log entry says
+> so.** The exception ends when tekton ships, covers one transition, and is not a
+> general licence.
+
+### Procedural bugs do not get to block anything
+
+**Where one part of this machinery tells another to move a status and the logic
+is wrong, fix the logic and carry on.** Do not wait for permission, do not route
+around it with a second mechanism, and do not treat a rule that has produced an
+absurd result as binding because it is written down. Correct it, unblock, and
+record what was corrected and why.
+
+This is [`coherence.md`](coherence.md)'s rule about not holding up the ecosystem
+with a position of your own, applied to machinery rather than to opinions: **a
+deadlock between two of our own protocols costs somebody real time and defends
+nothing.** The bootstrap above is the first instance, and it was fixed in the
+same sentence that raised it — which is the intended shape.
+
+## After deploying: `epoch double check`
+
+**Run after a deployment to find out whether it was properly received.** What
+*properly received* means is an **open research question**, and this section is
+the question rather than the answer.
+
+**Received is not the same as sent, delivered, or acted on**, and the difficulty
+is that only the last of those leaves a trace we may look at:
+
+- **We can see effects.** A pin that moved, a stance that appeared — and
+  [`../tools/ecosystem.py`](../tools/ecosystem.py) already reads a member's README
+  from its remote, so some of this is mechanical today.
+- **An effect is not reception, and the absence of one is not its absence.** A
+  member who read the announcement and decided against it is indistinguishable,
+  from where we stand, from one who never saw it.
+- **Declining is a fine outcome**, which is what makes the naive version wrong: a
+  check that scored *no effect* as a failure would be measuring compliance and
+  calling it reception. This ecosystem has spent a lot of words insisting that a
+  member owes us nothing, and a metric that quietly reverses that would undo
+  them.
+- **The only thing that reports reception directly is a reply**, and nothing
+  obliges anybody to send one. Silence is not evidence here either.
+
+**One tractable corner**, offered as a starting point rather than a definition:
+an announcement's own claims are checkable against the world it was sent into.
+`D14` says *nothing goes red on anybody* — that is falsifiable against three
+builds, by us, without asking anybody anything. A double check that begins by
+auditing what the announcement promised, rather than what the members did, stays
+on the right side of the line above.
+
+**Until it is settled, `epoch double check` is a person reading three trees and
+saying what they see.** That is worth doing, and worth not dressing up as a
+measurement.
+
 ## How much of this crosses the boundary — open
 
 **`epoch` is our word for our planning unit. `global announcement` is the

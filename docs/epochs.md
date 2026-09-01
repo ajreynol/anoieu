@@ -25,10 +25,11 @@ to; it has never said who must be contacted, and neither does this page.
 [`discussion.md`](discussion.md), which is the record. This holds the covering
 note somebody would paste when handing one over.
 
-Nine parts per entry, and the last is the one worth the space:
+Ten parts per entry, and the last is the one worth the space:
 
 | part | what it holds |
 | --- | --- |
+| **Status** | `planned`, `staging` or `deployed` — see [`epoch-policy.md`](epoch-policy.md#the-status-of-an-epoch). Only `deployed` means anything outside this tree, and only tekton moves it there |
 | **Announcement** | the topic id or ids in [`discussion.md`](discussion.md) |
 | **At** | the commit this epoch is adopted at, and whether our CI was green there |
 | **Involved** | every tool the epoch actually touched, and in what way. A fact about the epoch — and **anoieu is always one of them** |
@@ -60,6 +61,10 @@ the next person could not have guessed.
 
 ## E1 — through 2026-09-01
 
+**Status:** `planned`. Not `staging`: nobody is being given instructions to
+stage it, and two gates are failing. The move to `deployed` is tekton's and
+tekton does not exist — until it does, whoever holds `R28` makes that call on
+its behalf, and this row will say so when it happens.
 **Announcement:** [`D14`](discussion.md#d14--global-announcement-what-changed-this-week-and-the-one-thing-we-are-asking-of-everybody),
 and [`D16`](discussion.md#d16--only-move-your-pin-to-a-commit-where-our-ci-is-green)
 for the hard constraint, which arrived after `D14` was written.

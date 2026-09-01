@@ -111,6 +111,52 @@ that commit, and until then the entry in [`epochs.md`](epochs.md) says so and th
 epoch is adoptable by nobody. Asking *is this epoch deployable yet* is a
 reasonable end-of-session question and has a one-command answer.
 
+## The commands
+
+**Three, and they are the whole set.** Each is a prompt on its own, typed as it
+appears here.
+
+| command | what it does |
+| --- | --- |
+| `epoch dry run` | evaluates every gate, emits the block, **changes nothing** |
+| `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
+| `epoch double check` | after a deployment: did it land. What that means is [an open question](epoch-policy.md#after-deploying-epoch-double-check) |
+
+**Recognise them consistently, and do not invent variants.** The same prompt gets
+the same reading every time.
+
+**When a prompt plainly meant to be one of these and is not, say so and do
+nothing else.** The model for the reply is a compiler error — name what was
+typed, name what is accepted, stop:
+
+```text
+epoch: unrecognised command "dry-run"
+       accepted: dry run | deploy | double check
+       nothing was run
+```
+
+**The compiler is an aspiration, not an implementation**, and taking it literally
+would be the mistake. Nothing parses these, no program enforces a grammar, and
+reading this section as a specification would be the same error as reading the
+approval block as a verification. What is being asked for is **consistency**: one
+reading per prompt, a near miss named rather than guessed at, and no command ever
+half-run.
+
+**What is not a command is ordinary work.** A prompt that discusses epochs, asks
+a question about one, or happens to mention a command inside a sentence is not a
+command and gets no error — it gets answered. The error exists for the case where
+somebody clearly meant to run one and it did not match, because that is where
+guessing costs something: a protocol running that nobody asked for.
+
+**Guessing is the failure, and *did you mean* is fine to say and never fine to
+act on.** Same rule as the misaddressed-prompt paragraph and the response gate —
+do not do the plausible thing.
+
+**The one transition that matters is not protected by any of this.** Even a
+perfectly typed `epoch deploy` cannot move an epoch to `deployed` on the front
+end's say-so; that authority belongs to the build system alone. The commands are
+a convenience for a person, not a source of permission.
+
 ## Session shapes
 
 Each is a specialisation of the one sentence. The prompt is the short form; none
@@ -124,7 +170,7 @@ of them needs to be typed exactly.
 | **a finding carried** | *file `ethos-8` and `ethos-9`* — and expect to be told it stops at a person |
 | **a judgement, with nothing changed** | *take no action, just judge: <the thing>* |
 | **a readiness pass before something goes out** | *are we ready to advertise `D14`? review it* |
-| **a dry run** — where does the epoch stand, changing nothing | *do an epoch dry run* — evaluates every gate, deploys nothing, tells nobody |
+| **anything to do with an epoch** | one of the three commands below, typed exactly |
 | **ordinary work** | just ask. A check, a document, a test, a bug — no framing needed |
 
 **The judgement shape is underused and is the cheapest one.** *Take no action,
