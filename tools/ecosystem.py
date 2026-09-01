@@ -401,6 +401,8 @@ def main() -> int:
         inv = json.load(open(INVENTORY, encoding="utf-8"))
         return protocol({k: v for k, v in inv.items() if not k.startswith("_")})
     verbose = "--verbose" in sys.argv
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import bump_check  # noqa: PLC0415
     inv = json.load(open(INVENTORY, encoding="utf-8"))
     rows, notes = [], []
 
@@ -409,11 +411,11 @@ def main() -> int:
             continue
         status = e.get("status", "?")
         if status in ("child", "foundation"):
-            rows.append((name, status, "-", "-", "-", e.get("parent", "")))
+            rows.append((name, status, "-", "-", "-", "-", e.get("parent", "")))
             continue
         path = locate(e.get("repo", name))
         if not path:
-            rows.append((name, status, "no checkout", "-", "-", ""))
+            rows.append((name, status, "no checkout", "-", "-", "-", ""))
             continue
         # An associate is held to none of this, so nothing here runs the checker
         # over its tree. A failure count in that row would be this table
@@ -428,7 +430,8 @@ def main() -> int:
             topics = f"{for_us} for us" if for_us else "yes"
         else:
             topics = "none"
-        rows.append((name, status, verdict, topics, age(path), path))
+        rows.append((name, status, verdict, bump_check.epoch_marker(path) or "-",
+                     topics, age(path), path))
         if verdict == "ok" and status == "candidate":
             notes.append(f"{name} passes and is recorded as a candidate: "
                          "if it declares membership, the status is out of date")
@@ -439,16 +442,25 @@ def main() -> int:
             notes.append(f"{name}: " + "; ".join(fails[:6]))
 
     w = max(len(r[0]) for r in rows) + 2
-    print(f"{'tool':<{w}}{'status':<11}{'policy':<12}{'channel':<10}{'moved':<8}where")
-    for name, status, verdict, topics, moved, where in rows:
+    print(f"{'tool':<{w}}{'status':<11}{'policy':<12}{'epoch':<8}"
+          f"{'channel':<10}{'moved':<8}where")
+    for name, status, verdict, epoch, topics, moved, where in rows:
         short = where.replace(os.path.expanduser("~"), "~") if where else ""
-        print(f"{name:<{w}}{status:<11}{verdict:<12}{topics:<10}{moved:<8}{short}")
+        print(f"{name:<{w}}{status:<11}{verdict:<12}{epoch:<8}"
+              f"{topics:<10}{moved:<8}{short}")
 
     if notes:
         print()
         for n in notes:
             print(f"note: {n}")
     print()
+    here = bump_check.current_epoch()
+    if here:
+        print(f"Epoch here: {here}. The `epoch` column is what a tree records "
+              f"about which advice it\nwas built against -- encouraged and never "
+              "required, so `-` is the ordinary case\nand is not a finding. It is "
+              "not a compliance column and must not be read as one.")
+        print()
     print("Form only. A passing row says those checks passed on that tree, and "
           "nothing about\nwhether the tool is any good -- see docs/reports/"
           "reporting-policy.md on silence.")

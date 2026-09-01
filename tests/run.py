@@ -709,6 +709,19 @@ def epoch_gate() -> int:
         failures += 0 if ok else 1
         print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
 
+    # the version markers the internal tools read
+    open(os.path.join(wf, "anoieu.yml"), "a").write("          EUNOIA_EPOCH: E7\n")
+    marks = [
+        ("reads a recorded epoch marker", bump_check.epoch_marker(tmp) == "E7"),
+        ("reports no marker as absent, never as a failure",
+         bump_check.epoch_marker(HERE) == ""),
+        ("reads the current epoch from the log",
+         re.fullmatch(r"E\d+", bump_check.current_epoch(root) or "") is not None),
+    ]
+    for label, ok in marks:
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
+
     print(f"-- the epoch gate: {failures} failure(s)")
     return failures
 
@@ -730,7 +743,8 @@ def epoch_surfaces_agree() -> int:
     iface = open(os.path.join(root, "docs", "interface.md")).read()
     policy = open(os.path.join(root, "docs", "epoch-policy.md")).read()
 
-    truth_cmds = set(re.findall(r"^\| `epoch ([a-z]+(?: [a-z]+)?)` \|", iface, re.M))
+    truth_cmds = set(re.findall(r"^\| `((?:epoch|make) [a-z]+(?: [a-z]+)?)` \|",
+                                iface, re.M))
     block = re.search(r"```text\n(epoch \u2014 .*?)\n```", iface, re.S)
     truth_stat = set(re.findall(r"^\| `(planned|staging|deployed|installed)` \|",
                                 policy, re.M))
@@ -755,7 +769,8 @@ def epoch_surfaces_agree() -> int:
         return m.group(1) if m else ""
 
     case("`epoch help` lists exactly the commands the table defines",
-         set(re.findall(r"^  ([a-z]+(?: [a-z]+)?)\s{2,}\S", part("commands:"), re.M)),
+         set(re.findall(r"^  ((?:epoch|make) [a-z]+(?: [a-z]+)?)\s{2,}\S",
+                        part("commands:"), re.M)),
          truth_cmds)
     case("the syntax-error example accepts exactly those commands",
          {c.strip() for c in re.search(r"accepted: (.+)", iface).group(1).split("|")},

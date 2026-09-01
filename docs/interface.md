@@ -113,7 +113,7 @@ reasonable end-of-session question and has a one-command answer.
 
 ## The commands
 
-**Four today**, each a prompt on its own, typed as it appears here. **The set is
+**Five today**, each a prompt on its own, typed as it appears here. **The set is
 expected to grow** — adding one is `R29`'s to propose and a person's to accept,
 and a new command arrives with its output shape defined, not discovered.
 
@@ -122,6 +122,7 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 
 | command | what it does |
 | --- | --- |
+| `make epoch` | **make it better, and stage a deployment.** The one command not of the form `epoch <verb>` |
 | `epoch help` | print the commands. Reads nothing, runs nothing |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the epoch's status — and only to `deployed` on the build system's authority |
@@ -137,10 +138,11 @@ epoch — the Eunoia epoch build system
 usage: epoch <command>
 
 commands:
-  help           print this list
-  dry run        evaluate every gate; print the summary and the block; change nothing
-  deploy         move the epoch's status
-  double check   after a deployment: was it received (open question)
+  make epoch           make it better, and stage a deployment
+  epoch help           print this list
+  epoch dry run        evaluate every gate; print the summary and the block; change nothing
+  epoch deploy         move the epoch's status
+  epoch double check   after a deployment: was it received (open question)
 
 status:  planned -> staging -> deployed -> installed
          only the build system moves an epoch to `deployed`
@@ -172,13 +174,26 @@ rather than only when its name does.
 **Recognise them consistently, and do not invent variants.** The same prompt gets
 the same reading every time.
 
+**`make epoch` is the one exception to the shape**, and it is deliberate: it is
+what somebody types at a build system, and the whole arrangement is named after
+that. One documented exception is affordable where a silent one would not be —
+and it is why the scoping rule below is *a prompt that plainly meant to be a
+command*, rather than *a prompt beginning with `epoch`*.
+
+**It does not design the epoch.** Designing one is the person's and is not a role
+here; `make epoch` assembles inside a direction already set, and everything it
+produces goes through the feedback protocol below. Whether the designing could
+ever be automated is [an open research
+question](epoch-policy.md#make-epoch--and-the-research-question-it-is-a-probe-for),
+and every run of this command is a data point for it.
+
 **When a prompt plainly meant to be one of these and is not, say so and do
 nothing else.** The model for the reply is a compiler error — name what was
 typed, name what is accepted, stop:
 
 ```text
 epoch: unrecognised command "dry-run"
-       accepted: help | dry run | deploy | double check
+       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch double check
        nothing was run
 ```
 

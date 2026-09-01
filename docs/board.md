@@ -444,9 +444,8 @@ question to settle first is which of those the ecosystem wants, and
 ## B15 — governance, out of the analyzer
 
 **Task:** hand `R4` — the ecosystem's policy, and joining it — `R6` — the
-inventory, and getting the ecosystem onto a machine — and `R27`, designing the
-next epoch, to a repository that is not also the tool that files findings against
-members. `R1`, `R2`, `R3` and `R5` stay. Audited as `P2` in the ynoia proposals
+inventory, and getting the ecosystem onto a machine — to a repository that is not
+also the tool that files findings against members. `R1`, `R2`, `R3` and `R5` stay. Audited as `P2` in the ynoia proposals
 page; the roles and the procedure are in
 [`roles.md`](roles.md#how-a-role-is-handed-off).
 **Entities:** `anoieu`, `ynoia`

@@ -108,6 +108,49 @@ def pinned_rev(root: str) -> tuple[str, str]:
                 "tip, which the policy allows and this check cannot speak about")
 
 
+def epoch_marker(root: str) -> str:
+    """The `EUNOIA_EPOCH` a repository records, or "" if it records none.
+
+    The marker says which epoch of this ecosystem's *advice* a tree was built
+    against; `pinned_rev` above says which commit of the *checker* it is held to.
+    Two different facts, allowed to disagree, read from the same file because
+    that is where somebody already looks.
+
+    **Absent is the ordinary case and never a failure.** The convention is
+    encouraged and not required, so a tool reading this reports what it finds and
+    grades nobody.
+    """
+    d = os.path.join(root, ".github", "workflows")
+    if not os.path.isdir(d):
+        return ""
+    for name in sorted(os.listdir(d)):
+        if not name.endswith((".yml", ".yaml")):
+            continue
+        text = open(os.path.join(d, name), encoding="utf-8", errors="replace").read()
+        m = re.search(r"^\s*EUNOIA_EPOCH\s*:\s*[\"']?(E\d+)[\"']?\s*$", text, re.M)
+        if m:
+            return m.group(1)
+    return ""
+
+
+def current_epoch(root: str = "") -> str:
+    """The newest epoch in `docs/epochs.md`, or "" if there is none.
+
+    The log is newest-first, so the first `## E<n>` heading is the current one.
+    Read from the prose rather than from a second file on purpose: a machine-
+    readable copy would be one more thing to keep in step with the log, and the
+    log is already the ground truth for what an epoch is.
+    """
+    path = os.path.join(root or os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "docs", "epochs.md")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            m = re.search(r"^##\s+(E\d+)\b", fh.read(), re.M)
+    except OSError:
+        return ""
+    return m.group(1) if m else ""
+
+
 def ask(rev: str, timeout: int = 20) -> tuple[list[dict], str]:
     url = API.format(repo=REPO, rev=rev)
     req = urllib.request.Request(url, headers={

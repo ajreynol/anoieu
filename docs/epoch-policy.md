@@ -528,54 +528,48 @@ very small epoch or an unexamined one, and the second is far likelier. The
 honest failure to expect is the one `E1` records — the epoch's own ask went unmet
 in this tree while being asked of three others.
 
-## Designing the next epoch
+## Designing the next epoch is the human's
 
-**Deciding what the ecosystem's next stretch of work is *for*.** It is a
-responsibility rather than a document, it currently sits with this repository,
-and it is `R27` in [`roles.md`](roles.md).
+**It is not a role in [`roles.md`](roles.md) and it is not this repository's.**
+Deciding what the next stretch of work is *for* — what changes, what is left
+alone, what members are asked for, and what comes out to pay for what goes in —
+belongs to the person, and an entry allocating it to anoieu was written and has
+been deleted.
 
-Four things, and the last is the one that gets skipped:
+That is a stronger claim than *a person approves it*. **A person originates it.**
+An agent can evaluate gates, compose a summary, stage a deployment and write a
+log entry; what it does not do is decide that the ecosystem should be asked for
+something, because that is a claim on other people's attention and the standing
+to make it is not a thing this repository has.
 
-- **What changes**, and what is deliberately left alone. Most of the ecosystem
-  should be untouched by any given epoch.
-- **What is asked of members**, if anything — and an epoch that asks for nothing
-  is a good epoch, not a wasted one.
-- **When it has ended**, which is the same judgement as deciding an announcement
-  is worth everybody's attention. The one-pin rule is the budget: a second
-  announcement displaces the first, and having to choose is the cost control.
-- **What comes out.** Every protocol here is held to *an addition says what it
-  removes*, and the counter that watches the findings prompts has reported three
-  rounds and three increases. **An epoch that only adds has not been designed**,
-  and this is the clause to read first when designing one.
+**What an epoch that only adds tells you** is still the sharpest single test, and
+it is a question for the person: an epoch with `removes ... nothing` was probably
+not designed, it was accumulated.
 
-**What it is not.** Not [`board.md`](board.md), which is what is outstanding and
-does not say what any of it is for. Not [`vision.md`](vision.md), which says what
-the work is aiming at in general and is argued rather than decided. Not the
-record. This role decides the *shape of one stretch*, and it is small.
+### `make epoch` — and the research question it is a probe for
 
-**It goes to kanon, and this page is written to be handed over.** Deciding what
-every member is asked for next is governance, and it currently sits in the
-repository that also files findings against them — the arrangement `B15` on the
-board proposes to undo. When the governance repository exists, `R27` moves with
-the policy and the joining rules rather than staying behind.
+**`make epoch` means: make it better, and stage a deployment.** It is the
+hilariously simple command, and the simplicity is the point — it is what somebody
+would type at a build system, and it asks for exactly what a build asks for.
 
-**We hold this temporarily and should say so wherever it might read otherwise.**
-Two things follow that are worth being deliberate about rather than discovering
-later.
+**It does not design the epoch.** It works inside a direction the person has
+already set, and everything it produces goes through
+[the feedback protocol](interface.md#the-epoch-feedback-communication-protocol),
+where arguing with the content changes what agents receive. The person steers by
+arguing; the command does the assembling.
 
-**Nothing here should get harder to move because we have been keeping it.** No
-convention on this page depends on the holder being anoieu, no file it owns lives
-outside `docs/`, and the two registers are plain Markdown a person could carry
-across in one commit. If a future addition to epoch design would only work in the
-repository that also runs the analyzer, that is a reason to reject the addition
-rather than a reason to keep the role.
-
-**Being a *target* of an epoch is not the same as owning one, and only the second
-moves.** The section above — anoieu is subject to whatever an epoch asks — is a
-property of being a member, not of being the designer. It survives the handoff
-unchanged: when kanon designs an epoch, anoieu is still one of the trees it lands
-on, and the **Of us** row in the log is still owed. Reading that section as
-evidence that this repository is structurally central would be exactly backwards.
+> **The open research question, and this command is how evidence for it
+> accumulates: can designing an epoch be automated at all?**
+>
+> Every `make epoch` is a data point. If what comes back is repeatedly a stretch
+> of work the person would have chosen, the answer is trending yes and the role
+> that was deleted may one day be real. If what comes back is repeatedly more
+> machinery, better described, that is the answer trending no — and it is the
+> answer the outside criticism of this ecosystem currently predicts.
+>
+> **What would settle it is not an argument.** It is the ratio, over several
+> epochs, of what a person had to overrule. Nobody is counting that yet, and
+> starting to count it is cheaper than deciding the question.
 
 ## Frequency, and the honest position
 

@@ -176,9 +176,7 @@ changes that — it is the worked example precisely because a deferred decision 
 easier to read than a live one. In the terms of this page:
 
 - **Moves:** `R4`, the policy and joining; `R6`, the inventory and the
-  installer; and `R27`, designing the next epoch — deciding what every member is
-  asked for next is the same kind of thing as writing the rules they are checked
-  against, and it belongs on the same side of the split.
+  installer.
 - **Stays:** `R1` the bug report system, `R2` the analyzer, `R3` the fuzzer,
   `R5` the vision.
 - **Gains:** `kanon`, which has no repository, is not in the inventory, and is a
@@ -207,7 +205,7 @@ number worth looking at, in both directions.
 
 | tool | footing | how many |
 | --- | --- | --- |
-| `anoieu` | member | 9 |
+| `anoieu` | member | 8 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
 | `ethos` | candidate | 2 |
@@ -220,7 +218,7 @@ number worth looking at, in both directions.
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 
-Twenty-eight roles across twelve tools, and one section empty:
+Twenty-seven roles across twelve tools, and one section empty:
 `workflow-launcher` holds nothing, which is not an omission — its own front page
 says it has no responsibilities, nothing depends on it, and it owes nobody an
 artifact. The rows worth reading are the longest and the empty one, and both are
@@ -315,8 +313,8 @@ they argue with its content rather than its wording.
 feedback protocol.
 **Not this role:** the machinery the commands invoke, which is `R28` — the
 feedback protocol sits here because it runs between a person and an agent, where
-the rest of that family runs between repositories; what an epoch is *for*, which
-is `R27`; and **the authority to move an epoch to
+the rest of that family runs between repositories; what an epoch is *for*, which is
+nobody's role and is the human's; and **the authority to move an epoch to
 `deployed`**, which is the build system's alone — the front end may carry that
 transition but never originate it.
 
@@ -341,11 +339,13 @@ its dry run, the bump gate, and the shape of the log entry. Taken together they
 are this ecosystem's **main verification system for its own governance**, which
 is a claim worth stating plainly because it is unusual: what verifies an epoch is
 a protocol, not a test suite.
-**Owns:** `tools/bump_check.py`, the approval protocol in `docs/policy.md`, and
-the machinery half of `docs/epoch-policy.md` — the gates, the block template, the
-dry run, and the entry format `docs/epochs.md` is written to.
-**Not this role:** deciding what an epoch is *for*, which is `R27` and is
-judgement rather than machinery; the policy a member is checked against and the
+**Owns:** `tools/bump_check.py`, the approval protocol in `docs/policy.md`,
+`docs/epoch-policy.md` and `docs/epochs.md` — the gates, the block template,
+the dry run, the statuses, and the log's entry format.
+**Not this role:** **deciding what an epoch is *for*, which is not a role here
+at all** — it is the human's, and `R27` was allocated to this repository for it
+in error and has been deleted; whether it could ever be automated is an open
+research question this role carries rather than answers; the policy a member is checked against and the
 discussion protocol with its safety gate, both `R4`; and the low-level formats of
 the reporting loop, which koine has asked for and this must not quietly absorb.
 
@@ -364,7 +364,7 @@ the reporting loop, which koine has asked for and this must not quietly absorb.
 >
 > Whatever else changes about the machinery, this does not get displaced.
 
-> **Destined for `kanon`, with `R27`.** The protocols by which every member is
+> **Destined for `kanon`.** The protocols by which every member is
 > told what is expected of them are governance, and they should not stay in the
 > tree that also files findings against them.
 >
@@ -372,25 +372,6 @@ the reporting loop, which koine has asked for and this must not quietly absorb.
 > four documents. It is registered with `ynoia` as
 > [`tekton`](../tools/ynoia/tools.md), at the top of the priority order, and it is
 > deliberately **not** work for the current epoch.
-
-### R27 — designing the next epoch
-
-**Held by:** `anoieu`
-**Role:** deciding what the ecosystem's next stretch of work is *for* — what
-changes, what is deliberately left alone, what is asked of members, when the
-stretch has ended, and what comes out to pay for what goes in. An epoch that only
-adds has not been designed.
-**Owns:** `docs/epoch-policy.md` and `docs/epochs.md`, and the decision to open a
-topic carrying `Global:`.
-**Not this role:** what is outstanding, which is the board and says nothing about
-what any of it is for; what the work aims at in general, which is `R5` and is
-argued rather than decided; and the rules a member is checked against, which are
-`R4` — this decides the shape of one stretch, not the standard.
-
-> **Destined for `kanon`.** Deciding what every member is asked for next is
-> governance sitting in the repository that also files findings against them,
-> which is what `B15` proposes to undo. It moves with `R4` and `R6` rather than
-> staying behind.
 
 `R26` is deliberately not allocated here: koine's `D8` proposes it for the
 low-level formats of the reporting loop, and that request is open. An id claimed
@@ -455,6 +436,18 @@ this* is not drawn in it.
 **Not this role:** drawing that boundary. A second reading is `R20`, and it is
 additive: this role governs and that one does not.
 
+> **Future target: `sapheneia`.** The boundary this role does not draw is the
+> whole subject of `R20`, and the shape it would eventually take is that the
+> language definition becomes the account a reader goes to for *what Eunoia
+> requires*, with the manual remaining the authority on what the checker does.
+> Recorded as a direction, not a plan.
+>
+> **Blocked, and not on anybody's willingness.** `ethos` is a `candidate` — held
+> to none of this ecosystem's policy and owing it nothing — so there is no
+> channel through which this could even be asked, and asking would be the arrows
+> backwards. It unblocks if `ethos` ever takes a footing here, which is its
+> maintainers' decision and nobody else's.
+
 ## ethos-eoc
 
 ### R12 — the Eunoia compiler
@@ -466,6 +459,19 @@ constructor, type rule, evaluator case and verification condition per symbol.
 **Not this role:** what the emitted development goes on to prove, which is
 `R17`, and carrying what a proof establishes into Lean's own terms, which is
 nobody's.
+
+> **Future target: `noesis`.** This role compiles a semantics into a Lean
+> development; `noesis` is that arrangement with the semantics *defined in* Lean
+> instead, so the compiler becomes a metaprogram over definitions rather than a
+> translator into them. It is audited as `P3` in
+> [`../tools/ynoia/proposals.md`](../tools/ynoia/proposals.md) with the verdict
+> **not yet**, it has been written zero times, and it forks with `iogos` — both
+> cannot hold in their strongest forms.
+>
+> **Blocked for the same reason as `R11`.** `ethos-eoc` is a child of `ethos`,
+> which is a `candidate`. A child project is addressed through its parent, and
+> that parent has joined nothing — so this is a direction recorded on our side
+> and not a request made of theirs.
 
 ### R13 — the shipped semantics sets
 
