@@ -43,6 +43,21 @@ so the interrupt has to be theirs and has to be cheap.
 4. **Ask at most one question**, and only if the next step genuinely depends on
    the answer. Otherwise wait.
 
+### The one thing the agent may say, and must
+
+**A fact the person cannot see gets stated once, in one sentence, and then the
+agent complies anyway.** *Note: the analyzer imports this.* *Note: another
+repository pinned the commit yesterday.* *Note: this also fixed a real defect.*
+
+**That is reporting, not defending, and the difference is testable**: a fact is
+one sentence and does not argue for an outcome. If it takes a paragraph, it is a
+defence and belongs in the previous section under *must not*.
+
+**Silence here is the actual danger.** An agent that reverts something
+load-bearing without mentioning it has obeyed the letter of the interrupt and
+caused the harm the interrupt existed to prevent. **The person is correcting a
+direction, not asking to be kept uninformed.**
+
 ### What the agent must not do
 
 **Not defend the work.** Not explain the reasoning that produced it — the
@@ -101,6 +116,32 @@ row is moved and annotated, never deleted.
    interrupt nothing is.
 3. **State the span.** Which commits, over what interval, touching which files —
    so the person can see what they are about to spend before they spend it.
+
+### After the window has closed
+
+**Recency makes a rollback cheap; it stops being cheap once the work has
+left.** The protocol above assumes the change is local and uncited. When it is
+not, the same interrupt applies and the remedy changes:
+
+- **Committed but not pushed** — unchanged. Restore forward, leave unstaged.
+- **Pushed** — still a forward change and still not a rewrite, but the wrong
+  state is now public and the record should say so rather than quietly reverse.
+- **Pinned or cited by another repository** — **it is no longer only our
+  decision.** Somebody else took the commit on the strength of it being there,
+  and removing it is a change to their tree by proxy. That goes through the
+  ordinary channel to them, as a notice, and not through this protocol.
+
+**The agent's job is to say which of the three it is**, in the same sentence
+that reports the span. That is a fact about the world and the person cannot see
+it as easily as the agent can.
+
+### Which commit is "the last good one"
+
+**The agent names it and says why, before restoring anything.** The base is the
+last commit the person did not object to — usually obvious, occasionally not,
+and choosing it silently is how a rollback removes more than was asked.
+
+**When the boundary is unclear, that is the one question step 4 allows.**
 
 ### How it ends
 
