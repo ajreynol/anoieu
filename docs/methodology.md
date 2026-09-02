@@ -146,7 +146,11 @@ into a liability. The pin is the structural half of the answer: a member absorbs
 a change when they choose. **The rate principle is the half that is ours.** No
 stretch has been deployed yet, deliberately, because we were not sure the
 abstraction was right, and shipping an abstraction you cannot explain is how the
-mechanism above becomes a way of distributing confusion at scale.
+mechanism above becomes a way of distributing confusion at scale. The diligence
+owed before a deploy is **recursive** — the history behind a change and not only
+the change — with a stated stopping rule so that it ends in a deployment rather
+than in more reading; both are in
+[`stretch-policy.md`](stretch-policy.md).
 
 Scope is the lever: a small change may move quickly, a large one may not, and
 the size of a change between two announcements is a measurable property of a git

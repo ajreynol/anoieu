@@ -787,3 +787,61 @@ diagnosis-without-treatment failure this ecosystem is already criticised for.
 [`science-fiction.md`](science-fiction.md) is the sibling rule and the two are
 easy to confuse. That page limits how far ahead we may **plan**; this limits how
 fast we may **move**. Neither limits how ambitious the work is allowed to be.
+
+## Deploy only after reading our own history, recursively
+
+The rate principle above says how fast. This says how deeply, and it applies at
+the one moment that reaches outside this tree.
+
+> **We deploy when the diligence is done, and the diligence is recursive.**
+
+**Recursive means the history behind the change, not only the change.** What
+this stretch alters, and then what the things it rests on altered, and why the
+rules it was written under exist at all. Every artifact here refers backwards on
+purpose — a register edit rests on a role, a role rests on a rule, and a rule
+names the incident that produced it because a rule with no incident behind it is
+a preference. **The record is built so that walk is possible**: ids that never
+move, logs that are appended to rather than rewritten, verdicts that name the
+evidence they rest on, and a *from* column on every standing rule. A history
+that can be walked and is not walked is worth the same as one that cannot be.
+
+**It is not hypothetical.** The most expensive thing that has gone wrong here
+was a verdict of *fixed upstream* recorded three times for a fix that never
+landed, unnoticed for months. Nobody would have caught that by reading the diff.
+It was only visible by walking back from the claim to the thing the claim rested
+on, and finding nothing there.
+
+### Where the walk stops
+
+**Recursion with no base case is paralysis wearing diligence's clothes**, and
+this ecosystem is already criticised for substituting diagnosis for treatment.
+So the stopping rule is part of the ideal rather than an exception to it.
+
+- **Stop when the next step back could not change the decision.** That is the
+  test, and it is answerable rather than a feeling.
+- **Stop at an artifact, never at a sense of having understood.** The walk ends
+  on a commit, a recorded verdict, an incident named in a rule, or a person's
+  written decision.
+- **Stop when the record already says it.** A fact you re-derive is a fact the
+  record already carried; re-deriving it a second time is evidence you are
+  avoiding the deploy rather than preparing for it.
+- **Say where you stopped**, in the announcement. An unstated depth is
+  indistinguishable from no depth, and the next person cannot pick the walk up
+  from a place nobody named.
+
+**The depth is proportional to the scope**, which is the same lever the rate
+principle pulls. A small stretch has a short history behind it and its walk is
+short; that is what makes a small stretch worth preferring, and it is not a
+loophole.
+
+### Careful is not slow, and not deploying is not free
+
+**Sitting at `staged` has a cost and it is easy to miss**, because the cost is
+paid by people who are not in the room. Members do not get the thing, the
+announcement ages, and the criticism that governance here outruns the trees it
+governs gets stronger with every week the ledger of undeployed work grows. There
+is no side of this trade where nothing is spent.
+
+So: **we do not paralyse ourselves.** The ideal is a standard for the reading,
+not a licence to keep reading. When the walk has reached artifacts, the next
+step back would change nothing, and where it stopped is written down — deploy.

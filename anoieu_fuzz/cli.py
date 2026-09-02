@@ -419,15 +419,26 @@ def cmd_verify(args) -> int:
     # command can give. It gave exactly that answer in CI for weeks, because the
     # job that runs it checks out ethos and not cvc5.
     proofs = [r for r in records if r.get("mode", "proof") == "proof"]
-    if proofs and not _find_signature(getattr(args, "signature", "") or ""):
-        print(f"-- verify: no CPC signature, and {len(proofs)} of {len(records)} "
-              "reproducer(s) are proof cases")
-        print("   A proof case checked without its signature is a different "
-              "measurement, not a moved verdict.")
-        print("   Name one with CPC=<path-to>/Cpc.eo, or run `python3 "
-              "tools/deps.py` so that")
-        print(f"   {SIGNATURE_GUESSES[0]} exists.")
-        return 2
+    if proofs:
+        args.mode = "proof"
+        probe = Session(args)
+        # Only the checkers that actually interpolate one need a signature --
+        # `Checker.argv` drops a `{signature}` argument when there is none, so a
+        # checker that never mentions it is unaffected and must not be refused
+        # over. Asking the configuration rather than the filesystem is what
+        # keeps this decision a function of the tree.
+        wants = any("{signature}" in arg
+                    for checker in probe.checkers
+                    for arg in checker.modes.get("proof", []))
+        if wants and not probe.signature:
+            print(f"-- verify: no CPC signature, and {len(proofs)} of "
+                  f"{len(records)} reproducer(s) are proof cases")
+            print("   A proof case checked without its signature is a different "
+                  "measurement, not a moved verdict.")
+            print("   Name one with CPC=<path-to>/Cpc.eo, or run `python3 "
+                  "tools/deps.py` so that")
+            print(f"   {SIGNATURE_GUESSES[0]} exists.")
+            return 2
 
     changed = compared = 0
     for record in records:

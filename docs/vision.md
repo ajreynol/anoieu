@@ -92,6 +92,12 @@ integration as the tax paid for having moved quickly. It is the reverse — it i
 what makes speed survivable, and the reason a change to the core of an analyzer
 can be made on a Tuesday by someone who was not there when it was written.
 
+**And only as fast as you understand.** CI is what makes speed survivable; it is
+not what tells you that you understood what moved, and only the first of those
+has a check. Where a change is too large to hold in your head, make it smaller
+rather than slower — scope is the lever, and a span of history is where it is
+pulled.
+
 What it buys is concrete here. A change that invents a false positive fails
 *this* build before it ever reaches somebody else's, because CPC's output is
 pinned to a committed baseline. What ethos actually said about a witness is
