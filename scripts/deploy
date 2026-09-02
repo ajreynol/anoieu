@@ -166,20 +166,33 @@ if [ "$DRY" = 1 ]; then
   exit 0
 fi
 
-python3 - "$ROOT" "$STRETCH" "$NEXT" "$VERSION" "$PRESIDENT" <<'PY'
+python3 - "$ROOT" "$STRETCH" "$NEXT" "$VERSION" "$PRESIDENT" "$STATUS" <<'PYEOF'
 import datetime, os, re, sys
-root, stretch, nxt, version, president = sys.argv[1:6]
+root, stretch, nxt, version, president, was = sys.argv[1:7]
 today = datetime.date.today().isoformat()
 
 p = os.path.join(root, "docs", "stretches.md")
 s = open(p, encoding="utf-8").read()
-s = re.sub(r"(^##\s+" + re.escape(stretch) + r"\b.*?^\*\*Status:\*\*\s*)`?\w+`?",
-           lambda m: m.group(1) + f"`deployed` as **{version}** on {today}, by "
-                                  f"`./scripts/deploy`. Previously",
+
+# The Version field, which said "when deployed" and now is not a plan.
+s = re.sub(r"(^##\s+" + re.escape(stretch) + r"\b.*?^\*\*Version:\*\*\s*)"
+           r"\*\*`[0-9.]+`\*\* when deployed\. \*\*Not yet deployed\*\* —[^\n]*"
+           r"(?:\n(?!\*\*)[^\n]*)*",
+           lambda m: m.group(1) + f"**`{version}`**, deployed {today}.",
            s, count=1, flags=re.M | re.S)
+
+# The Status field. `was` is carried in so the previous status is named rather
+# than dropped -- an earlier version wrote "Previously, raised from ..." and
+# lost the word it was previously.
+s = re.sub(r"(^##\s+" + re.escape(stretch) + r"\b.*?^\*\*Status:\*\*\s*)`?\w+`?",
+           lambda m: m.group(1) + f"`deployed` as **{version}** on {today}, by\n"
+                                  f"`./scripts/deploy`.\nPreviously `{was}`",
+           s, count=1, flags=re.M | re.S)
+
 head = s.index("## " + stretch)
 s = s[:head] + (
     f"## {nxt} — opened {today}\n\n"
+    f"**Version:** none. A stretch is versioned when it is deployed.\n"
     f"**Status:** `brainstorm`, opened by `./scripts/deploy` when {stretch} was\n"
     f"deployed as {version}.\n"
     f"**President:** `{president}`.\n"
@@ -188,9 +201,13 @@ s = s[:head] + (
 ) + s[head:]
 open(p, "w", encoding="utf-8").write(s)
 
+# history.md names its sections `Stretch N`, not `EN`. Writing `## E2` there
+# would put a second heading for one stretch into a file that already has
+# `## Stretch 2`, under a naming scheme that page does not use.
+n = nxt[1:]
 h = os.path.join(root, "docs", "history.md")
 t = open(h, encoding="utf-8").read()
-marker = f"""## {nxt} — FIXME
+marker = f"""## Stretch {n} — FIXME
 
 **FIXME — for {president}, the incoming president. This section is yours.**
 
@@ -199,20 +216,30 @@ an entry.** Nothing here was observed; it is a reminder that the record now
 travels with you.
 
 **Law 12 first, then the rest.** Put a joke about your own name on your front
-page before anything else, because it is the cheapest of your obligations and
-the one most likely to be skipped. Then publish the working summary: it is your
-first responsibility and it is kept current while the stretch runs, not written
-at the end.
+page before anything else: it is the cheapest of your obligations and the one
+most likely to be skipped. Then publish the working summary, which is your first
+responsibility and is kept current while the stretch runs rather than written at
+the end.
 
 **Replace this whole section.** Leaving a FIXME in the record is worse than
-leaving it empty -- an empty entry says nothing happened yet, and this says
-somebody meant to and did not.
-
+leaving it empty — an empty entry says nothing has happened yet, and this says
+somebody meant to write one and did not.
 """
-i = t.index("## Stretch 0")
-open(h, "w", encoding="utf-8").write(t[:i] + marker + t[i:])
-print("  wrote docs/stretches.md and docs/history.md")
-PY
+
+existing = re.search(rf"^## Stretch {n} — .*?(?=^## |\Z)", t, re.M | re.S)
+if existing:
+    # There is already a section for this stretch, written ahead of time. It is
+    # replaced rather than joined, so one stretch keeps one section.
+    t = t[:existing.start()] + marker + "\n" + t[existing.end():]
+    where = f"replaced the existing Stretch {n} section"
+else:
+    m = re.search(r"^## Stretch \d+ — ", t, re.M)
+    at = m.start() if m else len(t)
+    t = t[:at] + marker + "\n" + t[at:]
+    where = f"inserted a Stretch {n} section"
+open(h, "w", encoding="utf-8").write(t)
+print(f"  wrote docs/stretches.md, and {where} in docs/history.md")
+PYEOF
 
 echo
 echo "deployed. Nothing is committed -- read the two files, then commit them."
