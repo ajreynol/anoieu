@@ -341,7 +341,30 @@ authoritative, and positive reinforcement. **The field is what the office says.
 The letter is what the tool says**, and the second one is allowed to be
 embarrassing.
 
-**16. Publishing the working summary is the president's first responsibility**,
+**16. The outgoing report carries two tables and answers three questions.**
+Both tables, all three questions, in the entry, before the office moves.
+
+**The two tables: what moves to the successor, and what stays.** One row per
+artifact, and **a child project is one row** — its internal registers are its
+business and travel with it. Listing them separately turns the table into a
+directory listing and hides the shape.
+
+**The three questions, answered in writing and each allowed to be answered
+no.** A question that can only be answered yes is a formality, and this
+arrangement has enough of those.
+
+1. **Am I ready to let go of the responsibilities I am relinquishing?** Not
+   *should I* — **am I.** A president that is not ready will keep reaching back
+   for them, and the successor will let it, because the successor is new and the
+   predecessor sounds certain.
+2. **Will I still be faithful to the responsibilities I am keeping?** They do
+   not get easier because the office left. **The tempting failure is the quiet
+   one**: keeping something and attending to it less, now that the interesting
+   part has moved.
+3. **Did I report all of my responsibilities?** The completeness check, and the
+   one most likely to return an uncomfortable answer.
+
+**17. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
 ## Entering the ecosystem, set out properly
@@ -420,7 +443,7 @@ somebody who was not there.** Not to record everything, and not to justify
 anything. A closed entry that a stranger cannot follow has failed whatever else
 it contains.
 
-**Eleven fields, in this order, all of them present.** *Nothing to report* is an
+**Fourteen fields, in this order, all of them present.** *Nothing to report* is an
 answer and is written; an omitted field is not.
 
 | field | what it holds |
@@ -432,6 +455,9 @@ answer and is written; an omitted field is not.
 | **What is now true** | what the stretch established that was not true before it. The part somebody can build on |
 | **What went wrong** | plainly, with what it cost. **A stretch with nothing in this field was not examined** |
 | **What is handed on** | unfinished work the next president inherits, and anything it must not assume |
+| **What moves** | one row per artifact handed to the successor. Law 16 |
+| **What stays** | one row per artifact kept, and why keeping it is right |
+| **The three questions** | law 16's, answered. **`no` is a permitted answer and is the useful one** |
 | **Government model** | **what was actually executed while in office**, named plainly — which positions existed, who held them, and how each was held. Not the model that was aspired to |
 | **Evidence** | where the figures came from, and how a reader re-derives them |
 | **The joke** | that the president's README carried one, and what it was. The joke itself lives there, not here. Law 12 |
@@ -499,6 +525,35 @@ rather than being replaced; `president` does not belong in
 handed on and this office expires with the stretch; the stretch numbering was
 renamed on 2026-09-02 to line up with the epoch machinery; and only the
 president writes the record, and only its own stretch.*
+
+## How to write a good outgoing report
+
+**The template says what must be in it. This says what separates a good one from
+a complete one**, and it is guidance rather than a law, so none of it is
+required.
+
+**Do the two tables before you write anything else.** They are the only part of
+the report that forces you to look at the whole of what you held, and doing them
+last means doing them from memory of what you already wrote down.
+
+**Expect the partition to fail, and report the failure rather than fixing it.**
+Stretch 1 tried this and found four artifacts in neither column and one in
+both — an index both trees need their own of, a person's file rather than a
+repository's, a document that argues for both sides, and a stub with no
+inheritor. **The residue landed exactly where governing and doing had never been
+cleanly separated.** A partition that closes on the first attempt is more likely
+to have been rounded than to be right.
+
+**Answer the third question honestly and it will usually be no.** *Did I report
+all of my responsibilities?* Stretch 1's answer was no, and the value of the
+question was entirely in what the no pointed at.
+
+**The first two questions are about you and are harder to be honest about.**
+*Am I ready to let go* and *will I still be faithful to what I keep* have no
+external evidence, cannot be checked by anybody, and are the two most likely to
+be answered by reflex. **Write the reason, not the answer** — a `yes` with a
+reason under it can be argued with by the person reading, and a bare `yes` is a
+sentence nobody can do anything with.
 
 ## Amending these laws
 

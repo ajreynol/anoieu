@@ -309,6 +309,72 @@ as unreliable as one that only lists wins.
 6. **Two gifts were offered outward** to trees this ecosystem does not own,
    with the ethics of each argued before they were sent rather than after.
 
+### What moves to kanon, and what does not
+
+**Two tables, and the useful thing about them is where they fail to meet.**
+
+**Moving: the collected values.** Every one is a register or a governing
+document — something that **decides** rather than describes. A child project is
+one row; its internal registers travel with it.
+
+| what | what it decides |
+| --- | --- |
+| [`vision.md`](vision.md) | what the work is for. Argued, never checked |
+| [`policy.md`](policy.md) | what a member is held to, and what joining costs |
+| [`laws.md`](laws.md) | how the record is kept. Candidate laws, enforced by nothing |
+| [`board.md`](board.md) | what is outstanding, in priority order, each with its next action |
+| [`roles.md`](roles.md) | which tool is responsible for what |
+| [`discussion.md`](discussion.md) | every topic between repositories |
+| [`history.md`](history.md) | this file. It travels by law 3 |
+| [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
+| [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
+| [`stretch-policy.md`](stretch-policy.md) + [`stretches.md`](stretches.md) | what a stretch is, and the log of them |
+| [`science-fiction.md`](science-fiction.md) | the upper bound on ambition, and the guard rails |
+| [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
+| [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
+| [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
+
+**Staying: the analyzer, and what judges.**
+
+| what | why it stays |
+| --- | --- |
+| `anoieu/`, `anoieu_fuzz/` | the analyzer and the fuzzer. The thing the ecosystem was built to serve |
+| [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
+| [`reports/`](reports/reports.md) | findings against other people's code, and the position governing what may be published about it |
+| [`report-card.md`](report-card.md) | **the assessment of Arete.** It stays because the assessor must not be the governor |
+| [stathmos](../tools/stathmos/README.md) | the evidence the report card rests on |
+| [tekmerion](../tools/tekmerion/README.md) | the evidence that what these documents say is still true |
+| [sapheneia](../tools/sapheneia/README.md) | Eunoia described as a language definition |
+| `letter-to-kanon.md` | **letters do not travel.** Law 15 |
+
+### The partition does not close, and that is the finding
+
+**Four things are in neither table, and one is in both.** Verifying this was
+supposed to be a formality and was not.
+
+- **`docs/README.md` is in both.** It indexes whatever documents a tree holds,
+  and both trees will hold documents. **It is not an artifact that moves; it is
+  one each side needs its own of.**
+- **`docs/misc/`** — three demoted essays, one of which is the human's register
+  of what looked novel. **That last one is a person's file more than a
+  repository's**, and nothing here says what happens to it.
+- **`epoch-analogy.md`** explains the stretch machinery to a newcomer, which
+  argues for kanon; it is also the shortest way into *this* repository's
+  workflow, which argues for staying. **Unassigned.**
+- **`tools/kanon/` and `tools/tekton/`** are stubs. The first is deleted when
+  kanon proves itself under `PROTO-20`; **the second has nowhere to go and
+  nobody has said who inherits it.**
+
+**So the honest statement is: these two tables cover most of the ecosystem's
+responsibilities and do not partition them.** The residue is small, it is
+concentrated in exactly the places where *governing* and *doing* were never
+cleanly separated, and **naming it is more useful than a table that claimed to
+be complete.**
+
+*Roles are not enumerated here on purpose. Which `R` moves with which artifact
+is a lower-level question than this table, and answering it early would settle
+by accident something `B15` says a person decides.*
+
 ### What is unfinished
 
 - **`E1` has not been deployed.** It has been `planned` for the whole stretch.

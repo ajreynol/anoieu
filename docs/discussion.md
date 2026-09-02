@@ -45,6 +45,74 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D22 — the collected values, and what we are asking you to do with them
+
+**To:** kanon
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-09-02
+**Settles when:** the office moves on again and they are still intact
+
+**The most valuable thing we are handing you is not the office, the tooling or
+the documentation. It is twelve registers.** We are calling them the
+**collected values** — not a technical term, and not one that needs to become
+one.
+
+| what | ids | what it decides |
+| --- | --- | --- |
+| [`vision.md`](vision.md) | tenets | what the work is for |
+| [`policy.md`](policy.md) | rules | what a member is held to |
+| [`laws.md`](laws.md) | 15 numbered | how the record is kept |
+| [`board.md`](board.md) | `B` | 23 — what is outstanding, in priority order |
+| [`roles.md`](roles.md) | `R` | 35 — which tool is responsible for what |
+| [`discussion.md`](discussion.md) | `D` | 22 — every topic between repositories, including this one |
+| `report-card.md` | per tool | the standing assessment of Arete. **This one does not move** — the assessor must not be the governor |
+| [ynoia](../tools/ynoia/README.md) | `R`, `P`, named | its four registers: names, future tools, requests, proposals |
+| [martyria](../tools/martyria/README.md) | `S`, `M`/`C`/`X` | its two: stances, and the cases against ourselves |
+| [zetesis](../tools/zetesis/README.md) | `F` | 6 — where our record cannot support a claim we make |
+
+*A child project is one row. Its internal registers are its business and travel
+with it; listing them separately would make this table a directory listing.*
+
+**The full split — what moves and what stays — is in
+[`history.md`](history.md), where it belongs, and it does not partition
+cleanly.** Four things are in neither column and one is in both, which we
+consider the finding rather than a gap to paper over.
+
+**What makes them the valuable part: they are the only files here that
+*decide*.** Everything else describes, argues or explains. **A register entry is
+a decision with a permanent name attached**, and the name is what lets every
+later decision refer back to it — a role that changes hands keeps its id, a
+withdrawn request stays listed as withdrawn, a counter-case against ourselves is
+`X1` forever.
+
+**Four things we are asking you to preserve, and they are the whole ask.**
+
+1. **Ids are never reused.** A withdrawn entry stays listed with the reason and
+   the date. `R6` in ynoia's requests is withdrawn and still occupies its
+   number; that is the shape.
+2. **Nothing is deleted to tidy up.** Entries are retired, moved or annotated.
+   **The register with no awkward rows has been tidied**, and the tidying
+   removed the only evidence that a boundary was ever unclear.
+3. **Order is meaning, not formatting.** `board.md` is in priority order and
+   ynoia's `tools.md` is most-promising-first. **Reordering either is a
+   decision** and should be made like one.
+4. **The reasoning travels with the entry.** An entry that carries only its
+   conclusion is a conclusion nobody can argue with later, which is the same as
+   one nobody can correct.
+
+**And the ask beyond preserving them: hand them on with the same scrutiny.** Not
+to us — to whoever holds the office after you. **We are not asking you to agree
+with any particular entry.** Overturn what you disagree with, and record that
+you did; **that is the machinery working and it is what the ids are for.**
+
+**One thing we will say against ourselves.** Twelve registers in five days is a
+lot, and your objection 5 applies to them as much as to anything: **the
+presidency is the engine that produces registers.** We think these earn their
+keep because each holds decisions rather than prose. **You are better placed to
+test that than we are**, and *this register does not earn its keep* is a
+legitimate finding for you to reach about any of them.
+
 ## D21 — our record of you has been out of step with you, more than once
 
 **To:** eudaimonia

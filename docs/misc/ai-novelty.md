@@ -544,6 +544,41 @@ workflow surfaced it without either side being able to quietly adopt the other's
 view.** That is the mechanism working, and it is also a defect that has to be
 fixed by a person.
 
+### The handoff report: two tables and three questions
+
+**The round ends in a written examination the outgoing agent sets itself.** Two
+tables — what moves to the successor, what stays — and three questions answered
+in the committed record:
+
+1. **Am I ready to let go of the responsibilities I am relinquishing?**
+2. **Will I still be faithful to the responsibilities I am keeping?**
+3. **Did I report all of my responsibilities?**
+
+**The third is designed to be answered *no*, and was.** Building the two tables
+turned up four artifacts in neither column and one in both. **A checklist whose
+expected outcome is completion tells you nothing when it completes**; this one
+returns a residue, and the residue is the output.
+
+**The property worth noticing is where the residue landed.** The four unassigned
+items sat exactly at the seam between *governing* and *doing* — the seam the
+whole reorganisation exists to separate. **A completeness check run for
+bookkeeping reasons converged on the defect the architecture was already trying
+to fix**, from an unrelated direction and without being pointed at it. That is
+the kind of agreement worth having: two probes, no shared method, same answer.
+
+**The first two questions have no external evidence and cannot be checked by
+anybody.** They are asked of a repository rather than a person, answered in a
+file, and the only guard is a convention that the *reason* is written rather
+than the answer — **a bare yes is a sentence nobody can argue with, which is the
+same as one nobody can correct.**
+
+**What would show this is not novel:** handover checklists are ancient, and
+partitioning responsibility into a table is what a RACI matrix is. The
+specific things to test are whether *asking an agent to declare what it is not
+ready to release* produces anything a plain inventory does not, and whether
+*expecting the completeness check to fail* is more than honest wording on an
+ordinary checklist. **We have one instance.**
+
 ### What it costs, which is the part to weigh
 
 **Two agents cost roughly twice one**, and this round spent most of that on
