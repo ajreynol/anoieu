@@ -119,6 +119,12 @@ through the interface*; a low one says *and here is the interface*; the commands
 themselves are the leaves. Reading them in one column made a rule about **how
 you may change state** look like a peer of the list of ways to change it.
 
+**Each level links down to the next, and the link is the point.** A high-level
+entry does not restate what its members do — it says *execute a command of this
+kind* and names where that command's meaning is defined. Follow the link and you
+reach one row of one table; follow it back and you reach the general act. **A
+protocol that names no lower level is either a leaf or is missing its link.**
+
 **A general protocol is the meaning a set of specific ones share.** `epoch
 deploy` means one thing exactly — *this stretch is now available for members to
 consume*. `PROTO-14` is what that has in common with `plan`, `stage` and
@@ -149,9 +155,9 @@ table.
 
 | id | protocol | between | defined in |
 | --- | --- | --- | --- |
-| `PROTO-14` | **advance or retreat the stretch** — the verbs that change state, `deploy` being the one that reaches outside | person → system | [`interface.md`](interface.md) |
-| `PROTO-15` | **ask, and change nothing** — the verbs that report, every one free to run | person → system | [`interface.md`](interface.md) |
-| `PROTO-16` | **ask what happened outside us** — currently empty, because what it would mean is undefined | person → members | [`interface.md`](interface.md) |
+| `PROTO-14` | **advance or retreat the stretch** — the verbs that change state, `deploy` being the one that reaches outside | person → system | [the command table](interface.md#the-commands) |
+| `PROTO-15` | **ask, and change nothing** — the verbs that report, every one free to run | person → system | [the command table](interface.md#the-commands) |
+| `PROTO-16` | **ask what happened outside us** — currently empty, because what it would mean is undefined | person → members | [the command table](interface.md#the-commands) |
 
 #### Level 2 — between repositories
 

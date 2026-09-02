@@ -28,6 +28,55 @@ this page is a ticket in anybody's tracker, and nothing here is filed anywhere:
 a request that a member should act on reaches them through
 [`docs/discussion.md`](../../docs/discussion.md), by a person, or not at all.
 
+## R6 — does unambiguous command syntax make an ecosystem efficient?
+
+**What:** the claim that **efficiency here comes from ambiguity falling to zero
+at the bottom of a layered interface** — a conversation is ambiguous, a group of
+commands less so, a table row less again, and the typed token not at all.
+Everything above decomposes into the token. The claim is that this, rather than
+speed of execution, is what makes an agent-run ecosystem fast.
+**Where:** the interface is anoieu's, so the subject is here; whether it wants a
+child project of its own is part of the question rather than settled by it.
+**State:** **open.** Raised by the maintainer, 2026-09-02, who believes it is
+key to the ecosystem's efficiency.
+
+### Why it is worth studying rather than asserting
+
+**The mechanism is plausible and unmeasured.** This repository already holds
+that clear writing is what makes an agent-run ecosystem fast, because the scarce
+resource is attention over text and every ambiguity is a branch discovered late.
+A command set is that argument taken to its limit: **an instruction with no
+readings has no wrong branch.** But nobody here has measured the difference
+between a session driven by verbs and one driven by prose, and the belief is
+currently an intuition with a good story attached.
+
+### What it would ask
+
+- **Where does ambiguity actually cost?** At the top, where somebody does not
+  know what they want; in the middle, choosing a verb; or at the bottom, where
+  the answer is that it costs nothing. The layer that carries the cost is the
+  layer worth investing in, and it is not obvious which.
+- **How many layers.** Four exist by accident rather than by design —
+  conversation, group, row, token. Whether that is the right number, or whether
+  the group layer earns its place at ten commands, is answerable by trying a
+  version without it.
+- **What decomposition can be checked.** Some of it is decidable today: every
+  general protocol has at least one member, every command belongs to exactly one
+  group, and every layer resolves downward to something typeable. **A layer that
+  does not reach a token is decoration**, and that is a check somebody could
+  write rather than a principle to hold.
+- **Where it stops working.** A command set is unambiguous and *narrow*. The
+  interesting question is what falls outside it and what happens to that work —
+  whether the ecosystem quietly stops doing things there is no verb for.
+
+### The honest state of the evidence
+
+**One command set, ten verbs, four of them changing state, two unsupported, and
+no measurement of anything.** The layering was written down after the commands
+existed, so it is a description that has not yet been tested as a design. **The
+first useful result would be a negative one**: a session where the verbs got in
+the way.
+
 ## R5 — a research project on cryptography in an AI-run ecosystem
 
 **What:** where cryptographic primitives actually help an ecosystem like this

@@ -344,6 +344,10 @@ and a new command arrives with its output shape defined, not discovered.
 **This table is the ground truth for the command set.** Everything below that
 lists commands is a copy of it, and `tests/run.py` compares them.
 
+**Every command belongs to exactly one of the three groups defined immediately
+below the table.** The table says what a verb *does*; the group says what kind
+of act it is. Read down for the specific meaning, up for the general one.
+
 ### The three things a command can mean
 
 **The commands group by meaning, and the grouping is the layer above them.** A
@@ -353,23 +357,49 @@ consume**. A general protocol is what a set of those specific meanings has in
 common, and it is what somebody reaches for when they do not yet know which verb
 they want.
 
-**`PROTO-14` — advance or retreat the stretch.** The commands that *change*
-something: `epoch plan`, `epoch stage`, `epoch deploy`, `epoch brainstorm`. Up
-is earned and down is free, and only `epoch deploy` reaches outside this
-repository, which is why it is the one the build system rather than a person has
-the final word on.
+**`PROTO-14` — advance or retreat the stretch.** *This instructs the agent to
+execute a command that changes the stretch's state. **The meaning of each such
+command is defined in [the command table](#the-commands) above** — this protocol
+adds only what they have in common.* Its members are `epoch plan`, `epoch
+stage`, `epoch deploy` and `epoch brainstorm`. What they share: up is earned and
+down is free, and **only `epoch deploy` reaches outside this repository**, which
+is why the build system rather than a person has the final word on it.
 
-**`PROTO-15` — ask, and change nothing.** `epoch status`, `epoch help`,
-`epoch advice`, `epoch dry run`. **Every one of these is free to run**, which is
-the property that makes the set usable: a person can find out where they are
-without deciding anything, and `epoch dry run` deliberately evaluates every gate
-and still writes nothing.
+**`PROTO-15` — ask, and change nothing.** *This instructs the agent to execute
+a command that reports. **The meaning of each is defined in [the command
+table](#the-commands) above**; this protocol adds the guarantee they share.* Its
+members are `epoch status`, `epoch help`, `epoch advice` and `epoch dry run`.
+What they share: **every one is free to run**, which is what makes the set
+usable — a person can find out where they are without deciding anything, and
+`epoch dry run` evaluates every gate and still writes nothing.
 
-**`PROTO-16` — ask what happened outside us.** `epoch double check`, which is
-not yet supported because what it would mean is undefined: a build system's
-output cannot decline, defer or quietly ignore you, and ours can. **The empty
-group is the honest one** — it says the ecosystem has a question it has not
-worked out how to ask.
+**`PROTO-16` — ask what happened outside us.** *This would instruct the agent
+to execute a command asking whether a deployment was received. **The one
+candidate is in [the command table](#the-commands) above** and is marked
+unsupported.* Its only member is `epoch double check`, and it is unsupported
+because what it would mean is undefined: a build system's output cannot decline,
+defer or quietly ignore you, and ours can. **An empty group is the honest
+shape** — it says the ecosystem has a question it has not worked out how to
+ask.
+
+### And below the table: the syntax, where ambiguity reaches zero
+
+**`epoch deploy` is two tokens, typed exactly, and means one thing.** It is not
+a request to be read, weighed or reconstructed — there is nothing in it for an
+agent to interpret, and that is the floor the whole hierarchy stands on.
+
+**Ambiguity falls monotonically as you descend, and that is the design.** A
+conversation is the most ambiguous layer and has four protocols devoted to
+repairing it. A general group narrows it to a kind of act. A table row narrows
+it to one meaning. **The token narrows it to nothing.** Each step up trades
+precision for generality, which is useful when somebody does not yet know what
+they want; each step down trades it back, which is what makes something happen.
+
+**So the layers above decompose into the syntax rather than sitting beside it.**
+`PROTO-14` is not a thing you can run. It resolves to four commands, each of
+which resolves to one row, each of which resolves to a string. **A layer that
+does not resolve downward to a token is decoration**, and the way to check the
+hierarchy is to follow it down until you reach something typeable.
 
 **Adding a verb means choosing its group first.** If it changes state it
 inherits `PROTO-14` and needs the gate discipline; if it only reports it
