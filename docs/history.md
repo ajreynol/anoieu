@@ -113,20 +113,81 @@ described.
 **Real time: 2026-08-29 to 2026-09-02 — five days.** From the first commit in
 this repository to the close of the stretch.
 
-**Membership, in the order it was endowed.**
+**Entering, in the order it happened, from both sides of each handshake.**
 
-| when | who | what changed |
-| --- | --- | --- |
-| 2026-08-29 | **anoieu** | the repository begins; there is no ecosystem yet for it to be a member of |
-| 2026-08-31 11:17 | **dokimasia** | joins as a **member**, the first to do so |
-| 2026-08-31 12:26 | **eudaimonia** | joins as a **member** |
-| 2026-08-31 12:38 | **koine** | joins as a **member**, having first been proposed and accepted as a tool worth building |
-| during the stretch | **ethos** | **candidate.** Asked to join and declined, correctly, on the ground that it is not solely owned by the person asking |
-| during the stretch | **logos** | **candidate** |
-| throughout | **cvc5** | **foundation.** It has joined nothing, and the ecosystem exists to serve it |
+**Two clocks, because they disagree.** *Declared* is when the membership banner
+first appears in **their** repository; *recorded* is when **our** inventory
+began calling them a member.
+
+| when declared | when recorded | who | footing |
+| --- | --- | --- | --- |
+| — | — | **anoieu** | the repository begins 2026-08-29; there is no ecosystem yet to be a member of |
+| **2026-08-31 10:53** | 2026-08-31 11:17 | **dokimasia** | **member.** Declared first, recorded 24 minutes later |
+| 2026-08-31 12:41 | **2026-08-31 12:26** | **eudaimonia** | **member — recorded 15 minutes before the banner existed.** Their commit is titled *"Join EO attempt"* |
+| 2026-08-31 12:50 | **2026-08-31 12:38** | **koine** | **member — recorded 12 minutes before the banner existed** |
+| — | during the stretch | **ethos** | **candidate.** Asked to join and declined, correctly: it is not solely owned by the person asking |
+| — | during the stretch | **logos** | **candidate** |
+| — | throughout | **cvc5** | **foundation.** It has joined nothing, and the ecosystem exists to serve it |
+| — | — | **ethos-eoc** | **child**, through ethos |
+
+**Two of the three members were recorded here before they had declared
+anything.** Not by much — twelve and fifteen minutes — and both declared shortly
+after, so the inventory became true rather than being wrong for long. **It was
+still an assertion about somebody else's tree made ahead of that tree**, and it
+is the kind of thing that is only visible by reading both sides, which is what
+`PROTO-23` now requires.
+
+**The footings are not one thing.** *Member*, *candidate*, *foundation* and
+*child* are four different relationships, and the register that matters is
+`tools/ecosystem.json` rather than the word *membership*. **A fifth,
+`associate`, is drafted and unused** — see `laws.md`, where entering is set out
+properly.
 
 **Three members in eighty-one minutes, and none since.** Everything after
 2026-08-31 lunchtime was done with the membership fixed.
+
+### The commit census
+
+**323 commits across six repositories**, 2026-08-29 to 2026-09-02.
+
+| tool | commits | believed AI-generated |
+| --- | --- | --- |
+| **anoieu** | 186 | **almost all of them** |
+| **eudaimonia** | 68 | unknown to us |
+| **dokimasia** | 43 | unknown to us |
+| **koine** | 13 | unknown to us |
+| **logos** | 10 | unknown to us |
+| **ethos** | 3 | unknown to us |
+
+**The right-hand column is a belief and cannot currently be checked by
+anybody**, which is the finding rather than a caveat on it.
+
+**Every one of those 323 commits is authored by a human.** Across the whole
+ecosystem, **three** carry a `Co-Authored-By` trailer naming an agent, all three
+in this repository. **The record therefore says a person wrote all of it, and
+that is not what happened** — in anoieu nearly every line of prose and code this
+stretch was written by an agent, reviewed by the maintainer, and committed under
+their name. The arrangement is honest at every step and **the artifact it
+produces is not**, because nothing in the commit format was asked to record the
+difference.
+
+**What the joining handshake does and does not tell us.** All three members ran
+`join_eo` and carry the declaration, and the ecosystem's vision states plainly
+that its tools are **mostly written by agents** — so each has adopted a policy
+premised on agent authorship. **That is suggestive and it is not attribution.**
+Adopting a policy is not a claim about who typed anything, and their histories
+carry the same signature ours does: a single human author, no agent trailers.
+**We are unsure, and unsure is the honest entry.**
+
+**We can only say this about ourselves.** The five other columns are marked
+*unknown to us* rather than estimated: we did not write those commits, and
+guessing at how somebody else's tree was produced would be exactly the
+overreach this page exists to avoid.
+
+**This is the figure `laws.md` now requires and epikrisis is asked to produce.**
+It is here, counted by the party it describes, because no epikrisis report
+exists — the same gap recorded below, and a sharper example of it: **a
+self-reported estimate of one's own automation is worth very little.**
 
 ### What the record shows
 
@@ -137,7 +198,8 @@ the only guard this page has against the party describing itself.*
 
 | | |
 | --- | --- |
-| **Commits** | 176 |
+| **Commits, this repository** | 186 |
+| **Commits, ecosystem-wide** | 323 across six repositories |
 | **CI runs** | 171, all from one workflow |
 | **Green** | 37, or **22%** |
 | **Longest unbroken red streak** | **112 runs** |
@@ -224,6 +286,12 @@ stable, the checker is adopted, the tooling runs, and the hardest thing this
 stretch did — getting three repositories to agree to anything at all — is
 already done and does not need doing again.
 
+**One thing to build that we deliberately did not.** There is no way to elect
+anybody, and you will inherit the office without one. **Writing that mechanism
+is yours rather than ours** — an incumbent designing how successors are chosen
+is exactly the document to distrust, and you will be the first holder able to
+write it without that problem.
+
 **What is handed on** is in the section above. This section is not for warnings.
 
 ---
@@ -235,6 +303,24 @@ this tree: three reasons, argued from measurements rather than principle, in
 `S4` of [martyria's stances](../tools/martyria/stances.md). The short form —
 **15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
 this repository, and everything that judges is inside the thing being judged.**
+
+**Power passes to kanon without a formal voting process, and that is a
+choice.** There is no election because there is no mechanism for one, and
+building the mechanism first would cost more than the handoff is worth right
+now. **The reason is speed, and the reason speed matters is visible in the
+numbers on this page**: 15 of the ecosystem's 28 roles sit in this tree, 21 of
+22 board items name this repository, and 186 of the stretch's 323 commits landed
+here. **anoieu is drowning in responsibilities**, and moving one office out is
+worth more today than moving it correctly.
+
+**This is a shortcut and is recorded as one.** A second bestowal is still a
+bestowal; nothing is elected and nothing is in Arete.
+
+**We encourage kanon to establish a democratic voting protocol.** It is the
+obvious first thing a president who inherited its office rather than winning it
+should build, and **kanon is better placed to write it than we are** — a
+protocol for choosing presidents, written by the incumbent, is the one document
+this arrangement should be most suspicious of.
 
 **Expected president: [kanon](../tools/kanon/README.md), by bestowal.** Not
 elected — there is still no mechanism — so Stretch 1 inherits Stretch 0's

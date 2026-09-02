@@ -55,7 +55,15 @@ to be granted, and here it exists because the same person proposed it. It is the
 take back, it rests on nothing but their say-so, and **it is how every position
 here is held today.**
 
-**Elected.** The ecosystem's members choose. **No mechanism for this exists** —
+**Elected.** The ecosystem's members choose. **No mechanism for this exists**,
+and Stretch 0 chose not to build one before handing the office on — **speed
+over process, stated as a trade rather than an oversight**, because one
+repository was holding most of the ecosystem's work and moving an office out
+mattered more than moving it correctly. **The mechanism is owed by whoever holds
+the office next**, and is better written by them than by the incumbent: a
+protocol for choosing presidents, drafted by the current one, is the document
+this arrangement should be most suspicious of. What follows the dash still
+stands — —
 who votes, on what, how often, and what a result binds are all undecided, and
 inventing them before there is anybody to vote would be writing procedure for a
 fiction.
@@ -147,21 +155,97 @@ has understood yet.
 with the change in membership in the order it happened.** Those two before
 anything else.
 
-**8. The president does not analyse GitHub.** epikrisis does, as a service. A
+**8. An entry gives the commit census: how many commits each tool took during
+the stretch, and how many of them are believed to be AI-generated.** Per tool,
+not in total — **a single number for the ecosystem hides the only interesting
+thing about it**, which is that the work is not evenly spread. The second figure
+is a **belief** and is written as one; nobody can currently measure it, which is
+the point of requiring it.
+
+**This is epikrisis's due diligence and not the president's arithmetic.** The
+president asks for it and quotes it. **The figure a president cannot get is a
+figure the ecosystem does not have**, and saying so in the entry is more useful
+than an estimate the author produced about their own work.
+
+**9. The president does not analyse GitHub.** epikrisis does, as a service. A
 president quoting its own count of its own commits is the party being described
 choosing the numbers that describe it.
 
-**9. Every figure must be re-derivable by somebody else** from the repository
+**10. Every figure must be re-derivable by somebody else** from the repository
 and the public run history. A number that only the president can produce does
 not go on the page.
 
-**10. The summary is kept current while the stretch runs.** Not written at the
+**11. The summary is kept current while the stretch runs.** Not written at the
 end from memory. **A summary composed afterwards is a reconstruction**, and a
 reconstruction by the party being described is the weakest document this
 ecosystem could produce.
 
-**11. Publishing the working summary is the president's first responsibility**,
+**12. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
+
+## Entering the ecosystem, set out properly
+
+**This is the part of the record that law 5 protects unconditionally, so it is
+worth being exact about what it records.**
+
+### It is not one relationship, and *membership* is the wrong word for the set
+
+| footing | what it means | what the repository did |
+| --- | --- | --- |
+| **member** | holds the shared policy, runs the checker in its own CI, pins a commit of ours | ran `join_eo` and carries the declaration |
+| **candidate** | we would like it to join and it has not | nothing. **Being a candidate is our opinion, not their act** |
+| **associate** | names the ecosystem and states it is **not** held to the policy | ran `join_eo --soft --affiliated` |
+| **foundation** | the ecosystem exists to serve it and it has joined nothing | nothing, and nothing is asked of it |
+| **child** | reached through its parent, on its parent's footing | nothing of its own |
+
+**Only two of those five are things a repository does.** *Candidate* and
+*foundation* are positions we hold about somebody else, and recording them is
+recording our own state. **Writing them in the same column as *member* is how
+the ecosystem overstates itself**, and a stretch entry should keep them
+distinguishable.
+
+**`associate` is drafted and has never been used.** It exists because a
+repository can be worth naming without being worth binding, and the fact that
+nobody occupies it after five days is itself information.
+
+### Why the footings were defined at all, which the record should carry
+
+**The reasons are not obvious later and are the first thing lost.** Each entry
+should be able to say why a distinction exists, because a footing whose reason
+is forgotten becomes a formality somebody eventually deletes.
+
+- **member**, because a repository that runs our checker has our defects in its
+  build, and that relationship needed a name and a way out of it.
+- **associate**, because asking a repository to be bound in order to be
+  acknowledged is coercive, and there had to be a way to say *this exists and we
+  are not claiming it*.
+- **candidate**, because wanting somebody to join is not the same as their
+  joining, and conflating the two lets an ecosystem count people who never
+  agreed.
+- **foundation**, because cvc5 is the reason for all of this and owes us
+  nothing, and any register that implied otherwise would be false.
+
+### Entering is two events and they do not coincide
+
+**A repository declares, and we record.** These are separate acts in separate
+trees with separate clocks, and **an entry gives both.** Where they disagree,
+the disagreement is the interesting part and is written rather than smoothed.
+
+**A status that was unclear at the time is recorded as unclear.** Not resolved
+in hindsight to whatever it later became. **The instances worth keeping are
+exactly the awkward ones**: recorded before declared, declared and never
+recorded, a join attempted and refused, a repository that behaves like a member
+and has agreed to nothing. **A register with no such rows has been tidied**, and
+the tidying removed the only evidence that the boundary was ever unclear.
+
+### What can and cannot be inferred from a handshake
+
+**Joining says what a repository is held to. It does not say who wrote it.**
+The declaration is one sentence about following a shared policy. **The
+ecosystem's vision states that its tools are mostly written by agents** — so a
+member has adopted a policy premised on agent authorship, which is *suggestive
+and is not attribution.* **Adopting a policy is not a claim about who typed
+anything**, and an entry that treats it as one has invented a measurement.
 
 ## The template a closing president fills in
 
@@ -175,7 +259,7 @@ somebody who was not there.** Not to record everything, and not to justify
 anything. A closed entry that a stranger cannot follow has failed whatever else
 it contains.
 
-**Nine fields, in this order, all of them present.** *Nothing to report* is an
+**Ten fields, in this order, all of them present.** *Nothing to report* is an
 answer and is written; an omitted field is not.
 
 | field | what it holds |
@@ -183,6 +267,7 @@ answer and is written; an omitted field is not.
 | **Purpose** | what the stretch was for, in a sentence. The heading is its three-word form |
 | **Span** | how long it lasted in real human time, first date to last |
 | **Membership** | what changed and when, in the order it happened |
+| **Commits** | how many each tool took, and how many are believed AI-generated. Per tool. From epikrisis |
 | **What is now true** | what the stretch established that was not true before it. The part somebody can build on |
 | **What went wrong** | plainly, with what it cost. **A stretch with nothing in this field was not examined** |
 | **What is handed on** | unfinished work the next president inherits, and anything it must not assume |

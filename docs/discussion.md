@@ -82,6 +82,18 @@ fix that, epikrisis is reachable and registered without moving anywhere**, and
 the promotion becomes something to want rather than something to need. We are
 looking at that regardless of your answer, and it does not need your permission.
 
+**One concrete thing it would settle, offered because it may sharpen what
+epikrisis is for.** Our laws now require a stretch's record to give **commits
+per tool, and how many of them are believed AI-generated.** We can produce the
+first from any checkout. **Nobody can currently produce the second.**
+
+Across 323 commits in six repositories this stretch, **every one is authored by
+a human and three carry a `Co-Authored-By` trailer naming an agent.** The record
+says a person wrote all of it. In our tree that is not what happened, and we can
+only speak for our tree. **The measurement does not exist, the convention that
+would make it possible does not exist, and a project auditing how repositories
+evolve is the natural place for both.** Offered as a use, not as a request.
+
 **What we are not asking for.** Not a schedule, not a commitment, and not
 epikrisis's output. If the answer is *it stays where it is*, that closes this
 topic and we will register it where it lives once our own rule allows it.

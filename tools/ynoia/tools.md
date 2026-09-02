@@ -277,8 +277,14 @@ solved by putting it in the inventory, not by moving it** — which would need o
 validator's rule against a child of a child revisited, and that rule is ours.
 **If registration is enough, the move is a want and not a need**, and this entry
 should be read that way.
-**Today:** running, unregistered, and depended on by a law written in this
-repository before anybody asked it whether it wanted the job.
+**Today:** running, unregistered, and depended on by two laws written in this
+repository before anybody asked it whether it wanted the job. The second is the
+sharper one: **a stretch's record must state how many commits each tool took and
+how many are believed AI-generated**, and the second half of that is a
+measurement nobody in this ecosystem can currently make. Across 323 commits this
+stretch, every one is authored by a human and three name an agent. **A project
+whose subject is how repositories evolve is where that question belongs**, and
+naming it may do more to focus the tool than the promotion would.
 **Why here:** **staged beside `kanon` and `tekton`, and not the same kind of
 item as either.** Those two are `init_eo new` — nothing exists, and starting
 them is ours to do. This is `init_eo from-child`, the work exists, and
