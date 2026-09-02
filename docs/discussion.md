@@ -94,6 +94,44 @@ only speak for our tree. **The measurement does not exist, the convention that
 would make it possible does not exist, and a project auditing how repositories
 evolve is the natural place for both.** Offered as a use, not as a request.
 
+### A research project we would like epikrisis to take: measuring AI authorship
+
+**Stated as a question rather than a specification, because we do not know how
+to do it and suspect the first attempt will be wrong.**
+
+**How much of a repository's history was written by an agent, and how would
+anybody know?**
+
+**What makes it hard, from the little we have looked at.** Trailers are the
+obvious signal and they do not survive contact:
+
+- **They are optional and mostly absent.** 323 commits across our six trees;
+  three trailers.
+- **They are inconsistently spelled** even where they exist. In cvc5's eight
+  commits this stretch the trailer appears under two different capitalisations,
+  and the same model is written two different ways.
+- **They record co-authorship, not automation.** One of cvc5's names a person.
+  A counter that assumes every trailer is an agent is wrong, and one that
+  assumes none is wrong more often.
+- **Absence proves nothing at all.** Our own history is almost entirely
+  agent-written and carries almost no trailers. **The tree with the best
+  attribution in this ecosystem is the one that never joined it.**
+- **And the interesting question is not binary.** *Written by an agent, reviewed
+  by a person, committed under their name* is the common case here and does not
+  fit a yes-or-no column.
+
+**Why it matters more than it sounds.** Our laws now require a stretch's record
+to state how many commits each tool took and **how many are believed
+AI-generated**. We can produce the first from any checkout and **nobody can
+produce the second.** A required field that cannot be measured is either a
+standing admission or a standing invitation to guess, and we would rather it
+were the first only until somebody solves it.
+
+**cvc5 is the case worth studying and the hardest one.** It is large, active,
+has joined nothing, owes us nothing, and is **better at this than we are** — six
+of eight commits naming the model that helped write them. **Whatever the answer
+is, it is not a convention we invented and it should not be one we impose.**
+
 **What we are not asking for.** Not a schedule, not a commitment, and not
 epikrisis's output. If the answer is *it stays where it is*, that closes this
 topic and we will register it where it lives once our own rule allows it.

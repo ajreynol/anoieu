@@ -284,7 +284,12 @@ how many are believed AI-generated**, and the second half of that is a
 measurement nobody in this ecosystem can currently make. Across 323 commits this
 stretch, every one is authored by a human and three name an agent. **A project
 whose subject is how repositories evolve is where that question belongs**, and
-naming it may do more to focus the tool than the promotion would.
+naming it may do more to focus the tool than the promotion would. It is posed as a
+research project in `D20`, with what we already know about why it is hard:
+trailers are optional, inconsistently spelled, record co-authorship rather than
+automation, and **absence proves nothing** — our own history is almost entirely
+agent-written and carries almost none. **The tree with the best attribution in
+this ecosystem is cvc5, which never joined it.**
 **Why here:** **staged beside `kanon` and `tekton`, and not the same kind of
 item as either.** Those two are `init_eo new` — nothing exists, and starting
 them is ours to do. This is `init_eo from-child`, the work exists, and

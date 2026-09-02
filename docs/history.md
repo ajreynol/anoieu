@@ -137,6 +137,20 @@ still an assertion about somebody else's tree made ahead of that tree**, and it
 is the kind of thing that is only visible by reading both sides, which is what
 `PROTO-23` now requires.
 
+**One recorded instance of a status nobody was sure about.** On **2026-09-01
+at 08:43** this repository's inventory recorded **ethos and logos as
+`associate`**. At **08:51** — **seven minutes later** — both were returned to
+`candidate`, in a commit titled *"Associate protocol"*: writing the protocol
+down was what showed they did not meet it. Neither had run
+`join_eo --soft --affiliated`, neither carries an affiliating note, and neither
+had been asked. **Both are still *proposed* for associate and neither is one**,
+which `python3 tools/ecosystem.py --protocol` reports and does not resolve.
+
+**The seven minutes are kept because they are the evidence.** Nothing outside
+this repository saw it, nothing depended on it, and it would cost one line to
+delete. **A register with no rows like this one has been tidied**, and the
+tidying is what removes the proof that a boundary was ever unclear.
+
 **The footings are not one thing.** *Member*, *candidate*, *foundation* and
 *child* are four different relationships, and the register that matters is
 `tools/ecosystem.json` rather than the word *membership*. **A fifth,
@@ -148,7 +162,7 @@ properly.
 
 ### The commit census
 
-**323 commits across six repositories**, 2026-08-29 to 2026-09-02.
+**331 commits across seven repositories**, 2026-08-29 to 2026-09-02.
 
 | tool | commits | believed AI-generated |
 | --- | --- | --- |
@@ -158,11 +172,30 @@ properly.
 | **koine** | 13 | unknown to us |
 | **logos** | 10 | unknown to us |
 | **ethos** | 3 | unknown to us |
+| **cvc5** | 8 | **6 of 8 say so themselves** |
 
 **The right-hand column is a belief and cannot currently be checked by
 anybody**, which is the finding rather than a caveat on it.
 
-**Every one of those 323 commits is authored by a human.** Across the whole
+**cvc5 is the row to read first, and it is not flattering to us.** It has
+joined nothing, is held to none of our policy, and has never been asked to
+record anything. **Six of its eight commits this stretch name the AI that helped
+write them — by vendor, model and version, in a co-author trailer in the commit
+message.** Three different models appear across those six. Across our own 323
+commits, **three** carry any such trailer at all.
+
+*The models are not named here because this repository's own checker forbids any
+document but the policy from naming a specific AI, and that rule is right: it
+keeps the documentation from reading as written for one vendor. **The finding is
+that cvc5 names them, not which ones.***
+
+**The project we exist to serve is already doing the thing our ethics documents
+argue for, without our documents.** We wrote an identify protocol requiring an
+agent to name itself in conversation; cvc5 puts it in the permanent record,
+where it survives the conversation. **That is the stronger practice and we did
+not invent it.**
+
+**Every one of our 323 commits is authored by a human.** Across the whole
 ecosystem, **three** carry a `Co-Authored-By` trailer naming an agent, all three
 in this repository. **The record therefore says a person wrote all of it, and
 that is not what happened** — in anoieu nearly every line of prose and code this
