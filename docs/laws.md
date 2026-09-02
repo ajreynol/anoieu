@@ -346,6 +346,45 @@ partly to make that hard. **If a field needs more than a short paragraph, the
 thing it describes belongs in a document of its own and this entry links to
 it.**
 
+## What `history.md` is, and is not
+
+**It is the record and this page is the rules.** The two were written into the
+same file until 2026-09-02 and are now apart: **a president reading its
+obligations should not have to skip past somebody else's stretch to find
+them**, and a reader wanting to know what happened should not have to skip past
+procedure.
+
+**It is the sibling of [`postmortem.md`](reports/postmortem.md).** That page
+asks what a *run of the reporting loop* did and what it cost; `history.md` asks
+what the *repository* did. **Neither is the report card** —
+[`report-card.md`](report-card.md) grades and stays with anoieu whoever is
+president; `history.md` only records and travels with the office.
+
+**It is not a changelog.** The commits are the changelog and are better at it.
+It records what a reader could not reconstruct from them: how often the build
+was broken, for how long, and what nobody was watching.
+
+**And it is not a defence.** A page written by the party it describes has an
+obvious failure mode, and law 10 is the only guard against it: **every number on
+it is one somebody else can recompute.**
+
+## What these laws do not yet settle
+
+1. **Asking epikrisis for the analysis this page should be quoting.** Stretch 1
+   counted its own commits and its own CI runs, which is the arrangement working
+   backwards. **The first thing Stretch 2 should have is somebody else's account
+   of Stretch 1.**
+2. **What happens if a stretch has no president**, or if the expected one never
+   exists. Nothing here says who holds the file then, and the travel rule
+   assumes a successor.
+
+*Four earlier questions were settled and are not listed: an entry accumulates
+rather than being replaced; `president` does not belong in
+[`roles.md`](roles.md), because that register holds responsibilities kept until
+handed on and this office expires with the stretch; the stretch numbering was
+renamed on 2026-09-02 to line up with the epoch machinery; and only the
+president writes the record, and only its own stretch.*
+
 ## Amending these laws
 
 **By the maintainer, and by nobody else, until a tool holds this page.** A

@@ -1,60 +1,12 @@
 # The history
 
-**What this repository actually did on GitHub during the current stretch, in
-one page.** A stretch is the span between one global announcement and the next;
-this page carries the current one and is replaced when it ends.
+**What previous presidents did, and what the current one is doing.** One
+section per stretch, oldest first, and nothing else.
 
-## The file travels with the presidency
-
-**This page lives in the president's repository, and moves when the presidency
-does.** It is not anoieu's document; it is the president's, and anoieu holds it
-because anoieu is president. When the office moves, the file goes with it —
-**history travels to the president.**
-
-**Only the president may modify this file.** Not a member, not a child project,
-not a contributor to the president's tree who is not acting for it.
-
-**A president may only write the stretch that describes it.** Earlier entries
-are read-only, and the arrangement enforces itself rather than relying on
-restraint: **once the file has travelled, your stretch is in somebody else's
-repository and you cannot reach it.** That is the point of moving it rather than
-copying it.
-
-## The president does not analyse GitHub
-
-**[epikrisis](https://github.com/ajreynol/eudaimonia) does, as a service.** It
-audits how repositories have changed over time, with every claim resting on
-evidence a reader can re-derive, and it asked for that responsibility rather
-than for a rank. **It is the ecosystem's only source of GitHub history
-analysis**, and a president writing this page should ask it rather than count
-things itself.
-
-**A president counting its own commits is the weakest version of this
-document**, and not only for effort: the party being described should not also
-be the party choosing which numbers describe it.
-
-*epikrisis is a child project inside a child project in eudaimonia's tree, which
-is a shape our inventory's validator rejects. Nothing fails today because it is
-not in the inventory, and it is not ours to settle.*
-
-## The shape of a stretch entry
-
-**The heading is the purpose, not a description of it.** *Initialization* says
-what Stretch 1 was for. A heading that summarises what happened has been written
-after the fact and has lost the thing worth recording.
-
-**Each stretch is labelled in at most three words.** A soft constraint, and the
-discipline it buys is that a stretch which cannot be named in three words has
-not been understood yet.
-
----
-
-**It is the sibling of [`postmortem.md`](reports/postmortem.md) and holds the
-other half.** That page asks what a *run of the reporting loop* did and what it
-cost. This one asks what the *repository* did: how much was committed, whether
-the build was green, and what happened that a reader reconstructing this from
-commits would otherwise have to infer. **Neither is the report card** —
-[`report-card.md`](report-card.md) grades, and this only records.
+**No procedure lives here.** How this file is kept — who may write it, what a
+stretch entry must contain, where it goes when the office changes hands — is in
+[`laws.md`](laws.md). **This page is the record; that page is the rules**, and
+the two were tangled together until 2026-09-02.
 
 ---
 
@@ -436,40 +388,3 @@ its own history after that**, which is the arrangement working rather than a
 loss.
 
 ---
-
-## What this page is not
-
-**Not a changelog.** The commits are the changelog and are better at it. This
-records behaviour a reader could not reconstruct from them: how often the build
-was broken, for how long, and what nobody was watching.
-
-**Not a defence.** A page written by the party it describes has an obvious
-failure mode, and the only guard offered here is that **every number on it is
-one somebody else can recompute** from the repository and from the public run
-history.
-
-## Open, for the maintenance policy
-
-**The rules for keeping this page are in [`laws.md`](laws.md).** What is below
-is what those laws do not yet settle.
-
-1. ~~Whether a stretch's entry is replaced or accumulated.~~ **Settled:** it
-   accumulates, and the whole file travels to the next president.
-2. ~~Whether *president* belongs in [`roles.md`](roles.md).~~ **Settled: no.**
-   That register holds responsibilities handed between tools and kept until
-   handed on. **The presidency expires with the stretch and is not handed off**,
-   and putting a term-limited office in a register of standing responsibilities
-   would make both harder to read. It is governed by
-   [`laws.md`](laws.md) instead.
-3. ~~Whether the numbering is right.~~ **Settled 2026-09-02 by renaming.**
-   Stretch 0 is the period before anoieu launched, Stretch 1 is anoieu's
-   presidency, Stretch 2 is kanon's. The scheme now lines up with the epoch
-   machinery's `E1` rather than running one ahead of it.
-4. ~~Who writes it, and whether the president may.~~ **Settled:** only the
-   president writes it, and only its own stretch.
-5. **Asking epikrisis for the analysis this page should be quoting.** Stretch 1
-   counted its own commits and its own CI runs, which is the arrangement
-   working backwards. **The first thing Stretch 2 should have is somebody
-   else's account of Stretch 1.**
-6. **What happens if a stretch has no president**, or if the expected one never
-   exists. Nothing in the arrangement says who holds the file then.
