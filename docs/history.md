@@ -190,15 +190,17 @@ history.
 
 ## Open, for the maintenance policy
 
-**Deliberately unanswered, pending the policy that comes next.**
+**The rules for keeping this page are in [`laws.md`](laws.md).** What is below
+is what those laws do not yet settle.
 
 1. ~~Whether a stretch's entry is replaced or accumulated.~~ **Settled:** it
    accumulates, and the whole file travels to the next president.
-2. **Whether *president* belongs in [`roles.md`](roles.md)**, which is the
-   register of which tool is responsible for what. It is a role, it is held by a
-   tool, and it is not in there — and unlike every other role in that register
-   it is **held for a stretch rather than until it is handed off**, which the
-   register has no field for.
+2. ~~Whether *president* belongs in [`roles.md`](roles.md).~~ **Settled: no.**
+   That register holds responsibilities handed between tools and kept until
+   handed on. **The presidency expires with the stretch and is not handed off**,
+   and putting a term-limited office in a register of standing responsibilities
+   would make both harder to read. It is governed by
+   [`laws.md`](laws.md) instead.
 3. **Whether the numbering is right.** This is called Stretch 0 because nothing
    has been announced yet, while the epoch machinery calls the work in progress
    `E1`. Two numbering schemes for one span is the shape of a defect.

@@ -86,6 +86,11 @@ including the two where anything actually gets built. Distinct from
 [`usage.md`](usage.md), which is the analyzer's command line, and from
 [`coherence.md`](coherence.md), which is the standards the work is held to.
 
+[`laws.md`](laws.md) is the short page governing [`history.md`](history.md) and
+nothing else: who may write it, what they may write, and what travels when the
+presidency changes hands. **It is currently held by the party it binds**, which
+it says about itself, and a tool should hold it eventually.
+
 [`history.md`](history.md) is **what this repository did on GitHub during the
 current stretch**, in one page: how much was committed, how often the build was
 green, and who was driving. It names the ecosystem's **president** for the
