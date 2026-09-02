@@ -14,6 +14,12 @@ that is not also the tool that files findings against members. See
 it holds no claim on the name — the name stays free for whoever builds it. It
 has no code, no plan and no schedule.
 
+**It is not an island, and this says so.** CI names this directory: a job
+called `Ready — init_eo kanon` asserts the stub is still here, so that opening
+this repository on the web says what the next step is. **The exception ends when
+the stub does** — deleting this directory turns that job red, and the only
+repair is to delete the job with it.
+
 Deleting it is governed by the handoff protocol in
 [`coherence.md`](../../docs/coherence.md#proto-20--the-handoff-protocol).
 **Deadline: it does not survive the deployment of stretch E1.**

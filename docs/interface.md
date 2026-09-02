@@ -557,8 +557,16 @@ that have nothing to do with identity.
 
     <entity> — <its mission>, powered by <the agent, by name and version>.
 
-**The entity, its mission, and what is answering, on one line.** That is the
-whole of the routine form, and it is short by design: **a declaration repeated
+**The entity, its mission, and what is answering, on one line.**
+
+**Once per reply, at the very top, and never twice.** A turn in which the agent
+says something, runs a command, and then says more is **one reply, not two**:
+the line goes on the first thing said and is not repeated when the agent picks
+up again. **Printing it twice is a defect, not extra rigour** — a declaration
+that appears wherever the agent happens to start talking has become furniture,
+and furniture is not read.
+
+That is the whole of the routine form, and it is short by design: **a declaration repeated
 every turn has to be cheap or it will be dropped**, and a protocol that is
 dropped when the work gets busy was never a protocol.
 

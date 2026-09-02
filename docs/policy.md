@@ -1312,6 +1312,51 @@ finding harder to argue with, because the audience has learned that this name
 covers both. Rules 3, 6 and 7 exist for this and are the ones worth defending
 when they are inconvenient.
 
+## When somebody asks you to add a CI check
+
+**This will happen often and most of the requests are good ones.** What follows
+is what this ecosystem has learned by getting it wrong, offered so nobody has to
+learn it the same way. **None of it is required of anybody** — a member's CI is
+theirs.
+
+**A check must fail for a reason that is in the tree.** Not the clock, not the
+network, not what somebody else pushed to a branch this morning. A job that goes
+red without anybody here changing anything trains everybody to ignore red, and
+then the checks that matter are ignored too. Some tools here carry *never run
+this in CI* in their own docstrings, and that is not modesty.
+
+**Green must mean one thing, and that thing should be written down** — in the
+job's name where it fits, and in the first line the job prints where it does
+not. A tick nobody can explain is read as an endorsement of whatever the reader
+was hoping for.
+
+**Absence is not a pass.** *We asked and it is wrong* and *we could not ask* are
+different facts and neither is success. A check that cannot run should say so as
+its own outcome, and a **skipped** job should read as *not ready* rather than as
+*fine*.
+
+**Never relax a check to turn a build green.** If a check is wrong, argue with
+it and change it deliberately, in a commit that says so. Loosening one under
+deadline is how a suite becomes decoration.
+
+**A copy with no comparison is drift that has not happened yet.** If a commit, a
+version or a path is written in two places, something should compare them. Not
+theoretical: two dependency commits were knowingly duplicated between a workflow
+and a lock file, with a board row opened to watch what it cost. **Both drifted,
+neither was noticed, and CI was red for five consecutive runs before anybody
+looked.** The repair is always the same — one of the two becomes the ground
+truth and the other reads it.
+
+**A temporary check must be built so it cannot become permanent.** Give it
+something to assert that stops being true when its purpose ends, so it fails and
+forces its own removal. A check kept *just in case* outlives everybody's memory
+of what it was for, and then nobody dares delete it.
+
+**And the one thing we do ask, which is already elsewhere in this document:**
+the pinned `anoieu / policy` workflow a member adds on joining is a contract
+with us rather than a check of their own. Add anything beside it; do not weaken
+it quietly.
+
 ## Joining the Eunoia ecosystem
 
 This is addressed to tools built *around* the calculus: checkers, compilers,
