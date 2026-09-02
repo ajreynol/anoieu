@@ -410,6 +410,25 @@ def cmd_verify(args) -> int:
     if not records:
         print("-- nothing is promoted, so there is nothing to verify")
         return 0
+
+    # Refuse rather than mis-compare. A proof case run without the signature it
+    # was recorded under is a *different measurement*, not a changed verdict:
+    # every rule in it is an unknown symbol, every checker refuses, and the
+    # comparison reports `CHANGED   was accept, is reject` -- which reads as the
+    # checker having moved under us and is the most expensive wrong answer this
+    # command can give. It gave exactly that answer in CI for weeks, because the
+    # job that runs it checks out ethos and not cvc5.
+    proofs = [r for r in records if r.get("mode", "proof") == "proof"]
+    if proofs and not _find_signature(getattr(args, "signature", "") or ""):
+        print(f"-- verify: no CPC signature, and {len(proofs)} of {len(records)} "
+              "reproducer(s) are proof cases")
+        print("   A proof case checked without its signature is a different "
+              "measurement, not a moved verdict.")
+        print("   Name one with CPC=<path-to>/Cpc.eo, or run `python3 "
+              "tools/deps.py` so that")
+        print(f"   {SIGNATURE_GUESSES[0]} exists.")
+        return 2
+
     changed = compared = 0
     for record in records:
         args.mode = record.get("mode", "proof")

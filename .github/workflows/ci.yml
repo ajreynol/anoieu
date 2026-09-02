@@ -149,6 +149,24 @@ jobs:
         run: |
           cmake -S corpus/ethos -B corpus/ethos/build -DCMAKE_BUILD_TYPE=Release
           cmake --build corpus/ethos/build -j"$(nproc)"
+      # The signature the proof reproducers were recorded under. Without it
+      # ethos is handed a proof whose every rule is an unknown symbol, refuses
+      # all of them, and `verify` reported that as ethos having *changed* --
+      # which is what this job did on every run for weeks. Sparse, because the
+      # only thing wanted is `proofs/eo`, and pinned to a commit for the same
+      # reason the ethos checkout above is.
+      #
+      # KNOWN DUPLICATE, same as the ethos pin and for the same reason:
+      # tools/deps.lock already records this commit and nothing compares the
+      # two. B20 carries that, and this adds a second instance to it rather
+      # than a second problem.
+      - name: check out the CPC signature
+        uses: actions/checkout@v4
+        with:
+          repository: cvc5/cvc5
+          ref: aee874240419269019507d47d687f01d871587f5
+          path: deps/cvc5
+          sparse-checkout: proofs/eo
       - name: the desugarer agrees with the parser
         run: |
           ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle

@@ -107,6 +107,14 @@ than a defect. Which repositories are actually contacted, and whether any are, i
 a person's decision: see *Who gets pinged* in
 [`policy.md`](policy.md#who-gets-pinged).
 
+[`methodology.md`](methodology.md) is the **distribution mechanism**: how a
+practice gets from this repository into a tree whose owner did not write it, and
+at what rate. The worked case is the one thing here that has actually crossed
+the boundary — the policy checker, fetched at a commit a member pins and runs
+against its own tree — and the rest is what generalising that to a command line
+would take, as a checklist rather than a plan. Nothing of it is built beyond the
+one program, and the page says so.
+
 [`science-fiction.md`](science-fiction.md) is **experimental** and is the only
 page here that sets a limit rather than a direction: **the furthest this
 ecosystem allows itself to plan**, with the contradiction against

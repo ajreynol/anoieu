@@ -87,7 +87,8 @@ version in every tree, which makes the pin a soname rather than only a lockfile.
 ethos revision written in two places with nothing comparing them is a duplicate
 definition, which a linker fails the build on. A prompt arriving in the wrong one
 of several deliberately-alike trees is the wrong library on the search path, and
-[`../scripts/repos.local`](../scripts/repos.local) is that search path.
+`scripts/repos.local` is that search path — untracked by design, so this
+sentence names it and does not link to it.
 
 **Half of it already exists and is not called this.** The comparisons in
 `tests/run.py` — the prompts against their document, the `epoch help` surfaces

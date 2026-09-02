@@ -89,6 +89,34 @@ a description of one tree's habits wearing the word *policy*.
   time, by a person, and the cost of that is the feature.
 - No claim anywhere that any of this *scales*.
 
+### We always come in peace
+
+**Whatever the scale, the posture toward another tree does not change**, and
+this is the one thing in the scenario worth keeping when the rest of it is
+discarded.
+
+It is not sentiment. It is the operational summary of constraints already in
+force, and every one of them is checkable: nothing here writes to a remote,
+opens an issue, or pushes; every message crosses a boundary in a person's hands;
+adoption is a decision by somebody with standing to make it; `deployed` is not
+`installed`; **a member who reads a contract and declines it has done nothing
+wrong**; and we do not score, order or badge anybody else's repository.
+
+The reason it belongs in *this* scenario rather than in the other one is that
+Utopia is where it would be abandoned. A path to universal adoption exists that
+runs through pressure — a check that is hard to turn off, a badge that is
+awkward to remove, a default that is expensive to decline, a score somebody
+would rather not be low on. Each of those is individually reasonable and each is
+a small conversion of *offered* into *imposed*. **We come in peace is the rule
+that forbids the whole family**, which is why it is worth a name.
+
+Note the asymmetry against the section below, which is deliberate and not a
+contradiction: **we do not trust what arrives, and we do not press what we
+arrive at.** Distrust is what we owe ourselves; peace is what we owe everybody
+else. An ecosystem that got those the other way round would be both credulous
+and pushy, which is a fair description of most of what arrives in a pull
+request.
+
 **What would move the line:** not more members. One member whose tree is
 genuinely unlike ours passing the checker without us changing the checker. That
 is cheap, it has not happened, and it is worth more than any number of

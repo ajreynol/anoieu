@@ -739,3 +739,51 @@ this ecosystem has already been given from outside is that governance is the
 cheapest thing here to produce and that it has outrun the trees it governs. A stretch is a governance artifact. The rate at which they are declared is therefore
 evidence about that criticism, in whichever direction it happens to point, and
 [`stretches.md`](stretches.md) is where somebody can count them.
+
+## Go only as fast as you understand
+
+**No stretch has ever been deployed.** Not one. The reason is worth stating
+plainly because it reads as laziness otherwise: it is not that nobody got round
+to it. It is that we were not sure the level of abstraction was right, and
+deploying to other people's trees while unsure what you are abstracting spends
+somebody else's morning on your uncertainty. There is no shortage of research
+worth indulging in. The decision, taken deliberately, was to go slowly and be
+sure.
+
+The principle that comes out of it is a safeguard rather than an aspiration:
+
+> **Go only as fast as you understand.**
+
+**It is a limit on comprehension, not on elapsed time.** The question worth
+asking before a stretch moves is not *has enough time passed* or *is the build
+green* — the build being green is necessary and says nothing about this — but
+**can a person hold what changed in their head.** A week spent on something
+nobody can explain afterwards is fast in the only sense that matters, and
+badly.
+
+**Scope is the lever, and a stretch is where it is pulled.** A small stretch may
+move quickly and should: if what it changes is reasonable to understand, waiting
+adds nothing and costs the visibility that made it small. A large one may not,
+however green it is. This is what makes the principle operational rather than a
+mood — **a stretch is a property of a git history**, a span between two
+announcements, so its size is something somebody can measure rather than
+something they have to feel.
+
+**What this asks of the build system, and does not yet get.** It should be the
+thing that tells us we are moving too fast, and today it cannot: every gate it
+evaluates asks whether the *tree* is healthy, and none asks whether the *change*
+is comprehensible. The gap is the honest state of it. What would close it is a
+gate that reports what a stretch changed and how much — and **refuses nothing**,
+because comprehensible is a judgement and judgement may never acquire a checker.
+Report it, and let a person decide. That is the same split this ecosystem draws
+everywhere else, applied to rate.
+
+**And it is not a licence to be slow.** *We were not sure* has to be about
+something nameable, or it is an excuse wearing a principle's clothes. Not
+understanding something yet is a reason to slow down **and** a thing to go and
+fix; a stretch held back for a reason nobody can state is not caution, it is the
+diagnosis-without-treatment failure this ecosystem is already criticised for.
+
+[`science-fiction.md`](science-fiction.md) is the sibling rule and the two are
+easy to confuse. That page limits how far ahead we may **plan**; this limits how
+fast we may **move**. Neither limits how ambitious the work is allowed to be.
