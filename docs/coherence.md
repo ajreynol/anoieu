@@ -240,6 +240,11 @@ This one starts with a stranger.*
 Where a rule has two sides, both get written and both get an id: `PROTO-n` in
 the register above, `INST-n` in [`instructions.md`](instructions.md).
 
+**Not every instruction has a protocol.** Some are addressed to a person and to
+nobody else — `INST-3`, *do not outrun your own understanding*, is one — and
+writing an agent-facing half would move a judgement to the party that cannot
+make it. **A missing counterpart is a decision, not a gap.**
+
 **They are written in opposite registers.** A protocol closes every edge,
 because a gap is a hole an agent falls through in good faith. An instruction
 stays short, because one that is not read is not followed. **An instruction is

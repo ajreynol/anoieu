@@ -15,6 +15,7 @@ addressed is a person at all.
 | --- | --- |
 | [`INST-1`](#inst-1--your-working-window) | set your working hours, once, and let us hold you to them |
 | [`INST-2`](#inst-2--ask-who-you-are-talking-to) | type *identify* whenever you want to know which tool the agent thinks it is working for |
+| [`INST-3`](#inst-3--do-not-outrun-your-own-understanding) | do not push development faster than you understand it |
 
 Ids stay put. A withdrawn one stays listed, so nobody reuses the number.
 
@@ -84,3 +85,24 @@ checkout it is working in and the mission quoted from that tool's own files.
 anything, and you are the only one in a position to correct it. The repositories
 here look alike, and an agent in the wrong one is not visibly confused — it is
 confidently helpful in the wrong place.
+
+---
+
+## `INST-3` — do not outrun your own understanding
+
+**Do not push development faster than you understand it.** Not *faster than it
+can be built* — an agent will always be able to build faster than you can
+follow, and that is not the constraint. **The constraint is you.**
+
+**This is an ethical line and not only a practical one.** Work you have not
+understood is work you cannot be said to have decided on, and at some point the
+record stops being a record of what you chose.
+
+**In practice:** when something has been built that you have not had explained,
+**ask for the explanation before asking for the next thing.** It is always
+cheaper than it looks, and the debt compounds — each unreviewed piece makes the
+next one harder to review.
+
+*This instruction has no matching protocol, deliberately. It is addressed to
+you, and turning it into a rule for the agent would move the judgement to the
+party that cannot make it.*

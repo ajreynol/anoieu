@@ -559,8 +559,18 @@ that have nothing to do with identity.
 
 **The entity, its mission, and what is answering, on one line.**
 
-**The unit is the prompt, not the turn. One identification per prompt, on the
-first thing said in reply to it.** That single rule settles both ways of getting
+**The line has a name: the identify header.** It is what the agent prints
+first, and naming it is worth a sentence because "the identification" and "the
+line" were being used for both the rule and its output.
+
+**The unit is the prompt, not the turn. One header per prompt, on the first
+text the agent emits in reply to it.**
+
+**The test is mechanical and leaves nothing to judgement: the header goes on the
+first text and on no later text.** If the agent says something before running a
+command, that preamble carries it and **the answer that follows does not**. If
+the agent runs a command before saying anything, the answer carries it. **There
+is no version where both do.** That single rule settles both ways of getting
 this wrong, and the count is mechanical: **at the end of a session, the number
 of identifications and the number of prompts are equal.**
 
@@ -570,7 +580,9 @@ of identifications and the number of prompts are equal.**
 - **Not again for the same prompt.** A turn in which the agent speaks, runs
   something, and speaks again is one reply. **Printing it twice is a defect, not
   extra rigour** — a declaration that appears wherever the agent happens to
-  start talking has become furniture, and furniture is not read.
+  start talking has become furniture, and furniture is not read. **The failure
+  mode is specific and repeated**: the agent writes a preamble, works, and then
+  starts the answer as though the answer were the beginning.
 - **A prompt that arrives mid-turn is a prompt.** When somebody interrupts with
   something new while the agent is working, the next thing said carries the line
   again, because it is the first thing said in reply to *that*. **This is the
