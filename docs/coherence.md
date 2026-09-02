@@ -128,7 +128,7 @@ named.
 | `PROTO-11` | the documentation handoff — a launch moves a description to its source | page → page | this page |
 | `PROTO-12` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
 | `PROTO-13` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
-| `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member | agent → human | [`interface.md`](interface.md) |
+| `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member and changes nothing in anybody's tree | agent → human | [`interface.md`](interface.md) |
 | `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
 | `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. CI green on both sides, non-negotiable; any hint of fraud, reject | spawned repo → anoieu | this page |
 | `PROTO-21` | **the identify protocol** — **every** response opens with the entity the agent acts for, its mission, and **which AI is answering, by name**. The long form at session start and on request | agent → human | [`interface.md`](interface.md) |
@@ -136,6 +136,7 @@ named.
 | `PROTO-23` | **the downstream refresh** — fetch and read another repository before making a claim about it, and say how far behind you were | us → downstream | this page |
 | `PROTO-24` | **the upstream refresh** — a member makes its copy of the shared arrangements current before relying on them, and only onto a green commit | member → us | this page |
 | `PROTO-25` | **the joke protocol** — humour lives on the president's front page and nowhere a machine parses or a stranger reads for instructions. Any tool may say *that's not funny*, meaning *you are confusing everyone*, and it ends there | any tool → any tool | this page |
+| `PROTO-26` | **transferring roles** — a role moves when it is marked, the target exists, and **both** repositories' CI is green. Theirs is a person's check, not a job | us → another project | this page |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it
@@ -144,10 +145,52 @@ wants to keep working, is not a rule.
 
 **`PROTO-18` is the first entry addressed to every member rather than to
 anoieu**, because the thing it is about — a person working at four in the
-morning — does not happen in one repository, so a rule held in one repository
-cannot reach it. The mechanism is maintained by
+morning — does not happen in one repository. **It is also the entry that asks
+least of them: its whole content is one sentence said to a person, and a member
+that honours it changes no file.** The mechanism is maintained by
 [martyria](../tools/martyria/README.md), which is where its ethics are argued
 and its schedule lives.
+
+## `PROTO-26` — transferring roles to another project
+
+**Roles move when both repositories are in order, and *both* is the word doing
+the work.** Ours and theirs. The check is `tools/transfer_check.py`, and CI
+carries it as a **report** rather than a gate.
+
+### What has to be true
+
+1. **The role is marked.** A role destined for another project carries a
+   `Destined for` line in [`roles.md`](roles.md). **A transfer nobody wrote down
+   is an intention, not a pending move**, and the marker is what the check
+   reads.
+2. **The target exists.** In the inventory, with a repository. **A stub is not
+   a destination** — it is a note saying one is expected.
+3. **Our CI is green**, which the job enforces by depending on the others: it
+   cannot report while anything else is red.
+4. **Their CI is green**, which **cannot be established from here.**
+
+### Why the fourth is a person's step and not a job
+
+**Asking GitHub about somebody else's build from inside our build would make our
+CI fail for reasons in somebody else's tree.** [`policy.md`](policy.md) names
+that as how a suite becomes noise, and it applies to us first. So the check
+reports *unverified from here* and a person runs it with `--online` before
+anything moves.
+
+**Unverified is its own outcome and is not a pass**, with its own exit code, for
+the same reason the bump gate has three: *we asked and it is wrong* and *we
+could not ask* are different facts.
+
+### Why it reports rather than gates
+
+**Every target is *not ready* today** — neither kanon nor tekton exists — so a
+job that failed on that would be red for a reason nobody can fix this week.
+**A check that is red for months trains everybody to ignore red**, and then the
+checks that matter are ignored too. The job is named for what it does: it
+produces a report, and **a green tick on it means only that we looked.**
+
+**It becomes a gate the day it can pass**, and that day is the day the roles
+move.
 
 ## `PROTO-25` — the joke protocol
 

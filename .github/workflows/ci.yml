@@ -259,6 +259,24 @@ jobs:
       - name: tekton is ready to be started
         run: python3 tools/ready_check.py tekton
 
+  # Reports, never gates. Every target is *not ready* today -- neither exists --
+  # so a job that failed on that would be red for a reason nobody can fix this
+  # week, which docs/policy.md names as how a suite becomes noise. The name
+  # promises a report and the output is the answer, so a green tick here means
+  # "we looked", which is all a reader should read into it.
+  transfer-readiness:
+    name: Transfer readiness (report)
+    needs: [suites, policy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: can roles move yet
+        run: |
+          for t in kanon tekton; do
+            python3 tools/transfer_check.py "$t" || true
+            echo
+          done
+
   refresh:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest

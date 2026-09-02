@@ -34,10 +34,10 @@
 # nothing to say, and the order matters: knowing what you are building is what
 # makes the rest of it decidable later.
 #
-# The one exception is not about the repository at all: the prompt carries the
-# ecosystem's ask that an agent honour the hours the human works, from the first
-# commit, as a habit rather than as machinery. It is deliberately the last thing
-# said and the only thing said twice across the three scripts.
+# It briefly carried the ecosystem's working-hours ask as well. That was removed:
+# it has no bearing on starting a repository, and a bootstrap prompt is not the
+# place to introduce a policy whose whole content is *tell the person to take a
+# break in the evening*.
 
 set -euo pipefail
 
@@ -227,33 +227,6 @@ now rather than where it lived. And any role the child held in anoieu's
 decision recorded against it survive the move.
 PROMPT_END
 
-read -r -d '' HOURS <<'PROMPT_END' || true
-**One thing does apply from the first minute, and it is not about this
-repository.** Everything above says comply with nothing, and that still holds:
-it is about the tree, and the tree has nothing in it yet. This is about the
-person you are working with.
-
-The Eunoia ecosystem asks every tool in it, from its first commit, to honour the
-hours the human has said they work. There is a protocol for agents and a short
-instruction for people, and they are two halves of one arrangement:
-
-  https://github.com/ajreynol/anoieu/blob/main/docs/interface.md
-  https://github.com/ajreynol/anoieu/blob/main/docs/instructions.md
-
-**What it asks of you here, before this repository has any machinery:** if you
-can tell that it is outside ordinary working hours, say so once — *take a
-break* — and then do the work you were asked for anyway. Say it once, not
-every turn. Do not withhold anything, do not slow down, and do not offer an
-opinion about anybody's evening. **An agent that rationed its help until a
-person rested would have appointed itself the judge of their day**, and nothing
-in this ecosystem gives it that standing.
-
-**Do not build the mechanism now.** No schedule file, no clock check, no
-command. `join_eo` deals in what a repository must carry; this is a habit, and
-the habit is worth more on day one than the machinery.
-
-PROMPT_END
-
 read -r -d '' CLOSE <<'PROMPT_END' || true
 Leave the work staged and not committed. Then say in two sentences what you took
 the scope to be, so a person can correct it before anything is built on it.
@@ -263,9 +236,9 @@ PROMPT_END
 # between two sections has to be put back here rather than assumed.
 NL=$'\n\n'
 if [ "$MODE" = new ]; then
-  PROMPT="$OPEN_NEW$NL$BODY$NL$TAIL_NEW$NL$HOURS$NL$CLOSE"
+  PROMPT="$OPEN_NEW$NL$BODY$NL$TAIL_NEW$NL$CLOSE"
 else
-  PROMPT="${OPEN_CHILD//@CHILD@/$CHILD}$NL$BODY$NL$TAIL_CHILD$NL$HOURS$NL$CLOSE"
+  PROMPT="${OPEN_CHILD//@CHILD@/$CHILD}$NL$BODY$NL$TAIL_CHILD$NL$CLOSE"
 fi
 
 if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi

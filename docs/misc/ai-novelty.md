@@ -376,6 +376,18 @@ text.
 **A plan using one instrument ships a broken tree. A plan using three ships a
 tool that silently does nothing.**
 
+**And the correction was itself incomplete, which is the last thing this case
+has to teach.** The `repos.local` bug was found and fixed, and **four more
+instances of the same line were left in place** — `ROOT=$(cd "$HERE/../.." &&
+pwd)`, in four other prompts, resolving one directory too high after the move.
+They were found five hours later by someone reading one of those files for an
+unrelated reason.
+
+**Fixing an instance is not fixing a class.** The right response to *a relative
+path changed meaning* was to grep every relative path in the moved files, not to
+repair the one that announced itself. **The instrument that found the first one
+had already told us what to look for, and we looked at the wrong scope.**
+
 **Planning took longer than the edit.** That is the accounting, not a boast: it
 paid for itself because one wrong assumption would have cost a stretch, and on a
 change with no such assumption in it the same care is waste.

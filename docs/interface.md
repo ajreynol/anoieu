@@ -420,8 +420,19 @@ down themselves is the most this should claim to be.
 
 **It binds every tool in this ecosystem, not only this one.** A human working
 past their window is not doing it in one repository, so a rule held by one
-repository does not touch the problem. This is the first thing in the register
-addressed to all members rather than to anoieu.
+repository does not touch the problem.
+
+**And it has no bearing on how any repository operates.** Its entire content is
+one sentence said to a person. **It changes nothing about what a tool builds,
+checks, publishes or owes anybody**, and it should never be introduced as though
+it did — it is not part of joining, not part of starting a repository, and not
+something to build machinery for in a tree that has none. **A member that
+honours it changes no file.**
+
+*It was briefly carried in the prompt that bootstraps a new repository, and was
+removed on 2026-09-02 for exactly that reason: a page telling somebody how to
+begin is not the place to introduce a policy whose whole content is `take a
+break in the evening`.*
 
 ### When it fires
 
