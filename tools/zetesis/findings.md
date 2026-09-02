@@ -169,3 +169,37 @@ records a human action correctly, as one half of an event rather than as a
 verdict; nothing stops the next one standing on its own.
 
 **State:** **open.** Raised 2026-09-02, out of the first instance.
+
+## F5 — the documentation goes stale silently
+
+**What:** this ecosystem's primary artifact is prose, other tools are asked to
+rely on it, and **nothing detects when a page stops being true.** Code has
+tests; a document that has quietly become false looks exactly like one that has
+not.
+
+**Evidence:** asked to assess the ecosystem, a neighbouring project's first
+question was *are their docs up to date?* — the constraint named from outside
+before we named it ourselves. And one working session on 2026-09-02 found six
+claims that had become false: a check count that contradicted a table on the
+same page, a repository described as not existing that did, a stopping rule that
+had been false since the thing it forbade happened, a count of child projects
+that had moved, a pull request recorded as open after it merged, and a stale
+repository URL. **All six were found by reading. None by anything that runs.**
+
+**Why it is ethical and not only technical:** every claim this ecosystem makes
+about its own conduct is a claim in prose, and the registers of testimony, cases
+and stances are prose too. **A register that has gone stale is
+indistinguishable, from outside, from one that is accurate** — and it is worse
+than no register, because it carries the authority of having been kept. We ask
+other projects to rely on our pages; the honest statement of what that reliance
+rests on today is *somebody read it recently*.
+
+**What would settle it:** partly and only partly, because most of it is not
+decidable. What is decidable is narrow and is already argued for as `R2` in
+ynoia's requests — a reference that no longer resolves, a cited id with no
+definition, a count in prose that disagrees with a count derivable from the
+tree. Everything else needs a date and a reader. **A cheaper first step than any
+check: date the claims that are about other projects**, so a reader can discount
+by age rather than by trust.
+
+**State:** **open.** Raised 2026-09-02, from an outside question.

@@ -227,12 +227,14 @@ number worth looking at, in both directions.
 | `martyria` | child of `anoieu` | 0 |
 | `sapheneia` | child of `anoieu` | 1 |
 | `stathmos` | child of `anoieu` | 1 |
+| `tekmerion` | child of `anoieu` | 0 |
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 | `zetesis` | child of `anoieu` | 0 |
 
-Twenty-eight roles across fifteen tools, and three sections empty:
-`workflow-launcher`, `martyria` and `zetesis` hold nothing, which is not an
+Twenty-eight roles across sixteen tools, and four sections empty:
+`workflow-launcher`, `martyria`, `zetesis` and `tekmerion` hold
+nothing, which is not an
 omission — a child project usually has no users, nothing depends on it, and it
 owes nobody an artifact. **`stathmos` is the exception and says so**: it holds
 `R30` from its first day, which makes it not an island, and the reason is
@@ -631,6 +633,8 @@ another tree already has and which this one asks rather than rebuilds.
 > it grades most closely. Starting the separation inside `anoieu` is the cheap
 > first step; the stated destination is a repository of its own, and the role
 > keeps its id when it goes.
+
+## tekmerion
 
 ## workflow-launcher
 

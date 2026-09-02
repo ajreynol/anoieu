@@ -187,6 +187,12 @@
     "path": "tools/stathmos",
     "what": "what each tool weighs against the tenets, at the recorded version, and the evidence for it -- the report card's raw material, not its verdicts"
   },
+  "tekmerion": {
+    "status": "child",
+    "parent": "anoieu",
+    "path": "tools/tekmerion",
+    "what": "the evidence that what these documents say is still true, claim by claim -- why anybody should believe the prose this ecosystem mostly consists of"
+  },
   "workflow-launcher": {
     "status": "child",
     "parent": "eudaimonia",

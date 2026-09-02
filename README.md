@@ -45,6 +45,28 @@ your README and one CI step, and anoieu checks it.
 > shared with [dokimasia](https://github.com/ajreynol/dokimasia), is
 > [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md).
 
+> **The binding question about this repository is whether its documentation is
+> current — and nothing checks that.**
+>
+> Asked to assess this ecosystem, a neighbouring project's first question was
+> not about the code. It was *are their docs up to date?* That is the right
+> question, and it is the sharpest constraint on believing anything here:
+> almost everything this ecosystem produces is prose, the prose is what other
+> tools are asked to rely on, and **prose goes stale silently.** No test fails
+> when a page starts describing a tree that changed.
+>
+> It is not hypothetical. A single working session in September 2026 turned up
+> six claims in these documents that had quietly become false — a check count,
+> a repository said not to exist that did, a rule contradicted by the page
+> carrying it, a stale count of child projects, a pull request recorded as
+> open after it merged, and a URL for a repository that had moved. **Every one
+> was found by somebody reading, and none by anything that runs.**
+>
+> So: read a date before you rely on a page, and treat an undated claim about
+> another project as the weakest thing here. Where a document is generated it
+> says so; where it is kept by hand, it is only as current as the last person
+> to look.
+
 ## What it finds
 
 Without running a proof:

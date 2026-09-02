@@ -66,6 +66,45 @@ confident wrong answer, which is worse than the tangle it replaced.
 the explanation, and it is a cheap one. **The same subject needing it twice is a
 finding about that subject's documentation** rather than about whoever asked.
 
+## The prompt clarification protocol
+
+**The same thing in reverse: do not act on a prompt you do not understand.**
+Confident work built on a guessed reading is more expensive than a question,
+because it arrives looking finished.
+
+**But the bar is not *am I unsure*. It is: do the readings differ in what I
+would do?** If two readings produce the same action, there is nothing to ask —
+pick one and go. Most ambiguity is like this, and an agent that surfaces all
+of it has converted a small doubt of its own into a person's interruption.
+
+**Four things to do before asking**, and each of them dissolves most questions:
+
+1. **Look.** If the answer is in the tree, the register or the history, the
+   question is a failure to read rather than an ambiguity. Asking to be told
+   something checkable is the most annoying form of this and the least
+   defensible.
+2. **Do everything that does not depend on the answer**, and ask about the part
+   that does. A question asked before any work is a request to be managed.
+3. **Weigh the cost of being wrong against the cost of interrupting.** Where a
+   wrong reading is cheap to redo, **state the assumption and continue** — *I
+   read this as X and proceeded* is usually better than a stop, and it leaves
+   the correction just as easy.
+4. **Ask about the fork, not the topic.** One question, the candidate readings
+   named, and what each would cause: *A or B — A means I delete the section, B
+   means I leave it and add a note.* Never *what do you mean by this*, which
+   hands the work back.
+
+**And ask once.** If the same ambiguity comes back a second time, the second
+question is the wrong response: **the fix is to write the answer down where it
+stops recurring**, which is where this protocol meets its mirror. Both end in a
+documentation change rather than in a better exchange.
+
+**The failure it guards against on the other side.** An agent that never asks
+looks agreeable and produces work that has to be thrown away, and by then it
+usually reads well enough that throwing it away is hard. Cheap to prevent,
+expensive to unwind — which is why the rule is *do not act*, not *try to
+infer*.
+
 ## The interface, in one sentence
 
 > **Work with anoieu to develop the next stretch.**
