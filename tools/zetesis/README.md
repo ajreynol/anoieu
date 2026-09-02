@@ -80,6 +80,13 @@ paper over there.
 **Does this ecosystem's conduct meet a standard it can state — and could
 somebody outside check that it does?**
 
+**So yes: this is a research project in the ethics of AI-run software**, and it
+is worth saying plainly because the scope section below is easy to misread as a
+disclaimer that there is no such project. There is. What it does *not* do is
+originate a framework — the standard is taken from work done outside and cited,
+and the research is the narrower and more answerable question of whether a
+particular ecosystem's conduct could be shown to meet one.
+
 Both halves matter and the second is the one that does the work. A claim about
 one's own conduct, made by the only party in a position to know, is worth very
 little. What makes it worth something is an artifact somebody else can inspect.

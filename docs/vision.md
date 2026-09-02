@@ -718,13 +718,15 @@ no import path, in no test suite, in no CI job and in no generated document, and
 deleting the directory changes nothing anywhere. That is the test, and it is
 what makes the arrangement cheap enough to be worth having.
 
-Four exist, tracked here in a sentence each and nowhere else:
+Six exist, tracked here in a sentence each and nowhere else:
 
 | child | parent | what it is |
 | --- | --- | --- |
 | [**sapheneia**](https://github.com/ajreynol/anoieu/tree/main/tools/sapheneia) | anoieu | a description of Eunoia written as a language definition rather than as a manual for a checker, in order to find where the existing account is silent, ambiguous or contradicts itself |
 | [**euthyna**](https://github.com/ajreynol/eudaimonia/tree/main/tools/euthyna) | eudaimonia | in its own words, an account of *the proof in logos: what it is made of, where its weight sits, and what would have to change for it to cover more than one calculus* — with a measurement harness over an unmodified logos checkout |
 | [**ynoia**](../tools/ynoia) | anoieu | *why Eunoia* — whether the ecosystem's arrangement earns its machinery, the strongest case against it, six ways it could be arranged instead, and the tools whose absence distorts the argument |
+| [**martyria**](../tools/martyria) | anoieu | one ethical question at a time with a stance attached, the evidence a stance rests on, and the register where a report that we violated something would be answered |
+| [**zetesis**](../tools/zetesis) | anoieu | the general half: what standard this ecosystem is held to — taken from work done outside rather than derived here, and not yet taken — and whether our record could show we met it |
 | [**workflow-launcher**](https://github.com/ajreynol/eudaimonia/tree/main/tools/workflow-launcher) | eudaimonia | the first hour of a new tool's life: the questions a person has to answer before a repository exists, the machinery that turns the answers into a prompt, and a register of what this ecosystem's practice appears to have found out — with, on the same list, what is wrong with it |
 
 Note what euthyna's row shows about the shape: its parent is eudaimonia and its

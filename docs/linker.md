@@ -154,6 +154,7 @@ copy of a command table is the thing the first rule on this page forbids.
 
 | do | defined in |
 | --- | --- |
+| make the change a person can read: the standard is that a reviewer can tell whether it is right, not that it is | [`coherence.md`](coherence.md) |
 | leave the work staged, never committed — a person reviews the diff | [`coherence.md`](coherence.md) |
 | run `python3 tests/run.py` and `python3 tools/policy_check.py` | [`coherence.md`](coherence.md) |
 | say what you did not do, and why | [`coherence.md`](coherence.md) |

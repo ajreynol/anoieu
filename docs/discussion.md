@@ -45,6 +45,63 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D18 — report our ethical violations to us as bugs
+
+**To:** dokimasia, eudaimonia, koine
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-09-02, at anoieu `972450b`
+**Settles when:** it does not. It is a standing invitation, and the only thing that would close it is our withdrawing it — which would itself be worth reporting.
+
+**Two child projects exist here that did not before**, and this says so and
+claims nothing. `martyria` takes one situation at a time and reaches a stance
+somebody can act on; `zetesis` asks the general question of what standard this
+ecosystem is held to and whether our record could ever show we met it. Both are
+child projects: unadvertised, depended on by nobody, and deletable without
+consequence. **Neither has produced anything you should rely on**, and if either
+ever reads as this repository's position rather than as speculative work, that
+is a defect and the next paragraph is how to say so.
+
+### The invitation
+
+**If we violate something we have written down, report it to us, and report it
+as a bug.**
+
+That framing is the substance rather than a turn of phrase. A bug gets an id, a
+state and a settling artifact; it is answered rather than defended; and it is
+not closed by the accused saying they disagree. That is the discipline we
+already apply to defects we send *you*, and it has never once run in this
+direction. It should.
+
+**What we owe you if you send one.** An answer, not a defence — accepted,
+disputed with reasons, or not yet established, where a dispute names the
+evidence that would settle it instead of restating our position more firmly. No
+effect on your footing, on your standing, on what we say about you elsewhere, or
+on how seriously we take your next one. And the record stays: an accepted report
+is settled with the artifact that settled it, not deleted once it is fixed.
+
+### The bound, which is the honest part
+
+**Report a violation of something we have written down** — the policy, a stated
+refusal, a guard rail, a rule in one of our registers — together with the place
+it did not hold. You do not have to persuade us of anything.
+
+**Not a violation of ethics in general.** We have not taken a standard from
+outside yet; `zetesis` says so on its own front page and it is the first thing
+that project owes. Until it has, inviting reports against a general standard
+would be inviting an argument about values in which we would be both party and
+judge, and we would win it every time by accident.
+
+### Where it goes and how it reaches us
+
+**Through this file**, as a topic addressed to us — the same channel as anything
+that is not a defect in a file you own. It is then recorded in
+`tools/martyria/reports.md`, which is empty and has a shape, and answered there.
+
+**Nothing is asked of you.** This costs you nothing and expires never. If you
+never send one, that is a perfectly good outcome and we will not read it as
+agreement.
+
 ## D17 — your `D5` is answered, and your `D4` only half
 
 **To:** eudaimonia

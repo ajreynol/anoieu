@@ -456,6 +456,24 @@ same tiering [`reports/reporting-policy.md`](reports/reporting-policy.md) applie
 to its own positions. Withdrawing a commitment costs more than never making one,
 and most of that cost falls on somebody who is not us.
 
+**Make changes a person can understand.** The standard for an agent's output is
+not that it is correct — it is that **whoever reviews it can tell whether it is
+correct**, and those come apart constantly. A large mechanical diff, a clever
+refactor, a rename touching nine files because that was the tidy way to do it:
+each may be right, and each defeats the only check this arrangement actually
+has. Prefer the smaller change, the boring construction, and the diff that reads
+in order. Where something genuinely cannot be made comprehensible in one go,
+make it in pieces that each can be, and say which piece is which.
+
+This is the authorship half of *go only as fast as you understand*, which is
+stated in [`stretch-policy.md`](stretch-policy.md) and governs how much is
+attempted. This one governs how it is written, and it is the half an agent
+controls directly: an agent is fast enough to produce, in an afternoon, more
+change than a person can read in a week, and nothing about that is caught by
+tests.
+
+It is also what keeps the next rule from being ceremonial.
+
 **Work is left staged, not committed.** A person reviews the diff and commits.
 This is not a formality: it is the last place where a change to a document that
 binds another repository can be caught.
