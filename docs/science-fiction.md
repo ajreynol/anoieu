@@ -257,6 +257,60 @@ That is `F1`'s own settling condition, so this scenario and that finding move
 together — **which makes it the most attainable thing on this page, and the
 reason it is here rather than absent.**
 
+## Scenario M — this machinery helps settle open problems in mathematics
+
+The pipeline that checks a solver's proofs turns out to bear on unsolved
+mathematics: machines propose, and this kind of machinery is what makes the
+result believable rather than merely impressive.
+
+**Why it is fiction, and the gap is one of kind rather than of engineering.**
+Everything here verifies proofs that a solver **already found**, in fragments
+chosen because they are decidable. An open conjecture is not a large instance of
+that problem; it is a different problem. No amount of making this pipeline
+faster or bigger crosses that distance, and treating scale as progress toward it
+is the specific error this page exists to name.
+
+**What survives, and it is the useful half.** Not solving — **checking.** If a
+machine ever produces a proof of something open, somebody has to establish that
+the proof is a proof, and the property that would matter is not the size of the
+development but that its **trusted base is stated**: a kernel, a parser, and a
+statement somebody can read. logos is roughly 808,000 lines of generated Lean
+across 930 files, and the thing worth citing about it is not that number — it is
+that its README says what its theorem establishes **and what it still assumes.**
+A machine-produced proof of an open problem would need exactly that sentence,
+and almost nothing in this area currently writes one.
+
+**What this scenario forbids:**
+
+- **No claim that this ecosystem contributes to solving anything.** It checks.
+- **No citing the size of the Lean development as evidence of capability.**
+  808,000 lines is a fact about generation, not about power, and quoting it as
+  the latter is the easiest overclaim available here.
+- **No extending the pipeline's claims past decidable fragments**, in any
+  document, without saying which step is new.
+- **No "AI for mathematics" framing.** We would be borrowing a subject's
+  significance for machinery that does something narrower.
+
+**The ethical concerns, and only the ones this ecosystem can actually see.**
+Three follow structurally from what is already written here, and they are not
+speculative: a proof no person can read moves trust **from understanding to
+machinery**, which is defensible only where the trusted base is stated and
+small; the cost of checking such a result falls on the **community receiving
+it** rather than on whoever produced it, which is the same asymmetry this page
+already objects to when the direction is reversed; and attribution for a
+machine-assisted result is unsettled everywhere, including here, where our own
+record does not even track which prompts produced what.
+
+**Anything drawn from current events is deliberately absent**, because it cannot
+be checked from this tree and an unverifiable claim in a document about
+verification would be self-refuting. If there is a specific case worth citing,
+it is a person's to name and it goes in with a date and a source.
+
+**What would move the line:** a machine-produced proof of something open,
+checked by a checker whose trusted base is written down, with somebody outside
+the producing group willing to rely on the check. None of the three exists
+together today.
+
 ## A candidate for first contact, and we do not trust it
 
 Everything above is fiction by construction. This is not, which is why it is

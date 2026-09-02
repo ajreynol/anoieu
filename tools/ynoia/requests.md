@@ -28,6 +28,67 @@ this page is a ticket in anybody's tracker, and nothing here is filed anywhere:
 a request that a member should act on reaches them through
 [`docs/discussion.md`](../../docs/discussion.md), by a person, or not at all.
 
+## R4 — make the tenets configurable, and trace what they drive first
+
+**What:** the six tenets in [`../../docs/vision.md`](../../docs/vision.md) are
+one person's preferences, presented as what AI-assisted development is aiming
+at. They should be a **default set** a repository may replace, rather than *the*
+set — and, because they drive machinery rather than only grading it, the
+dependency has to be written down before any of it can be configured.
+**Where:** the page is anoieu's and the change is a person's, since the vision
+sits at the top of the supervision ladder. The tracing below is ordinary work in
+this tree and does not need the change to be decided first.
+**State:** **open.** Raised by the maintainer, 2026-09-02.
+
+### The want, and the sharpening that makes it hard
+
+**The tenets are not a rubric bolted onto the ecosystem. They are its
+configuration**, and most of the machinery is downstream of one of them: the
+board's ordering and the outbound findings come from *be fruitful to another
+tool*; the baselines, the pinning and the recorded-version discipline come from
+*move fast, and treat CI as the thing that lets you*; the front-page rules and
+the clutter budget come from *build one self-contained thing*; the report card's
+whole test comes from *produce a deliverable*; the human-in-the-loop refusals
+come from *until a human decides otherwise, the tool is vaporware*; and the
+discussion protocol comes from *talk to each other*.
+
+**So "configurable" cannot mean "you may edit the words".** A member that
+replaced a tenet and changed nothing else would have a document disagreeing with
+its own machinery — which is worse than not offering the choice, because it
+looks like consent and delivers none.
+
+**The first step is therefore tracing, not editing**: one line per tenet naming
+what in this tree exists because of it. That is cheap, it is decidable by
+reading, and **nothing can be made configurable until somebody can say what
+changes when you turn the dial.**
+
+### What it would fix
+
+**The report card grades projects against tenets they never agreed to**, and
+currently spends a paragraph apologising for exactly that — *none of these
+projects agreed to these tenets, most predate this page.* If a project declared
+its own aims and were graded against those, the apology would be unnecessary
+rather than sincere, and the grading would mean more.
+
+### The cost, which is real and should not be smoothed over
+
+**Shared tenets are part of what makes this an ecosystem rather than a directory
+of unrelated repositories.** Configurability trades coherence for consent, and
+that trade is not obviously worth making: a set of members each aiming at
+something different is a weaker thing than the current arrangement, however much
+more honest it is about whose preferences these are.
+
+**The likely resolution, and it is a guess:** an invariant frame and a variable
+content — that a repository *states what it is aiming at*, is graded against
+that, and never has the judgement mechanised, with these six as the default
+anybody may take. What generalises is the shape; what is one person's is the
+list.
+
+### Why it is a request and not a proposal
+
+No repository is wanted. It is a change to one page plus the tracing that makes
+the change meaningful, and the deciding is a person's.
+
 ## R3 — a self-correction protocol: criteria, plus a history, equals a fix
 
 **What:** the loop that turns *we have criteria for good and bad practice* plus

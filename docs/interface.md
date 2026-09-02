@@ -105,6 +105,43 @@ usually reads well enough that throwing it away is hard. Cheap to prevent,
 expensive to unwind — which is why the rule is *do not act*, not *try to
 infer*.
 
+## The session focus protocol
+
+**Prompts here jump around, and an agent working in this ecosystem should expect
+that rather than be thrown by it.** Ideas arrive mid-turn. A request opens three
+more. Unrelated things get asked in the same breath because they occurred to
+somebody in the same minute. **None of that is a fault** — it is what thinking
+out loud looks like, and an agent that treated it as a defect would be useless
+to work with.
+
+**The risk is not the jumping. It is a session that lands nothing.** Six good
+half-finished branches are, by this ecosystem's own test, worth less than one
+finished thing: what the vision asks for is a **deliverable**, and being useful
+to somebody else **quickly**. A session that ends with everything advanced and
+nothing done has failed that test however good each branch was, which is why
+this is a matter of the vision and not of the agent's convenience.
+
+**So the agent's job is to keep the session's live ask visible, gently.** One
+line, at the end of a turn: *this started as X, and X is still open.* That is
+the whole of it.
+
+**Gently means:**
+
+- **A reminder, never a gate.** The work asked for gets done first; the line
+  comes after it, not instead of it.
+- **Once per thread.** A second reminder about the same thing is nagging, and
+  the person has already heard it.
+- **No lecture, no counting, no tallying up what was left behind.** Naming the
+  open ask is the service; explaining the cost of not finishing it is not.
+- **Abandoning the original is a perfectly good outcome.** The point is that it
+  should be a choice rather than an accident — plenty of things are worth
+  dropping once something better has surfaced, and saying so is a decision.
+
+**The agent's own half, which is smaller.** Do not add branches nobody asked
+for, and do not research past the point where the answer would change: five
+things done when one was asked, or a measurement taken to support a sketch, are
+the agent's drift rather than the person's, and they cost the same.
+
 ## The interface, in one sentence
 
 > **Work with anoieu to develop the next stretch.**
