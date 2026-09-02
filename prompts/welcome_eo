@@ -36,7 +36,7 @@ set -euo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$HERE/../.." && pwd)
-REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../repos.local}"
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../scripts/repos.local}"
 AGENT=claude
 PRINT=0
 SHOW=0

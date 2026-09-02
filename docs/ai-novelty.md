@@ -351,10 +351,30 @@ halves — true while `prompts/` was nested, false once it moved out. **Same
 words, same file, now wrong.** Nothing was misspelled, no link broke, no path
 failed to resolve. **No check can find this and none ever will.**
 
-**The search finds strings. The suite finds behaviour. Only a reader finds a
-sentence that has quietly become untrue.** A plan using one ships a broken tree.
-A plan using two ships a false sentence in a document this repository publishes
-to other people.
+**And `git status` caught a path that was still correct and no longer meant the
+same thing.** Five prompts resolved their shared configuration as
+`$HERE/../repos.local`. In `scripts/prompts/` that was `scripts/repos.local`; in
+`prompts/` it is the repository root. **Nothing about the string was wrong.** The
+grep could not match it — it does not contain the old path — the suite passed,
+and no reader would flag a line that reads correctly. Every prompt run after the
+move silently resolved against an empty file it had just created.
+
+**What surfaced it was luck with a narrow ignore rule.** `.gitignore` listed
+`scripts/repos.local` and not `repos.local`, so the stray file appeared as
+untracked in a routine `git status`. **A broader ignore pattern and nothing
+would have shown it at all** — the prompts would simply have stopped resolving
+anybody's checkout, quietly, for as long as it took somebody to notice by hand.
+
+**Four instruments, and each found what the others could not.** The search finds
+strings. The suite finds behaviour it already checks. A reader finds a sentence
+that has become untrue. **And the working tree finds a file appearing where no
+file should be.** A relative path is the hard case for all of the first three at
+once: it is a string that means something different depending on where the file
+containing it sits, so moving the file changes the meaning without changing the
+text.
+
+**A plan using one instrument ships a broken tree. A plan using three ships a
+tool that silently does nothing.**
 
 **Planning took longer than the edit.** That is the accounting, not a boast: it
 paid for itself because one wrong assumption would have cost a stretch, and on a

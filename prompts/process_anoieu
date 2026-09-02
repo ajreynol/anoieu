@@ -34,7 +34,7 @@ set -euo pipefail
 #    different name, or several checkouts of one project where only one is the
 #    one you answer findings from.
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../repos.local}"
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../scripts/repos.local}"
 
 write_repos_file() {
   cat > "$REPOS_FILE" <<'TEMPLATE'

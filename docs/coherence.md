@@ -130,7 +130,7 @@ named.
 | `PROTO-13` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
 | `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member | agent → human | [`interface.md`](interface.md) |
 | `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
-| `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. Any hint of fraud, reject | spawned repo → anoieu | this page |
+| `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. CI green on both sides, non-negotiable; any hint of fraud, reject | spawned repo → anoieu | this page |
 | `PROTO-21` | **the identify protocol** — *identify* is answered at once: who the agent acts for, how it knows, and that entity's mission read from its tree | agent → human | [`interface.md`](interface.md) |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
@@ -176,6 +176,35 @@ is not. That is the only thing being checked, and it is checked by reading it.
 **And it is not currently a risk.** One person drives this ecosystem as of
 2026-09-02. The protocol is written now because writing it later, under
 pressure, is the expensive version — not because anybody is knocking.
+
+### CI green, on both sides, non-negotiable
+
+**Every entity acting in a handoff must have its CI passing.** The spawned
+repository, and us. **There is no version of this that is waived**, argued down,
+or granted for a change that is obviously fine — no *green except one unrelated
+job*, no *it was passing yesterday*, no exceptions for urgency.
+
+**The reason it is absolute here and nowhere else.** A handoff is the one moment
+this repository deletes something irreversibly on the strength of a claim about
+a tree. **A repository whose CI is red cannot support a claim about itself** —
+its own machinery is reporting that something in it is wrong while it asks us to
+believe something else. That is not a judgement about the claimant; it is that
+there is nothing to read.
+
+**And it binds us harder than it binds them**, because we are the party doing
+the deleting. **Verifying somebody else's tree while our own build is broken is
+not a standard, it is a courtesy we extend to ourselves.** This is not
+hypothetical: `B20` records that CI here was red for at least five consecutive
+runs on the day this protocol was written, and nobody had noticed.
+
+**No CI is not passing CI.** A repository that runs nothing is `unknown`, and
+`unknown` sits with *attention* rather than with *ok* — the same rule the health
+summary and the bump gate already use, for the same reason. *We asked and it is
+wrong* and *we could not ask* are different facts and neither is a pass.
+
+**A red build is not something the claimant may explain.** It is checked, not
+discussed, which keeps it consistent with the rest of this protocol: asking a
+claim to grow is not verification.
 
 ### The security half
 

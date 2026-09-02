@@ -181,30 +181,38 @@ roles that are fine to hold while nobody is watching and awkward the moment
 adoption is the goal. The known fact that every member joined by pinning a
 commit our own gate refuses is the same problem seen from the other end.
 
-## B20 — the ethos commit is written in two places on purpose
+## B20 — the two commits drifted, exactly as this row was watching for
 
-**Task:** `.github/workflows/ci.yml` and `tools/deps.lock` both name the ethos
-commit the `oracle` job builds, and nothing compares them. Taken deliberately
-rather than building the version that reads the lock, because the alternative was
-holding up a finished stretch for an elegant fix.
+**Task:** `.github/workflows/ci.yml` and `tools/deps.lock` both named the ethos
+and cvc5 commits, and nothing compared them. Taken deliberately rather than
+building the version that reads the lock, because the alternative was holding up
+a finished stretch for an elegant fix. **This row existed to measure what that
+cost.**
 **Entities:** `anoieu`
-**Status:** ready — the duplicate is one line and the fix is about six.
+**Status:** **settled, 2026-09-02.** The workflow now reads both commits out of
+`tools/deps.lock` and the duplicates are gone.
 **Channel:** **internal** — nothing to send.
-**Next:** when the ethos pin next moves, watch whether both copies move. That is
-the measurement this item exists for, and it costs nothing to take.
-**Prompt — `anoieu`:** replace the hardcoded `ref:` with a step that reads
-`tools/deps.lock` and passes the commit through — the ground truth stays the
-lock and the workflow follows it. Do it when the pin next moves, or sooner if the
-two are ever found disagreeing, and record which of those prompted it.
+**Next:** nothing. Kept for the result rather than the task.
+**Prompt — `anoieu`:** none. If a third copy of a dependency's commit is ever
+proposed, this row is the evidence against it.
 **HUMAN FEEDBACK:**
 
-**Why it is on the board rather than only in a comment.** A known defect that
-lives only in the file it is in gets found by whoever next edits that file, which
-for a CI workflow is rarely. The point of the entry is the *measurement*: this
-repository holds that a copy with no comparison is drift that has not happened
-yet, and it now has one, on purpose, where the cost will be visible. Either the
-copies move together and the discipline was over-strict here, or they do not and
-we will have paid for the lesson in our own tree instead of somebody else's.
+**The result, which is why the row was worth keeping.** The entry said: *either
+the copies move together and the discipline was over-strict here, or they do
+not.* **Both copies drifted, and both were wrong.** CI built ethos at
+`7f4482b7` while the lock recorded `fe74fe40`, and checked out cvc5 at
+`aee87424` while the lock recorded `5cf62594`. Neither had been noticed.
+
+**Three things about how it was found, none of them the plan.** It was not
+found by anybody watching this row. It was found by a check added for an
+unrelated reason — the lock-versus-checkouts comparison — which could only see
+the cvc5 copy, because that is the one that lands in `deps/`. **The ethos
+disagreement was never detectable by any check we had** and turned up only
+because fixing the first sent somebody to read the file.
+
+**And the cost was paid before it was noticed: CI had been red for at least
+five consecutive runs.** A duplicate with no comparison is not a risk this
+repository ran, it is a failure it had already had and could not see.
 
 ## B18 — a footing exists for ethos and logos, and no protocol puts them in it
 

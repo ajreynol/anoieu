@@ -119,26 +119,34 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      # The lock is the ground truth for which commit of somebody else's tree
+      # this job builds against, and the workflow follows it rather than
+      # restating it. It used to restate it: the two commits were written here
+      # *and* in tools/deps.lock, with nothing comparing them, taken knowingly
+      # as B20. They then drifted, both of them, and the check that found it was
+      # added afterwards for an unrelated reason. That is the whole argument for
+      # this step -- a copy with no comparison is drift that has not happened
+      # yet, and this one had.
+      - name: the commits the lock records
+        id: lock
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          for name, v in json.load(open("tools/deps.lock")).items():
+              if not name.startswith("_"):
+                  print(f"{name}={v['commit']}")
+          PY
       # A commit, not a branch. `ethosEoc3` is about to merge into main and will
       # then be deleted, and a `ref:` naming a branch is a claim with an expiry
       # date: it built whatever cvc5 last pushed, which is why this job could go
       # red without anybody here committing. tools/deps.py learned this the
       # expensive way and its comment records it; this is the same lesson applied
       # to the one place that had not had it.
-      #
-      # KNOWN DUPLICATE, ON PURPOSE. tools/deps.lock also records this commit,
-      # so the ethos revision is now written in two places and nothing compares
-      # them. That is the failure this repository has a whole discipline about,
-      # and we are taking it deliberately rather than building the version that
-      # reads deps.lock here: the stretch is otherwise finished, and holding it up
-      # for the elegant fix would be the dogmatic position docs/coherence.md
-      # warns about. B20 carries it, and what the drift costs is the thing we
-      # expect to learn.
       - name: check out ethos
         uses: actions/checkout@v4
         with:
           repository: cvc5/ethos
-          ref: 7f4482b7f0656c9dc5cc828820c755c73b2d4bbc
+          ref: ${{ steps.lock.outputs.ethos }}
           path: corpus/ethos
       - name: which ethos this is
         id: ethos
@@ -168,16 +176,11 @@ jobs:
       # which is what this job did on every run for weeks. Sparse, because the
       # only thing wanted is `proofs/eo`, and pinned to a commit for the same
       # reason the ethos checkout above is.
-      #
-      # KNOWN DUPLICATE, same as the ethos pin and for the same reason:
-      # tools/deps.lock already records this commit and nothing compares the
-      # two. B20 carries that, and this adds a second instance to it rather
-      # than a second problem.
       - name: check out the CPC signature
         uses: actions/checkout@v4
         with:
           repository: cvc5/cvc5
-          ref: aee874240419269019507d47d687f01d871587f5
+          ref: ${{ steps.lock.outputs.cvc5 }}
           path: deps/cvc5
           sparse-checkout: proofs/eo
       - name: the desugarer agrees with the parser
