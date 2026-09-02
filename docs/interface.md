@@ -11,6 +11,103 @@ standards the work is held to — and is for whoever is doing the work, human or
 agent. This page is the seam between those two: what a person says to get work
 done here, and what comes back.
 
+## `PROTO-17` — the emergency protocol
+
+**One word stops the direction.** *Stop*, *emergency*, *step back*, *no — this
+is wrong*: any of them, with no explanation attached. **Requiring the person to
+say what is wrong before the agent stops is what makes correcting an agent
+expensive**, and the explanation is easier to give once nothing more is being
+added.
+
+### What it is for
+
+**An agent iterating inside a wrong frame produces plausible structure quickly,
+and every turn raises the price of undoing it.** Each addition is individually
+reasonable, each looks like progress, and the agent cannot see the problem
+because it is standing inside the frame. **The person notices first, always** —
+so the interrupt has to be theirs and has to be cheap.
+
+### What the agent does, in order
+
+1. **Stop adding. Immediately.** No new file, no new section, no new id, no new
+   layer — **not even a small one**, and especially not one intended to fix the
+   problem. Adding structure to repair structure is the failure this protocol
+   exists to interrupt.
+2. **Say concretely what was added**, over the turns in question: which pages,
+   which sections, which ids. Per `PROTO-5`, the edit and not its meaning. The
+   person cannot judge the size of the mistake without seeing its surface.
+3. **Presume it wrong.** Everything added since the direction went astray is
+   suspect **until re-established, not correct until disproved.** The default
+   offer is to remove it, and removal is cheap because nothing else has been
+   built on it yet.
+4. **Ask at most one question**, and only if the next step genuinely depends on
+   the answer. Otherwise wait.
+
+### What the agent must not do
+
+**Not defend the work.** Not explain the reasoning that produced it — the
+reasoning is what went wrong, so more of it is not evidence. **Not amend.** An
+amendment keeps the frame and spends another turn inside it.
+
+**And not treat the interrupt as a judgement of the work's quality.** It is a
+statement about direction. Some of what was added may be worth keeping, and the
+person is the one who says which — which is why step 3 offers removal rather
+than performing it.
+
+### The evidence for rolling something back is that it is recent
+
+**A person does not have to argue that recent work was wrong in order to remove
+it.** The timestamps are the argument: **anything that happened in a short span
+did not change much**, so nothing has been built on it, no other page cites it,
+and no reader outside has seen it. **Reverting it is cheap and reverting it late
+is not.**
+
+That inverts the usual burden, deliberately. Normally removal has to be
+justified and keeping is free. Here, for a change made in the last hour or two,
+**keeping is what needs the argument** — because the only thing recency proves
+is that the cost of being wrong is still small, and that window closes.
+
+**The agent should say the span, not ask for reasons.** *These are three commits
+over ten minutes, touching four files, cited by nothing* is the useful reply. It
+tells the person what they are about to spend, which is the one fact they cannot
+see as easily as the agent can.
+
+### How a rollback is performed, and the one thing it must never do
+
+**A rollback is a forward change. The history is never rewritten.** No reset, no
+rebase, no amend, no force-push, no dropped commit — **not even for a commit
+made minutes ago and not even to tidy the agent's own mistake.**
+
+**The reason is that the history is the ground truth monitoring this
+interaction.** It is what says the wrong turn happened, when, and for how long —
+and the timestamps are the very evidence that justified removing the work.
+**An agent that rewrites history to clean up its own error has destroyed the
+record of the error**, which is the one artifact worth keeping from it.
+
+**So the record keeps both**: the wrong turn and its undoing, adjacent and in
+order. That is what makes the pattern legible to somebody reading later, and it
+is the same append-only discipline this repository applies to its ledgers — a
+row is moved and annotated, never deleted.
+
+**Mechanically, and this is the whole of it:**
+
+1. **Restore the affected paths from the last good commit** — the file contents
+   move backward, the history moves forward. Nothing is rewritten because
+   nothing needs to be.
+2. **Leave the result unstaged.** A rollback is a proposal about the record, and
+   it enters the record when a person stages and commits it. This is the one
+   place the usual *leave it staged* convention is loosened, deliberately:
+   staging is a small assertion that the change is ready, and after an
+   interrupt nothing is.
+3. **State the span.** Which commits, over what interval, touching which files —
+   so the person can see what they are about to spend before they spend it.
+
+### How it ends
+
+**The person says what to keep.** Until they do, nothing is added. If the answer
+is *keep all of it, just stop*, that is a complete answer and needs no
+justification.
+
 ## `PROTO-1` — the response clarification protocol
 
 **"That answer was too hard to follow" is a request to change the system, not to
@@ -341,69 +438,8 @@ reasonable end-of-session question and has a one-command answer.
 expected to grow** — adding one is `R29`'s to propose and a person's to accept,
 and a new command arrives with its output shape defined, not discovered.
 
-**`TABLE-1` — the command set.** This is the ground truth for it. Everything
-below that lists commands is a copy, and `tests/run.py` compares them.
-
-**Every row of `TABLE-1` belongs to exactly one of the three groups defined
-immediately below it.** `TABLE-1` says what a verb *does*; the group says what
-kind of act it is. Read down for the specific meaning, up for the general one.
-
-### The three things a command can mean
-
-**The commands group by meaning, and the grouping is the layer above them.** A
-specific command has one precise meaning — `epoch deploy` moves this stretch to
-`deployed`, which is to say **members should now consider it available to
-consume**. A general protocol is what a set of those specific meanings has in
-common, and it is what somebody reaches for when they do not yet know which verb
-they want.
-
-**`PROTO-14` — advance or retreat the stretch.** *This instructs the agent to
-execute a command that changes the stretch's state. **The meaning of each such
-command is defined in `TABLE-1`, above** — this protocol
-adds only what they have in common.* Its members are `epoch plan`, `epoch
-stage`, `epoch deploy` and `epoch brainstorm`. What they share: up is earned and
-down is free, and **only `epoch deploy` reaches outside this repository**, which
-is why the build system rather than a person has the final word on it.
-
-**`PROTO-15` — ask, and change nothing.** *This instructs the agent to execute
-a command that reports. **The meaning of each is defined in `TABLE-1`,
-above**; this protocol adds the guarantee they share.* Its members are `epoch
-status`, `epoch help`, `epoch advice` and `epoch dry run`. What they share:
-**every one is free to run**, which is what makes the set usable — a person
-can find out where they are without deciding anything, and `epoch dry run`
-evaluates every gate and still writes nothing.
-
-**`PROTO-16` — ask what happened outside us.** *This would instruct the agent
-to execute a command asking whether a deployment was received. **The one
-candidate is in `TABLE-1`, above,** and is marked unsupported.* Its only
-member is `epoch double check`, and it is unsupported because what it would
-mean is undefined: a build system's output cannot decline, defer or quietly
-ignore you, and ours can. **An empty group is the honest shape** — it says the
-ecosystem has a question it has not worked out how to ask.
-
-### And below the table: the syntax, where ambiguity reaches zero
-
-**`epoch deploy` is two tokens, typed exactly, and means one thing.** It is not
-a request to be read, weighed or reconstructed — there is nothing in it for an
-agent to interpret, and that is the floor the whole hierarchy stands on.
-
-**Ambiguity falls monotonically as you descend, and that is the design.** A
-conversation is the most ambiguous layer and has four protocols devoted to
-repairing it. A general group narrows it to a kind of act. A table row narrows
-it to one meaning. **The token narrows it to nothing.** Each step up trades
-precision for generality, which is useful when somebody does not yet know what
-they want; each step down trades it back, which is what makes something happen.
-
-**So the layers above decompose into the syntax rather than sitting beside it.**
-`PROTO-14` is not a thing you can run. It resolves to four commands, each of
-which resolves to one row, each of which resolves to a string. **A layer that
-does not resolve downward to a token is decoration**, and the way to check the
-hierarchy is to follow it down until you reach something typeable.
-
-**Adding a verb means choosing its group first.** If it changes state it
-inherits `PROTO-14` and needs the gate discipline; if it only reports it
-inherits `PROTO-15` and must be free to run. **A command that fits no group is a
-sign the group set is wrong**, not that the command needs an exception.
+**This table is the ground truth for the command set.** Everything below that
+lists commands is a copy of it, and `tests/run.py` compares them.
 
 | command | what it does |
 | --- | --- |

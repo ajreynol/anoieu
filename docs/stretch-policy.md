@@ -311,9 +311,7 @@ needs a person, and asking for that is a different block with a different header
 
 ## The status of a stretch
 
-**`TABLE-2` — the status vocabulary. Five levels, and each is a higher bar of
-scrutiny than the one before it.** This is the ground truth for the words; every
-restatement of them elsewhere is a copy, and `tests/run.py` compares them.
+**Five levels, and each is a higher bar of scrutiny than the one before it.**
 
 | status | what it means | scrutiny |
 | --- | --- | --- |
