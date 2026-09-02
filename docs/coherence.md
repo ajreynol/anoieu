@@ -112,7 +112,24 @@ defined on whichever page owns its subject, and moving them all here would put
 the definition further from the work. What this table adds is that they can be
 named.
 
-### The strata, which is the point of the layout
+### The tables a protocol may point at
+
+**Tables are labelled so a protocol can cite one instead of describing it.** A
+protocol that says *the meaning is defined below* has told you nothing you can
+follow; one that says `TABLE-1` has.
+
+| id | what it holds | where |
+| --- | --- | --- |
+| `TABLE-1` | the command set — every verb and what it does | [`interface.md`](interface.md#the-commands) |
+| `TABLE-2` | the status vocabulary — the five levels a stretch moves through | [`stretch-policy.md`](stretch-policy.md) |
+| `TABLE-3` | the protocol register — the four strata below | this page |
+
+**`TABLE-1` and `TABLE-2` are ground truth and are compared against.** Every
+restatement of either is a copy, and the suite fails when a copy stops matching.
+That is what makes citing them safe: a protocol pointing at `TABLE-1` cannot be
+pointing at a stale version, because there is only one.
+
+### `TABLE-3` — the strata, which is the point of the layout
 
 **Protocols sit at levels, and a flat list hid that.** A high one says *go
 through the interface*; a low one says *and here is the interface*; the commands

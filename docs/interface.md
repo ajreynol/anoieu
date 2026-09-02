@@ -341,12 +341,12 @@ reasonable end-of-session question and has a one-command answer.
 expected to grow** — adding one is `R29`'s to propose and a person's to accept,
 and a new command arrives with its output shape defined, not discovered.
 
-**This table is the ground truth for the command set.** Everything below that
-lists commands is a copy of it, and `tests/run.py` compares them.
+**`TABLE-1` — the command set.** This is the ground truth for it. Everything
+below that lists commands is a copy, and `tests/run.py` compares them.
 
-**Every command belongs to exactly one of the three groups defined immediately
-below the table.** The table says what a verb *does*; the group says what kind
-of act it is. Read down for the specific meaning, up for the general one.
+**Every row of `TABLE-1` belongs to exactly one of the three groups defined
+immediately below it.** `TABLE-1` says what a verb *does*; the group says what
+kind of act it is. Read down for the specific meaning, up for the general one.
 
 ### The three things a command can mean
 
@@ -359,28 +359,27 @@ they want.
 
 **`PROTO-14` — advance or retreat the stretch.** *This instructs the agent to
 execute a command that changes the stretch's state. **The meaning of each such
-command is defined in [the command table](#the-commands) above** — this protocol
+command is defined in `TABLE-1`, above** — this protocol
 adds only what they have in common.* Its members are `epoch plan`, `epoch
 stage`, `epoch deploy` and `epoch brainstorm`. What they share: up is earned and
 down is free, and **only `epoch deploy` reaches outside this repository**, which
 is why the build system rather than a person has the final word on it.
 
 **`PROTO-15` — ask, and change nothing.** *This instructs the agent to execute
-a command that reports. **The meaning of each is defined in [the command
-table](#the-commands) above**; this protocol adds the guarantee they share.* Its
-members are `epoch status`, `epoch help`, `epoch advice` and `epoch dry run`.
-What they share: **every one is free to run**, which is what makes the set
-usable — a person can find out where they are without deciding anything, and
-`epoch dry run` evaluates every gate and still writes nothing.
+a command that reports. **The meaning of each is defined in `TABLE-1`,
+above**; this protocol adds the guarantee they share.* Its members are `epoch
+status`, `epoch help`, `epoch advice` and `epoch dry run`. What they share:
+**every one is free to run**, which is what makes the set usable — a person
+can find out where they are without deciding anything, and `epoch dry run`
+evaluates every gate and still writes nothing.
 
 **`PROTO-16` — ask what happened outside us.** *This would instruct the agent
 to execute a command asking whether a deployment was received. **The one
-candidate is in [the command table](#the-commands) above** and is marked
-unsupported.* Its only member is `epoch double check`, and it is unsupported
-because what it would mean is undefined: a build system's output cannot decline,
-defer or quietly ignore you, and ours can. **An empty group is the honest
-shape** — it says the ecosystem has a question it has not worked out how to
-ask.
+candidate is in `TABLE-1`, above,** and is marked unsupported.* Its only
+member is `epoch double check`, and it is unsupported because what it would
+mean is undefined: a build system's output cannot decline, defer or quietly
+ignore you, and ours can. **An empty group is the honest shape** — it says the
+ecosystem has a question it has not worked out how to ask.
 
 ### And below the table: the syntax, where ambiguity reaches zero
 
