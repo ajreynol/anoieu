@@ -29,7 +29,20 @@ they ship — and this page has no way of noticing. So the age is stated, and
 | `eudaimonia` | 2026-09-02 |
 | `anoieu` | 2026-09-02 |
 | `koine` | 2026-09-02 |
-| `dokimasia` | unknown |
+| `dokimasia` | 2026-09-02 — graded on its **pipeline**; its subject is not checkable from here |
+
+**Two different things get recorded here, and conflating them flatters us.**
+*Not yet checked* means nobody has looked. *Not checkable from here* means we
+have no instrument that could — this repository reads `.eo` and `.eos`, so a
+project whose subject is C++ or Lean internals cannot be assessed by us at all,
+however long we spend. **The second is not a budget problem and does not improve
+with effort**, and calling it `unknown` implies somebody was merely slow.
+
+**What is available even then is the pipeline.** Whether a tool has findings,
+whether they reached anybody, and whether anything changed as a result are
+countable without understanding the subject at all — and they are what the
+tenets actually ask about. Grading the pipeline where the subject is out of
+reach is the difference between an honest entry and no entry.
 
 **`unknown` is not a formality.** It means nobody recorded when the paragraph
 was written, so a reader cannot tell whether it describes the project as it is
@@ -338,7 +351,21 @@ seriously, because this repository reads `.eo` and `.eos` rather than C++, so
 everything above comes out of that project's own documents and
 [`../docs/notes.md`](notes.md) §8 rather than out of any measurement.
 
-**Parainesis.** Settle who owns the check at the `src/proof/eo/` seam, where
+**Parainesis.** *Graded 2026-09-02, on the pipeline rather than the subject —
+see the note under the currency table. Its register carries findings, one draft
+and one open, and **none has been filed to cvc5**. That is the same shortfall
+this page grades us on, at an earlier stage: an unfiled finding is a finding
+that has changed nothing, and the gap between having one and sending it is where
+both of us are currently losing.*
+
+*And a view, recorded as a view rather than as an assessment: the maintainer's
+position on 2026-09-02 is that **this repository has the highest potential in
+the ecosystem right now to produce actionable bug reports to cvc5** — not ready
+yet, but nearest. That is a judgement about promise and this page cannot check
+it; it is here because where attention should go is worth writing down, and
+because if it is right the next entry should look very different.*
+
+Settle who owns the check at the `src/proof/eo/` seam, where
 cvc5 turns an internal proof into Eunoia: a rule cvc5 emits that CPC does not
 declare is visible from either side and from neither alone. That is `cvc5-6`, it
 was requested by cvc5, and it is owned by nobody. Two tools building the same
