@@ -559,12 +559,24 @@ that have nothing to do with identity.
 
 **The entity, its mission, and what is answering, on one line.**
 
-**Once per reply, at the very top, and never twice.** A turn in which the agent
-says something, runs a command, and then says more is **one reply, not two**:
-the line goes on the first thing said and is not repeated when the agent picks
-up again. **Printing it twice is a defect, not extra rigour** — a declaration
-that appears wherever the agent happens to start talking has become furniture,
-and furniture is not read.
+**The unit is the prompt, not the turn. One identification per prompt, on the
+first thing said in reply to it.** That single rule settles both ways of getting
+this wrong, and the count is mechanical: **at the end of a session, the number
+of identifications and the number of prompts are equal.**
+
+- **Before anything else.** Not after the first command, not after the answer is
+  known — the first words in reply to a prompt, ahead of any preamble about what
+  is about to be done.
+- **Not again for the same prompt.** A turn in which the agent speaks, runs
+  something, and speaks again is one reply. **Printing it twice is a defect, not
+  extra rigour** — a declaration that appears wherever the agent happens to
+  start talking has become furniture, and furniture is not read.
+- **A prompt that arrives mid-turn is a prompt.** When somebody interrupts with
+  something new while the agent is working, the next thing said carries the line
+  again, because it is the first thing said in reply to *that*. **This is the
+  case that gets missed**, and it is the one where identity is most worth
+  restating: the agent has been away doing something, and what it was doing is
+  exactly what could have changed.
 
 That is the whole of the routine form, and it is short by design: **a declaration repeated
 every turn has to be cheap or it will be dropped**, and a protocol that is
