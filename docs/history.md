@@ -48,6 +48,36 @@ which is the honest state of it: **the most significant thing here has not yet
 been accepted by the people it was offered to**, and that is their decision and
 not a delay.
 
+### The commit census
+
+**15,822 commits across four repositories, everything up to 2026-08-29.**
+
+| tool | commits | first commit | authors | agent-attributed |
+| --- | --- | --- | --- | --- |
+| **cvc5** | 14,064 | 2009-09-26 | 123 | **70** |
+| **ethos** | 1,055 | 2023-07-18 | 10 | **9** |
+| **logos** | 699 | 2026-03-03 | 4 | 0 |
+| **eudaimonia** | 4 | 2026-08-29 | 1 | 0 |
+
+**Seventeen years, four repositories, and more than 130 people.** Stretch 1, by
+comparison, is 331 commits over five days.
+
+**The agent column is a count of commits carrying a co-author trailer that names
+an agent**, which is the only signal that exists and is a weak one — see the
+research question posed to epikrisis in `D21`'s neighbour. **cvc5's first is
+dated 2026-03-14**, so agent-assisted work was going on in the project this
+ecosystem serves for five months before the ecosystem existed, and was being
+recorded in the permanent record while it happened.
+
+**dokimasia and koine are absent because they did not exist**, and that is the
+table's job: it says what was here, not who is here now.
+
+**This table is expected to grow, and law 13 says how.** A tool that was around
+before 2026-08-29 and joins later may have its row inserted retroactively, by
+whoever is president then, with the date it was added. **Those are facts that
+were always true and the table did not know them** — the four rows above are
+what we happened to be looking at, not a claim about what existed.
+
 ### Why this entry exists at all
 
 **Because a history that begins when we started reads as though nothing came

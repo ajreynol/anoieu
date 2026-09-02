@@ -226,7 +226,24 @@ front page and nowhere a machine parses or a stranger reads for instructions,
 and **any tool may say *that's not funny***, meaning *you are confusing
 everyone*, which ends it without argument.
 
-**13. Publishing the working summary is the president's first responsibility**,
+**13. A tool that existed in an earlier stretch may be inserted into that
+stretch's census when it joins, retroactively.** If a repository was there and
+its commits were not counted — because nobody had heard of it, or because it had
+not joined yet — **the current president adds the row and says when it was
+added.**
+
+**This is an insertion of facts that were always true, not a revision**, which
+is why it is allowed where law 4 otherwise makes the past read-only. The commits
+existed; the table simply did not know about them. **Nothing already in the row
+above may be changed to make the new one fit.**
+
+**Stretch 0 is the case this exists for.** It has four repositories in it and
+the ecosystem now has sixteen entries; **most of what was going on before this
+started is not in that table and some of it should be.** A tool joining in a
+later stretch is the natural moment to find out, because joining is when
+somebody reads its history for the first time.
+
+**14. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
 ## Entering the ecosystem, set out properly
