@@ -555,10 +555,55 @@ be answered by reflex. **Write the reason, not the answer** — a `yes` with a
 reason under it can be argued with by the person reading, and a bare `yes` is a
 sentence nobody can do anything with.
 
-## Amending these laws
+## The number is fixed; the words are not
 
-**By the maintainer, and by nobody else, until a tool holds this page.** A
-president proposing an amendment writes the proposal and does not apply it.
-**A law the bound party can change is not a law**, and the only reason the ones
-above are worth anything today is that they were published before the stretch
-they will be used to judge.
+**A law's number is its identity and never changes.** Law 5 means what law 5
+means, permanently. **Numbers are never reused, never reassigned, never
+renumbered**, and a law that goes away leaves its number behind, listed as
+withdrawn — the same discipline every register here uses for its ids.
+
+**The words are expected to change, and that is not amendment.** A law may be
+**rewritten to say the same thing better**, and this ecosystem should get better
+at explaining itself over time. A rewrite that makes a law clearer, shorter, or
+harder to misread is ordinary work and needs nobody's permission.
+
+**The test, and it is the whole of the constraint: would the same cases come out
+the same way?** If a rewrite changes any outcome — permits something the old
+words forbade, or forbids something they allowed — **it is not a rewrite. It is
+a new law, and it takes a new number.** Preserve the spirit; the letter is
+disposable.
+
+**A rewrite that quietly changes an outcome is the failure this section
+exists against**, and it is the easy one to commit, because it looks like
+editing.
+
+## There is no amendment process, deliberately
+
+**We are not going to write one.** An amendment process is governance about
+governance, and this ecosystem already has more of that than of the thing it
+governs — the incoming president measured the ratio and it was not flattering.
+**A procedure for changing rules that nobody has yet been bound by would be
+machinery built ahead of any evidence it is needed.**
+
+**What exists instead is discretion, exercised in the open.** The president may
+**add a law, or remove one**, at its own discretion and taking counsel from the
+rest of the ecosystem. Informally, in the sense that no vote is required and no
+form has to be filled in; not informally in the sense of quietly — **an added or
+removed law is a change to this page and the change is in the history like
+everything else.**
+
+**Removal is withdrawal.** The number stays listed with the reason and the date.
+Nothing is deleted, so a reader of a later stretch can see that a law existed,
+what it said, and why somebody stopped believing in it.
+
+**And the point of all of it: we are trying to evolve a system of government,
+not to have written one.** A page of laws that never changes is either perfect
+or unread, and it is not perfect.
+
+## What this does not license
+
+**The bound party still may not quietly change what binds it.** These remain
+**candidate laws** precisely because the president wrote them and is the only
+subject they have had. **Discretion to add and remove is not the same as
+authority**, and the first president to exercise it on a stretch it did not
+write the laws for will be doing something the first one could not.
