@@ -61,6 +61,12 @@ the next person could not have guessed.
 
 ## E1 — through 2026-09-01
 
+**Version:** **`0.1.0`** when deployed. **Not yet deployed** — the number is the
+one this stretch is intended to be published as, recorded before the fact so
+that the deploy names it rather than chooses it. It versions the ecosystem's
+shared arrangements and nothing else; see
+[`stretch-policy.md`](stretch-policy.md#what-a-stretch-is) for the three version
+numbers in this repository and why they are unrelated.
 **Status:** `planned`, raised from `brainstorm` on 2026-09-01 by `epoch plan` —
 a person's word, which is the whole of that criterion. The protected rings are
 open again. Previously `brainstorm`, dropped from `planned` earlier the same

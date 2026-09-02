@@ -3,6 +3,8 @@
 #
 #   ./scripts/deploy <president> --version=X.Y.Z [--dry-run]
 #
+#   ./scripts/deploy kanon --version=0.1.0        # E1, the first deployment
+#
 # **The first fragment of the epoch build system, living where the protocols do
 # until `tekton` exists.** Everything it does is something a person has been
 # doing by hand: read `epoch status`, check the gates, move the stretch, open the
@@ -40,7 +42,10 @@ usage: deploy <president> --version=X.Y.Z [--dry-run]
                  joined the thing it would be presiding over.
   --version      the version this stretch is deployed as. Required, and typed
                  rather than derived, because it is the one number other people
-                 will refer to.
+                 will refer to. It versions the ecosystem's shared arrangements
+                 and is unrelated to the analyzer's or the fuzzer's package
+                 version -- see docs/stretch-policy.md. E1 is intended to be
+                 0.1.0, recorded on the stretch before the deploy.
   --dry-run      evaluate every gate, print what would change, write nothing.
 
 Refusals are hard. There is no --force, deliberately.
@@ -67,8 +72,28 @@ esac
 
 fail() { echo; echo "REFUSED: $1"; exit 1; }
 
-STRETCH=$(python3 -c "import sys;sys.path.insert(0,'$ROOT/tools');import bump_check as b;print(b.current_stretch() or '')")
-STATUS=$(python3 -c "import sys;sys.path.insert(0,'$ROOT/tools');import bump_check as b;print(b.current_status() or '')")
+# The stretch log may already say which version this stretch is meant to be
+# published as. Disagreeing with it is allowed and is worth saying out loud:
+# somebody wrote that number down deliberately, before the deploy.
+INTENDED=$(ANOIEU_ROOT="$ROOT" python3 <<'PYEOF'
+import os, re
+try:
+    t = open(os.path.join(os.environ["ANOIEU_ROOT"], "docs", "stretches.md"),
+             encoding="utf-8").read()
+except OSError:
+    t = ""
+m = re.search(r"^##\s+E\d+\b.*?^\*\*Version:\*\*\s*\*\*`([0-9.]+)`",
+              t, re.M | re.S)
+print(m.group(1) if m else "")
+PYEOF
+)
+
+STRETCH=$(ANOIEU_ROOT="$ROOT" python3 -c "
+import os, sys; sys.path.insert(0, os.path.join(os.environ['ANOIEU_ROOT'], 'tools'))
+import bump_check as b; print(b.current_stretch() or '')")
+STATUS=$(ANOIEU_ROOT="$ROOT" python3 -c "
+import os, sys; sys.path.insert(0, os.path.join(os.environ['ANOIEU_ROOT'], 'tools'))
+import bump_check as b; print(b.current_status() or '')")
 
 echo "epoch status"
 echo "  stretch:        ${STRETCH:-none}"
@@ -76,6 +101,13 @@ echo "  status:         ${STATUS:-unknown}"
 echo "  deploying as:   $VERSION"
 echo "  next president: $PRESIDENT"
 echo
+
+if [ -n "$INTENDED" ] && [ "$INTENDED" != "$VERSION" ]; then
+  echo "note: the stretch log says this stretch is intended to be $INTENDED,"
+  echo "      and you asked for $VERSION. Neither is wrong here, but one of the"
+  echo "      two was written down first and it was not this command."
+  echo
+fi
 
 echo "gates"
 

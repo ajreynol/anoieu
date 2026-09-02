@@ -9,9 +9,35 @@ be stale look like it covered the rules as well.
 
 ## What a stretch is
 
-**The work between one global announcement and the next.** Not a
-release, nothing is versioned against it, and it has no schedule — it is the span
-a single announcement turned out to cover, named after the fact.
+**The work between one global announcement and the next.** It has no schedule
+— it is the span a single announcement turned out to cover, named after the
+fact.
+
+**A deployed stretch carries a version, and that changed on 2026-09-02.** This
+page previously said *nothing is versioned against it*, which was true while
+nothing had been deployed. **`E1` is the stretch's name and `0.1.0` is the
+version it is deployed as**, and the two are not alternatives: the name is what
+a member writes in `EUNOIA_EPOCH` to say which advice they built against, and
+the version is what a deployment is called out loud.
+
+**Three version numbers exist in this repository and they mean different
+things.** Conflating them is the mistake this paragraph is here to prevent:
+
+| number | what it versions | where it lives |
+| --- | --- | --- |
+| **`0.1.0`** | **the ecosystem's shared arrangements** — the policy, the protocols, the advice a member adopts | the stretch log, on the deployed stretch |
+| `0.2.0` | the **analyzer**, as a Python package | `pyproject.toml`, `anoieu/__init__.py` |
+| `0.1.0` | the **fuzzer**, as a Python package | `anoieu_fuzz/__init__.py` |
+
+**The last two are unrelated to the first and to each other**, and the collision
+between the fuzzer's `0.1.0` and the ecosystem's is a coincidence rather than a
+correspondence. **Nothing synchronises them and nothing should**: a member
+adopting `0.1.0` of the arrangements is not adopting a version of anybody's
+Python package.
+
+**It is still not a release.** No cadence is promised, no compatibility is
+guaranteed, and a version number is a name for what was published rather than a
+commitment about what comes next.
 
 **The boundary is an announcement and not a date**, because a date would be a
 cadence, and a cadence is a commitment to other repositories that we are in no
