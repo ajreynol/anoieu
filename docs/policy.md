@@ -1403,6 +1403,73 @@ the pinned `anoieu / policy` workflow a member adds on joining is a contract
 with us rather than a check of their own. Add anything beside it; do not weaken
 it quietly.
 
+## The deployment policy
+
+> **For the president, and for nobody else.** No member is held to anything in
+> this section, nothing here is checked in anybody's CI, and a repository that
+> never reads it loses nothing. It is in this document because deployment is the
+> one act whose effects land in other people's trees, and this document is where
+> things that touch other people's trees are written down.
+
+**A stretch's entry in [`history.md`](history.md) is that stretch's commit.**
+One atomic record of what happened, with a message, which either lands or does
+not. **Deploying without a sound entry is committing with an empty message and
+the checks turned off** — the work still happened, and nobody afterwards can
+tell what it was.
+
+**The entry looking reasonable is one constraint among several, and it is not
+the sufficient one.** All of the following have to hold.
+
+### The four a program decides, and `./scripts/deploy` refuses without
+
+1. **The incoming president is a `member`.** An office cannot be handed to a
+   repository that has not joined the thing it would preside over.
+2. **The stretch is `staged`.** Deploying is only reachable from there.
+3. **Our own policy check passes.** Nothing is published from a tree that fails
+   its own checks.
+4. **Our build is green at the commit members would adopt** — and
+   **unverifiable is a refusal, not a pass.** A member may only bump to a green
+   commit, so deploying without knowing publishes a commit nobody may adopt.
+
+**There is no `--force` and there will not be one.**
+
+### The four nobody can decide but a person
+
+5. **The entry reads as a record somebody who was not there could follow.**
+6. **The three questions are answered, with reasons and not verdicts** — and if
+   none of the three answers is uncomfortable, they were answered by reflex.
+7. **Both tables are present and the residue is named.** A partition that closes
+   on the first attempt was more likely rounded than right.
+8. **The working summary was kept current, not reconstructed at the close.**
+   Nobody can check this afterwards, which is exactly why it is a rule.
+
+### What *looks reasonable* is allowed to mean
+
+**The weakest word in this section, so it is given edges.** An entry is not
+reasonable if any of these is true:
+
+- **A figure in it cannot be re-derived by somebody else** from the repository
+  and the public record.
+- ***What went wrong* is empty.** A stretch with nothing in that field was not
+  examined.
+- **It says something about a project outside this ecosystem** without the
+  caveats the page's own banner requires.
+- **A `FIXME` is still in it.** The deploy script writes one for the incoming
+  president; **it is a placeholder, and shipping it is worse than shipping an
+  empty section.**
+
+### The part of this that does not work yet
+
+**Gates 5 to 8 are self-administered.** The president writes the entry, judges
+whether it is reasonable, and deploys. **Nobody else reads it first**, which
+means four of the eight constraints are currently a promise rather than a gate.
+
+**This is the strongest argument for the offices that do not exist yet.**
+`nomophylax` would hold the laws the entry is judged against, and `epikrisis`
+would supply the figures the president is not supposed to be producing. **Until
+one of them exists, the honest description of this policy is that half of it is
+the president marking its own work.**
+
 ## Joining the Eunoia ecosystem
 
 This is addressed to tools built *around* the calculus: checkers, compilers,
