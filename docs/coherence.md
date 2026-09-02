@@ -160,18 +160,33 @@ and no stub survives the deployment of the stretch it was made in. The spawned
 repository **identifies itself**: the claim *I am who I say I am* is theirs to
 make and theirs to support. Neither side does the other's half.
 
-### The security half, which is the whole of it
+### It is not a uniqueness claim
+
+**The stub is not a title with one rightful heir.** Any repository that, as far
+as we can see, is capable of upholding the vision is fine — and if two of them
+turn up, that is also fine. We are not adjudicating who owns a name.
+
+**We do not track GitHub ownership.** No accounts, no signatures, no
+organisation membership, no chain of custody. Keep it simple.
+
+**So *fraud* here is narrow**: a repository that claims to be doing the work and
+is not. That is the only thing being checked, and it is checked by reading it.
+
+**And it is not currently a risk.** One person drives this ecosystem as of
+2026-09-02. The protocol is written now because writing it later, under
+pressure, is the expensive version — not because anybody is knocking.
+
+### The security half
 
 **Deleting a stub is irreversible and keeping one costs nothing.** That
 asymmetry sets the default: **no**.
 
 1. **Any hint of fraud, reject.** Not a finding, not an accusation, no
    investigation owed — the stub simply stays and the claimant may come back.
-2. **Evidence the claimant controls is not evidence.** A message saying *I am
-   kanon* and a repository whose README says *I am kanon* are one claim twice,
-   not two claims. **Corroboration has to come from something they do not
-   control**: the name register, the inventory, the person who would have
-   spawned it.
+2. **Read the repository, not the message.** A claim is worth nothing; a
+   repository that visibly does the work is worth something. Not because a
+   repository cannot be faked, but because **the cheapest way to fake being a
+   working instantiation of the tool is to build one.**
 3. **Asking the claimant for more proof is not verification.** It is asking a
    claim to grow, and a claim will.
 4. **An agent never deletes a stub.** It gathers, it reports, and it refuses.

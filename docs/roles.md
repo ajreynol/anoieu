@@ -17,6 +17,20 @@ carries the same four labels in the same order, always present, and a field with
 nothing in it says so in words rather than being left out. That costs nothing to
 keep true by hand and is the whole of what a parser would need.
 
+## A role is not a child project
+
+**A role is simple and globally maintained.** One register, this one, covering
+the whole ecosystem. Anybody can read the list and see who holds what.
+
+**A child project is complex and locally maintained.** It lives in its parent's
+tree, on its parent's footing, and its parent governs it. There is no global
+register of them and there should not be one.
+
+**They are answers to different questions** — *who is responsible for this* and
+*where is this work being done* — and a tool can hold roles with no child
+projects, or carry child projects while holding one role.
+
+
 ## The philosophy
 
 **The unit is the responsibility, not the tool.** A tool is where roles happen

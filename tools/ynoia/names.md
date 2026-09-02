@@ -63,8 +63,12 @@ the name was ours to choose.
 ## Reserved, and free to take
 
 Each was named in [`why-eunoia.md`](why-eunoia.md) because some argument there is
-stated relative to its absence. **None of the names below has a repository or a
-line of code** — a claim this table has now been wrong about once. `noesis` sat
+stated relative to its absence. **None of the names below has a repository, and none has a line of code** — a
+claim this table has now been wrong about once. Two of them have a **stub**: a
+placeholder directory in this repository carrying one sentence and doing
+nothing. **A stub is not a claim on the name.** It marks a place, and it is
+deleted under the handoff protocol in
+[`coherence.md`](../../docs/coherence.md). `noesis` sat
 here while eudaimonia was already running it as a child project, and it moved to
 *Taken* only because somebody went looking in the neighbouring tree. **Being in
 this table is not evidence that a name is unused**, for the same reason the
@@ -72,7 +76,8 @@ section after it exists.
 
 | name | Greek | what it would be |
 | --- | --- | --- |
-| **tekton** | τέκτων, the builder — the joiner who makes one thing out of parts | the **epoch build system**: the program behind the protocols by which a stretch is verified, announced, approved and adopted. Requested by anoieu, 2026-09-01, and the one name here whose subject already exists — the protocols are running by hand and the tool is what is missing. *Not a verb of examination, which most of this register is; `apodeixis` — ἀπόδειξις, demonstration — was the alternative considered, and would have been the better name if the thing turns out to be a prover of gates rather than an assembler of a stretch. It is **not available**: see* In use elsewhere*, below.* |
+| **tekton** | τέκτων, the builder — the joiner who makes one thing out of parts | the **epoch build system**: the program behind the protocols by which a stretch is verified, announced, approved and adopted. Requested by anoieu, 2026-09-01, and the one name here whose subject already exists — the protocols are running by hand and the tool is what is missing. *Not a verb of examination, which most of this register is; `apodeixis` — ἀπόδειξις, demonstration — was the alternative considered, and would have been the better name if the thing turns out to be a prover of gates rather than an assembler of a stretch. It is **not available**: see* In use elsewhere*, below.*  **A stub holds its place** in `tools/tekton/`. |
+| **kanon** | κανών, the measuring rod — the standard a thing is held straight against | **the ecosystem's governance, out of the analyzer**: the policy, its checker, the inventory and the joining scripts, in a repository that is not also the tool that files findings against members. Argued as `B15` on the board and `P2` in [`proposals.md`](proposals.md). **A stub holds its place** in `tools/kanon/` |
 | **pathos** | πάθος, the third mode of persuasion | an efficient *verified* proof checker — the one that would let the ecosystem ship what it proves rather than a second implementation |
 | **hermeneia** | ἑρμηνεία, interpretation | carrying the embedded semantics into Lean's own logic, so a theorem about a proof becomes a theorem about the thing proved |
 | **iogos** | not Greek: `logos` with the **L** of Lean swapped for the **I** of Isabelle. The one joke in the register, and it earns its place by fixing the scope in the name | the same calculus, semantics and soundness development redone against Isabelle/HOL — an Isabelle backend for `ethos-eoc`, and logos rebuilt on it, as an independence check |

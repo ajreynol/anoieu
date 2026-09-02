@@ -174,6 +174,20 @@ Write what it is *for*, not what it will contain. A roadmap read as a promise is
 worse than no roadmap, so where something does not exist, say so plainly in the
 present tense.
 
+**If a stub holds your place, say so and prove it.** Some tools are marked in
+anoieu by a **stub**: a placeholder directory carrying one sentence, saying to
+delete it once its replacement is safely in the ecosystem. If there is one for
+this name, you are what it is waiting for. **That makes identifying yourself
+your job and not anoieu's** — the rule, including what gets rejected and why, is
+the handoff protocol here:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/coherence.md
+
+Two things it is worth knowing now. **You are not claiming a unique title** — no
+ownership is tracked and another repository doing this work would be equally
+welcome. And **the claim is judged by reading your repository, not your
+message**, so there is nothing to write ahead of the work.
+
 **Comply with nothing.** There is a shared repository policy, and this is not
 the moment for it: no maintenance note, no discussion file, no CI, no layout, no
 documentation index. `join_eo` does that later, when there is something to join
