@@ -919,18 +919,18 @@ first answer anybody gives about this page is too long. Nothing below is new.
 | the question | the answer | where the rule lives |
 | --- | --- | --- |
 | who may change a paragraph | **a person, asked first** | the supervision ladder above |
-| what is it graded against | the commits [`../tools/deps.lock`](../tools/deps.lock) records — **not the trees on disk** | [`report-card.md`](report-card.md) |
+| what is it graded against | **a fixed, recorded version of each project — never whatever is on their disk today.** Changing which version is a separate decision, because it changes what the build measures. The mechanism is [`../tools/deps.lock`](../tools/deps.lock) | [`report-card.md`](report-card.md) |
 | which voice does a paragraph use | whichever the project's own maintenance note asks for: **people get an observation, agents get an instruction** | [`report-card.md`](report-card.md) |
 | what shape does a paragraph take | *arete*, *elleipsis*, *parainesis* — **all three** | [`report-card.md`](report-card.md) |
 | who may appear on it at all | tools in [`../tools/ecosystem.json`](../tools/ecosystem.json). **A child project may not**, until a person decides it has earned a place | [`vision.md`](vision.md) |
 
-**The order to work in.** First check that the lock already covers the work you
-want to credit; if it does not, **moving the lock is the first act and a
-separate one**, because it changes what the `corpus` job measures. Then draft,
+**The order to work in.** First check that the recorded version already covers
+the work you want to credit; if it does not, **updating it is the first act and
+a separate decision**, because it changes what the build measures. Then draft,
 in the register that project's note asks for, with all three fields. Then ask.
 
-**The trap this table exists to make visible.** Praising something the lock does
-not cover is grading work the recorded evidence does not contain — which reads
+**The trap this table exists to make visible.** Praising something the recorded
+version does not cover is grading work the evidence does not contain — which reads
 as generosity and is actually the page failing its own evidence rule.
 
 **And the one check that matters more than the rest**: anoieu is graded on the

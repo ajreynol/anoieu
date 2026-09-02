@@ -226,15 +226,18 @@ number worth looking at, in both directions.
 | `logos` | candidate | 3 |
 | `martyria` | child of `anoieu` | 0 |
 | `sapheneia` | child of `anoieu` | 1 |
+| `stathmos` | child of `anoieu` | 1 |
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 | `zetesis` | child of `anoieu` | 0 |
 
-Twenty-seven roles across fourteen tools, and three sections empty: `workflow-
-launcher`, `martyria` and `zetesis` hold nothing, which is not an omission — a
-child project has no users, nothing depends on it, and it owes nobody an
-artifact. The rows worth reading are the longest and the empty one, and both
-are the page working rather than the page being wrong.
+Twenty-eight roles across fifteen tools, and three sections empty:
+`workflow-launcher`, `martyria` and `zetesis` hold nothing, which is not an
+omission — a child project usually has no users, nothing depends on it, and it
+owes nobody an artifact. **`stathmos` is the exception and says so**: it holds
+`R30` from its first day, which makes it not an island, and the reason is
+written beside the role. The rows worth reading are the longest, the empty ones,
+and that one.
 
 ---
 
@@ -305,11 +308,12 @@ and the research-quality successor, which is nobody's — it has a name,
 
 **Held by:** `anoieu`
 **Role:** what AI-assisted development in this ecosystem is aiming at — the
-tenets, the record of what the tools have actually delivered to one another, and
-a report card that is a judgement about somebody else's project. Written for
-every repository, and argued rather than checked.
-**Owns:** `docs/vision.md`, and `docs/report-card.md`, which is the half of it
-that is re-graded every round.
+tenets, and the record of what the tools have actually delivered to one another.
+Written for every repository, and argued rather than checked.
+**Owns:** `docs/vision.md`. The grading half was split out as `R30` on
+2026-09-02: the two pages have nothing in common operationally — this one is
+argued and changes rarely, that one is re-done every round against recorded
+evidence — and carrying both under one id hid which of them had gone stale.
 **Not this role:** anything mechanical. Nothing may ever check this one, which
 is the single rule in this ecosystem that forbids work rather than requiring it;
 the checkable half is `R4`.
@@ -604,6 +608,29 @@ language requires and what one implementation happens to do.
 **Not this role:** governing. `R11` remains the authority and this account says
 so on its own front page; where the two disagree, that disagreement is a finding
 and it leaves through `R1`.
+
+## stathmos
+
+### R30 — the report card
+
+**Held by:** `stathmos`
+**Role:** keeping the report card current — assembling, per tool and at the
+recorded version, the evidence a paragraph about that tool would rest on, and
+re-grading each round. It is the half of the vision that goes stale, because it
+is the half that is a claim about somebody else's project this month rather than
+a statement of what the work is for.
+**Owns:** `docs/report-card.md`.
+**Not this role:** the tenets themselves, which are `R5` and are argued rather
+than assembled; deciding whether a paragraph is right, which stays a person's
+and may never acquire a checker; and reading *histories*, which is an instrument
+another tree already has and which this one asks rather than rebuilds.
+
+> **This role is held by a child project, which makes that project not an
+> island, and the exception is deliberate.** The point of moving it off `anoieu`
+> is that the tool writing the report card should not indefinitely be the tool
+> it grades most closely. Starting the separation inside `anoieu` is the cheap
+> first step; the stated destination is a repository of its own, and the role
+> keeps its id when it goes.
 
 ## workflow-launcher
 

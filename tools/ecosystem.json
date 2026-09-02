@@ -181,6 +181,12 @@
     "path": "tools/zetesis",
     "what": "the general inquiry: what standard this ecosystem is held to, taken from outside, and whether our record could show we met it"
   },
+  "stathmos": {
+    "status": "child",
+    "parent": "anoieu",
+    "path": "tools/stathmos",
+    "what": "what each tool weighs against the tenets, at the recorded version, and the evidence for it -- the report card's raw material, not its verdicts"
+  },
   "workflow-launcher": {
     "status": "child",
     "parent": "eudaimonia",

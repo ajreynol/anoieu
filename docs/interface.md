@@ -17,26 +17,47 @@ done here, and what comes back.
 say it again.**
 
 It is invoked by a person, in whatever words. What it means is not *explain it
-better*. It means: **an answer that has to be assembled from four documents will
-be unclear however carefully it is written**, so the unclear answer is a symptom
-and the scattered procedure is the defect. Re-explaining treats the symptom and
-leaves the next person to hit the same thing.
+better* — re-explaining treats the symptom and leaves the next person to hit the
+same thing. **There are two defects it can be pointing at, and they need
+different fixes.**
+
+**Wrong altitude — the commoner one, and the one an agent will miss.** The
+answer explained a *mechanism* when the person needed a *consequence*. Naming a
+file, a command or a data format to somebody who is deciding something is not
+precision; it is the agent showing its working. **The test is blunt: if
+understanding the answer requires knowing a filename, it is not an answer yet.**
+Somebody deciding needs to know what is true, what it costs, and what they must
+choose — never where any of that is recorded.
+
+**Scattered — the structural one.** The answer had to be assembled from four
+documents, and it will be unclear however carefully it is written. Here the
+unclear answer is a symptom and the arrangement is the defect: collect the
+procedure into one place, on whichever page owns the subject.
+
+**The person sets the altitude, and the agent does not get a vote.** An agent
+that judges some detail *necessary* is usually protecting its own reasoning
+rather than serving the decision. If a mechanism genuinely binds the choice,
+**state the constraint in plain terms and leave the mechanism in the
+documentation** — *the version we grade against is fixed, and changing it is a
+separate decision* says everything the filename would have, to somebody who does
+not have to care which file it is.
 
 **What happens when it is invoked**, in order:
 
-1. **Find where the procedure actually lives.** Usually several places, and
-   counting them is the diagnosis — if the answer came from one page, the
-   problem really was the writing and the rest of this does not apply.
-2. **Put it in one place**, on whichever page owns the subject, in the smallest
-   form that is still true. Other pages keep their rules; what is new is that
-   one page answers the question.
+1. **Say which defect it was.** Re-read the answer and ask what a person could
+   not have acted on. Mechanism where a consequence was wanted, or an answer
+   assembled from several pages — the fix differs, and guessing wastes the
+   second attempt too.
+2. **Fix that defect.** For altitude: rewrite so the answer names no file and
+   still constrains the decision correctly. For scattering: collect the
+   procedure onto whichever page owns the subject. Frequently both.
 3. **Answer again, short**, pointing at that place rather than reciting it.
 4. **Say what was wrong in the first answer**, if anything was. Clarifying is a
    second look, and a second look sometimes finds an error rather than a
    tangle.
 
 **It is not a licence to simplify by omission.** The spirit of the analysis
-survives the refactor; only the scattering goes. Where a conclusion is genuinely
+survives the refactor; only the mechanism and the scattering go. Where a conclusion is genuinely
 complicated, the fix is to say so **in one place** rather than in four — a
 procedure that is short because it left out a constraint will produce a
 confident wrong answer, which is worse than the tangle it replaced.

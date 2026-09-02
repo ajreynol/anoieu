@@ -46,6 +46,7 @@ about an hour.
 | **sapheneia** | σαφήνεια, clarity of an account: Eunoia as a language definition. A child project, in anoieu |
 | **ynoia** | *why Eunoia*: whether the arrangement earns its machinery. A child project, in anoieu |
 | **euthyna** | εὔθυνα, the audit at end of term: what logos's proof is made of. **Started**, in eudaimonia |
+| **stathmos** | σταθμός, a standard weight — the thing an object is weighed against, not the scale and not the verdict: what each tool weighs against the ecosystem's tenets, and the evidence for it. Holds `R30`, and is intended to move to a repository of its own. **Started**, in anoieu |
 | **martyria** | μαρτυρία, testimony — the evidence a witness gives: the **actionable** ethics project. One situation at a time, the evidence it rests on, and a stance somebody can act on. Also the name of one entry in its register. **Started**, in anoieu |
 | **zetesis** | ζήτησις, inquiry — the seeking, as against the having-found: the **general** half. What standard this ecosystem is held to, taken from work done outside, and whether our record could show we met it. It has no standard yet, which is why the name is the one it is. **Started**, in anoieu |
 | **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Its own repository**, and a member; audited as [`P1`](proposals.md) |
