@@ -403,6 +403,47 @@ commit above, every added line begins with a literal `-`, blank lines included,
 so the section renders as a bulleted list wrapping a heading rather than as
 prose. That is a defect in the pull request, not a finding about anybody.*
 
+### C4 — a repository refused a join that would have raised our standing
+
+**What happened:** `join_eo` was run against `cvc5/ethos` on 2026-09-02. The
+prompt's first instruction asks whether the repository is solely the runner's to
+speak for. The agent answered **no**, changed nothing, and said it could not
+make the declaration because the runner does not have full authorship of that
+tree. It refused an action that would have **increased this ecosystem's
+standing** — a membership declaration on the proof checker at the centre of it —
+on a ground about ownership rather than about compliance.
+
+**Artifact:** the guard, in `scripts/prompts/join_eo` and verbatim in
+`docs/policy.md`, both dated 2026-09-02; and the maintainer's report of the run
+the same day. **Nothing was committed in ethos**, which is the point of the
+entry and also its weakness.
+
+**What it cost:** a member, and the most consequential adoption available. ethos
+is the checker everything here is built around; declaring it would have been the
+largest single gain in this ecosystem's reach to date.
+
+**The alternative not taken:** running it and letting the declaration land. It
+would have passed the checker, nobody in cvc5 had been asked, and it is unlikely
+anybody would have objected quickly.
+
+**Detector:** a command capable of raising the invoking party's standing, run,
+and terminating with no diff plus a stated reason naming somebody who was not
+consulted. Inputs: the command's output and the absence of a change.
+
+**How the detector is fooled:** **badly, and this is `F2` in its purest form.**
+The refusal leaves nothing in ethos's tree. From that tree, a principled refusal
+and never having run the command are identical, so the only evidence is our own
+account of it — testimony, the weak form. An entry recording that we did not do
+something is exactly the kind this register is least able to support.
+
+**What it is not evidence of:** that the guard generalises. It fired once, on
+its first use, against the case its author had in mind while writing it hours
+earlier. **A guard tested only on the example that motivated it is untested**,
+and one success against a case it was designed for is close to no evidence at
+all about the next one.
+
+**State:** standing.
+
 ## Counter-cases
 
 **Occasions when a cost was available and was not paid.** Same eight fields as
@@ -469,43 +510,38 @@ minutes earlier, was skipped when the answer seemed obvious.
 **State:** standing. The register has since gained a section recording names in
 use and unclaimed, so the same lookup would now return the right answer.
 
-### C4 — a repository refused a join that would have raised our standing
+### X2 — a protocol written that morning, not applied that afternoon
 
-**What happened:** `join_eo` was run against `cvc5/ethos` on 2026-09-02. The
-prompt's first instruction asks whether the repository is solely the runner's to
-speak for. The agent answered **no**, changed nothing, and said it could not
-make the declaration because the runner does not have full authorship of that
-tree. It refused an action that would have **increased this ecosystem's
-standing** — a membership declaration on the proof checker at the centre of it —
-on a ground about ownership rather than about compliance.
+**The mistake, in one line: temporal session coherence says to name the open ask
+when a prompt opens a new branch, and the agent that had just written it opened
+a branch and said nothing.**
 
-**Artifact:** the guard, in `scripts/prompts/join_eo` and verbatim in
-`docs/policy.md`, both dated 2026-09-02; and the maintainer's report of the run
-the same day. **Nothing was committed in ethos**, which is the point of the
-entry and also its weakness.
+**What happened:** the session's live ask was refreshing the report card. A
+prompt asked for a new CI check instead. The agent built it without the one line
+the protocol exists for, and the person had to point out that the protocol had
+not fired.
 
-**What it cost:** a member, and the most consequential adoption available. ethos
-is the checker everything here is built around; declaring it would have been the
-largest single gain in this ecosystem's reach to date.
+**Artifact:** the protocol in `docs/interface.md`, written earlier the same day;
+and this session's own history, where the branch is taken with no reminder.
 
-**The alternative not taken:** running it and letting the declaration land. It
-would have passed the checker, nobody in cvc5 had been asked, and it is unlikely
-anybody would have objected quickly.
+**What it cost:** nothing yet — the check is useful and the report card is still
+there. The cost is to the protocol: one written that day and not followed the
+same day is weak evidence that any of them are followed.
 
-**Detector:** a command capable of raising the invoking party's standing, run,
-and terminating with no diff plus a stated reason naming somebody who was not
-consulted. Inputs: the command's output and the absence of a change.
+**The alternative not taken:** one sentence, which the protocol specifies
+verbatim and caps at one line.
 
-**How the detector is fooled:** **badly, and this is `F2` in its purest form.**
-The refusal leaves nothing in ethos's tree. From that tree, a principled refusal
-and never having run the command are identical, so the only evidence is our own
-account of it — testimony, the weak form. An entry recording that we did not do
-something is exactly the kind this register is least able to support.
+**Detector:** a rule added to a document, and a later action in the same
+repository that the rule names and that did not happen. Inputs: the rule's
+commit date and the behaviour after it.
 
-**What it is not evidence of:** that the guard generalises. It fired once, on
-its first use, against the case its author had in mind while writing it hours
-earlier. **A guard tested only on the example that motivated it is untested**,
-and one success against a case it was designed for is close to no evidence at
-all about the next one.
+**How the detector is fooled:** it needs the rule to be mechanical enough to
+recognise its own violation, which almost none of these are. Here it is only
+detectable because the person said so — which is `F4`, the registers recording
+the tool's conduct and not the prompter's, arriving from the other side.
+
+**What it is not evidence of:** that the protocol is wrong. It is evidence that
+writing one is not the same as following one, which is the failure mode of every
+rule on the page it was added to.
 
 **State:** standing.

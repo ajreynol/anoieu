@@ -35,6 +35,19 @@ jobs:
   #
   # docs/vision.md is deliberately absent here and must stay absent: see
   # "Policy is checked; vision is argued" in docs/vision.md.
+  # The measurement this repository's central policy asks for and cannot make
+  # into a gate: what a sentence says is not decidable, so this reports how much
+  # evidence there is that the documentation is current and fails nothing.
+  documentation-up-to-date:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: how much evidence there is that the documentation is current
+        run: python3 tools/doc_currency.py --list
+
   policy:
     runs-on: ubuntu-latest
     steps:

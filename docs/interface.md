@@ -105,7 +105,13 @@ usually reads well enough that throwing it away is hard. Cheap to prevent,
 expensive to unwind — which is why the rule is *do not act*, not *try to
 infer*.
 
-## The session focus protocol
+## Temporal session coherence
+
+*Coherence is already this repository's word for **the record, the documents and
+the tree do not disagree with each other**. This is the same property applied to
+a session over time: what the session set out to do and what it is doing do not
+drift apart. It is a protocol about the agent steering the conversation, and the
+steering is the service.*
 
 **Prompts here jump around, and an agent working in this ecosystem should expect
 that rather than be thrown by it.** Ideas arrive mid-turn. A request opens three
