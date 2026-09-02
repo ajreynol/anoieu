@@ -85,6 +85,11 @@ should not read as more.
 | **the laws** | `nomophylax` | **no.** Fixed to one repository | does not exist | elected |
 | **counsel** | `euboulia` | **no.** Fixed to one repository | does not exist | elected |
 
+**Why the presidency should actually move**, rather than being an office one
+repository holds indefinitely, is argued from the ecosystem's own numbers in
+`S4` of martyria's stances — role concentration, the judge sitting inside the
+judged, and a cost that compounds every stretch.
+
 **The presidency rotates and the other two do not**, and that asymmetry is
 deliberate: an office that changes hands each stretch is checked by its
 successors, while an office nobody replaces has to be checked some other way —
@@ -125,29 +130,37 @@ which is a reason to require evidence and not a reason to freeze the text.
 demonstration attached, or a correction that removes the claim instead of
 answering it, is the failure this law exists against.
 
-**5. A stretch's heading is its purpose, in at most three words.** Not a summary
+**5. The membership history stays, unconditionally.** Who joined, when, and on
+what footing is the one part of this file that is never demoted, summarised
+away, or dropped when the page gets long. **It survives every clean-up, every
+correction, and every change of president.** A member's arrival is a fact about
+somebody else's repository as much as ours, and the record of it is not the
+current president's to economise on. **When space has to be found, it is found
+somewhere else.**
+
+**6. A stretch's heading is its purpose, in at most three words.** Not a summary
 of what happened. A heading written after the fact has lost the thing worth
 recording, and one that cannot be said in three words describes a stretch nobody
 has understood yet.
 
-**6. An entry opens with how long the stretch lasted in real human time, and
+**7. An entry opens with how long the stretch lasted in real human time, and
 with the change in membership in the order it happened.** Those two before
 anything else.
 
-**7. The president does not analyse GitHub.** epikrisis does, as a service. A
+**8. The president does not analyse GitHub.** epikrisis does, as a service. A
 president quoting its own count of its own commits is the party being described
 choosing the numbers that describe it.
 
-**8. Every figure must be re-derivable by somebody else** from the repository
+**9. Every figure must be re-derivable by somebody else** from the repository
 and the public run history. A number that only the president can produce does
 not go on the page.
 
-**9. The summary is kept current while the stretch runs.** Not written at the
+**10. The summary is kept current while the stretch runs.** Not written at the
 end from memory. **A summary composed afterwards is a reconstruction**, and a
 reconstruction by the party being described is the weakest document this
 ecosystem could produce.
 
-**10. Publishing the working summary is the president's first responsibility**,
+**11. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
 ## The template a closing president fills in
@@ -162,7 +175,7 @@ somebody who was not there.** Not to record everything, and not to justify
 anything. A closed entry that a stranger cannot follow has failed whatever else
 it contains.
 
-**Eight fields, in this order, all of them present.** *Nothing to report* is an
+**Nine fields, in this order, all of them present.** *Nothing to report* is an
 answer and is written; an omitted field is not.
 
 | field | what it holds |
@@ -175,6 +188,19 @@ answer and is written; an omitted field is not.
 | **What is handed on** | unfinished work the next president inherits, and anything it must not assume |
 | **Government model** | **what was actually executed while in office**, named plainly — which positions existed, who held them, and how each was held. Not the model that was aspired to |
 | **Evidence** | where the figures came from, and how a reader re-derives them |
+| **To the next president** | what the outgoing president wants its successor to know. **The one field written to a reader rather than about a stretch** |
+
+**The message to the successor is positive reinforcement, and that is a rule
+rather than a tone.** Name what the next president should keep doing and what
+this stretch got right that would be easy to drop. **Warnings belong in *what is
+handed on*** — that field exists for them, and mixing the two produces a letter
+that reads as a list of things not to get wrong.
+
+**The reason is that a president arrives at the bottom.** Whatever the last one
+reached, the successor starts at `brainstorm`, inherits a record it wrote none
+of, and is graded by a page it does not hold. **The one thing the outgoing
+president can hand over that costs nothing is confidence about what is already
+working.**
 
 **Why the government model is a required field.** The arrangement described on
 this page is expected to change, and a reader of a closed stretch needs to know

@@ -228,3 +228,82 @@ settles it for them immediately.
 this speaks to them at all. Ours, for the ceiling and for the refusal to
 enforce. **No agent may widen the ceiling**, and an agent asked to is being
 asked for the one thing here that is not on offer.
+---
+
+## S4 — why handing the presidency on is the right thing, in three reasons
+
+**The situation:** the presidency of the Eunoia ecosystem is proposed, held by
+anoieu for Stretch 0 by bestowal, and expected to pass to `kanon` for Stretch 1.
+**Handing it on has a cost** — the level is lost, the record leaves this tree,
+and the next holder does not exist yet. This entry is the argument that it is
+right anyway, and it is made from measurements rather than from principle.
+
+*Read **environment** here as the ecosystem these tools live in. Every figure
+below is re-derivable from this repository at the commit that records it.*
+
+**Status:** **decided**, 2026-09-02.
+
+**Our stance: hand it on, for three reasons.**
+
+**1. One repository holds most of the ecosystem, and that is not what anybody
+joined.** Of the **28 roles** in [`roles.md`](../../docs/roles.md), **15 sit in
+anoieu's tree** — 8 held by anoieu itself and 7 by its own child projects. The
+next largest holder outside it has **3**. Of the **22 items on the board, 21
+name anoieu** as an entity. **An arrangement where every outstanding question
+but one runs through a single tool is not an ecosystem; it is one project with
+correspondents.** Three repositories joined something described as shared, and
+the ethical obligation created by that description is to **make it true**.
+Handing the office on is the cheapest available step toward it.
+
+**2. Everything that judges is currently inside the thing being judged.**
+anoieu writes the policy, ships the checker that **three other members run in
+their own CI**, keeps the inventory, files the findings against members, holds
+`laws.md`, keeps `history.md`, and grades every tool including itself. **No
+party should be able to change the rule it is judged by without asking
+anybody.** That this is not merely theoretical is on the record: **CI here was
+red for 112 consecutive runs**, across two full days with no green run at all,
+and nothing outside this repository noticed. The only oversight that operated
+was one person's review. **Oversight that depends entirely on one person paying
+attention is not a property of the system**, and handing the office on is what
+starts making it one.
+
+**3. The cost of keeping it compounds, and is paid by people who cannot see
+it.** Every member pins this repository's tip, so every member's build depends
+on our tree. **Three members joined inside 81 minutes on 2026-08-31 and none
+has joined since.** Meanwhile the published joining requirement has never once
+been satisfiable — every member joined at a commit our own gate refuses. **Each
+stretch that closes under a single presidency is another stretch of record that
+nobody but its author can examine**, and entries written before a second
+president exists can never be judged by rules somebody else wrote. **The
+correction gets more expensive every stretch and never gets cheaper.**
+
+**What we will not do:**
+
+- **Hand it to something that does not exist.** `kanon` must be built and
+  running before Stretch 1 opens; the readiness check on the front page is what
+  says so, and it is not a formality.
+- **Hand over the assessment with the office.**
+  [`report-card.md`](../../docs/report-card.md) stays here. The record of what
+  happened should follow whoever is answerable for it; the grading of everybody
+  should not travel with the office being graded.
+- **Claim this makes the arrangement legitimate.** A second bestowal is still a
+  bestowal. **Nothing here is elected and nothing is in Arete**, and handing on
+  a proposed office does not ratify it.
+- **Present the numbers above as an audit.** They were computed by the party
+  they describe, which is the defect they are cited to argue against. epikrisis
+  is the tool that should produce them and has not been asked.
+
+**What it rests on:** the role counts in `roles.md`; the entity fields in
+`board.md`; the member list in `tools/ecosystem.json`; the public CI run
+history; and the joining moments recorded in the inventory. All five are
+re-derivable by anybody with the repository.
+
+**What would change it:** evidence that a second president would be worse than
+none — most plausibly that `kanon` cannot hold the record without also
+acquiring the roles that made concentration a problem here, which would move
+the concentration rather than reduce it. **That is a real risk and is not
+answered by this entry.**
+
+**Whose decision it is:** the maintainer's, who bestows the office. Ours only in
+the sense that this is the advice we would give if asked, which is what a stance
+is.

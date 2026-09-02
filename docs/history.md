@@ -155,18 +155,40 @@ non-negotiable for every party to a handoff. **For most of this stretch this
 repository could not have handed anything to anybody**, and nobody noticed,
 because nobody was looking at the colour.
 
-### What was established
+### What is now true
 
-- **Members joined**: ethos declined a full join on ownership grounds and was
-  correct to; the ecosystem's inventory carries the current footing of each.
-- **Two gifts were offered outward** to trees this ecosystem does not own, with
-  the ethics of each argued before they were sent rather than after.
-- **The protocol register grew** from five entries to twenty-one, and acquired a
-  human-facing sibling.
-- **Two stubs were created**, for the two tools the next stretch is expected to
-  start, with a readiness check on the front page for each.
+**Six things this stretch built that outlast it.** Stated as claims with the
+evidence beside them, because a stretch entry that only lists difficulties is
+as unreliable as one that only lists wins.
 
-### What is unfinished
+1. **Another repository's build depends on our checker, and has for days.**
+   `tools/policy_check.py --root` runs in **three** members' CI. That is a
+   published interface with somebody else's build hanging off it — the hardest
+   kind of thing to have, and the one that cannot be claimed without their
+   trees agreeing.
+2. **A fresh repository can be told whether it is ready to be started, on the
+   front page.** The `Ready — init_eo <name>` jobs answer *what is the next
+   thing to do* without anybody reading a board, and green means the register
+   entry exists, the stub is there, and every other job passed. **They are also
+   built so they cannot outlive their purpose**: each asserts its own stub, so
+   deleting the stub turns the job red and forces its removal.
+3. **Research on epikrisis, interesting and not yet vetted.** It audits how
+   repositories change over time on evidence a reader can re-derive, and it
+   asked to be given a responsibility rather than the rank it was offered.
+   **Nothing here has checked its work** — the ecosystem has no report from it,
+   which is why this is listed as promising rather than as delivered.
+4. **The protocol register grew from five entries to twenty-two and acquired a
+   human-facing sibling.** One arrangement, written twice: `PROTO-n` for the
+   party that reads literally, `INST-n` for the party that reads at the end of a
+   long day.
+5. **ethos was asked to join, declined on ownership grounds, and was right
+   to.** That is the ethics work having teeth rather than having pages — a tool
+   in this ecosystem refused an instruction from the person who wrote it,
+   correctly, and the exchange is on the record.
+6. **Two gifts were offered outward** to trees this ecosystem does not own,
+   with the ethics of each argued before they were sent rather than after.
+
+### What is unfinished### What is unfinished
 
 - **`E1` has not been deployed.** It has been `planned` for the whole stretch.
 - **The joining requirement is still one nobody has satisfied**, which is why
@@ -177,6 +199,12 @@ because nobody was looking at the colour.
 ---
 
 ## Stretch 1 — not started
+
+**Why hand it on at all**, given that the level is lost and the record leaves
+this tree: three reasons, argued from measurements rather than principle, in
+`S4` of [martyria's stances](../tools/martyria/stances.md). The short form —
+**15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
+this repository, and everything that judges is inside the thing being judged.**
 
 **Expected president: [kanon](../tools/kanon/README.md), by bestowal.** Not
 elected — there is still no mechanism — so Stretch 1 inherits Stretch 0's
