@@ -7,6 +7,24 @@ half that moves — the tenets are stable and these paragraphs are re-graded eve
 round — and because a judgement about somebody else's project is a different
 kind of writing from a statement of what the work is for.*
 
+**This is anoieu's assessment of Arete**, in the sense
+[`laws.md`](laws.md#how-a-position-is-held-bestowed-elected-in-arete) gives the
+word: ἀρετή, a thing performing its function well. A repository is *in Arete*
+for a position when it has become the accepted reference for the executor of
+that position, and **what this page carries is the evidence that would bear on
+that** — how well each tool does the job it says it does.
+
+**Assessing is not conferring, and the difference is the point.** Nothing on
+this page puts anybody in Arete or keeps them out. **Arete is acceptance and
+cannot be granted by the party doing the assessing** — least of all by one that
+appears on the list. This is evidence for somebody else's judgement.
+
+**And anoieu keeps this page, whatever else moves.** The history travels with
+the presidency; **this does not.** It is a standing responsibility rather than
+an office, it stays here when the office leaves, and that separation is
+deliberate: **the record of what happened should follow whoever is answerable
+for it, and the assessment of how well everyone is doing should not.**
+
 How each tool in the ecosystem stands against the six tenets. It is here
 because a vision document with nothing measured against it is a wish, and
 because the useful thing for another repository to read is not the rules but

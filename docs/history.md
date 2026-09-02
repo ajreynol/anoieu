@@ -60,7 +60,8 @@ commits would otherwise have to infer. **Neither is the report card** —
 
 ## Stretch 0 — Initialization
 
-**President: anoieu.**
+**President: anoieu** — in the proposed sense of the word, which
+[`laws.md`](laws.md) sets out.
 
 **The presidency is held by a repository, not by a person and not by an
 agent.** **And it has nothing to do with who owns anything.** Not who owns the
@@ -84,6 +85,26 @@ limit. **The presidency is direction, not permission.**
 **And it is a role held by a tool**, which is the shape [`roles.md`](roles.md)
 is built for and where this one is conspicuously absent. That is the second
 open question below.
+
+### Government model
+
+**One office, bestowed, and no separation of powers.** Named plainly because
+[`laws.md`](laws.md) requires the model that was *executed* rather than the one
+described.
+
+- **anoieu held the *proposed* presidency by bestowal**, granted by the
+  maintainer on 2026-09-02, the same day the office was first written down.
+  **The office is a proposal that happens to have an occupant**, which is not
+  the same as an office. Not elected, and not in Arete.
+- **It also wrote the laws it was bound by, and kept the record it was
+  described in.** The three positions `laws.md` describes did not exist as three
+  — one repository was all of them.
+- **The only real check was the maintainer**, who reviewed and committed every
+  change and reversed several. **That is oversight and not a branch of
+  anything**, and it is the whole of what stood between this stretch and an
+  unchecked one.
+- **`nomophylax` and `euboulia` were named during this stretch and neither
+  exists.** Nothing was elected, because there is no mechanism to elect with.
 
 ### How long it lasted, and who joined
 
@@ -157,7 +178,12 @@ because nobody was looking at the colour.
 
 ## Stretch 1 — not started
 
-**Expected president: [kanon](../tools/kanon/README.md).** The tool does not
+**Expected president: [kanon](../tools/kanon/README.md), by bestowal.** Not
+elected — there is still no mechanism — so Stretch 1 inherits Stretch 0's
+government model unless something changes, with one difference that matters:
+**the laws will have been written by a different repository than the one they
+bind.** That is the first real separation this arrangement has had, and it
+arrives by the presidency moving rather than by anybody designing it. The tool does not
 exist yet; a stub holds its place and CI carries a job saying whether it is
 ready to be started. **Stretch 1 cannot open before kanon does**, which makes
 the readiness check the thing standing between the two stretches rather than a

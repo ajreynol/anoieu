@@ -1,6 +1,8 @@
 # The laws
 
-**The rules for updating [`history.md`](history.md), and nothing else.** A
+**The rules for updating [`history.md`](history.md), and nothing else.**
+**The government they describe is proposed rather than established** — see
+below, where that is said properly. A
 narrow document on purpose: it governs one file, and a law about anything else
 does not belong here.
 
@@ -16,7 +18,8 @@ bound party wrote for itself.
 | --- | --- |
 | **the office** | the **president** — a repository, holding it for one stretch, which keeps and writes [`history.md`](history.md) |
 | **the law** | **this page**, which the president is bound by |
-| **keeping the law** | **nobody yet.** The tool that should hold this page does not exist, so the bound party holds it |
+| **keeping the law** | **nobody yet.** `nomophylax` is the candidate; until it exists and is elected, the bound party holds it |
+| **counsel** | **nobody yet.** `euboulia` is the candidate, and would gather the ethics projects that today sit inside the repository whose conduct they assess |
 | **independent audit** | **epikrisis**, which analyses what the repositories actually did, on evidence a reader can re-derive |
 | **deciding compliance** | **the checks** — CI and the policy checker, mechanically, and they settle nothing about intent |
 
@@ -35,6 +38,63 @@ bound party wrote for itself.
 - **And none of this carries a claim about ownership.** The presidency is an
   office within this ecosystem's own work. It confers nothing over anybody's
   repository, including the ones the ecosystem exists to serve.
+
+## How a position is held: bestowed, elected, in Arete
+
+**Every position on this page is proposed.** Not enacted, not ratified, and not
+agreed to by anybody but the maintainer who proposed it — **including the
+presidency**, which is the one that already has a holder. A proposal with an
+occupant still reads as a proposal, and the distinction is worth keeping
+precisely because occupancy makes it easy to forget.
+
+**Three words, and the distance between them is the whole of how this may
+evolve.**
+
+**Bestowed.** A person grants the position — which presumes the position exists
+to be granted, and here it exists because the same person proposed it. It is theirs to give and theirs to
+take back, it rests on nothing but their say-so, and **it is how every position
+here is held today.**
+
+**Elected.** The ecosystem's members choose. **No mechanism for this exists** —
+who votes, on what, how often, and what a result binds are all undecided, and
+inventing them before there is anybody to vote would be writing procedure for a
+fiction.
+
+**In Arete.** *ἀρετή — excellence; a thing performing its function well.* **A
+repository holds a position in Arete when it has become the accepted reference
+for the executor of that position** — when it is what others point at when they
+mean the office, rather than what a person appointed. **Arete is acceptance and
+not appointment**, and it cannot be granted, only earned and then recognised.
+
+**The assessment of Arete is [`report-card.md`](report-card.md)**, which anoieu
+maintains and will continue to maintain. It grades how well each tool performs
+the function it claims, which is the evidence acceptance would have to rest on.
+**It does not confer anything** — acceptance is not the assessor's to grant, and
+anoieu appears on the list it keeps. **The page travels with nobody**: the
+history follows the presidency, and the assessment stays where it is.
+
+**No repository is in Arete today, including this one.** anoieu is president
+because the maintainer said so on 2026-09-02. That is a bestowal and the page
+should not read as more.
+
+### The three positions, and how each may evolve
+
+| position | held by | rotates? | today | to be in Arete |
+| --- | --- | --- | --- | --- |
+| **president** | a repository, for one stretch | **yes** — a different one may hold it each stretch | **proposed, and bestowed** — anoieu, Stretch 0 | elected |
+| **the laws** | `nomophylax` | **no.** Fixed to one repository | does not exist | elected |
+| **counsel** | `euboulia` | **no.** Fixed to one repository | does not exist | elected |
+
+**The presidency rotates and the other two do not**, and that asymmetry is
+deliberate: an office that changes hands each stretch is checked by its
+successors, while an office nobody replaces has to be checked some other way —
+which is what electing it is for.
+
+**Election is the step that turns a candidate into an office.** `nomophylax` and
+`euboulia` are candidates. **They may be built, used, and depended on without
+ever being elected**, and if that happens they are useful tools and not branches
+of anything. **The title is not the work**, and nothing here should be read as
+promising the title to whoever does the work first.
 
 ## The laws
 
@@ -92,7 +152,7 @@ somebody who was not there.** Not to record everything, and not to justify
 anything. A closed entry that a stranger cannot follow has failed whatever else
 it contains.
 
-**Seven fields, in this order, all of them present.** *Nothing to report* is an
+**Eight fields, in this order, all of them present.** *Nothing to report* is an
 answer and is written; an omitted field is not.
 
 | field | what it holds |
@@ -103,7 +163,14 @@ answer and is written; an omitted field is not.
 | **What is now true** | what the stretch established that was not true before it. The part somebody can build on |
 | **What went wrong** | plainly, with what it cost. **A stretch with nothing in this field was not examined** |
 | **What is handed on** | unfinished work the next president inherits, and anything it must not assume |
+| **Government model** | **what was actually executed while in office**, named plainly — which positions existed, who held them, and how each was held. Not the model that was aspired to |
 | **Evidence** | where the figures came from, and how a reader re-derives them |
+
+**Why the government model is a required field.** The arrangement described on
+this page is expected to change, and a reader of a closed stretch needs to know
+which one was running — **not which one the documents of the day described.**
+A president that ran something other than what was written down says so, and
+that sentence is worth more than the rest of the entry.
 
 **Concise is a requirement and not a preference.** A president writing at
 length about its own stretch is producing a defence, and the seven fields exist
