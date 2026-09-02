@@ -95,6 +95,14 @@ honest version is a kernel in a runtime with no memory protection: it works
 because everything is cooperating, and it would not survive one participant that
 was not.
 
+**The kernel has a sibling question, and it is not in the kernel.** *What is
+this work for* and *what are we held to, and could anybody check it* are two
+halves of one thing, and only the first is here. The second is a child project
+and governs nothing — deliberately, because a second page claiming kernel
+standing is how an ecosystem ends up with two of them. It also argues that the
+two pull in opposite directions on speed, and that this may be the point rather
+than a cost.
+
 *What would show this false:* a rule that matters turning out to live somewhere
 other than the kernel and nobody noticing — which is a thing to look for rather
 than a thing that has happened.

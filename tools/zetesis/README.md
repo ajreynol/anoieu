@@ -142,6 +142,93 @@ it is a question about this tree.
    instances themselves are [`../martyria/`](../martyria/README.md)'s; what is
    owed here is the standard they would be judged against.
 
+5. **Whether being ethical and being robust are the same investment.** Stated
+   below, because it is the claim that says what this project is *for* beyond
+   answering for itself. It is open, it is not close to settled, and it is
+   expected to take a long time.
+
+## Siblings, and the two speeds
+
+**The claim is that this project and [`../../docs/vision.md`](../../docs/vision.md)
+are siblings**, and it is worth being exact about the sense, because one reading
+of it is true and load-bearing and another is false.
+
+**True in subject.** The vision asks *what is this work for and how should it be
+done*; this asks *what are we held to and could anybody check it*. Those are two
+halves of one question and neither is derivable from the other. Read that way
+they are peers.
+
+**False in standing, and the difference is not a formality.** The vision is the
+kernel: loaded first, governing everything else, and a checker for it would have
+to sit above it and would therefore *be* it. This is a **child project** — no
+users, nothing depends on it, unadvertised, and deleting the directory changes
+nothing anywhere. **It governs nothing and may not.** A sibling in question is
+not a sibling in authority, and an account here that started reading like a
+second kernel would have quietly claimed standing nobody granted. If the
+responsibility ever does become real, the honest route is the one the policy
+already names — the work graduates out of `tools/` and becomes a document that
+governs, decided by a person — and not a page here gradually acquiring weight.
+
+### The vision accelerates; this brakes
+
+**They pull in opposite directions on purpose, and both are right.** The vision
+is an argument for speed, and the mechanism is not exhortation but the one
+[`../../docs/ai-novelty.md`](../../docs/ai-novelty.md) sets out: clear, precise
+writing is what makes an agent-run ecosystem fast, because the scarce resource
+is attention over text and every ambiguity is a branch discovered late.
+
+**Three brakes now exist and they are not the same brake**, which is worth
+saying because the fourth one somebody invents will overlap unless the first
+three are laid out. [`../../docs/science-fiction.md`](../../docs/science-fiction.md)
+limits how far ahead we may **plan**;
+[`../../docs/stretch-policy.md`](../../docs/stretch-policy.md) limits how fast we
+may **move**, and its rule is *go only as fast as you understand*; this limits
+what we may claim without being able to **show** it. Range, rate, evidence.
+Against one accelerator, which is the kernel.
+
+**This project costs time and is meant to.** Asking *what could an outsider
+check* before acting is slower than acting, always, and there is no version of
+it that is not. The justification is not that caution is a virtue. It is the
+claim below.
+
+### The claim: ethics and robustness may be the same investment
+
+**Open, unproven, and the reason this is worth somebody's years.** The
+suggestion is that conducting ourselves so that our claims are checkable has a
+**by-product**: the ecosystem becomes robust. Three mechanisms make the
+correlation plausible, and all three are mechanical rather than moral.
+
+**They want the same artifact.** An ethical claim needs a record an outsider can
+check; debugging needs a record you can reconstruct a failure from. Both reduce
+to *the record must support a claim about the past*, so the same investment —
+dated, attributable, contradictable evidence — serves both. This is the
+strongest form of the correlation because nothing about it is about virtue.
+
+**Refusal is least privilege.** The refusals here — no repository created,
+nothing pushed, no acting on correspondence unbidden — are ethical constraints
+that are also **capability limits**, and capability limits are the oldest
+robustness mechanism there is. A system that cannot do a thing cannot do it by
+accident either.
+
+**Declining cheaply is reversibility.** The rule that declining must stay cheap,
+which this ecosystem applies to everyone it deals with, is the same property as
+*changes must be reversible* — a robustness requirement wearing an ethical
+name.
+
+**And the case against, which is not weak.** Ethics can *cost* robustness.
+Refusing to rank or measure others deprives us of signal. Refusing automation
+that would cross a repository boundary leaves failures uncaught. And a system
+optimised for defensibility can become slower at fixing real defects — which is
+not hypothetical here, since this ecosystem has already been told from outside
+that the quality of its self-criticism functions as a substitute for the work.
+**If the correlation is real it is not free, and it is not automatic.**
+
+*What would settle it:* an incident where the record kept for ethical reasons
+was what made a technical failure diagnosable — or the opposite, one where the
+ethical constraint is what let a failure through. Neither has been recorded. The
+registers next door are where either would land, and noticing them is a reason
+those registers exist.
+
 ## What this project does not do
 
 - **It does not do research in ethical AI, and it is not our job to.** The field
