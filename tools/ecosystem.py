@@ -73,6 +73,14 @@ REQUIRED = {
     "candidate": ("repo", "url"),
     "foundation": ("repo", "url"),
     "child": ("parent",),
+    # A tool outside this ecosystem that we track and are **not** proposing to
+    # promote. It exists so that "how active were we this stretch" has
+    # something to be compared against: our own numbers alone say nothing about
+    # whether five days of commits is a lot. `why` is what it is being compared
+    # for, and `vetted` is the date somebody last looked at the entry -- because
+    # writing about a project that never asked to be written about should carry
+    # a date the way every other claim here does.
+    "outside-candidate": ("repo", "url", "vetted", "why"),
 }
 
 #: A footing an entry says we *intend*, in `proposed`, while its `status` stays

@@ -381,8 +381,9 @@ worth being exact about what it records.**
 | **associate** | names the ecosystem and states it is **not** held to the policy | ran `join_eo --soft --affiliated` |
 | **foundation** | the ecosystem exists to serve it and it has joined nothing | nothing, and nothing is asked of it |
 | **child** | reached through its parent, on its parent's footing | nothing of its own |
+| **outside-candidate** | a tool outside this ecosystem that we track for comparison and are **not** proposing to promote | **nothing, and it was never asked.** The footing is ours, not theirs |
 
-**Only two of those five are things a repository does.** *Candidate* and
+**Only two of those six are things a repository does.** *Candidate* and
 *foundation* are positions we hold about somebody else, and recording them is
 recording our own state. **Writing them in the same column as *member* is how
 the ecosystem overstates itself**, and a stretch entry should keep them
@@ -408,6 +409,34 @@ is forgotten becomes a formality somebody eventually deletes.
   agreed.
 - **foundation**, because cvc5 is the reason for all of this and owes us
   nothing, and any register that implied otherwise would be false.
+- **outside-candidate**, because *how active were we this stretch* is a
+  meaningless number on its own. Six commits or six hundred says nothing until
+  it sits beside tools of comparable scope over the same days. **The footing
+  exists to give our own figures something to be read against**, and for no
+  other purpose.
+
+### What being an outside-candidate does and does not mean
+
+**Every tool on that list is one we admire.** They have served cvc5 well, they
+are the reason several questions in this ecosystem are already answered, and
+being listed is a compliment paid quietly rather than a status conferred.
+
+**The list is not exclusive.** It is the tools we happened to think of, not a
+ranking, not a shortlist, and not a judgement about anything left off it.
+**Anything absent is absent because nobody added it.**
+
+**Nothing we write about them is theirs.** They did not ask to be listed, have
+not been asked, and owe this ecosystem nothing. **No view recorded here
+represents the authors of an outside-candidate tool** — the `what` field
+describes what a tool is, the `why` field records why *we* are watching it, and
+both are ours. Where an entry repeats something its authors said, it says so and
+attributes it: `lfsc` is recorded as deprecated **because its authors say so**,
+which is their statement and not our assessment, and low activity numbers for it
+are expected rather than a finding.
+
+**And we are not proposing to promote any of them.** *Candidate* elsewhere in
+this table means we would like them to join. **Outside-candidate means the
+opposite of that: we are not asking.**
 
 ### Entering is two events and they do not coincide
 

@@ -1,4 +1,52 @@
 {
+  "ddsmt": {
+    "status": "outside-candidate",
+    "repo": "ddSMT",
+    "url": "https://github.com/ddsmt/ddSMT",
+    "vetted": "2026-09-02",
+    "what": "a delta debugger for SMT-LIB benchmarks",
+    "why": "comparison data: an established tool serving the same solver, so that our own activity in a stretch can be read against something"
+  },
+  "murxla": {
+    "status": "outside-candidate",
+    "repo": "murxla",
+    "url": "https://github.com/murxla/murxla",
+    "vetted": "2026-09-02",
+    "what": "a model-based API fuzzer for SMT solvers",
+    "why": "comparison data, and the nearest outside analogue to our own fuzzer, which we describe as a deliberate baseline"
+  },
+  "carcara": {
+    "status": "outside-candidate",
+    "repo": "carcara",
+    "url": "https://github.com/ufmg-smite/carcara",
+    "vetted": "2026-09-02",
+    "what": "a proof checker and elaborator for Alethe",
+    "why": "comparison data, and an independent answer to a question this ecosystem also asks: how a proof produced by a solver gets checked"
+  },
+  "lfsc": {
+    "status": "outside-candidate",
+    "repo": "LFSC",
+    "url": "https://github.com/cvc5/LFSC",
+    "vetted": "2026-09-02",
+    "what": "the LFSC proof checker. **Its authors report it is deprecated and no longer useful**, which is their statement and not our assessment",
+    "why": "comparison data with a different shape: a tool whose own authors have declared it done. Activity numbers for it are expected to be low and that is not a finding about it"
+  },
+  "lean-smt": {
+    "status": "outside-candidate",
+    "repo": "lean-smt",
+    "url": "https://github.com/ufmg-smite/lean-smt",
+    "vetted": "2026-09-02",
+    "what": "tactics for discharging Lean goals into SMT solvers",
+    "why": "comparison data, and the closest outside neighbour to logos: it joins Lean and SMT from the other direction"
+  },
+  "isarare": {
+    "status": "outside-candidate",
+    "repo": "IsaRARE",
+    "url": "https://github.com/cvc5/IsaRARE",
+    "vetted": "2026-09-02",
+    "what": "generates Isabelle lemmas from RARE rewrite rules",
+    "why": "comparison data, and the nearest thing to `iogos`, a tool we have only named: it already does in Isabelle what we have written down and not built"
+  },
   "_comment": [
     "Who is in the Eunoia ecosystem, and on what footing. Read by",
     "scripts/global_audit, which resolves each `repo` through scripts/repos.local",

@@ -709,6 +709,37 @@ is where a fix is read before it lands; it is never what a finding is measured
 against, and [what closes a row](reports/reporting-workflow.md#what-closes-a-row-and-what-does-not)
 is a separate question with its own answer.
 
+## The primary scope, and what follows from it
+
+**[`vision.md`](vision.md) states it in one line: a solver as fast as cvc5,
+statically verified to be correct.** The argument is here because that page
+takes claims and not their justifications.
+
+**It is the sharpest thing this ecosystem has said about itself**, and it is
+sharp in the way that matters: **it can fail.** A solver that is verified and
+slow does not meet it. A solver that is fast and unverified does not meet it.
+**Both halves at once is the whole of the difficulty**, and it is why
+[`pathos`](../tools/ynoia/tools.md) — a checker that is both — is named in the
+register and unbuilt.
+
+**Everything else here is instrumental to that, including this page.** The
+analyzer, the fuzzer, the policy, the protocols, the offices, the laws: none of
+them is the point. **They exist because the point is far away and somebody has
+to keep the path legible in the meantime.**
+
+**What the scope excludes, which is the useful half.** Work that makes the
+documentation better without making the solver faster or more verified is
+overhead — justified overhead, sometimes, and still overhead. **A stretch that
+produced 1.54 MB of markdown and no movement on either axis has spent itself on
+the instrument rather than the subject**, which is the measurement the incoming
+president attached to its own term.
+
+**And it explains the standing debt.** cvc5 is seventeen years and 14,064
+commits of solver. **We are proposing to match it and prove it**, which is
+either a long project or the wrong project, and the honest position today is
+that we do not know which. **Nothing in this repository has yet made a solver
+faster.**
+
 ## The supervision ladder
 
 Ordered, most supervised first. *Supervised* means: propose the change and the

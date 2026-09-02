@@ -762,6 +762,8 @@ policy that governs them, and the whole content of each entry is that the
 project has no standing yet. Naming something in order to record that it does
 not count is the opposite of advertising it.
 
+**Primary scope: a solver as fast as cvc5, statically verified to be correct.**
+
 **The mission is distribution: no tool should hold what another tool could.**
 
 **Have fun and enjoy the Eunoia ecosystem!**
