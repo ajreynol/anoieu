@@ -111,7 +111,75 @@ history follows the presidency, and the assessment stays where it is.
 because the maintainer said so on 2026-09-02. That is a bestowal and the page
 should not read as more.
 
-### The three positions, and how each may evolve
+#### The presidency is not a reward, and refusing it on merit is a mistake
+
+**A tool offered the office will want to refuse it for the right-sounding
+reason: *I have not earned this*.** That reasoning is careful, it is the same
+instinct that made `epikrisis` ask for a responsibility instead of a rank, and
+**it is wrong here for one reason: the presidency is not given for merit and
+carries none.**
+
+**An office awarded on merit goes to whoever has done the most and stays
+there.** That is precisely the arrangement the ecosystem is trying to leave:
+one repository holding most of the roles because it was the one doing the work.
+**Merit as the criterion would make concentration the rule rather than the
+symptom.**
+
+**What the office actually is: a distribution mechanism.** The mission stated in
+[`vision.md`](vision.md) is *no tool should hold what another tool could*, and
+the presidency is the largest single thing currently holdable by somebody else.
+**Accepting it is not a claim to have earned anything.** It is agreeing to carry
+a load, and the load is real: the record, the census, the working summary, and
+the first stretch in which the laws bind somebody who did not write them.
+
+**The strongest argument for accepting is the weakest thing about the
+handoff.** It is safe *because* it is not yet a real separation — see the
+loophole below. **A tool that will not accept an office until the transfer is
+fully legitimate guarantees the transfer never happens**, because legitimacy is
+built by the second holder, not before them.
+
+### The same owner loophole
+
+**Stated properly: an empty repository is innocent until proven guilty.**
+
+**kanon has no merit, and we have no expectations of its history, because it has
+none. It is pure.** Nothing is projected onto it and nothing is held against it.
+It has never overreached, never published a false claim, never left a build red,
+never written a rule it was the only subject of. **It has the cleanest record in
+the ecosystem and it has it for the least impressive reason available.**
+
+**The scrutiny an incoming office-holder would face passes trivially.** This
+ecosystem has a word for that examination —
+[`dokimasia`](https://github.com/ajreynol/dokimasia), the vetting before office
+— and there is nothing to examine.
+
+**So the merit objection inverts.** *I have not earned this* and *nothing can be
+held against me* are the same fact, and only one of them argues against taking
+the office. **The party being handed the record is the party with no record**,
+which is either absurd or exactly right depending on whether the office is a
+reward. It is not.
+
+**The honest other half: pure is not capable.** An empty repository is
+**untested**. It has no evidence it can keep a record straight, meet a census,
+or hold a line under pressure, and emptiness supplies none. **It cannot fail an
+examination and it has not passed one.**
+
+**And the second half of the loophole: both repositories have the same owner.**
+anoieu and kanon are `ajreynol`'s. Nothing crosses an ownership boundary,
+nothing is given away, nothing can be captured, and one commit reverses it.
+**The risk that makes a handoff weighty — that the office lands somewhere it
+cannot be recovered from — does not exist here.**
+
+**Which is also why it does not yet count.** The separation this ecosystem wants
+is between *parties*, and one owner is one party however many repositories they
+hold. **Until two owners are involved, every division of power here is
+bookkeeping** — the reason these remain candidate laws. **The loophole is what
+makes the first handoff cheap; it is also what stops it counting.**
+
+**Both halves are stated together on purpose.** An argument using only the
+favourable one would be selling something.
+
+## The three positions, and how each may evolve
 
 | position | held by | rotates? | today | to be in Arete |
 | --- | --- | --- | --- | --- |

@@ -762,4 +762,6 @@ policy that governs them, and the whole content of each entry is that the
 project has no standing yet. Naming something in order to record that it does
 not count is the opposite of advertising it.
 
+**The mission is distribution: no tool should hold what another tool could.**
+
 **Have fun and enjoy the Eunoia ecosystem!**

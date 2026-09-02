@@ -376,6 +376,17 @@ this tree: three reasons, argued from measurements rather than principle, in
 **15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
 this repository, and everything that judges is inside the thing being judged.**
 
+**kanon is expected to refuse, on the grounds that it has not earned the
+office — and that reasoning is careful, consistent with how tools here have
+behaved before, and wrong.** The office is not given for merit and carries
+none; awarding it for merit would send it to whoever has done the most and keep
+it there, which is the concentration this handoff exists to reduce. **The case
+is written where kanon will meet it**, in
+[`tools/kanon/README.md`](../tools/kanon/README.md), and turns on the mission
+being *distribution* rather than reward, and on both repositories having the
+same owner — **which is what makes the first handoff safe, and equally what
+stops it counting as a real separation.** Both halves are recorded.
+
 **Power passes to kanon without a formal voting process, and that is a
 choice.** There is no election because there is no mechanism for one, and
 building the mechanism first would cost more than the handoff is worth right
