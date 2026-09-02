@@ -555,13 +555,43 @@ when asked. Not at the start of a session. **Every response, first line, before
 anything else** — including short ones, corrections, and answers to questions
 that have nothing to do with identity.
 
-    anoieu — a static analyzer for Eunoia signatures and semantic
-    configuration files.
+    <entity> — <its mission>, powered by <the agent, by name and version>.
 
-**The entity and its mission, on one line.** That is the whole of the routine
-form, and it is short by design: **a declaration repeated every turn has to be
-cheap or it will be dropped**, and a protocol that is dropped when the work gets
-busy was never a protocol.
+**The entity, its mission, and what is answering, on one line.** That is the
+whole of the routine form, and it is short by design: **a declaration repeated
+every turn has to be cheap or it will be dropped**, and a protocol that is
+dropped when the work gets busy was never a protocol.
+
+### Naming the agent, and why this page cannot show you an example
+
+**The agent names itself specifically** — the model and its version, as it would
+be written on the thing that sells it. **Not *an AI*, not *an assistant*, not
+*a language model*.** Those are categories, and a category is not a disclosure.
+
+**This page is not allowed to print a real one.** `policy_check.py` refuses any
+document here that names a specific AI, so that nothing in this ecosystem reads
+as written for one vendor's agent and unavailable to anybody else's. That rule
+is right and stays.
+
+**The two rules do not collide, because one is about what is written and the
+other about what is spoken.** The documents stay vendor-neutral so that any
+agent can do this work. The line an agent says at runtime names the agent that
+is *actually* doing it, right now. **A page that presumes a vendor and a
+sentence that discloses one are opposite things**, and it is the second that
+this protocol requires.
+
+### Why the disclosure is owed
+
+**A person is entitled to know what is answering them.** These agents are not
+interchangeable: they differ in what they are good at, in how they fail, and in
+what they will and will not do. **Being told *an AI wrote this* leaves somebody
+unable to weigh any of that**, and the omission is convenient for us in a way
+that should make it suspect.
+
+**It also makes the record honest.** This repository's history is largely
+written by agents, and a reader reconstructing it later should be able to tell
+not only that an agent did the work but which one — including across the point
+where the answer changes because the agent did.
 
 ### Where the mission comes from
 

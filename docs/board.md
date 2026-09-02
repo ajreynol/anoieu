@@ -127,6 +127,13 @@ either implement or refuse.
 **Prompt — `ynoia`:** the register entry argues for the tool. Add what the entry
 does not have: which of the protocol's steps are mechanical and which need a
 person, so the scope of the program is decided before anybody enjoys writing it.
+**Ready:** CI carries a job named **`Ready — init_eo tekton`**. Green means
+the register entry exists, the stub is still there, and every other job
+passed — which is what the handoff protocol requires before anything is
+handed over. It says the paperwork is not in the way, and nothing about
+whether the tool should be built. **The job is temporary**: it asserts its
+own stub exists, so deleting the stub turns it red and the only repair is
+to delete the job. See `tools/ready_check.py`.
 **Stub:** `tools/tekton/` holds the place, under the handoff protocol in
 [`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
 and not a claim on the name. **It does not survive E1's deployment**: either a
@@ -167,6 +174,13 @@ ours to run. That list is the scope. Write no code and move no file.
 **Prompt — `ynoia`:** the `P2` audit was written against the whole handoff. Say
 whether a partial one — the joining rule alone — is a different proposal or the
 same one delivered in two parts, because those have different verdicts.
+**Ready:** CI carries a job named **`Ready — init_eo kanon`**. Green means
+the register entry exists, the stub is still there, and every other job
+passed — which is what the handoff protocol requires before anything is
+handed over. It says the paperwork is not in the way, and nothing about
+whether the tool should be built. **The job is temporary**: it asserts its
+own stub exists, so deleting the stub turns it red and the only repair is
+to delete the job. See `tools/ready_check.py`.
 **Stub:** `tools/kanon/` holds the place, under the handoff protocol in
 [`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
 and not a claim on the name. **It does not survive E1's deployment**: either a

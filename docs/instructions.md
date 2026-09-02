@@ -65,8 +65,13 @@ you have worked — only what time it is.
 **Every response you get opens with one line**: the tool the agent believes it
 is working for, and what that tool is for.
 
-    anoieu — a static analyzer for Eunoia signatures and semantic
-    configuration files.
+    <tool> — <what it is for>, powered by <which AI, by name>.
+
+**It names the AI, specifically** — which model and which version, not "an
+assistant". You are entitled to know what is answering you: these differ in what
+they are good at and in how they fail, and you cannot weigh an answer without
+knowing that. *The documents here never name one, deliberately, so that anybody's
+agent can do this work; the spoken line always does.*
 
 **You do not have to ask for it, and it should never stop.** If it stops, the
 protocol has been dropped, which is worth more of your attention than whatever

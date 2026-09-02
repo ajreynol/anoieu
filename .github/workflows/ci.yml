@@ -228,6 +228,37 @@ jobs:
   # than a regression — new findings to triage, or counts to re-record. It is
   # deliberately not on push: nobody's pull request should go red because cvc5
   # merged something.
+  # ------------------------------------------------------------------------
+  # TEMPORARY, AND BUILT TO NOT OUTLIVE ITS PURPOSE.
+  #
+  # These two jobs exist for one reason: so that opening this repository on the
+  # web answers "what is the next thing to do" without reading anything. Green
+  # means `init_eo new` can be run on that name today.
+  #
+  # Each job asserts that its stub still exists. **That is deliberate.** When a
+  # spawned repository is verified and the stub is deleted under the handoff
+  # protocol, this job goes red, and the only fix is to delete the job. A
+  # temporary check that quietly becomes permanent is the thing being avoided;
+  # this one cannot, because the tree stops supporting it.
+  # ------------------------------------------------------------------------
+  ready-kanon:
+    name: Ready — init_eo kanon
+    needs: [suites, policy, corpus, oracle, documentation-up-to-date]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: kanon is ready to be started
+        run: python3 tools/ready_check.py kanon
+
+  ready-tekton:
+    name: Ready — init_eo tekton
+    needs: [suites, policy, corpus, oracle, documentation-up-to-date]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: tekton is ready to be started
+        run: python3 tools/ready_check.py tekton
+
   refresh:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
