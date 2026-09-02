@@ -18,6 +18,41 @@ aiming at: this page is about the arrangement, that one about the point of it.
 Cite a rule or a convention by name rather than by number. Append; do not
 renumber. Retire either in place, with a line saying why.
 
+## The central one: a document that has gone stale is a defect
+
+**Everything else on this page assumes it.** A layout rule, a front-page
+convention, a declaration of membership — each is a claim in prose, and a claim
+in prose that has quietly stopped being true is worse than one that was never
+made, because it carries the authority of having been written down and checked
+by somebody once.
+
+**It is stated here and not in [`vision.md`](vision.md)** because it is not an
+aim. It is a property a repository either has or does not, and the vision is for
+the arguable half.
+
+**But it is the rule this page cannot check**, which is why it is stated first
+rather than numbered among the others. `tools/policy_check.py` decides whether
+a document *exists*, whether a link *resolves*, whether a declaration is
+*present*. **No program here decides whether a sentence is still true**, and
+none is likely to: a page describing a tree that changed is indistinguishable,
+mechanically, from one that is accurate. Asked to assess this ecosystem, a
+neighbouring project's first question was *are their docs up to date?* — which
+is the right question and the one nothing here answers.
+
+**What that asks of a repository**, concretely, and none of it is enforced:
+
+- **Correct a claim when you notice it has gone false**, in the same change that
+  made it false where possible, and treat finding one as ordinary work rather
+  than as an interruption.
+- **Date a claim about somebody else's project**, so a reader can discount it by
+  age rather than by trust.
+- **Say which documents are generated** — those cannot go stale in this sense —
+  and accept that everything else is only as current as the last person to read
+  it.
+- **Do not add a page you will not re-read.** An unmaintained page is not
+  neutral; it is a claim you have stopped standing behind and never
+  withdrawn.
+
 ---
 
 ## The layout

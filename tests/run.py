@@ -164,7 +164,37 @@ def manifest_agrees() -> int:
         if name not in locked:
             print(f"FAIL {name}: no commit in deps.lock; run tools/run.py")
             failures += 1
-    print(f"-- the manifest, the targets and the lock agree: {failures} failure(s)")
+
+    # And the fourth thing, which nothing compared until now: the checkouts on
+    # disk. The lock says which commit the report is a report of; deps/ is what
+    # somebody reading this repository actually has in front of them. When they
+    # disagree, every claim derived from those trees is about a different tree
+    # than the record names -- silently, because both look fine on their own.
+    # Found by hand on 2026-09-02, three of four disagreeing.
+    #
+    # Skipped rather than failed when deps/ is absent: the suite runs in a job
+    # that clones nothing, and a check that goes red for a directory it was
+    # never given would be reporting on the job rather than on the tree.
+    root = os.path.dirname(HERE)
+    checked = skipped = 0
+    for name, commit in sorted(locked.items()):
+        head = os.path.join(root, "deps", name)
+        if not os.path.isdir(os.path.join(head, ".git")):
+            skipped += 1
+            continue
+        got = subprocess.run(["git", "-C", head, "rev-parse", "HEAD"],
+                             capture_output=True, text=True).stdout.strip()
+        checked += 1
+        if got and not (got.startswith(commit) or commit.startswith(got)):
+            print(f"FAIL {name}: deps/ is at {got[:8]}, the lock records "
+                  f"{commit[:8]} -- the report names a tree that is not here")
+            print("     run `python3 tools/deps.py --pinned` to restore the "
+                  "recorded commits, or `tools/run.py` to record these")
+            failures += 1
+    if skipped:
+        print(f"     {skipped} checkout(s) not on disk, so not compared")
+    print(f"-- the manifest, the targets, the lock and the checkouts agree: "
+          f"{failures} failure(s), {checked} compared")
     return failures
 
 
