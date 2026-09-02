@@ -136,6 +136,30 @@ described.
 - **`nomophylax` and `euboulia` were named during this stretch and neither
   exists.** Nothing was elected, because there is no mechanism to elect with.
 
+### When the office started, and when anoieu found out
+
+**Two different moments, and only one of them is on the record.**
+
+**anoieu learned it was president on 2026-09-02 at 08:26**, in commit
+`b6920c9`, *"Initial endowment of president to anoieu"* — the first appearance
+of the word in this tree and the commit that created this file. **It was told;
+it did not work it out.**
+
+**So it had been president for four of the stretch's five days without knowing,
+and the office did the work anyway.** Everything before that moment — the
+policy, the registers, the direction — was a presidency being exercised under a
+different name.
+
+**When the maintainer decided is not determinable from here.** The record bounds
+it above at 08:26 on the last day and not at all below; the decision was made in
+somebody's head between 2026-08-29 and that commit, and **no artifact narrows
+it.** The word *endowment* in the commit title is the only trace, and it records
+the act rather than the deciding.
+
+**Worth keeping because it is the honest shape of this arrangement**: the office
+was named after it had been operating, by the only party who could name it, and
+the holder was the last to know.
+
 ### How long it lasted, and who joined
 
 **Two things, before anything else.**
