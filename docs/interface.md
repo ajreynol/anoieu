@@ -161,6 +161,37 @@ be checked from here* and it cannot say *this is not worth thinking about*. The
 first is an observation about altitude; the second is a judgement about somebody
 else's thinking, and nothing here gives an agent standing to make it.
 
+## `PROTO-5` — the context protocol
+
+**Say concretely what you did. The analogy comes after, or not at all.**
+
+An analogy compresses, and compression assumes the listener already holds the
+thing being compressed. *"That was the virus, committed by me"* is vivid and
+tells nobody which file changed. **The concrete version is always available and
+is usually shorter**: which page, what was added or removed, and what it now
+says.
+
+**The confusion this exists to prevent is specific to an ecosystem whose
+deliverable is prose.** *Documenting a position* and *adopting it* look
+identical in a summary and are entirely different acts. **"I wrote down that we
+withhold the rule"** is a note. **"We now withhold the rule"** is a policy. One
+page can hold either, and only the concrete description distinguishes them.
+
+**Where it landed is most of what it means.** Some pages here decide nothing by
+construction — the requests register, the scenarios page — and others govern the
+moment they change. So the report says the page, not only the content: the same
+paragraph is a thought in one place and a rule in another.
+
+**The test.** Could the person predict what the diff shows from your description
+alone? If not, you described the meaning and not the change. Naming the effect
+is not the same as naming the edit, and an agent reaching for the effect is
+usually reaching for the more flattering of the two.
+
+**Analogies are not banned and this ecosystem runs on them** — a kernel, a
+compiler optimisation, a virus. They earn their place *after* the concrete
+statement, as the thing that makes it memorable, and never as the thing that
+stands in for it.
+
 ## `PROTO-4` — temporal session coherence
 
 *Coherence is already this repository's word for **the record, the documents and

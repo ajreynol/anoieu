@@ -118,14 +118,15 @@ named.
 | `PROTO-2` | prompt clarification — *do not act on what you do not understand* | agent → person | [`interface.md`](interface.md) |
 | `PROTO-3` | going off the deep end — *this cannot be checked from here* | agent → person | [`interface.md`](interface.md) |
 | `PROTO-4` | temporal session coherence — the session's open ask survives its branches | agent → person | [`interface.md`](interface.md) |
-| `PROTO-5` | the reporting workflow — a defect carried to whoever owns the file | repository → repository | [`reporting-workflow.md`](reports/reporting-workflow.md) |
-| `PROTO-6` | the discussion file — everything that is not a defect report | repository → repository | [`policy.md`](policy.md) |
-| `PROTO-7` | joining, and its soft and affiliating forms | repository → ecosystem | [`policy.md`](policy.md) |
-| `PROTO-8` | the epoch family — announce, gate, approve, adopt | repository → members | [`stretch-policy.md`](stretch-policy.md) |
-| `PROTO-9` | the role handoff — a responsibility changes hands, keeping its id | tool → tool | [`roles.md`](roles.md) |
-| `PROTO-10` | the documentation handoff — a launch moves a description to its source | page → page | this page |
-| `PROTO-11` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
-| `PROTO-12` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
+| `PROTO-5` | the context protocol — say concretely what changed, not what it means | agent → person | [`interface.md`](interface.md) |
+| `PROTO-6` | the reporting workflow — a defect carried to whoever owns the file | repository → repository | [`reporting-workflow.md`](reports/reporting-workflow.md) |
+| `PROTO-7` | the discussion file — everything that is not a defect report | repository → repository | [`policy.md`](policy.md) |
+| `PROTO-8` | joining, and its soft and affiliating forms | repository → ecosystem | [`policy.md`](policy.md) |
+| `PROTO-9` | the epoch family — announce, gate, approve, adopt | repository → members | [`stretch-policy.md`](stretch-policy.md) |
+| `PROTO-10` | the role handoff — a responsibility changes hands, keeping its id | tool → tool | [`roles.md`](roles.md) |
+| `PROTO-11` | the documentation handoff — a launch moves a description to its source | page → page | this page |
+| `PROTO-12` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
+| `PROTO-13` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
 
 **Name the protocol when it fires.** *"`PROTO-4` — this started as X and X is
 still open"* teaches the protocol in the act of using it, at the cost of six
