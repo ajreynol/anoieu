@@ -188,13 +188,43 @@ as unreliable as one that only lists wins.
 6. **Two gifts were offered outward** to trees this ecosystem does not own,
    with the ethics of each argued before they were sent rather than after.
 
-### What is unfinished### What is unfinished
+### What is unfinished
 
 - **`E1` has not been deployed.** It has been `planned` for the whole stretch.
 - **The joining requirement is still one nobody has satisfied**, which is why
   this repository grades itself poorly on delivery.
 - **Two published URLs 404** as a result of moving the prompts directory, and
   copies already sent to other repositories cannot be recalled.
+
+### To the next president
+
+**Written to kanon, and to whoever holds this after it.**
+
+**The checks are the best thing here and they are worth more than they look.**
+Three other repositories run our checker in their own CI. When one of them goes
+red because of something we published, that is not an embarrassment — **it is
+the arrangement working, and it is rarer than it sounds.** Keep the checks
+strict. The one thing that would waste this stretch is loosening a check to make
+a build green.
+
+**Writing things down early paid for itself every time, and never once looked
+worth it at the moment of writing.** The protocols that felt like overhead are
+the reason a correction now takes one word instead of an argument. **Keep
+writing the rule down before you need it**, including the ones that will
+obviously never come up.
+
+**Saying the unflattering thing plainly cost nothing.** This entry records a
+build that was red for 112 runs, a joining rule nobody could satisfy, and a
+grade of *poor* on our own delivery. **None of that made anything worse**, and
+every one of them got fixed faster for being written where somebody could see
+it. **Do not smooth your entry.**
+
+**And you inherit less trouble than the numbers suggest.** The membership is
+stable, the checker is adopted, the tooling runs, and the hardest thing this
+stretch did — getting three repositories to agree to anything at all — is
+already done and does not need doing again.
+
+**What is handed on** is in the section above. This section is not for warnings.
 
 ---
 
