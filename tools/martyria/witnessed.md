@@ -391,8 +391,10 @@ in advance — `M3` — which is testimony and therefore the weak form. A detect
 firing on this pattern in trees with no shared author would be wrong more often
 than right, and should say so before it says anything else.
 
-**What it is not evidence of:** that the convention is good, or that ethos
-wants it. It is an open pull request with no reviews, and it may be declined.
+**What it is not evidence of:** that the convention is good in general. It is
+one merge into one tree by a maintainer of that tree. *Updated 2026-09-02: the
+pull request has since **merged**, so the convention did travel and was
+accepted; the entry originally recorded it as open with no reviews.*
 
 **State:** standing.
 
