@@ -204,6 +204,59 @@ not surveyed applies here more sharply than anywhere else on this page.
 **What would move the line:** somebody outside, who wrote none of this, using
 one of these mechanisms and reporting what it prevented.
 
+## Scenario P — you code with prompts
+
+The prompt is the source; the tree is what it produced. You write prompts,
+review prompts, diff prompts, and the code is downstream of them the way a
+binary is downstream of a program.
+
+**This one is unlike the others here: it is almost attainable now**, and saying
+so is the point of listing it. Everything in this repository was written by
+agents from prompts, so in the literal sense it is already what happens. And the
+ecosystem has taken one real step toward the strong form that it did not have to
+take: the prompts it **publishes** — the joining prompt, the outbound and
+follow-up reporting prompts, the rest of `scripts/prompts/` — are documents
+first, and a test compares each script's copy against the document that defines
+it and fails the build when they drift. **A prompt that is a versioned,
+drift-checked artifact is most of what *the prompt is the source* would mean.**
+
+**What is missing is one thing, and it is already recorded as a defect.** The
+prompts we publish are under version control. **The prompts we actually code
+with are not recorded at all.** No session's instructions are tracked; the
+record accounts for what was produced and not for what was asked. The asymmetry
+is exactly backwards for this scenario — the handful of prompts we hand to other
+people are versioned, and the thousands we hand to ourselves are gone. That is
+`F1` in the ethics register, raised before this scenario was written.
+
+**Two things keep it on this page rather than on a to-do list.**
+
+**A prompt is not a build script, because an agent is not a function.** The same
+prompt does not produce the same tree twice. So *the prompt is the source* is
+false in the sense that matters to a build: you can re-attempt, not rebuild.
+Calling `scripts/prompts/` a build system would be the overclaim, and the
+neighbouring analogy page already says so about a larger case.
+
+**Review would move rather than shrink.** If prompts were the artifact, a
+reviewer reads the prompt **and** the tree it produced, because the second does
+not follow from the first. That is more reading, not less — the opposite of what
+this scenario is usually sold as, and worth knowing before wanting it.
+
+**What this scenario forbids:**
+
+- **No claiming the prompt is the source while prompts are untracked.** Either
+  record them or stop saying it. This is the one that bites today.
+- **No treating a prompt as reproducible.** No rebuild, no claim that a result
+  can be regenerated from its prompt, no version on a prompt that implies it
+  determines an output.
+- **No prompt template changed without the drift check and a person.** Already a
+  rule; here it is the stake rather than a convention.
+
+**What would move the line:** prompts recorded alongside the work they produced,
+for long enough that somebody could take a change and find what was asked for.
+That is `F1`'s own settling condition, so this scenario and that finding move
+together — **which makes it the most attainable thing on this page, and the
+reason it is here rather than absent.**
+
 ## A candidate for first contact, and we do not trust it
 
 Everything above is fiction by construction. This is not, which is why it is
@@ -550,6 +603,14 @@ file rather than amending it.
 that this page would have forbidden, and it was a good plan. Then the page moves
 and says why, which costs a paragraph.
 
-**It grows a third scenario.** Two is a ceiling. A page of scenarios is the
-genre it was written to limit, and the first sign of that failure is this
-section getting shorter while the ones above get longer.
+**It grows a scenario that forbids nothing.** The count is not the test — each
+scenario earns its place by ending in something we may not do, and a page of
+scenarios that only enable is the genre this one was written to limit. The first
+sign of that failure is this section getting shorter while the ones above get
+longer.
+
+*This bullet read "two is a ceiling" until 2026-09-02, and had been false since
+the third scenario was added — an instance of exactly what it was warning
+about, corrected here rather than quietly. There are four, the fourth was added
+by a person on that date, and a raise is recorded the way the board records
+its cap.*

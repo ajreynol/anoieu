@@ -456,6 +456,26 @@ same tiering [`reports/reporting-policy.md`](reports/reporting-policy.md) applie
 to its own positions. Withdrawing a commitment costs more than never making one,
 and most of that cost falls on somebody who is not us.
 
+**Documentation lives at its source, and a launch is a handoff.** While a thing
+does not exist, the page that argues for it also describes it, and that is
+correct. **The moment it exists — a repository, or a directory with a charter of
+its own — it documents itself, and the description elsewhere is deleted.** Not
+marked stale, not archived: deleted, because git keeps it and a marked-stale
+description still gets read and still gets quoted.
+
+The protocol is three lines and is meant to stay that short:
+
+1. **Delete the description; keep the argument.** A page that argued for a thing
+   usually also uses it to make a point. The point stays; the specification
+   goes.
+2. **Leave one line** — the name, where it lives now, and when it launched.
+3. **Do it at the launch, by whoever notices, without asking.** Waiting for
+   permission is what produces the failure this prevents: two accounts of one
+   thing, of which the unmaintained one is what a stranger finds first.
+
+The worked case is [`../tools/ynoia/why-eunoia.md`](../tools/ynoia/why-eunoia.md),
+which described six projects that did not exist and now describes five.
+
 **Make changes a person can understand.** The standard for an agent's output is
 not that it is correct — it is that **whoever reviews it can tell whether it is
 correct**, and those come apart constantly. A large mechanical diff, a clever
@@ -577,10 +597,10 @@ simplification.
 
 ### And the honest limit
 
-**One adopter is not five.** ethos, logos and eudaimonia have not joined and may
-never; evidence that this coordinates two repositories is not evidence that it
-coordinates ten, and the second adopter will find things the first did not.
-`koine` does not exist yet.
+**Three adopters are not ten.** `eudaimonia`, `dokimasia` and `koine` have
+joined; `ethos` and `logos` have not, and may never. Evidence that this
+coordinates four repositories is not evidence that it coordinates forty, and
+each adopter so far has found things the ones before it did not.
 
 **It has not been free.** [`report-card.md`](report-card.md) records
 that the stretch of work which produced most of this changed nothing about what

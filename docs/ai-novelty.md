@@ -28,6 +28,16 @@ is a weaker and more useful claim than novelty, and it is the one being made.
 
 ## The central mechanism: clear writing is what makes this fast
 
+In one line: **in the Eunoia ecosystem, you are aided throughout to code with
+documentation.** Not *after*, which is where documentation usually sits, and not
+*instead*. Throughout, and as an aid rather than a tax.
+
+**The sentence cuts both ways, which is what makes it a mechanism rather than a
+slogan.** If prose is what you are aided by, then bad prose is not a cosmetic
+failure — it is a defect in the tool you are working with, and it costs
+continuously rather than at the end. That is the whole claim, and the rest of
+this section is why it holds here.
+
 The thing that looks like a style preference and is not.
 
 **An agent's scarce resource is attention over text**, and almost every cost in

@@ -83,7 +83,7 @@ measured.** That belongs at the top.
 | **6 — the Lean side is generated rather than chosen** | **True of the pipeline as built**, and untested as an *independence* claim | `iogos` — a second prover — which does not exist. Until then, "generated rather than chosen" is a fact about one backend |
 | **O2 — the `.eos` layer is the tell** | **Argued, and conceded**: this is where the arrangement's own case is weakest, and the document says so | `noesis`, which does not exist |
 | **arrangements A–F** | **Laid out fairly. None costed.** No estimate of what moving to any of them would take | any one of them costed by somebody who would have to do it |
-| **the six projects** | **None exists.** Their register, in priority order, is [`tools.md`](tools.md) | one of them being started |
+| **the named projects** | **Five do not exist.** A sixth, `euthyna`, has been started and is documented at its source. The register, in priority order, is [`tools.md`](tools.md) | another one being started |
 
 ### The one measurement that is runnable today
 
@@ -117,6 +117,15 @@ told about from outside in a different context.
 **The correction is not less argument. It is one number.** Reason 4 is where the
 argument is loudest and the evidence thinnest, so it is where a measurement buys
 the most, and it is the one that is free.
+
+## Maintaining this page
+
+**A project that launches stops being documented here.** Its description is
+deleted — not marked stale — and it documents itself at its source; what is left
+behind is one line saying where it went. Whatever argument this page was making
+*with* it stays, because the argument is what this page is for. The general form
+of the rule, and why deletion beats a stale-marker, is in
+[`../../docs/coherence.md`](../../docs/coherence.md).
 
 ## How the numbering works
 
@@ -226,7 +235,7 @@ tactics, no metaprogramming — and nothing a proof can invoke that is not one o
 those.
 
 What that buys is not elegance. It is that **the ways a thing can be wrong are
-enumerable**, and this repository is the evidence: 43 checks cover a large part
+enumerable**, and this repository is the evidence: 63 checks cover a large part
 of what a signature can get wrong, the whole analyzer is about three thousand
 lines, and its account of the language's desugaring is validated against the
 real parser case by case. Nobody writes that for "arbitrary Lean", because for
@@ -525,15 +534,20 @@ and what nothing else provides.
 
 ---
 
-# Six projects that do not exist yet, and change the picture
+# Five projects that do not exist yet, and change the picture
 
-**Pathos**, **hermeneia**, **noesis**, **iogos**, **euthyna** and **elenchos**
-are code names.
-None has a repository or a line of code: all six are future work, named here
-because the costs and open questions above are stated relative to what exists
-today, and each of these would move a different one. Writing down what they
-*would* change is also the cheapest way to notice which of today's arguments are
-about the arrangement and which are merely about its current state.
+**Pathos**, **hermeneia**, **noesis**, **iogos** and **elenchos** are code
+names, and none of the five has a repository or a line of code. A sixth,
+**euthyna**, was named here and **has since been started** as a child project in
+eudaimonia's tree; its description has been deleted from this page and it
+documents itself at its source, which is what this ecosystem does with anything
+that launches. It is still referred to below wherever it carries an argument —
+**the argument stays, the specification goes.**
+
+The five are named here because the costs and open questions above are stated
+relative to what exists today, and each of these would move a different one. Writing down what they *would* change is also the cheapest way
+to notice which of today's arguments are about the arrangement and which are
+merely about its current state.
 
 ## Pathos — an efficient verified proof checker
 
@@ -788,106 +802,6 @@ tractable than it looks — 591 near-identical per-rule obligations are the
 workload Isabelle's automation was built for, and if they go through easily that
 is itself a measurement about how much of the development is boilerplate.
 
-## Euthyna — advice to logos about its own proof
-
-*A code name, for work not yet started.* εὔθυνα is literally a *straightening*:
-at Athens, the examination a magistrate underwent at the end of the term, when
-the accounts were read. The sibling project
-[dokimasia](https://github.com/ajreynol/dokimasia) is named for δοκιμασία, the
-scrutiny that comes first.
-
-Euthyna reads logos's proof and tells logos how to make it better — what is dead
-and can go, what is repeated and wants factoring out, what is structured in a
-way that will cost the next regeneration — with the refactoring attached
-wherever it can produce one. It does not maintain the development and does not
-rewrite it. The findings go to the people who do, which is the arrangement this
-repository already has with logos: anoieu sends it findings about the `.eo` and
-`.eos` files it carries, and euthyna would send it findings about the 695,000
-lines of Lean those files turn into.
-
-**Why that artifact.** Six hundred and ninety-five thousand lines is not read,
-and what nobody reads, nobody maintains. Build time, the cost of a regeneration,
-and whether the thing the ecosystem's trust rests on can be reviewed at all are
-functions of that development's size and structure, and neither of those has
-been anybody's job. Nothing in the pipeline is looking at the proof as an object
-in its own right.
-
-**What it would have to say.**
-
-- *Minimize.* Generated lemmas nothing cites, hypotheses no proof needs,
-  rule-support lemmas left dead by a later signature, per-rule proofs that are
-  the same proof, obligations discharged twice, and machinery a calculus cannot
-  reach — eudaimonia's `examples/hello` carries 370 lines, 15% of what is
-  generated for it, of datatype and literal machinery it cannot use, and that is
-  the small end of the phenomenon.
-- *Modularize.* Separate the calculus-independent core from what a signature
-  contributes, give the pieces interfaces rather than adjacency, and replace
-  per-rule repetition with a shared support library. This is eudaimonia's own
-  stated blocker — *stabilize the SMT-LIB model as a fixed base that signatures
-  extend*, *extract the invariant core* — and arrangement **B**'s design
-  question, arrived at from inside the artifact rather than from the generator.
-- *Improve.* Build time, robustness across a regeneration, uniformity across the
-  591 per-rule proofs, and what the theorem actually rests on: the axioms behind
-  the top-level statement, every remaining `sorry` or stub, and any step that
-  recruits a compiler into the trusted base — `native_decide` is the Lean
-  example, and the point of naming it is that a development can acquire one
-  without anybody deciding to.
-
-**Two outputs that are not advice, and that come first.** A development nobody
-reads needs, before it needs suggestions, an account of itself: what the
-top-level theorem says in English, what the parts are and which of them the
-argument turns on, how the core checker proof, the side conditions, the
-soundness theorem and the 591 per-rule proofs fit together, and where a reader
-who is not going to read all of it should start. Hermeneia quotes logos's
-guarantee above; one theorem statement is close to the whole of what a person
-gets today. Alongside it, detailed statistics — lines by component, generated
-against hand-written, per-rule against shared, how much of each is boilerplate,
-how deep the dependency graph runs, what a full build and a full regeneration
-cost, how many obligations are still stubs — because most of what is said about
-this development, in this document included, is said without a number.
-
-Both would have to be produced from the development rather than written beside
-it, for the reason this repository renders its own check pages from the registry
-they document: a description maintained by hand against a generated artifact
-drifts, and a drifted description of a proof is worse than none. And both are
-worth having on their own, whether or not a single suggestion is ever taken.
-
-**What kind of finding this is**, which matters because it is not the kind this
-repository publishes. anoieu reports defects: a thing is wrong, and the argument
-is about whether it is. Euthyna would report suggestions, where the owner's
-judgement governs and a declined one is not an unfixed defect but a difference
-of taste about a proof somebody else maintains. Same reporting system, a
-different burden — and the same refusal at the end of it, because a development
-euthyna has nothing to say about is not thereby a development that is good.
-
-**The wishue** is the same service for whatever eudaimonia builds next: a
-development the tool has not seen, for a calculus it does not know. That is also
-the honest test of the first goal — whether what euthyna learns on logos is
-about logos, or about generated proof developments in general.
-
-**What it would settle.** Reason 6 says the Lean side is generated and therefore
-close to free. That figure is what *free* currently weighs, and nobody has said
-how much of it is load-bearing — the statistics alone would retire several
-sentences in this document that currently begin *nobody has measured*. Euthyna
-is the only one of the six projects here that takes the artifact this document
-keeps calling a by-product as its subject, and its findings would be the first
-evidence either column has about whether a generated development of that size
-can be made modular at all.
-
-**Where the difficulty sits.** Some of what it finds will not be logos's to fix:
-in a generated development, a suggestion can only be taken by hand where the
-text is hand-written and preserved — eudaimonia already carries per-rule proofs
-across a regeneration — and everywhere else it is really a request to the
-compiler, forwarded through logos. Sorting the two is part of each finding, not
-a preliminary to it. Minimality is also a search, and the obvious method does
-not survive the size: delete something, rebuild, see whether it still goes
-through, does not scale to 695,000 lines, so most of the answer has to come from
-the dependency graph the prover already has. And smaller is not self-evidently
-better — 591 rules that look alike are worth more than 591 individually shortest
-proofs, and a refactoring no generator can reproduce is a liability rather than
-an improvement. Advice that does not say which of those it is optimizing for is
-not advice anybody should take.
-
 ## Elenchos — differential fuzzing as a derived artifact
 
 *A code name, for work not yet started.* ἔλεγχος is cross-examination: the
@@ -958,6 +872,10 @@ claim rather than an adjective.
 
 ## What the six mean for the argument above
 
+*Six were named and five are described above; `euthyna` is documented at its
+source now. It stays in this section because the argument still turns on it.*
+
+
 Two of the cost columns are dated rather than wrong. Arrangement **D** is
 blocked on a measurement that Pathos would replace with an artifact, and reason
 4's folklore status matters much less if the trade-off it rests on is dissolved
@@ -979,7 +897,8 @@ turning its by-product into an instrument, making its strongest artifact reach
 further, making its largest one tractable, and settling where the semantics
 lives — and only the last of those is a fork rather than an increment.
 
-What all six share is that they are expensive things built *against* the
+What all six share — the five below and the one that launched — is that they
+are expensive things built *against* the
 signature and the proof format, and each one that gets built raises the cost of
 moving those. That is an argument for settling questions 1 and 3 — where the
 calculus is defined, and whether `.eos` should be Lean — before rather than
