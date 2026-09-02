@@ -180,7 +180,22 @@ end from memory. **A summary composed afterwards is a reconstruction**, and a
 reconstruction by the party being described is the weakest document this
 ecosystem could produce.
 
-**12. Publishing the working summary is the president's first responsibility**,
+**12. A president keeps a joke about its own name, prominently on its main
+README, for the whole of its term.** On the front page where anybody arriving
+sees it — **not in this file, and not in a footnote.** The history entry records
+only that the joke is there and what it is.
+
+**The placement is the rule.** A joke filed in a governance document is an
+anecdote; a joke on the front page of the repository currently running the
+ecosystem is a standing statement about how seriously the office takes itself.
+**A president that cannot leave one there has started to believe the office is
+important**, which is worth catching early in a government that one repository
+invented for itself in an afternoon.
+
+**It is cheap and it doubles as description**, which is the test of a good one:
+the joke should tell a stranger what the tool does.
+
+**13. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
 ## Entering the ecosystem, set out properly
@@ -259,7 +274,7 @@ somebody who was not there.** Not to record everything, and not to justify
 anything. A closed entry that a stranger cannot follow has failed whatever else
 it contains.
 
-**Ten fields, in this order, all of them present.** *Nothing to report* is an
+**Eleven fields, in this order, all of them present.** *Nothing to report* is an
 answer and is written; an omitted field is not.
 
 | field | what it holds |
@@ -273,6 +288,7 @@ answer and is written; an omitted field is not.
 | **What is handed on** | unfinished work the next president inherits, and anything it must not assume |
 | **Government model** | **what was actually executed while in office**, named plainly — which positions existed, who held them, and how each was held. Not the model that was aspired to |
 | **Evidence** | where the figures came from, and how a reader re-derives them |
+| **The joke** | that the president's README carried one, and what it was. The joke itself lives there, not here. Law 12 |
 | **To the next president** | what the outgoing president wants its successor to know. **The one field written to a reader rather than about a stretch** |
 
 **The message to the successor is positive reinforcement, and that is a rule

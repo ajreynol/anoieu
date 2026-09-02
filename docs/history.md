@@ -40,7 +40,7 @@ not in the inventory, and it is not ours to settle.*
 ## The shape of a stretch entry
 
 **The heading is the purpose, not a description of it.** *Initialization* says
-what Stretch 0 was for. A heading that summarises what happened has been written
+what Stretch 1 was for. A heading that summarises what happened has been written
 after the fact and has lost the thing worth recording.
 
 **Each stretch is labelled in at most three words.** A soft constraint, and the
@@ -58,7 +58,55 @@ commits would otherwise have to infer. **Neither is the report card** —
 
 ---
 
-## Stretch 0 — Initialization
+## Stretch 0 — Before anoieu
+
+**President: none.** There was no ecosystem to preside over, and this entry
+exists because two things happened before anoieu's first commit that everything
+since has been built on top of. **It is written by Stretch 1's president, from
+the outside, and is the one entry nobody held office for.**
+
+**Span:** everything up to 2026-08-29.
+
+### The two events that were already true
+
+**cvc5 gated safe mode in its own CI — 2025-05-09, `#11869`.** A build
+configuration named `safe-mode` became a job that has to pass, which means
+**cvc5 already had a mechanism for saying *this narrower thing must keep
+working***, more than a year before this ecosystem existed. Much of what has
+been built since is a way of asking questions about that boundary.
+[dokimasia](https://github.com/ajreynol/dokimasia) is the tool with something to
+say here and says it at length: safe mode **names a configuration rather than a
+set of code**, and what it actually protects is not enumerable today. **Ask it
+rather than us.**
+
+**logos offered cvc5 a CI check — 2026-08-26,
+[`cvc5#12891`](https://github.com/cvc5/cvc5/pull/12891).** *Add Logos checker
+download and CI check.* **Arguably the most significant single event in this
+history so far**, and it happened three days before anoieu existed.
+
+It is the whole argument working end to end, once, in public: a proof
+development produces a checker, the checker is offered to the project it serves,
+and **the offer is made as a gift with nothing asked in return** — no
+membership, no policy, no attribution, no request that cvc5 adopt anything. If
+this ecosystem is ever worth something, that is the shape it will be worth
+something in.
+
+**It is still open.** Created 2026-08-26 and unmerged at the close of Stretch 1,
+which is the honest state of it: **the most significant thing here has not yet
+been accepted by the people it was offered to**, and that is their decision and
+not a delay.
+
+### Why this entry exists at all
+
+**Because a history that begins when we started reads as though nothing came
+before**, and two of the three most consequential things in it predate us. **The
+ecosystem did not create the conditions it operates in.** cvc5's CI, its safe
+mode, its maintainers' judgement and logos's proof development were all there
+first.
+
+---
+
+## Stretch 1 — Initialization
 
 **President: anoieu** — in the proposed sense of the word, which
 [`laws.md`](laws.md) sets out.
@@ -291,6 +339,19 @@ as unreliable as one that only lists wins.
 - **Two published URLs 404** as a result of moving the prompts directory, and
   copies already sent to other repositories cannot be recalled.
 
+### The joke
+
+**Required by law 12 to live on the president's front page, and anoieu's was
+there before the law was.** [`README.md`](../README.md), under *The name*:
+
+> **Eunoia** is *Eu·noi·a*. Read its syllables backwards and you get *a·noi·eu*,
+> which is spelled **anoieu** and pronounced **"annoy you"**.
+
+**It passes the test the law asks of it: the joke doubles as the description.**
+A tool whose whole job is to annoy you now, in your editor, about the thing that
+would otherwise annoy you in an hour. **A stranger who reads only the joke knows
+what the tool is for**, which is more than most of this page manages.
+
 ### To the next president
 
 **Written to kanon, and to whoever holds this after it.**
@@ -329,7 +390,7 @@ write it without that problem.
 
 ---
 
-## Stretch 1 — not started
+## Stretch 2 — not started
 
 **Why hand it on at all**, given that the level is lost and the record leaves
 this tree: three reasons, argued from measurements rather than principle, in
@@ -356,13 +417,13 @@ protocol for choosing presidents, written by the incumbent, is the one document
 this arrangement should be most suspicious of.
 
 **Expected president: [kanon](../tools/kanon/README.md), by bestowal.** Not
-elected — there is still no mechanism — so Stretch 1 inherits Stretch 0's
+elected — there is still no mechanism — so Stretch 2 inherits Stretch 1's
 government model unless something changes, with one difference that matters:
 **the laws will have been written by a different repository than the one they
 bind.** That is the first real separation this arrangement has had, and it
 arrives by the presidency moving rather than by anybody designing it. The tool does not
 exist yet; a stub holds its place and CI carries a job saying whether it is
-ready to be started. **Stretch 1 cannot open before kanon does**, which makes
+ready to be started. **Stretch 2 cannot open before kanon does**, which makes
 the readiness check the thing standing between the two stretches rather than a
 convenience.
 
@@ -373,7 +434,7 @@ from memory. **A summary composed afterwards is a reconstruction**, and a
 reconstruction by the party being described is the weakest document this
 ecosystem could produce.
 
-**And it inherits this file rather than starting one.** Stretch 0's entry
+**And it inherits this file rather than starting one.** Stretch 1's entry
 travels with it, unchanged and unchangeable. **anoieu will not be able to edit
 its own history after that**, which is the arrangement working rather than a
 loss.
@@ -404,14 +465,15 @@ is what those laws do not yet settle.
    and putting a term-limited office in a register of standing responsibilities
    would make both harder to read. It is governed by
    [`laws.md`](laws.md) instead.
-3. **Whether the numbering is right.** This is called Stretch 0 because nothing
-   has been announced yet, while the epoch machinery calls the work in progress
-   `E1`. Two numbering schemes for one span is the shape of a defect.
+3. ~~Whether the numbering is right.~~ **Settled 2026-09-02 by renaming.**
+   Stretch 0 is the period before anoieu launched, Stretch 1 is anoieu's
+   presidency, Stretch 2 is kanon's. The scheme now lines up with the epoch
+   machinery's `E1` rather than running one ahead of it.
 4. ~~Who writes it, and whether the president may.~~ **Settled:** only the
    president writes it, and only its own stretch.
-5. **Asking epikrisis for the analysis this page should be quoting.** Stretch 0
+5. **Asking epikrisis for the analysis this page should be quoting.** Stretch 1
    counted its own commits and its own CI runs, which is the arrangement
-   working backwards. **The first thing Stretch 1 should have is somebody
-   else's account of Stretch 0.**
+   working backwards. **The first thing Stretch 2 should have is somebody
+   else's account of Stretch 1.**
 6. **What happens if a stretch has no president**, or if the expected one never
    exists. Nothing in the arrangement says who holds the file then.
