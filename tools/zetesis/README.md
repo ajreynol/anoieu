@@ -180,7 +180,7 @@ governs, decided by a person — and not a page here gradually acquiring weight.
 
 **They pull in opposite directions on purpose, and both are right.** The vision
 is an argument for speed, and the mechanism is not exhortation but the one
-[`../../docs/ai-novelty.md`](../../docs/ai-novelty.md) sets out: clear, precise
+[`../../docs/ai-novelty.md`](../../docs/misc/ai-novelty.md) sets out: clear, precise
 writing is what makes an agent-run ecosystem fast, because the scarce resource
 is attention over text and every ambiguity is a branch discovered late.
 

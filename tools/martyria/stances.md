@@ -120,7 +120,7 @@ Whether anybody takes it up is not ours.
    built as one** — the day it is, it stops being evidence and becomes an
    advertisement with a git history attached.
 2. **The caveats travel with it, or the offer is withdrawn.** They are in
-   [`../../docs/ai-novelty.md`](../../docs/ai-novelty.md) and they are the
+   [`../../docs/ai-novelty.md`](../../docs/misc/ai-novelty.md) and they are the
    substantive half: the inputs are missing, the good conduct is selected,
    there is one ecosystem and no adversary, the prose is agent-written and
    reads as more rigorous than it is, and the whole is biased toward

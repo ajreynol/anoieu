@@ -1,7 +1,7 @@
 # The mechanisms, and why they are subtle
 
 **What this ecosystem is actually doing, mechanically.** Not whether it is good
-— [`report-card.md`](report-card.md) grades that and remains the authority — and
+— [`report-card.md`](../report-card.md) grades that and remains the authority — and
 not what of it generalises, which a child project in eudaimonia's tree asks in
 its own register. This page asks the narrower question: *what are the moving
 parts, and why is each one shaped the way it is?*
@@ -72,7 +72,7 @@ conversation with a fact*:
 clearer, or the corpus getting clearer while the things it is supposed to
 produce — checks, findings, adopted work — stay flat. The second is measurable
 and the counter for it is in
-[`coherence.md`](coherence.md#the-governance-budget). It is not currently
+[`coherence.md`](../coherence.md#the-governance-budget). It is not currently
 reading well.
 
 ## `vision.md` is the kernel
@@ -81,10 +81,10 @@ The most load-bearing analogy on this page, and worth being precise about.
 
 A kernel is **small, loaded first, and privileged**: everything else runs
 against its interface, and no program above it can revoke it.
-[`vision.md`](vision.md) holds that position. It is short relative to what it
+[`vision.md`](../vision.md) holds that position. It is short relative to what it
 governs, it is the first thing a new repository is pointed at, and every other
 document is written against it rather than beside it —
-[`policy.md`](policy.md) is what it looks like to make part of it decidable,
+[`policy.md`](../policy.md) is what it looks like to make part of it decidable,
 and the checker is what it looks like to make part of *that* executable.
 
 **Why it may never be checked mechanically** falls straight out of the analogy.
@@ -251,7 +251,7 @@ here, and it is four things, none of them new:
 
 **Some of the work is already done and is not called this.** The two roles are
 written as separable on purpose — the machinery and the front end are separate
-entries in [`roles.md`](roles.md) held by one tool today — so that moving either
+entries in [`roles.md`](../roles.md) held by one tool today — so that moving either
 one is a handoff rather than a rewrite, and the procedure for that handoff is on
 the same page. The planned maintainer is named and does not exist.
 
@@ -447,7 +447,7 @@ The section that keeps the rest honest.
 **Governance is the cheapest thing here to produce, and nothing prices it.** An
 agent can write a defensible page in minutes and every page is individually
 defensible; the total is what nobody was counting until recently. The counter is
-in [`coherence.md`](coherence.md#the-governance-budget) and these two pages are
+in [`coherence.md`](../coherence.md#the-governance-budget) and these two pages are
 on the wrong side of it — they are written prose, they displace nothing yet, and
 the thing that has to pay for them is what [`linker.md`](linker.md) saves the
 next reader.

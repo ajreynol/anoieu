@@ -132,6 +132,7 @@ named.
 | `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
 | `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. CI green on both sides, non-negotiable; any hint of fraud, reject | spawned repo → anoieu | this page |
 | `PROTO-21` | **the identify protocol** — **every** response opens with the entity the agent acts for, its mission, and **which AI is answering, by name**. The long form at session start and on request | agent → human | [`interface.md`](interface.md) |
+| `PROTO-22` | **the misc protocol** — a document too expensive to clean up now is demoted to `docs/misc/` rather than deleted or left misrepresenting itself. Discouraged, and a growing `misc/` is a symptom | page → layout | this page |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it
@@ -144,6 +145,37 @@ morning — does not happen in one repository, so a rule held in one repository
 cannot reach it. The mechanism is maintained by
 [martyria](../tools/martyria/README.md), which is where its ethics are argued
 and its schedule lives.
+
+## `PROTO-22` — the misc protocol
+
+**`docs/misc/` is where a document goes when cleaning it up properly would cost
+more than it is worth today.** Demotion, not deletion: the page keeps working,
+every link to it keeps resolving, and **nothing is lost.**
+
+**It is a discouraged practice and the page says so.** The good outcome is that
+a document is cleaned up, merged into the page it should have been part of, or
+argued out of existence. `misc/` is what you do when none of those will happen
+this week and the alternative is leaving the front of the documentation
+misrepresenting what is load-bearing.
+
+**What demotion means.** The document is still maintained, still linked, still
+checked. **What changes is the claim the layout makes about it**: it is no
+longer offered as one of the places a question is answered.
+
+**What it must never be.** A place to put something to avoid arguing about it,
+a way to keep a page that should be deleted, or a holding pen that fills up
+because demoting is easier than deciding. **A `misc/` that grows is a symptom,
+not a filing system** — the count belongs in the health assessment, and a
+directory nobody has emptied in a year is evidence about the project rather than
+about the documents.
+
+**First use, 2026-09-02**: `ai-novelty.md`, `linker.md` and `methodology.md` —
+1,564 lines of essay that mostly cited each other, of which one had a single
+inbound link from the index and nowhere else. **They exist because a subject was
+split rather than because three questions have three homes**, and merging them
+is the work that was not affordable today. `science-fiction.md` was in the same
+group and stays where it is: it holds the ecosystem's upper bounds and its
+guard rails, which is a safety job rather than an essay.
 
 ## `PROTO-20` — the handoff protocol
 

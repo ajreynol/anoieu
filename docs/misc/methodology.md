@@ -7,7 +7,7 @@ imposed.
 
 Three neighbours, so this page can stay narrow. [`linker.md`](linker.md) is what
 this repository holds; [`ai-novelty.md`](ai-novelty.md) is why those mechanisms
-are shaped as they are; [`science-fiction.md`](science-fiction.md) is how far
+are shaped as they are; [`science-fiction.md`](../science-fiction.md) is how far
 ahead we may plan. This one is the distribution mechanism and nothing else.
 
 ## The problem
@@ -137,7 +137,7 @@ on the answer. Nothing has done this.
 ## The rate this runs at
 
 **Go only as fast as you understand.** The principle is stated in full in
-[`stretch-policy.md`](stretch-policy.md), and it belongs on this page because it
+[`stretch-policy.md`](../stretch-policy.md), and it belongs on this page because it
 is what stops the mechanism above from being used badly.
 
 Distribution makes it cheap to push a change into other people's builds — that
@@ -150,7 +150,7 @@ mechanism above becomes a way of distributing confusion at scale. The diligence
 owed before a deploy is **recursive** — the history behind a change and not only
 the change — with a stated stopping rule so that it ends in a deployment rather
 than in more reading; both are in
-[`stretch-policy.md`](stretch-policy.md).
+[`stretch-policy.md`](../stretch-policy.md).
 
 Scope is the lever: a small change may move quickly, a large one may not, and
 the size of a change between two announcements is a measurable property of a git

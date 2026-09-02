@@ -73,7 +73,7 @@ closes. If you move it, the only thing worth knowing is what caught our own
 mistakes: a textual search missed a path that was assembled from components at
 run time, and no check at all could catch a sentence that had quietly become
 false about the shape. The write-up is in
-[`ai-novelty.md`](ai-novelty.md#a-worked-example-moving-one-directory).
+[`ai-novelty.md`](misc/ai-novelty.md#a-worked-example-moving-one-directory).
 
 **Any URL you hold that points into our `scripts/prompts/` will 404.** We know
 of two we published ourselves and have fixed those.

@@ -33,6 +33,57 @@ this page is a ticket in anybody's tracker, and nothing here is filed anywhere:
 a request that a member should act on reaches them through
 [`docs/discussion.md`](../../docs/discussion.md), by a person, or not at all.
 
+## R8 — a tool that ranks documentation by importance, and finds the dead weight
+
+**What:** a program that reads a repository's documents and orders them by **how
+much depends on them**, so that *which of these matters* is a measurement rather
+than an opinion. The immediate use is deciding what to merge or delete; the
+lasting one is that **nobody currently knows which pages are load-bearing**, and
+that is a strange thing not to know about a project whose central policy is
+about documents.
+**Where:** anoieu keeps the documentation policy and has the most documents, so
+the subject is here. It should work on any member's tree.
+**State:** **open.** Requested by the maintainer, 2026-09-02, on noticing that
+`docs/` had grown to 30 files and roughly 18,700 lines.
+
+### What it would measure
+
+**Signals that are already computable, none of which is importance on its own:**
+
+- **Inbound references** — how many other documents name this one. Cheap,
+  objective, and the closest single proxy. It ranges from 35 to 1 here.
+- **Whether a check reads it.** A document that is ground truth for a test in
+  `tests/run.py` or `tools/policy_check.py` cannot be deleted without breaking
+  something, which is a harder fact than any link count.
+- **Whether it leaves the repository** — published to members, quoted in an
+  outbound prompt, or pinned by somebody else's CI. Those cannot be changed
+  unilaterally at all.
+- **Age against the tree it describes**, which
+  [`tools/doc_currency.py`](../doc_currency.py) already measures separately and
+  which this should read rather than recompute.
+
+### The question underneath, which is the interesting one
+
+**Some documents exist because a question needs a home. Others exist because a
+subject was split.** The second kind is what accumulates, and it is invisible to
+every signal above: four essays that cross-reference each other and are read by
+nobody score exactly like four independent pages.
+
+**A candidate test, offered to be argued with: a document that is only ever
+reached through its siblings is a section, not a document.** If every path to a
+page goes through pages on the same subject, the split is internal structure
+that escaped into the filesystem. **That is a claim about link topology and is
+checkable**, which is why it is worth writing down rather than leaving as taste.
+
+### What would make it wrong
+
+**A page with no inbound links and no reader may still be the most important
+thing here** — `vision.md` would rank low on most of these signals and governs
+everything. **Any tool that recommends deletion by score is dangerous**, so this
+should rank and report, and never propose. The decision stays a person's, and
+the tool's job is to make sure the person is looking at the right ten files
+rather than all thirty.
+
 ## R7 — what does recency prove about a change?
 
 **What:** the sibling question to `R5`. That one asks what cryptography can

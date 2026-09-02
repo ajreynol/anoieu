@@ -109,11 +109,21 @@ moves, unchanged. **This is what enforces law 2** — after the move your stretc
 is in somebody else's repository and you cannot reach it. The laws are kept
 short because most of the work is done by where the file lives.
 
-**4. The past is never revised.** A mistake in a closed stretch is corrected by
-the *current* president appending a correction to the *current* entry, naming
-what was wrong. **The wrong statement stays**, for the same reason this
-ecosystem never rewrites its git history: the record of the error is the part
-worth keeping.
+**4. A president may correct an earlier stretch, and must show its work.** Not
+freely: the burden is on the editor to **demonstrably show** that the earlier
+summary was wrong, or that it can be improved, and the demonstration goes in the
+edit. *It was unclear* is not a demonstration; *this figure disagrees with the
+run history, here* is.
+
+**This costs nothing, and that is the argument for allowing it.** The change is
+in the git history either way, the previous wording is one command away, and
+nothing is destroyed by a correction — **so the only thing a prohibition would
+buy is a record that stays wrong.** A past president cannot defend its entry,
+which is a reason to require evidence and not a reason to freeze the text.
+
+**What is still forbidden is silent revision.** An entry that changes with no
+demonstration attached, or a correction that removes the claim instead of
+answering it, is the failure this law exists against.
 
 **5. A stretch's heading is its purpose, in at most three words.** Not a summary
 of what happened. A heading written after the fact has lost the thing worth

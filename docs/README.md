@@ -1,7 +1,10 @@
 # The documentation
 
-Seven documents, so that a question has one obvious place to be answered, plus
-the files a run generates. If you are looking for content rather than for where
+**Thirty documents and about 18,700 lines**, which is more than the *one
+obvious place per question* this page was built on, and is being looked at.
+Seven of them are the written core listed below and the rest are named further
+down. **Which of them are load-bearing is not currently known**, and a tool to
+measure that has been requested. If you are looking for content rather than for where
 content lives, every row below leads somewhere better.
 
 ## Written
@@ -16,14 +19,30 @@ sweeping the whole report, and what it takes for another repository to run these
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor nobody has started |
 | [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the six above belongs here |
 
+## Demoted
+
+**[`misc/`](misc/) is where a document goes when cleaning it up properly would
+cost more than it is worth today** — see `PROTO-22` in
+[`coherence.md`](coherence.md). Still maintained, still linked, still checked;
+what changes is that it is no longer offered as one of the places a question is
+answered. **The practice is discouraged and a growing `misc/` is a symptom.**
+
+| document | its job |
+| --- | --- |
+| [`ai-novelty.md`](misc/ai-novelty.md) | the mechanics of why this arrangement works, and a worked example of one refactor. Demoted 2026-09-02 |
+| [`linker.md`](misc/linker.md) | the workflow resolved to where each rule is defined, for an agent to load. Demoted 2026-09-02 |
+| [`methodology.md`](misc/methodology.md) | how a practice reaches somebody else's tree, and at what rate. Demoted 2026-09-02 |
+
 ## Generated
 
-Written by a run, and the only files here a tool may edit.
+Written by a run, and the only files here a tool may edit — **except one.**
+`closed-findings.md` sits in this table because it lives with the others and is
+hand-maintained; being in this section is what once made it look disposable.
 
 | document | its job |
 | --- | --- |
 | [`open-findings.md`](reports/open-findings.md) | **every finding currently reported**, one row each. *Additive* — see the caution below |
-| [`closed-findings.md`](reports/closed-findings.md) | **internal**: every row already ruled on, and the verdict against it. What stops a settled finding being listed again |
+| [`closed-findings.md`](reports/closed-findings.md) | **internal, and NOT generated** — it is written by the review step and only *read* by the generator, which skips every id in it. **It is the ledger of verdicts and cannot be reconstructed**: delete it and every settled finding is reported to its project again, including the ones somebody already declined. It is listed here because it lives beside the other two, and `tools/policy_check.py` deliberately leaves it out of its generated list |
 | [`corpus.md`](reports/corpus.md) | **what was measured, and what the checks reported on it**: the commits each project was restored to, and the counts taken from them. *Rewritten whole* |
 | [`checks.md`](checks.md) | **one page per check** — what it reports, what it assumes, and what it deliberately does not. Rendered from the registry, so a page cannot drift from the code beside it. *Rewritten whole* |
 
@@ -128,7 +147,7 @@ than a defect. Which repositories are actually contacted, and whether any are, i
 a person's decision: see *Who gets pinged* in
 [`policy.md`](policy.md#who-gets-pinged).
 
-[`methodology.md`](methodology.md) is the **distribution mechanism**: how a
+[`methodology.md`](misc/methodology.md) is the **distribution mechanism**: how a
 practice gets from this repository into a tree whose owner did not write it, and
 at what rate. The worked case is the one thing here that has actually crossed
 the boundary — the policy checker, fetched at a commit a member pins and runs
@@ -146,7 +165,7 @@ enables, and one dated piece of evidence: the first outside approach this
 ecosystem has received, why it is only a candidate for that, and why the posture
 toward it is distrust regardless of who is behind it.
 
-[`linker.md`](linker.md) and [`ai-novelty.md`](ai-novelty.md) are
+[`linker.md`](misc/linker.md) and [`ai-novelty.md`](misc/ai-novelty.md) are
 **experimental and new**, a pair, and in the table above least of all. The
 first is every rule this repository holds, each resolved to the file that
 defines it and none of them restated — one page an agent can load before
