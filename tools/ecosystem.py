@@ -529,6 +529,21 @@ def main() -> int:
         if verdict != "ok" and status == "member":
             notes.append(f"{name} is recorded as a member and does not pass: "
                          "this is the state the check exists to catch")
+        # A checkout whose directory is not called what the inventory calls it.
+        # Said loudly because the quiet version of this cost us a member: the
+        # tree was on disk as `eudiamonia`, the inventory said `eudaimonia`, and
+        # the row read `no checkout` for a repository that was right there --
+        # hiding its failures and eleven topics it was owed. A near-miss is
+        # worse than an absence: absence is obvious and this is not.
+        if path:
+            want = inv[name].get("repo", name)
+            got = os.path.basename(os.path.normpath(path))
+            if got != want:
+                notes.append(f"NAME MISMATCH: {name} is checked out as `{got}` "
+                             f"and we expect `{want}`. One of the two is a typo, "
+                             "and until it is fixed this row is resolved by a "
+                             "hand-written line in scripts/repos.local rather "
+                             "than by its name")
         if verbose and fails:
             notes.append(f"{name}: " + "; ".join(fails[:6]))
 
@@ -547,14 +562,28 @@ def main() -> int:
     print()
     here = bump_check.current_stretch()
     if here:
-        print(f"Stretch here: {here}. The `epoch` column is what a tree records "
-              f"about which advice it\nwas built against -- encouraged and never "
-              "required, so `-` is the ordinary case\nand is not a finding. It is "
-              "not a compliance column and must not be read as one.")
+        print(f"Stretch here: {here}. `epoch` is which stretch's advice a tree "
+              f"records being built\nagainst, and `moved` is how long since its "
+              "last commit. Both are optional and\n`-` is ordinary; neither is a "
+              "compliance column.")
         print()
-    print("Form only. A passing row says those checks passed on that tree, and "
-          "nothing about\nwhether the tool is any good -- see docs/reports/"
-          "reporting-policy.md on silence.")
+    counts: dict[str, int] = {}
+    for r in rows:
+        counts[r[1]] = counts.get(r[1], 0) + 1
+    members = [r for r in rows if r[1] == "member"]
+    passing = sum(1 for r in members if r[2] == "ok")
+    owed = sum(int(r[4].split()[0]) for r in rows if r[4].endswith("for us"))
+
+    #: Plurals that are not formed by adding an s. Short on purpose: the table
+    #: has five footings and four of them are regular.
+    PLURAL = {"child": "children"}
+    print("  ".join(f"{n} {PLURAL.get(k, k + 's') if n != 1 else k}"
+                    for k, n in sorted(counts.items(), key=lambda kv: -kv[1])))
+    print(f"{passing} of {len(members)} members pass. {owed} topic"
+          f"{'s' if owed != 1 else ''} owed to us.")
+    print()
+    print("Form only: a passing row says those checks passed, not that the tool "
+          "is any good.")
     # The judgement half deliberately lives elsewhere and is never computed
     # here: this table is decidable from a tree and that one is not. Pointing at
     # it is the whole of the relationship -- a reader who wants to know how a
