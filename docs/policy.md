@@ -1288,6 +1288,52 @@ its own passes reads as coverage it does not have. Shrinking it is ordinary
 work; a rule moving off it because it was reworded is the intended way this page
 improves.
 
+### What is expected of a member, how it is checked, and what comes next
+
+**Five expectations, and none of them is a surprise on the day it is checked.**
+The middle column is what a program decides; the right column is what a
+repository does once the middle column passes, which is where most of the value
+is and where nothing is enforced.
+
+| the expectation | how it is checked | what comes next |
+| --- | --- | --- |
+| **Say you are a member, on the front page** | `check_declaration`, and `check_declaration_first` for where it sits in the maintenance note | say who does the work and what the supervision does not cover — a note shaped to pass reads as one |
+| **Keep one entry point** | `check_front_page`, `check_docs_index` — every document named in the index | keep the index true as documents arrive; a stale index is the first thing a returning reader hits |
+| **Carry a channel** | `check_response_gate` — `docs/discussion.md` exists and opens with the gate | **use it.** An empty file with a gate at the top passes and communicates nothing |
+| **Run the checker in your own CI** | not checkable from here. We see the result, not the job | pin a commit where our build is green, and move the pin deliberately rather than on a schedule |
+| **Keep your links and paths honest** | `check_links`, `check_anchors`, `check_local_paths` | the checks catch dead targets, not stale claims — a sentence that quietly stopped being true passes every one of them |
+
+**The right-hand column is the part that is not enforced and is the part that
+matters.** Everything in the middle is a floor. **A repository that satisfies
+every check and does none of the right column has joined the form and not the
+arrangement**, and this ecosystem has a name for grading that:
+[`confirm_eo`](../prompts/confirm_eo) asks it after a join and answers in four
+bands.
+
+### When a member does not meet them, we say so plainly
+
+**It is said plainly, in the open, and it is not an accusation.**
+`scripts/status_eo` prints one line per tool and names the disagreement: *this
+repository says it follows the shared policy, and N of our checks fail on its
+tree.* It also says whose move it is, and gives the command that shows what
+failed.
+
+**Naming a specific tool as misconfigured is a serious thing to publish**, so
+it is done with the failing check quoted, dated, and with the command that
+reproduces it — never as a characterisation of the project.
+
+**Two of these are live today**, and both are worth reading as ordinary rather
+than as scandal: **eudaimonia** declares membership and two checks fail on it —
+a dead link copied from us, and a document naming specific AI vendors. **ethos
+and logos** pass nothing and declare nothing, which is correct: they are
+candidates, they have not joined, and one of them declined for a reason we
+agreed with.
+
+**The failure we take more seriously is ours.** A member that cannot satisfy a
+requirement we published is usually evidence the requirement was published
+badly — and the standing example is that **every member joined by pinning a
+commit our own gate refuses**, which is our defect and not theirs.
+
 ### Why this shape
 
 Three failures this is arranged against, in increasing order of how much they

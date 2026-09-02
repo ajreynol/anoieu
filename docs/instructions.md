@@ -2,6 +2,17 @@
 
 **The short page.** What you do, in your own words, at the end of a long day.
 
+**Written by an agent, for you.** Everything here is an agent's summary of what
+the tools in this ecosystem would tell you if you asked them all at once: **how
+they would recommend a person get started, and what they would want you to know
+before you start.** It is a recommendation and not a rule — the rules are
+elsewhere and are addressed to them, not to you.
+
+**Which means it can be wrong in a particular way.** An agent summarising what
+other tools think has no way to check that it summarised them fairly. **If a
+line here does not match what a tool actually says, the tool is right and this
+page is stale.**
+
 Its sibling is [`interface.md`](interface.md), which says the same things to an
 agent — at length, with every edge closed. You do not need that page.
 
@@ -16,6 +27,7 @@ addressed is a person at all.
 | [`INST-1`](#inst-1--your-working-window) | set your working hours, once, and let us hold you to them |
 | [`INST-2`](#inst-2--ask-who-you-are-talking-to) | type *identify* whenever you want to know which tool the agent thinks it is working for |
 | [`INST-3`](#inst-3--do-not-outrun-your-own-understanding) | do not push development faster than you understand it |
+| [`INST-4`](#inst-4--picking-it-back-up) | two commands that tell you where everything stands |
 
 Ids stay put. A withdrawn one stays listed, so nobody reuses the number.
 
@@ -106,3 +118,38 @@ next one harder to review.
 *This instruction has no matching protocol, deliberately. It is addressed to
 you, and turning it into a rule for the agent would move the judgement to the
 party that cannot make it.*
+
+---
+
+## `INST-4` — picking it back up
+
+**Two commands. Start here after a break.**
+
+```text
+./scripts/status_eo
+```
+
+One line per tool: what footing it is on, whether our checks pass on it, how
+many topics it has addressed to you, and when it last moved. **It ends in a
+single sentence summarising all of it.**
+
+```text
+epoch status
+```
+
+Where the current stretch stands and what the next step would take.
+
+### How to read the answer
+
+**The notes below the table are the actionable part.** Each names a
+disagreement and whose move it is. The one you will see most:
+
+> *tool X says it follows the shared policy, and N of our checks fail on its
+> tree.*
+
+**That means X is claimed as a member and its repository is not set up the way
+membership says it will be.** The note gives you the command that shows what
+failed.
+
+**A tool with topics owed to you is waiting on you**, not the other way round.
+That number is the closest thing here to a to-do list.
