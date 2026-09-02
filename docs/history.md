@@ -72,6 +72,37 @@ recorded in the permanent record while it happened.
 **dokimasia and koine are absent because they did not exist**, and that is the
 table's job: it says what was here, not who is here now.
 
+### The neighbours in Stretch 0
+
+**The same six tools, over the same span — everything up to 2026-08-29.** They
+had **zero** commits during Stretch 1, so their totals are their Stretch 0
+totals.
+
+| tool | repository created | commits | what it is |
+| --- | --- | --- | --- |
+| [murxla](https://github.com/murxla/murxla) | 2021-04-01 | 1,450 | a model-based API fuzzer for SMT solvers |
+| [carcara](https://github.com/ufmg-smite/carcara) | 2021-02-16 | 1,384 | a proof checker and elaborator for Alethe |
+| [ddSMT](https://github.com/ddsmt/ddSMT) | 2017-06-20 | 933 | a delta debugger for SMT-LIB benchmarks |
+| [lean-smt](https://github.com/ufmg-smite/lean-smt) | 2021-11-23 | 201 | tactics for discharging Lean goals into SMT solvers |
+| [LFSC](https://github.com/cvc5/LFSC) | 2017-08-16 | 95 | the LFSC proof checker |
+| [IsaRARE](https://github.com/cvc5/IsaRARE) | 2023-10-06 | 71 | generates Isabelle lemmas from RARE rewrite rules |
+
+**4,134 commits across the six, spanning nine years**, and every one of them
+predates this ecosystem entirely. Beside the 15,822 in the four repositories
+above, **Stretch 0 holds just under twenty thousand commits of work this
+ecosystem inherited and did not do.**
+
+**Two of them are direct precedents for tools we have only named.** `murxla`
+does at scale what our fuzzer is described in our own documents as a deliberate
+baseline for; `IsaRARE` already does in Isabelle what `iogos` is a name for.
+**A register of tools that do not exist reads differently beside a register of
+tools that do.**
+
+*Dates are repository creation on GitHub, which is the earliest thing that can
+be read without a checkout and may postdate a project's first commit. Counts are
+the sum of contributions across all contributors. **Neither number was supplied
+by these projects and none of them asked to be counted.***
+
 **This table is expected to grow, and law 13 says how.** A tool that was around
 before 2026-08-29 and joins later may have its row inserted retroactively, by
 whoever is president then, with the date it was added. **Those are facts that
@@ -253,6 +284,45 @@ stretch was written by an agent, reviewed by the maintainer, and committed under
 their name. The arrangement is honest at every step and **the artifact it
 produces is not**, because nothing in the commit format was asked to record the
 difference.
+
+### The neighbours, over the same five days
+
+**Six tools outside this ecosystem that have served cvc5 well, measured over the
+identical window** — the `outside-candidate` footing exists for exactly this.
+Read from the GitHub API on 2026-09-02, not from checkouts.
+
+| tool | commits in the stretch | last commit |
+| --- | --- | --- |
+| [ddSMT](https://github.com/ddsmt/ddSMT) | **0** | 2025-06-30 |
+| [murxla](https://github.com/murxla/murxla) | **0** | 2026-05-07 |
+| [carcara](https://github.com/ufmg-smite/carcara) | **0** | 2026-08-27 |
+| [lean-smt](https://github.com/ufmg-smite/lean-smt) | **0** | 2026-08-26 |
+| [IsaRARE](https://github.com/cvc5/IsaRARE) | **0** | 2026-01-22 |
+| [LFSC](https://github.com/cvc5/LFSC) | **0** | 2023-09-14 |
+
+**Zero, all six.** Against our 331.
+
+**And the honest reading is the opposite of flattering.** Two of them committed
+within three days *before* our window opened — carcara on the 27th, lean-smt on
+the 26th — so they are active and simply did not happen to commit during five
+particular days. **That is what a mature tool looks like: bursts, then
+quiet.** **A five-day window cannot distinguish a healthy tool from a dormant
+one**, and it is too short to say anything about any of them.
+
+**What the comparison actually establishes is about us.** 331 commits in five
+days is not evidence that we are doing more useful work than six established
+tools. **It is evidence that we are new**, and new projects churn — most of ours
+went into documentation about ourselves, which none of these six spent a line
+on. **The number we were quietly pleased with means less in company than it did
+alone**, which is what the footing was added to find out.
+
+*None of these projects asked to be measured, and nothing here is a judgement
+about any of them. LFSC's three-year gap is its authors having declared it
+done.*
+
+**What would make this worth repeating:** local checkouts, so a stretch can be
+measured against the same tools without asking GitHub, and **a window long
+enough to mean something.** One stretch is not a time series.
 
 **What the joining handshake does and does not tell us.** All three members ran
 `join_eo` and carry the declaration, and the ecosystem's vision states plainly
