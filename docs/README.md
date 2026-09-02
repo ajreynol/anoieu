@@ -86,6 +86,14 @@ including the two where anything actually gets built. Distinct from
 [`usage.md`](usage.md), which is the analyzer's command line, and from
 [`coherence.md`](coherence.md), which is the standards the work is held to.
 
+[`history.md`](history.md) is **what this repository did on GitHub during the
+current stretch**, in one page: how much was committed, how often the build was
+green, and who was driving. It names the ecosystem's **president** for the
+stretch first, because a page about what happened should say who was
+responsible for it. Distinct from [`report-card.md`](report-card.md), which
+grades, and from [`postmortem.md`](reports/postmortem.md), which asks what one
+run of the reporting loop cost. Its maintenance policy is not written yet.
+
 [`instructions.md`](instructions.md) is the other half of that page, and is
 the only document here **addressed to you rather than to whoever maintains
 this**. Where [`interface.md`](interface.md) tells an agent how to behave, this
