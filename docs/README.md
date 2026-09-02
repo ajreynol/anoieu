@@ -107,6 +107,16 @@ than a defect. Which repositories are actually contacted, and whether any are, i
 a person's decision: see *Who gets pinged* in
 [`policy.md`](policy.md#who-gets-pinged).
 
+[`science-fiction.md`](science-fiction.md) is **experimental** and is the only
+page here that sets a limit rather than a direction: **the furthest this
+ecosystem allows itself to plan**, with the contradiction against
+[`vision.md`](vision.md) stated rather than smoothed over — the vision governs
+direction and speed, this governs range, and where they conflict the vision
+wins. Two scenarios, each ending in what it *forbids* rather than what it
+enables, and one dated piece of evidence: the first outside approach this
+ecosystem has received, why it is only a candidate for that, and why the posture
+toward it is distrust regardless of who is behind it.
+
 [`linker.md`](linker.md) and [`ai-novelty.md`](ai-novelty.md) are
 **experimental and new**, a pair, and in the table above least of all. The
 first is every rule this repository holds, each resolved to the file that
