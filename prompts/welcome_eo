@@ -147,7 +147,7 @@ if [ "$SHOW" = 1 ]; then
   echo "-- dry run: nothing recorded. $NAME -> $TARGET" >&2
 elif [ -z "$RECORDED" ]; then
   if [ ! -f "$REPOS_FILE" ]; then
-    printf '# where each project is checked out on this machine.\n# One entry per line, "<repo-id> <path>". See scripts/prompts/process_anoieu.\n' > "$REPOS_FILE"
+    printf '# where each project is checked out on this machine.\n# One entry per line, "<repo-id> <path>". See prompts/process_anoieu.\n' > "$REPOS_FILE"
   fi
   printf '%s\t%s\n' "$NAME" "$TARGET" >> "$REPOS_FILE"
   echo "-- recorded in $REPOS_FILE:" >&2

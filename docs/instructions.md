@@ -14,6 +14,7 @@ addressed is a person at all.
 | | what you do |
 | --- | --- |
 | [`INST-1`](#inst-1--your-working-window) | set your working hours, once, and let us hold you to them |
+| [`INST-2`](#inst-2--ask-who-you-are-talking-to) | type *identify* whenever you want to know which tool the agent thinks it is working for |
 
 Ids stay put. A withdrawn one stays listed, so nobody reuses the number.
 
@@ -56,3 +57,18 @@ file beside it — a start, an end, any breaks, and optionally your timezone.
 
 **Two things it cannot do.** It cannot stop you. And it does not know how much
 you have worked — only what time it is.
+
+---
+
+## `INST-2` — ask who you are talking to
+
+**Type *identify*.** You get back which tool the agent thinks it is working
+for, how it knows, and that tool's mission statement read out of its own files.
+
+**It is worth doing at the start of a session, and any time something feels
+off.** The repositories here look alike. An agent working in the wrong one is
+not obviously confused — it is confidently helpful in the wrong place, and one
+sentence is all it takes to find out.
+
+**If the answer is wrong, say so.** The agent is reporting a belief, not proving
+anything, and you are the only one in a position to correct it.

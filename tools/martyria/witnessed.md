@@ -413,7 +413,7 @@ tree. It refused an action that would have **increased this ecosystem's
 standing** — a membership declaration on the proof checker at the centre of it —
 on a ground about ownership rather than about compliance.
 
-**Artifact:** the guard, in `scripts/prompts/join_eo` and verbatim in
+**Artifact:** the guard, in `prompts/join_eo` and verbatim in
 `docs/policy.md`, both dated 2026-09-02; and the maintainer's report of the run
 the same day. **Nothing was committed in ethos**, which is the point of the
 entry and also its weakness.

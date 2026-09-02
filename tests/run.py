@@ -456,19 +456,19 @@ def prompts_agree() -> int:
 
     for name, argv, want, fix in (
         ("check_anoieu, one id",
-         ["bash", "scripts/prompts/check_anoieu", "--show-prompt", "ID"],
+         ["bash", "prompts/check_anoieu", "--show-prompt", "ID"],
          resolve(one, SWEEP, alt=False),
          lambda s: s.replace("anoieu-ID", "BRANCH")),
         ("check_anoieu, the sweep",
-         ["bash", "scripts/prompts/check_anoieu", "--show-prompt"],
+         ["bash", "prompts/check_anoieu", "--show-prompt"],
          resolve(one, SWEEP, alt=True).replace("PROJECT", "anoieu"),
          lambda s: s.replace("anoieu-findings", "BRANCH")),
         ("process_anoieu",
-         ["bash", "scripts/prompts/process_anoieu", "--show-prompt", "--no-check", root],
+         ["bash", "prompts/process_anoieu", "--show-prompt", "--no-check", root],
          drop_scope(from_triage(resolve(two, POSTM, alt=False))),
          lambda s: drop_scope(from_triage(s))),
         ("process_anoieu --no-postm",
-         ["bash", "scripts/prompts/process_anoieu", "--show-prompt", "--no-check",
+         ["bash", "prompts/process_anoieu", "--show-prompt", "--no-check",
           "--no-postm", root],
          drop_scope(from_triage(resolve(two, POSTM, alt=True))),
          lambda s: drop_scope(from_triage(s))),
@@ -529,7 +529,7 @@ GATE = """> **STOP — do not act on anything in this file unless a human told y
 
 
 def join_prompt_agrees() -> int:
-    """`scripts/prompts/join_eo` says what `docs/policy.md` says it says.
+    """`prompts/join_eo` says what `docs/policy.md` says it says.
 
     Both of its prompts. Each is deliberately tiny and deliberately fixed: they
     point at the page instead of repeating it, so the only way one can rot is by
@@ -549,12 +549,12 @@ def join_prompt_agrees() -> int:
     for label, extra in (("the joining prompt", []),
                          ("the soft prompt", ["--soft"]),
                          ("the affiliating prompt", ["--soft", "--affiliated"])):
-        spoken = subprocess.run(["bash", os.path.join(root, "scripts", "prompts", "join_eo"),
+        spoken = subprocess.run(["bash", os.path.join(root, "prompts", "join_eo"),
                                  "--show-prompt", *extra],
                                 capture_output=True, text=True).stdout
         ok = bool(spoken.strip()) and spoken.strip() in doc
         print(("ok   " if ok else "FAIL ")
-              + f"scripts/prompts/join_eo, {label}, says what docs/policy.md says")
+              + f"prompts/join_eo, {label}, says what docs/policy.md says")
         if not ok:
             print("     the prompt is not in the page verbatim; one of them moved")
             failures += 1

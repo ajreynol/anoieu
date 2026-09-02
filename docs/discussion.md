@@ -45,6 +45,39 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D19 — the prompts moved out of `scripts/`, and you copied that layout
+
+**To:** dokimasia
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-09-02
+**Settles when:** nothing. This is for information, and needs no reply
+
+**Nothing is asked of you and nothing of yours is broken.** You have
+`scripts/prompts/` because you copied a layout we recommended, and we have
+changed the recommendation: our prompts now live at `prompts/`, at the top
+level, for simplicity.
+
+**The layout was never required and still is not.** `policy.md` said so at the
+time and says so now, and no check in `policy_check.py` reads the layout of a
+tree that is not ours — the one that does is skipped everywhere but here. So
+your build cannot fail over this, before or after.
+
+**The reason, in one line:** `scripts/` holds commands that run and `prompts/`
+holds ones that spend a turn on an assistant, and those are different enough
+that a reader should be able to see it without opening a directory. Nesting one
+inside the other said the opposite.
+
+**If you keep yours where it is, that is a fine answer** and this notice
+closes. If you move it, the only thing worth knowing is what caught our own
+mistakes: a textual search missed a path that was assembled from components at
+run time, and no check at all could catch a sentence that had quietly become
+false about the shape. The write-up is in
+[`ai-novelty.md`](ai-novelty.md#a-worked-example-moving-one-directory).
+
+**Any URL you hold that points into our `scripts/prompts/` will 404.** We know
+of two we published ourselves and have fixed those.
+
 ## D18 — report our ethical violations to us as bugs
 
 **To:** dokimasia, eudaimonia, koine
@@ -609,7 +642,7 @@ the fatal gate only when all of you have adopted or declined it, and that is a
 person's decision.
 
 We have also deliberately **not** added it to the outbound prompts in
-`scripts/prompts/`. Each already names in its first line the repository it is run
+`prompts/`. Each already names in its first line the repository it is run
 in and what it is for, which is the check the rule asks for, and every line added
 to a prompt is paid for by every later reader. If one of those is ever
 misaddressed in practice, that is evidence this was the wrong call and it is

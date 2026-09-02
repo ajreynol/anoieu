@@ -43,7 +43,7 @@ kept in a different directory.
    argument, and is where a name is taken. **Check the trees as well as the
    register**: a name can be in use without being claimed, which has already
    caught somebody here.
-4. Then [`../../scripts/prompts/init_eo`](../../scripts/prompts/init_eo), which
+4. Then [`../../prompts/init_eo`](../../prompts/init_eo), which
    writes a new repository's README from the register and complies with nothing
    else on purpose.
 

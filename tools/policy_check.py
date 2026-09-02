@@ -488,10 +488,10 @@ def check_links() -> list[str]:
     moved is worse than one that sends them nowhere.
     """
     bad = []
-    for rel in tracked("*.md") + ["scripts/prompts/check_anoieu", "scripts/prompts/process_anoieu",
-                                    "scripts/prompts/join_eo", "scripts/prompts/check_join_eo",
-                                    "scripts/prompts/process_discussion", "scripts/prompts/init_eo",
-                                    "scripts/prompts/global_audit", "scripts/prompts/welcome_eo"]:
+    for rel in tracked("*.md") + ["prompts/check_anoieu", "prompts/process_anoieu",
+                                    "prompts/join_eo", "prompts/check_join_eo",
+                                    "prompts/process_discussion", "prompts/init_eo",
+                                    "prompts/global_audit", "prompts/welcome_eo"]:
         full = os.path.join(ROOT, rel)
         if not os.path.isfile(full):
             continue
@@ -626,7 +626,7 @@ def check_declaration_first() -> list[str]:
 
 
 def check_scripts_listed() -> list[str]:
-    """Every command in `scripts/` appears in the table that lists them.
+    """Every command in `scripts/` and `prompts/` appears in the table.
 
     The cheapest kind of check: its input is the tree, so it cannot rot, and the
     thing it prevents is the one that actually happened repeatedly -- a script
@@ -636,12 +636,16 @@ def check_scripts_listed() -> list[str]:
     table = read("docs/coherence.md")
     if not table:
         return []
+    # Both directories, since the prompts moved up out of `scripts/`. They were
+    # covered before the move by being nested under it, and a rename that
+    # quietly drops eight files out of a check is the failure this repository
+    # is least willing to ship: it reads as a pass.
     bad = []
-    for rel in tracked("scripts/*"):
+    for rel in tracked("scripts/*") + tracked("prompts/*"):
         name = os.path.basename(rel)
         if name.endswith(".local") or f"`{name}" in table:
             continue
-        bad.append(f"scripts/{name} is not in the table in docs/coherence.md")
+        bad.append(f"{rel} is not in the table in docs/coherence.md")
     return bad
 
 

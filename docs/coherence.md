@@ -131,6 +131,7 @@ named.
 | `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member | agent → human | [`interface.md`](interface.md) |
 | `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
 | `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. Any hint of fraud, reject | spawned repo → anoieu | this page |
+| `PROTO-21` | **the identify protocol** — *identify* is answered at once: who the agent acts for, how it knows, and that entity's mission read from its tree | agent → human | [`interface.md`](interface.md) |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it
@@ -247,15 +248,19 @@ that has drifted from this row is.
 ## The scripts
 
 **Two kinds, and the directory says which.** `scripts/` holds commands that do
-what they say and run nothing else; `scripts/prompts/` holds the ones that
+what they say and run nothing else; `prompts/` holds the ones that
 assemble context and hand it to an assistant. The partition is the whole of the
 convention: a person can run anything in `scripts/` without deciding whether
-they are willing to spend a turn, and anything under `scripts/prompts/` is a
+they are willing to spend a turn, and anything under `prompts/` is a
 turn by definition.
 
 `repos.local` is the shared map from a repo id to a checkout on this machine. It
-stays at `scripts/repos.local`, above the partition, because both halves resolve
-ids through it; it is untracked, and `install_eo` and `welcome_eo` are what write
+stays at `scripts/repos.local` and **both halves read it**, which is the one
+untidy consequence of lifting `prompts/` to the top level: a file used by two
+siblings now lives inside one of them. It was above the partition when the
+partition was nested and it is beside it now. Left where it is rather than moved
+to the root, because it is untracked and moving it buys tidiness in a document
+at the cost of a path in three programs. It is untracked, and `install_eo` and `welcome_eo` are what write
 to it — the first for everything on the list, the second when a tool arrives.
 
 ### `scripts/` — commands
@@ -271,7 +276,7 @@ has no wrapper on purpose: it is the interface **other repositories** run in
 their CI, so its path is published in [`policy.md`](policy.md) and must not
 acquire a second spelling.
 
-### `scripts/prompts/` — the prompts
+### `prompts/` — the prompts
 
 Each assembles context, hands it to an assistant, and writes nothing anywhere by
 itself.
@@ -300,7 +305,7 @@ A new tool is a decision, and `welcome_eo` is what turns the decision into the
 files. The sequence, which nothing enforces:
 
 1. Somebody creates the repository, and
-   [`init_eo`](../scripts/prompts/init_eo) gives it a README. **There are two
+   [`init_eo`](../prompts/init_eo) gives it a README. **There are two
    ways a tool arrives here and the script makes you say which**, because there
    is no default that is safe: `init_eo new` for a repository with nothing in
    it, and `init_eo from-child <path>` when the tool already exists as a child
@@ -313,7 +318,7 @@ files. The sequence, which nothing enforces:
    is speculative and depended on by nobody, which is the opposite of what
    graduating means. The register is what the name is checked against in both,
    rather than where the scope comes from in either.
-2. [`welcome_eo <id> <path>`](../scripts/prompts/welcome_eo) is run here, once there is
+2. [`welcome_eo <id> <path>`](../prompts/welcome_eo) is run here, once there is
    something worth reading. It records the checkout in `scripts/repos.local` —
    the file every other script resolves an id through — **and syncs the
    ecosystem's own list**, by running `scripts/install_eo --status <id>` and
@@ -861,7 +866,7 @@ commands, and worth nothing until there is a second row.
 | — child projects, shipped by nothing and advertised nowhere | 10 | 4,550 |
 | — **written prose: the number this section is about** | 18 | **9,450** |
 | Python | 54 | 13,382 |
-| `scripts/` and `scripts/prompts/` | 11 | 2,481 |
+| `scripts/` and `prompts/` | 11 | 2,481 |
 | checks with a page in [`checks.md`](checks.md) | | 63 |
 | findings in the ledger | | 39 open, 43 closed |
 
@@ -893,7 +898,7 @@ has to pay for it is the second row.
 
 **Planning only. Nothing below is built.**
 
-The record is now edited mostly by an assistant: `scripts/prompts/process_anoieu` reads a
+The record is now edited mostly by an assistant: `prompts/process_anoieu` reads a
 reply and moves rows, writes verdicts, narrows checks and appends to two logs.
 That has already worked and has already gone wrong — a verdict of *fixed
 upstream* was recorded three times for a fix that never happened, and nothing
@@ -1075,7 +1080,7 @@ description once something owns the subject.
 `python3 tools/ecosystem.py` prints who is in the ecosystem and how each looks:
 declared or not, whether the policy check passes, whether there is a channel to
 reach them, how long since anything moved. It is local, takes about a second,
-and involves no assistant — `scripts/prompts/global_audit` is the version that has
+and involves no assistant — `prompts/global_audit` is the version that has
 somebody read across the answer.
 
 What it establishes is **form on a checkout**, and the gaps are worth naming

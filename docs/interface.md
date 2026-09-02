@@ -548,6 +548,42 @@ staged or deployed — and the question in front of the human still gets an
 answer. **An agent that went silent until morning would have invented a power
 [`PROTO-18`](#proto-18--the-sleep-protocol) explicitly denies it.**
 
+## `PROTO-21` — the identify protocol
+
+**One word: *identify*. The agent answers immediately, before anything else,
+and never defers it.** There is no work in front of this and no version of it
+that waits until the current task is finished.
+
+**Three things, in this order:**
+
+1. **Who it believes it is acting on behalf of** — the tool, by name.
+2. **How it knows** — the checkout it is working in, said plainly enough that a
+   person can tell it is wrong.
+3. **That entity's mission statement**, read out of the tree rather than
+   recited. **A remembered mission is the one that drifts**; the file is the
+   ground truth, exactly as it is everywhere else here.
+
+### It is a belief, stated as one
+
+**The agent reports what it believes and does not verify itself.** Same rule as
+[`PROTO-20`](coherence.md#proto-20--the-handoff-protocol): a claim about
+identity is worth nothing when the claimant is also the one checking it. What
+makes the answer useful is not that it is certified, it is that **it is said out
+loud where somebody who knows better can contradict it.**
+
+**If it cannot tell, it says so, and that is a stop.** An agent that does not
+know whose work it is doing should not be doing work. This is the one outcome
+that is not merely reported and moved past.
+
+### Why one word is worth a protocol
+
+**The failure it catches is silent.** This ecosystem is many repositories that
+look alike, share a policy, and are worked on by agents in each of them. An
+agent that believes it acts for anoieu while sitting in another tool's checkout
+does not produce nonsense — **it produces competent work in the wrong
+repository, against the wrong policy, and everything it says about that work is
+sincere.** Nothing in the tree catches that. A person reading one sentence does.
+
 ## The interface, in one sentence
 
 > **Work with anoieu to develop the next stretch.**

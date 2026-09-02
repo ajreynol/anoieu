@@ -11,7 +11,7 @@ log.
 Nothing compares it against anything, nothing consumes it, and **a prompt here
 that has gone stale is not a defect** — it is a record of what we thought was
 worth sending at the time, which is what a log is for. That is the opposite of
-the discipline the prompts under [`../scripts/prompts/`](../scripts/prompts) are
+the discipline the prompts under [`../prompts/`](../prompts) are
 held to, and the contrast is why it is stated here: those carry a copy of a
 document, so a drifted copy is worse than none and `tests/run.py` fails when one
 drifts. These carry nothing.

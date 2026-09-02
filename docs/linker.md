@@ -135,7 +135,7 @@ copy of a command table is the thing the first rule on this page forbids.
 | --- | --- | --- |
 | the epoch commands | how a person drives a stretch | [`interface.md`](interface.md) |
 | `scripts/` | commands that run something and spend no turn | [`coherence.md`](coherence.md) |
-| `scripts/prompts/` | commands that hand context to an agent — every one takes `--show-prompt` | [`coherence.md`](coherence.md) |
+| `prompts/` | commands that hand context to an agent — every one takes `--show-prompt` | [`coherence.md`](coherence.md) |
 | `tools/policy_check.py` | the contract other repositories run in their own CI | [`policy.md`](policy.md) |
 | `tests/run.py` | including the checks that scripts still agree with the documents defining them | [`coherence.md`](coherence.md) |
 

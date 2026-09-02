@@ -10,7 +10,7 @@
 #   status_eo --check            # is the inventory itself well formed?
 #   status_eo --check --online   # ... and does each remote still agree with it
 #
-# **Not a prompt**, which is why it is here and not in scripts/prompts/: no
+# **Not a prompt**, which is why it is here and not in prompts/: no
 # assistant, no turn spent, nothing to review before running it.
 #
 # Two questions that sound alike and are not. This one is *who is in the

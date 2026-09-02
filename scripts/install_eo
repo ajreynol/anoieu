@@ -377,7 +377,7 @@ def merge_repos_local(root: str, repos: list[Repo], planned: set[str] = frozense
                       path: str = REPOS_FILE) -> tuple[str, list[str]]:
     """Add what is missing to the mapping, and rewrite nothing that is there.
 
-    `scripts/prompts/welcome_eo` records an id here by hand and refuses to rewrite an
+    `prompts/welcome_eo` records an id here by hand and refuses to rewrite an
     existing one, on the grounds that a repo id changing meaning under the other
     scripts is worse than an error. This follows that rule rather than
     contradicting it: a row already recorded is left exactly as it is, and a

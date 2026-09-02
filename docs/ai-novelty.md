@@ -319,6 +319,107 @@ this corpus is ever worth using, the entries recording where it fell short are
 the ones to weight most heavily, and any version of it that has stopped
 producing those should be assumed to have gone bad.
 
+## A worked example: moving one directory
+
+**2026-09-02. `scripts/prompts/` became `prompts/`, for simplicity.** The change
+is not the interesting part. **Three different instruments were needed to make
+it safely, and no two of them could find what the third found.**
+
+**The naive estimate — a rename and a search-and-replace across 25 files — was
+wrong in both directions.** Measuring first is what showed how.
+
+**It was not ecosystem-breaking, and that assumption would have been expensive.**
+The only check that reads a tree's layout is skipped everywhere but here, so no
+member's build could fail. The policy already called the split *"a convention
+worth copying and is not required"*. Acting on the plausible belief that this
+needed a stretch and a round of notices would have cost more than the change.
+
+**The one irreversible cost was two absolute URLs**, already sent to other
+repositories in joining prompts, which now 404. **Nothing here resolves an
+external URL, so no check will ever find these.**
+
+**Then the plan missed two things.**
+
+**The suite caught a path assembled from parts.** `git grep "scripts/prompts"`
+found 25 files and not the twenty-sixth, which read `os.path.join(root,
+"scripts", "prompts", "join_eo")`. **A textual search cannot see a path that is
+never written down.** Three comparisons went red within seconds.
+
+**A person caught a sentence that became false without changing.**
+`coherence.md` said `repos.local` sits *above the partition* between the two
+halves — true while `prompts/` was nested, false once it moved out. **Same
+words, same file, now wrong.** Nothing was misspelled, no link broke, no path
+failed to resolve. **No check can find this and none ever will.**
+
+**The search finds strings. The suite finds behaviour. Only a reader finds a
+sentence that has quietly become untrue.** A plan using one ships a broken tree.
+A plan using two ships a false sentence in a document this repository publishes
+to other people.
+
+**Planning took longer than the edit.** That is the accounting, not a boast: it
+paid for itself because one wrong assumption would have cost a stretch, and on a
+change with no such assumption in it the same care is waste.
+
+### The plan, as it was given
+
+**Reproduced because the prose is the point.** This is the shape asked for: what
+was measured, what it cost, and seven steps somebody could execute without
+asking a follow-up question.
+
+> I measured it. **Cheaper than it looks, with exactly one thing that genuinely
+> breaks.**
+>
+> **What can't break.** No member's CI can fail from this. `check_scripts_listed`
+> — the only layout check — is `is_home`, skipped in every other tree. And
+> `policy.md` already says the split is *"a convention worth copying and is not
+> required"*, so this edits a recommendation, not a rule: no numbered rule to
+> append, nothing to renumber.
+>
+> **What does break — two published URLs.**
+> `https://github.com/ajreynol/anoieu/blob/main/scripts/prompts/join_eo` appears
+> in `docs/policy.md` and inside `join_eo` itself, and that text has already gone
+> out to other repositories in joining prompts. After the move those 404. **This
+> is the one item no check catches**, because they're external URLs nothing
+> resolves. I'd take the break rather than leave a compatibility directory — a
+> second path to the same file is the drift shape this repo exists to avoid, and
+> `blob/main` URLs go stale on any rename anyway.
+>
+> **One member copied the layout**: `dokimasia` has `scripts/prompts/`. Nothing
+> is required of them — it's a courtesy notice, not a demand.
+>
+> **The plan, in order:**
+>
+> 1. **`git mv scripts/prompts prompts`** — one rename, history follows it.
+> 2. **Code first**, because it's what fails loudly: `tools/policy_check.py` (a
+>    hardcoded list of all 8 prompt paths, plus the `tracked("scripts/*")` walk),
+>    `tests/run.py` (6), `tools/ecosystem.py`, `tools/near.py`,
+>    `scripts/install_eo`, `scripts/status_eo`, and four prompts that reference
+>    their siblings.
+> 3. **Fix the coverage hole this opens.** `check_scripts_listed` walks
+>    `scripts/*` and requires every entry to appear in a table in
+>    `coherence.md`. Move the prompts out and **those eight files silently stop
+>    being checked** — a loss that reads as a pass. It needs to cover `prompts/*`
+>    too, and the table in `coherence.md` needs its second half.
+> 4. **Docs**: the layout row in `policy.md`, then the ten other documents, then
+>    the index.
+> 5. **The two absolute URLs, in the same commit as the policy text** —
+>    `join_prompt_agrees` compares the joining prompts verbatim against
+>    `policy.md`, so they must move together or the suite goes red.
+> 6. **Run `policy_check` and the full suite.** `check_links`, `check_anchors`
+>    and `check_local_paths` will catch every stale path in a document, which is
+>    why steps 4 and 5 are low-risk. Nothing catches step 2 except the tests
+>    failing, and nothing at all catches the external URLs.
+> 7. **A discussion topic to dokimasia**, saying the convention changed and
+>    nothing is asked of them.
+
+**What makes it executable rather than a list of intentions.** Every step names
+the files it touches. The order is *what fails loudest first*, so a mistake in
+step 2 surfaces before step 4 has buried it under a hundred edits. **Step 3
+exists only because planning found it** — it is not a step in the change, it is
+a step in not silently losing a check while making the change. And step 6 says
+which parts the suite will catch and which it will not, so the reader knows
+where their own attention is the only instrument left.
+
 ## What all of this costs
 
 The section that keeps the rest honest.

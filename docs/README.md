@@ -165,7 +165,7 @@ be changed without asking, and the open technical work on the record itself.
 
 [`../scripts/`](../scripts) holds the commands that run something —
 `install_eo`, `status_eo`, `harvest_cpc_proofs` — and
-[`../scripts/prompts/`](../scripts/prompts) holds the ones that hand context to
+[`../prompts/`](../prompts) holds the ones that hand context to
 an assistant: starting a tool, welcoming it, joining, working correspondence, and
 carrying findings both ways. The directory is the whole of the distinction, and
 it is there so that running something never means deciding whether to spend a

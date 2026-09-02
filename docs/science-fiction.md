@@ -215,7 +215,7 @@ so is the point of listing it. Everything in this repository was written by
 agents from prompts, so in the literal sense it is already what happens. And the
 ecosystem has taken one real step toward the strong form that it did not have to
 take: the prompts it **publishes** — the joining prompt, the outbound and
-follow-up reporting prompts, the rest of `scripts/prompts/` — are documents
+follow-up reporting prompts, the rest of `prompts/` — are documents
 first, and a test compares each script's copy against the document that defines
 it and fails the build when they drift. **A prompt that is a versioned,
 drift-checked artifact is most of what *the prompt is the source* would mean.**
@@ -233,7 +233,7 @@ people are versioned, and the thousands we hand to ourselves are gone. That is
 **A prompt is not a build script, because an agent is not a function.** The same
 prompt does not produce the same tree twice. So *the prompt is the source* is
 false in the sense that matters to a build: you can re-attempt, not rebuild.
-Calling `scripts/prompts/` a build system would be the overclaim, and the
+Calling `prompts/` a build system would be the overclaim, and the
 neighbouring analogy page already says so about a larger case.
 
 **Review would move rather than shrink.** If prompts were the artifact, a

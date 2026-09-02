@@ -3,7 +3,7 @@
 # in it, or claiming to be without backing the claim?
 #
 # Run it here, in anoieu, pointed at somebody else's checkout. The counterpart is
-# scripts/prompts/join_eo, which runs in *their* repository and does the joining.
+# prompts/join_eo, which runs in *their* repository and does the joining.
 #
 #   check_join_eo ethos             # by repo id, or by path
 #   check_join_eo --show-prompt eo  # print the prompt and exit

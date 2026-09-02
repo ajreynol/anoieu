@@ -321,11 +321,11 @@ The third has grown since that sentence was written. It is now
 [`tools/policy_check.py`](../../tools/policy_check.py) — which runs in every
 member's CI — [`tools/ecosystem.json`](../../tools/ecosystem.json),
 [`tools/ecosystem.py`](../../tools/ecosystem.py),
-[`scripts/prompts/init_eo`](../../scripts/prompts/init_eo),
-[`scripts/prompts/join_eo`](../../scripts/prompts/join_eo),
-[`scripts/prompts/check_join_eo`](../../scripts/prompts/check_join_eo),
-[`scripts/prompts/welcome_eo`](../../scripts/prompts/welcome_eo),
-[`scripts/prompts/global_audit`](../../scripts/prompts/global_audit),
+[`prompts/init_eo`](../../prompts/init_eo),
+[`prompts/join_eo`](../../prompts/join_eo),
+[`prompts/check_join_eo`](../../prompts/check_join_eo),
+[`prompts/welcome_eo`](../../prompts/welcome_eo),
+[`prompts/global_audit`](../../prompts/global_audit),
 [`scripts/install_eo`](../../scripts/install_eo) and
 [`tools/checkouts.json`](../../tools/checkouts.json). That is a tool, and it is
 not the analyzer.
@@ -532,7 +532,7 @@ should not be rediscovered. In anoieu, at the commit this was audited:
   `--show-prompt`, and diffs. This is the sixty lines both repositories now carry.
 - `tests/run.py`, `join_prompt_agrees()` — the same idea in its simplest possible
   form, for a prompt with no substitutions. Worth reading first.
-- `scripts/prompts/check_anoieu` and `scripts/prompts/process_anoieu` — the two halves of the
+- `prompts/check_anoieu` and `prompts/process_anoieu` — the two halves of the
   loop, and where the reply format is actually emitted.
 - `docs/reports/reporting-workflow.md` — the prose the scripts are checked
   against, and the document that already draws the line between what is shared

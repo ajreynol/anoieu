@@ -34,7 +34,7 @@ were.
 concedes it, in the sequence describing how a tool starts: *a person points it
 in a direction, with whatever prompts that takes. This step is invisible
 afterwards — it leaves no artifact — which is worth remembering when reading the
-result.* The templates under `scripts/prompts/` are drift-checked against the
+result.* The templates under `prompts/` are drift-checked against the
 documents that define them, which covers the prompts we **publish** and none of
 the prompts we **use**.
 

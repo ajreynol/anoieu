@@ -65,7 +65,8 @@ is the right question and the one nothing here answers.
 | `report/` | the paper, where there is one: a LaTeX document written for a human who will never clone this repository. Encouraged, never required, and its absence may be a stated position rather than an omission |
 | `tools/` | the harness: generators, the runner, the dependency manifest — and child projects |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
-| `scripts/` | executable versions of workflows the documents define. anoieu keeps the ones that hand context to an assistant in `scripts/prompts/`, so that running a command never means deciding to spend a turn; the split is a convention worth copying and is not required |
+| `scripts/` | executable versions of workflows the documents define |
+| `prompts/` | the workflows that hand context to an assistant, kept apart so that running a command never means deciding to spend a turn. **Top level rather than nested under `scripts/`**, because a reader should be able to see that these two are different kinds of thing without opening a directory. The split is a convention worth copying and is not required |
 | `deps/` | other people's repositories, fetched by a run and never committed |
 | `.github/workflows/` | what runs on every push |
 | the package itself | at the top level, named after the tool |
@@ -555,7 +556,7 @@ deleted rather than read. It becomes part of the fatal gate when every member ha
 adopted or declined it; that is a person's decision and is recorded here when it
 is made.
 
-**The outbound prompts in [`../scripts/prompts/`](../scripts/prompts) deliberately
+**The outbound prompts in [`../prompts/`](../prompts) deliberately
 do not repeat it.** Each already names the repository it is run in and what it is
 for, in its first line, which is the check this rule asks for — and every line
 added to a prompt is paid for by every reader of it afterwards. If one of them is
@@ -966,7 +967,7 @@ as a major event in one, and what designing the next one involves are in
 held to opposite standards — the policy has to be current and **the log
 explicitly does not.** A stale prompt in the log is a record rather than a defect,
 which is the reverse of the prompts under
-[`../scripts/prompts/`](../scripts/prompts): those carry a copy of a document and
+[`../prompts/`](../prompts): those carry a copy of a document and
 are drift-checked, because there a drifted copy is worse than none.
 
 Nothing in that log is an instruction. It is a suggestion with a date on it, and
@@ -1052,7 +1053,7 @@ to nudge, a person nudges — out of band, in their own voice, at their own cost
 
 ### Working the other side of it
 
-[`scripts/prompts/process_discussion`](../scripts/prompts/process_discussion) reads another
+[`prompts/process_discussion`](../prompts/process_discussion) reads another
 repository's discussion file — resolved through the same `scripts/repos.local`
 the reporting scripts use — and works what is addressed to us. It implements the
 gate above rather than restating it: **naming a topic is what authorises acting
@@ -1067,7 +1068,7 @@ topic of Kind `answer` in our own file instead.
 
 ### Auditing the whole of it
 
-[`scripts/prompts/global_audit`](../scripts/prompts/global_audit) runs the checker over every
+[`prompts/global_audit`](../prompts/global_audit) runs the checker over every
 member listed in `tools/ecosystem.json` that is checked out on this machine, and
 reads across the results. The inventory is a list somebody maintains rather than
 one anything derives: **membership is a decision, not a fact about a tree**, so
@@ -1332,7 +1333,7 @@ Two steps. The first is a sentence; the second is a CI job that checks the
 sentence is true.
 
 Before either of them, if the repository is new: nothing is required yet.
-[`scripts/prompts/init_eo`](../scripts/prompts/init_eo) gives a new tool a
+[`prompts/init_eo`](../prompts/init_eo) gives a new tool a
 README saying what it is for, and it is told explicitly not to comply with any
 of this —
 knowing what you are building is what makes the rest decidable, and that order
@@ -1680,7 +1681,7 @@ Nothing is installed and nothing is built: the checker reads text and needs only
 Python. It exits non-zero when the repository does not uphold what the
 declaration claims.
 
-Or run [`scripts/prompts/join_eo`](../scripts/prompts/join_eo) from a clone of anoieu, in the
+Or run [`prompts/join_eo`](../prompts/join_eo) from a clone of anoieu, in the
 repository that is joining, and let an assistant do both steps.
 
 **It passes if and only if two things hold.** The README declares membership as
@@ -1732,7 +1733,7 @@ everything above it, and it is worth writing whether or not the repository has
 anything to do with this ecosystem.
 
 So the note may be adopted on its own.
-[`join_eo --soft`](../scripts/prompts/join_eo) is that, and it is **a different
+[`join_eo --soft`](../prompts/join_eo) is that, and it is **a different
 act rather than a partial one**:
 
 - **It declares no membership, and links nowhere.** The repository is not in the
@@ -1809,7 +1810,7 @@ above, starting from a README that already has the note the second step wants.
 
 ### If you want an assistant to do it
 
-[`scripts/prompts/join_eo`](../scripts/prompts/join_eo) in the anoieu repository starts one with
+[`prompts/join_eo`](../prompts/join_eo) in the anoieu repository starts one with
 this prompt, which is the canonical copy — the script holds a duplicate and
 `tests/run.py` fails when the two drift apart.
 
@@ -1866,7 +1867,7 @@ the same way. It is the whole of what the soft form does:
 script is the authority for what this prompt asks**, and it can be read without
 running anything:*
 
-  https://github.com/ajreynol/anoieu/blob/main/scripts/prompts/join_eo
+  https://github.com/ajreynol/anoieu/blob/main/prompts/join_eo
 
 *`join_eo --soft --show-prompt` prints exactly this text and does nothing else,
 so anybody handed this can check it against what the command actually says.*
@@ -1908,7 +1909,7 @@ and in what it forbids:
 repository. **That script is the authority for what this prompt asks**, and it
 can be read without running anything:*
 
-  https://github.com/ajreynol/anoieu/blob/main/scripts/prompts/join_eo
+  https://github.com/ajreynol/anoieu/blob/main/prompts/join_eo
 
 *`join_eo --soft --affiliated --show-prompt` prints exactly this text and does
 nothing else, so anybody handed this can check it against what the command
@@ -1949,7 +1950,7 @@ All three are run in the repository that is adopting something, never here.
 
 ### Checking a repository from this side
 
-[`scripts/prompts/check_join_eo`](../scripts/prompts/check_join_eo) is the counterpart, run in
+[`prompts/check_join_eo`](../prompts/check_join_eo) is the counterpart, run in
 anoieu and pointed at somebody's checkout. It runs the checker, then has an
 assistant judge what a program cannot — whether a maintenance note says anything
 or merely satisfies the check, whether a discussion file is a channel or a stub

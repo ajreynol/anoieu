@@ -66,8 +66,8 @@ is not a formality:
 
 | channel | what it means | who acts |
 | --- | --- | --- |
-| **discussion** | a topic in [`discussion.md`](discussion.md) addressed to them, or a reply into a topic of theirs — the standing channel for anything that is **not** a defect report | a person carries it; `scripts/prompts/process_discussion` reads theirs, and nothing here writes into anybody else's file |
-| **findings** | a row in the ledger, carried by `scripts/prompts/check_anoieu <id>` and answered through `scripts/prompts/process_anoieu` | the same person, through the reporting workflow, which is a separate protocol on purpose |
+| **discussion** | a topic in [`discussion.md`](discussion.md) addressed to them, or a reply into a topic of theirs — the standing channel for anything that is **not** a defect report | a person carries it; `prompts/process_discussion` reads theirs, and nothing here writes into anybody else's file |
+| **findings** | a row in the ledger, carried by `prompts/check_anoieu <id>` and answered through `prompts/process_anoieu` | the same person, through the reporting workflow, which is a separate protocol on purpose |
 | **upstream, by a person** | a message, an issue or a pull request in a tree that has no discussion file | a person, entirely — no script here has a way to do it, and none should |
 
 **Only a member has a discussion file.** `anoieu`, `eudaimonia`, `dokimasia` and
@@ -297,13 +297,13 @@ signature, and error paths that print outside ethos's own `Error: <file>:<line>`
 convention. Six reproducers are committed here; nothing has been sent upstream.
 **Entities:** `ethos`, `anoieu`
 **Status:** ready — the reproducers exist and are committed under `tests/fuzz/`.
-**Channel:** **findings** — `ethos-8` and `ethos-9`, through `scripts/prompts/check_anoieu ethos`, because a defect report is not a discussion topic.
+**Channel:** **findings** — `ethos-8` and `ethos-9`, through `prompts/check_anoieu ethos`, because a defect report is not a discussion topic.
 **Next:** file the two, with their reproducers, through the ordinary loop.
 **Prompt — `ethos`:** `(declare-const f (->))` aborts with an uncaught
 `std::length_error` rather than reporting a bad type. Separately, three error
 paths exit without a file or line, which breaks the convention every other error
 in the binary follows. Reproducers are committed and fetchable raw.
-**Prompt — `anoieu`:** run `scripts/prompts/check_anoieu ethos` for these two rows, and
+**Prompt — `anoieu`:** run `prompts/check_anoieu ethos` for these two rows, and
 say plainly in the report that the fuzzer produced them — a provoked crash and a
 read signature are different claims and the codes already say which.
 **HUMAN FEEDBACK:** raised 2026-08-31: these are real defects and nothing is stopping us filing them.
@@ -482,7 +482,7 @@ from a signature that declares `Int`, recorded as fixed upstream three months
 ago on a change that never landed.
 **Entities:** `cvc5`, `logos`, `anoieu`
 **Status:** waiting on `cvc5` — reopened after the landing audit caught it.
-**Channel:** **findings** — `cvc5-1` in the ledger, carried by `scripts/prompts/check_anoieu cvc5`. `cvc5` has no discussion file and has joined nothing; delivery upstream is a person's act.
+**Channel:** **findings** — `cvc5-1` in the ledger, carried by `prompts/check_anoieu cvc5`. `cvc5` has no discussion file and has joined nothing; delivery upstream is a person's act.
 **Next:** get the two lines fixed on a named branch of `cvc5`, or a statement
 that the declaration is intended and the finding is wrong.
 **Prompt — `cvc5`:** `proofs/eo/cpc/programs/Strings.eo:42` and `:55` declare a

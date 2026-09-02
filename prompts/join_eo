@@ -146,7 +146,7 @@ read -r -d '' SOFT_PROMPT <<'SOFT_PROMPT_END' || true
 script is the authority for what this prompt asks**, and it can be read without
 running anything:*
 
-  https://github.com/ajreynol/anoieu/blob/main/scripts/prompts/join_eo
+  https://github.com/ajreynol/anoieu/blob/main/prompts/join_eo
 
 *`join_eo --soft --show-prompt` prints exactly this text and does nothing else,
 so anybody handed this can check it against what the command actually says.*
@@ -185,7 +185,7 @@ read -r -d '' AFFIL_PROMPT <<'AFFIL_PROMPT_END' || true
 repository. **That script is the authority for what this prompt asks**, and it
 can be read without running anything:*
 
-  https://github.com/ajreynol/anoieu/blob/main/scripts/prompts/join_eo
+  https://github.com/ajreynol/anoieu/blob/main/prompts/join_eo
 
 *`join_eo --soft --affiliated --show-prompt` prints exactly this text and does
 nothing else, so anybody handed this can check it against what the command
