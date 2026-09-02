@@ -236,6 +236,26 @@ ethical constraint is what let a failure through. Neither has been recorded. The
 registers next door are where either would land, and noticing them is a reason
 those registers exist.
 
+## What this does not slow down
+
+**Research.** The account in [`../ynoia/why-eunoia.md`](../ynoia/why-eunoia.md)
+argues about how this ecosystem is arranged and what a researcher starting a new
+tool would be building into. **Nothing here gates it, and nothing here should.**
+
+The reason is structural rather than generous. This project governs **conduct**,
+and an argument is not conduct: it commits nobody, reaches nobody and asks
+nothing of anybody, so there is nothing in it for a rule about how we treat
+people to bite on. What this project governs is the moment something is *done* —
+published, sent, adopted, or asked of somebody who did not ask us — and a
+research account does none of those until a person carries it somewhere.
+
+**The ordering is: the kernel, then this, then the work.** The kernel says what
+the work is for and may never be checked. This asks what we are held to when we
+act, and is a brake on acting. Research sits below both and is braked by
+neither, which is why it can be wrong in public and revised without ceremony.
+**A project that slowed inquiry down in the name of ethics would have made a
+category error**, and it would be the first thing to report under `D18`.
+
 ## What this project does not do
 
 - **It does not do research in ethical AI, and it is not our job to.** The field

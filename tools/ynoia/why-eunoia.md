@@ -17,6 +17,55 @@ side of it is right — and where that shows, it is meant to.*
 > columns are meant to be read: where the argument against is stronger, it says
 > so. Link it from an index only if it becomes something to publish.
 
+## Who this is for
+
+**A researcher who intends to start a new tool initialized from this
+ecosystem.** That is the audience, and naming it is most of what this page has
+been missing: everything below is the argument such a person needs in order to
+know *what arrangement they would be building into*, before they take a name and
+write a README.
+
+You are in the right place if you are asking whether the arrangement this
+ecosystem has chosen is the right one to extend, what a new tool would sit on
+top of, and which of the open questions is worth a project. You are in the wrong
+place if you want to know what the existing tools do — that is each tool's own
+front page — or what this ecosystem owes anybody, which is a different question
+kept in a different directory.
+
+**What to do with it**, in the order that costs least:
+
+1. Read the case and the case against. The arrangements are laid out fairly and
+   where the argument against is stronger it says so; a page that only argued
+   one way would be worth nothing to somebody deciding.
+2. Then [`tools.md`](tools.md) — the tools that do not exist, in priority order,
+   each with the argument for its position rather than a wish list.
+3. Then [`names.md`](names.md), which is deliberately one page rather than an
+   argument, and is where a name is taken. **Check the trees as well as the
+   register**: a name can be in use without being claimed, which has already
+   caught somebody here.
+4. Then [`../../scripts/prompts/init_eo`](../../scripts/prompts/init_eo), which
+   writes a new repository's README from the register and complies with nothing
+   else on purpose.
+
+## Research here is not slowed by ethics
+
+**Deliberate, and worth stating because the two are easy to confuse.** How this
+ecosystem conducts itself is governed **higher up** — by the kernel that says
+what the work is for, and by the two child projects that ask what standard we
+are held to and what we do about one situation at a time. **None of that gates
+this page.**
+
+The reason is not that research is exempt from scrutiny. It is that **an
+argument commits nobody and reaches nobody**: there is no conduct inside an
+account for a rule about conduct to govern. Every brake this ecosystem has
+applies at the point where something is *done* — published, sent, adopted, asked
+of somebody who did not ask us. Nothing on this page does any of those.
+
+So the account runs at whatever speed it runs at, and it is meant to be
+argumentative, wrong in places, and revised. **What is governed is acting on
+it**, which is a separate question, answered in a separate directory, by people
+who are not this page.
+
 ## The question, put fairly
 
 An SMT solver has found an answer and is asked to justify it. Two arrangements:

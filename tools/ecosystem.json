@@ -65,7 +65,33 @@
     "described in tools/ynoia/requests.md rather than here.",
     "",
     "A status is changed by a person. scripts/global_audit may report that one",
-    "looks wrong; it does not edit this file on its own."
+    "looks wrong; it does not edit this file on its own.",
+    "",
+    "Two further fields, neither of which is a status:",
+    "",
+    "  joined     the commit of anoieu a member pinned when it joined, which is",
+    "             the only coordinate we actually have. There is no X.Y.Z",
+    "             version of this repository and nothing is versioned against a",
+    "             stretch, so a commit is the honest answer until somebody",
+    "             decides otherwise. Absent where it could not be established:",
+    "             we did not record joins at the time, and reconstructing one",
+    "             means reading somebody else's history.",
+    "",
+    "  genuine    a judgement, never a check: that the repository was",
+    "             *constructed* according to these policies rather than made to",
+    "             pass them afterwards. It is a fact about a history and not",
+    "             about a tree, so tools/policy_check.py cannot decide it and",
+    "             must never try -- a tree retrofitted into compliance and a",
+    "             tree built compliant are identical from the tree alone. It is",
+    "             settled by reading the history, which is what an auditor of",
+    "             histories is for, and it is a person's to record.",
+    "",
+    "             No entry carries it. Nobody has assessed one, and writing it",
+    "             down unassessed would be the overclaim the field exists to",
+    "             make visible. Note also that anoieu cannot ever be genuine:",
+    "             it wrote the policies, so it could not have been constructed",
+    "             according to them. The property distinguishes what came after",
+    "             from what came first, which is most of why it is worth having."
   ],
   "anoieu": {
     "status": "member",
@@ -106,6 +132,7 @@
   },
   "eudaimonia": {
     "status": "member",
+    "joined": "anoieu dc2c613",
     "repo": "eudaimonia",
     "url": "https://github.com/ajreynol/eudaimonia",
     "what": "the calculus template: bring a signature, get a checker and its proofs"
@@ -118,6 +145,7 @@
   },
   "koine": {
     "status": "member",
+    "joined": "anoieu 5668c20",
     "repo": "koine",
     "url": "https://github.com/ajreynol/koine",
     "what": "the shared machinery of the reporting loop: one implementation of the protocol rather than one per member"
