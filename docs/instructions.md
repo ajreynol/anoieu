@@ -60,15 +60,22 @@ you have worked — only what time it is.
 
 ---
 
-## `INST-2` — ask who you are talking to
+## `INST-2` — every answer says who it is from
 
-**Type *identify*.** You get back which tool the agent thinks it is working
-for, how it knows, and that tool's mission statement read out of its own files.
+**Every response you get opens with one line**: the tool the agent believes it
+is working for, and what that tool is for.
 
-**It is worth doing at the start of a session, and any time something feels
-off.** The repositories here look alike. An agent working in the wrong one is
-not obviously confused — it is confidently helpful in the wrong place, and one
-sentence is all it takes to find out.
+    anoieu — a static analyzer for Eunoia signatures and semantic
+    configuration files.
 
-**If the answer is wrong, say so.** The agent is reporting a belief, not proving
-anything, and you are the only one in a position to correct it.
+**You do not have to ask for it, and it should never stop.** If it stops, the
+protocol has been dropped, which is worth more of your attention than whatever
+was in the answer.
+
+**Ask for the long version any time.** You get the same line plus which
+checkout it is working in and the mission quoted from that tool's own files.
+
+**If it is ever wrong, say so.** The agent is reporting a belief, not proving
+anything, and you are the only one in a position to correct it. The repositories
+here look alike, and an agent in the wrong one is not visibly confused — it is
+confidently helpful in the wrong place.

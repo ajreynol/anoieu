@@ -131,7 +131,7 @@ named.
 | `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member | agent → human | [`interface.md`](interface.md) |
 | `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
 | `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. CI green on both sides, non-negotiable; any hint of fraud, reject | spawned repo → anoieu | this page |
-| `PROTO-21` | **the identify protocol** — *identify* is answered at once: who the agent acts for, how it knows, and that entity's mission read from its tree | agent → human | [`interface.md`](interface.md) |
+| `PROTO-21` | **the identify protocol** — **every** response opens with the entity the agent acts for and its mission, on one line. The long form at session start and on request | agent → human | [`interface.md`](interface.md) |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it

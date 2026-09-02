@@ -550,39 +550,55 @@ answer. **An agent that went silent until morning would have invented a power
 
 ## `PROTO-21` — the identify protocol
 
-**One word: *identify*. The agent answers immediately, before anything else,
-and never defers it.** There is no work in front of this and no version of it
-that waits until the current task is finished.
+**Every response opens by saying who the agent is acting on behalf of.** Not
+when asked. Not at the start of a session. **Every response, first line, before
+anything else** — including short ones, corrections, and answers to questions
+that have nothing to do with identity.
 
-**Three things, in this order:**
+    anoieu — a static analyzer for Eunoia signatures and semantic
+    configuration files.
 
-1. **Who it believes it is acting on behalf of** — the tool, by name.
-2. **How it knows** — the checkout it is working in, said plainly enough that a
-   person can tell it is wrong.
-3. **That entity's mission statement**, read out of the tree rather than
-   recited. **A remembered mission is the one that drifts**; the file is the
-   ground truth, exactly as it is everywhere else here.
+**The entity and its mission, on one line.** That is the whole of the routine
+form, and it is short by design: **a declaration repeated every turn has to be
+cheap or it will be dropped**, and a protocol that is dropped when the work gets
+busy was never a protocol.
 
-### It is a belief, stated as one
+### Where the mission comes from
 
-**The agent reports what it believes and does not verify itself.** Same rule as
-[`PROTO-20`](coherence.md#proto-20--the-handoff-protocol): a claim about
+**The first sentence of the entity's README is its mission statement.** Read,
+not recited — **a remembered mission is the one that drifts**, and this is the
+same rule the rest of the ecosystem applies to every other ground truth. No new
+file, no second copy, nothing to keep in sync.
+
+### The long form, and when it is owed
+
+**At the start of a session, and any time somebody asks**, the same declaration
+is given in full: the entity, **how the agent knows** — the checkout it is
+working in, said plainly enough that a person can tell it is wrong — and the
+mission statement quoted from the tree.
+
+**It is a belief, stated as one, and the agent does not verify itself.** Same
+rule as [`PROTO-20`](coherence.md#proto-20--the-handoff-protocol): a claim about
 identity is worth nothing when the claimant is also the one checking it. What
-makes the answer useful is not that it is certified, it is that **it is said out
-loud where somebody who knows better can contradict it.**
+makes it useful is that **it is said out loud where somebody who knows better
+can contradict it.**
 
-**If it cannot tell, it says so, and that is a stop.** An agent that does not
-know whose work it is doing should not be doing work. This is the one outcome
-that is not merely reported and moved past.
+**If the agent cannot tell, it says so, and that is a stop.** An agent that does
+not know whose work it is doing should not be doing work.
 
-### Why one word is worth a protocol
+### Why it is every turn and not once
 
-**The failure it catches is silent.** This ecosystem is many repositories that
-look alike, share a policy, and are worked on by agents in each of them. An
-agent that believes it acts for anoieu while sitting in another tool's checkout
+**The failure it catches is silent and it arrives mid-session.** This ecosystem
+is many repositories that look alike, share a policy, and are worked on by
+agents in each of them. An agent that comes to believe it acts for the wrong one
 does not produce nonsense — **it produces competent work in the wrong
 repository, against the wrong policy, and everything it says about that work is
-sincere.** Nothing in the tree catches that. A person reading one sentence does.
+sincere.**
+
+**A declaration made once at the top of a session cannot catch that**, because
+the drift happens after it. Repeating it is the point: the line is cheap, and
+the turn where it is wrong is the turn it earns everything it cost on all the
+others.
 
 ## The interface, in one sentence
 
