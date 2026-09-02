@@ -112,6 +112,31 @@ defined on whichever page owns its subject, and moving them all here would put
 the definition further from the work. What this table adds is that they can be
 named.
 
+### The strata, which is the point of the layout
+
+**Protocols sit at levels, and a flat list hid that.** A high one says *go
+through the interface*; a low one says *and here is the interface*; the commands
+themselves are the leaves. Reading them in one column made a rule about **how
+you may change state** look like a peer of the list of ways to change it.
+
+**A general protocol is the meaning a set of specific ones share.** `epoch
+deploy` means one thing exactly — *this stretch is now available for members to
+consume*. `PROTO-14` is what that has in common with `plan`, `stage` and
+`brainstorm`: they all move the state. **The low level is where meaning is
+precise; the high level is where it is general**, and a reader who does not yet
+know which verb they want starts at the top and descends.
+
+**The analogy, for fun and because it is accurate: this is a syscall
+boundary.** `vision.md` is already the kernel in this ecosystem's vocabulary —
+small, privileged, loaded first, and never to be checked by a program. What
+follows from that reading is the rest of the picture: **a person does not edit
+the state directly, they issue a call**, the set of calls is fixed and
+published, and everything above the boundary is written against that set
+rather than against the state. `PROTO-14` is the convention; `PROTO-15` is the
+table.
+
+#### Level 0 — the conversation
+
 | id | protocol | between | defined in |
 | --- | --- | --- | --- |
 | `PROTO-1` | response clarification — *your answer was too hard to follow* | person → agent | [`interface.md`](interface.md) |
@@ -119,20 +144,45 @@ named.
 | `PROTO-3` | going off the deep end — *this cannot be checked from here* | agent → person | [`interface.md`](interface.md) |
 | `PROTO-4` | temporal session coherence — the session's open ask survives its branches | agent → person | [`interface.md`](interface.md) |
 | `PROTO-5` | the context protocol — say concretely what changed, not what it means | agent → person | [`interface.md`](interface.md) |
+
+#### Level 1 — the command boundary
+
+| id | protocol | between | defined in |
+| --- | --- | --- | --- |
+| `PROTO-14` | **advance or retreat the stretch** — the verbs that change state, `deploy` being the one that reaches outside | person → system | [`interface.md`](interface.md) |
+| `PROTO-15` | **ask, and change nothing** — the verbs that report, every one free to run | person → system | [`interface.md`](interface.md) |
+| `PROTO-16` | **ask what happened outside us** — currently empty, because what it would mean is undefined | person → members | [`interface.md`](interface.md) |
+
+#### Level 2 — between repositories
+
+| id | protocol | between | defined in |
+| --- | --- | --- | --- |
 | `PROTO-6` | the reporting workflow — a defect carried to whoever owns the file | repository → repository | [`reporting-workflow.md`](reports/reporting-workflow.md) |
 | `PROTO-7` | the discussion file — everything that is not a defect report | repository → repository | [`policy.md`](policy.md) |
 | `PROTO-8` | joining, and its soft and affiliating forms | repository → ecosystem | [`policy.md`](policy.md) |
 | `PROTO-9` | the epoch family — announce, gate, approve, adopt | repository → members | [`stretch-policy.md`](stretch-policy.md) |
+
+#### Level 3 — the record
+
+| id | protocol | between | defined in |
+| --- | --- | --- | --- |
 | `PROTO-10` | the role handoff — a responsibility changes hands, keeping its id | tool → tool | [`roles.md`](roles.md) |
 | `PROTO-11` | the documentation handoff — a launch moves a description to its source | page → page | this page |
 | `PROTO-12` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
 | `PROTO-13` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
 
-**Name the protocol when it fires.** *"`PROTO-4` — this started as X and X is
-still open"* teaches the protocol in the act of using it, at the cost of six
-characters; an unnamed reminder is just a remark and the person never learns
-there was a rule behind it. This is how the ids earn their keep in a
-conversation rather than only in this table.
+**The end goal, in one line: what a prompt means should follow from its syntax,
+not from inference.** `epoch stage` has exactly one meaning; *could you stage
+this* is a sentence somebody has to interpret, and interpretation is where an
+agent guesses. **The command set removes the guess**, and the layer above it
+exists so that each new verb inherits that property instead of reintroducing the
+ambiguity one command at a time.
+
+**Why stratifying helps write more commands.** A new verb is not a new protocol.
+It is a row in the table `PROTO-15` points at, and it inherits `PROTO-14`
+without anybody restating it — so the question when adding one stops being *what
+rules does this need* and becomes *what does it do and what is its output
+shape*. **The layer is what makes the next command cheap.**
 
 **Labelling is partial and that is fine for now.** The four in
 [`interface.md`](interface.md) carry their ids; the rest are labelled as

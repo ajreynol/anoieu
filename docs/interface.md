@@ -344,6 +344,38 @@ and a new command arrives with its output shape defined, not discovered.
 **This table is the ground truth for the command set.** Everything below that
 lists commands is a copy of it, and `tests/run.py` compares them.
 
+### The three things a command can mean
+
+**The commands group by meaning, and the grouping is the layer above them.** A
+specific command has one precise meaning — `epoch deploy` moves this stretch to
+`deployed`, which is to say **members should now consider it available to
+consume**. A general protocol is what a set of those specific meanings has in
+common, and it is what somebody reaches for when they do not yet know which verb
+they want.
+
+**`PROTO-14` — advance or retreat the stretch.** The commands that *change*
+something: `epoch plan`, `epoch stage`, `epoch deploy`, `epoch brainstorm`. Up
+is earned and down is free, and only `epoch deploy` reaches outside this
+repository, which is why it is the one the build system rather than a person has
+the final word on.
+
+**`PROTO-15` — ask, and change nothing.** `epoch status`, `epoch help`,
+`epoch advice`, `epoch dry run`. **Every one of these is free to run**, which is
+the property that makes the set usable: a person can find out where they are
+without deciding anything, and `epoch dry run` deliberately evaluates every gate
+and still writes nothing.
+
+**`PROTO-16` — ask what happened outside us.** `epoch double check`, which is
+not yet supported because what it would mean is undefined: a build system's
+output cannot decline, defer or quietly ignore you, and ours can. **The empty
+group is the honest one** — it says the ecosystem has a question it has not
+worked out how to ask.
+
+**Adding a verb means choosing its group first.** If it changes state it
+inherits `PROTO-14` and needs the gate discipline; if it only reports it
+inherits `PROTO-15` and must be free to run. **A command that fits no group is a
+sign the group set is wrong**, not that the command needs an exception.
+
 | command | what it does |
 | --- | --- |
 | `make epoch` | **not yet supported.** Would mean: make it better, *then* stage — the composite of doing the work and `epoch stage`. The one command not of the form `epoch <verb>` |
