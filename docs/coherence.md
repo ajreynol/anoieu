@@ -127,6 +127,12 @@ named.
 | `PROTO-11` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
 | `PROTO-12` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
 
+**Name the protocol when it fires.** *"`PROTO-4` — this started as X and X is
+still open"* teaches the protocol in the act of using it, at the cost of six
+characters; an unnamed reminder is just a remark and the person never learns
+there was a rule behind it. This is how the ids earn their keep in a
+conversation rather than only in this table.
+
 **Labelling is partial and that is fine for now.** The four in
 [`interface.md`](interface.md) carry their ids; the rest are labelled as
 somebody next touches them. An unlabelled protocol is not a defect — a protocol

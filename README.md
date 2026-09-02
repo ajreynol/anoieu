@@ -21,15 +21,20 @@ it has to be published where its owner will read it, argued where they can
 disagree with it, and tracked until it is resolved or declined. This repository
 is that somewhere.
 
-**And the place the Eunoia ecosystem's shared policy is kept.** How a repository
-in this ecosystem is arranged, what its front page must say about who is writing
-it, how tools talk to one another, and what may be kept in a tree that is not
-part of what it ships — that is [`docs/policy.md`](docs/policy.md), written to
-be adopted rather than admired. It is arguably the most useful thing here: the
-analyzer reports on four projects, and the policy is what lets a fifth join
-without anybody negotiating it from scratch.
-[Joining](docs/policy.md#joining-the-eunoia-ecosystem) takes one sentence in
-your README and one CI step, and anoieu checks it.
+**And the place the Eunoia ecosystem's shared arrangements are kept** — which is
+more than the policy, and is stated in full because understating it is how a
+front page stops being true. Four things sit here: how a repository is arranged
+and what its front page must say, in [`docs/policy.md`](docs/policy.md); who is
+in the ecosystem and how the rest of it is fetched onto a machine; what the work
+is aiming at and how each tool is doing against it, argued and never checked;
+and the machinery by which any of those changes and is announced to everybody
+pinned to them.
+
+The policy is the part written to be adopted rather than admired, and is
+arguably the most useful thing here: the analyzer reports on four projects, and
+the policy is what lets a fifth join without anybody negotiating it from
+scratch. [Joining](docs/policy.md#joining-the-eunoia-ecosystem) takes one
+sentence in your README and one CI step, and anoieu checks it.
 
 > **A successful pass is not a clean bill of health.**
 >

@@ -245,6 +245,15 @@ and that one.
 
 ## anoieu
 
+*Eight responsibilities under the three headings the front page names: the
+analyzer and the fuzzer are the tool, the ledger and its workflow are the
+reporting system, and the remaining four are the ecosystem's shared
+arrangements. **A register counts responsibilities and a front page says what a
+repository is** — different granularities, and neither is a longer version of
+the other. Three of these have a stated destination elsewhere and have not
+moved.*
+
+
 ### R4 — the ecosystem's policy, and joining it
 
 **Held by:** `anoieu`
