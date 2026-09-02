@@ -279,6 +279,46 @@ and `euthyna` the audit **after** it; this is the one that watches **during**.
 better name if the thing turns out to be a register of rules rather than an
 office that guards them.*
 
+## euboulia — the ethical advisor to whoever holds the laws
+
+**What:** the ethics of this ecosystem, gathered into one place and given a
+reader: **`nomophylax`**, the tool that holds `docs/laws.md`. It advises and
+does not decide — **the laws are held by one party, amended by a person, and
+advised by this one**, and none of the three is the other.
+**State:** `named` — suggested 2026-09-02, alongside `nomophylax`. Not audited;
+there is no proposal for it yet, and there is a real question below that a
+proposal would have to answer first.
+**Settles:** nothing in [`why-eunoia.md`](why-eunoia.md). What it settles is
+that this repository's ethics work is **scattered across child projects of the
+tool it is meant to hold to account**, which is the same defect `kanon` and
+`nomophylax` each fix in their own area, in the one area where it is least
+comfortable to say so.
+**Costs:** the two ethics child projects here move out —
+[`martyria`](../martyria/README.md), the actionable half, and
+[`zetesis`](../zetesis/README.md), the general one — and **what they are
+advising changes with them.** Today they examine anoieu's conduct. Under this
+they would advise an office. **That is not a smaller job or a bigger one, it is
+a different one**, and a proposal has to say whether both belong or only one.
+**Before it:** `nomophylax`, obviously — an advisor with nobody to advise is a
+register with extra steps. And a second president, for the same reason that one
+gives.
+**Today:** `tools/martyria/` and `tools/zetesis/`, inside anoieu, each a child
+project of the repository whose conduct they assess. Both say so on their own
+front pages; neither is thereby fixed.
+**Why here:** **fourth, behind `nomophylax`.** It cannot be built before the
+thing it advises exists, and it is placed above the research tools for the same
+reason: what it fixes gets quietly worse while nothing is done, because every
+stretch that closes was assessed by a project living inside the assessed.
+
+*On the name: εὐβουλία, good counsel — the quality of deliberating well, as
+against the deliberating itself. Chosen for what it claims and does not: it
+names an advisor's virtue rather than an authority, which is the whole of the
+office. It shares its prefix with **eunoia** by construction rather than by
+accident. Its near neighbour `bouleusis` — deliberation about particulars —
+stays free and stays the better name for anything that decides cases, which
+this does not; `martyria` already holds particulars, and if this ever starts
+deciding them, it has taken the wrong job.*
+
 ## elenchos — differential fuzzing as a derived artifact
 
 **What:** a research-quality fuzzer for the ecosystem's checkers — coverage
