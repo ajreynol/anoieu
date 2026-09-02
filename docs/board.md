@@ -492,10 +492,10 @@ happens.
 
 ## B21 — an ethics we can be held to, taken from work we have not read
 
-**Task:** `apodeixis` says its standard comes from outside and cites the
+**Task:** `martyria` says its standard comes from outside and cites the
 reading that supports it. **The reading has not been done**, so the project has
 a question, two recorded gaps, and no standard.
-**Entities:** `anoieu`, `apodeixis`
+**Entities:** `anoieu`, `martyria`
 **Status:** ready — nothing is blocked on anybody else, and the first hour of it
 is a literature search.
 **Channel:** **internal** — nothing to send, and nothing here is filed anywhere.
@@ -506,7 +506,7 @@ saying so is not an excuse: the alternative is to take a standard somebody else
 argued for. Until one is cited, every claim this ecosystem makes about its own
 conduct rests on a standard it wrote itself, which is the weakest possible
 arrangement and the one we criticise elsewhere.
-**Prompt — `apodeixis`:** name what you could not find as carefully as what you
+**Prompt — `martyria`:** name what you could not find as carefully as what you
 did. A gap in the literature is a result; a plausible bibliography assembled to
 look rigorous is the failure you exist to notice.
 **HUMAN FEEDBACK:**

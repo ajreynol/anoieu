@@ -99,7 +99,7 @@
     "status": "candidate",
     "proposed": "associate",
     "repo": "logos",
-    "url": "https://github.com/ajreynol/logos",
+    "url": "https://github.com/cvc5/logos",
     "vetted": "2026-09-01",
     "what": "the Lean development, and the owner of Cpc.eos",
     "why": "the ecosystem's trust argument terminates here: nothing else states that the rules cvc5 emits are sound"
@@ -140,11 +140,11 @@
     "path": "tools/euthyna",
     "what": "what the proof in logos is made of, and where its weight sits"
   },
-  "apodeixis": {
+  "martyria": {
     "status": "child",
     "parent": "anoieu",
-    "path": "tools/apodeixis",
-    "what": "whether this ecosystem's conduct meets a standard it can state and an outsider can check"
+    "path": "tools/martyria",
+    "what": "the ecosystem's ethics research engine: what of our conduct can be shown to somebody with no reason to believe us"
   },
   "workflow-launcher": {
     "status": "child",

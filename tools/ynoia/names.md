@@ -30,7 +30,7 @@ grepping the tree for **the bare project name**, so a common word matches prose
 about the *subject* rather than about the project, and reports an island break
 that is not one. An unusual name reads unambiguously and greps unambiguously,
 and those turn out to be the same property. The case is written up in
-[`../apodeixis/README.md`](../apodeixis/README.md), which was named `ethics` for
+[`../martyria/README.md`](../martyria/README.md), which was named `ethics` for
 about an hour.
 
 ## Taken
@@ -46,7 +46,7 @@ about an hour.
 | **sapheneia** | σαφήνεια, clarity of an account: Eunoia as a language definition. A child project, in anoieu |
 | **ynoia** | *why Eunoia*: whether the arrangement earns its machinery. A child project, in anoieu |
 | **euthyna** | εὔθυνα, the audit at end of term: what logos's proof is made of. **Started**, in eudaimonia |
-| **apodeixis** | ἀπόδειξις, a showing forth — demonstration, as against a claim asserted well: whether this ecosystem's conduct can be shown to somebody with no reason to believe us. **Started**, in anoieu |
+| **martyria** | μαρτυρία, testimony — the evidence a witness gives: the ecosystem's ethics research engine, and the name of one entry in its register. **Started**, in anoieu |
 | **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Its own repository**, and a member; audited as [`P1`](proposals.md) |
 | **workflow-launcher** | descriptive rather than Greek, and the register's own exception applies: it is a program and not an account. The first hour of a new tool's life, and a register of what this ecosystem's practice turns out to be doing. A child project, in eudaimonia |
 
@@ -63,29 +63,29 @@ stated relative to its absence. None has a repository or a line of code.
 
 | name | Greek | what it would be |
 | --- | --- | --- |
-| **tekton** | τέκτων, the builder — the joiner who makes one thing out of parts | the **epoch build system**: the program behind the protocols by which a stretch is verified, announced, approved and adopted. Requested by anoieu, 2026-09-01, and the one name here whose subject already exists — the protocols are running by hand and the tool is what is missing. *Not a verb of examination, which most of this register is; `apodeixis` — ἀπόδειξις, demonstration — was the alternative considered, and is the better name if the thing turns out to be a prover of gates rather than an assembler of a stretch.* |
+| **tekton** | τέκτων, the builder — the joiner who makes one thing out of parts | the **epoch build system**: the program behind the protocols by which a stretch is verified, announced, approved and adopted. Requested by anoieu, 2026-09-01, and the one name here whose subject already exists — the protocols are running by hand and the tool is what is missing. *Not a verb of examination, which most of this register is; `apodeixis` — ἀπόδειξις, demonstration — was the alternative considered, and would have been the better name if the thing turns out to be a prover of gates rather than an assembler of a stretch. It is **not available**: see* In use elsewhere*, below.* |
 | **pathos** | πάθος, the third mode of persuasion | an efficient *verified* proof checker — the one that would let the ecosystem ship what it proves rather than a second implementation |
 | **hermeneia** | ἑρμηνεία, interpretation | carrying the embedded semantics into Lean's own logic, so a theorem about a proof becomes a theorem about the thing proved |
 | **noesis** | νόησις, the act of understanding | the semantics and the compiler defined *in* Lean rather than compiled into it |
 | **iogos** | not Greek: `logos` with the **L** of Lean swapped for the **I** of Isabelle. The one joke in the register, and it earns its place by fixing the scope in the name | the same calculus, semantics and soundness development redone against Isabelle/HOL — an Isabelle backend for `ethos-eoc`, and logos rebuilt on it, as an independence check |
 | **elenchos** | ἔλεγχος, cross-examination | differential fuzzing derived from the calculus rather than written by hand — what the fuzzer here is a deliberate baseline for |
 
-## Names for things that are not tools
+## In use elsewhere, and claimed by nobody
 
-A new category, and small on purpose. The tables above name *repositories and
-projects*; this names a **kind of artifact** the ecosystem needed a word for.
-Keeping them apart stops a reader assuming every entry here is somewhere you
-could go and clone.
+Names a tree in this ecosystem is actually using, which no one has entered in
+the tables above. **They are not free.** The section exists because this
+register once reported a name as free when a neighbouring tree was already
+using it, and a name was taken on the strength of that.
 
-| name | Greek | what it is |
+| name | where | why it is not in the tables above |
 | --- | --- | --- |
-| **martyria** | μαρτυρία, testimony — the evidence a witness gives | one unit of what is *witnessed* about conduct: a dated, attributable, contradictable declaration, or a stretch of joint history read for the same purpose. Evidence given, never judgement passed. **Chosen** 2026-09-02; the register is in [`../apodeixis/martyria.md`](../apodeixis/martyria.md) |
+| **apodeixis** | a child project in eudaimonia — the build framework driven at a calculus nobody designed it around | its authors deliberately did not claim it here, on the ground that adding a line to somebody else's register is a person's edit to make. That restraint is the reason it looked free |
 
-Two candidates were weighed against it and are free: **synkrisis** (σύγκρισις, a
-bringing-together and comparing — names the method rather than the finding) and
-**logismos** (λογισμός, the reckoning — too close to *euthyna*, which is taken).
+**So the register is not the whole answer to *is this name free*.** It records
+what has been claimed, and a name can be in use without being claimed. Look in
+the trees as well, which costs one grep.
 
-## If none of them fits
+## If none of them fits## If none of them fits
 
 Then the work is new, which is the interesting case. Pick a word for **what the
 tool does to its subject** rather than for the subject — the register above is

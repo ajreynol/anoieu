@@ -94,3 +94,33 @@ their absence is checkable by a third party in a way our internal restraint is
 not. That is the strongest available answer and it is still not proof.
 
 **State:** **open.** Raised 2026-09-02, in the course of writing `F1`.
+
+## F3 — the register of cases has no counter-cases in it
+
+**What:** [`witnessed.md`](witnessed.md) keeps a register of occasions when this
+ecosystem or a tool in it acted well at a cost. **Every entry in it is
+flattering, and there is no entry recording the opposite.**
+
+**Evidence:** the register itself, and its own rule that a register with no
+counter-cases is evidence of selection rather than of conduct — written into the
+page on the day the page was created, against zero counter-cases.
+
+**Why it is ethical and not only technical:** a list of one's own good conduct,
+kept by the party it flatters, is the single easiest self-serving document to
+produce, and the failure does not look like dishonesty from inside. It looks
+like there being nothing bad to write down. The neighbouring tool that audits
+histories holds that **a self-assessment producing no negative findings is
+void**, and it applies that to itself; the same standard applied here says this
+register is void until it can name an occasion where we or a tool here took the
+easier path.
+
+**What would settle it:** one entry, with the same fields and the same evidence
+requirement, recording an occasion when the cost was available to pay and was
+not paid. Finding one is work rather than a matter of remembering — the cases
+that flatter are the ones that get written down at the time.
+
+**State:** **partly answered**, 2026-09-02. One counter-case is recorded, `X1`,
+and it was produced by this project getting something wrong rather than by
+anybody going looking — which is the weakest way to discharge a finding of this
+kind. One entry is not a balanced register and the finding stays open until a
+counter-case is found by looking rather than by stumbling.

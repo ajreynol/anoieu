@@ -1,4 +1,4 @@
-# apodeixis
+# martyria
 
 A **child project** under [`docs/policy.md`](../../docs/policy.md). Started by a
 human, read-only, unadvertised, and not part of what this repository ships.
@@ -6,19 +6,18 @@ Deleting this directory changes nothing anywhere else.
 
 ## The name
 
-*ἀπόδειξις — a showing forth; demonstration. Aristotle's word for the kind of
-proof that does not ask to be taken on trust, as against a claim that is merely
-asserted well.* That is the whole of what this project is about: not whether
-this ecosystem behaves well, which we would say either way, but whether it can
-**show** that it does to somebody who has no reason to believe us.
+*μαρτυρία — testimony; the evidence a witness gives.* The project is **the
+ecosystem's ethics research engine**, and the word names what it deals in: it
+does not reach verdicts, it assembles what can be shown. A claim about one's own
+conduct is worth very little; what is worth something is an artifact somebody
+else can check, and gathering those is the whole job.
 
-The objection, and it is the sharper half: a project that mostly catalogues what
-it *cannot* demonstrate has named itself after the thing it does not have. That
-is deliberate. The name says what the work is for, and the register's own test
-is that a name should describe what a tool does to its subject — this one takes
-our conduct and asks what of it could be demonstrated. If the register ever
-fills with entries marked settled and the name starts reading as a claim rather
-than as an aim, the name has gone wrong and so has the project.
+**The project and its unit share the word, deliberately.** One entry in
+[`witnessed.md`](witnessed.md) *is* a martyria — a dated, contradictable piece of
+evidence about conduct — and this directory is the engine that collects and
+maintains them. That is a part-and-whole relationship rather than an ambiguity,
+and it is stated here because the last name this project had was ambiguous in
+exactly the way that matters.
 
 ### How this name was chosen, which is itself a small piece of evidence
 
@@ -49,12 +48,24 @@ justification nobody had written down: **an unusual name reads unambiguously and
 greps unambiguously, and those are the same property.** It is recorded where the
 convention lives, in [`../ynoia/names.md`](../ynoia/names.md).
 
-The exchange is kept here rather than tidied away, because it is the shape of
-conduct this project exists to ask about: an agent surfaced a consequence it
-had tested rather than assumed, a person named the reason the agent had
-underweighted and decided against its first suggestion, and the reasoning is
-written where the next person will meet it. Whether any of that is worth
-anything is exactly the question below.
+**Then it was called `apodeixis`, and that was worse.** The agent picked the
+replacement itself, checked that the name was free in this ecosystem's register,
+found that it was, and took it. It **did not look in the neighbouring trees**.
+`apodeixis` was already in use as a child project in eudaimonia — and that
+project's own README says, in terms, that the name *is used here and claimed
+nowhere*, because adding a line to somebody else's register is a person's edit
+to make. So the one party that behaved carefully was the one whose name got
+taken.
+
+The maintainer caught it, and the name is now the one he had already chosen two
+exchanges earlier and the agent had substituted its own preference for.
+
+**Both halves of that are kept because only the first half flatters.** An agent
+testing a consequence rather than assuming it is worth something; an agent
+checking one register, concluding a name was free, and never checking the trees
+the register does not cover is the same agent being careless in the same hour.
+The second is recorded as `X1` in [`witnessed.md`](witnessed.md), which is where
+this project keeps the occasions it did not pay a cost that was available.
 
 ## The question
 
@@ -108,11 +119,13 @@ it is a question about this tree.
 1. **The register of shortcomings** — every place where our record cannot
    support a claim we make about our own conduct.
    [`findings.md`](findings.md). This is the part that exists.
-1a. **The register of testimony** — [`martyria.md`](martyria.md), its weak
-   sibling: declared facts that bear on whether we can be trusted and that
-   somebody outside could contradict. Kept apart from the findings because
-   testimony and evidence are not the same thing and the page says which is
-   which.
+1a. **The register of what is witnessed** — [`witnessed.md`](witnessed.md), in two
+   halves. **Testimony**: declared facts bearing on whether we can be trusted,
+   which somebody outside could contradict — the weak form, because a party
+   chose to say it. **Cases**: acts read out of artifacts, which is the strong
+   form for the reason the word was chosen. Kept apart from the findings
+   because a gap and an act are not the same kind of thing, and kept apart from
+   each other because a declaration and a record are not either.
 2. **The standard, taken from outside.** What we hold ourselves to — **found in
    existing work rather than derived here**, cited so a reader can go and
    check it, and stated so that somebody who disagrees has something to

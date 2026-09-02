@@ -216,7 +216,6 @@ number worth looking at, in both directions.
 | tool | footing | how many |
 | --- | --- | --- |
 | `anoieu` | member | 8 |
-| `apodeixis` | child of `anoieu` | 0 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
 | `ethos` | candidate | 2 |
@@ -225,12 +224,13 @@ number worth looking at, in both directions.
 | `euthyna` | child of `eudaimonia` | 1 |
 | `koine` | member | 1 |
 | `logos` | candidate | 3 |
+| `martyria` | child of `anoieu` | 0 |
 | `sapheneia` | child of `anoieu` | 1 |
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 
 Twenty-seven roles across thirteen tools, and two sections empty:
-`workflow-launcher` and `apodeixis` hold nothing, which is not an omission — a
+`workflow-launcher` and `martyria` hold nothing, which is not an omission — a
 child project has no users, nothing depends on it, and it owes nobody an
 artifact. The rows worth reading are the longest and the empty one, and both are
 the page working rather than the page being wrong.
@@ -388,8 +388,6 @@ the reporting loop, which koine has asked for and this must not quietly absorb.
 low-level formats of the reporting loop, and that request is open. An id claimed
 in a proposal nobody has answered is not free, and taking it would make the reply
 harder to write than skipping a number is.
-
-## apodeixis
 
 ## cvc5
 
@@ -590,6 +588,8 @@ cvc5 emits proofs in.
 **Not this role:** the signature it is the semantics of, which is `R8` and sits
 in a different tree under a different owner. Two legs of one triple, held apart
 — which is exactly why something has to compare them, and that is `R2`.
+
+## martyria
 
 ## sapheneia
 
