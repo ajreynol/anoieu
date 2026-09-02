@@ -13,6 +13,33 @@ because the useful thing for another repository to read is not the rules but
 what happened when somebody applied them to real projects. Graded at the commits
 [`deps.lock`](../tools/deps.lock) records.
 
+## When each paragraph was last graded
+
+**The first thing to know about any paragraph here is how old it is.** A
+judgement about somebody else's project decays — they fix things, they move,
+they ship — and this page has no way of noticing. So the age is stated, and
+`unknown` is stated where it is unknown rather than left to look current.
+
+| entry | last graded |
+| --- | --- |
+| `cvc5` | unknown |
+| `ethos` | unknown |
+| `ethos-eoc` | unknown |
+| `logos` | unknown |
+| `eudaimonia` | unknown |
+| `anoieu` | 2026-09-02 |
+| `koine` | 2026-09-02 |
+| `dokimasia` | unknown |
+
+**`unknown` is not a formality.** It means nobody recorded when the paragraph
+was written, so a reader cannot tell whether it describes the project as it is
+or as it was — and two of the eight were found to be false the first time
+anybody checked. Treat an undated paragraph as the weakest thing on this page.
+
+**The order carries nothing.** Entries appear in the order they were first
+written, which is not a ranking, not a priority and not an assessment — this
+page says it is not a ranking and the ordering should not quietly imply one.
+
 Three fields per tool, named along the ecosystem's convention:
 
 | field | means |
