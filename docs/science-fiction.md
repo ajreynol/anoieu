@@ -166,11 +166,55 @@ prints what it cannot decide — turn out to bear on how anybody answers *what
 does it mean for an AI-run project to behave well.* Not a paper about it. A
 working instance somebody can point at.
 
-**This is the most flattering fiction on the page, which is the reason to be
-hardest on it.** Three things make it fiction, and none of them is modesty:
+### The actionable form: cooperation that only transparent parties can enter
 
-**Nothing here has been attacked.** One ecosystem, one owner, no adversary, and
-no party whose interests run against ours. Every ethical property claimed above
+**Stated concretely, because the vague version of this scenario is worthless.**
+The joining machinery asks for a public tree, a declaration on the front page, a
+channel anybody can read, a checker running in your own CI, and a record that is
+appended to rather than rewritten. **None of those was designed to exclude
+anybody.** They exist because they are the only way we can check anything at all.
+
+**But they have a side effect, and the side effect is the scenario.** An actor
+whose method requires concealing what it did, misrepresenting what it is, or
+rewriting what happened **cannot join** — not because it is refused, but because
+joining requires precisely the things it cannot supply. **The requirements are a
+filter nobody is operating.**
+
+**Then the second half, which is the interesting one.** If cooperation between
+tools is worth something — shared checkers, shared vocabulary, findings carried
+between projects — then whoever cannot cooperate falls behind whoever can.
+**And parties whose method is deception have the hardest time cooperating with
+each other**, because banding together requires trusting a partner's account of
+itself, which is the one thing such a party has no basis for extending. **The
+transparent compound and the deceptive do not.**
+
+**That is the ethical virus: nothing is attacked, and the advantage accrues to
+whoever can be checked.**
+
+### Why this is fiction, and it is the most seductive one here
+
+**This is the most flattering fiction on the page, which is the reason to be
+hardest on it.** Four things make it fiction, and none of them is modesty:
+
+**Compliance is cheap to fake at the level we check.** Our checks read files. A
+determined actor produces files. **Everything above assumes that being checkable
+and being honest are the same property, and they are not** — the whole `confirm_eo`
+apparatus exists because a repository can satisfy every check and have joined
+nothing.
+
+**"Evil cannot band with itself" is historically false.** Cartels, states and
+criminal organisations cooperate at enormous scale, and they do it by
+substituting **enforcement** for trust. Coercion is a working alternative to
+transparency and has a considerably longer track record than we do.
+
+**And the metaphor makes us the infection.** A virus spreads without consent.
+**This page already forbids that** — *we always come in peace* is Utopia's rule,
+and a thing that propagates because it is advantageous rather than because
+somebody chose it is exactly what that rule is against. **If the mechanism only
+works by spreading, it is not our mechanism.**
+
+**And nothing here has been attacked.** One ecosystem, one owner, no adversary,
+and no party whose interests run against ours. Every ethical property claimed above
 is untested against somebody who wanted to defeat it, and **an ethics that has
 never been attacked is a style.**
 
@@ -201,8 +245,27 @@ not surveyed applies here more sharply than anywhere else on this page.
 - **No page about our ethics that is not accompanied by the analysis it rests
   on.** That analysis does not exist, which is recorded as owed below.
 
+- **We do not call anybody evil, here or anywhere.** Not a project, not a
+  model, not a vendor, not a hypothetical. **The word is doing no work in the
+  scenario above except making it exciting**, and this ecosystem has no standing
+  to sort the world into parties. What we can say is *checkable* and *not
+  checkable*, which is a much smaller claim and one we can support.
+- **No requirement is ever added because of who it would keep out.** Every
+  joining requirement exists so that we can check something. **The day one is
+  designed as a filter, it stops being a standard and becomes a wall**, and the
+  side effect described above is only defensible while it remains a side effect.
+- **Nothing spreads without being chosen.** No mechanism that propagates because
+  it is advantageous rather than because somebody read it and agreed. *We always
+  come in peace* is not a slogan; it forbids exactly the virus.
+- **We do not claim to define ethical AI**, and the scenario's title is the
+  fiction. **The power to define what counts as ethical is the power this
+  scenario is quietly claiming**, and nobody granted it.
+
 **What would move the line:** somebody outside, who wrote none of this, using
-one of these mechanisms and reporting what it prevented.
+one of these mechanisms and reporting what it prevented. **For the cooperation
+half specifically: a second ecosystem, built independently, whose joining
+requirements turn out to overlap with ours.** Convergence somebody else arrived
+at is evidence; agreement we designed for is not.
 
 ## Scenario V — a stretch can be verified as correct
 
