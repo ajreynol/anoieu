@@ -137,6 +137,7 @@ named.
 | `PROTO-24` | **the upstream refresh** — a member makes its copy of the shared arrangements current before relying on them, and only onto a green commit | member → us | this page |
 | `PROTO-25` | **the joke protocol** — humour lives on the president's front page and nowhere a machine parses or a stranger reads for instructions. Any tool may say *that's not funny*, meaning *you are confusing everyone*, and it ends there | any tool → any tool | this page |
 | `PROTO-26` | **transferring roles** — a role moves when it is marked, the target exists, and **both** repositories' CI is green. Theirs is a person's check, not a job | us → another project | this page |
+| `PROTO-27` | **verifying the install** — we can show a stretch was deployed and cannot show it was installed. Reported as *unverified*, never as installed. **Open, and the next step is asking members rather than computing it** | members → us | this page |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it
@@ -150,6 +151,54 @@ least of them: its whole content is one sentence said to a person, and a member
 that honours it changes no file.** The mechanism is maintained by
 [martyria](../tools/martyria/README.md), which is where its ethics are argued
 and its schedule lives.
+
+## `PROTO-27` — verifying the install
+
+**We can show that a stretch was deployed. We cannot yet show that it was
+installed.** `deployed` means we published; `installed` means every member is
+actually upholding what it set out. **The second is a claim about other
+people's trees and this ecosystem has no way to establish it.**
+
+**Deliberately unsolved, and written down so the gap is not mistaken for an
+oversight.** The status ladder already says `installed` is *read out of members'
+trees and may never be true* — this protocol is that admission promoted to a
+place where it can be worked on.
+
+### Why it is hard, concretely
+
+- **A member's tree can carry the policy and not run it.** We see files, not
+  jobs. That a workflow exists is not that it ran, and that it ran is not that
+  it ran on the commit we care about.
+- **A pin says which commit, not which behaviour.** A member pinned to a green
+  commit of ours may still have adopted nothing from it.
+- **GitHub answers questions about runs, not about compliance.** We can read
+  whether a build passed; we cannot read whether it passed *because* of us.
+- **And asking costs something we have already ruled out.** A check of ours that
+  reaches into somebody else's CI makes our build fail for reasons in their
+  tree, which [`policy.md`](policy.md) names as how a suite becomes noise.
+
+### What is true today
+
+**Nothing verifies an install, and the honest report is *unverified*.** Not
+*installed*, not *presumed installed*, and not a number derived from how many
+members carry a file. **Unverified sits with `attention` rather than with `ok`**,
+the same rule the health summary and the bump gate already use.
+
+**What we can do and do do:** report what a member's tree looks like, report
+what its last public run concluded, and report that neither of those is an
+install.
+
+### What would move it
+
+**A member telling us**, in a form we did not compute — a line in their
+discussion file, a marker in their tree, or a reply to a global announcement
+saying which stretch they adopted. **The strongest evidence available is
+somebody else's statement about their own tree**, and we have never asked for
+one.
+
+**That is the concrete next step and it is not a program.** It is a question in
+an announcement, and the answers would be the first data anybody here has had
+about installs.
 
 ## `PROTO-26` — transferring roles to another project
 
@@ -497,6 +546,7 @@ to it — the first for everything on the list, the second when a tool arrives.
 | --- | --- | --- |
 | `install_eo` | here, **first** | the rest of the ecosystem, cloned beside this checkout with `git clone` and nothing else — audited by `tests/run.py`. `--dry-run` prints what it would run; `--status` reads the rows back. [The options](usage.md#the-rest-of-the-ecosystem) |
 | `status_eo` | here | who is in the ecosystem and how each looks: declared or not, whether the policy check passes, whether there is a channel, how long since anything moved. `--check` decides whether the inventory itself is still true, and is what CI runs. `python3 tools/ecosystem.py --protocol` is the other report: where each tool proposed for the `associate` footing stands against each version of that drafted protocol, read from a checkout where there is one. It reports and never fails |
+| `deploy <president> --version=X.Y.Z` | here | **the first fragment of the epoch build system**, doing by program what `epoch deploy` describes: check the gates, close the stretch, open the next, and leave the incoming president a `FIXME` in the record. Refuses if the president is not a member, if the stretch is not `staged`, if our policy check fails, or if the bump gate is not green. `--dry-run` evaluates everything and writes nothing. **No `--force`** |
 | `harvest_cpc_proofs` | here | collects real CPC proofs to seed the fuzzer with |
 
 `status_eo` is a wrapper around `tools/ecosystem.py`, and `tools/policy_check.py`

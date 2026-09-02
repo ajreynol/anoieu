@@ -1,0 +1,188 @@
+#!/usr/bin/env bash
+# deploy -- close the current stretch, open the next, and hand the record on.
+#
+#   ./scripts/deploy <president> --version=X.Y.Z [--dry-run]
+#
+# **The first fragment of the epoch build system, living where the protocols do
+# until `tekton` exists.** Everything it does is something a person has been
+# doing by hand: read `epoch status`, check the gates, move the stretch, open the
+# next one, and leave the incoming president something to fill in.
+#
+# It speaks the epoch language deliberately, because you will see these four a
+# lot and they should stop needing a lookup:
+#
+#   epoch help    print the commands and the ecosystem's health
+#   epoch status  which level this stretch is at, and what the next one takes
+#   epoch stage   attempt planned -> staged; needs something to stage
+#   epoch deploy  attempt staged -> deployed; the gates decide, nobody's say-so
+#
+# This script is `epoch deploy` with the parts that were never written down: who
+# the record goes to, and what gets bumped.
+#
+# **It refuses more readily than it acts.** A deploy is the one move here whose
+# effects are in other people's trees, so every gate is a hard stop and none of
+# them can be overridden by an argument. It writes files and never commits.
+
+set -euo pipefail
+
+HERE=$(cd "$(dirname "$0")" && pwd)
+ROOT=$(cd "$HERE/.." && pwd)
+PRESIDENT=""
+VERSION=""
+DRY=0
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: deploy <president> --version=X.Y.Z [--dry-run]
+
+  <president>    the tool taking the office for the next stretch. It must be a
+                 member: an office cannot be handed to a repository that has not
+                 joined the thing it would be presiding over.
+  --version      the version this stretch is deployed as. Required, and typed
+                 rather than derived, because it is the one number other people
+                 will refer to.
+  --dry-run      evaluate every gate, print what would change, write nothing.
+
+Refusals are hard. There is no --force, deliberately.
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --version=*) VERSION="${1#--version=}" ;;
+    --dry-run) DRY=1 ;;
+    -h|--help) usage ;;
+    -*) echo "deploy: unknown option $1" >&2; usage ;;
+    *) [ -z "$PRESIDENT" ] || usage; PRESIDENT="$1" ;;
+  esac
+  shift
+done
+[ -n "$PRESIDENT" ] || usage
+[ -n "$VERSION" ] || { echo "deploy: --version=X.Y.Z is required" >&2; usage; }
+case "$VERSION" in
+  [0-9]*.[0-9]*.[0-9]*) ;;
+  *) echo "deploy: --version must look like X.Y.Z, got '$VERSION'" >&2; exit 2 ;;
+esac
+
+fail() { echo; echo "REFUSED: $1"; exit 1; }
+
+STRETCH=$(python3 -c "import sys;sys.path.insert(0,'$ROOT/tools');import bump_check as b;print(b.current_stretch() or '')")
+STATUS=$(python3 -c "import sys;sys.path.insert(0,'$ROOT/tools');import bump_check as b;print(b.current_status() or '')")
+
+echo "epoch status"
+echo "  stretch:        ${STRETCH:-none}"
+echo "  status:         ${STATUS:-unknown}"
+echo "  deploying as:   $VERSION"
+echo "  next president: $PRESIDENT"
+echo
+
+echo "gates"
+
+# 1. the president is a member. An office cannot be handed to a repository that
+#    has not joined the thing it would preside over -- this is the check the
+#    handoff protocol makes non-negotiable, and the one most likely to be true
+#    later and false today.
+FOOTING=$(ANOIEU_ROOT="$ROOT" python3 -c "
+import json, os, sys
+d = json.load(open(os.path.join(os.environ['ANOIEU_ROOT'], 'tools', 'ecosystem.json')))
+e = d.get('$PRESIDENT')
+print(e.get('status', '?') if e else 'absent')")
+echo "  president footing:   $FOOTING"
+[ "$FOOTING" = "member" ] || fail "$PRESIDENT is '$FOOTING', not a member.
+  An office cannot be handed to a repository that has not joined the thing it
+  would preside over. Run join_eo there, then confirm_eo --president here."
+
+# 2. the stretch has to be staged before it can be deployed
+echo "  stretch status:      $STATUS"
+[ "$STATUS" = "staged" ] || fail "the stretch is '$STATUS' and deploying is only
+  available from 'staged'. Run \`epoch stage\` first, which needs a stretch with
+  content and a person's direction."
+
+# 3. our own suite and policy
+echo -n "  policy check:        "
+if python3 "$ROOT/tools/policy_check.py" >/dev/null 2>&1; then echo "ok"; else
+  echo "failing"; fail "our own policy check does not pass. Nothing is deployed
+  from a tree that fails its own checks."; fi
+
+# 4. the bump gate: is our build green at the commit members would adopt
+echo -n "  build at HEAD:       "
+set +e
+python3 "$ROOT/tools/bump_check.py" >/dev/null 2>&1
+BUMP=$?
+set -e
+case "$BUMP" in
+  0) echo "green" ;;
+  2) echo "unverifiable"; fail "we could not establish that our build is green.
+  That is not a pass -- a member may only bump to a commit where our CI is
+  green, so deploying without knowing publishes a commit nobody may adopt." ;;
+  *) echo "not green"; fail "our build is not green. See PROTO-20: CI passing is
+  non-negotiable for every party to a handoff, and it binds us hardest because
+  we are the ones handing over." ;;
+esac
+
+NEXT="E$(( ${STRETCH#E} + 1 ))"
+echo
+echo "would happen"
+echo "  $STRETCH -> deployed, as $VERSION"
+echo "  $NEXT opened, president $PRESIDENT"
+echo "  docs/history.md gains a FIXME for $PRESIDENT"
+
+if [ "$DRY" = 1 ]; then
+  echo
+  echo "dry run: nothing written."
+  exit 0
+fi
+
+python3 - "$ROOT" "$STRETCH" "$NEXT" "$VERSION" "$PRESIDENT" <<'PY'
+import datetime, os, re, sys
+root, stretch, nxt, version, president = sys.argv[1:6]
+today = datetime.date.today().isoformat()
+
+p = os.path.join(root, "docs", "stretches.md")
+s = open(p, encoding="utf-8").read()
+s = re.sub(r"(^##\s+" + re.escape(stretch) + r"\b.*?^\*\*Status:\*\*\s*)`?\w+`?",
+           lambda m: m.group(1) + f"`deployed` as **{version}** on {today}, by "
+                                  f"`./scripts/deploy`. Previously",
+           s, count=1, flags=re.M | re.S)
+head = s.index("## " + stretch)
+s = s[:head] + (
+    f"## {nxt} — opened {today}\n\n"
+    f"**Status:** `brainstorm`, opened by `./scripts/deploy` when {stretch} was\n"
+    f"deployed as {version}.\n"
+    f"**President:** `{president}`.\n"
+    f"**Announcement:** none yet. A stretch with no announcement has not asked\n"
+    f"anybody for anything, which is the correct state on its first day.\n\n"
+) + s[head:]
+open(p, "w", encoding="utf-8").write(s)
+
+h = os.path.join(root, "docs", "history.md")
+t = open(h, encoding="utf-8").read()
+marker = f"""## {nxt} — FIXME
+
+**FIXME — for {president}, the incoming president. This section is yours.**
+
+**Written by `./scripts/deploy` on {today}, and it is a placeholder rather than
+an entry.** Nothing here was observed; it is a reminder that the record now
+travels with you.
+
+**Law 12 first, then the rest.** Put a joke about your own name on your front
+page before anything else, because it is the cheapest of your obligations and
+the one most likely to be skipped. Then publish the working summary: it is your
+first responsibility and it is kept current while the stretch runs, not written
+at the end.
+
+**Replace this whole section.** Leaving a FIXME in the record is worse than
+leaving it empty -- an empty entry says nothing happened yet, and this says
+somebody meant to and did not.
+
+"""
+i = t.index("## Stretch 0")
+open(h, "w", encoding="utf-8").write(t[:i] + marker + t[i:])
+print("  wrote docs/stretches.md and docs/history.md")
+PY
+
+echo
+echo "deployed. Nothing is committed -- read the two files, then commit them."
+echo "Next: confirm_eo --president $PRESIDENT, and verifying the install, which"
+echo "we cannot yet do. See PROTO-27."
