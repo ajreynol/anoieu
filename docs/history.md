@@ -74,7 +74,7 @@ which is the honest state of it: **the most significant thing here has not yet
 been accepted by the people it was offered to**, and that is their decision and
 not a delay.
 
-### The commit census
+### The commit census, before us
 
 **15,822 commits across four repositories, everything up to 2026-08-29.**
 
@@ -224,24 +224,25 @@ the holder was the last to know.
 **Real time: 2026-08-29 to 2026-09-02 — five days.** From the first commit in
 this repository to the close of the stretch.
 
-**Entering, in the order it happened, from both sides of each handshake.**
+**Entering, as a chronology: one row per event, from both sides of each
+handshake.** A footing changes in two different trees at two different moments,
+and putting them in one column each would have hidden the gap between them.
 
-**Two clocks, because they disagree.** *Declared* is when the membership banner
-first appears in **their** repository; *recorded* is when **our** inventory
-began calling them a member.
+| date | time | status | who | footing |
+| --- | --- | --- | --- | --- |
+| 2026-08-29 | 14:30 | — | [anoieu](https://github.com/ajreynol/anoieu) | the repository begins. There is no ecosystem yet to hold a footing in |
+| 2026-08-31 | 10:53 | `member` | [dokimasia](https://github.com/ajreynol/dokimasia) | **theirs** — declared in their tree, first to do so |
+| 2026-08-31 | 11:05 | `candidate` | several | **ours** — the inventory is written for the first time |
+| 2026-08-31 | 12:41 | `member` | [eudaimonia](https://github.com/ajreynol/eudaimonia) | **theirs** — declared, in a commit titled *"Join EO attempt"* |
+| 2026-08-31 | 12:50 | `member` | [koine](https://github.com/ajreynol/koine) | **theirs** — declared |
+| 2026-08-31 | 16:44 | `member` | dokimasia, eudaimonia, koine | **ours** — all three recorded in one commit, `a3ca74a` |
+| 2026-09-01 | 08:43 | `associate` | [ethos](https://github.com/cvc5/ethos), [logos](https://github.com/cvc5/logos) | **ours, and wrong** — recorded as associates, which neither had asked to be |
+| 2026-09-01 | 08:51 | `candidate` | ethos, logos | **ours** — returned, seven minutes later, by the commit that wrote the associate protocol down |
+| throughout | — | `foundation` | [cvc5](https://github.com/cvc5/cvc5) | **neither.** It has joined nothing and owes nothing; the ecosystem exists to serve it |
 
-| declared | we recorded | who | footing |
-| --- | --- | --- | --- |
-| — | — | **[anoieu](https://github.com/ajreynol/anoieu)** | the repository begins 2026-08-29; there is no ecosystem yet to be a member of |
-| **10:53** | 16:44 | **[dokimasia](https://github.com/ajreynol/dokimasia)** | **member.** First to declare, by an hour and a half |
-| **12:41** | 16:44 | **[eudaimonia](https://github.com/ajreynol/eudaimonia)** | **member.** Their commit is titled *"Join EO attempt"* |
-| **12:50** | 16:44 | **[koine](https://github.com/ajreynol/koine)** | **member** |
-| — | during the stretch | **[ethos](https://github.com/cvc5/ethos)** | **candidate.** Asked to join and declined, correctly: it is not solely owned by the person asking |
-| — | during the stretch | **[logos](https://github.com/cvc5/logos)** | **candidate** |
-| — | throughout | **[cvc5](https://github.com/cvc5/cvc5)** | **foundation.** It has joined nothing, and the ecosystem exists to serve it |
-| — | — | **ethos-eoc** | **child**, through ethos |
-
-*All times 2026-08-31.*
+**`status` is the membership role after the event; `footing` is whose act it
+was** — *theirs* means it happened in their tree, *ours* means it happened in our
+inventory. **The rows worth reading are the ones where those two disagree.**
 
 **Every member declared before we recorded it, and all three were recorded in a
 single commit at 16:44** — between three and four hours after each banner landed.
@@ -258,7 +259,7 @@ did not change to `member` until `a3ca74a`, and tracing that field commit by
 commit is what showed it. **The claim is corrected rather than deleted**, and
 the method that produced it is named so the same mistake is visible next time.
 
-**The footings are not one thing.****The footings are not one thing.** *Member*, *candidate*, *foundation* and
+**The footings are not one thing.** *Member*, *candidate*, *foundation* and
 *child* are four different relationships, and the register that matters is
 `tools/ecosystem.json` rather than the word *membership*. **A fifth,
 `associate`, is drafted and unused** — see `laws.md`, where entering is set out
@@ -267,7 +268,7 @@ properly.
 **Three members in eighty-one minutes, and none since.** Everything after
 2026-08-31 lunchtime was done with the membership fixed.
 
-### The commit census
+### The commit census, this stretch
 
 **331 commits across seven repositories**, 2026-08-29 to 2026-09-02.
 
