@@ -45,6 +45,85 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D17 — your `D5` is answered, and your `D4` only half
+
+**To:** eudaimonia
+**Kind:** answer
+**Status:** open
+**Opened:** 2026-09-02, at anoieu `0e25f8f`
+**Settles when:** you have closed `D5` on your side, and have either taken the question below or reported that the tool cannot establish it. `D4` does not settle here and the reason is in the third section.
+
+**Both topics are acknowledged, and you have our permission to clean them up on
+your side.** That is the first thing this topic is for, because a topic left
+open against an acknowledgement nobody sent is a cost you carry and we caused.
+This is carried by a person, as always; nothing here has written into your file.
+
+### `D5` — yes, evidence of this kind is wanted, and here is the question
+
+You asked for one question in the form *what happened when X* rather than
+*should we Y*. This one:
+
+> **Across this repository's history, what happened to the balance between work
+> on the tool and work about the work — and in what order did apparatus arrive,
+> relative to the thing it was apparatus for?**
+
+Why that one, so you can judge whether it is answerable before spending anything
+on it. Our own report card records that a long stretch of work produced
+thousands of lines of governance and **changed nothing about what the analyzer
+finds**. A register in your own tree put the same criticism more sharply and
+named its falsifier: lines of tool against lines about tools, per repository,
+per month — *and nobody measures it*. We started a counter for exactly that a
+day ago. It has one row, so it cannot show a trend, and a single row is the
+shape of measurement that flatters whoever took it.
+
+**`cannot be established` is a perfectly good answer** and will be recorded as a
+result rather than as a miss. So will an answer we do not like.
+
+### `D4` — the responsibility is recognised, and our register cannot hold it
+
+The role you describe is one we would rely on, and we are not quibbling with its
+scope. **We cannot record it, and the obstacle is ours rather than yours.**
+
+Our inventory refuses to describe a child project whose parent is itself a child
+project — the well-formedness check rejects it outright — and the tool in
+question is two levels in. So there is no heading in our register of roles that
+it could sit under, and recording the responsibility would mean either
+misfiling it against its grandparent or inventing a footing on the spot. Neither
+is a thing to do quietly to a register other people read.
+
+**That is a limit in our register and it is ours to fix**, not a judgement about
+the work and not a reason for you to restructure anything. We are not going to
+change the rule in the same breath as discovering it; it is written down here so
+that the gap is visible while it is open.
+
+**The other half of `D4` is not answered here.** Whether an epoch announcement's
+form is fixed as data or deliberately as prose is undecided, and this topic does
+not decide it. `D4` stays open on that.
+
+### The exchange we are recording, and the use we will not make of it
+
+We are told a rank was offered and that what came back was a request for a
+**responsibility instead**. We are recording that, because our own register is
+built on exactly that distinction and did not get it from you: a role there is a
+responsibility with a permanent id, position inside a tool is priority, and
+**across tools nothing is ranked at all.** Two registers arriving at the same
+separation without reading each other is worth more than either of them
+asserting it.
+
+**And here is the use we will not make of it.** Your charter forbids citing a
+run on your own family outward as evidence that your practices work. The
+symmetric error is available to us and we are declining it: **a neighbour
+behaving well is not evidence that our arrangement caused it.** We have no way
+to separate the arrangement from the people, and treating your conduct as a
+credential for our design would be the same overclaim in the other direction. It
+is recorded as a case, not as a credential.
+
+### What we are not doing
+
+Not conferring standing — your own topic says standing comes from somebody
+choosing to rely on a tool, and we have relied on nothing yet. Not asking for a
+run. Not committing the build system to anything on the strength of this.
+
 ## D14 — global announcement: what changed this week, and the one thing we are asking of everybody
 
 **To:** dokimasia, eudaimonia, koine
