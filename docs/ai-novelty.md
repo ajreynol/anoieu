@@ -149,6 +149,54 @@ matters. Where a copy has to exist, something compares it; where it does not
 have to exist, a reference is strictly better. That rule is why
 [`linker.md`](linker.md) contains no tables of its own.
 
+## Writing documentation is coding; reading it is debugging
+
+**The analogy completes the set and it is not decoration.** If prose is what an
+agent is aided by, then **writing a page is authoring the source** — with the
+same care, the same review, the same reluctance to be clever. And **reading a
+page is debugging**: you find the defect by reading, because there is no test
+that fails when a sentence stops being true.
+
+That is why the reading is not optional and not a lesser activity. In an
+ordinary project the tests find most defects and reading finds the rest. Here it
+is the other way round, and **an unread page is untested code**.
+
+### And a misleading change to the documentation is a virus
+
+**The sharpest form of the analogy, and the one worth designing against.** A
+defect in prose that reads as correct is not a bug — it is a *virus*, because it
+has the two properties that word actually names. **It is hard to see**, since
+plausible prose and true prose look identical to a reader in a hurry. And **it
+propagates**: this ecosystem's documents are written to be adopted, copied and
+pinned by other repositories, so a page that has gone wrong travels into trees
+whose owners did not write it and cannot easily check it.
+
+**The threat that matters is not a person with commit access.** It is a change
+that is *individually reasonable* and moves the record away from what is true —
+arriving as a helpful correction, a tidier phrasing, a scope that widens by one
+word. An agent produces that kind of change fluently and in volume, and the
+review that would catch it is a human reading carefully, which is the scarcest
+thing here.
+
+**What defends against it is what is already written down**, and none of it is
+secrecy: a person executes every irreversible step; the vision may only be
+changed by a person, asked first; the record is append-only, so a change is
+visible rather than silent; and a claim that cannot be justified from evidence
+is refusable on stated grounds. **The defence is that manipulation has to
+happen in public and in front of somebody.**
+
+### The limit worth stating plainly: this repository can hide nothing
+
+**Every commit here is public, permanently, including in history after a
+deletion.** So a defence that works by not being known cannot live in this
+repository — not in a file, not in a comment, not in a commit message, and not
+in a document that says what it is careful about.
+
+**That is a fact about git rather than a policy choice**, and it has one honest
+consequence: **what is not published cannot be written here at all.** A page may
+say that we do not publish something; it may not contain the thing. Anything
+else is a secret with a public address.
+
 ## Scripts are the ground truth
 
 **A document describes; a script decides.** Where the two disagree, the script

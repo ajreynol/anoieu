@@ -28,6 +28,101 @@ this page is a ticket in anybody's tracker, and nothing here is filed anywhere:
 a request that a member should act on reaches them through
 [`docs/discussion.md`](../../docs/discussion.md), by a person, or not at all.
 
+## R5 — a research project on cryptography in an AI-run ecosystem
+
+**What:** where cryptographic primitives actually help an ecosystem like this
+one, and where they are theatre. One sub-question is already settled and is
+recorded below as the worked example of the answer being *no*.
+**Where:** **a child project, and whose tree is the open part** — its live cases
+sit in at least two trees, so siting it before scoping it would be guessing.
+**State:** **open, and at brainstorming stage** — raised by the maintainer,
+2026-09-02, and explicitly not a decision. This page decides nothing by
+construction; what is written below is the shape of a question, and no part of
+it has been adopted anywhere else.
+
+### The settled part, first, because it is the cheapest thing to inherit
+
+**Hiding how a report-card band is determined, so it cannot be gamed:
+declined.** The want was real — a published rubric becomes a target, which
+this ecosystem has already argued about somebody else's index. It was declined
+because the thing it would hide is the thing that makes the page worth
+anything: our sharpest criticism of that index was that **a score which cannot
+be re-derived cannot be contested**, and encrypting our own basis would make
+us that, deliberately, having said it aloud. In a public repository it is also
+theatre — the key lives somewhere and the rule is inferable from enough
+outputs.
+
+**And the want dissolved rather than being refused.** The bands are not
+computed, so there is no formula to encrypt and nothing to optimise against.
+What survived was a smaller rule, already taken: **never publish a rubric, even
+informally.**
+
+### The open part, and it is not about hiding anything
+
+**Attestation, where we currently have testimony.** The declaration that a human
+has executed every push in these trees is the most load-bearing fact a history
+analyser needs, and it is a **self-report**. Everything claimed here about
+supervision reduces to who executed the irreversible step. **A signature would
+make that evidence rather than testimony** — and the register holding it already
+says it is the entry most likely to be superseded, with the supersession being
+the point.
+
+**Commitment, which is already in use here and not called cryptography.** A tool
+in a neighbouring tree hashes its questions into a run **before the evidence is
+seen**, so a question invented to fit an answer is visible afterwards. That is a
+commitment scheme, in production, unnamed. **Noticing that we already depend on
+one primitive is the cheapest start available** for a project about which others
+would help.
+
+**And one stated position that would need revisiting.** The build-system analogy
+says outright that there is no signing here and no threat for it to address —
+*one owner, one keyboard, nothing for a signature to distinguish.* True today,
+and the exact sentence that stops being true the day an agent executes a push.
+
+### What it must not become
+
+**Not a survey of cryptography.** The literature is enormous and none of it is
+ours; this ecosystem's rule is to take work from outside and cite it. What is
+ours is the narrow question of which primitives change what *this* arrangement
+can prove about itself.
+
+**Not a secrecy project.** The decline above is the first thing it should read.
+
+### A standing condition, and it closes recursively
+
+**Anything concluded here must be kept current with the state of the field, and
+a conclusion that has not been re-checked against current practice is void
+rather than merely old.** Security work is the one subject in this ecosystem
+where the *threat* moves independently of our tree: everything else goes stale
+because we changed something, and this goes stale because somebody else did.
+
+**It closes recursively.** Whatever rests on this inherits the obligation —
+starting with the report card's lowest band, which now depends on the reasoning
+here for what it withholds and why. **A stale conclusion does not just become
+wrong in place; it makes everything cited to it wrong too**, and quietly,
+because nothing downstream is re-read when an upstream page ages.
+
+**So the practical form is one line rather than a process**: every conclusion
+carries the date it was last checked against current practice, and an undated
+one is treated as void by anybody relying on it. **Nothing enforces this.** The
+currency measurement can see whether a date is present and cannot see whether
+the field has moved past it, which is the honest limit and is the same limit the
+central policy states about every page here.
+
+*A note on wording. This was raised as a **legal** requirement; it is written as
+a standing obligation of this project, because a claim that some statute
+requires it is a claim about law that nothing here can back, and unbacked claims
+are the specific thing this ecosystem is careful about. The force intended is
+the same: void rather than optional.*
+
+### The cost, stated plainly
+
+This would be a **seventh** child project under `anoieu`, four of which hold no
+roles, at a moment when the ecosystem has already been told from outside that
+work about the work outweighs work on the thing. **A page inside an existing
+project may be the right size**, and deciding that is part of the request rather
+than a preliminary to it.
+
 ## R4 — make the tenets configurable, and trace what they drive first
 
 **What:** the six tenets in [`../../docs/vision.md`](../../docs/vision.md) are
