@@ -523,12 +523,26 @@ def main() -> int:
             topics = "none"
         rows.append((name, status, verdict, bump_check.epoch_marker(path) or "-",
                      topics, age(path), path))
+        # Both notes name the disagreement and then say whose move it is.
+        # They used to state the rule instead -- "this is the state the check
+        # exists to catch" -- which explains the check to somebody who already
+        # knows why it is there, and tells a reader arriving cold nothing they
+        # can act on.
         if verdict == "ok" and status == "candidate":
-            notes.append(f"{name} passes and is recorded as a candidate: "
-                         "if it declares membership, the status is out of date")
+            notes.append(
+                f"{name} passes our checks but we still have it down as a "
+                "candidate rather than a member. If it has joined since, our "
+                "inventory is out of date -- ours to fix, in tools/ecosystem.json")
         if verdict != "ok" and status == "member":
-            notes.append(f"{name} is recorded as a member and does not pass: "
-                         "this is the state the check exists to catch")
+            # The count comes from `verdict`, which counts failing *checks*.
+            # `fails` is their detail lines and there are more of them -- the
+            # overstatement `check()` warns about three lines above its return.
+            n_fail = verdict.split()[0]
+            where_short = path.replace(os.path.expanduser("~"), "~")
+            notes.append(
+                f"{name} says it follows the shared policy, and {n_fail} of our "
+                "checks fail on its tree. Theirs to fix, not ours. To see what: "
+                f"python3 tools/policy_check.py --root {where_short}")
         # A checkout whose directory is not called what the inventory calls it.
         # Said loudly because the quiet version of this cost us a member: the
         # tree was on disk as `eudiamonia`, the inventory said `eudaimonia`, and
@@ -548,52 +562,41 @@ def main() -> int:
             notes.append(f"{name}: " + "; ".join(fails[:6]))
 
     w = max(len(r[0]) for r in rows) + 2
-    print(f"{'tool':<{w}}{'status':<11}{'policy':<12}{'epoch':<8}"
+    print(f"{'tool':<{w}}{'status':<11}{'policy':<12}"
           f"{'channel':<10}{'moved':<8}where")
     for name, status, verdict, epoch, topics, moved, where in rows:
         short = where.replace(os.path.expanduser("~"), "~") if where else ""
-        print(f"{name:<{w}}{status:<11}{verdict:<12}{epoch:<8}"
+        print(f"{name:<{w}}{status:<11}{verdict:<12}"
               f"{topics:<10}{moved:<8}{short}")
 
     if notes:
         print()
         for n in notes:
             print(f"note: {n}")
-    print()
-    here = bump_check.current_stretch()
-    if here:
-        print(f"Stretch here: {here}. `epoch` is which stretch's advice a tree "
-              f"records being built\nagainst, and `moved` is how long since its "
-              "last commit. Both are optional and\n`-` is ordinary; neither is a "
-              "compliance column.")
-        print()
+
     counts: dict[str, int] = {}
     for r in rows:
         counts[r[1]] = counts.get(r[1], 0) + 1
     members = [r for r in rows if r[1] == "member"]
     passing = sum(1 for r in members if r[2] == "ok")
     owed = sum(int(r[4].split()[0]) for r in rows if r[4].endswith("for us"))
+    here = bump_check.current_stretch() or "?"
 
-    #: Plurals that are not formed by adding an s. Short on purpose: the table
-    #: has five footings and four of them are regular.
+    #: Plurals not formed by adding an s.
     PLURAL = {"child": "children"}
-    print("  ".join(f"{n} {PLURAL.get(k, k + 's') if n != 1 else k}"
-                    for k, n in sorted(counts.items(), key=lambda kv: -kv[1])))
-    print(f"{passing} of {len(members)} members pass. {owed} topic"
-          f"{'s' if owed != 1 else ''} owed to us.")
+    parts = ", ".join(f"{n} {PLURAL.get(k, k + 's') if n != 1 else k}"
+                      for k, n in sorted(counts.items(), key=lambda kv: -kv[1]))
+
+    # One sentence, last, after everything. A reader who wants the state of the
+    # ecosystem should not have to add a column up themselves, and it is held to
+    # one sentence because a summary that grows into a paragraph is a second
+    # report -- and then there are two of them to keep true.
     print()
-    print("Form only: a passing row says those checks passed, not that the tool "
-          "is any good.")
-    # The judgement half deliberately lives elsewhere and is never computed
-    # here: this table is decidable from a tree and that one is not. Pointing at
-    # it is the whole of the relationship -- a reader who wants to know how a
-    # tool is doing gets sent to evidence and a dated paragraph, not to a
-    # column this program could be tempted to invent.
-    print()
-    print("How each of these is actually doing is a judgement and is not in "
-          "this table.\ndocs/report-card.md carries it: four bands, three axes, "
-          "a date per entry, and\nthe evidence each paragraph rests on. It "
-          "grades the tool that writes it on the\nsame scale.")
+    print(f"In short: {parts}; {passing} of {len(members)} members pass their "
+          f"policy check, {owed} topic{'s' if owed != 1 else ''} "
+          f"{'are' if owed != 1 else 'is'} owed to us, we are in stretch {here}, "
+          "and how good any of these tools actually are is a judgement kept in "
+          "docs/report-card.md rather than in this table.")
     return 0
 
 

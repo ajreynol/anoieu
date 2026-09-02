@@ -167,39 +167,35 @@ this repository to the close of the stretch.
 first appears in **their** repository; *recorded* is when **our** inventory
 began calling them a member.
 
-| when declared | when recorded | who | footing |
+| declared | we recorded | who | footing |
 | --- | --- | --- | --- |
 | — | — | **anoieu** | the repository begins 2026-08-29; there is no ecosystem yet to be a member of |
-| **2026-08-31 10:53** | 2026-08-31 11:17 | **dokimasia** | **member.** Declared first, recorded 24 minutes later |
-| 2026-08-31 12:41 | **2026-08-31 12:26** | **eudaimonia** | **member — recorded 15 minutes before the banner existed.** Their commit is titled *"Join EO attempt"* |
-| 2026-08-31 12:50 | **2026-08-31 12:38** | **koine** | **member — recorded 12 minutes before the banner existed** |
+| **10:53** | 16:44 | **dokimasia** | **member.** First to declare, by an hour and a half |
+| **12:41** | 16:44 | **eudaimonia** | **member.** Their commit is titled *"Join EO attempt"* |
+| **12:50** | 16:44 | **koine** | **member** |
 | — | during the stretch | **ethos** | **candidate.** Asked to join and declined, correctly: it is not solely owned by the person asking |
 | — | during the stretch | **logos** | **candidate** |
 | — | throughout | **cvc5** | **foundation.** It has joined nothing, and the ecosystem exists to serve it |
 | — | — | **ethos-eoc** | **child**, through ethos |
 
-**Two of the three members were recorded here before they had declared
-anything.** Not by much — twelve and fifteen minutes — and both declared shortly
-after, so the inventory became true rather than being wrong for long. **It was
-still an assertion about somebody else's tree made ahead of that tree**, and it
-is the kind of thing that is only visible by reading both sides, which is what
-`PROTO-23` now requires.
+*All times 2026-08-31.*
 
-**One recorded instance of a status nobody was sure about.** On **2026-09-01
-at 08:43** this repository's inventory recorded **ethos and logos as
-`associate`**. At **08:51** — **seven minutes later** — both were returned to
-`candidate`, in a commit titled *"Associate protocol"*: writing the protocol
-down was what showed they did not meet it. Neither had run
-`join_eo --soft --affiliated`, neither carries an affiliating note, and neither
-had been asked. **Both are still *proposed* for associate and neither is one**,
-which `python3 tools/ecosystem.py --protocol` reports and does not resolve.
+**Every member declared before we recorded it, and all three were recorded in a
+single commit at 16:44** — between three and four hours after each banner landed.
+**That is batching rather than a defect**: the trees were right and our register
+caught up in one go.
 
-**The seven minutes are kept because they are the evidence.** Nothing outside
-this repository saw it, nothing depended on it, and it would cost one line to
-delete. **A register with no rows like this one has been tidied**, and the
-tidying is what removes the proof that a boundary was ever unclear.
+**A correction, because this table said the opposite for several hours.** An
+earlier version of this entry claimed eudaimonia and koine were **recorded as
+members before their banners existed**, by fifteen and twelve minutes. **That was
+wrong, and wrong in the direction that flattered nobody.** It came from reading
+the inventory's `joined` field — which records a commit of ours associated with
+each join — as the moment we recorded membership. It is not: the status field
+did not change to `member` until `a3ca74a`, and tracing that field commit by
+commit is what showed it. **The claim is corrected rather than deleted**, and
+the method that produced it is named so the same mistake is visible next time.
 
-**The footings are not one thing.** *Member*, *candidate*, *foundation* and
+**The footings are not one thing.****The footings are not one thing.** *Member*, *candidate*, *foundation* and
 *child* are four different relationships, and the register that matters is
 `tools/ecosystem.json` rather than the word *membership*. **A fifth,
 `associate`, is drafted and unused** — see `laws.md`, where entering is set out
