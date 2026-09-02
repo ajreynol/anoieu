@@ -28,6 +28,72 @@ this page is a ticket in anybody's tracker, and nothing here is filed anywhere:
 a request that a member should act on reaches them through
 [`docs/discussion.md`](../../docs/discussion.md), by a person, or not at all.
 
+## R3 — a self-correction protocol: criteria, plus a history, equals a fix
+
+**What:** the loop that turns *we have criteria for good and bad practice* plus
+*we can read our own history* into *we know precisely what to change, and can
+tell afterwards whether it worked.*
+**Where:** **split across two trees, and that is the interesting part.** The
+criteria are ours — [`../zetesis/`](../zetesis/README.md) owes them and does not
+have them. The evidence half exists and is somebody else's: `epikrisis`, in
+eudaimonia's tree, derives re-derivable findings from histories. **Nothing owns
+the join between them**, and inventing a third tool to hold it would be the
+wrong answer before either half is finished.
+**State:** **open.** Raised by the maintainer, 2026-09-02.
+
+### The want
+
+**Mistakes can be fixed, and the machinery for finding them cheaply now
+half-exists.** The shape is four steps:
+
+1. **State the criteria** — what counts as good and bad practice, written down
+   so a disagreement is possible.
+2. **Derive the evidence from the history**, re-derivably, so the finding is not
+   somebody's impression.
+3. **Report the delta**: which practice violates which criterion, with
+   coordinates a person can go and look at.
+4. **Correct it, and check the correction against the same criteria.**
+
+Steps 2 and 3 are the ones that exist. Step 1 is owed. **Step 4 is the one
+nobody has, and it is what separates a self-correction protocol from an
+auditor** — a loop that stops at reporting is a mirror, and this ecosystem has
+already been told from outside that it is better at diagnosis than treatment.
+
+### The evidence, and the narrower claim it actually supports
+
+**On 2026-09-02 a person asked for an inventory of when each member joined.**
+Reading three trees and running one existing command produced, in minutes, a
+result nobody had suspected: **all three members pinned a commit our own CI had
+failed**, so a requirement we published as hard has never been satisfiable. It
+is written up in [`../../docs/coherence.md`](../../docs/coherence.md).
+
+That is a real demonstration and it demonstrates **detection**, not correction.
+Three honest limits, and they are the content of this request:
+
+- **The criteria were already written**, in that one case. The rule *only pin a
+  green commit* existed; the audit compared reality against it. Where no
+  criterion exists, none of this runs — which is why step 1 blocks everything.
+- **The loop did not start itself.** A person asked. An audit that requires
+  somebody to think of it is not a protocol, and every finding recorded here so
+  far arrived the same way.
+- **Nothing has been fixed.** The pin problem is open at the time of writing.
+  *Mistakes can be fixed* is, on today's evidence, **mistakes can be found** —
+  and the gap between those two is the whole reason this is a request rather
+  than a report of success.
+
+### What would make it real
+
+One defect located by this loop, corrected, and the correction verified against
+the criterion that found it — **without a person prompting any of the four
+steps.** Nothing has done one of the four unprompted yet.
+
+### Why it is a request and not a proposal
+
+Because two of the four steps are already somebody's job in an existing tree,
+and a repository for the join would be a third party owning the seam between two
+tools that are not finished. If it ever wants its own tree, that is a proposal
+and the argument goes next door.
+
 ## R2 — a check that a deletion did not remove the only explanation of something
 
 **What:** a check, run against a *diff* rather than a tree, that fails when a
