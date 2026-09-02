@@ -139,6 +139,7 @@
   },
   "dokimasia": {
     "status": "member",
+    "joined": "anoieu 441b562",
     "repo": "dokimasia",
     "url": "https://github.com/ajreynol/dokimasia",
     "what": "reads cvc5's proof-production C++ and asks what no proof step covers"

@@ -874,6 +874,42 @@ any of this**: it decides claims about this tree, clones nothing but the policy
 it is checked against, and is a contract with other repositories rather than a
 convenience for us.
 
+### When each member joined, and what we were at the time
+
+**Audited 2026-09-02**, from the members' own trees and by running
+`tools/bump_check.py --rev` against each pin they took. Everything below is
+re-derivable; nothing is remembered.
+
+| member | joined at | pinned anoieu at | our CI at that commit |
+| --- | --- | --- | --- |
+| `eudaimonia` | `a93fbec`, 2026-08-31 | `dc2c613` | **not green** — `corpus`, `oracle` |
+| `dokimasia` | `0593624`, 2026-08-31 | `441b562` | **not green** |
+| `koine` | `16af79d`, 2026-08-31 | `5668c20` | **not green** |
+
+**All three joined on the same day, and all three pinned a commit our own build
+had failed.** That is the whole finding and it is not a near miss: the gate that
+decides it, `bump_check.py`, refuses every one of them today, naming `corpus`
+and `oracle`.
+
+**The requirement they were given has never been satisfiable.** We published it
+as a hard one — *only move your pin to a commit where our CI is green, and
+refuse the bump otherwise* — and there was no such commit to move to. logos
+reported exactly this from outside before joining, and declined partly on those
+grounds; this audit says the same thing about everyone who did not decline.
+
+**So the rule is one we enforce on others and have never met ourselves**, which
+is the asymmetry the ethics registers exist to catch and did not catch here — a
+person asked for this inventory and it fell out of it. Two things follow, and
+neither is a document: either the build goes green and stays green long enough
+for a pin to exist, or the requirement is withdrawn as unmeetable and replaced
+with something true. **Until one of those happens, no member can comply and no
+new member can join correctly.**
+
+**One deviation, already raised.** dokimasia does not keep the pin in
+`ANOIEU_REV` as the joining step describes; it keeps it in `tools/deps.lock` and
+moves it with a script of its own, and it raised that with us as its `D2` rather
+than doing it silently. The audit reads its pin from where it actually is.
+
 ### The ecosystem, and what we cannot see of it
 
 `python3 tools/ecosystem.py` prints who is in the ecosystem and how each looks:

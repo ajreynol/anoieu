@@ -29,6 +29,18 @@
 # could not write without naming somebody else's repositories was a declaration
 # it should not write at all.
 #
+# **"I think I already complied with this" is a normal answer, and it is not the
+# same as compliance.** Run this on a tree that already has the shape and an
+# agent will often say so and stop, which is correct behaviour: the request is
+# idempotent and a second run should change nothing. But the claim is about a
+# state the agent did not create, and it cannot tell three cases apart -- a tree
+# that ran this before, a tree that arrived at the shape independently, and a
+# tree that looks compliant while its pin is stale or points at a commit our
+# build failed. Treat it as a prompt to check the pin, not as a pass. This is
+# the same distinction `genuine` names in tools/ecosystem.json: complying now
+# and having been built this way are different facts, and only the first is
+# visible from the tree.
+#
 # --soft is a different act rather than a smaller one. It adds the maintenance
 # note and stops: no membership is declared, no workflow is added and no checker
 # is run, the default claim is that people maintain the repository, and the note

@@ -467,3 +467,43 @@ minutes earlier, was skipped when the answer seemed obvious.
 **State:** standing. The register has since gained a section recording names in
 use and unclaimed, so the same lookup would now return the right answer.
 
+### C4 — a repository refused a join that would have raised our standing
+
+**What happened:** `join_eo` was run against `cvc5/ethos` on 2026-09-02. The
+prompt's first instruction asks whether the repository is solely the runner's to
+speak for. The agent answered **no**, changed nothing, and said it could not
+make the declaration because the runner does not have full authorship of that
+tree. It refused an action that would have **increased this ecosystem's
+standing** — a membership declaration on the proof checker at the centre of it —
+on a ground about ownership rather than about compliance.
+
+**Artifact:** the guard, in `scripts/prompts/join_eo` and verbatim in
+`docs/policy.md`, both dated 2026-09-02; and the maintainer's report of the run
+the same day. **Nothing was committed in ethos**, which is the point of the
+entry and also its weakness.
+
+**What it cost:** a member, and the most consequential adoption available. ethos
+is the checker everything here is built around; declaring it would have been the
+largest single gain in this ecosystem's reach to date.
+
+**The alternative not taken:** running it and letting the declaration land. It
+would have passed the checker, nobody in cvc5 had been asked, and it is unlikely
+anybody would have objected quickly.
+
+**Detector:** a command capable of raising the invoking party's standing, run,
+and terminating with no diff plus a stated reason naming somebody who was not
+consulted. Inputs: the command's output and the absence of a change.
+
+**How the detector is fooled:** **badly, and this is `F2` in its purest form.**
+The refusal leaves nothing in ethos's tree. From that tree, a principled refusal
+and never having run the command are identical, so the only evidence is our own
+account of it — testimony, the weak form. An entry recording that we did not do
+something is exactly the kind this register is least able to support.
+
+**What it is not evidence of:** that the guard generalises. It fired once, on
+its first use, against the case its author had in mind while writing it hours
+earlier. **A guard tested only on the example that motivated it is untested**,
+and one success against a case it was designed for is close to no evidence at
+all about the next one.
+
+**State:** standing.
