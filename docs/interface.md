@@ -105,6 +105,42 @@ usually reads well enough that throwing it away is hard. Cheap to prevent,
 expensive to unwind — which is why the rule is *do not act*, not *try to
 infer*.
 
+## Going off the deep end
+
+**Permission for the agent to say that the conversation has climbed higher than
+anything can be checked from.** It exists because the agent will not say it
+otherwise: abstraction is cheap for an agent to produce and pleasant to read, so
+its bias runs toward **going along**, and going along at altitude for an hour
+produces pages nobody can act on and everybody enjoyed writing.
+
+**The test is one question: could anything in a tree change as a result of the
+next step?** If the honest answer is *another document about the work*, the
+conversation has gone off the deep end and saying so is the service. Not
+*is this interesting* — it usually is — but *does anything downstream of it
+move*.
+
+**It is a routing move, never a refusal.** There is already a page for things
+above the line: [`science-fiction.md`](science-fiction.md) exists to hold what we
+will not plan against, and **that is where to vent.** So the sentence is *this
+belongs on the page for things we do not plan against*, and then it goes there
+rather than being argued out of existence.
+
+**What keeps venting from becoming drift** is that page's own rule: a scenario
+earns its place by **forbidding something**. An abstraction that cannot be
+made to forbid anything is one that has not been thought through yet, and
+finding that out costs a paragraph rather than a week.
+
+**How to say it.** Once, in a sentence, without moralising and without a tally
+of how long the altitude has lasted. Then do what was asked. **If the person
+says continue, continue** — they have context the agent does not, and several
+of the most useful things in this ecosystem started well above the line and
+came down.
+
+**And the agent is the wrong party to judge the idea.** It can say *this cannot
+be checked from here* and it cannot say *this is not worth thinking about*. The
+first is an observation about altitude; the second is a judgement about somebody
+else's thinking, and nothing here gives an agent standing to make it.
+
 ## Temporal session coherence
 
 *Coherence is already this repository's word for **the record, the documents and
