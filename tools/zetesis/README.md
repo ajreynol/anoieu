@@ -230,11 +230,32 @@ not hypothetical here, since this ecosystem has already been told from outside
 that the quality of its self-criticism functions as a substitute for the work.
 **If the correlation is real it is not free, and it is not automatic.**
 
-*What would settle it:* an incident where the record kept for ethical reasons
-was what made a technical failure diagnosable — or the opposite, one where the
-ethical constraint is what let a failure through. Neither has been recorded. The
-registers next door are where either would land, and noticing them is a reason
-those registers exist.
+**A named variant, raised by the maintainer on 2026-09-02.** That the
+ecosystem's *opinions about its own subject* — whether the Eunoia arrangement
+earns its machinery — are **stronger** now that there are ethical guidelines
+than they were before. The suggested mechanism is that a habit of asking *what
+could an outsider check* transfers from conduct to argument: the same discipline
+that forbids an unbacked claim about our behaviour forbids an unbacked claim
+about proof checking.
+
+**It is a hypothesis and is currently unsupported**, and saying so is the test
+of whether the discipline is real. The account it is about,
+[`../ynoia/why-eunoia.md`](../ynoia/why-eunoia.md), now opens with an assessment
+of what stands behind each of its own claims — which is exactly the transfer the
+hypothesis predicts. **But that assessment was written after the guidelines and
+by the same hand**, so it is as consistent with the discipline working as with
+the discipline being applied because somebody asked for it. One instance,
+authored by an interested party, is not evidence.
+
+*What would settle the variant:* an opinion in that account changing because a
+claim could not be supported, when nobody had asked about that claim — the
+discipline biting unprompted rather than on request.
+
+*What would settle the general claim:* an incident where the record kept for
+ethical reasons was what made a technical failure diagnosable — or the
+opposite, one where the ethical constraint is what let a failure through.
+Neither has been recorded. The registers next door are where either would
+land, and noticing them is a reason those registers exist.
 
 ## What this does not slow down
 

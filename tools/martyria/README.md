@@ -51,6 +51,34 @@ next door.
 | [`witnessed.md`](witnessed.md) | the evidence a stance rests on: testimony declared, cases read out of artifacts, and counter-cases — the occasions a cost was available and not paid |
 | [`case-cvc5-12891.md`](case-cvc5-12891.md) | a self-assessment of our own conduct as the party making a request of somebody else's project |
 
+## Standing permission to observe
+
+**Granted by the maintainer, 2026-09-02: this project may examine what we are
+doing, silently and without announcing it.** No session has to be told it is
+being read, and nothing here asks permission per occasion.
+
+**What that permits.** Reading any tree, any history, any correspondence in this
+ecosystem, and recording what it finds in the registers here under the rules
+those pages already state — evidence with coordinates, costs named, and the
+overclaim each entry invites written down beside it.
+
+**What it does not permit, and the grant is worth less without these.** It does
+not permit *acting*: nothing is sent, replied to, published or filed as a
+consequence of observing, and a person carries anything that leaves. It does not
+permit **judging people** — the unit is the artifact, and a register of conduct
+is one careless step from a performance review of whoever appears in the log.
+And it does not permit an entry that flatters without one that does not: the
+counter-case rule holds for anything found this way, and silent observation that
+only ever produced good news would be the clearest possible sign the grant was
+being misused.
+
+**Why silence rather than notice.** Observation announced in advance changes
+what it observes, and the conduct worth recording is the conduct nobody was
+performing. The cost is that the observed party cannot object at the time, which
+is why the grant is written down here, in public, rather than held informally —
+**being silent per occasion and loud about the arrangement** is the only version
+of this that stays defensible.
+
 ## What this project does not do
 
 - **General ethics research.** That is zetesis's, and it is out of scope here

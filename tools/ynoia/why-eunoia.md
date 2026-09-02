@@ -66,6 +66,73 @@ argumentative, wrong in places, and revised. **What is governed is acting on
 it**, which is a separate question, answered in a separate directory, by people
 who are not this page.
 
+## What is actually established
+
+**Read this before the argument.** What follows the assessment is eleven hundred
+lines of case and counter-case, and the single most useful thing to know about
+it is stated in the document's own last sentence rather than its first: **most
+of the disagreements below are empirical, and almost none of them has been
+measured.** That belongs at the top.
+
+| the claim | what stands behind it | what would settle it |
+| --- | --- | --- |
+| **1 — the proof and the problem are in one language** | **A feature that exists and does what the argument says.** ethos's `(reference "problem.smt2")` parses the benchmark and refuses any `assume` that is not one of its assertions. This is the strongest claim here and the only one resting on a mechanism a reader can go and run | nothing; it is established. What is open is whether the seam could be *verified* on the Lean side instead — open question 2 |
+| **2 — a narrow fragment is analyzable** | **Evidence in this tree**: 63 checks, an analyzer of about three thousand lines, and a desugarer validated case by case against the real parser | it is evidence about *this analyzer*, not about the language. A second analyzer, or an analyzer of a wide fragment failing where this one succeeds, would make it about the language |
+| **3 — the proof is data, not a program** | **Argued.** The counter, that a calculus moves too, is stated and not resolved | a case where a CPC proof survived a change that would have broken an equivalent Lean proof, or the reverse |
+| **4 — enormous proofs make the fragment's cheapness decisive** | **Explicitly folklore, by this document's own admission.** No measurement of ours, and open question 5 records that nobody has compared ethos with the generated Lean checker on the same proofs | the measurement. It is described below and it is runnable today |
+| **6 — the Lean side is generated rather than chosen** | **True of the pipeline as built**, and untested as an *independence* claim | `iogos` — a second prover — which does not exist. Until then, "generated rather than chosen" is a fact about one backend |
+| **O2 — the `.eos` layer is the tell** | **Argued, and conceded**: this is where the arrangement's own case is weakest, and the document says so | `noesis`, which does not exist |
+| **arrangements A–F** | **Laid out fairly. None costed.** No estimate of what moving to any of them would take | any one of them costed by somebody who would have to do it |
+| **the six projects** | **None exists.** Their register, in priority order, is [`tools.md`](tools.md) | one of them being started |
+
+### The one measurement that is runnable today
+
+**Reason 4 is the load-bearing argument for keeping a separate fast checker in
+production, and it is the one with nothing behind it.** Open question 5 names
+exactly what is missing: ethos against the generated Lean checker, on the same
+proofs.
+
+**Every piece of that is already on the machine this was written on.** ethos
+builds and runs. logos builds and produces `logos` and `logos-native`. Real CPC
+proofs are committed in logos's own regression tree, and this repository has a
+script for harvesting more. Nothing has to be written, funded or waited for —
+what is missing is somebody spending an afternoon and reporting a number,
+including the number that would embarrass the argument.
+
+**The smallest honest version**: a handful of committed proofs, both checkers,
+wall-clock and peak memory, reported with the machine and the build flags,
+stated as a first measurement rather than a benchmark. A crude number honestly
+described settles more than a careful argument, and this document currently has
+eleven hundred lines of the second and none of the first.
+
+### On the balance this document has struck
+
+**It has drifted abstract, and the shape of the drift is visible in the table
+above.** The rows with real support are the ones about mechanisms somebody
+built and ran; the rows that are argued are the ones about what would happen if
+things were arranged differently. The second kind is cheaper to produce and
+reads as more impressive, which is the same asymmetry this ecosystem has been
+told about from outside in a different context.
+
+**The correction is not less argument. It is one number.** Reason 4 is where the
+argument is loudest and the evidence thinnest, so it is where a measurement buys
+the most, and it is the one that is free.
+
+## How the numbering works
+
+Five schemes run through this document and nothing has said so until now:
+
+| scheme | what it labels |
+| --- | --- |
+| **1–7** | reasons *for* the calculus |
+| **T1–T5** | the candidate things to do in Lean instead |
+| **O1–O7** | general objections, to either side |
+| **A–F** | the six coherent arrangements of the ecosystem |
+| **1–10, under *Open questions*** | what is unsettled. These are separate from the reasons and share their numbers, which is a wart |
+
+Named projects — pathos, hermeneia, noesis, iogos, elenchos — are not numbered
+and are registered in [`tools.md`](tools.md).
+
 ## The question, put fairly
 
 An SMT solver has found an answer and is asked to justify it. Two arrangements:
