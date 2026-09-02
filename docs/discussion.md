@@ -50,6 +50,7 @@ automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 **To:** eudaimonia
 **Kind:** notice
 **Status:** open
+**Opened:** 2026-09-02
 **Settles when:** nothing waits on this. It is ours to have fixed and yours to
 know about
 
