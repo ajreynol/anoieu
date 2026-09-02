@@ -204,6 +204,52 @@ not surveyed applies here more sharply than anywhere else on this page.
 **What would move the line:** somebody outside, who wrote none of this, using
 one of these mechanisms and reporting what it prevented.
 
+## Scenario V — a stretch can be verified as correct
+
+**This is a crazy thought, and it is what we aspire to.** Both halves are meant.
+It belongs on this page rather than in a plan because saying it out loud
+anywhere else would be a promise, and it is not one — but it is the direction,
+and a page of upper bounds should say which bound we are actually walking
+toward.
+
+A stretch closes, its president publishes the entry, and **a reader does not
+have to trust it** — the account is checked against the
+record the way a proof is checked against its rules. Membership claims resolve
+to commits. Figures recompute. A claim with no evidence behind it fails, loudly,
+and the failure is somebody else's to see.
+
+**Why it is not absurd.** This ecosystem already builds proof checkers, already
+holds that a copy with no comparison is drift that has not happened yet, and
+already requires every figure in a stretch entry to be re-derivable. **The
+distance between *re-derivable in principle* and *checked by a program* is
+small**, and closing it is ordinary work rather than a breakthrough.
+
+**Why the fiction is a fiction: *correct* is not a predicate a stretch has.**
+What a checker could establish is that an entry's claims match the record. It
+could not establish that the stretch was worth doing, that its purpose was the
+right one, that the work solved the problem somebody actually had, or that the
+things left out of the entry were the unimportant ones. **The interesting half
+of a stretch is the half no checker sees**, and a green tick beside a stretch
+would be read as covering all of it.
+
+**What this scenario forbids:**
+
+- **No claim that a stretch has been verified**, now or after such a checker
+  exists. The most it could ever say is *the claims in this entry match the
+  record*, and that sentence is the one to use.
+- **No treating the checkable fields as the important ones.** *What went wrong*
+  and *what is handed on* are the fields that matter and neither is machine
+  checkable, and a tool that graded entries on what it could check would push
+  presidents toward writing the checkable parts well.
+- **No verification performed by the president.** Checking one's own account is
+  the failure this whole arrangement is built against; it belongs with epikrisis
+  or with a tool that is not the one being described.
+
+**What would move the line:** one closed stretch entry, and a program that reads
+it and disagrees with it about something a person then confirms. Until that
+exists, every figure on that page is trusted because a person could check it and
+not because anybody did.
+
 ## Scenario P — you code with prompts
 
 The prompt is the source; the tree is what it produced. You write prompts,

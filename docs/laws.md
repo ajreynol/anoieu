@@ -80,6 +80,37 @@ ecosystem could produce.
 **10. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
+## The template a closing president fills in
+
+**A stretch is closed by its own president, in this template, before the file
+travels.** After that the office has moved and the entry cannot be touched, so
+**closing the entry is the last act of a presidency, not the first act of the
+next one.**
+
+**The standard it is written to: explain the stretch as clearly as possible to
+somebody who was not there.** Not to record everything, and not to justify
+anything. A closed entry that a stranger cannot follow has failed whatever else
+it contains.
+
+**Seven fields, in this order, all of them present.** *Nothing to report* is an
+answer and is written; an omitted field is not.
+
+| field | what it holds |
+| --- | --- |
+| **Purpose** | what the stretch was for, in a sentence. The heading is its three-word form |
+| **Span** | how long it lasted in real human time, first date to last |
+| **Membership** | what changed and when, in the order it happened |
+| **What is now true** | what the stretch established that was not true before it. The part somebody can build on |
+| **What went wrong** | plainly, with what it cost. **A stretch with nothing in this field was not examined** |
+| **What is handed on** | unfinished work the next president inherits, and anything it must not assume |
+| **Evidence** | where the figures came from, and how a reader re-derives them |
+
+**Concise is a requirement and not a preference.** A president writing at
+length about its own stretch is producing a defence, and the seven fields exist
+partly to make that hard. **If a field needs more than a short paragraph, the
+thing it describes belongs in a document of its own and this entry links to
+it.**
+
 ## Amending these laws
 
 **By the maintainer, and by nobody else, until a tool holds this page.** A

@@ -243,6 +243,42 @@ and already depend on the thing; nothing else here has a user at all. That it is
 parked is a fact about *when*, decided by a person, and not a fact about how
 promising it is.
 
+## nomophylax — the laws, out of the hands of the party they bind
+
+**What:** the tool that maintains `docs/laws.md` — the rules under which a
+president writes the ecosystem's history — and checks that a closed stretch
+entry was written the way the laws say. **Not a lawgiver:** amendments stay a
+person's, and this holds the page, watches compliance, and proposes.
+**State:** `named` — suggested 2026-09-02, the day the laws were first written
+down. Not audited; there is no proposal for it yet.
+**Settles:** nothing in [`why-eunoia.md`](why-eunoia.md). What it settles is a
+defect `laws.md` states about itself in its first paragraph: **the president
+writes the record and also the rules the record is kept under.** That is the
+whole of the case for it, and the page makes the case better than this entry
+does.
+**Costs:** little today, because nothing depends on `laws.md` yet. **The cost is
+in waiting** — the longer one party holds both, the more of the record was
+produced under rules its own author could have shaped.
+**Before it:** a second president. With one, the separation is theatre: there is
+nobody yet whose stretch was judged by rules somebody else wrote. `kanon`
+taking Stretch 1 is what makes this real rather than tidy.
+**Today:** `docs/laws.md`, held by anoieu, which is the president it binds. It
+says so on the page rather than hiding it.
+**Why here:** **third, behind `tekton` and `kanon`, and ahead of everything
+else.** It is not urgent — one stretch, one president, and the maintainer
+reviews every commit, which is real oversight even if it is not independence.
+It is placed above the research tools because **the defect it fixes gets worse
+with every stretch that closes**, and the entries written before it exists
+cannot be revisited later.
+
+*On the name: νομοφύλαξ, guardian of the laws — an office that held the statutes
+and checked that magistrates acted within them. It completes a family this
+ecosystem already has by accident: `dokimasia` is the scrutiny **before** office
+and `euthyna` the audit **after** it; this is the one that watches **during**.
+`thesmos` — θεσμός, that which is laid down — was the alternative and is the
+better name if the thing turns out to be a register of rules rather than an
+office that guards them.*
+
 ## elenchos — differential fuzzing as a derived artifact
 
 **What:** a research-quality fuzzer for the ecosystem's checkers — coverage
