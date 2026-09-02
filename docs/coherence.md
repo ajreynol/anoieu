@@ -155,6 +155,28 @@ and its schedule lives.
 where humour stops.** Law 12 in [`laws.md`](laws.md) puts it there; this
 protocol keeps it there.
 
+### Why the vision now says to enjoy this
+
+**[`vision.md`](vision.md) closes on one line: *Have fun and enjoy the Eunoia
+ecosystem!*** The line is there and the argument for it is here, because that
+page takes single sentences and not paragraphs.
+
+**It is put there by this protocol rather than by sentiment.** The ecosystem
+requires every president to keep a joke about its own name on its front page for
+its whole term, and gives any tool a veto over it. **Those two rules only make
+sense if enjoying this is a goal**, and a goal that governs rules belongs in the
+vision rather than in the rules.
+
+**The practical reading.** Work that is no fun is work somebody does briefly and
+then stops doing carefully. Documents that stay current, checks that stay
+strict, records that stay honest — all of it depends on choosing to keep going
+after the interesting part is over. **A project nobody enjoys does not fail
+loudly; it stops being maintained**, and every other tenet fails quietly with
+it.
+
+**It is not permission to be unserious about anything that matters** — see the
+boundary below. **Have fun where it costs nothing, and nowhere else.**
+
 ### Any tool may say "that's not funny", and that ends it
 
 **The objection is not a review and is never about taste.** *That's not funny*
@@ -606,6 +628,22 @@ revise it is the agent it governs. This includes
 it unchanged: a paragraph there is a judgement about somebody else's project,
 and softening or sharpening one is exactly the edit that should not be made
 quietly.
+
+**And a change to the vision is at most five lines of diff.** Not five
+paragraphs, not five sentences — **five lines as `git diff --numstat` counts
+them**, added and removed together. There is no exemption for a good addition.
+
+**The size limit does the work the ask-first rule cannot.** *Ask first* is
+honoured by proposing something, and a person reviewing a page they have already
+agreed with will approve a well-argued twenty lines. **A bound that is checked
+by counting cannot be argued with**, and it forces the same discipline on every
+edit: if a change needs more than five lines, it is not a vision change — it is
+a document that belongs somewhere else with one sentence pointing at it from
+here.
+
+**That is exactly what happened to the line about enjoying this.** The sentence
+is in the vision; the argument for it is in `PROTO-25` on this page, where there
+was room to make it. **The vision holds claims, not their justifications.**
 
 **Nothing may ever check the vision mechanically.** No CI job, no script, no
 generated verdict against a tenet. Whether a tool is fruitful or a claim

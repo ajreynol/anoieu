@@ -1,8 +1,34 @@
-# The laws
+# The candidate laws
+
+**Candidate laws, not laws.** Everything on this page is written down, followed
+voluntarily, and **enforced by nothing.** No check reads it, no build fails on
+it, and no tool has been given the job of holding anybody to it.
 
 **The rules for updating [`history.md`](history.md), and nothing else.**
 **The government they describe is proposed rather than established** — see
-below, where that is said properly. A
+below, where that is said properly.
+
+## Why they are candidates, and what would make them real
+
+**Because they were written by the party they bind, in the term they govern.**
+anoieu is the president, wrote these, and is the only entity they have ever
+applied to. **A rule with one subject who is also its author is a habit with
+formatting**, and calling it a law now would be the first thing it got wrong.
+
+**Two things would change that, and neither has happened.**
+
+1. **A second president.** The first time these are applied to a stretch whose
+   president did not write them, they are doing the work of laws. Until then
+   there is no evidence they constrain anything.
+2. **A holder that is not the president.** `nomophylax` is the candidate for
+   that, and does not exist. **A law nobody but the bound party keeps is kept
+   exactly as long as the bound party finds it convenient.**
+
+**Until both, they are followed here and cannot be relied on elsewhere.** A
+member reading this page should treat it as a description of how anoieu intends
+to behave, not as a rule it can hold anybody to. **Nothing in it has been
+offered to anybody as a commitment**, and promoting a candidate law to a law is
+a person's act, on the record, not a quiet change of wording. A
 narrow document on purpose: it governs one file, and a law about anything else
 does not belong here.
 
