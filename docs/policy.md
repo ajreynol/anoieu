@@ -1779,6 +1779,19 @@ this prompt, which is the canonical copy — the script holds a duplicate and
 `tests/run.py` fails when the two drift apart.
 
 ```text
+**First, one question, and stop if the answer is no.** Is this repository solely
+the runner's to speak for? Joining writes a declaration onto its README, in the
+repository's own voice, on its front page. If the tree is shared -- an
+organisation, a community, other maintainers with a say -- **that declaration is
+not the runner's alone to make, and commit access does not make it so.** In that
+case: change nothing, say which repository this looks like and who else would
+have to agree, and suggest **`join_eo --soft`**, which writes a maintenance note
+naming **no other project at all** — no membership, no workflow, no policy link,
+and not our name either. `--affiliated` names this ecosystem, and on a tree
+somebody else owns that is a second thing to get agreement for rather than a
+softer version of the first. Saying *this is not mine to declare* is a correct
+outcome of this command.
+
 This repository is joining the Eunoia ecosystem. One page says how, and it is
 the authority:
 

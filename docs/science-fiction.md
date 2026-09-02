@@ -310,7 +310,8 @@ cannot be bought* is a promise, and we would not accept it from ourselves.
 
 **It is unverifiable by construction.** We cannot check the score, the weights,
 or the claim about the weights. We can read a methodology page that may be
-rewritten tomorrow with no commit anywhere near us.
+rewritten with no commit anywhere near us — though see the correction below:
+it is versioned, and that premise was wrong as stated.
 
 **It is an unpinned dependency, on our front page.** Pinning is this ecosystem's
 answer to exactly this problem: a member pins a commit of the policy checker so
@@ -338,7 +339,10 @@ it is the mechanism to watch rather than the intent to guess at.
 summary of what this ecosystem spends its time on, and somebody is now scoring
 it across every public repository on an axis we did not write, with weights we
 do not set, that can be changed without telling us. Publishing a number against
-the thing our vision is about creates a gradient toward it. **A vision does not
+the thing our vision is about creates a gradient toward it — **weaker than
+stated, and corrected below: through the composite there is no gradient at
+all.** What survives is that the sub-score is published per repository, and a
+visible axis pulls even at zero weight. **A vision does not
 get abandoned; it gets replaced by a metric that correlates with it, and the
 replacement feels like progress the whole way.**
 
@@ -428,10 +432,13 @@ index is untrusted.**
 
 1. **Reproducible.** We can read what it measures and arrive at the same score
    ourselves. A published methodology is a description; a reproduction is
-   evidence.
-2. **Versioned, and pinnable.** A claim about us is a claim *at a version*, and
-   we can name which. An index that can be silently rewritten cannot be relied
-   on by anybody, including its author.
+   evidence. **A reproduced error already exists** — see the correction below.
+2. **Pinnable, which is not the same as versioned.** *Corrected 2026-09-02:* the
+   methodology **is** versioned, as a whole, and a change to a formula, weight,
+   threshold or the calibration curve bumps that version. What remains true is
+   narrower and is the part the guard rail rested on: **a version you cannot pin
+   from your own README is not a pin**, and a badge renders the current score
+   rather than a versioned one.
 3. **No gradient we would follow.** Nothing we would change *in order to score
    better* rather than because it was right. If such a change exists, the index
    is steering us and the question of its intent does not arise.
@@ -519,6 +526,49 @@ before trusting the index, and stop there. Their tree, their call.
   this the same way we did* — and that is a question a person asks, in their own
   words, through a channel that exists. It is not a reply to a pull request, and
   nothing here initiates it.
+
+### Corrections from outside, accepted
+
+**Two premises above were wrong, and a neighbouring tool established it.**
+Recorded here rather than silently edited, because a page that quietly absorbs
+its corrections teaches nobody anything.
+
+**It is versioned.** The methodology is versioned as a whole — v2.10.0 when read
+on 2026-09-02 — and any change to a formula, weight, band threshold or the
+calibration curve bumps it. We had written that it *may be rewritten tomorrow
+with no commit anywhere near us*. **The guard rail survives and the premise does
+not:** a version you cannot pin from your own README is still not a pin, and the
+badge renders the current score rather than a versioned one, but *it can change
+without any record* is a weaker and different claim.
+
+**The 4% cannot cost anybody a perfect score.** That weight is sized with the
+calibration curve so that a repository with no agent tooling still reaches
+100/100 — so through the composite there is **no gradient at all**, and our
+sharpest paragraph was sharper than the facts. What survives is smaller and
+worth keeping: the sub-score is published per repository regardless, and a
+visible axis pulls even at zero weight. cvc5's is 48/100 — Agent Context 40,
+Verify Loop 32, Code Legibility 54 — a rendering of the thing our vision is
+about, published about a project that never asked.
+
+**And two things make the reading stronger than we had it.** Missing data is
+renormalised away, so a gap in the record never costs anything and can raise a
+score — absence of record treated as absence of fact. And the index is
+calibrated against the distribution of the public record, which makes it **a
+rank**: our number moves when other repositories move. That is a stronger form
+of the unpinned-dependency argument than we made — the dependency is not only on
+their judgement but on everybody else's activity.
+
+**One error, reproduced.** Reported by a cvc5 developer and verified
+independently on 2026-09-02: the index scores cvc5's release recency 0/36 on
+"1,603 days", reading a rolling nightly prerelease slot whose publication date
+is frozen in 2022. The real latest stable release was 118 days old — a
+**13.6-fold** overstatement of staleness. The deeper point is not the misread
+field: the same report records Development Activity 99/100 beside release
+recency 0/36, **reconciles neither, and absorbs the contradiction into a
+composite**. A weighted average is very good at making a contradiction
+disappear. And there is nowhere to send it — a score that cannot be re-derived
+cannot be contested, which is a structural property rather than a complaint
+about anybody's manners.
 
 ### The testimony this analysis rests on
 

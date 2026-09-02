@@ -12,6 +12,23 @@
 #   join_eo --show-prompt   # print the prompt and exit
 #   join_eo --print         # run non-interactively and print the result
 #
+# **Whose repository is it?** Joining writes a declaration onto a README, which
+# is a claim made on that project's front page in its own voice. Where the
+# repository has one owner and you are them, that is yours to make. **Where it
+# is shared -- an organisation, a community, other maintainers -- it is not**,
+# however much commit access you have. Commit access is capability; a front page
+# is somebody's public voice, and the two are not the same thing.
+#
+# So for a shared tree, the sequence is agreement first and this command second,
+# and plain `--soft` is what to reach for meanwhile: a maintenance note that
+# names no other project at all -- no membership, no workflow, no policy link,
+# and not our name either. `--affiliated` puts *our* name on somebody else's
+# front page, which on a tree we do not own is a second thing to ask for rather
+# than a gentler version of the first. logos reached exactly this conclusion from the other side, reversing a
+# membership commit it had already pushed, on the ground that a declaration it
+# could not write without naming somebody else's repositories was a declaration
+# it should not write at all.
+#
 # --soft is a different act rather than a smaller one. It adds the maintenance
 # note and stops: no membership is declared, no workflow is added and no checker
 # is run, the default claim is that people maintain the repository, and the note
@@ -74,6 +91,19 @@ while [ $# -gt 0 ]; do
 done
 
 read -r -d '' PROMPT <<'PROMPT_END' || true
+**First, one question, and stop if the answer is no.** Is this repository solely
+the runner's to speak for? Joining writes a declaration onto its README, in the
+repository's own voice, on its front page. If the tree is shared -- an
+organisation, a community, other maintainers with a say -- **that declaration is
+not the runner's alone to make, and commit access does not make it so.** In that
+case: change nothing, say which repository this looks like and who else would
+have to agree, and suggest **`join_eo --soft`**, which writes a maintenance note
+naming **no other project at all** — no membership, no workflow, no policy link,
+and not our name either. `--affiliated` names this ecosystem, and on a tree
+somebody else owns that is a second thing to get agreement for rather than a
+softer version of the first. Saying *this is not mine to declare* is a correct
+outcome of this command.
+
 This repository is joining the Eunoia ecosystem. One page says how, and it is
 the authority:
 
