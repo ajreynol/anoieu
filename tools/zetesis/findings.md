@@ -97,7 +97,7 @@ not. That is the strongest available answer and it is still not proof.
 
 ## F3 — the register of cases has no counter-cases in it
 
-**What:** [`witnessed.md`](witnessed.md) keeps a register of occasions when this
+**What:** [`../martyria/witnessed.md`](../martyria/witnessed.md) keeps a register of occasions when this
 ecosystem or a tool in it acted well at a cost. **Every entry in it is
 flattering, and there is no entry recording the opposite.**
 

@@ -425,8 +425,9 @@ history does not choose to speak, and testimony implies a witness who did. That
 sharpens the word instead of sinking it. A martyria is **evidence given**, not
 judgement passed — which is the modesty this whole line of work needs — and it
 covers both a party's declaration and a record, with the record the stronger
-form *precisely because* it did not choose. The register is kept in the child
-project that holds this material, and its first entry is the testimony below.
+form *precisely because* it did not choose. The word has since been given to the
+child project that keeps this material as well as to one entry in its register,
+which is a part-and-whole relationship rather than a second use.
 
 ### Our stance on the pull request
 
@@ -491,8 +492,9 @@ between testimony and a defence. And for this particular fact there is no
 stronger form available: no commit records the absence of a relationship, so the
 choice was never testimony against evidence, only testimony against silence.
 
-It is kept as `M1` in the register the child project holds, under the rules that
-page states, rather than asserted here where it could quietly lapse.
+It is kept as `M1` in the register the actionable child project holds, under the
+rules that page states, rather than asserted here where it could quietly lapse.
+The stance it supports is `S1` in the same project.
 
 ### What is owed, and by whom
 

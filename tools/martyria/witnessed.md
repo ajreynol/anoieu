@@ -193,7 +193,7 @@ caused it**, because nothing here separates the arrangement from the people.
 
 **And a register with no counter-cases is evidence of selection, not of
 conduct.** There are none below. That is a gap, it is recorded as one in
-[`findings.md`](findings.md), and until it is filled this section should be read
+[`../zetesis/findings.md`](../zetesis/findings.md), and until it is filled this section should be read
 as what it is — the flattering half of a record, kept by the party it flatters.
 
 **This register is a hand-labelled corpus, and that is its main use.** A
@@ -217,7 +217,7 @@ principle and one that was lazy, blocked, absent or incompetent produce
 identical negative space. Separating them needs the **stated reason** to exist,
 be dated, and predate the outcome — which is exactly what a history of outputs
 without inputs does not have. That is not a hypothetical: it is
-[`findings.md`](findings.md) `F1`, and it is the reason `C2` below is
+[`../zetesis/findings.md`](../zetesis/findings.md) `F1`, and it is the reason `C2` below is
 undetectable from the trees alone.
 
 **A second failure mode is this page.** Cases that flatter get written down at

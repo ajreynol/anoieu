@@ -46,7 +46,8 @@ about an hour.
 | **sapheneia** | σαφήνεια, clarity of an account: Eunoia as a language definition. A child project, in anoieu |
 | **ynoia** | *why Eunoia*: whether the arrangement earns its machinery. A child project, in anoieu |
 | **euthyna** | εὔθυνα, the audit at end of term: what logos's proof is made of. **Started**, in eudaimonia |
-| **martyria** | μαρτυρία, testimony — the evidence a witness gives: the ecosystem's ethics research engine, and the name of one entry in its register. **Started**, in anoieu |
+| **martyria** | μαρτυρία, testimony — the evidence a witness gives: the **actionable** ethics project. One situation at a time, the evidence it rests on, and a stance somebody can act on. Also the name of one entry in its register. **Started**, in anoieu |
+| **zetesis** | ζήτησις, inquiry — the seeking, as against the having-found: the **general** half. What standard this ecosystem is held to, taken from work done outside, and whether our record could show we met it. It has no standard yet, which is why the name is the one it is. **Started**, in anoieu |
 | **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Its own repository**, and a member; audited as [`P1`](proposals.md) |
 | **workflow-launcher** | descriptive rather than Greek, and the register's own exception applies: it is a program and not an account. The first hour of a new tool's life, and a register of what this ecosystem's practice turns out to be doing. A child project, in eudaimonia |
 
@@ -80,6 +81,8 @@ using it, and a name was taken on the strength of that.
 | name | where | why it is not in the tables above |
 | --- | --- | --- |
 | **apodeixis** | a child project in eudaimonia — the build framework driven at a calculus nobody designed it around | its authors deliberately did not claim it here, on the ground that adding a line to somebody else's register is a person's edit to make. That restraint is the reason it looked free |
+
+| **bouleusis** | βούλευσις, deliberation about particulars — considered for the actionable half and not used, since `martyria` covers it. Free, and the argument for it is in this repository's history |
 
 **So the register is not the whole answer to *is this name free*.** It records
 what has been claimed, and a name can be in use without being claimed. Look in

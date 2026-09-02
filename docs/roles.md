@@ -228,12 +228,13 @@ number worth looking at, in both directions.
 | `sapheneia` | child of `anoieu` | 1 |
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
+| `zetesis` | child of `anoieu` | 0 |
 
-Twenty-seven roles across thirteen tools, and two sections empty:
-`workflow-launcher` and `martyria` hold nothing, which is not an omission — a
+Twenty-seven roles across fourteen tools, and three sections empty: `workflow-
+launcher`, `martyria` and `zetesis` hold nothing, which is not an omission — a
 child project has no users, nothing depends on it, and it owes nobody an
-artifact. The rows worth reading are the longest and the empty one, and both are
-the page working rather than the page being wrong.
+artifact. The rows worth reading are the longest and the empty one, and both
+are the page working rather than the page being wrong.
 
 ---
 
@@ -660,3 +661,5 @@ stated standard, with `no` as the commonest verdict.
 on publishing settles that for itself and outranks the register, which records
 the disagreement rather than resolving it. Nor is it the findings ledger: that is
 `R1`, it is about somebody else's code, and this is about our own.
+
+## zetesis

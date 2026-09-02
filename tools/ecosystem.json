@@ -144,7 +144,13 @@
     "status": "child",
     "parent": "anoieu",
     "path": "tools/martyria",
-    "what": "the ecosystem's ethics research engine: what of our conduct can be shown to somebody with no reason to believe us"
+    "what": "specific ethical concerns, with a stance attached: what we do about one situation, and what can be shown about how we behaved in it"
+  },
+  "zetesis": {
+    "status": "child",
+    "parent": "anoieu",
+    "path": "tools/zetesis",
+    "what": "the general inquiry: what standard this ecosystem is held to, taken from outside, and whether our record could show we met it"
   },
   "workflow-launcher": {
     "status": "child",
