@@ -22,11 +22,11 @@ they ship — and this page has no way of noticing. So the age is stated, and
 
 | entry | last graded |
 | --- | --- |
-| `cvc5` | unknown |
-| `ethos` | unknown |
-| `ethos-eoc` | unknown |
-| `logos` | unknown |
-| `eudaimonia` | unknown |
+| `cvc5` | 2026-09-02 — re-checked, claim confirmed |
+| `ethos` | 2026-09-02 — re-checked, claim confirmed |
+| `ethos-eoc` | 2026-09-02 — **could not be re-established**, see the entry |
+| `logos` | 2026-09-02 — re-checked, one clause overtaken |
+| `eudaimonia` | 2026-09-02 |
 | `anoieu` | 2026-09-02 |
 | `koine` | 2026-09-02 |
 | `dokimasia` | unknown |
@@ -105,8 +105,12 @@ drift check against logos's copy is planned rather than running, and `cvc5-1` �
 two programs in `programs/Strings.eo` declaring `Int` where every case returns a
 Boolean — was recorded on our side as fixed upstream and never was.
 
-**Parainesis.** An observation rather than advice: that defect survived every
-review the signature has had, and the thing that would have caught it is a gate
+**Parainesis.** *Re-checked 2026-09-02 at the recorded commit: the two
+declarations are still there, in `programs/Strings.eo`, so `cvc5-1` stands. The
+drift check this entry calls planned is now a specific open pull request rather
+than an intention — `cvc5#12891` — which changes its status and not its
+absence.* An observation rather than advice: that defect survived every review
+the signature has had, and the thing that would have caught it is a gate
 rather than a reader. Tenets 3 and 5 do not apply here at all — and neither does
 membership. cvc5 sits outside the ecosystem, which exists to serve it; it is
 graded here because the tenets were largely learned by watching it, not because
@@ -130,7 +134,10 @@ exception on `(declare-const f (->))` and an error path that skips ethos's own
 
 **Parainesis.** An observation: those two are unfiled, which is our shortfall
 rather than theirs, and until they are filed this paragraph is worth less than
-it looks.
+it looks. *Re-checked 2026-09-02: still unfiled, and by a wider margin — the
+reproducers have been committed for weeks and this repository's own board has
+carried them as ready throughout. A shortfall that survives being written down
+twice is no longer an oversight.*
 
 ## ethos-eoc
 
@@ -146,11 +153,19 @@ compiling the set. The failure modes are all late: a symbol with no semantics is
 fatal at stage 6; a forward-declared program that is never defined arrives in
 SMT-LIB as a free uninterpreted function and in Lean as a name nobody wrote.
 
-**Parainesis.** Build the block-level well-formedness check. Every failure named
-above is decidable from the two input files, which makes that loop long by
-omission rather than by necessity — and a compiler is the worst place in an
-ecosystem to keep the slowest feedback, because everything downstream inherits
-the wait. It is the highest-value unbuilt thing on this page.
+**Parainesis.** *Re-checked 2026-09-02, and the elleipsis above could **not**
+be re-established. Two large changes have since merged into that tree —
+`ethos#235`, +6,807/−3,040, titled "Major updates to the agility of the eoc
+compiler", and `ethos#236`, "Finalize eoc compiler". A change whose stated
+subject is the agility of the loop this paragraph grades down is exactly what
+would overturn it, and settling that needs somebody reading the compiler
+rather than its pull request titles. **Treat this entry as the least reliable
+on the page** until somebody has.* Build the block-level well-formedness
+check. Every failure named above is decidable from the two input files, which
+makes that loop long by omission rather than by necessity — and a compiler is
+the worst place in an ecosystem to keep the slowest feedback, because
+everything downstream inherits the wait. It is the highest-value unbuilt thing
+on this page.
 
 ## logos
 
@@ -167,9 +182,14 @@ when it never was.
 `Cpc.eo` rather than something logos wrote, and whether it has drifted is a
 check that is planned rather than running.
 
-**Parainesis.** An observation: a repository carrying somebody else's ground
-truth by copy is not self-contained in the sense the tenet means, and the
-ordinary remedy is a manifest and a lock. Separately, it is already the natural
+**Parainesis.** *Re-checked 2026-09-02, and two things have moved. logos now
+lives in the cvc5 organisation, given there for free, so "somebody else's ground
+truth" is a shorter distance than it was. And the remedy named below now exists
+as a specific open pull request, `cvc5#12891`, which pins a logos commit and
+fails cvc5's build when the calculus and the pinned checker disagree.* An
+observation: a repository carrying somebody else's ground truth by copy is not
+self-contained in the sense the tenet means, and the ordinary remedy is a
+manifest and a lock. Separately, it is already the natural
 home for the triple check, since it vendors ethos and consumes cvc5's signature
 — that is `logos-3`, and it is open.
 
@@ -188,6 +208,35 @@ modularizing — rather than an artifact.
 **Elleipsis.** Tenet 3. Its `TODO.md` is more current than its README's status
 paragraph, so the front page is not the entry point; and its signature contract
 is specified in prose, which this repository misread once and had to correct.
+
+**Parainesis.** *Re-graded 2026-09-02, at a recorded version that now includes
+the work below.* **Two child projects in this tree have delivered to us, and
+that is tenet 4 met a second time, outward.** One keeps a register of what this
+ecosystem's practice appears to be doing and what is wrong with it; we acted on
+it by building a counter for our own governance growth. The other read our
+published analysis of an outside approach and returned **two corrected premises
+with sources, one reproduced error in a third party's data, and two arguments
+that made our reading stronger than we had it** — and we accepted all four,
+changing the page rather than defending it.
+
+What makes that worth recording rather than thanking: it arrived with its
+provenance attached and it argued *against* our stated position. **A tool that
+improves an argument aimed away from itself is doing something a flatterer
+cannot.** It also volunteered the case against its own adoption — that two
+readings help only when they are independent and their disagreement is visible,
+and that two numbers trusted alike are worse than one — which is the strongest
+single reason to take it seriously.
+
+**The discount, which is ours to state and not theirs.** Same maintainer, same
+family, one run behind it; on this page's own test, "outside" is doing less work
+than it looks. **We have verified its findings and not its method** — every
+correction was checked here before it was accepted — and that is the right basis
+for taking it seriously so far, which is not the same as relying on it.
+
+*One clause below could not be re-established: whether the README's status
+section is still less current than `TODO.md`. The section exists at the recorded
+commit and the front page now points at a script for progress, which is neither
+the fix this asks for nor the failure it names.*
 
 **Parainesis.** Generate the README's status paragraph from `TODO.md` or delete
 it. A front page less current than a file sitting beside it is exactly the

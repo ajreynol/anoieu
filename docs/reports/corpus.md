@@ -13,10 +13,10 @@ own, so these are what they are relative to.
 
 | project | ref | commit | dated | what is read |
 | --- | --- | --- | --- | --- |
-| **cvc5** | `main` | `aee874240419` | 2026-08-29 | the CPC signature and the expert extension; the solver's own proof machinery is dokimasia's subject, not ours |
-| **ethos** | `ethosEoc3` | `7f4482b7f065` | 2026-08-31 | the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool |
-| **logos** | `main` | `6cb59db508dc` | 2026-08-31 | the installed signature and the CPC semantics logos owns |
-| **eudaimonia** | `main` | `a93fbec2f6d8` | 2026-08-31 | its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read |
+| **cvc5** | `main` | `5cf62594dd40` | 2026-09-01 | the CPC signature and the expert extension; the solver's own proof machinery is dokimasia's subject, not ours |
+| **ethos** | `ethosEoc3` | `fe74fe40e7f1` | 2026-09-01 | the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool |
+| **logos** | `main` | `7ff136bb6174` | 2026-09-01 | the installed signature and the CPC semantics logos owns |
+| **eudaimonia** | `main` | `07cd88534e98` | 2026-09-01 | its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read |
 
 Produced by anoieu `0.2.0`. Which commit of anoieu produced it is
 the commit this file is committed in, and is deliberately not written here:
