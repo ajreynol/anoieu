@@ -1827,8 +1827,17 @@ update.
 the same way. It is the whole of what the soft form does:
 
 ```text
+*Produced by `join_eo --soft`, a command kept in the anoieu repository. **That
+script is the authority for what this prompt asks**, and it can be read without
+running anything:*
+
+  https://github.com/ajreynol/anoieu/blob/main/scripts/prompts/join_eo
+
+*`join_eo --soft --show-prompt` prints exactly this text and does nothing else,
+so anybody handed this can check it against what the command actually says.*
+
 This repository is adopting one convention and joining nothing. One page defines
-it, and it is the authority:
+the convention, and it is the authority for what the note must say:
 
   https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#the-soft-form-the-note-without-the-membership
 
@@ -1860,8 +1869,18 @@ could not establish from the tree and left for a person to write.
 and in what it forbids:
 
 ```text
+*Produced by `join_eo --soft --affiliated`, a command kept in the anoieu
+repository. **That script is the authority for what this prompt asks**, and it
+can be read without running anything:*
+
+  https://github.com/ajreynol/anoieu/blob/main/scripts/prompts/join_eo
+
+*`join_eo --soft --affiliated --show-prompt` prints exactly this text and does
+nothing else, so anybody handed this can check it against what the command
+actually says.*
+
 This repository is adopting one convention and joining nothing. One page defines
-it, and it is the authority:
+the convention, and it is the authority for what the note must say:
 
   https://github.com/ajreynol/anoieu/blob/main/docs/policy.md#the-soft-form-the-note-without-the-membership
 
