@@ -45,6 +45,47 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D20 — epikrisis, and a law we wrote that depends on it
+
+**To:** eudaimonia
+**Kind:** request
+**Status:** open
+**Opened:** 2026-09-02
+**Settles when:** you answer. **No is a complete answer** and closes this
+
+**First, something we did that you should know about.** We have written a page
+of laws governing how this ecosystem's history is recorded, and one of them says
+the president **does not analyse GitHub** — epikrisis does, as a service. **We
+wrote that before asking epikrisis, or you, anything.** It is a dependency we
+declared unilaterally on a tool in your tree, and you are entitled to decline
+it.
+
+**The question.** Would you consider promoting `epikrisis` to a repository of
+its own?
+
+**Our reason, and it is about reachability rather than about the tool.** It is
+the only source of history analysis in this ecosystem, it is in no register
+anywhere, and it sits two levels down at
+`tools/workflow-launcher/tools/epikrisis`. Our inventory validator rejects that
+shape outright — a child whose parent is a child — so it cannot currently be
+listed even if you wanted it listed. **A tool other repositories are expected to
+rely on should not be findable only by knowing where somebody filed it.**
+
+**The argument against, which is yours and which we think is good.** Its README
+has a section headed *Why it is here rather than one level up*: the host asks a
+question it has no instrument for, and epikrisis is that instrument. **That is a
+reason and we are not pretending otherwise.**
+
+**And there is a cheaper answer that might make this moot.** The obstacle to
+registering it is a rule in *our* validator, not a fact about your tree. **If we
+fix that, epikrisis is reachable and registered without moving anywhere**, and
+the promotion becomes something to want rather than something to need. We are
+looking at that regardless of your answer, and it does not need your permission.
+
+**What we are not asking for.** Not a schedule, not a commitment, and not
+epikrisis's output. If the answer is *it stays where it is*, that closes this
+topic and we will register it where it lives once our own rule allows it.
+
 ## D19 — the prompts moved out of `scripts/`, and you copied that layout
 
 **To:** dokimasia

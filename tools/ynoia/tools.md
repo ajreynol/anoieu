@@ -243,6 +243,53 @@ and already depend on the thing; nothing else here has a user at all. That it is
 parked is a fact about *when*, decided by a person, and not a fact about how
 promising it is.
 
+## epikrisis — a repository of its own, and not ours to grant
+
+**What:** the tool that audits how these repositories have changed over time,
+with every claim resting on evidence a reader can re-derive, **promoted out of
+its parent into a repository of its own.** It is the ecosystem's only source of
+GitHub history analysis, and `docs/laws.md` already requires a president to
+quote it rather than count for itself.
+**State:** `proposed` — suggested by the maintainer, 2026-09-02. **Unlike every
+other entry on this page, the thing already exists and works.** What is proposed
+is a move, not a build.
+**Settles:** that the ecosystem's history analysis lives **two levels down
+inside another tool**, at `tools/workflow-launcher/tools/`, which our own
+inventory validator rejects as malformed — a child whose parent is a child.
+Nothing fails today only because it is not in the inventory. **A tool three
+repositories are expected to rely on should not be reachable only by knowing
+where somebody filed it.**
+**Costs:** eudaimonia loses a child project it started, and whatever the parent
+was getting from having it close. **We do not know what that is**, which is
+itself a reason the decision is not ours.
+**Before it:** nothing technical. **The one prerequisite is a person in
+eudaimonia agreeing**, which is the whole of the difficulty — and there is an
+argument to answer first. **epikrisis has already explained why it sits where it
+does**, in a section of its own README headed *Why it is here rather than one
+level up*: its host asks a question it has no instrument for, and epikrisis is
+that instrument. **That is a reason, not an accident**, and a proposal to move it
+has to beat it rather than ignore it.
+
+**And there may be a cheaper fix that gets us what we actually want.** Our
+complaint is that the ecosystem's only source of history analysis is
+unregistered and reachable only by knowing where somebody filed it. **That is
+solved by putting it in the inventory, not by moving it** — which would need our
+validator's rule against a child of a child revisited, and that rule is ours.
+**If registration is enough, the move is a want and not a need**, and this entry
+should be read that way.
+**Today:** running, unregistered, and depended on by a law written in this
+repository before anybody asked it whether it wanted the job.
+**Why here:** **staged beside `kanon` and `tekton`, and not the same kind of
+item as either.** Those two are `init_eo new` — nothing exists, and starting
+them is ours to do. This is `init_eo from-child`, the work exists, and
+**graduating a child project is its parent's decision.** It sits on this page as
+something we want and have asked for, never as something we have planned.
+
+*On the name: chosen in eudaimonia's tree, not ours. It is recorded in
+[`names.md`](names.md) under names in use elsewhere, which is the section that
+exists because this register once called a name free while a neighbouring tree
+was already using it.*
+
 ## nomophylax — the laws, out of the hands of the party they bind
 
 **What:** the tool that maintains `docs/laws.md` — the rules under which a

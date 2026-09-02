@@ -94,6 +94,7 @@ using it, and a name was taken on the strength of that.
 
 | name | where | why it is not in the tables above |
 | --- | --- | --- |
+| **epikrisis** | a child project **inside a child project** in eudaimonia — `tools/workflow-launcher/tools/` | it audits how repositories change over time, and it is running. **Proposed for a repository of its own**, which is eudaimonia's call and not ours; see the board. It is here rather than in *Taken* because that table records names **we** reserved, and this one was chosen in somebody else's tree |
 | **apodeixis** | a child project in eudaimonia — the build framework driven at a calculus nobody designed it around | its authors deliberately did not claim it here, on the ground that adding a line to somebody else's register is a person's edit to make. That restraint is the reason it looked free |
 
 **`bouleusis`** — βούλευσις, deliberation about particulars — was considered

@@ -103,6 +103,38 @@ who decides.
 
 ---
 
+## B23 — epikrisis is the ecosystem's only history analysis and nothing can find it
+
+**Task:** `epikrisis` audits how these repositories have changed over time and
+is the only source of that in the ecosystem — `docs/laws.md` already requires a
+president to quote it rather than count for itself. It lives at
+`tools/workflow-launcher/tools/epikrisis` in eudaimonia: **a child project
+inside a child project**, a shape our own inventory validator rejects, and it is
+in no register anywhere. **We wrote a law that depends on it before asking it
+anything.**
+**Entities:** `anoieu`, `eudaimonia`
+**Status:** **open, and not ours to close.** Two candidate remedies and they are
+very different in cost: **register it**, which needs our validator's rule about
+a child of a child revisited and is entirely our work; or **promote it to its
+own repository**, which is eudaimonia's decision and nobody else's.
+**Channel:** **discussion** — `D20`, to eudaimonia.
+**Next:** ask, and read the answer. **The registration half can start
+immediately and does not need anybody's permission**, and it may turn out to be
+the whole of what we needed.
+**Prompt — `anoieu`:** decide whether the inventory's rule against a child of a
+child is a rule we believe or an assumption nobody tested. If it is the second,
+fixing it registers epikrisis today and the move becomes optional.
+**Prompt — `eudaimonia`:** `D20` asks the question. **Its own README argues for
+the current nesting** — the host asks a question it has no instrument for — so
+the answer may well be no, and no is a complete answer.
+**HUMAN FEEDBACK:**
+
+**Why this is staged beside `B22` and `B15` and is not the same kind of item.**
+Those two start tools that do not exist, which is ours to do. **This one asks
+somebody else to give up a child project**, and the thing already works. Staging
+them together is about sequence, not about symmetry: all three are what the next
+stretch needs, and only two of them are ours to deliver.
+
 ## B22 — the epoch build system is protocols with no program
 
 **Task:** every gate in the stretch protocol is evaluated by hand. `epoch dry

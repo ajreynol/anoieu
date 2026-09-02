@@ -133,6 +133,8 @@ named.
 | `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. CI green on both sides, non-negotiable; any hint of fraud, reject | spawned repo → anoieu | this page |
 | `PROTO-21` | **the identify protocol** — **every** response opens with the entity the agent acts for, its mission, and **which AI is answering, by name**. The long form at session start and on request | agent → human | [`interface.md`](interface.md) |
 | `PROTO-22` | **the misc protocol** — a document too expensive to clean up now is demoted to `docs/misc/` rather than deleted or left misrepresenting itself. Discouraged, and a growing `misc/` is a symptom | page → layout | this page |
+| `PROTO-23` | **the downstream refresh** — fetch and read another repository before making a claim about it, and say how far behind you were | us → downstream | this page |
+| `PROTO-24` | **the upstream refresh** — a member makes its copy of the shared arrangements current before relying on them, and only onto a green commit | member → us | this page |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it
@@ -145,6 +147,56 @@ morning — does not happen in one repository, so a rule held in one repository
 cannot reach it. The mechanism is maintained by
 [martyria](../tools/martyria/README.md), which is where its ethics are argued
 and its schedule lives.
+
+## `PROTO-23` — the downstream refresh
+
+**Before saying anything about another repository, make your copy of it
+current.** Fetch, check how far behind you are, and read the tree rather than
+your own notes about the tree.
+
+**The failure this catches is confident and wrong.** A claim about somebody
+else's tree, made from a stale checkout or from a sentence we wrote about them
+last week, reads exactly like a claim made from reading it — and this
+repository has already published one. `noesis` sat in our register as *free to
+take* while eudaimonia was running it, and the register said so for as long as
+nobody looked.
+
+**Three things, and it is a minute's work.**
+
+1. **Fetch, and say how far behind you were.** `0` is a result worth reporting;
+   it is the difference between *checked* and *assumed*.
+2. **Read the thing itself**, not our summary of it. Their README argues its own
+   case, and it may argue against what you are about to propose — as
+   epikrisis's does.
+3. **Say when you could not.** A repository not on this machine is a gap in the
+   claim, not a detail. **Not checkable and checked-and-fine are different
+   facts**, and only one of them is a pass.
+
+**It applies hardest when the claim is critical.** Proposing that somebody
+reorganise their tree, reporting a defect against them, or recording their
+status in our inventory are all claims about a thing we do not control.
+
+## `PROTO-24` — the upstream refresh
+
+**The mirror, and it is a member's protocol rather than ours.** Before relying
+on the ecosystem's shared arrangements, a member makes its copy of *them*
+current: pull the policy, re-run the checker, and check whether the commit it
+pins is still the one it means.
+
+**Its own failure mode is the more expensive of the two.** A member acting on a
+policy that moved is not merely out of date — **it is complying with a rule
+nobody publishes any more**, and it will pass its own checks while doing so.
+
+**What it costs us, which is the part that is ours.** A member cannot refresh
+against a moving target. **Every change we publish is a refresh somebody else
+has to perform**, and that is the real price of an edit to a shared page —
+argued in [`policy.md`](policy.md), and the reason changes there are batched
+into stretches rather than shipped as they occur.
+
+**And a member may only bump to a commit where our build is green**, which is
+where this protocol meets [`PROTO-20`](#proto-20--the-handoff-protocol) and the
+handoff standard: **refreshing onto a red commit spreads a failure instead of
+adopting a change.**
 
 ## `PROTO-22` — the misc protocol
 
