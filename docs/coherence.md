@@ -91,6 +91,47 @@ editing one of them edits what other repositories are following, and the fact
 that the file sits in this tree does not make the change local. That is the
 whole reason the next section exists.
 
+## Protocols, and how they are labelled
+
+**A protocol here is a named exchange with a shape somebody has to follow.**
+There are a dozen, they are scattered across seven pages, and until now they had
+no common label — so a document could refer to *the joining protocol* and a
+reader could not tell whether that was a defined thing or a phrase.
+
+**The scheme is `PROTO-n`, and the ugliness is the point.** A bare letter would
+collide: `R` already means both a role and a request, `P` is a proposal, `D` a
+discussion topic, and prose is full of stray capitals. `PROTO-7` cannot be
+mistaken for anything, reads unambiguously and **greps unambiguously**, which
+this repository has already learned the hard way are the same property.
+
+**The number is permanent and is never reused.** A protocol that is retired
+keeps its id in this table with a line saying so, because other pages cite it.
+
+**They stay where they live.** This is a register, not a home: a protocol is
+defined on whichever page owns its subject, and moving them all here would put
+the definition further from the work. What this table adds is that they can be
+named.
+
+| id | protocol | between | defined in |
+| --- | --- | --- | --- |
+| `PROTO-1` | response clarification — *your answer was too hard to follow* | person → agent | [`interface.md`](interface.md) |
+| `PROTO-2` | prompt clarification — *do not act on what you do not understand* | agent → person | [`interface.md`](interface.md) |
+| `PROTO-3` | going off the deep end — *this cannot be checked from here* | agent → person | [`interface.md`](interface.md) |
+| `PROTO-4` | temporal session coherence — the session's open ask survives its branches | agent → person | [`interface.md`](interface.md) |
+| `PROTO-5` | the reporting workflow — a defect carried to whoever owns the file | repository → repository | [`reporting-workflow.md`](reports/reporting-workflow.md) |
+| `PROTO-6` | the discussion file — everything that is not a defect report | repository → repository | [`policy.md`](policy.md) |
+| `PROTO-7` | joining, and its soft and affiliating forms | repository → ecosystem | [`policy.md`](policy.md) |
+| `PROTO-8` | the epoch family — announce, gate, approve, adopt | repository → members | [`stretch-policy.md`](stretch-policy.md) |
+| `PROTO-9` | the role handoff — a responsibility changes hands, keeping its id | tool → tool | [`roles.md`](roles.md) |
+| `PROTO-10` | the documentation handoff — a launch moves a description to its source | page → page | this page |
+| `PROTO-11` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
+| `PROTO-12` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
+
+**Labelling is partial and that is fine for now.** The four in
+[`interface.md`](interface.md) carry their ids; the rest are labelled as
+somebody next touches them. An unlabelled protocol is not a defect — a protocol
+that has drifted from this row is.
+
 ## The scripts
 
 **Two kinds, and the directory says which.** `scripts/` holds commands that do

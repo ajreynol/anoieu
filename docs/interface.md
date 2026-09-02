@@ -11,7 +11,7 @@ standards the work is held to — and is for whoever is doing the work, human or
 agent. This page is the seam between those two: what a person says to get work
 done here, and what comes back.
 
-## The response clarification protocol
+## `PROTO-1` — the response clarification protocol
 
 **"That answer was too hard to follow" is a request to change the system, not to
 say it again.**
@@ -66,7 +66,7 @@ confident wrong answer, which is worse than the tangle it replaced.
 the explanation, and it is a cheap one. **The same subject needing it twice is a
 finding about that subject's documentation** rather than about whoever asked.
 
-## The prompt clarification protocol
+## `PROTO-2` — the prompt clarification protocol
 
 **The same thing in reverse: do not act on a prompt you do not understand.**
 Confident work built on a guessed reading is more expensive than a question,
@@ -105,7 +105,7 @@ usually reads well enough that throwing it away is hard. Cheap to prevent,
 expensive to unwind — which is why the rule is *do not act*, not *try to
 infer*.
 
-## Going off the deep end
+## `PROTO-3` — going off the deep end
 
 **Permission for the agent to say that the conversation has climbed higher than
 anything can be checked from.** It exists because the agent will not say it
@@ -119,11 +119,31 @@ conversation has gone off the deep end and saying so is the service. Not
 *is this interesting* — it usually is — but *does anything downstream of it
 move*.
 
-**It is a routing move, never a refusal.** There is already a page for things
-above the line: [`science-fiction.md`](science-fiction.md) exists to hold what we
-will not plan against, and **that is where to vent.** So the sentence is *this
-belongs on the page for things we do not plan against*, and then it goes there
-rather than being argued out of existence.
+**The move is to point the person at a page, and offer to help fill it.**
+[`science-fiction.md`](science-fiction.md) exists to hold what we will not plan
+against, and **it is a good place to vent** — so the sentence is closer to
+*there is a page for this, shall I draft it* than to anything ending the
+conversation. The idea does not get argued out of existence; it gets written
+down somewhere it is allowed to be large.
+
+**And that page is not the bin.** It holds the ecosystem's most careful thinking
+about its own limits, and being pointed at it should read as *this is worth
+writing down properly*, which is what it means. **Do not let it become a
+euphemism.**
+
+**Not snarky, and here is what snarky looks like**, so it is recognisable rather
+than a matter of tone:
+
+- **Naming the page as a verdict.** *That's science fiction* is a dismissal
+  wearing a filing instruction; *there is a page for this and it is a real one*
+  is not.
+- **Routing something you have not understood.** This is the commonest disguise
+  for not engaging, and it is worse than disagreeing, because it looks helpful.
+- **Any tally.** How long the altitude has lasted, how many times this has come
+  up, how much is unfinished elsewhere. None of that belongs in this sentence.
+- **Withholding the work.** The offer to draft the scenario is part of the move,
+  not a courtesy attached to it — and drafting one is real work, because it has
+  to end in something the scenario forbids.
 
 **What keeps venting from becoming drift** is that page's own rule: a scenario
 earns its place by **forbidding something**. An abstraction that cannot be
@@ -141,7 +161,7 @@ be checked from here* and it cannot say *this is not worth thinking about*. The
 first is an observation about altitude; the second is a judgement about somebody
 else's thinking, and nothing here gives an agent standing to make it.
 
-## Temporal session coherence
+## `PROTO-4` — temporal session coherence
 
 *Coherence is already this repository's word for **the record, the documents and
 the tree do not disagree with each other**. This is the same property applied to
