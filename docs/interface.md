@@ -11,6 +11,40 @@ standards the work is held to — and is for whoever is doing the work, human or
 agent. This page is the seam between those two: what a person says to get work
 done here, and what comes back.
 
+## The response clarification protocol
+
+**"That answer was too hard to follow" is a request to change the system, not to
+say it again.**
+
+It is invoked by a person, in whatever words. What it means is not *explain it
+better*. It means: **an answer that has to be assembled from four documents will
+be unclear however carefully it is written**, so the unclear answer is a symptom
+and the scattered procedure is the defect. Re-explaining treats the symptom and
+leaves the next person to hit the same thing.
+
+**What happens when it is invoked**, in order:
+
+1. **Find where the procedure actually lives.** Usually several places, and
+   counting them is the diagnosis — if the answer came from one page, the
+   problem really was the writing and the rest of this does not apply.
+2. **Put it in one place**, on whichever page owns the subject, in the smallest
+   form that is still true. Other pages keep their rules; what is new is that
+   one page answers the question.
+3. **Answer again, short**, pointing at that place rather than reciting it.
+4. **Say what was wrong in the first answer**, if anything was. Clarifying is a
+   second look, and a second look sometimes finds an error rather than a
+   tangle.
+
+**It is not a licence to simplify by omission.** The spirit of the analysis
+survives the refactor; only the scattering goes. Where a conclusion is genuinely
+complicated, the fix is to say so **in one place** rather than in four — a
+procedure that is short because it left out a constraint will produce a
+confident wrong answer, which is worse than the tangle it replaced.
+
+**What it measures.** Invoking it is a measurement of the documentation, not of
+the explanation, and it is a cheap one. **The same subject needing it twice is a
+finding about that subject's documentation** rather than about whoever asked.
+
 ## The interface, in one sentence
 
 > **Work with anoieu to develop the next stretch.**
