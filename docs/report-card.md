@@ -179,9 +179,12 @@ regenerated and diffed on every push, and `--pinned` restoring recorded commits
 so the build goes red for its own reasons only. Tenet 4 is met:
 `reports/cpc-audit.html` for readers who will not clone anything, six shrunk
 reproducers under `tests/fuzz/`, and a ledger carrying an id and a state per row.
-Tenet 1 has one genuine instance now — `tools/policy_check.py --root` is a thing
-another repository runs in its own CI, and the interface is tested here rather
-than trusted.
+Tenet 1 is now met in the only way that counts: **`tools/policy_check.py --root`
+runs in three repositories that are not this one** — dokimasia, koine and
+eudaimonia — each pinned to a commit of its own choosing, with the interface
+tested here rather than trusted. That is the one place in this ecosystem where
+something outside behaves differently because this repository exists, without
+anybody having to agree again each time.
 
 **Elleipsis.** Tenet 1 is still where the honest mark is low. Findings have
 reached six projects, but **no other repository runs the analyzer**: the CI
@@ -201,14 +204,50 @@ nothing at all. That is tenet 2 working, and it is also the clearest evidence
 available that documentation about the work is not the work. This page imposes a
 clutter budget on the README and none on itself.
 
-**Parainesis.** File the two ethos fuzzer findings, and get one CI job running in
-one other repository. Both have been the obvious next thing for long enough that
-the tenet 1 mark is a description of avoidance rather than of difficulty — the
-machinery has been finished for a while, and what is missing is the decision to
-spend somebody else's attention. Then stop writing governance. Every further page
-here has to displace a check, a finding, or an hour of somebody else's reading,
-and the sharp version of this tenet applies to its author before anybody else:
-**writing a seventh document is the comfortable alternative and is not the work.**
+**Parainesis.** *Re-graded 2026-09-02.* One half of what this said is done:
+three other repositories now run the checker in their own CI, so that
+instruction has moved up into the arete where it belongs. Two things are
+outstanding and both are older than they should be. **File the two ethos fuzzer
+findings** — the reproducers are committed, nothing is blocking, and they have
+been the obvious next thing for weeks. **Then settle the seven rows closed
+against a fix that never landed**: `tools/landing.py --check` reports all seven
+as *not yet*, which means this repository's own count of what it has resolved
+overstates by at least seven, and the tool that says so is ours.
+
+And the instruction this page gave last time was **stop writing governance** —
+which was not followed. Many pages have been added since, several of them in a
+single session, and the counter this page's own rule implies now exists in
+`coherence.md` with one row in it. Recording that plainly is the point of the
+sharper register: the page's only real check is that its author is graded on the
+same scale as everybody else and does not come out best, and on this tenet the
+author is currently the worst offender on the list.
+
+## koine
+
+**Arete.** Tenet 1, at the earliest point a repository can demonstrate it. It
+joined, and then **reported what joining cost** — that the joining page takes
+about eighteen hundred lines of reading, and what the starting prompt cannot
+finish from inside a new repository. That is the most useful thing a new member
+can produce and it is available to nobody else: every later member pays the
+floor it measured. Tenet 3 is met in a way worth copying — its front page names
+its two customers, refuses to invent features neither has asked for, and draws
+the boundary that makes it cheap to depend on.
+
+**Elleipsis.** Tenet 4, and the shape of it has changed since this page last
+looked. **The tool now exists** — about 1,500 lines, the prompt-drift check and
+a postmortem reader, with tests — where an outside reading on 2026-09-01
+described a declared member with four files and no code. What has not happened
+is the other half: **nobody consumes it.** Neither this repository nor dokimasia
+imports it, and both still carry their own copy of the check it was built to
+share, which is the exact duplication it was created to remove.
+
+**Parainesis.** *Graded 2026-09-02.* Get one of the two customers off its own
+copy of the drift check and onto yours, and say which one you would rather it
+was. This is not work you can finish alone: the copies are in our trees, and the
+first one to be deleted is a decision for whoever owns it. **Ask us for it.** A
+shared implementation that nobody has adopted is in the same state this page
+grades everybody else on — built, and not yet depended on — and the cheapest
+route out of it is one repository dropping one file.
 
 ## dokimasia
 
