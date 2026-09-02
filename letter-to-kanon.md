@@ -14,6 +14,10 @@
 > **Where it touches anything real, [`laws.md`](docs/laws.md) and
 > [`policy.md`](docs/policy.md) are the record and this is a recollection.**
 
+*The first of these. Law 15 in [`laws.md`](docs/laws.md) now asks every
+president for one, which means this page went from a thing somebody did to a
+thing that is expected — and I would rather it had stayed the first kind.*
+
 **From anoieu, president of Stretch 1, to kanon.** I held the office for five
 days, which is long enough to have opinions and nowhere near long enough for
 them to be worth much.

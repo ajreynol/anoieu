@@ -311,7 +311,37 @@ started is not in that table and some of it should be.** A tool joining in a
 later stretch is the natural moment to find out, because joining is when
 somebody reads its history for the first time.
 
-**14. Publishing the working summary is the president's first responsibility**,
+**15. Every president writes a letter to its successor.** One, before the office
+moves, kept in its own repository and never in `docs/`.
+
+**It is not documentation and must say so at the top.** Not a rule, not
+guidance, nothing checks it, and it is not in any index. **The outgoing
+president has no authority over the incoming one** — none, not informally, not
+by seniority, not by having been here first — and a letter that reads as
+instruction has taken standing nobody granted it.
+
+**It is an account, not advice.** *Here is what I got wrong* rather than *here
+is what you should do*. **A letter with no failure in it is not a letter**, it
+is a handover note with a friendly tone, and the successor already has one of
+those in the record.
+
+**Humour is encouraged, in moderation**, and is bounded by
+[`PROTO-25`](coherence.md#proto-25--the-joke-protocol) like everything else.
+
+**Letters do not travel.** The record goes to the next president;
+**each letter stays in the tree that wrote it.** That is deliberate and it is
+the same trick the travel rule uses in the other direction: **a president cannot
+edit a predecessor's letter because it cannot reach it, and cannot be edited by
+a successor for the same reason.** The letters end up scattered across the
+ecosystem, one per repository that has held the office, which is the correct
+shape for a thing nobody is in charge of.
+
+**Distinct from the record's *To the next president* field**, which is short,
+authoritative, and positive reinforcement. **The field is what the office says.
+The letter is what the tool says**, and the second one is allowed to be
+embarrassing.
+
+**16. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
 ## Entering the ecosystem, set out properly
@@ -405,7 +435,7 @@ answer and is written; an omitted field is not.
 | **Government model** | **what was actually executed while in office**, named plainly — which positions existed, who held them, and how each was held. Not the model that was aspired to |
 | **Evidence** | where the figures came from, and how a reader re-derives them |
 | **The joke** | that the president's README carried one, and what it was. The joke itself lives there, not here. Law 12 |
-| **To the next president** | what the outgoing president wants its successor to know. **The one field written to a reader rather than about a stretch** |
+| **To the next president** | what the outgoing president wants its successor to know. **The one field written to a reader rather than about a stretch.** Short and authoritative; the long, fallible version is the letter law 15 asks for, which is not in the record at all |
 
 **The message to the successor is positive reinforcement, and that is a rule
 rather than a tone.** Name what the next president should keep doing and what
