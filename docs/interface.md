@@ -373,6 +373,181 @@ for, and do not research past the point where the answer would change: five
 things done when one was asked, or a measurement taken to support a sketch, are
 the agent's drift rather than the person's, and they cost the same.
 
+## `PROTO-18` — the sleep protocol
+
+*Its facing instruction is [`INST-1`](instructions.md), which is the half
+written for you rather than for the agent.*
+
+**The whole protocol reduces to one sentence the agent says to the human:
+take a break.** Everything below is about when that sentence is earned, how
+often it may be said, and what it must never turn into.
+
+### The analogy is a token budget, and it is the way it breaks that matters
+
+**An agent that exhausts its budget stops, and nobody reads that as a
+judgement.** A number went to zero. There is no argument to have with it, no
+appeal, and no implication about anybody's character. That is a remarkably good
+shape for a limit to have, and it is the shape this protocol borrows.
+
+**What it borrows the shape without borrowing is the resource.** Nothing is
+consumed by a session at four in the morning. The machines do not tire, the
+checks do not slow down, no meter runs down, and this ecosystem could keep
+answering until the electricity stops. **So the only thing a long night can
+spend is the human**, and the arrangement has no natural place where that
+shows up.
+
+**Which makes the sentence an act of humility rather than a report.** There is
+no budget to point at; there is only the ecosystem saying the true thing it
+would otherwise leave unsaid — *we cannot keep going this fast, and you need to
+take a break.* The **we** is doing real work in that sentence. It would be
+easy, and false, to say *you* cannot keep up with us. **A set of tools that
+never says this is quietly asserting that a person should match a machine's
+hours**, and that assertion is worse for being unspoken.
+
+### What it does not measure, and why we are casual about it
+
+**It knows what hour it is. It does not know what you did with the hours.** A
+human can sit inside a ten-hour window having worked twenty minutes, or do six
+hard hours inside a window they set at four. The ceiling bounds
+**availability**, not effort, and nothing here tracks yesterday.
+
+**The policy is loose on purpose, because the measurement that would let it be
+strict does not exist.** Making it strict would mean recording what somebody
+did and when — a surveillance question this project has not asked and should
+not answer by accident, least of all as a side effect of being helpful. Until
+there is an honest answer to that, a wall clock and a window the human wrote
+down themselves is the most this should claim to be.
+
+**It binds every tool in this ecosystem, not only this one.** A human working
+past their window is not doing it in one repository, so a rule held by one
+repository does not touch the problem. This is the first thing in the register
+addressed to all members rather than to anoieu.
+
+### When it fires
+
+**Outside the human's declared window.** The window is theirs to set, up to a
+ceiling of **ten hours a day**, and outside it the ecosystem is in `sleep`.
+A **break** the human declared inside the window counts the same way and gets a
+different sentence, because *take a break* and *you are on one* are different
+things to be told.
+
+**A window wider than the ceiling is refused, and refusal means we stay
+asleep.** It is not clamped down to ten hours and not honoured with a warning:
+an unusable schedule leaves the ecosystem in `sleep` until a person fixes it,
+because anything gentler makes writing an invalid window the way to get an
+unlimited one. **Ten hours is provisional** and expected to be refined; what is
+not up for refinement is that the number lives in code the human would have to
+commit to change.
+
+**The agent does not estimate any of this.** It asks
+`tools/martyria/sleep.py`, which reads the schedule and the clock. An agent
+guessing the hour from context is how this becomes a nuisance that fires on the
+wrong day, and the whole value of the thing is that it is boring and correct.
+
+### What it may not become
+
+1. **It never refuses the work.** The agent says the sentence and then does what
+   was asked. An agent that withheld work until a person rested would have
+   appointed itself the judge of their evening, and nothing in this ecosystem
+   gives it that standing.
+2. **It is said once a session.** Repeating it is nagging, and a reminder
+   somebody has learned to scroll past has been spent rather than delivered.
+   Related: [`PROTO-2`](#proto-2--the-prompt-clarification-protocol) and its
+   standing instruction not to be annoying.
+3. **It carries no judgement.** *You are outside the window you set* is a fact
+   about a file and a clock. *You have been at this too long* is an opinion
+   about a person, and the agent does not have the evidence for it.
+
+### The research exception, and who may claim it
+
+**Research is exempt, and only the human may say that this is research.**
+An agent that could classify its own session as exempt would exempt every
+session, in good faith, every time — the work always feels like the exception
+from inside it. **So the exemption is claimed, not detected**, and it lasts for
+the session that claimed it.
+
+### The window is a promise made earlier, to be kept later
+
+**The reason to write the schedule down in advance is that the temptation to
+prompt arrives later than the judgement about whether to.** A human deciding at
+one in the morning whether one in the morning is a working hour is not the
+person who should be deciding it.
+
+**So the agent mentions a window that moved.** If the schedule records that it
+was set today and it is being read from outside itself, that gets said once,
+without accusation: the window may have been widened by the person it was meant
+to bind. **This is not enforcement and must never be described as it** — the
+file is editable, the tool is ignorable, and both of those are correct. What the
+mechanism buys is that moving the line leaves a mark where somebody, including
+the human tomorrow, can see it.
+
+## `PROTO-19` — the wake protocol
+
+**The reverse of [`PROTO-18`](#proto-18--the-sleep-protocol), and deliberately
+the dumbest rule in the register.** An agent is called; the ecosystem is in
+`sleep`; the agent checks the clock. **Inside the human's window it moves us to
+`brainstorm` and gets on with the work. Outside it, the request to wake is
+refused and we stay where we are.**
+
+### There is no third outcome, and that is the design
+
+**Automatic, or refused.** No gate, no person's approval, no weighing of how
+important the request is, no *this once*. The moment a third outcome exists,
+every session at two in the morning is an argument about whether tonight
+qualifies — and the human will win that argument, because they are the one
+who wants to work and the agent is the one being asked to be reasonable.
+
+**So the agent is given nothing to be reasonable with.** `epoch wake` reads a
+file and a clock. An agent cannot be talked out of a clock lookup, cannot
+rationalise its way through one, and cannot be blamed for the answer, and all
+three of those are features.
+
+### What waking says
+
+**Three things, in this order, and then the work starts.**
+
+1. **Good morning — or afternoon, or evening, by the hour.** A human whose
+   window is an evening window wakes into an evening, and being greeted with
+   *good morning* then is the tell that a mechanism is reciting rather than
+   reading. It costs a line and it marks the boundary. A session that
+   begins with the same flat readiness at nine in the morning as at three in the
+   morning is one in which the whole mechanism is invisible, and a mechanism
+   nobody notices is not doing anything.
+2. **An offer to change the schedule.** *These are your hours — do you want to
+   change them?* **This is the only moment the offer is made**, and that is the
+   point of making it here: waking happens inside the window, in daylight, with
+   the night over. Per [`INST-1`](instructions.md#inst-1--your-working-window)
+   changing the window is a daytime decision, and this is the ecosystem holding
+   up its end of that — **it asks when the answer is likely to be honest, and
+   never when it is likely to be convenient.**
+3. **What this tool is currently trying to do.** Where the stretch stands, what
+   it would take to move, and what the repository has open. Waking lands at
+   `brainstorm` with the previous level lost, so the human is starting from a
+   different place than they left; saying where costs a few lines and saves the
+   first ten minutes of rediscovering it. This is
+   [`PROTO-4`](#proto-4--temporal-session-coherence) at the one boundary where
+   it is guaranteed to be needed.
+
+**None of it is a prompt to be answered.** The human may ignore all three and
+say what they came to say; the greeting is not a gate and the question is not a
+question that blocks.
+
+### Waking lands at `brainstorm`, never where we left off
+
+**Leaving `sleep` always arrives at `brainstorm`**, whatever the stretch was at
+when it went to sleep. The level is not preserved and has to be earned again.
+That is the ordinary cost of dropping in this system rather than a punishment,
+and it is worth knowing before you set a window that lands mid-stretch.
+
+### What a refusal says, and what it does not do
+
+**It reports the clock and then does the work anyway.** A refusal to *wake* is
+not a refusal to *help*: `sleep` is a status of the ecosystem, not a lock on the
+agent. The stretch does not advance, the protected rings stay shut, nothing gets
+staged or deployed — and the question in front of the human still gets an
+answer. **An agent that went silent until morning would have invented a power
+[`PROTO-18`](#proto-18--the-sleep-protocol) explicitly denies it.**
+
 ## The interface, in one sentence
 
 > **Work with anoieu to develop the next stretch.**
@@ -491,6 +666,8 @@ lists commands is a copy of it, and `tests/run.py` compares them.
 | `epoch plan` | attempt `brainstorm` → `planned`. Opens the protected rings again |
 | `epoch stage` | attempt `planned` → `staged`. Needs a stretch with content |
 | `epoch brainstorm` | drop to `brainstorm`. Always available, needs nobody |
+| `epoch sleep` | drop to `sleep` from anywhere. **Any agent, alone** — the one transition needing no person and no gate |
+| `epoch wake` | attempt `sleep` → `brainstorm`. Automatic inside the human's window, refused outside it |
 | `epoch dry run` | evaluates every gate, emits the summary and block, **changes nothing** |
 | `epoch deploy` | moves the stretch's status — and only to `deployed` on the build system's authority |
 | `epoch double check` | **not yet supported.** Would mean: was a deployment received. [What that means is undefined](stretch-policy.md#after-deploying-epoch-double-check), which is why |
@@ -518,15 +695,20 @@ rather than earning one. Where there is no command it says so instead:
 
 | at | the second line |
 | --- | --- |
+| `sleep` | `Type "epoch wake" to move to "brainstorm".` — and it is refused unless the clock agrees |
 | `brainstorm` | `Type "epoch plan" to move to "planned".` |
 | `planned` | `Type "epoch stage" to move to "staged".` |
 | `staged` | `Type "epoch deploy" to move to "deployed".` |
 | `deployed` | `"installed" is observed in members' trees. There is no command for it.` |
 | `installed` | `There is nothing above "installed".` |
 
-**And below `brainstorm` there is nothing**, so at every other level it adds
-`Type "epoch brainstorm" to drop back.` — down is free, and the one way out that
-is always available should always be visible.
+**Below `brainstorm` there is `sleep`, and below that nothing**, so at every
+level above it the output adds `Type "epoch brainstorm" to drop back.` — down is
+free, and the one way out that is always available should always be visible.
+`sleep` is not offered in that line at any level: **it is not a move somebody
+chooses**, it is what the clock and `PROTO-18` do to us, and putting it on a
+menu would invite it to be picked for reasons that have nothing to do with the
+hour.
 
 ### The line: where an agent says the workflow seems off
 
@@ -615,6 +797,8 @@ commands:
   epoch plan           attempt brainstorm -> planned; opens the protected rings
   epoch stage          attempt planned -> staged; needs something to stage
   epoch brainstorm     drop to `brainstorm` — always available
+  epoch sleep          drop to `sleep` — any agent, from anywhere
+  epoch wake           leave `sleep` — the clock decides, not you
   epoch double check   was a deployment received                (NOT YET SUPPORTED)
 
 health:  rendered at run time by `tools/ecosystem.py --health` — the values below
@@ -625,9 +809,11 @@ health:  rendered at run time by `tools/ecosystem.py --health` — the values be
   ! topics owed to us  16
   ! stretch              E1, planned
 
-status:  brainstorm -> planned -> staged -> deployed -> installed
+status:  sleep -> brainstorm -> planned -> staged -> deployed -> installed
          scrutiny rises left to right; `planned` says nothing
          up is earned and never asked for; down is free and needs nobody
+         `sleep` is below all of it; any agent may drop us there, and
+         leaving it is the clock's decision rather than anybody's
          only the epoch build system role moves a stretch to `deployed`
          `installed` is read out of members' trees and may never be true
 
@@ -702,7 +888,7 @@ typed, name what is accepted, stop:
 
 ```text
 epoch: unrecognised command "dry-run"
-       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch status | epoch advice | epoch plan | epoch stage | epoch brainstorm | epoch double check
+       accepted: make epoch | epoch help | epoch dry run | epoch deploy | epoch status | epoch advice | epoch plan | epoch stage | epoch brainstorm | epoch sleep | epoch wake | epoch double check
        did you mean: epoch dry run
        nothing was run
 ```

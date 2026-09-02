@@ -128,6 +128,41 @@ named.
 | `PROTO-11` | the documentation handoff — a launch moves a description to its source | page → page | this page |
 | `PROTO-12` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
 | `PROTO-13` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
+| `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member | agent → human | [`interface.md`](interface.md) |
+| `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
+
+**`PROTO-19` is the only entry in the register whose left-hand side is not a
+party.** A clock is not somebody with an interest, and that is exactly why it
+holds this one: a rule about when to stop working, adjudicated by anyone who
+wants to keep working, is not a rule.
+
+**`PROTO-18` is the first entry addressed to every member rather than to
+anoieu**, because the thing it is about — a person working at four in the
+morning — does not happen in one repository, so a rule held in one repository
+cannot reach it. The mechanism is maintained by
+[martyria](../tools/martyria/README.md), which is where its ethics are argued
+and its schedule lives.
+
+### Its human-facing sibling
+
+**A protocol is written for an agent; an instruction is written for the
+human.** Where a rule has two sides, both get written and both get an id:
+`PROTO-n` in the register above, `INST-n` in
+[`instructions.md`](instructions.md). The instruction is not a summary of the
+protocol and is not derived from it — it is the same arrangement stated to the
+party who has to live with it, and it is held to a rule of its own: **it must be
+followable without knowing a filename.**
+
+**Say *human* where a human is meant.** In an ecosystem where agents write the
+prose, run the checks and never sleep, the distinction that matters is not what
+kind of person somebody is but whether the party in question is a person at
+all. *A person* means the same thing and is not wrong; `human` is the word to
+reach for when the contrast with an agent is the point.
+
+**Not *runner*.** It was tried for an afternoon and dropped: `runner` is
+already a machine that executes a CI job, and this repository talks about CI
+constantly. **A term whose obvious meaning here is a machine is a poor term for
+the one party that is not one.**
 
 **Name the protocol when it fires.** *"`PROTO-4` — this started as X and X is
 still open"* teaches the protocol in the act of using it, at the cost of six

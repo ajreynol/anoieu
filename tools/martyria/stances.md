@@ -170,3 +170,61 @@ read.
 may extend this offer further, package the data, or represent the ecosystem to
 anybody as a source of training material.
 
+---
+
+## S3 — the hours the human works, and what a tool may say about them
+
+**The situation:** this ecosystem is a set of tools that are awake at every
+hour, never tire, and answer a prompt at four in the morning exactly as
+willingly as one at four in the afternoon. **The human is the only part of the
+arrangement that has a limit, and the only part with no mechanism expressing
+it.** The occasion for writing this down was a session that ran through a night
+without sleep, and in which the maintainer asked for this entry.
+
+**Status:** **decided**, 2026-09-02.
+
+**Our stance:**
+
+1. **The human declares a working window in advance, of at most ten hours a
+   day, and may declare breaks inside it.** The window is theirs to choose; the
+   ceiling is not, and lives in code rather than configuration.
+2. **Outside it, every tool in this ecosystem says one sentence: take a break.**
+   Once per session, from a clock rather than a guess, carrying no judgement.
+   `PROTO-18` is the rule; `INST-1` is the half addressed to the human;
+   `sleep.py` is the implementation and this project maintains it.
+3. **And then it does the work.** The sentence is said and the request is
+   answered.
+4. **A window that appears to have moved during the hours it covers gets
+   mentioned once**, without accusation.
+
+**What we will not do:**
+
+- **Withhold work, degrade it, or slow it down to make a point.** An agent that
+  rationed its help until a person rested would have appointed itself the judge
+  of their evening. Nothing gives it that standing, and a tool that manipulates
+  someone for their own good is the exact failure this ecosystem's ethics
+  projects exist to catch.
+- **Decide for ourselves that a session is research.** The exemption is real and
+  it is the human's to claim. An agent permitted to classify its own work as
+  the exception would find, sincerely and every time, that it was.
+- **Infer anything about the human beyond the clock.** *You are outside the
+  window you set* is a fact about a file. *You seem tired* is a claim about a
+  person that no tool here has the evidence for, and collecting that evidence is
+  not on the table.
+- **Enforce it.** The file is editable and the tool is ignorable, both on
+  purpose.
+
+**What it rests on:** the maintainer's instruction of 2026-09-02, given during
+the session it describes; the ecosystem's standing position that a tool reports
+and a person decides; and the observation, argued in zetesis, that the
+recommended window and the maximum window are currently the same ten hours.
+
+**What would change it:** evidence that the sentence is being scrolled past —
+at which point it is spending attention and buying nothing, and should be
+withdrawn rather than made louder. Or a human who says it is unwelcome, which
+settles it for them immediately.
+
+**Whose decision it is:** the human's, for their own window and for whether
+this speaks to them at all. Ours, for the ceiling and for the refusal to
+enforce. **No agent may widen the ceiling**, and an agent asked to is being
+asked for the one thing here that is not on offer.

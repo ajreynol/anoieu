@@ -95,9 +95,57 @@ of this that stays defensible.
 - **Speaking for anoieu in public.** Its output is internal until a person
   carries it.
 
+## The one mechanism it maintains
+
+**The sleep protocol**, [`PROTO-18`](../../docs/interface.md), and the schedule
+behind it. That makes this the only ethics project here that ships a program
+rather than a page, and it is worth saying why the program landed in the
+*actionable* half rather than the general one: the question *should an agent
+tell a person to stop working* belongs to [zetesis](../zetesis/README.md) and is
+open there. **What belongs here is that a specific person is working specific
+hours and something should say so.** One situation, one artifact, acted on.
+
+| file | what it is |
+| --- | --- |
+| [`sleep.py`](sleep.py) | reads the clock and the schedule; prints one sentence and an exit code. Never run in CI |
+| [`schedule.json`](schedule.json) | the human's window, their breaks, and the date it was set |
+
+**The ceiling of ten hours a day is in the code and not in the file.** A limit
+the human can raise from inside the session it is limiting is not a limit, and
+putting it where changing it is a commit rather than an edit is the whole of the
+enforcement — which is to say there is almost none, deliberately. The tool can
+be ignored, the file can be rewritten, and neither is a defect. **What it buys
+is that moving the line leaves a mark.** The human-facing half is
+[`INST-1`](../../docs/instructions.md).
+
+### It is not an island, and this is the statement saying so
+
+**A child project is normally an island: nothing outside it names it, and
+deleting the directory changes nothing anywhere else. A child that breaks that
+has to say so in its charter, and this paragraph is martyria doing it.** It is
+named by
+`tools/ecosystem.py`, which reads the schedule so the ecosystem's health
+summary can show where the human stands. The exception is recorded here rather
+than avoided, because the dependency is real and hiding it would make the
+charter false rather than make the project an island.
+
+**The reference is soft.** `ecosystem.py` asks for the mechanism and carries on
+without it, so deleting this directory still changes nothing that matters —
+the health summary loses one row and reports it as unknown. That keeps the
+practical half of the island rule while admitting the formal break.
+
+**And it is a sign this should graduate.** A mechanism the whole ecosystem is
+supposed to honour does not belong in a read-only child project, for the same
+reason `tools/stathmos` says it belongs elsewhere: a thing others depend on
+should live somewhere they may depend on it. **What stays here in either case
+is the argument** — the stance, the ceiling, and the reasoning for both. What
+moves is the program.
+
 ## Status
 
 **Started 2026-09-02**, by the maintainer, at their explicit instruction — the
-only way one of these may begin. One stance, `S1`: how to respond to an
-unsolicited pull request that arrived at the project this ecosystem serves.
-Three testimonies, three cases and one counter-case stand behind it.
+only way one of these may begin. Two stances — `S1`, how to respond to an
+unsolicited pull request that arrived at the project this ecosystem serves; and
+`S3`, the working window — plus one mechanism, the sleep protocol, which is the
+first thing this project maintains rather than merely records. Three
+testimonies, three cases and one counter-case stand behind `S1`.

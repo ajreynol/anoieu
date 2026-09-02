@@ -311,10 +311,12 @@ needs a person, and asking for that is a different block with a different header
 
 ## The status of a stretch
 
-**Five levels, and each is a higher bar of scrutiny than the one before it.**
+**Five levels, each a higher bar of scrutiny than the one before it — and one
+below all of them.**
 
 | status | what it means | scrutiny |
 | --- | --- | --- |
+| `sleep` | **nothing is in play.** The human is outside the hours they declared, and no work is done at any ring | none, and it outranks all of them |
 | `brainstorm` | the outer rings only: ideas, discussions, registers. **Nothing critical is touched** | lowest |
 | `planned` | **on deck.** Brainstorming is over, the protected rings are open, and staging is expected to be next. Not a resting place | a person decides |
 | `staged` | an agent is being given instructions to stage it — the announcement, the covering note, the register edits | the gates are being worked |
@@ -359,6 +361,37 @@ scrutiny rising:
 | `planned` → `staged` | `epoch stage` | a person's direction **and a stretch with content** — there must be something to stage |
 | `staged` → `deployed` | `epoch deploy` | **the gates, and nobody's say-so** — what is at stake is other people's trees |
 | `deployed` → `installed` | *no command* | other people, observed. Not ours to assert at all |
+| *any* → `sleep` | `epoch sleep` | **any agent in the ecosystem, alone.** No person, no gate, no stretch content |
+| `sleep` → `brainstorm` | `epoch wake` | **the clock, and nothing else.** Inside the window it happens; outside it is refused |
+
+### Why any agent may put the whole ecosystem to sleep
+
+**Read once, that is the largest authority granted anywhere in this policy**: a
+single agent, with no person and no gate, moving a stretch out of `deployed`.
+Read twice it grants nothing new. **Down has always been free** — `epoch
+brainstorm` is available at every level and needs nobody — and `sleep` is one
+step further down the same staircase. An agent that can already drop us to
+`brainstorm` unilaterally is not made more powerful by being able to drop us
+one below it.
+
+**What makes it safe is that neither direction takes judgement.** Going down
+needs no reason, which is the existing rule. Coming up has exactly two
+outcomes and no third: **inside the declared window it is automatic, outside it
+is refused.** There is no argument to be had, nothing to weigh, and so nothing
+for an agent to be wrong about or talked out of. `epoch wake` is a clock lookup
+wearing the costume of a decision.
+
+**And it is the one status with no work at any ring.** `brainstorm` still
+touches the outer rings; `sleep` touches nothing, which is why it sits below
+`brainstorm` in scrutiny and above every level in authority at the same time.
+Those are not in tension: it is the floor of what may be *done* and the ceiling
+of what may be *overridden*.
+
+**The cost is real and is the same cost `epoch brainstorm` has always had.**
+Sleeping from `staged` and waking lands at `brainstorm`, so the level is lost
+and has to be earned again. That is not a special penalty; it is what dropping
+has always meant here, and it is the reason to declare a window that fits the
+work rather than one that keeps getting hit mid-stretch.
 | anything → `brainstorm` | `epoch brainstorm` | nobody. Down is free |
 
 **`make epoch` is the composite, not a transition.** It would do the work *and*

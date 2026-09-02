@@ -777,7 +777,7 @@ def epoch_surfaces_agree() -> int:
                                 iface, re.M))
     block = re.search(r"```text\n(epoch \u2014 .*?)\n```", iface, re.S)
     truth_stat = set(re.findall(
-        r"^\| `(brainstorm|planned|staged|deployed|installed)` \|", policy, re.M))
+        r"^\| `(sleep|brainstorm|planned|staged|deployed|installed)` \|", policy, re.M))
 
     failures = 0
 
@@ -809,7 +809,7 @@ def epoch_surfaces_agree() -> int:
          # the whole `status:` block, not just its first line -- a status named
          # on a continuation line is still a copy and still has to agree
          set(re.findall(r"[a-z]+", part("status:")))
-         & {"brainstorm", "planned", "staged", "deployed", "installed"},
+         & {"sleep", "brainstorm", "planned", "staged", "deployed", "installed"},
          truth_stat)
 
     print(f"-- the epoch surfaces: {failures} failure(s)")

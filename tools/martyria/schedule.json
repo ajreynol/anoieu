@@ -1,0 +1,13 @@
+{
+  "_": "The human's working window. See sleep.py, and INST-1 in docs/instructions.md.",
+  "human": "ajreynol",
+  "timezone": null,
+  "_timezone": "An IANA name such as \"America/Chicago\". null means: use whatever local time this machine reports, which is right on a workstation and wrong in a container.",
+  "available": {
+    "from": "08:00",
+    "to": "18:00"
+  },
+  "breaks": [],
+  "set_on": "2026-09-02",
+  "why": "The recommended default. Ten hours is the ceiling, so this window is at it."
+}

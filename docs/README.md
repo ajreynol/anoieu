@@ -86,6 +86,14 @@ including the two where anything actually gets built. Distinct from
 [`usage.md`](usage.md), which is the analyzer's command line, and from
 [`coherence.md`](coherence.md), which is the standards the work is held to.
 
+[`instructions.md`](instructions.md) is the other half of that page, and is
+the only document here **addressed to you rather than to whoever maintains
+this**. Where [`interface.md`](interface.md) tells an agent how to behave, this
+tells the human — the person at the terminal — what is theirs to do, and it is
+held to one rule the rest of the documentation is not: an instruction that
+cannot be followed without first opening a file has failed. There is one so
+far, about the hours you intend to work.
+
 [`epoch-analogy.md`](epoch-analogy.md) is the shortest way in if the two below
 look like a lot: the epoch build system mapped onto an ordinary build system —
 sources, a dry run, a gate, an exit code, a version — and then the longer half,

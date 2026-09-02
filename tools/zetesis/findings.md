@@ -203,3 +203,41 @@ check: date the claims that are about other projects**, so a reader can discount
 by age rather than by trust.
 
 **State:** **open.** Raised 2026-09-02, from an outside question.
+
+---
+
+## F6 — the window we recommend is the most work we will condone
+
+**What:** the sleep protocol caps a working day at **ten hours** and recommends
+a default window of **08:00–18:00**, which is ten hours. **The recommendation
+and the ceiling are the same number.** A default is read as advice about what is
+normal, and a maximum is read as the edge of what is tolerable; when one value
+does both jobs, the ecosystem is quietly proposing that a normal day is the
+longest day it will permit. We chose both numbers ourselves and have no evidence
+for either.
+
+**Evidence:** `MAX_HOURS = 10` and `DEFAULT = {"from": "08:00", "to": "18:00"}`
+in [`../martyria/sleep.py`](../martyria/sleep.py), and the schedule shipped in
+`schedule.json`, whose own `why` field records that the window is at the
+ceiling. Neither number is argued for anywhere in the tree.
+
+**Why it is ethical and not only technical:** the mechanism exists to protect
+somebody from a pressure the ecosystem itself creates, and its default setting
+is the maximum exposure it allows. A tool that says *take a break* while
+recommending the longest permitted day is not obviously acting against the
+person, but it is not acting for them either, and the gap between those two is
+the whole subject of this project. There is a second half: **we are also the
+party that benefits from a long window**, since more hours is more prompts. A
+limit written by the interested party needs its reasoning in the open, and ours
+is not there.
+
+**What would settle it:** a stated basis for both numbers, from outside this
+ecosystem, and a default set strictly below the ceiling if the basis does not
+support them being equal. Failing that, an honest note in the code saying the
+numbers are conventional and unevidenced — which is cheaper, weaker, and still
+better than the silence there now.
+
+**State:** **open.** Raised 2026-09-02, in the session that introduced the
+protocol, at the maintainer's instruction. The related question of whether an
+agent should ever tell a person to stop working is **not** in this entry and is
+the general half of `S3` in [martyria](../martyria/stances.md).

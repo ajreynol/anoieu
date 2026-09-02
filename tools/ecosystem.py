@@ -401,6 +401,18 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
         if os.path.isfile(disc):
             owed += open(disc, encoding="utf-8").read().count("**To:** anoieu")
 
+    # Soft on purpose. The schedule mechanism is maintained by a child project,
+    # and a child project may be deleted without anything else noticing -- so
+    # this asks for it and carries on without it. The reference is still a
+    # rule 10 break and is recorded as one in that project's charter; what it
+    # is not is a dependency that takes the health summary down with it.
+    sys.path.insert(0, os.path.join(ROOT, "tools", "martyria"))
+    try:
+        import sleep as sleep_tool  # noqa: PLC0415
+        clock = sleep_tool.state()
+    except Exception:  # noqa: BLE001
+        sleep_tool, clock = None, None
+
     epoch = bump_check.current_stretch() or "?"
     status = bump_check.current_status() or "?"
 
@@ -414,6 +426,14 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
         ("topics owed to us", str(owed), verdict(owed == 0)),
         ("stretch", f"{epoch}, {status}",
          verdict(status in ("deployed", "installed"), status == "?")),
+        # The one indicator that is about the runner rather than the tree, and
+        # the one whose value changes without anybody committing anything. It
+        # is marked `attention` outside the window because the mark is the
+        # whole intervention -- see PROTO-18. It is never `unknown`: a missing
+        # schedule means the default window, not an unanswerable question.
+        ("hours",
+         sleep_tool.summary(clock) if clock else "no schedule mechanism",
+         verdict(clock and clock["status"] == "awake", clock is None)),
     ]
 
 

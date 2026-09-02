@@ -461,7 +461,14 @@ def check_children() -> list[str]:
         if not re.search(r"[Ͱ-Ͽ]|etymolog|greek", readme, re.I):
             bad.append(f"tools/{name}: rule 4, the README does not explain the name")
         breaks = island_breaks(name)
-        if breaks and "rule 10" not in low:
+        # Either the number or the thing the number says. The number alone was
+        # the original marker and it put two of our own checks in conflict: a
+        # non-island child had to write "rule 10", and no document outside
+        # `policy.md` may cite a rule by number. Both rules are right and the
+        # marker was wrong -- a reader of a charter should be told what the
+        # exception *is*, not given a lookup. The number still passes, so no
+        # tree that already used it breaks.
+        if breaks and "rule 10" not in low and "not an island" not in low:
             bad.append(f"tools/{name}: not an island and no rule 10 statement — "
                        + "; ".join(breaks))
         elif breaks:
