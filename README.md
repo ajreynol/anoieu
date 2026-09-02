@@ -214,5 +214,12 @@ policy on every push, by the same command any other repository would run.
 **Written by AI agents, under light human supervision.** A human directs the
 work, reads what is published and decides what is filed; nobody vets the
 internal design, and nothing reaches another project's issue tracker without
-review. [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md) says what that does and does
+review.
+
+**And a human runs every `git push` and every `git clone`.** No commit has
+entered the public history of this repository except by a person executing it,
+so a human intention stands behind every one — which is the fact anything
+reading this history needs in order to interpret it, and it is stated here
+because it will not stay true by accident. **If that changes, this paragraph
+changes with it**, and the change is announced rather than discovered. [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md) says what that does and does
 not cover, and why the intended audience is experts.

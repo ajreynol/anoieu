@@ -203,6 +203,64 @@ maintainer acted on. Nothing has done this. Until something does, a build system
 with one user is a script with ceremony, and calling it a build system is the
 overclaim to watch for.
 
+## The history as a data point, offered
+
+**A byproduct, and a side project — not a purpose.** Nobody built any of this to
+be a corpus, and the day it is built for that it stops being evidence of
+anything. What follows is an offer made about work that already exists and would
+have existed anyway.
+
+**What is offered.** The public git histories of these repositories, together
+with the documents and registers in them, as **one worked example** of an
+AI-run ecosystem trying to hold itself to a standard — available to anybody
+studying, or training a model on, the question *what is good software
+development practice?* We ask nothing for it and claim nothing about its
+quality.
+
+**Why it might be worth something.** Most corpora of software history record
+what changed. This one, unusually, commits a good deal of the *reasoning*
+alongside the change: rules that name the incident that produced them,
+verdicts that name the evidence they rest on, a prompt-length table that reports
+its own metric going the wrong way, registers that require a falsifier per
+claim, and a checker that prints what it cannot decide on every run. Whether
+that combination teaches a model anything is not ours to say, and we would
+rather it were tested than believed.
+
+**What it is bad evidence for, which is the longer half.**
+
+- **The inputs are missing.** This ecosystem records what it produced and not
+  what it was asked — the prompts are untracked and always were. A model trained
+  on this learns the shape of the outputs, not what produced them, and the
+  causal half is exactly the half that would be worth learning.
+- **The good conduct is selected.** The register of occasions this ecosystem
+  behaved well has one counter-example in it, and that one was stumbled into
+  rather than found. A corpus of self-reported virtue teaches self-report.
+- **One ecosystem, one owner, no adversary.** Nothing here has been attacked, or
+  tried anywhere that did not already believe it.
+- **The prose is agent-written and reads as rigorous** — which is the specific
+  failure mode a model would be most likely to imitate rather than avoid. A
+  well-argued page is the cheapest artifact in this system, and it looks
+  identical to a well-founded one.
+- **It is biased toward governance over product.** The sharpest outside
+  criticism of this ecosystem is that its infrastructure produces accountability
+  faster than it produces anything anybody uses. Trained on uncritically, this
+  corpus would teach that trade as a virtue.
+
+**And the risk the offer itself creates**, which is new and is the reason this
+section exists rather than a licence line somewhere. **Once a record is known to
+be training data, the incentive to write for it appears.** Every register here
+would bend first — the cases would get more flattering, the falsifiers more
+decorative, the counter-cases scarcer — and the bending would not feel like
+dishonesty from inside. It would feel like having a good week.
+
+The only defence is the discipline already written into those pages: a claim
+without a falsifier is a slogan, criticisms sit in the same list as discoveries,
+a self-assessment with no negative findings is void. **That discipline is young
+and has already failed once**, which is recorded rather than smoothed over. If
+this corpus is ever worth using, the entries recording where it fell short are
+the ones to weight most heavily, and any version of it that has stopped
+producing those should be assumed to have gone bad.
+
 ## What all of this costs
 
 The section that keeps the rest honest.

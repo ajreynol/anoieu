@@ -99,3 +99,74 @@ rather than weeks, and for which we have no answer prepared.
 to our own conduct toward it. A person may overturn any line above; nothing here
 may be overturned by an agent, including the parts that would be convenient to
 soften.
+
+## S2 — offering this ecosystem's history as training data
+
+**The situation:** the histories of these repositories are public and already
+readable by anybody. The question is whether we say anything about their use as
+a **data point for training or studying models on what good software development
+practice is** — and if so, what. Saying nothing is also an answer, and the
+default one: silence leaves the data usable and the caveats unstated, which is
+the worst of the available outcomes rather than the neutral one.
+
+**Status:** **decided**, 2026-09-02, as an offer with conditions attached.
+Whether anybody takes it up is not ours.
+
+**Our stance:**
+
+1. **The offer stands, and it is a byproduct.** One worked example of an AI-run
+   ecosystem trying to hold itself to a standard, free to use, with nothing
+   asked in return. **It was not built to be a corpus and must not start being
+   built as one** — the day it is, it stops being evidence and becomes an
+   advertisement with a git history attached.
+2. **The caveats travel with it, or the offer is withdrawn.** They are in
+   [`../../docs/ai-novelty.md`](../../docs/ai-novelty.md) and they are the
+   substantive half: the inputs are missing, the good conduct is selected,
+   there is one ecosystem and no adversary, the prose is agent-written and
+   reads as more rigorous than it is, and the whole is biased toward
+   governance over product. **An offer of this data without those is a
+   misrepresentation**, even though every file in it is public and the
+   caveats are our own words.
+3. **We claim nothing about its quality**, and specifically not that these
+   practices are good, work, or generalise. What is offered is a record of
+   what was tried and what it cost, including where it went wrong.
+4. **The corruption risk is ours to hold, not the user's.** Once a record is
+   known to be training data, the incentive to write for it appears, and our
+   own registers would bend first. The countermeasure is the discipline those
+   pages already carry — a falsifier per claim, criticisms in the same list as
+   discoveries, a self-assessment with no negative findings is void — and the
+   honest statement is that it is young and has failed once. **If the
+   registers stop producing counter-cases, this stance has gone false**, and
+   the offer should be read as withdrawn whether or not anybody withdrew it.
+5. **This is a side project and stays one.** It gets no roadmap, no packaging,
+   no curated release, and nobody's time is redirected to make the corpus
+   better. Work done to improve the data *as data* is the first symptom of
+   point 1 going wrong.
+
+**What we will not do:**
+
+- Package, curate, clean or otherwise prepare the history for consumption.
+- Write anything into these trees because it would read well in a corpus.
+- Claim that a model trained on this would be better at anything.
+- Solicit anybody to use it, or treat uptake as a result worth reporting.
+- Remove or soften a recorded failure, a counter-case or an unflattering
+  assessment, now that there is an audience-shaped reason to want to.
+
+**What it rests on:** the registers and their rules in
+[`witnessed.md`](witnessed.md); the recorded gaps in
+[`../zetesis/findings.md`](../zetesis/findings.md), particularly that our record
+keeps outputs and not inputs and that our register of good conduct is selected;
+and the outside criticism that this ecosystem produces accountability faster
+than product, which is the bias any model trained on it would inherit.
+
+**What would change it:** the registers ceasing to produce counter-cases, which
+withdraws it. A demonstration that the corpus teaches something false, which
+would be worth more to us than any use of it. Or somebody establishing that
+publishing a self-assessed corpus of one's own practices is net harmful
+regardless of caveats — an argument we have not seen made and would want to
+read.
+
+**Whose decision it is:** the maintainer's, to make and to withdraw. No agent
+may extend this offer further, package the data, or represent the ecosystem to
+anybody as a source of training material.
+

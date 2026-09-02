@@ -165,6 +165,40 @@ without coordinating on it. Neither cited the other.
 **State:** **standing.** The assessment it supports is
 [`case-cvc5-12891.md`](case-cvc5-12891.md).
 
+### M4 — every commit in the public history was pushed by a person
+
+**What:** *up to now, a human has run every `git push` and every `git clone` in
+this ecosystem's trees. No commit has entered a public history except by a
+person executing it, so a human intention stands behind every one. If that
+changes — if commits come to be executed by an agent rather than by a person —
+the policy is updated to say so, and any tool reading these histories is told.*
+
+**Who:** the maintainer of this repository, who is the person executing them.
+
+**When:** declared 2026-09-02, describing the regime up to that date. Not yet
+re-affirmed.
+
+**Why it bears on our conduct:** it is the fact a history analyser most needs
+and is least able to derive. A commit says what changed and not who chose it,
+and *the repository did X* means something entirely different depending on
+whether a person or an agent put it there. Everything this ecosystem claims
+about human supervision — that a person approves every prompt change, that
+nothing is created or published without one, that work is left staged for review
+— reduces to a claim about **who executed the irreversible step**, and this
+names it. Declaring the regime also makes its ending detectable: an undeclared
+transition is the failure, not the transition.
+
+**How it could be contradicted:** push events are public and carry an actor.
+Anybody can compare the pushers on record against this claim, for any commit, in
+any of these repositories. This is the rare declaration here that is close to
+fully checkable, which is why it is worth making precisely rather than in
+spirit.
+
+**State:** **standing**, and this is the entry most likely to be superseded. The
+supersession is the point: it is recorded so that a change of regime is an
+announcement rather than something an analyser has to infer from a change in
+commit rhythm.
+
 ## Cases
 
 **Acts, witnessed from the record.** One entry per occasion when this ecosystem
