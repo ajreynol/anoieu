@@ -1,5 +1,31 @@
 # The history
 
+> ## ⚠ READ THIS BEFORE QUOTING ANYTHING ON THIS PAGE
+>
+> **NOTHING HERE ABOUT A PROJECT OUTSIDE THE EUNOIA ECOSYSTEM REFLECTS THAT
+> PROJECT'S VIEW.** Those projects did not ask to be measured, were not
+> consulted, have not seen this page, and owe this ecosystem nothing. Every
+> figure about them is **our** reading of a public record, and every
+> description of what they are is **our** summary. **Where a project has stated
+> something about itself we attribute it; everything else is ours and should be
+> attributed to us.**
+>
+> **WE GIVE NO GUARANTEE THAT ANYTHING ON THIS PAGE IS CORRECT.** None, to
+> anybody, and least of all to an outside project relying on it. The numbers are
+> produced by the party they describe, using tools that party wrote, at one
+> moment, without independent audit. **They have already been wrong**: this page
+> published a false claim about when two members joined and corrected it the
+> same day.
+>
+> **IF SOMETHING HERE ABOUT YOUR PROJECT IS WRONG, TELL US AND WE WILL CORRECT
+> IT**, in the open, with the correction and the reason both kept — see
+> [`discussion.md`](discussion.md). **You do not have to be a member of anything
+> to ask**, and we will not require you to join in order to be corrected.
+>
+> **This page is a record of what one ecosystem did. It is not an assessment of
+> anybody else.**
+
+
 **What previous presidents did, and what the current one is doing.** One
 section per stretch, oldest first, and nothing else.
 
