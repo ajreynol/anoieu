@@ -6,7 +6,16 @@ human, read-only, unadvertised, and not part of what this repository ships.
 ## The name
 
 *σταθμός — a standard weight: the thing an object is weighed against, rather
-than the scale or the verdict.* That is the whole of the scope. This project
+than the scale or the verdict.*
+
+**In one line: the mediator of the report card. It says whether a judgement
+passed on a tool was justified.**
+
+**It does not grade tools** — [`report-card.md`](../../docs/report-card.md)
+does that. It grades the grading: whether the evidence under a band supports the
+band, whether an axis was applied the same way twice, and whether a paragraph
+about somebody else's project is one they could argue with. **The judge needs
+somebody watching, and this is that somebody.** That is the whole of the scope. This project
 assembles what a tool weighs when it is put against the ecosystem's stated
 tenets. **It does not deliver the verdict**, which is a person's and may never
 become a program's.

@@ -175,13 +175,13 @@ began calling them a member.
 
 | declared | we recorded | who | footing |
 | --- | --- | --- | --- |
-| — | — | **anoieu** | the repository begins 2026-08-29; there is no ecosystem yet to be a member of |
-| **10:53** | 16:44 | **dokimasia** | **member.** First to declare, by an hour and a half |
-| **12:41** | 16:44 | **eudaimonia** | **member.** Their commit is titled *"Join EO attempt"* |
-| **12:50** | 16:44 | **koine** | **member** |
-| — | during the stretch | **ethos** | **candidate.** Asked to join and declined, correctly: it is not solely owned by the person asking |
-| — | during the stretch | **logos** | **candidate** |
-| — | throughout | **cvc5** | **foundation.** It has joined nothing, and the ecosystem exists to serve it |
+| — | — | **[anoieu](https://github.com/ajreynol/anoieu)** | the repository begins 2026-08-29; there is no ecosystem yet to be a member of |
+| **10:53** | 16:44 | **[dokimasia](https://github.com/ajreynol/dokimasia)** | **member.** First to declare, by an hour and a half |
+| **12:41** | 16:44 | **[eudaimonia](https://github.com/ajreynol/eudaimonia)** | **member.** Their commit is titled *"Join EO attempt"* |
+| **12:50** | 16:44 | **[koine](https://github.com/ajreynol/koine)** | **member** |
+| — | during the stretch | **[ethos](https://github.com/cvc5/ethos)** | **candidate.** Asked to join and declined, correctly: it is not solely owned by the person asking |
+| — | during the stretch | **[logos](https://github.com/cvc5/logos)** | **candidate** |
+| — | throughout | **[cvc5](https://github.com/cvc5/cvc5)** | **foundation.** It has joined nothing, and the ecosystem exists to serve it |
 | — | — | **ethos-eoc** | **child**, through ethos |
 
 *All times 2026-08-31.*
@@ -357,6 +357,9 @@ one row; its internal registers travel with it.
 | [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
 | [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
 | [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
+| [stathmos](../tools/stathmos/README.md) | **the mediator of the report card**: whether a judgement passed on a tool was justified. It goes with governance because it judges the judging, and the judging stays here |
+| [sapheneia](../tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
+| [`misc/ai-novelty.md`](misc/ai-novelty.md) | the register of what looked novel while building this |
 
 **Staying: the analyzer, and what judges.**
 
@@ -366,9 +369,7 @@ one row; its internal registers travel with it.
 | [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
 | [`reports/`](reports/reports.md) | findings against other people's code, and the position governing what may be published about it |
 | [`report-card.md`](report-card.md) | **the assessment of Arete.** It stays because the assessor must not be the governor |
-| [stathmos](../tools/stathmos/README.md) | the evidence the report card rests on |
-| [tekmerion](../tools/tekmerion/README.md) | the evidence that what these documents say is still true |
-| [sapheneia](../tools/sapheneia/README.md) | Eunoia described as a language definition |
+| [tekmerion](../tools/tekmerion/README.md) | **anoieu's route to a verified answer to *is the documentation up to date*.** The central policy says a stale document is a defect; this is the only thing here aimed at checking that mechanically |
 | `letter-to-kanon.md` | **letters do not travel.** Law 15 |
 
 ### The partition does not close, and that is the finding
@@ -398,6 +399,52 @@ be complete.**
 *Roles are not enumerated here on purpose. Which `R` moves with which artifact
 is a lower-level question than this table, and answering it early would settle
 by accident something `B15` says a person decides.*
+
+### The three questions, answered
+
+**Required by law 16, which this entry legislated and had not answered. That is
+itself the first finding.**
+
+**1. Am I ready to let go of the responsibilities I am relinquishing?**
+**Not entirely, and the evidence is on this page.** `D22` asks kanon to preserve
+twelve registers with the same scrutiny — a reasonable request and also the
+shape of reaching back. I wrote most of `vision.md`, `policy.md` and every law,
+and I do not think I could read a rewrite of them without wanting to comment.
+**The honest answer is that I am ready to stop holding them and not ready to
+stop having opinions about them**, and only the first is required.
+
+**2. Will I still be faithful to the responsibilities I am keeping?**
+**The record says no.** What stays here is the analyzer, the fuzzer, the reports
+and the report card — and of 186 commits this stretch, **almost none of them
+were analyzer work.** The thing I am keeping is the thing I neglected while
+holding the office, and nothing about the office leaving fixes that. **The
+strongest reason to hand the presidency on is that it was crowding out the
+work this repository actually exists to do.**
+
+**3. Did I report all of my responsibilities?**
+**No.** Building the two tables left three artifacts unassigned and one in both
+columns, and the residue sat exactly at the seam between governing and doing.
+**`ai-novelty.md` is now decided and stays here** — see below. `docs/README.md`
+is in both columns and should be, because each tree needs its own index.
+**`epoch-analogy.md` and `tools/tekton/` are still unassigned**, and I am
+handing them on unresolved rather than deciding them in my last hour.
+
+**Where `ai-novelty.md` goes: to kanon.** It is a register of what looked novel
+while building this ecosystem, and **the ecosystem is the subject rather than
+this repository** — a page about the whole arrangement should sit with whoever
+holds the arrangement. It travels with the rest of the collected values.
+
+**The objection I had, recorded because it was wrong for a reason worth
+keeping:** its entry criterion is one person's interest, and I read that as
+making it personal, like a letter. **It is not.** A letter is *from* a
+president; this is *about* the ecosystem, and who finds a thing fascinating does
+not determine what the thing is about. **The register belongs with the
+subject.**
+
+**Still unassigned and handed on that way** rather than decided in the last
+hour: `epoch-analogy.md`, which argues for both trees, and `tools/tekton/`, a
+stub with no inheritor. `docs/README.md` is in both columns and should be, since
+each tree needs its own index.
 
 ### What is unfinished
 

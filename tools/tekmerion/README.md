@@ -6,7 +6,17 @@ human, read-only, unadvertised, and not part of what this repository ships.
 ## The name
 
 *τεκμήριον — conclusive evidence, as against σημεῖον, a mere sign that may point
-the other way.* Aristotle draws the distinction sharply and it is the standard
+the other way.*
+
+**In one line: anoieu's route to a verified answer to *is the documentation up to
+date*.**
+
+**The central policy of this ecosystem is that a document which has gone stale
+is a defect.** Everything else about that policy is argued; this is the only
+thing here aimed at making it **checkable** — evidence, claim by claim, that
+what a page says is still true of the tree it describes. `tools/doc_currency.py`
+measures whether a document carries a date, which is evidence about evidence.
+**This project is the part that would measure the claim itself.** Aristotle draws the distinction sharply and it is the standard
 this project is held to: **what would have to be true for a claim in these
 documents to be believed by somebody with no reason to believe us.**
 
