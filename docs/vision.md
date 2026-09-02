@@ -761,3 +761,5 @@ arrives expecting the parent's considered position. This is `tools/`, beside the
 policy that governs them, and the whole content of each entry is that the
 project has no standing yet. Naming something in order to record that it does
 not count is the opposite of advertising it.
+
+**Have fun and enjoy the Eunoia ecosystem!**

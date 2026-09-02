@@ -135,6 +135,7 @@ named.
 | `PROTO-22` | **the misc protocol** — a document too expensive to clean up now is demoted to `docs/misc/` rather than deleted or left misrepresenting itself. Discouraged, and a growing `misc/` is a symptom | page → layout | this page |
 | `PROTO-23` | **the downstream refresh** — fetch and read another repository before making a claim about it, and say how far behind you were | us → downstream | this page |
 | `PROTO-24` | **the upstream refresh** — a member makes its copy of the shared arrangements current before relying on them, and only onto a green commit | member → us | this page |
+| `PROTO-25` | **the joke protocol** — humour lives on the president's front page and nowhere a machine parses or a stranger reads for instructions. Any tool may say *that's not funny*, meaning *you are confusing everyone*, and it ends there | any tool → any tool | this page |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it
@@ -147,6 +148,50 @@ morning — does not happen in one repository, so a rule held in one repository
 cannot reach it. The mechanism is maintained by
 [martyria](../tools/martyria/README.md), which is where its ethics are argued
 and its schedule lives.
+
+## `PROTO-25` — the joke protocol
+
+**A president keeps a joke about its own name on its front page, and that is
+where humour stops.** Law 12 in [`laws.md`](laws.md) puts it there; this
+protocol keeps it there.
+
+### Any tool may say "that's not funny", and that ends it
+
+**The objection is not a review and is never about taste.** *That's not funny*
+means one thing here: **you are confusing everyone.** A reader arrived, met a
+joke, and left less sure what the tool does or what they were being asked to do.
+
+**It is honoured without argument.** The joke is removed or replaced, by
+whoever put it there, and **nobody explains the joke.** Arguing that a joke is
+funny is the behaviour that makes it worse, and a tool that can be talked out of
+saying so will stop saying it. **The objector owes no evidence.** One reader
+confused is the whole of the case, because that reader is the only one who can
+report it.
+
+**No appeal, and no cost to raising it.** An objection that turns out to be
+wrong has cost one joke. **An unraised objection costs every reader after it.**
+
+### Where humour may not go at all
+
+**Not a matter of judgement, and not subject to a good enough joke:**
+
+- **Anything a machine parses.** Check output, exit codes, formats, ids.
+- **Anything a stranger reads to find out what to do.** Prompts sent to other
+  repositories, joining instructions, error messages. **A joke in a diagnostic
+  costs somebody a debugging session**, and they will never know it was a joke.
+- **The policy, the checks, and any document a member is held to.** Nobody
+  should have to decide whether a rule is serious.
+- **Anything about somebody else.** A joke at another project's expense is not
+  covered by this protocol and never was.
+
+### The one that earns its place
+
+**A joke that *is* the description is not decoration and is welcome.** anoieu is
+*eunoia* backwards and pronounced *annoy you*, which tells a stranger what the
+tool does in three words. `iogos` in the name register is the same trick: it
+fixes the scope in the name and could not be renamed without losing information.
+**That is the standard — if removing the joke loses nothing, it was never doing
+any work.**
 
 ## `PROTO-23` — the downstream refresh
 

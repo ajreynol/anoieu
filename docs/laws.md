@@ -195,6 +195,11 @@ invented for itself in an afternoon.
 **It is cheap and it doubles as description**, which is the test of a good one:
 the joke should tell a stranger what the tool does.
 
+**And it is bounded by `PROTO-25`, the joke protocol** — humour goes on the
+front page and nowhere a machine parses or a stranger reads for instructions,
+and **any tool may say *that's not funny***, meaning *you are confusing
+everyone*, which ends it without argument.
+
 **13. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
