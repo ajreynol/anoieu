@@ -495,6 +495,27 @@ tests.
 It is also what keeps the next rule from being ceremonial.
 
 **Work is left staged, not committed.** A person reviews the diff and commits.
+
+**And when a commit is taken while the work is still moving, say so in one
+line.** The staging convention assumes the person commits once the agent has
+stopped. Committing mid-stream instead is nobody's fault and will keep
+happening — but the commit's message then **stops describing its contents**, and
+a history somebody can walk is most of what this ecosystem claims. A reader
+looking for a change finds it filed under a subject it has nothing to do with,
+which is worse than not finding it.
+
+The remedy is deliberately small: **one line naming the commits and what they
+actually carry.** Anyone may write it, anyone may delete it, at any time,
+without asking — it is a note about the record rather than a record in its own
+right. Nothing waits on it and nothing is blocked by it being there or gone.
+
+> **Noted 2026-09-02, and removable.** Two commits were taken mid-stream and
+> their subjects are misleading. `086f1d9` — *"More additions to why-eunoia"* —
+> changes no line of that file: it is martyria's standing observation grant and
+> zetesis's analysis of its relationship to the kernel. `9d9a33f` — *"Code with
+> prompts idea"* — carries that idea and also the documentation handoff
+> protocol, request `R2`, four factual corrections, and the 103-line deletion of
+> the euthyna description from `why-eunoia.md`.
 This is not a formality: it is the last place where a change to a document that
 binds another repository can be caught.
 

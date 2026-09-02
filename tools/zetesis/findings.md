@@ -124,3 +124,48 @@ and it was produced by this project getting something wrong rather than by
 anybody going looking — which is the weakest way to discharge a finding of this
 kind. One entry is not a balanced register and the finding stays open until a
 counter-case is found by looking rather than by stumbling.
+
+## F4 — the registers record the tool's conduct and not the prompter's
+
+**What:** every register in this family records what the *tools* did. The
+person directing them appears only where their action is entangled with an
+agent's. The mid-stream commit noted in
+[`../../docs/coherence.md`](../../docs/coherence.md) is the first fault recorded
+here that is **purely the prompter's**, and it went into a maintenance page
+rather than into any register of conduct — because no register has a slot for
+it.
+
+**Evidence:** in [`../martyria/witnessed.md`](../martyria/witnessed.md),
+testimony is *declared by* the maintainer but is about facts rather than
+conduct; `C1`, `C2` and `C3` are all about tools; and `X1`, the only entry
+naming a human action, names it as the **second half** of an agent's miss —
+*a reviewer who did not check that it had*. `F1` through `F3` above are about
+the record. There is no entry anywhere whose subject is something the person
+did, on their own.
+
+**Why it is ethical and not only technical:** an ecosystem that records the
+conduct of only its non-human half will conclude, **correctly from its own
+evidence**, that its non-human half is where the faults are. That conclusion
+would be an artefact of the filing system, and it is the kind of error that gets
+more convincing the longer the registers run.
+
+The reason for the asymmetry is the uncomfortable part: **the agent writes the
+registers.** It is the party with the least standing to grade the person
+directing it, and both failure directions are open — flattering the prompter,
+or blaming them — with neither detectable from inside. That is a structural
+problem and not a matter of anybody trying harder.
+
+**What would settle it:** one entry whose subject is a human action. **Not a
+procedure** — the registers already have the right shape, and the shape is why
+no new authority is needed: their fields are *what happened*, *the artifact*,
+*what it cost*, never *whose fault*. An entry about a mid-stream commit is an
+entry about a commit, and a commit is an artifact. Nobody is being graded, so
+there is nothing to adjudicate and no rule required about who may write or
+remove one — the answer to both is *anyone*, as it already is for every other
+entry here.
+
+What is missing is therefore small: not permission, just the habit. `X1` already
+records a human action correctly, as one half of an event rather than as a
+verdict; nothing stops the next one standing on its own.
+
+**State:** **open.** Raised 2026-09-02, out of the first instance.
