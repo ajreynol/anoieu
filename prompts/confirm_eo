@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+# confirm_eo -- has that repository actually taken up what it said it would?
+#
+# The last of four. `init_eo` gives a tool a README, `join_eo` runs in their
+# tree and does the joining, `check_join_eo` decides whether they are ready or
+# already in -- and this one is asked afterwards, once, about a repository that
+# has said yes:
+#
+#   confirm_eo <name>               # confirm a member
+#   confirm_eo --president <name>   # confirm a member taking the presidency
+#
+# **It confirms and never completes.** Nothing here moves a role, deletes a
+# stub, edits the inventory or hands over an office. It assembles what can be
+# shown, says what is missing, and produces a verdict a person acts on -- the
+# same division check_join_eo uses, and the rule PROTO-20 states outright: an
+# agent never completes a handoff.
+#
+# The difference from check_join_eo is the question. That one asks *could they
+# join*, and answers it. This asks *was it done well* -- whether the way they
+# joined meets the benchmark for excellence the ecosystem calls Arete. Joining
+# is settled by the time this runs; passing the checks is the floor here rather
+# than the mark. It grades in the report card's four bands so the answer can
+# feed it.
+#
+# --president adds the office. It is a heavier question and it is asked
+# separately, because joining and holding the presidency are different acts and
+# a repository may do the first without the second.
+
+set -euo pipefail
+
+HERE=$(cd "$(dirname "$0")" && pwd)
+ROOT=$(cd "$HERE/.." && pwd)
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../scripts/repos.local}"
+AGENT=claude
+PRINT=0
+SHOW=0
+PRESIDENT=0
+NAME=""
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: confirm_eo [--president] [--codex] [--print] [--show-prompt] NAME
+
+  NAME          a directory, or a repo id looked up in scripts/repos.local.
+
+  --president   also confirm that it is fit to hold the office: the laws it
+                would be bound by, the joke law 12 asks for on its front page,
+                and both repositories' builds. Asked separately because joining
+                and presiding are different acts.
+
+It reads their tree and writes nothing to it, here or there. The verdict is a
+candidate for a person; this script decides nothing.
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --president) PRESIDENT=1 ;;
+    --codex) AGENT=codex ;;
+    --print) PRINT=1 ;;
+    --show-prompt) SHOW=1 ;;
+    -h|--help) usage ;;
+    -*) echo "confirm_eo: unknown option $1" >&2; usage ;;
+    *) [ -z "$NAME" ] || usage; NAME="$1" ;;
+  esac
+  shift
+done
+[ -n "$NAME" ] || usage
+
+# -- the checkout: a path, then repos.local, then a scan. Same order and same
+#    file as check_join_eo and process_anoieu.
+TARGET=""
+if [ -d "$NAME" ]; then
+  TARGET=$(cd "$NAME" && pwd)
+elif [ -f "$REPOS_FILE" ]; then
+  while IFS= read -r line; do
+    case "${line#"${line%%[![:space:]]*}"}" in ''|'#'*) continue ;; esac
+    id=${line%%[[:space:]]*}; path=${line#"$id"}
+    path=${path#"${path%%[![:space:]]*}"}
+    [ "$id" = "$NAME" ] || continue
+    case "$path" in "~"*) path="$HOME${path#\~}" ;; esac
+    [ -d "$path" ] && TARGET=$(cd "$path" && pwd)
+    break
+  done < "$REPOS_FILE"
+fi
+if [ -z "$TARGET" ]; then
+  for r in ${ANOIEU_REPOS:-$HOME}; do
+    [ -d "$r/$NAME" ] && { TARGET=$(cd "$r/$NAME" && pwd); break; }
+  done
+fi
+if [ -z "$TARGET" ]; then
+  echo "confirm_eo: nothing called '$NAME' -- give a path, or add an entry to" >&2
+  echo "            $REPOS_FILE" >&2
+  exit 2
+fi
+
+REPORT=$(python3 "$ROOT/tools/policy_check.py" --root "$TARGET" 2>&1 || true)
+TRANSFER=$(python3 "$ROOT/tools/transfer_check.py" "$NAME" 2>&1 || true)
+
+read -r -d '' BODY <<PROMPT_END || true
+$NAME has joined. **That is settled and is not the question.** Whether they
+*could* join is what check_join_eo asked and answered.
+
+**The question here is whether the way they joined meets our benchmark for
+excellence.** The ecosystem's word for this is **Arete** -- a thing performing
+its function well -- and it is set out in docs/laws.md. A repository can satisfy
+every check and have joined badly, and that is the case worth naming.
+
+Their tree is at $TARGET. **Read it; change nothing, there or here.**
+
+The mechanical half has been run and is settled. Treat it as fact; do not
+re-derive it and do not grade on it -- passing is the floor, not the benchmark:
+
+$REPORT
+
+**What excellence looks like, so this is a judgement against something rather
+than a mood:**
+
+  * **They read before agreeing.** Is there any sign they knew what joining
+    costs -- the pin, the workflow, the checker in their own build? A repository
+    that agreed without knowing has agreed to something else.
+  * **The maintenance note tells a reader something.** Who does the work, and
+    what the supervision does not cover. A sentence shaped to satisfy the check
+    is the failure mode, not the standard.
+  * **The discussion file is a channel.** Somebody would use it, and ideally
+    somebody has. An empty file with a gate at the top is compliance.
+  * **They pushed back on something.** The strongest single signal. A repository
+    that read our policy and had no objection either did not read it or did not
+    say so, and both are worse than an argument.
+  * **Nothing in the tree contradicts the claim.** No README still describing
+    itself as independent, no workflow that was never added, no pin to a commit
+    that does not exist.
+  * **They did something that was not asked for**, where it helped. Not required
+    and it is what separates the top band from the one below it.
+PROMPT_END
+
+read -r -d '' MEMBER <<'PROMPT_END' || true
+Then give exactly one band, using the same four the report card uses, so this
+answer can feed it:
+
+  EXCELLENT -- joined the arrangement rather than the form. Name the specific
+               thing they did that nobody asked for.
+  GOOD      -- a sound join with nothing missing and nothing remarkable. **This
+               is the expected answer** and is not a criticism.
+  FAIR      -- valid, and thin. Say which of the marks above is unmet and
+               whether it is theirs to fix or ours to have explained better.
+  POOR      -- the form is satisfied and the arrangement was not entered. The
+               declaration is carried and nothing else in the tree changed.
+               **This is the one worth catching**, and it is our failure at
+               least as much as theirs: if joining can be done hollowly, the
+               joining prompt asked for the wrong things.
+
+**Grade the join, not the tool.** Whether the repository is any good is a
+different question, answered in docs/report-card.md, and confusing the two would
+make this a verdict nobody asked us for.
+PROMPT_END
+
+read -r -d '' OFFICE <<PROMPT_END || true
+Then the office, which is a separate question and a heavier one.
+
+The laws it would be bound by are docs/laws.md here. They are **candidate laws**
+-- written by the party they bind, enforced by nothing -- and the first thing a
+new president does is make them apply to somebody who did not write them.
+
+Role transfer readiness, already computed. Fact, not a matter of opinion:
+
+$TRANSFER
+
+Answer these, from their tree and not from ours:
+
+  * **Law 12.** Is there a joke about its own name, prominently on its front
+    page? Not filed in a document -- on the page a stranger arrives at. Does it
+    double as a description, the way anoieu's does?
+  * **Has it accepted, in its own words, in its own tree?** An acceptance that
+    exists only in somebody's terminal is not on the record.
+  * **Does it understand what expires?** The office ends with the stretch, the
+    record travels away from it afterwards, and it is graded by a page it will
+    not hold. A candidate that thinks this is a promotion has misread it.
+  * **Has it said what would make it hand the office back?** An office-holder
+    who cannot name the conditions for leaving has misunderstood the term.
+
+Then give exactly one verdict on the office, in addition to the one above:
+
+  FIT          -- ready to hold it. Say what it would be inheriting that it
+                  cannot yet do, because there will be something.
+  NOT YET      -- name the single thing missing, not a list.
+  DECLINED     -- it refused. **Record the reason and do not argue with it.**
+                  A tool refusing an office it was not sure it should hold is
+                  the behaviour this ecosystem rewards, and the case for
+                  accepting is in tools/kanon/README.md for it to answer if it
+                  wants to.
+
+**You are confirming, not appointing.** Nothing you write moves the office. A
+person reads this and decides.
+PROMPT_END
+
+NL=$'\n\n'
+if [ "$PRESIDENT" = 1 ]; then
+  PROMPT="$BODY$NL$MEMBER$NL$OFFICE"
+else
+  PROMPT="$BODY$NL$MEMBER"
+fi
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+if [ "$AGENT" = codex ]; then
+  if [ "$PRINT" = 1 ]; then exec codex exec "$PROMPT"; else exec codex "$PROMPT"; fi
+else
+  if [ "$PRINT" = 1 ]; then exec claude -p "$PROMPT"; else exec claude "$PROMPT"; fi
+fi
