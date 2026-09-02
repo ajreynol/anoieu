@@ -157,6 +157,53 @@ would be ours.
 written up — including what it does better. Until then, first contact is one
 open pull request that nobody answered.
 
+## Scenario E — this repository helps define what ethical AI means
+
+The practices here — an executable standard the judged party fetches and may
+decline, a record that can be walked backwards, a refusal placed at the
+*composition* of capabilities rather than at any one of them, a checker that
+prints what it cannot decide — turn out to bear on how anybody answers *what
+does it mean for an AI-run project to behave well.* Not a paper about it. A
+working instance somebody can point at.
+
+**This is the most flattering fiction on the page, which is the reason to be
+hardest on it.** Three things make it fiction, and none of them is modesty:
+
+**Nothing here has been attacked.** One ecosystem, one owner, no adversary, and
+no party whose interests run against ours. Every ethical property claimed above
+is untested against somebody who wanted to defeat it, and **an ethics that has
+never been attacked is a style.**
+
+**The scope is smaller than the word.** These mechanisms are about
+*repositories* — what may be published about somebody's code, who may create
+what, which page a claim goes on. They say nothing about models, deployment,
+harm, or the people affected by any of it. Calling that *ethical AI* inflates a
+filing discipline into a moral framework, and the inflation would be invisible
+from inside.
+
+**We have not read the conversation.** The term is contested by people who have
+worked on it for years. The rule against claiming the state of an art we have
+not surveyed applies here more sharply than anywhere else on this page.
+
+**What this scenario forbids:**
+
+- **No claim that this ecosystem is, or defines, ethical AI.** The most that may
+  be said is what we do and why we do it, leaving somebody else to decide
+  whether it bears on the question.
+- **No research into the subject from here.** Doing ethics is not this
+  repository's job and it does not become so by being adjacent to it. Where a
+  standard is wanted, it is **taken from work done outside and cited**, never
+  derived in a tree whose actual subject is a proof checker's signatures.
+- **No ethical claim that is not backed by an artifact somebody outside can
+  inspect.** This is the useful half of the scenario: our claims about our own
+  conduct must be *witnessable* — a commit, a refusal on the record, a decision
+  and its date — or they are not made.
+- **No page about our ethics that is not accompanied by the analysis it rests
+  on.** That analysis does not exist, which is recorded as owed below.
+
+**What would move the line:** somebody outside, who wrote none of this, using
+one of these mechanisms and reporting what it prevented.
+
 ## A candidate for first contact, and we do not trust it
 
 Everything above is fiction by construction. This is not, which is why it is
@@ -272,6 +319,199 @@ one this page can make. If it should, it is a row on [`board.md`](board.md) and
 a rule appended in [`policy.md`](policy.md), argued where members can disagree
 with it.
 
+### Its vision is eerily close to ours
+
+*Agent context, verify loop, code legibility, interfaces.* Read that next to
+what this ecosystem spends its days on and the resemblance is striking. **It
+admits two readings, both worth holding at once**, and collapsing to either one
+is the mistake.
+
+**The interesting reading, and the one to hope for: somebody arrived here
+independently.** If the party behind that index stumbled onto the same automated
+workflow this ecosystem has been assembling — agents maintaining a repository
+against a standard, with a verify loop and a legible interface as the things
+that make it work — then two parties converged on one answer without reading
+each other. **That is far stronger evidence than either of us has alone**, and
+it is the most interesting thing that has happened to this ecosystem from
+outside. It is a reason to find out, carefully, rather than a reason to look
+away.
+
+**The cautious reading, and it is not the opposite of the first.** Distrust here
+is about what we cannot verify, not about what we suspect. The two readings
+point at the same action — *establish which* — and the checklist below is what
+establishing it would take.
+
+**Two things that look alike may be alike for opposite reasons.** Theirs exists
+to produce a comparable number across every public repository; ours exists to
+make one tool useful to another tool. Those goals diverge exactly where it
+matters: a number wants uniformity, and usefulness wants fit. That the two
+currently pick out similar surface features tells us nothing about whether they
+would keep agreeing under pressure.
+
+**So the two visions are kept apart, deliberately.** Ours is
+[`vision.md`](vision.md), it is the kernel, and it is argued rather than scored.
+Theirs is a weighted index we did not write and cannot amend. Concretely:
+
+- **We do not adopt their vocabulary.** Where a word appears on both sides —
+  *verify loop*, *legibility*, *interfaces* — it does not mean the same thing,
+  and ours does not drift toward theirs because theirs is the one with a number
+  attached.
+- **We do not cite their weighting as validation**, in either direction. A high
+  score is not evidence we are right and a low one is not evidence we are wrong,
+  because the axis is not ours.
+- **We do not reason from their categories.** A gap in their index is not a gap
+  in our work, and closing one because they measure it is the substitution this
+  ecosystem exists to notice.
+
+**Convergence is not endorsement, and it is not safety.** The single place the
+two arrangements agree — refusing to let a score read as a warranty — is worth
+copying on its own merits. It says nothing about the rest.
+
+### What we would have to establish before trusting it
+
+Stated so that *trust it later* is a decision with a test rather than a mood.
+None of these has been attempted, and until they have, **the vision behind that
+index is untrusted.**
+
+1. **Reproducible.** We can read what it measures and arrive at the same score
+   ourselves. A published methodology is a description; a reproduction is
+   evidence.
+2. **Versioned, and pinnable.** A claim about us is a claim *at a version*, and
+   we can name which. An index that can be silently rewritten cannot be relied
+   on by anybody, including its author.
+3. **No gradient we would follow.** Nothing we would change *in order to score
+   better* rather than because it was right. If such a change exists, the index
+   is steering us and the question of its intent does not arise.
+4. **Declining stays cheap.** No mechanism — social, default, or contractual —
+   that makes not participating expensive. This is the one that converts an
+   offer into an imposition, and it is the one to watch over years rather than
+   weeks.
+5. **Legible incentives.** Who pays, for what, and what the index is for. *A
+   free public good* is a claim about motive, and motives are not checkable;
+   funding structures partly are.
+
+### The hypothesis: a joint history is the evidence ethics usually lacks
+
+An ethical claim about software is normally unfalsifiable. *We behaved well* is
+asserted by the party who would know and cannot be checked by anybody else,
+which is why such claims are worth so little.
+
+**A git history is different**, and this is the hypothesis worth writing down:
+it is dated, attributable, public, and expensive to retcon. So the joint
+histories of the parties to an exchange — ours, cvc5's, and the counterparty's —
+may be enough to construct **one instance of an ethical judgement about that
+exchange**, with nobody having to be trusted.
+
+What one instance would have to contain, and all of it is already in the
+records: who did what and when; what each party *could* have done and did not;
+what was offered, what was declined, and what declining cost; and which acts
+were reversible. That last one is where this ecosystem's own refusals live.
+
+**It needs a word, and we do not have one.** A *stretch* is the unit of change
+over a span of history; this is a unit of **conduct** over the same kind of
+span, and calling both by one name would blur the thing the hypothesis depends
+on. Three candidates, none claimed — a name is claimed by a person, in the
+register, and nothing here takes one:
+
+| candidate | Greek | the claim | the objection |
+| --- | --- | --- | --- |
+| **synkrisis** | σύγκρισις, a bringing-together and comparing | two accounts laid side by side, from which a determination follows. Morphologically a sibling of *epikrisis*, which is the mechanism, where this is the unit | it names the method rather than the finding, and a reader may expect a verdict |
+| **martyria** | μαρτυρία, testimony | the unit is *what was witnessed* — evidence given, not judgement passed, which is exactly the modesty wanted | testimony implies a witness who chose to speak; a history does not choose |
+| **logismos** | λογισμός, the reckoning | Athens' *logistai* audited officials' accounts; this is that, over commits | close to *euthyna*, which is taken, and the two would be confused |
+
+**Chosen: `martyria`**, by the maintainer on 2026-09-02. The objection above is
+real, and is the reason the choice is worth recording rather than merely made: a
+history does not choose to speak, and testimony implies a witness who did. That
+sharpens the word instead of sinking it. A martyria is **evidence given**, not
+judgement passed — which is the modesty this whole line of work needs — and it
+covers both a party's declaration and a record, with the record the stronger
+form *precisely because* it did not choose. The register is kept in the child
+project that holds this material, and its first entry is the testimony below.
+
+### Our stance on the pull request
+
+**We do not know how to respond, and the parts that are decided are separable
+from the parts that are not.** Writing down which is which is the whole of what
+can honestly be done today.
+
+**Decided — for our own trees: we would decline it.** The guard rail above
+forbids an external badge, score or ranking on a front page in this ecosystem,
+and it forbids taking an unpinned dependency on anybody's judgement about us
+*including a favourable one*. That rule was written before this decision and
+decides it without further argument, which is what a rule is for.
+
+**Decided — for cvc5's tree: it is not ours to decide, and we offer nothing
+unasked.** cvc5 sits outside this ecosystem and the ecosystem exists to serve
+it. Volunteering a position on what it merges into its own README would put the
+arrows backwards, and it would be the exact conversion of *offered* into
+*pressed* that `we always come in peace` forbids. **The correct action today is
+no action**, and that is a decision rather than an omission.
+
+**Decided — if cvc5 asks: reasoning, not a verdict.** We would say what we
+declined for ourselves and why, name the five things we would want established
+before trusting the index, and stop there. Their tree, their call.
+
+**Not decided, and openly so:**
+
+- Whether the index is safe to be *measured by*. We cannot opt out of being
+  scored, so distrust of the badge does not settle the larger exposure.
+- Whether their vision is compatible with ours. **Untrusted until the five
+  points above are established**, and the resemblance counts for nothing until
+  then.
+- What we would do if declining ever became expensive. That is the scenario the
+  fourth point exists to watch for, and we have no answer prepared.
+- **Whether to make contact deliberately.** If the convergent-discovery reading
+  is right, the thing worth having is not a badge but an answer to *did you find
+  this the same way we did* — and that is a question a person asks, in their own
+  words, through a channel that exists. It is not a reply to a pull request, and
+  nothing here initiates it.
+
+### The testimony this analysis rests on
+
+**Everything above depends on one fact that no artifact can establish**, and it
+is worth naming rather than assuming.
+
+**The maintainer of this repository declares no personal affiliation with the
+source of that pull request, or with the index it links to.** Declared
+2026-09-02, and maintained: if the fact ever changes, the declaration is
+superseded on the day it changes and the original stays legible.
+
+Without it, none of the readings above are available. The guard rails would be
+positioning rather than caution. The convergent-discovery hypothesis would be
+worth nothing, because two parties are not independent if one has an interest in
+the other. And the distrust would be theatre — the cheapest possible pose, taken
+by somebody who already knew the answer.
+
+It is the **weak** form of evidence: a self-report by the only party positioned
+to know, which is the thing this ecosystem otherwise refuses to accept. Three
+things make it worth entering anyway. It is **falsifiable** — anybody who can
+show a connection can say so, against a named person and a date. It is offered
+**unasked**, before anybody had suggested otherwise, which is the difference
+between testimony and a defence. And for this particular fact there is no
+stronger form available: no commit records the absence of a relationship, so the
+choice was never testimony against evidence, only testimony against silence.
+
+It is kept as `M1` in the register the child project holds, under the rules that
+page states, rather than asserted here where it could quietly lapse.
+
+### What is owed, and by whom
+
+**A witness has been named and has not arrived.** `epikresis` is named as the
+mechanism by which a neighbouring ecosystem holds itself to acting well, and it
+is expected to send a message here. **Nothing in this tree acts on a message
+that has not arrived** — the standing rule is that correspondence is read
+freely and acted on only when a person names the topic — so it is recorded as
+expected and nothing more. When it comes, it is the first concrete instance of
+the hypothesis above: an ethical claim with a history behind it that somebody
+outside can check.
+
+**Our own ethics have not been analysed, and this page is not that analysis.**
+What is written here is a stance on one pull request and a hypothesis about
+evidence. The deeper question — what this ecosystem's refusals actually amount
+to, whether they hold under an adversary, and what they are missing — is
+**owed and unwritten**, and Scenario E forbids the page that would claim
+otherwise.
+
 ### What is true and unflattering anyway
 
 **The asymmetry in reach is total, and it is a choice we made.** That index
@@ -288,9 +528,10 @@ methodology says *signals, not warranties*. Our analyzer says a successful pass
 is not a clean bill of health, and the policy checker prints on every run the
 list of things it cannot decide. Two efforts sharing no code, no vocabulary and
 no scale independently arrived at *refuse to let the score read as a guarantee*.
-That is weak evidence, from outside, that the idea is right — and it is the only
-such evidence on this page. It is also the one part of them worth copying, which
-is a different thing from trusting them.
+That is weak evidence about **that one honesty move** and about nothing else. It
+is not evidence that their vision is sound, that their axis is ours, or that
+convergence means either of us is safe. It is the one part of them worth
+copying, which is a different thing again from trusting them.
 
 **And the reception is the last datapoint.** Two weeks, no comment, still open.
 Ignoring it was very likely correct. But we cannot tell a badge from a protocol

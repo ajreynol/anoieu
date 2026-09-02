@@ -140,6 +140,12 @@
     "path": "tools/euthyna",
     "what": "what the proof in logos is made of, and where its weight sits"
   },
+  "apodeixis": {
+    "status": "child",
+    "parent": "anoieu",
+    "path": "tools/apodeixis",
+    "what": "whether this ecosystem's conduct meets a standard it can state and an outsider can check"
+  },
   "workflow-launcher": {
     "status": "child",
     "parent": "eudaimonia",

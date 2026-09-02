@@ -1,8 +1,8 @@
 # The board
 
 **What is being maintained across the Eunoia ecosystem, in priority order.**
-One page, at most twenty items, each with the next thing to do and who has to do
-it. Written for a person to read in a minute and edit by hand.
+One page, at most twenty-four items, each with the next thing to do and who has
+to do it. Written for a person to read in a minute and edit by hand.
 
 Nothing consumes this file yet. It is written first, deliberately: a board that
 is generated before anybody has kept one by hand encodes whatever the generator's
@@ -21,11 +21,20 @@ that is the main way a person changes what this page says.
 and that is correct rather than a mistake to tidy. A row that leaves is not
 reused: the next new item takes the next unused number.
 
-**Twenty is a cap, not a target.** Adding a twenty-first means deciding which
-one leaves, which is the whole value of the number. An item that is done, or
-that nobody will act on, is deleted rather than archived — the record of what
-happened lives in [`reports/reports.md`](reports/reports.md) and in git, and a
-board that keeps its dead is a board nobody reads to the bottom of.
+**Twenty-four is a cap, not a target.** Adding a twenty-fifth means deciding
+which one leaves, which is the whole value of the number. An item that is
+done, or that nobody will act on, is deleted rather than archived — the record
+of what happened lives in [`reports/reports.md`](reports/reports.md) and in
+git, and a board that keeps its dead is a board nobody reads to the bottom of.
+
+**The cap was twenty until 2026-09-02, and raising it needs a reason on the
+page.** It was set when the inventory held eight tools and now holds thirteen. A
+cap that never moves stops measuring priority and starts measuring how many
+repositories exist, so the number is set at roughly two items per entity — and
+**it is reviewed when the entity count changes, never when the board is full.**
+The second is how a cap gets raised by whatever happens to want adding, which is
+the failure the number exists to prevent. Every raise is recorded here, with its
+date, like this one.
 
 **Every field is a person's to overwrite.** `HUMAN FEEDBACK` is the one that
 outranks everything else on its item: whatever it says wins over the status, the
@@ -481,6 +490,27 @@ everybody fetches, which is a proposal rather than a request. Promote it if that
 happens.
 **HUMAN FEEDBACK:**
 
+## B21 — an ethics we can be held to, taken from work we have not read
+
+**Task:** `apodeixis` says its standard comes from outside and cites the
+reading that supports it. **The reading has not been done**, so the project has
+a question, two recorded gaps, and no standard.
+**Entities:** `anoieu`, `apodeixis`
+**Status:** ready — nothing is blocked on anybody else, and the first hour of it
+is a literature search.
+**Channel:** **internal** — nothing to send, and nothing here is filed anywhere.
+**Next:** find and cite one external account of what an agent-run project owes,
+and say plainly which of our claims it does and does not reach.
+**Prompt — `anoieu`:** doing ethics from this repository is out of scope and
+saying so is not an excuse: the alternative is to take a standard somebody else
+argued for. Until one is cited, every claim this ecosystem makes about its own
+conduct rests on a standard it wrote itself, which is the weakest possible
+arrangement and the one we criticise elsewhere.
+**Prompt — `apodeixis`:** name what you could not find as carefully as what you
+did. A gap in the literature is a result; a plausible bibliography assembled to
+look rigorous is the failure you exist to notice.
+**HUMAN FEEDBACK:**
+
 ## B17 — what reads this board
 
 **Task:** the infrastructure that consumes this page — a staleness check, a
@@ -496,5 +526,7 @@ field on an item, and a tool that overwrites one has misread the page.
 **HUMAN FEEDBACK:**
 ---
 
-*Seventeen items, which is about where this page should usually be — a full
-board is one that has stopped being prioritised.*
+*A full board is one that has stopped being prioritised. If this page is at its
+cap, the next thing to do is not to add an item — it is to decide which one has
+stopped mattering. The count is deliberately not written here: it rots, it has
+rotted twice, and anybody who needs it can count.*

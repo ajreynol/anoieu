@@ -216,6 +216,7 @@ number worth looking at, in both directions.
 | tool | footing | how many |
 | --- | --- | --- |
 | `anoieu` | member | 8 |
+| `apodeixis` | child of `anoieu` | 0 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
 | `ethos` | candidate | 2 |
@@ -228,9 +229,9 @@ number worth looking at, in both directions.
 | `workflow-launcher` | child of `eudaimonia` | 0 |
 | `ynoia` | child of `anoieu` | 5 |
 
-Twenty-seven roles across twelve tools, and one section empty:
-`workflow-launcher` holds nothing, which is not an omission — its own front page
-says it has no responsibilities, nothing depends on it, and it owes nobody an
+Twenty-seven roles across thirteen tools, and two sections empty:
+`workflow-launcher` and `apodeixis` hold nothing, which is not an omission — a
+child project has no users, nothing depends on it, and it owes nobody an
 artifact. The rows worth reading are the longest and the empty one, and both are
 the page working rather than the page being wrong.
 
@@ -387,6 +388,8 @@ the reporting loop, which koine has asked for and this must not quietly absorb.
 low-level formats of the reporting loop, and that request is open. An id claimed
 in a proposal nobody has answered is not free, and taking it would make the reply
 harder to write than skipping a number is.
+
+## apodeixis
 
 ## cvc5
 

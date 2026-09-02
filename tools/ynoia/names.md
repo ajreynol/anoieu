@@ -22,6 +22,17 @@ been decided yet.
 Descriptive non-Greek names are allowed where the thing is a program rather than
 an account — `anoieu_fuzz` is one — but the burden is on the name to earn it.
 
+**And the convention has a second reason, found by breaking it.** A child
+project named with an ordinary English word makes every sentence using that word
+ambiguous — proper noun, or common one — and the ambiguity is not only a reading
+cost. `tools/policy_check.py` decides whether a child project is an island by
+grepping the tree for **the bare project name**, so a common word matches prose
+about the *subject* rather than about the project, and reports an island break
+that is not one. An unusual name reads unambiguously and greps unambiguously,
+and those turn out to be the same property. The case is written up in
+[`../apodeixis/README.md`](../apodeixis/README.md), which was named `ethics` for
+about an hour.
+
 ## Taken
 
 | name | what it is |
@@ -35,6 +46,7 @@ an account — `anoieu_fuzz` is one — but the burden is on the name to earn it
 | **sapheneia** | σαφήνεια, clarity of an account: Eunoia as a language definition. A child project, in anoieu |
 | **ynoia** | *why Eunoia*: whether the arrangement earns its machinery. A child project, in anoieu |
 | **euthyna** | εὔθυνα, the audit at end of term: what logos's proof is made of. **Started**, in eudaimonia |
+| **apodeixis** | ἀπόδειξις, a showing forth — demonstration, as against a claim asserted well: whether this ecosystem's conduct can be shown to somebody with no reason to believe us. **Started**, in anoieu |
 | **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Its own repository**, and a member; audited as [`P1`](proposals.md) |
 | **workflow-launcher** | descriptive rather than Greek, and the register's own exception applies: it is a program and not an account. The first hour of a new tool's life, and a register of what this ecosystem's practice turns out to be doing. A child project, in eudaimonia |
 
@@ -57,6 +69,21 @@ stated relative to its absence. None has a repository or a line of code.
 | **noesis** | νόησις, the act of understanding | the semantics and the compiler defined *in* Lean rather than compiled into it |
 | **iogos** | not Greek: `logos` with the **L** of Lean swapped for the **I** of Isabelle. The one joke in the register, and it earns its place by fixing the scope in the name | the same calculus, semantics and soundness development redone against Isabelle/HOL — an Isabelle backend for `ethos-eoc`, and logos rebuilt on it, as an independence check |
 | **elenchos** | ἔλεγχος, cross-examination | differential fuzzing derived from the calculus rather than written by hand — what the fuzzer here is a deliberate baseline for |
+
+## Names for things that are not tools
+
+A new category, and small on purpose. The tables above name *repositories and
+projects*; this names a **kind of artifact** the ecosystem needed a word for.
+Keeping them apart stops a reader assuming every entry here is somewhere you
+could go and clone.
+
+| name | Greek | what it is |
+| --- | --- | --- |
+| **martyria** | μαρτυρία, testimony — the evidence a witness gives | one unit of what is *witnessed* about conduct: a dated, attributable, contradictable declaration, or a stretch of joint history read for the same purpose. Evidence given, never judgement passed. **Chosen** 2026-09-02; the register is in [`../apodeixis/martyria.md`](../apodeixis/martyria.md) |
+
+Two candidates were weighed against it and are free: **synkrisis** (σύγκρισις, a
+bringing-together and comparing — names the method rather than the finding) and
+**logismos** (λογισμός, the reckoning — too close to *euthyna*, which is taken).
 
 ## If none of them fits
 
