@@ -274,10 +274,13 @@ in a currency other than trust.
 **What:** `.eos` written as Lean definitions over the model logos already
 carries, the compiler as a Lean metaprogram over those definitions, and a
 theorem relating what it emits to what they say.
-**State:** `named` — audited as `P3` in [`proposals.md`](proposals.md) with
-the verdict **not yet**: it has been written zero times, and two of its three
-prerequisites already have owners in trees that are not it. The repository
-question returns when they meet.
+**State:** **started, elsewhere** — a child project in eudaimonia, with a
+charter and docs, whose stated goal is a verified Eunoia compiler in Lean. The
+`P3` audit in [`proposals.md`](proposals.md) returned **not yet** on the
+*repository* question and that verdict stands; what has changed is that "it has
+been written zero times" is no longer true, and this listing said so for longer
+than it was accurate. **This entry is now a description of somebody else's
+work** and should be read for what it wants rather than as a plan of ours.
 **Settles:** **O2**, **O3** and **O6**, each of which currently has a convention
 where it wants a statement; and **open question 3**, by building it. Arrangement
 **B** is the shape.

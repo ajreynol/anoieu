@@ -104,8 +104,9 @@ SCHEDULE = os.path.join(HERE, "schedule.json")
 #: is not a limit, it is a suggestion with extra steps.
 #:
 #: **Ten is provisional and is expected to be refined.** It was chosen by the
-#: maintainer rather than derived from anything, which is recorded as a
-#: shortcoming in `tools/zetesis/findings.md` rather than left implied. A
+#: maintainer rather than derived from anything, which is recorded as an open
+#: shortcoming in the ecosystem's general ethics register rather than left
+#: implied -- this project's README links it. A
 #: schedule that exceeds it is **refused outright** -- not clamped to it, not
 #: warned about and honoured. Clamping would silently answer a question the
 #: human asked, and this file does not have the standing to do that.
@@ -114,7 +115,7 @@ MAX_HOURS = 10
 #: The window used when there is no schedule on disk. It is *at* the ceiling
 #: rather than under it, which is worth noticing rather than smoothing over:
 #: it means the recommended state is also the most work this tool will condone.
-#: Argued, not settled, in `tools/zetesis/findings.md`.
+#: Argued, not settled, in the general ethics register this project links to.
 DEFAULT = {"from": "08:00", "to": "18:00"}
 
 #: Breaks are windows *inside* the working window, declared the same way and

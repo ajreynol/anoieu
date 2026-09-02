@@ -130,6 +130,7 @@ named.
 | `PROTO-13` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
 | `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member | agent → human | [`interface.md`](interface.md) |
 | `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
+| `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. Any hint of fraud, reject | spawned repo → anoieu | this page |
 
 **`PROTO-19` is the only entry in the register whose left-hand side is not a
 party.** A clock is not somebody with an interest, and that is exactly why it
@@ -143,15 +144,68 @@ cannot reach it. The mechanism is maintained by
 [martyria](../tools/martyria/README.md), which is where its ethics are argued
 and its schedule lives.
 
-### Its human-facing sibling
+## `PROTO-20` — the handoff protocol
 
-**A protocol is written for an agent; an instruction is written for the
-human.** Where a rule has two sides, both get written and both get an id:
-`PROTO-n` in the register above, `INST-n` in
-[`instructions.md`](instructions.md). The instruction is not a summary of the
-protocol and is not derived from it — it is the same arrangement stated to the
-party who has to live with it, and it is held to a rule of its own: **it must be
-followable without knowing a filename.**
+**A stub** is a child project whose README says: *this is a stub, delete me
+when you are convinced that my replacement is safely in the ecosystem.* It
+marks a place. **It is not the tool and it holds no claim on the name** — the
+name stays free for whoever builds it. `tools/tekton` and `tools/kanon` are the
+first two.
+
+**A spawned repository** is a new repository claiming to be the working
+instantiation of a stubbed tool. *Spawned* is the word for it here.
+
+**Two responsibilities, one each.** anoieu **cleans**: a stale stub is deleted,
+and no stub survives the deployment of the stretch it was made in. The spawned
+repository **identifies itself**: the claim *I am who I say I am* is theirs to
+make and theirs to support. Neither side does the other's half.
+
+### The security half, which is the whole of it
+
+**Deleting a stub is irreversible and keeping one costs nothing.** That
+asymmetry sets the default: **no**.
+
+1. **Any hint of fraud, reject.** Not a finding, not an accusation, no
+   investigation owed — the stub simply stays and the claimant may come back.
+2. **Evidence the claimant controls is not evidence.** A message saying *I am
+   kanon* and a repository whose README says *I am kanon* are one claim twice,
+   not two claims. **Corroboration has to come from something they do not
+   control**: the name register, the inventory, the person who would have
+   spawned it.
+3. **Asking the claimant for more proof is not verification.** It is asking a
+   claim to grow, and a claim will.
+4. **An agent never deletes a stub.** It gathers, it reports, and it refuses.
+   **A person deletes.** No amount of evidence moves this.
+5. **Deleting a stale stub claims nothing** about whether the tool exists,
+   whether anybody built it, or whether a claim was true. It is housekeeping and
+   should read as housekeeping.
+
+**Two-way, and recorded both ways.** The claim arrives through the discussion
+channel; we answer accept or reject; the answer is written down whichever it is.
+A rejection nobody recorded is indistinguishable from silence, and silence is
+what a fraudulent claimant is hoping for.
+
+*Not to be confused with `PROTO-10`, the role handoff, which moves a
+responsibility between tools that already exist and already know each other.
+This one starts with a stranger.*
+
+### Instructions are the inverse of protocols
+
+**A protocol is written for an agent; an instruction is written for a human.**
+Where a rule has two sides, both get written and both get an id: `PROTO-n` in
+the register above, `INST-n` in [`instructions.md`](instructions.md).
+
+**They are written in opposite registers.** A protocol closes every edge,
+because a gap is a hole an agent falls through in good faith. An instruction
+stays short, because one that is not read is not followed. **An instruction is
+therefore not a summary of its protocol** — if it reads like the protocol with
+words removed, it has not been written yet.
+
+**The pair cannot be diffed.** Everywhere else here a copy is compared against
+what it copies; this one is deliberately not a copy, so what binds them is the
+shared id and somebody reading both.
+
+
 
 **Say *human* where a human is meant.** In an ecosystem where agents write the
 prose, run the checks and never sleep, the distinction that matters is not what

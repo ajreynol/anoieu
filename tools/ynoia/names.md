@@ -51,6 +51,7 @@ about an hour.
 | **martyria** | μαρτυρία, testimony — the evidence a witness gives: the **actionable** ethics project. One situation at a time, the evidence it rests on, and a stance somebody can act on. Also the name of one entry in its register. **Started**, in anoieu |
 | **zetesis** | ζήτησις, inquiry — the seeking, as against the having-found: the **general** half. What standard this ecosystem is held to, taken from work done outside, and whether our record could show we met it. It has no standard yet, which is why the name is the one it is. **Started**, in anoieu |
 | **koine** | κοινή, *the common tongue* — the shared dialect that let people who spoke differently understand each other. The shared machinery of the reporting loop, so the protocol has one implementation rather than one per member. **Its own repository**, and a member; audited as [`P1`](proposals.md) |
+| **noesis** | νόησις, *the act of understanding* — the semantics and the compiler defined **in** Lean rather than compiled into it: a verified Eunoia compiler. **Started**, in eudaimonia, and found there rather than declared here — see the note under *Reserved* |
 | **workflow-launcher** | descriptive rather than Greek, and the register's own exception applies: it is a program and not an account. The first hour of a new tool's life, and a register of what this ecosystem's practice turns out to be doing. A child project, in eudaimonia |
 
 **Names chosen outside this ecosystem are not here.** `cvc5` and `ethos-eoc` are
@@ -62,14 +63,18 @@ the name was ours to choose.
 ## Reserved, and free to take
 
 Each was named in [`why-eunoia.md`](why-eunoia.md) because some argument there is
-stated relative to its absence. None has a repository or a line of code.
+stated relative to its absence. **None of the names below has a repository or a
+line of code** — a claim this table has now been wrong about once. `noesis` sat
+here while eudaimonia was already running it as a child project, and it moved to
+*Taken* only because somebody went looking in the neighbouring tree. **Being in
+this table is not evidence that a name is unused**, for the same reason the
+section after it exists.
 
 | name | Greek | what it would be |
 | --- | --- | --- |
 | **tekton** | τέκτων, the builder — the joiner who makes one thing out of parts | the **epoch build system**: the program behind the protocols by which a stretch is verified, announced, approved and adopted. Requested by anoieu, 2026-09-01, and the one name here whose subject already exists — the protocols are running by hand and the tool is what is missing. *Not a verb of examination, which most of this register is; `apodeixis` — ἀπόδειξις, demonstration — was the alternative considered, and would have been the better name if the thing turns out to be a prover of gates rather than an assembler of a stretch. It is **not available**: see* In use elsewhere*, below.* |
 | **pathos** | πάθος, the third mode of persuasion | an efficient *verified* proof checker — the one that would let the ecosystem ship what it proves rather than a second implementation |
 | **hermeneia** | ἑρμηνεία, interpretation | carrying the embedded semantics into Lean's own logic, so a theorem about a proof becomes a theorem about the thing proved |
-| **noesis** | νόησις, the act of understanding | the semantics and the compiler defined *in* Lean rather than compiled into it |
 | **iogos** | not Greek: `logos` with the **L** of Lean swapped for the **I** of Isabelle. The one joke in the register, and it earns its place by fixing the scope in the name | the same calculus, semantics and soundness development redone against Isabelle/HOL — an Isabelle backend for `ethos-eoc`, and logos rebuilt on it, as an independence check |
 | **elenchos** | ἔλεγχος, cross-examination | differential fuzzing derived from the calculus rather than written by hand — what the fuzzer here is a deliberate baseline for |
 
@@ -84,13 +89,15 @@ using it, and a name was taken on the strength of that.
 | --- | --- | --- |
 | **apodeixis** | a child project in eudaimonia — the build framework driven at a calculus nobody designed it around | its authors deliberately did not claim it here, on the ground that adding a line to somebody else's register is a person's edit to make. That restraint is the reason it looked free |
 
-| **bouleusis** | βούλευσις, deliberation about particulars — considered for the actionable half and not used, since `martyria` covers it. Free, and the argument for it is in this repository's history |
+**`bouleusis`** — βούλευσις, deliberation about particulars — was considered
+for the actionable half and not used, since `martyria` covers it. Free, and the
+argument for it is in this repository's history.
 
 **So the register is not the whole answer to *is this name free*.** It records
 what has been claimed, and a name can be in use without being claimed. Look in
 the trees as well, which costs one grep.
 
-## If none of them fits## If none of them fits
+## If none of them fits
 
 Then the work is new, which is the interesting case. Pick a word for **what the
 tool does to its subject** rather than for the subject — the register above is

@@ -103,6 +103,84 @@ who decides.
 
 ---
 
+## B22 — the epoch build system is protocols with no program
+
+**Task:** every gate in the stretch protocol is evaluated by hand. `epoch dry
+run`, `epoch stage`, `epoch deploy` and the rest are documented commands that a
+person performs by reading the policy and doing what it says. `tekton` is the
+program that would run them, and it is the top entry in ynoia's tools register
+with no board item until now.
+**Entities:** `anoieu`, `ynoia`
+**Status:** ready in the unusual sense that **the subject already exists** — the
+protocols, the gates, the status ladder and the command surface are written
+down. What is missing is the tool, not the design.
+**Channel:** **internal** — nothing to send until it exists.
+**Next:** **run E1 to `deployed` by hand and record what was actually done**,
+step by step, including whatever was decided by judgement rather than by the
+policy. That record is the specification. Nothing about `tekton` should be
+written before it.
+**Prompt — `anoieu`:** while taking E1 from `planned` to `deployed`, keep a
+plain log of each gate: what was checked, what command or file answered it, and
+where a person decided something the written policy did not settle. **The third
+column is the valuable one** — it is the list of places a program would have to
+either implement or refuse.
+**Prompt — `ynoia`:** the register entry argues for the tool. Add what the entry
+does not have: which of the protocol's steps are mechanical and which need a
+person, so the scope of the program is decided before anybody enjoys writing it.
+**Stub:** `tools/tekton/` holds the place, under the handoff protocol in
+[`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
+and not a claim on the name. **It does not survive E1's deployment**: either a
+spawned repository has proved itself by then, or anoieu deletes it as stale.
+**HUMAN FEEDBACK:**
+
+**Why it blocks the next stretch rather than merely annoying us.** E2 is the
+second time this is done by hand, and a procedure performed by hand twice with
+no record between them is a procedure that quietly changes. The command surface
+also grew this session — `epoch sleep` and `epoch wake` — so there is more of it
+to run by hand than there was when E1 opened. **The argument against building it
+yet is good and is the reason the next step is a log rather than a program**: the
+protocols are still moving, and a tool written now would freeze a design that
+running E1 is still testing. Deploying E1 is what turns the design into a
+specification.
+
+## B15 — governance, out of the analyzer, before we ask members to adopt again
+
+**Task:** hand `R4` — the ecosystem's policy, and joining it — and `R6` — the
+inventory, and getting the ecosystem onto a machine — to a repository that is
+not also the tool that files findings against members. `R1`, `R2`, `R3` and
+`R5` stay. The tool is `kanon`, second in ynoia's register. Audited as `P2` in
+the ynoia proposals page; the roles and the procedure are in
+[`roles.md`](roles.md#how-a-role-is-handed-off).
+**Entities:** `anoieu`, `ynoia`
+**Status:** **raised, 2026-09-02**, and scoped — the maintainer parked this
+until they raised it again, and has, against the next stretch. What is in scope
+is what E2 needs; the full handoff is not.
+**Channel:** **internal** while the scope is being cut. It becomes
+**discussion** the moment a rule moves, and then every member whose pin moves is
+an entity.
+**Next:** decide the smallest version that helps E2 — most likely the joining
+rule and its checker, not the inventory — and say what stays. **Do not start
+the move.**
+**Prompt — `anoieu`:** list which artifacts of `R4` a member actually touches
+when it adopts a stretch, and which of those are ours to publish rather than
+ours to run. That list is the scope. Write no code and move no file.
+**Prompt — `ynoia`:** the `P2` audit was written against the whole handoff. Say
+whether a partial one — the joining rule alone — is a different proposal or the
+same one delivered in two parts, because those have different verdicts.
+**Stub:** `tools/kanon/` holds the place, under the handoff protocol in
+[`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
+and not a claim on the name. **It does not survive E1's deployment**: either a
+spawned repository has proved itself by then, or anoieu deletes it as stale.
+**HUMAN FEEDBACK:**
+
+**Why it belongs next to `B22` and not further down.** What a stretch *deploys*
+is other people's willingness to adopt it, and the thing they adopt is the
+policy. **We are currently the tool that publishes the rule, checks compliance
+with it, and files findings against the repositories being checked** — three
+roles that are fine to hold while nobody is watching and awkward the moment
+adoption is the goal. The known fact that every member joined by pinning a
+commit our own gate refuses is the same problem seen from the other end.
+
 ## B20 — the ethos commit is written in two places on purpose
 
 **Task:** `.github/workflows/ci.yml` and `tools/deps.lock` both name the ethos
@@ -448,29 +526,6 @@ or measure and commit the regenerated files.
 nobody reads; a run that commits changes the report without a person. The
 question to settle first is which of those the ecosystem wants, and
 `docs/coherence.md` is where the answer belongs before any workflow file exists.
-**HUMAN FEEDBACK:**
-
-## B15 — governance, out of the analyzer
-
-**Task:** hand `R4` — the ecosystem's policy, and joining it — `R6` — the
-inventory, and getting the ecosystem onto a machine — to a repository that is not
-also the tool that files findings against members. `R1`, `R2`, `R3` and `R5` stay. Audited as `P2` in the ynoia proposals
-page; the roles and the procedure are in
-[`roles.md`](roles.md#how-a-role-is-handed-off).
-**Entities:** `anoieu`, `ynoia`
-**Status:** parked — the maintainer is inclined, and has said explicitly that it
-is not actionable until they raise it again.
-**Channel:** **internal** — parked; the argument is in the ynoia proposals page.
-Unparking it makes the channel **discussion** and adds every member whose pin
-moves as an entity, which is the step that turns this from a decision into
-something they can answer.
-**Next:** nothing. This row exists so that the decision is visible while it is
-being deferred.
-**Prompt — `anoieu`:** do not start. If a rule is written between now and then,
-write it where it will be cheap to move — which now has a precise meaning:
-inside `R4`'s artifacts, rather than across the seam between `R4` and `R1`.
-**Prompt — `ynoia`:** the audit is written. If the answer changes, it changes by
-somebody arguing with the page, not by the page being rewritten quietly.
 **HUMAN FEEDBACK:**
 
 ## B16 — nobody audits what the tools depend on
