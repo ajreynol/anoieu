@@ -13,6 +13,105 @@ because the useful thing for another repository to read is not the rules but
 what happened when somebody applied them to real projects. Graded at the commits
 [`deps.lock`](../tools/deps.lock) records.
 
+## The standing, at a glance
+
+**Gentle advice, and four bands.** **excellent**, **good**, **fair**, **poor**.
+*Fair* means there is something worth doing, not that anything is wrong — most
+rows sit there and that is unremarkable.
+
+**Poor is the only band that says something went the wrong way.** Not a bad
+grade for a shortfall: it means the thing **works against what this ecosystem is
+aiming at**, so that not having done it would have left the ecosystem better
+off. A gap is *fair*; a negative contribution is *poor*. The word is flat rather
+than moral, and describes an effect rather than an intent.
+
+**There is no formula, and that is deliberate.** A band is a judgement made from
+the evidence each paragraph names — not a score, not a weighted sum, and not
+something a program computes. **So there is nothing here to optimise against**,
+which is the point: a published rubric becomes a target, and a project that
+improved its band without improving anything else would have found a defect in
+the page rather than in itself.
+
+**What that costs, and how it is paid.** A judgement with no formula could be
+arbitrary, so the protection is not a method but an exposure: **the evidence is
+published, the date is on the row, and the tool that writes the page is graded
+on the same scale.** Argue with the evidence or with the paragraph — *How to get
+a paragraph changed* is at the bottom and the answer is that you say it is
+wrong. What you cannot argue with is a formula, because there is not one to
+argue with.
+
+**It is used sparingly, and the first one is ours**, which is the only way a
+band like this earns any credibility at all.
+
+*This section said an hour ago that the scale had no bottom on purpose. It now
+has one. Recorded rather than edited away: a band nobody can reach is
+decoration, and the case below is what convinced us there was a real one.*
+
+**Three axes, because one grade hides where the work is.**
+
+- **Delivered** — does anything outside this project behave differently because
+  it exists?
+- **Legible** — can somebody arriving find their way, and is the front page the
+  entry point?
+- **Checkable** — can a claim about it be re-derived by somebody who does not
+  trust us?
+
+| | delivered | legible | checkable | the paragraph below says |
+| --- | --- | --- | --- | --- |
+| `cvc5` | excellent | good | good | one defect stands, and nothing gates the signature |
+| `ethos` | excellent | fair | good | the manual is a program's, not the language's |
+| `ethos-eoc` | good | fair | *unconfirmed* | a large change may have overtaken the grade |
+| `logos` | excellent | fair | excellent | carries somebody else's ground truth by copy |
+| `eudaimonia` | excellent | good | excellent | delivered to logos, and twice to us |
+| `anoieu` | **poor** | fair | excellent | we published a joining rule nobody can satisfy |
+| `koine` | fair | excellent | good | the tool exists and nobody consumes it |
+| `dokimasia` | fair | good | *not from here* | findings exist; none filed |
+
+**Read a row across, not down.** A column is not a league table — the projects
+do different things, and `koine` being *fair* on delivery while *excellent* on
+legibility is the useful fact, not its position relative to `logos`.
+
+### This page used to say it was not a ranking
+
+**It said so absolutely, and that has been narrowed rather than dropped.**
+Recorded here rather than edited away, because a page that quietly reverses
+itself is the thing this ecosystem is most careful about.
+
+**What has not changed:** it binds nobody, none of these projects agreed to
+anything, and no band here is a verdict on whether a project is good. **What has
+changed:** the page now says where each stands on three named axes, because a
+paragraph nobody can act on is advice in name only, and the alternative to a
+band was a reader guessing one from the prose.
+
+**The line we still hold** is the one that mattered when an outside index was
+scoring repositories that never asked: **we do not publish this as a score, do
+not rank anybody outside the ecosystem, and grade the tool that writes the page
+on the same scale.** On this table that tool holds the only *poor* mark
+on the page, which is the check working rather than modesty.
+
+### Why `anoieu` is poor on delivery
+
+**Three repositories run our checker, and all three joined by pinning a commit
+our own build had failed.** The joining step tells a member to pin a commit
+where our CI is green and to refuse the bump otherwise. **No such commit
+existed.** The gate that decides it refuses every pin any member currently
+holds, naming the same two jobs each time.
+
+**So the compliance we handed them is fictional**, and that is worse than not
+having offered it: a member following our instructions ends up with a pin our
+own tool rejects, and the one repository that read the requirement carefully —
+logos — **declined to join partly because of it**, and told us so by hand.
+
+**That is not a shortfall, which is why it is not `fair`.** A gap would be
+having no joining step. This is a joining step that cannot be completed
+correctly, published as a hard requirement, adopted by three trees that trusted
+it. Not having built it would have left them better off, which is the whole
+definition of the band.
+
+**It leaves the band the moment either half is true**: our build goes green and
+stays green long enough for a pin to exist, or the requirement is withdrawn as
+unmeetable and replaced with one that can be met.
+
 ## When each paragraph was last graded
 
 **The first thing to know about any paragraph here is how old it is.** A

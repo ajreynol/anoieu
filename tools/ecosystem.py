@@ -535,6 +535,16 @@ def main() -> int:
     print("Form only. A passing row says those checks passed on that tree, and "
           "nothing about\nwhether the tool is any good -- see docs/reports/"
           "reporting-policy.md on silence.")
+    # The judgement half deliberately lives elsewhere and is never computed
+    # here: this table is decidable from a tree and that one is not. Pointing at
+    # it is the whole of the relationship -- a reader who wants to know how a
+    # tool is doing gets sent to evidence and a dated paragraph, not to a
+    # column this program could be tempted to invent.
+    print()
+    print("How each of these is actually doing is a judgement and is not in "
+          "this table.\ndocs/report-card.md carries it: four bands, three axes, "
+          "a date per entry, and\nthe evidence each paragraph rests on. It "
+          "grades the tool that writes it on the\nsame scale.")
     return 0
 
 
