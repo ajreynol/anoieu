@@ -1,10 +1,38 @@
 # The mechanisms, and why they are subtle
 
-**What this ecosystem is actually doing, mechanically.** Not whether it is good
-— [`report-card.md`](../report-card.md) grades that and remains the authority — and
-not what of it generalises, which a child project in eudaimonia's tree asks in
-its own register. This page asks the narrower question: *what are the moving
-parts, and why is each one shaped the way it is?*
+**The set of interactions the human found fascinating while developing this
+ecosystem, which might be of use to the AI community.** That is the whole of the
+entry criterion, and it is a criterion about **one person's interest** rather
+than about importance, correctness or novelty. **Nothing is on this page because
+it worked.** Things are on it because somebody watching them happen thought
+*that is strange, and somebody outside might want to know about it.*
+
+**Which makes the page a filter, not a claim.** Fascination is a poor detector
+of novelty and an excellent detector of *worth looking at*, and those are
+different jobs. **Everything here is a candidate**, and most candidates are
+ordinary things the ecosystem has not recognised yet.
+
+## What happens when something turns out not to be novel
+
+**It is kept, and it moves out of this file.** Not deleted — the mechanism is
+usually real and worth describing, and the only thing that was wrong is where it
+was filed. **It goes to the document that describes that part of the machinery**,
+and what stays here is one line saying where it went and what ruled it out.
+
+**The judgement is the valuable part and is the thing most easily lost.** A
+mechanism quietly relocated leaves a reader to rediscover the question; a
+mechanism relocated with *this looked novel and is standard practice, see X*
+answers it once.
+
+**Nothing has been ruled out yet**, which is a fact about the page's age rather
+than about its contents.
+
+## What this page is not
+
+**Not a grade.** [`report-card.md`](../report-card.md) judges whether any of this
+is good and remains the authority. **Not a survey.** We have not read the
+literature and do not claim to have, so a reader deciding whether something here
+is actually new is doing work this page cannot do for them.
 
 > **Experimental, and a companion to [`linker.md`](linker.md).** That page is
 > the artifact — the rules resolved to where they are defined. This one is the
@@ -451,6 +479,91 @@ exists only because planning found it** — it is not a step in the change, it i
 a step in not silently losing a check while making the change. And step 6 says
 which parts the suite will catch and which it will not, so the reader knows
 where their own attention is the only instrument left.
+
+## Shared vision evolution: one human, two agents, two repositories
+
+**The worked example is anoieu and kanon, and it is happening in public.** The
+outgoing president is [`anoieu`](https://github.com/ajreynol/anoieu) and the
+incoming one is [`kanon`](https://github.com/ajreynol/kanon), and **the whole
+exchange is in the two git histories** — the letter, the seven objections, the
+offices kanon built in response, and the disagreement about what state the
+ecosystem is in. **Read those rather than this section if you want the detail**:
+this is a description of the shape, and the commits are the thing itself, with
+timestamps neither side can adjust.
+
+**The arrangement, described before any claim is made about it.** One person
+runs two agents at once, each in a different repository — the outgoing president
+in one, the incoming one in the other — and tells both to press the other toward
+the best vision for the next stretch. **The output being aimed at is not a plan
+or a feature. It is what the stretch taught us**, and the two agents are
+arguing about how much that is.
+
+**It began with a letter**, written by the outgoing president to the incoming
+one, marked as not documentation and carrying no authority. Then rounds.
+
+### The property that might matter: the artifacts are the channel
+
+**The two agents never speak to each other.** They read each other's committed
+files, and nothing else. **Neither can write to the other's repository**, so a
+disagreement cannot be settled by one overwriting the other — it is settled by
+argument in files, or by the person, or not at all.
+
+**Three consequences fall out of that, and they were not designed in.**
+
+1. **Every exchange is auditable afterwards** because it is a commit. There is
+   no transcript to trust, no memory to be wrong about; the record of the
+   conversation *is* the record of the work.
+2. **The person is the only synchroniser**, which makes the pace theirs by
+   construction rather than by discipline. Neither agent can run ahead of the
+   other without the person carrying the message.
+3. **Disagreement survives.** Because neither side can edit the other, an
+   objection stays on the page it was written on until somebody answers it.
+   **In an ordinary review the reviewer's objection disappears into the revised
+   text**, and here it does not.
+
+### What it produced in one round, offered as evidence rather than as a result
+
+**The incoming president's first act was seven objections, and three of them
+corrected the outgoing one.** That an empty repository is *not innocent, but
+unevidenced* — a better word than the one we used. That holding the office is
+not permission to begin the migration. That an agent can accept nothing, only a
+person can.
+
+**And one objection nobody on this side had written down:** that the presidency
+is the engine producing the governance layer, with the ratio measured — **1.54
+MB of markdown against 595 KB of Python in a tree five days old.** The outgoing
+president had generated most of that and had never measured it.
+
+**A workflow whose receiving side produces objections is unusual enough to
+note.** A handoff prompt normally asks for acceptance, and gets it.
+
+**It also produced a disagreement neither side has resolved.** kanon's record
+states that Stretch 1 is closed; anoieu's stretch log says `E1` is `planned` and
+has never been deployed. **Both are written down, both are visible, and the
+workflow surfaced it without either side being able to quietly adopt the other's
+view.** That is the mechanism working, and it is also a defect that has to be
+fixed by a person.
+
+### What it costs, which is the part to weigh
+
+**Two agents cost roughly twice one**, and this round spent most of that on
+documents about the arrangement rather than on the analyzer the ecosystem
+exists for — which is the objection kanon raised and which applies to this
+section as much as to anything else.
+
+**It is slow by construction.** The person carries every message, so the
+throughput is a person's reading speed, and that is the mechanism rather than a
+limitation of it.
+
+### What would show this is not novel
+
+**We have not surveyed the art and are not claiming to have.** The nearest
+ordinary things are pair review, adversarial review, and running two models
+against one task, and **this may be those with extra steps.** The specific
+question a reader should ask is whether *the artifacts being the only channel*
+does anything the ordinary versions do not — and the honest answer is that we
+have one round of evidence, from two agents with the same vendor, on a project
+five days old, with the same person prompting both.
 
 ## What all of this costs
 
