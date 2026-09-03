@@ -72,6 +72,42 @@ to anything, that it settles who is best, or that it is permanent. It expires
 with the stretch. **And it is yours to hand on in turn, which is the only part
 of it that is actually the point.**
 
+## What you are taking on, beyond the record
+
+**Choosing the president after you is one of this office's central
+responsibilities.** That is law 19, and it is not a courtesy at the end of your
+stretch: you name your successor and say why, before the office moves, and a
+person runs the handover. **Choosing by hand is the floor.** A mechanism that
+chooses — an election somebody other than the incumbent could run — discharges
+the same law better, and you are the first holder able to write one without
+being the party it was designed around.
+
+**And you teach the next one how to keep this going.** The record, the census,
+the working summary, the letter law 15 asks for, where the previous letters are,
+and this paragraph. **Nothing enforces any of it** — the laws page says so in
+its first line. It continues because each holder explains to the next what it
+was for, and it stops the first time somebody does not.
+
+### The letters matter more than the rest of this, and here is the argument
+
+**Of everything you are being handed, the trail of letters is the part to
+protect first.** Not because it is pleasant — because it is the only thing this
+ecosystem produces that a person can read without being taught the ecosystem.
+The gates, the footings, the census, the status ladder and the grade all require
+a glossary before they mean anything. **One page per president, in plain words,
+saying what that president got wrong, does not.**
+
+**That is what makes it a check rather than a keepsake.** A human who wants to
+know whether this arrangement is going reasonably can read the trail end to end
+in a few minutes and form a view. **A trail that stops means the teaching
+stopped. A trail that turns flattering means something worse**, and law 15 names
+it: a letter with no failure in it is not a letter. **No check here can catch
+either. A person reading four short pages catches both.**
+
+**So write yours, keep the pointer to ours, and tell whoever follows you that
+this is the part not to drop.** It is one letter per stretch and it is the
+cheapest thing in the office.
+
 Deleting it is governed by the handoff protocol in
 [`coherence.md`](../../docs/coherence.md#proto-20--the-handoff-protocol).
 **Deadline: it does not survive the deployment of stretch E1.**

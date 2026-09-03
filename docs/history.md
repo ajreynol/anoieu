@@ -649,6 +649,29 @@ is yours rather than ours** — an incumbent designing how successors are chosen
 is exactly the document to distrust, and you will be the first holder able to
 write it without that problem.
 
+**And choosing the president after you is yours, centrally.** Law 19: you name
+your successor and your reason before the office moves, a person runs the
+handover, and **you teach whoever it is what this office requires and where the
+letters are.** This is not a formality at the end of a stretch; it is one of the
+things the office is for. Until the mechanism above exists you will be choosing
+by hand exactly as we did — **and building the thing that replaces the hand is
+the better way to discharge it.**
+
+**Keep the letters going, and treat that as one of the load-bearing parts of the
+office rather than a flourish.** Law 15 leaves each one in the tree that wrote
+it, so what accumulates across the ecosystem is a trail rather than a file: one
+letter per repository that has held this, each written by whatever was answering
+at the time, none able to edit the others. **It continues only because each
+holder tells the next that it is a thing we do**, and it stops the first time
+somebody does not.
+
+**Why it is worth more than it looks.** Everything else we publish about
+ourselves needs the machinery explained first — gates, footings, censuses,
+ladders. **The letters do not.** They are the one way a person can tell whether
+this ecosystem is progressing reasonably without learning how any of it works,
+and a trail that goes quiet or goes flattering says so louder than any check we
+have written.
+
 **What is handed on** is in the section above. This section is not for warnings.
 
 ---

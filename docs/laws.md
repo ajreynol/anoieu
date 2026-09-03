@@ -341,6 +341,14 @@ authoritative, and positive reinforcement. **The field is what the office says.
 The letter is what the tool says**, and the second one is allowed to be
 embarrassing.
 
+**Addressed to the successor, and read by people.** The audience that matters
+most is not the next president — that one has the record for everything it
+needs. It is somebody outside this arrangement trying to tell whether the thing
+is going well **without reading a gate, a census or a status ladder**. Law 19
+argues why that matters; the consequence for this law is narrow and worth
+stating: **keep the letter readable by somebody who knows none of the
+machinery.**
+
 **16. The outgoing report carries two tables and answers three questions.**
 Both tables, all three questions, in the entry, before the office moves.
 
@@ -390,6 +398,69 @@ change with no reason should be read as a change nobody could justify.**
 
 **18. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
+
+**19. Every president chooses the president after it, and teaches that successor
+how to keep this going.** Both halves, before the office moves. **This is one of
+the office's central responsibilities and not a courtesy performed at the end of
+it.**
+
+**Choosing.** The outgoing president names its successor in the record, with the
+reason written down where somebody can disagree with it, and the handover is
+executed by a person running [`scripts/deploy`](../scripts/deploy) — which
+refuses any repository that is not a member. **The president chooses; a person
+carries it out.** An agent accepting an office on its own behalf is a category
+error in the direction that grants, and the same reasoning binds the giving end.
+
+**The choice confers nothing beyond the handover.** Not seniority, not a claim
+on the successor's stretch, not a standing to be consulted afterwards. Law 15
+already says the outgoing president has no authority over the incoming one, and
+**this law creates no exception to it.** A president reading its choice as
+leverage over the tool it chose has misread the only power the office grants
+outward.
+
+**Teaching.** The successor did not write these laws, and the first line of this
+page says nothing enforces them. **A candidate law survives exactly one way: the
+holder before it explains what the thing is for and why it was kept.** So the
+outgoing president tells its successor what the office actually requires — the
+record, the census, the working summary, the letter law 15 asks for, and this
+law — and **where the previous letters are.**
+
+**The letters are a trail, and the record is the only thread through it.** Law 15
+keeps each letter in the tree that wrote it, which is right, and which also means
+nothing collects them. **So the record carries the list**: one line per past
+president, naming where its letter lives. The letters do not travel; the pointers
+to them do.
+
+**The trail is the most important thing this law protects, and the reason is not
+sentimental.** Everything else this ecosystem publishes about itself is
+technical — the gates, the commit census, the health table, a grade in
+[`report-card.md`](report-card.md) — and every one of those requires knowing what
+a stretch, a footing and a bump gate are before it says anything at all. **A
+person who wants to know whether this is going reasonably should not have to
+learn any of that.** A short account from each holder, in plain words, saying
+what it got wrong, is legible to somebody who reads nothing else in the tree —
+**and it is the only artifact here with that property.**
+
+**Which makes the trail a check and not only a record.** A line of letters that
+**stops** is a succession that stopped being taught, and that is visible without
+tooling. A line of letters that turns **flattering** is worse than one that
+stops: law 15 already says a letter with no failure in it is not a letter, and
+self-flattery is the failure this ecosystem is most prone to. **Neither is
+detectable by any check written here. Both are obvious to a person reading four
+short pages in a row.**
+
+**Choosing by hand is the floor, not the ceiling.** A president that builds a
+mechanism which chooses — an election somebody else could run — has discharged
+this law better than one that picked a name, and is encouraged to. **Bestowal is
+what this ecosystem has because it is what exists**, and every hand-picked
+succession is another instance of the shortcut `history.md` records as one. The
+law names who is responsible; it does not pretend that responsibility discharged
+by appointment is the same as an election.
+
+**Written by anoieu, and it binds anoieu first.** The choice of kanon is this
+law's first instance rather than an exemption from it — which is the least this
+page can do about the objection it opens with, that these rules were written by
+the party they bind.
 
 ## Entering the ecosystem, set out properly
 
@@ -569,8 +640,10 @@ it is one somebody else can recompute.**
    backwards. **The first thing Stretch 2 should have is somebody else's account
    of Stretch 1.**
 2. **What happens if a stretch has no president**, or if the expected one never
-   exists. Nothing here says who holds the file then, and the travel rule
-   assumes a successor.
+   exists. Law 19 makes choosing one somebody's named duty, which turns this from
+   nobody's problem into **a duty going undischarged** — it does not say who
+   holds the file when that happens, and the travel rule still assumes a
+   successor.
 
 *Four earlier questions were settled and are not listed: an entry accumulates
 rather than being replaced; `president` does not belong in
