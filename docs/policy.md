@@ -595,6 +595,95 @@ said so**. The response gate did not apply, because there was no topic yet. That
 gap is what this section closes, and the incident is recorded with it because a
 rule with no incident behind it is a preference.
 
+## The questions people arrive with, and the front page that answers them
+
+**Every repository here is asked the same handful of questions, and none of them
+writes the list down.** *What is this*, *which repository does X*, *what is the
+thing called that does Y*, *where is the register that would record this*. They
+are asked by people and by the agents working for them, they have short answers,
+and today each one is answered by searching the tree and reading back whatever
+turned up.
+
+**The tree is the wrong place to keep an answer that is asked for repeatedly.**
+Searching works — which is why nobody notices the cost — but it is paid every
+time, it is paid by whoever is waiting, and what it produces is *reconstructed*
+rather than decided. A reconstruction is right until two files disagree, and then
+it is right for whichever one was read first.
+
+**So write them down, on the front page, as questions.** Not as a section a
+reader has to translate into their question: in the words somebody would use. The
+test is whether a stranger's question appears verbatim enough that they recognise
+it before they have read the answer.
+
+### What goes in it
+
+**Questions that have short settled answers, and that get asked.** The evidence
+for *gets asked* is that it was asked — of a person, in a prompt, in an issue. An
+FAQ assembled by imagining an audience is a second overview competing with the
+front page, which [*The layout*](#the-layout) already forbids.
+
+**Routing answers first.** The most valuable entry is not *what does this tool
+do*; the front page says that in its first paragraph. It is **which repository
+this belongs to** — the question convergence makes hard, and the positive form of
+[*A prompt may not be for this
+repository*](#a-prompt-may-not-be-for-this-repository). That section says how to
+stop; this one says where to send it.
+
+**One line each, and a link.** The line on the page is the answer, the document
+behind it is the account. An FAQ whose entries grow into explanations has become
+the documentation index, and there already is one.
+
+### The answers that may not go in it
+
+**A research project is never an entry.** Not by name, not as *there is something
+in `tools/` for that*, not as a hedge that tells a reader there is something to
+find. [*Research projects*](#research-projects) requires them unadvertised, and
+**an FAQ is the most efficient advertisement a repository can write**: it is at
+the top, it is indexed, and it answers the exact question a stranger would
+otherwise have had to already know the answer to in order to ask.
+
+**Where the true answer is a research project, the honest entry is that nothing
+is published yet — or there is no entry.** Both are correct. What is not correct
+is naming it because the question was reasonable and the answer was sitting right
+there.
+
+**And nothing about a repository's own standing** — whether it should hold a
+role, whether its work is worth publishing. Those are not FAQ answers because
+they are not this repository's answers; [*The shape that must always
+stop*](#the-shape-that-must-always-stop) says why.
+
+### Where the rule is carried
+
+On the front page, as a `## Common questions` section, late — after what the tool
+is and what it finds, before the maintenance note. It is **recommended and not
+checked**: nothing fails if it is absent, no member has been asked for one, and a
+repository that has never been asked the same question twice does not need one.
+
+**A stale FAQ is worse than none**, and [the central
+rule](#the-central-one-a-document-that-has-gone-stale-is-a-defect) applies to it
+hardest, because an FAQ answer is the sentence most likely to be quoted back at
+whoever wrote it. Keep it short enough to re-read in a minute — which is also the
+length that keeps it worth reading.
+
+### The account
+
+**On 2026-09-02 somebody asked dokimasia what its cvc5 pull-request project was
+called.** The answer is one word and one directory. It took twenty-seven seconds
+and two searches, because nothing in that tree says it anywhere an agent reads
+before it starts looking.
+
+**The interesting part is what a front-page answer would have cost.** That
+project is a research project under the rules on this page, deliberately linked
+from neither its repository's README nor either register. **The fix that
+suggested itself was the one the policy forbids** — and the question was
+ordinary, the asker was the maintainer, and the answer was already in the tree.
+That is the whole of how an unadvertised project comes to be advertised: not by a
+decision, by somebody reasonable shortening a lookup.
+
+**So the rule arrived with its exception attached**, which is the useful thing
+about it. The list of questions a repository is asked is not the list it may
+answer, and the second list is the one worth writing down.
+
 ## The ecosystem never locks everybody out
 
 **No arrangement here may reach a state where nobody can proceed.** Not the

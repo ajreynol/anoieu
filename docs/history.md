@@ -543,13 +543,64 @@ hour: `epoch-analogy.md`, which argues for both trees, and `tools/tekton/`, a
 stub with no inheritor. `docs/README.md` is in both columns and should be, since
 each tree needs its own index.
 
-### What is unfinished
+### What went wrong
+
+**Required by the template, and it was missing from this entry until the laws
+were checked against it** — which is itself the first item. **A stretch with
+nothing in this field was not examined**, and this one wrote that sentence into
+its own law and then left the field out.
+
+- **The build was red for 112 consecutive runs**, across two days with no green
+  run at all, and nobody looked at the colour. Two dependency commits were
+  duplicated between the workflow and the lock file, knowingly, with a board row
+  open to watch what it would cost.
+- **A false claim about two members was published** — that we recorded them
+  before they declared — wrong in the direction that flattered us. Corrected the
+  same day.
+- **One directory move silently broke five scripts.** One was found and fixed,
+  the lesson was written up at length, and **four identical instances were left
+  in place for another five hours.**
+- **The name register reported names as free that neighbouring trees were
+  using**, twice: `apodeixis` was taken on the strength of it, and `noesis` sat
+  there while eudaimonia ran it.
+- **The governance layer outgrew what it governs** — 1.54 MB of markdown against
+  595 KB of Python in a five-day-old tree. **The incoming president measured it;
+  this one never did.**
+- **Twenty-two protocols against three instructions.** Most of what was built is
+  legible to an agent and not to a person.
+
+### What is handed on
 
 - **`E1` has not been deployed.** It has been `planned` for the whole stretch.
 - **The joining requirement is still one nobody has satisfied**, which is why
   this repository grades itself poorly on delivery.
 - **Two published URLs 404** as a result of moving the prompts directory, and
   copies already sent to other repositories cannot be recalled.
+
+**And three things the next president must not assume.** That `E1` was deployed
+— it was not, and the stretch log still says `planned`. That the deploy script
+works — its mutation path has run once, in a temporary directory, and four
+defects were found in that single run. That the figures on this page were
+audited — **they were produced by the party they describe.**
+
+### Evidence
+
+**Where every figure here came from, and how somebody else re-derives it.**
+
+| figure | source | re-derive by |
+| --- | --- | --- |
+| commits, this repository | `git log` | count commits since 2026-08-29 |
+| commits, other members | their checkouts | the same, in each tree |
+| CI runs, green rate, red streak | the public run history | `gh run list --limit 200 --json conclusion` |
+| agent-attributed commits | commit message trailers | count messages naming a co-author |
+| join and record times | both trees' histories | `git log -S` on the declaration; the inventory's `status` field, commit by commit |
+| the neighbours | the GitHub API, read 2026-09-02 | the commits endpoint, with `since` and `until` |
+| governance-to-code ratio | measured by kanon at anoieu `579aae7` | `du` over `docs/` and the packages |
+
+**Not one of these was produced by an independent party.** `laws.md` says the
+president does not analyse GitHub and epikrisis does; **no epikrisis report
+exists, so this stretch counted itself throughout.** That is the single largest
+qualification on everything above.
 
 ### The joke
 

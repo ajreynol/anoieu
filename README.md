@@ -213,6 +213,27 @@ for welcoming a tool, joining, and carrying findings, are in
 | [`docs/notes.md`](docs/notes.md) | what ethos misses, what we have established about `.eo` and `.eos`, and the design |
 | [`docs/README.md`](docs/README.md) | the index, and the files a run generates: the open findings, the corpus, the check catalogue |
 
+## Common questions
+
+The questions this repository is actually asked, in the words they arrive in.
+One line each; the link is the account. What is not here is anything about
+`tools/` — [research projects](docs/policy.md#research-projects) are unadvertised
+by rule, including from a list like this one, and the policy explains why a FAQ
+is the worst place to break that.
+
+| | |
+| --- | --- |
+| **anoieu reported nothing — is my signature correct?** | No. A clean run is a fact about the checks that ran, never about the signature; see the box at the top of this page and [`reporting-policy.md`](docs/reports/reporting-policy.md) |
+| **How do I run it over my own file?** | [`docs/usage.md`](docs/usage.md) — every command, option, baseline and suppression |
+| **Which repository does X? Who should I be asking?** | [`docs/roles.md`](docs/roles.md) is who holds what; [`docs/board.md`](docs/board.md) is who is here. The registers live in this tree, so *which tool should own this* is a question for this tree |
+| **Is this prompt even meant for this repository?** | Possibly not, and saying so is an acceptable answer: [*A prompt may not be for this repository*](docs/policy.md#a-prompt-may-not-be-for-this-repository) |
+| **How do I get the rest of the ecosystem onto a machine?** | [`scripts/install_eo`](scripts/install_eo) checks the members out as siblings |
+| **How does a repository join?** | One sentence in your README and one CI step: [Joining](docs/policy.md#joining-the-eunoia-ecosystem) |
+| **I disagree with a finding, or want to propose something.** | [`docs/discussion.md`](docs/discussion.md) — the topics, the format, and who may address whom |
+| **What is a "president", and who decides the shared arrangements?** | [`docs/laws.md`](docs/laws.md) is the office and its limits; [`docs/history.md`](docs/history.md) is what each one did |
+| **What does it actually check?** | [`docs/checks.md`](docs/checks.md) is the catalogue; [*What it finds*](#what-it-finds) is the summary |
+| **Why is it called that?** | Read it backwards — [*The name*](#the-name) |
+
 ## The name
 
 **Eunoia** is *Eu·noi·a*. Read its syllables backwards and you get *a·noi·eu*,

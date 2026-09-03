@@ -364,7 +364,31 @@ arrangement has enough of those.
 3. **Did I report all of my responsibilities?** The completeness check, and the
    one most likely to return an uncomfortable answer.
 
-**17. Publishing the working summary is the president's first responsibility**,
+**17. A stretch records what changed in the documents other people depend on.**
+In moderation, and **from Stretch 2 onward** — Stretch 1 is not retrofitted,
+because reconstructing it would mean the first application of this law being a
+guess.
+
+**Three tiers, and only the first two appear in the record.**
+
+| tier | documents | how it is logged |
+| --- | --- | --- |
+| **always** | `vision.md`, `policy.md`, `laws.md` | **every change, with the reason.** *We changed the vision, and here is why* is a sentence a stretch should have to write |
+| **when substantive** | `roles.md`, `stretch-policy.md`, `report-card.md`, `reporting-policy.md`, and **the set of checks a member's CI runs** | one line when the change alters what somebody outside has to do |
+| **never** | everything else | nothing. Most documents change constantly and none of it is history |
+
+**In moderation is part of the law and not a softening of it.** Protocols,
+registers and working pages are logged **in aggregate if at all** — *four
+protocols added, one withdrawn* — never one line each. **A stretch that lists
+every document it touched has written a changelog**, and the commits already are
+one.
+
+**The reason is the entry, not the diff.** *We changed the vision* is worth
+nothing on its own; *we changed the vision because the mission had never been
+stated and every argument was reconstructing it* is the sentence. **A logged
+change with no reason should be read as a change nobody could justify.**
+
+**18. Publishing the working summary is the president's first responsibility**,
 before anything else it is asked to do.
 
 ## Entering the ecosystem, set out properly

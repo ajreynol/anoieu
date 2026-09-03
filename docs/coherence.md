@@ -740,6 +740,53 @@ either a long project or the wrong project, and the honest position today is
 that we do not know which. **Nothing in this repository has yet made a solver
 faster.**
 
+## Promoting a document: when a change becomes an event
+
+**Most documents here change constantly and none of it matters to anybody
+else.** A few change and somebody outside has to do something about it. **The
+difference is not importance and it is not length — it is whether anybody
+depends on the page.**
+
+**A document is promoted when something outside this repository rests on it.**
+That is the whole criterion, and it is close enough to checkable to argue with:
+
+- **Another repository is held to it.** `policy.md` is the case — a member's CI
+  runs the checker that decides it.
+- **Another repository quotes it.** `reporting-policy.md` is shared with
+  dokimasia, so a change there changes a position somebody else publishes.
+- **A tool consumes it as ground truth.** `stretch-policy.md`'s status table and
+  the command table are compared against their copies by the suite.
+- **Or it governs everything else here**, which is `vision.md` and `laws.md`
+  and nothing else.
+
+**Promotion is recorded when it happens, and is rarer than it sounds.** No
+document has been promoted yet; the four tiers above were assigned by looking at
+what already depends on what. **The first real promotion will be a page nobody
+depended on acquiring a consumer**, and that is the moment to notice, not
+whenever a page feels significant.
+
+### The code documentation that qualifies, and the rest that does not
+
+**One thing, and it is not prose: the set of checks a member's CI runs.**
+`tools/policy_check.py` executes in three other repositories. **Adding a check
+changes what somebody else's build does, and removing one changes what it stops
+catching** — both are events in the ordinary sense, and neither is visible in a
+document unless we write it down. [`checks.md`](checks.md) is generated from the
+registry, so the page is not the event; **the check is.**
+
+**What does not qualify, and would clog the record if it did:**
+[`usage.md`](usage.md) and [`fuzzing.md`](fuzzing.md) describe an interface
+nobody outside runs; [`notes.md`](notes.md) is miscellany by construction;
+[`interface.md`](interface.md), [`coherence.md`](coherence.md) and this
+ecosystem's protocol register change most weeks and are read by agents working
+here rather than by anybody depending on them. **A protocol added is worth an
+aggregate line in a stretch and never its own.**
+
+**The honest risk of all of this:** a tier system invites promotion by feeling
+important, and **the pages most likely to be argued into the top tier are the
+ones this repository is proudest of.** The dependency criterion exists to make
+that argument lose.
+
 ## The supervision ladder
 
 Ordered, most supervised first. *Supervised* means: propose the change and the
