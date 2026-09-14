@@ -1035,7 +1035,7 @@ is and where nothing is enforced.
 
 | the expectation | how it is checked | what comes next |
 | --- | --- | --- |
-| **Say you are a member, on the front page** | `check_declaration`, and `check_declaration_first` for where it sits in the maintenance note | say who does the work and what the supervision does not cover — a note shaped to pass reads as one |
+| **Say you are a member, on the front page** | `check_declaration` reads the claim — *part of the Eunoia ecosystem* — and `check_declaration_first` where it sits in the note. Linking the policy is `check_declaration_links`, which is minor | say who does the work and what the supervision does not cover — a note shaped to pass reads as one |
 | **Keep one entry point** | `check_front_page`, `check_docs_index` — every document named in the index | keep the index true as documents arrive; a stale index is the first thing a returning reader hits |
 | **Run the checker in your own CI** | not checkable from here. We see the result, not the job | pin a commit where our build is green, and move the pin deliberately rather than on a schedule |
 | **Keep your links and paths honest** | `check_links`, `check_anchors`, `check_local_paths` | the checks catch dead targets, not stale claims — a sentence that quietly stopped being true passes every one of them |
@@ -1317,6 +1317,19 @@ supervision does not cover>
 
 It goes **first** in that section for the same reason the note goes last in the
 README: it is what a reader needs in order to weigh everything above it.
+
+**The claim is what is checked; the link is asked for and not required.** What
+decides *declares / does not declare* is that the note says this repository is
+**part of** the Eunoia ecosystem — that is the sentence the affiliating note
+below deliberately does not contain, since it says it *works with* this
+ecosystem and is not held to it, and the two must never read alike. A
+declaration that makes the claim in its own words and links nowhere **passes**,
+with the missing link reported as a minor finding.
+
+It is worth adding anyway, and the reason is a reader rather than a rule: *part
+of the Eunoia ecosystem* tells somebody there is an arrangement and gives them
+no way to find out what it asks of you. The block above is the shortest thing
+that answers both.
 
 **Paste the block and write your own note under it.** That is the whole of this
 step. Anything else you add to that paragraph is yours, and is checked like any

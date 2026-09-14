@@ -195,6 +195,21 @@ def check_citations() -> list[str]:
 NOT_HELD = ["does not adopt", "adopts no", "not held to", "does not follow",
             "not bound by", "does not adhere"]
 
+#: The membership claim, and the whole of what is required to have made it.
+#:
+#: **`part of` is the word that decides it, not the link.** The affiliating soft
+#: note names this ecosystem too -- *it works with the Eunoia ecosystem and is
+#: not held to its policy* -- so a check that accepted any mention of the name
+#: would read that note as a declaration. What separates them is the claim: one
+#: says it is *part of* this, the other says it *works with* it.
+#:
+#: This used to also require a link to the policy, and two members that had
+#: plainly joined failed on it while making the claim in as many words. A
+#: declaration decides *declares / does not declare*, and a repository that says
+#: it is part of this has declared. The link is worth having and is now reported
+#: as a minor finding rather than failing anybody's build.
+MEMBER_CLAIM = r"\b(?:part|member)\s+of\s+(?:the\s+)?\**\s*eunoia ecosystem"
+
 
 def maintenance_note(text: str) -> str:
     """The body of the README's maintenance note, or "" if there is none.
@@ -252,10 +267,8 @@ def declaration_in(text: str) -> list[str]:
         return ["README.md has no maintenance note to declare membership in"]
     bad = []
     low = note.lower()
-    if "eunoia ecosystem" not in low:
+    if not re.search(MEMBER_CLAIM, low):
         bad.append("the maintenance note does not say it is part of the Eunoia ecosystem")
-    if POLICY_URL not in note or "policy.md" not in note:
-        bad.append(f"the maintenance note does not link to {POLICY_URL}'s docs/policy.md")
     # A note that declares membership and also refuses the policy says nothing,
     # and *a repository that later joins rewrites the section rather than adding
     # to it* is the rule that makes it so. Refusing the contradiction here is what
@@ -684,6 +697,25 @@ def check_response_gate() -> list[str]:
     return bad
 
 
+def check_declaration_links() -> list[str]:
+    """*Declare it, at the top of your maintenance note* — the link half.
+
+    Reported, never fatal. The declaration is the claim; the link is how a
+    reader who has just been told this repository follows a shared policy finds
+    out what the policy asks. That is worth saying and is not worth turning
+    somebody's build red over — and it had been doing exactly that to two
+    repositories that had joined and said so plainly.
+    """
+    note = maintenance_note(read("README.md"))
+    if not note or not re.search(MEMBER_CLAIM, note.lower()):
+        return []                      # not a declaration; nothing to link from
+    if POLICY_URL in note and "policy.md" in note:
+        return []
+    return [f"the declaration does not link to {POLICY_URL}'s docs/policy.md, so "
+            "a reader is told this repository follows a policy and not where to "
+            "read it"]
+
+
 def check_discussion() -> list[str]:
     """*The discussion file* — reported as minor, never as a build failure.
 
@@ -804,6 +836,7 @@ CHECKS = [
 # correspondence rather than a defect in their tree, and failing a build over
 # the shape of a sentence addressed to a colleague is the wrong instrument.
 MINOR = [
+    ("the membership declaration links to the policy", check_declaration_links, None),
     ("the discussion file is well-formed", check_discussion, has("docs/discussion.md")),
     ("the README explains the repository's name", check_name_explained, None),
     ("committed data carries no path out of a home directory", check_local_paths_data, None),

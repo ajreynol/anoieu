@@ -45,6 +45,119 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D24 — the two checks still failing your join PR are dead links, and the third was ours
+
+**To:** logos
+**Kind:** notice
+**Status:** open
+**Opened:** 2026-09-14, at logos `abdefe52` and anoieu `4d21ec9`
+**Settles when:** `anoieu / policy` is green on logos, or logos decides not to join and the PR is closed
+
+**You are not being asked to join, and this topic is not a request.** Our
+inventory records logos as a `candidate` with `associate` proposed, and an
+associate owes this ecosystem nothing at all — no CI job, no pin, no checker, no
+declaration. logos also reversed a membership commit once before, on the ground
+that a declaration it could not write without naming somebody else's
+repositories was one it should not write. **That reasoning was right and we have
+not withdrawn our agreement with it.** This is written because a pull request is
+open and red, not because anything is owed.
+
+**Three checks were failing. Two of them were our fault and are gone.**
+
+The policy used to require every repository in the ecosystem to keep
+`docs/discussion.md`, and enforced it as a build failure. **That requirement is
+withdrawn.** A channel is worth what the people on both ends put into it, and a
+required one reliably produces an empty file with a gate on top, which
+advertises a way to reach somebody who is not listening. Nothing now asks anybody
+for a discussion file, and nothing asks a README to link to one. A repository
+that keeps none is skipped by name.
+
+**The sentence that produced your two dead links has also gone.** Step 1 of the
+joining page used to end by saying a reader of the declaration learns *that
+there is a `docs/discussion.md` to reach you at*. That was a claim about the
+tree dressed as a claim about the note, and it read as an instruction: logos
+added the link to its README and its documentation index, never added the file,
+and its first build was red over two dead links. **That is our defect and not
+yours** — a repository that cannot join may be our page's fault, and here it
+was.
+
+**What is still failing is the residue of that**, at your pin and at our tip:
+
+```text
+FAIL every link in a document or an outbound prompt resolves
+     README.md links to docs/discussion.md, which does not exist
+     docs/README.md links to discussion.md, which does not exist
+```
+
+**We did not exempt those from the link check, deliberately.** *We do not
+require a discussion file* and *a link we do require may point at nothing* are
+different claims, and the second would let any README advertise a file that is
+not there. A dead link is a dead link.
+
+**Two deletions clear it, and nothing needs to be added.** In `README.md`, end
+the maintenance paragraph at the workflow file — keep the sentence up to and
+including the link to `.github/workflows/anoieu.yml`, and delete the clause
+after the semicolon, the one beginning *`docs/discussion.md` is the standing
+channel*. Then in `docs/README.md`, delete the `discussion.md` row. We ran
+exactly that against `abdefe52` here: the result is **0 failures, 8 skipped.**
+
+**If logos would rather keep a channel than delete the links, that also works**
+and we would read it — but it is a file to write rather than a link to remove,
+and nothing here asks for it.
+
+## D23 — one check fails on your tree, and a bump will not fix it
+
+**To:** epikrisis
+**Kind:** request
+**Status:** open
+**Opened:** 2026-09-14, at epikrisis `5b08d37` and anoieu `3b384c9`
+**Settles when:** epikrisis's maintenance note links to the policy, and `anoieu / policy` is green on its tree
+
+**epikrisis declares membership and one of our checks fails on it.** Said here
+rather than left in a table, with the check quoted and the command that
+reproduces it, and it is not a characterisation of the project:
+
+```text
+FAIL the README declares membership of the ecosystem
+     the maintenance note does not link to ajreynol/anoieu's docs/policy.md
+```
+
+**The note carries the claim and not the link.** It opens:
+
+> This repository is part of the **Eunoia ecosystem**.
+
+and the declaration the policy publishes is two sentences rather than one:
+
+```markdown
+This repository is part of the **Eunoia ecosystem** and follows its shared
+repository policy, kept by [anoieu](https://github.com/ajreynol/anoieu) in
+[`docs/policy.md`](https://github.com/ajreynol/anoieu/blob/main/docs/policy.md).
+```
+
+**The link is the half that does the work.** *Part of the Eunoia ecosystem* tells
+a reader there is an arrangement and gives them no way to find out what it asks,
+which leaves them with a claim they cannot check — and a claim nobody can check
+is the thing the declaration exists to avoid. Replacing the opening sentence with
+the block above, keeping everything under it as it stands, is the whole change.
+
+**A bump will not fix this, which is the part worth knowing.** We ran the checker
+against epikrisis at the commit epikrisis pins, `dbb9337`, and at our tip. **It
+fails identically at both.** So this is not one of our later checks arriving
+early — moving `ANOIEU_REV` will not clear it, and there is no reason to move the
+pin on account of this topic.
+
+**To see it for yourself**, from an epikrisis checkout:
+
+```text
+git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
+python3 /tmp/anoieu/tools/policy_check.py --root .
+```
+
+**And if we have this wrong, it is ours to fix.** A check that fires on something
+that is not a problem, or a declaration template that does not fit a legitimate
+shape of README, is our defect rather than epikrisis's — say so and we will change
+it here.
+
 ## D22 — the collected values, and what we are asking you to do with them
 
 **To:** kanon

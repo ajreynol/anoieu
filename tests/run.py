@@ -690,12 +690,27 @@ def note_forms() -> int:
             "person in their own time, reviewed by nobody, and nothing here has "
             "been checked by a second reader.\n")
 
+    head = "# A tool\n\n## How this repository is maintained\n\n"
+    tail = "\nWritten by one person, and nobody vets the design.\n"
+    #: The short form, as epikrisis and logos both actually wrote it.
+    short = head + "This repository is part of the **Eunoia ecosystem**.\n" + tail
+    #: Names this ecosystem and claims nothing. Not a declaration, and the only
+    #: thing separating the two is the verb.
+    works_with = head + "It works with the **Eunoia ecosystem**.\n" + tail
+
     # (label, text, is a member's declaration?, the affiliating note?, any note?)
     cases = [
         ("the membership declaration", joined, True, False, True),
         ("the independent soft note", independent, False, False, True),
         ("the affiliating soft note", affiliating, False, True, True),
         ("a bare maintenance note", bare, False, False, True),
+        # The claim without the link. Two repositories wrote their declaration
+        # this way and were failed by a check that wanted the URL; the link is
+        # now a minor finding, so this has to read as a declaration. The pair
+        # below is what stops that relaxation going too far: `works with` is the
+        # affiliating note's own words, and must never be a declaration.
+        ("a declaration with no link to the policy", short, True, False, True),
+        ("a note that only works with the ecosystem", works_with, False, False, True),
         ("no maintenance note at all", "# A tool\n\nWhat it does.\n", False, False, False),
     ]
     failures = 0
