@@ -276,10 +276,55 @@ moved.*
 must say about who is writing it, how tools talk to one another, and what a
 child project may do. Written to be adopted rather than admired, and
 machine-checked in every member's CI.
-**Owns:** `docs/policy.md`, `tools/policy_check.py`, and the `init_eo`,
-`join_eo`, `check_join_eo` and `global_audit` prompts.
-**Not this role:** who is actually in the ecosystem, which is `R6`, and what the
-work is *for*, which is `R5` and is argued rather than decided by a program.
+**Owns:** `docs/policy.md`, and the `init_eo`, `join_eo`, `check_join_eo` and
+`global_audit` prompts.
+**Not this role:** who is actually in the ecosystem, which is `R6`; what the
+work is *for*, which is `R5` and is argued rather than decided by a program;
+and **deciding whether a tree complies, which is `R31` and stays here.**
+
+> **Destined for `kanon`.** Writing the rules a member is judged by is
+> governance, and it should not sit in the tree that also files findings against
+> them.
+>
+> **The program is not part of this role and does not go with it.** That is a
+> deliberate split rather than an oversight — see `R31`.
+
+### R31 — the policy checker
+
+**Held by:** `anoieu`
+**Role:** **deciding whether a tree complies with the policy**, whoever wrote
+the policy. The program every member's CI runs, its checks, its two tiers, its
+skip lines, and its refusal to report coverage it does not have.
+**Owns:** `tools/policy_check.py`, and the `adoption_interface` case in
+`tests/run.py` that holds it to being a published interface.
+**Not this role:** what the rules *are*, which is `R4` and is leaving. This role
+implements somebody else's document and has no standing to change what it says.
+
+**Why it is split from `R4`, and why the split is the point.** `B15` argues
+that the repository writing the rules should not be the one filing findings
+against the repositories judged by them. Separating the *rule* from the
+*checker* discharges that better than moving both: the rules go to a tree with
+no stake in the findings, and the checking stays with the tool whose whole
+mission is checking things. **anoieu is a fuzzer, a static analyzer and a policy
+checker** — three programs that read somebody's files and report what is wrong
+with them. The policy checker is the third of those and has never been anything
+else.
+
+**What it costs, and it falls on us rather than on any member.** After the move
+the checker and the document it enforces are in two repositories, so
+`ANOIEU_REV` stops pinning them together — see *Run the check* in
+[`policy.md`](policy.md), which says today that cloning this repository pins
+both at one version. **That sentence stops being true on the day `R4` moves**,
+and what replaces it is undecided: either the checker pins a commit of kanon, or
+the two are versioned together by agreement, or a member pins both. Nobody has
+chosen, and it is recorded here because the move is what makes it urgent.
+
+**What it buys, and this is the part worth the split.** Members' workflows do
+not change. The `anoieu / policy` job clones this repository and runs
+`tools/policy_check.py`; if the checker moved, every member's job would clone
+somewhere else and the check would arrive under a different name in their pull
+requests. **Moving the rules costs a member nothing. Moving the checker would
+cost every one of them a commit.**
 
 ### R1 — the bug report system
 

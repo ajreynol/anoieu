@@ -460,6 +460,30 @@ one row; its internal registers travel with it.
 | [stathmos](../tools/stathmos/README.md) | **the mediator of the report card**: whether a judgement passed on a tool was justified. It goes with governance because it judges the judging, and the judging stays here |
 | [sapheneia](../tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
 
+**Moving to kanon: the machinery that carries out all of it.** The table above
+is what governs; this is what *runs*. It was missing until 2026-09-14, and its
+absence was the more serious of the two gaps this section had: a handover that
+named documents and no programs is one nobody could actually carry out.
+
+**`policy_check.py` is the one program that does not go**, and it is listed
+under *Staying* below. The rules are governance; deciding whether a tree
+complies with them is checking, and checking is what this repository is. The
+consequence — that the checker and the document it enforces end up in two
+repositories, and `ANOIEU_REV` stops pinning them together — is recorded against
+`R31` in [`roles.md`](roles.md) and is not settled.
+
+| what | what it does |
+| --- | --- |
+| [`../tools/ecosystem.json`](../tools/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
+| [`../tools/ecosystem.py`](../tools/ecosystem.py) + [`../scripts/status_eo`](../scripts/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
+| [`../scripts/install_eo`](../scripts/install_eo) + [`../tools/checkouts.json`](../tools/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
+| [`../prompts/join_eo`](../prompts/join_eo), [`../prompts/check_join_eo`](../prompts/check_join_eo), [`../prompts/confirm_eo`](../prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
+| [`../prompts/init_eo`](../prompts/init_eo), [`../prompts/welcome_eo`](../prompts/welcome_eo), [`../tools/near.py`](../tools/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
+| [`../prompts/global_audit`](../prompts/global_audit), [`../prompts/process_discussion`](../prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
+| [`../scripts/deploy`](../scripts/deploy) + [`../tools/bump_check.py`](../tools/bump_check.py) + [`../tools/stretch.json`](../tools/stretch.json) | the epoch machinery: closing a stretch, opening the next, and the gate a member bumps through |
+| [`../tools/transfer_check.py`](../tools/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
+| [`../tools/ready_check.py`](../tools/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
+
 **Moving to aisthesis: the AI research.** Both pages take *this ecosystem* as
 their subject and ask what is actually novel about building one this way. **That
 is a research question, not a governing one** — neither decides anything, and
@@ -482,7 +506,14 @@ rather than carried with it: it was demoted because it was not load-bearing
 
 | what | why it stays |
 | --- | --- |
-| `anoieu/`, `anoieu_fuzz/` | the analyzer and the fuzzer. The thing the ecosystem was built to serve |
+| `anoieu/`, `anoieu_fuzz/`, `tests/` | the analyzer, the fuzzer, and the evidence they rest on. The thing the ecosystem was built to serve |
+| [`../tools/deps.json`](../tools/deps.json), `deps.lock`, [`../tools/deps.py`](../tools/deps.py) | the corpus the analyzer is measured on, fetched and pinned |
+| [`../tools/run.py`](../tools/run.py), [`../tools/sweep.py`](../tools/sweep.py), [`../tools/oracle_desugar.py`](../tools/oracle_desugar.py) | the run: refresh the sources, measure them, record what came back |
+| `tools/gen_checks_doc.py`, `gen_corpus_table.py`, `gen_open_findings.py` | the generators of the documents a run writes |
+| [`../tools/landing.py`](../tools/landing.py) | the landing audit — whether a finding closed as *fixed upstream* actually landed. It is about the ledger, so it stays with the ledger |
+| [`../tools/policy_check.py`](../tools/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
+| [`../prompts/check_anoieu`](../prompts/check_anoieu), [`../prompts/process_anoieu`](../prompts/process_anoieu) | findings out, and answers back |
+| [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |
 | [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
 | [`reports/`](reports/reports.md) | findings against other people's code, and the position governing what may be published about it |
 | [`report-card.md`](report-card.md) | **the assessment of Arete.** It stays because the assessor must not be the governor |
@@ -491,10 +522,11 @@ rather than carried with it: it was demoted because it was not load-bearing
 
 ### The partition does not close, and that is the finding
 
-**Three things are in neither table, and one is in all of them.** Verifying this
-was supposed to be a formality and was not. **The third destination closed one
-item of residue and opened a smaller one**, which is the honest result of adding
-a table rather than the tidy one.
+**Some things are in neither table, and some are in all of them.** Verifying
+this was supposed to be a formality and was not, twice: the third destination
+closed one item of residue and opened a smaller one, and **adding the machinery
+table on 2026-09-14 opened three more** — which is the honest result of writing
+a table down rather than the tidy one.
 
 - **`docs/README.md` is in all three.** It indexes whatever documents a tree
   holds, and all three trees will hold documents. **It is not an artifact that
@@ -510,6 +542,23 @@ a table rather than the tidy one.
 - **`tools/kanon/` and `tools/tekton/`** are stubs. The first is deleted when
   kanon proves itself under `PROTO-20`; **the second has nowhere to go and
   nobody has said who inherits it.**
+- **[`../tools/doc_currency.py`](../tools/doc_currency.py)** measures how much
+  evidence there is that *the tree it is run in* has current documentation. It
+  is the mechanical half of the central policy rule, so it argues for kanon;
+  tekmerion owns that question here and stays, which argues for staying. **Like
+  `docs/README.md` it is most likely a thing each side needs its own of**, and
+  nobody has decided.
+- **`.github/workflows/` is in all three**, for the same reason `docs/README.md`
+  is: every tree runs CI and none of them runs the same jobs. What does not
+  split is the **`anoieu / policy` job every member carries** — it names this
+  repository in its job name and in its clone URL, so **moving the checker
+  renames a check in five other people's pull requests.** That is the first
+  thing in this section that costs somebody outside the handover anything, and
+  no table here covers it.
+- **`scripts/repos.local` is per-machine and untracked**, and every script that
+  resolves a checkout reads it. It does not move because it was never in the
+  tree; it is named here so that whoever carries the rest does not discover it
+  by having a command fail.
 
 **So the honest statement is: these three tables cover most of the ecosystem's
 responsibilities and do not partition them.** The residue is small, it is

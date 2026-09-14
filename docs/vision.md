@@ -276,7 +276,7 @@ logos `47f29bf`, eudaimonia `45e34e0` — and re-measurable from them.
 | **ethos-eoc** | `cvc5/ethos`, branch `ethosEoc3` | the Eunoia compiler: the second binary from the same tree, taking a signature *and its semantics* and emitting the Lean development, an SMT-LIB verification condition per rule, and a SyGuS query per rule |
 | **logos** | `ajreynol/logos` | the Lean development: a generated deep embedding of CPC carrying the claim that its rules are sound against a semantics of SMT-LIB, and the owner of `Cpc.eos`, CPC's official semantics |
 | **eudaimonia** | `ajreynol/eudaimonia` | the calculus template: bring a signature and a semantics, get a Lake project with a checker, its proofs, its regression suite and its documentation |
-| **anoieu** | `ajreynol/anoieu` | the static analyzer for `.eo` and `.eos`, and a fuzzer for the checkers that read them |
+| **anoieu** | `ajreynol/anoieu` | the static analyzer for `.eo` and `.eos`, a fuzzer for the checkers that read them, and the policy checker every member runs |
 | **dokimasia** | `ajreynol/dokimasia` | reads cvc5's C++ proof-production code and asks whether any path through the solver reaches an inference no proof step covers |
 
 ### The exchanges

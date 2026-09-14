@@ -10,25 +10,47 @@ pass, the desugarer and the CI plumbing are written, and run over CPC on every
 push — where they have found three real bugs. A fuzzer for the checkers
 themselves,* [the anoieu fuzzer](docs/fuzzing.md)*, is the newest part.*
 
-## Three things this repository is
+## What this repository is for
 
-**A tool**, first: an analyzer you run over a signature, in an editor or in CI,
-that reports what ethos accepts and should not.
+**Three programs that read somebody's files and report what is wrong with
+them** — a **static analyzer**, a **fuzzer**, and a **policy checker**. That is
+the mission, and each of the three answers a different question about work
+nobody here wrote.
 
-**And a reporting system.** A finding is about *someone else's* file — a program in cvc5's calculus, a test
+**The static analyzer** runs over a signature, in an editor or in CI, and
+reports what ethos accepts and should not.
+
+**The fuzzer** points the same suspicion at the checkers themselves, this one
+included: [the anoieu fuzzer](docs/fuzzing.md) generates cases and compares what
+two checkers say about them, on the principle that a tool which only ever
+reports on other people's files has not been checked by anybody.
+
+**The policy checker** decides whether a repository's tree matches the shared
+arrangement it says it follows —
+[`tools/policy_check.py`](tools/policy_check.py), which runs in every member's
+CI. **It decides compliance; it does not write the rules**, and the difference
+matters: the rules are governance and are [destined to
+move](docs/roles.md), while deciding whether a tree complies stays here with the
+other two checkers.
+
+## Two things it also carries
+
+**A reporting system.** A finding is about *someone else's* file — a program in cvc5's calculus, a test
 signature in ethos, a semantics set in logos, a gap in the language itself — so
 it has to be published where its owner will read it, argued where they can
 disagree with it, and tracked until it is resolved or declined. This repository
 is that somewhere.
 
-**And the place the Eunoia ecosystem's shared arrangements are kept** — which is
-more than the policy, and is stated in full because understating it is how a
-front page stops being true. Four things sit here: how a repository is arranged
-and what its front page must say, in [`docs/policy.md`](docs/policy.md); who is
-in the ecosystem and how the rest of it is fetched onto a machine; what the work
-is aiming at and how each tool is doing against it, argued and never checked;
-and the machinery by which any of those changes and is announced to everybody
-pinned to them.
+**And, for now, the place the Eunoia ecosystem's shared arrangements are kept** —
+which is more than the policy, and is stated in full because understating it is
+how a front page stops being true. Four things sit here: how a repository is
+arranged and what its front page must say, in
+[`docs/policy.md`](docs/policy.md); who is in the ecosystem and how the rest of
+it is fetched onto a machine; what the work is aiming at and how each tool is
+doing against it, argued and never checked; and the machinery by which any of
+those changes and is announced to everybody pinned to them. **These are here
+because nothing else existed to hold them, not because they belong to a
+checker**, and the plan of record is that they leave.
 
 The policy is the part written to be adopted rather than admired, and is
 arguably the most useful thing here: the analyzer reports on four projects, and

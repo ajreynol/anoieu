@@ -1390,6 +1390,19 @@ Cloning the repository rather than downloading the one file is deliberate: it
 pins the checker and this page *together*, so the rules you are held to and the
 program that decides them are the same version.
 
+**That is true today and is planned to stop being true.** The checker is a
+separate responsibility from this page — deciding whether a tree complies is
+checking, which is what anoieu is for, while writing the rules is governance and
+is intended to move to another repository. **When it does, one `ANOIEU_REV`
+stops covering both.** Nothing about your workflow changes on that day: the job
+still clones this repository and still runs `tools/policy_check.py`, because the
+half that moves is the half your CI never touches. **What is undecided is how
+the two stay in step afterwards** — whether the checker pins a commit of the
+page, whether they are released together by agreement, or whether a member ends
+up pinning two things. It is named here rather than after the fact, because the
+one outcome we will not choose is the one where a member finds out by being
+checked against a page it could not have read.
+
 Tracking the tip — dropping the `env:` and the `checkout` line — is a reasonable
 choice for a repository that wants to find out about changes immediately and
 does not mind a red build arriving without a commit. It is not the default we

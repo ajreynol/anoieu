@@ -145,7 +145,7 @@
     "status": "president",
     "repo": "anoieu",
     "url": "https://github.com/ajreynol/anoieu",
-    "what": "the analyzer and the fuzzer; keeps the ecosystem's policy"
+    "what": "the static analyzer, the fuzzer, and the policy checker; keeps the ecosystem's policy for now"
   },
   "cvc5": {
     "status": "foundation",
