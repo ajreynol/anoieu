@@ -1,6 +1,6 @@
 {
   "ddsmt": {
-    "status": "outside-candidate",
+    "status": "outsider",
     "repo": "ddSMT",
     "url": "https://github.com/ddsmt/ddSMT",
     "vetted": "2026-09-02",
@@ -8,7 +8,7 @@
     "why": "comparison data: an established tool serving the same solver, so that our own activity in a stretch can be read against something"
   },
   "murxla": {
-    "status": "outside-candidate",
+    "status": "outsider",
     "repo": "murxla",
     "url": "https://github.com/murxla/murxla",
     "vetted": "2026-09-02",
@@ -16,7 +16,7 @@
     "why": "comparison data, and the nearest outside analogue to our own fuzzer, which we describe as a deliberate baseline"
   },
   "carcara": {
-    "status": "outside-candidate",
+    "status": "outsider",
     "repo": "carcara",
     "url": "https://github.com/ufmg-smite/carcara",
     "vetted": "2026-09-02",
@@ -24,7 +24,7 @@
     "why": "comparison data, and an independent answer to a question this ecosystem also asks: how a proof produced by a solver gets checked"
   },
   "lfsc": {
-    "status": "outside-candidate",
+    "status": "outsider",
     "repo": "LFSC",
     "url": "https://github.com/cvc5/LFSC",
     "vetted": "2026-09-02",
@@ -32,7 +32,7 @@
     "why": "comparison data with a different shape: a tool whose own authors have declared it done. Activity numbers for it are expected to be low and that is not a finding about it"
   },
   "lean-smt": {
-    "status": "outside-candidate",
+    "status": "outsider",
     "repo": "lean-smt",
     "url": "https://github.com/ufmg-smite/lean-smt",
     "vetted": "2026-09-02",
@@ -40,7 +40,7 @@
     "why": "comparison data, and the closest outside neighbour to logos: it joins Lean and SMT from the other direction"
   },
   "isarare": {
-    "status": "outside-candidate",
+    "status": "outsider",
     "repo": "IsaRARE",
     "url": "https://github.com/cvc5/IsaRARE",
     "vetted": "2026-09-02",

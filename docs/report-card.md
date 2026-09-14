@@ -7,12 +7,18 @@ half that moves — the tenets are stable and these paragraphs are re-graded eve
 round — and because a judgement about somebody else's project is a different
 kind of writing from a statement of what the work is for.*
 
-**This is anoieu's assessment of Arete**, in the sense
-[`laws.md`](laws.md#how-a-position-is-held-bestowed-elected-in-arete) gives the
-word: ἀρετή, a thing performing its function well. A repository is *in Arete*
-for a position when it has become the accepted reference for the executor of
-that position, and **what this page carries is the evidence that would bear on
-that** — how well each tool does the job it says it does.
+**This is anoieu's assessment of Arete** — ἀρετή, a thing performing its
+function well. A repository is *in Arete* for a position when it has become the
+accepted reference for the executor of that position: **acceptance rather than
+appointment**, which cannot be granted and can only be earned and then
+recognised. **What this page carries is the evidence that would bear on that** —
+how well each tool does the job it says it does.
+
+**The word is defined here because this is the page that assesses it.**
+[`laws.md`](laws.md) says how a position is *held* — bestowed, and revocable by
+the person who bestowed it. **It does not grade anybody**, and this page confers
+nothing: acceptance is not the assessor's to grant, and anoieu appears on the
+list it keeps.
 
 **Assessing is not conferring, and the difference is the point.** Nothing on
 this page puts anybody in Arete or keeps them out. **Arete is acceptance and

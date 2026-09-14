@@ -106,17 +106,17 @@ who decides.
 ## B23 — epikrisis is the ecosystem's only history analysis and nothing can find it
 
 **Task:** `epikrisis` audits how these repositories have changed over time and
-is the only source of that in the ecosystem — `docs/laws.md` already requires a
-president to quote it rather than count for itself. It lives at
-`tools/workflow-launcher/tools/epikrisis` in eudaimonia: **a child project
-inside a child project**, a shape our own inventory validator rejects, and it is
-in no register anywhere. **We wrote a law that depends on it before asking it
-anything.**
-**Entities:** `anoieu`, `eudaimonia`
-**Status:** **open, and not ours to close.** Two candidate remedies and they are
-very different in cost: **register it**, which needs our validator's rule about
-a child of a child revisited and is entirely our work; or **promote it to its
-own repository**, which is eudaimonia's decision and nobody else's.
+is the only source of that in the ecosystem. **It has been promoted out of
+eudaimonia into a repository of its own**, which removes the child-of-a-child
+shape our inventory validator rejects and closes the harder of the two remedies
+below. **It is still in no register**: it has no entry in
+[`../tools/ecosystem.json`](../tools/ecosystem.json), so nothing that reads the
+inventory can find it.
+**Entities:** `anoieu`, `epikrisis`
+**Status:** **half closed.** The promotion happened and was eudaimonia's to
+make. **Registering it is what remains and is entirely our work** — it needs a
+footing decided for a repository that has joined nothing, which is our opinion
+to hold and not its act.
 **Channel:** **discussion** — `D20`, to eudaimonia.
 **Next:** ask, and read the answer. **The registration half can start
 immediately and does not need anybody's permission**, and it may turn out to be

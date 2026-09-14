@@ -80,7 +80,7 @@ REQUIRED = {
     # for, and `vetted` is the date somebody last looked at the entry -- because
     # writing about a project that never asked to be written about should carry
     # a date the way every other claim here does.
-    "outside-candidate": ("repo", "url", "vetted", "why"),
+    "outsider": ("repo", "url", "vetted", "why"),
 }
 
 #: A footing an entry says we *intend*, in `proposed`, while its `status` stays

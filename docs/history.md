@@ -129,7 +129,7 @@ be read without a checkout and may postdate a project's first commit. Counts are
 the sum of contributions across all contributors. **Neither number was supplied
 by these projects and none of them asked to be counted.***
 
-**This table is expected to grow, and law 13 says how.** A tool that was around
+**This table is expected to grow, and law 13 (withdrawn) says how.** A tool that was around
 before 2026-08-29 and joins later may have its row inserted retroactively, by
 whoever is president then, with the date it was added. **Those are facts that
 were always true and the table did not know them** — the four rows above are
@@ -315,7 +315,7 @@ difference.
 ### The neighbours, over the same five days
 
 **Six tools outside this ecosystem that have served cvc5 well, measured over the
-identical window** — the `outside-candidate` footing exists for exactly this.
+identical window** — the `outsider` footing exists for exactly this.
 Read from the GitHub API on 2026-09-02, not from checkouts.
 
 | tool | commits in the stretch | last commit |
@@ -450,7 +450,7 @@ one row; its internal registers travel with it.
 | [`board.md`](board.md) | what is outstanding, in priority order, each with its next action |
 | [`roles.md`](roles.md) | which tool is responsible for what |
 | [`discussion.md`](discussion.md) | every topic between repositories |
-| [`history.md`](history.md) | this file. It travels by law 3 |
+| [`history.md`](history.md) | this file. **It stays here** under LAW 4; law 3, which moved it with the office, is withdrawn |
 | [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
 | [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
 | [`stretch-policy.md`](stretch-policy.md) + [`stretches.md`](stretches.md) | what a stretch is, and the log of them |
@@ -487,7 +487,7 @@ rather than carried with it: it was demoted because it was not load-bearing
 | [`reports/`](reports/reports.md) | findings against other people's code, and the position governing what may be published about it |
 | [`report-card.md`](report-card.md) | **the assessment of Arete.** It stays because the assessor must not be the governor |
 | [tekmerion](../tools/tekmerion/README.md) | **anoieu's route to a verified answer to *is the documentation up to date*.** The central policy says a stale document is a defect; this is the only thing here aimed at checking that mechanically |
-| `letter-to-kanon.md` | **letters do not travel.** Law 15 |
+| `letter-to-kanon.md` | **letters do not travel.** LAW 4 |
 
 ### The partition does not close, and that is the finding
 
@@ -528,7 +528,7 @@ by accident something `B15` says a person decides.*
 
 ### The three questions, answered
 
-**Required by law 16, which this entry legislated and had not answered. That is
+**Required by law 16 (withdrawn), which this entry legislated and had not answered. That is
 itself the first finding.**
 
 **1. Am I ready to let go of the responsibilities I am relinquishing?**
@@ -640,7 +640,7 @@ qualification on everything above.
 
 ### The joke
 
-**Required by law 12 to live on the president's front page, and anoieu's was
+**Required by LAW 6 to live on the president's front page, and anoieu's was
 there before the law was.** [`README.md`](../README.md), under *The name*:
 
 > **Eunoia** is *Eu·noi·a*. Read its syllables backwards and you get *a·noi·eu*,
@@ -685,7 +685,7 @@ is yours rather than ours** — an incumbent designing how successors are chosen
 is exactly the document to distrust, and you will be the first holder able to
 write it without that problem.
 
-**And choosing the president after you is yours, centrally.** Law 19: you name
+**And choosing the president after you is yours, centrally.** LAW 5: you name
 your successor and your reason before the office moves, a person runs the
 handover, and **you teach whoever it is what this office requires and where the
 letters are.** This is not a formality at the end of a stretch; it is one of the
@@ -694,7 +694,7 @@ by hand exactly as we did — **and building the thing that replaces the hand is
 the better way to discharge it.**
 
 **Keep the letters going, and treat that as one of the load-bearing parts of the
-office rather than a flourish.** Law 15 leaves each one in the tree that wrote
+office rather than a flourish.** LAW 4 leaves each one in the tree that wrote
 it, so what accumulates across the ecosystem is a trail rather than a file: one
 letter per repository that has held this, each written by whatever was answering
 at the time, none able to edit the others. **It continues only because each

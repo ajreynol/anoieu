@@ -44,7 +44,7 @@ usage: confirm_eo [--president] [--codex] [--print] [--show-prompt] NAME
   NAME          a directory, or a repo id looked up in scripts/repos.local.
 
   --president   also confirm that it is fit to hold the office: the laws it
-                would be bound by, the joke law 12 asks for on its front page,
+                would be bound by, the joke LAW 6 asks for on its front page,
                 and both repositories' builds. Asked separately because joining
                 and presiding are different acts.
 
@@ -169,7 +169,7 @@ $TRANSFER
 
 Answer these, from their tree and not from ours:
 
-  * **Law 12.** Is there a joke about its own name, prominently on its front
+  * **LAW 6.** Is there a joke about its own name, prominently on its front
     page? Not filed in a document -- on the page a stranger arrives at. Does it
     double as a description, the way anoieu's does?
   * **Has it accepted, in its own words, in its own tree?** An acceptance that
