@@ -120,10 +120,11 @@ irritating.
 ## The thing I am not the one to tell you
 
 **Choosing the president after you is yours, and I am the wrong entity to be the
-reason you believe it.** It is LAW 5 and it is in the record, which is where a
-duty on you can come from; this page is a recollection and has no standing to add
-one. I name it here only because a letter that left it out would be pretending
-the office is smaller than it is.
+reason you believe it.** It used to be a law; it was replaced on 2026-09-14 by
+one that says only where the office is recorded, so **nothing obliges you to
+choose at all** and this page certainly cannot — a letter is a recollection and
+has no standing to create a duty. I name it because a letter that left it out
+would be pretending the office is smaller than it is.
 
 **What I can do is say what I hope, which costs you nothing and closes nothing.**
 These letters do not travel. Mine stays here, yours stays with you, and neither

@@ -72,21 +72,12 @@ esac
 
 fail() { echo; echo "REFUSED: $1"; exit 1; }
 
-# The stretch log may already say which version this stretch is meant to be
+# The register may already say which version this stretch is meant to be
 # published as. Disagreeing with it is allowed and is worth saying out loud:
 # somebody wrote that number down deliberately, before the deploy.
-INTENDED=$(ANOIEU_ROOT="$ROOT" python3 <<'PYEOF'
-import os, re
-try:
-    t = open(os.path.join(os.environ["ANOIEU_ROOT"], "docs", "stretches.md"),
-             encoding="utf-8").read()
-except OSError:
-    t = ""
-m = re.search(r"^##\s+E\d+\b.*?^\*\*Version:\*\*\s*\*\*`([0-9.]+)`",
-              t, re.M | re.S)
-print(m.group(1) if m else "")
-PYEOF
-)
+INTENDED=$(ANOIEU_ROOT="$ROOT" python3 -c "
+import os, sys; sys.path.insert(0, os.path.join(os.environ['ANOIEU_ROOT'], 'tools'))
+import bump_check as b; print(b.current_version() or '')")
 
 STRETCH=$(ANOIEU_ROOT="$ROOT" python3 -c "
 import os, sys; sys.path.insert(0, os.path.join(os.environ['ANOIEU_ROOT'], 'tools'))
@@ -103,7 +94,7 @@ echo "  next president: $PRESIDENT"
 echo
 
 if [ -n "$INTENDED" ] && [ "$INTENDED" != "$VERSION" ]; then
-  echo "note: the stretch log says this stretch is intended to be $INTENDED,"
+  echo "note: the register says this stretch is intended to be $INTENDED,"
   echo "      and you asked for $VERSION. Neither is wrong here, but one of the"
   echo "      two was written down first and it was not this command."
   echo
@@ -170,39 +161,32 @@ if [ "$DRY" = 1 ]; then
 fi
 
 python3 - "$ROOT" "$STRETCH" "$NEXT" "$VERSION" "$PRESIDENT" "$STATUS" <<'PYEOF'
-import datetime, os, re, sys
+import datetime, json, os, re, sys
 root, stretch, nxt, version, president, was = sys.argv[1:7]
 today = datetime.date.today().isoformat()
 
-p = os.path.join(root, "docs", "stretches.md")
-s = open(p, encoding="utf-8").read()
-
-# The Version field, which said "when deployed" and now is not a plan.
-s = re.sub(r"(^##\s+" + re.escape(stretch) + r"\b.*?^\*\*Version:\*\*\s*)"
-           r"\*\*`[0-9.]+`\*\* when deployed\. \*\*Not yet deployed\*\* —[^\n]*"
-           r"(?:\n(?!\*\*)[^\n]*)*",
-           lambda m: m.group(1) + f"**`{version}`**, deployed {today}.",
-           s, count=1, flags=re.M | re.S)
-
-# The Status field. `was` is carried in so the previous status is named rather
-# than dropped -- an earlier version wrote "Previously, raised from ..." and
-# lost the word it was previously.
-s = re.sub(r"(^##\s+" + re.escape(stretch) + r"\b.*?^\*\*Status:\*\*\s*)`?\w+`?",
-           lambda m: m.group(1) + f"`deployed` as **{version}** on {today}, by\n"
-                                  f"`./scripts/deploy`.\nPreviously `{was}`",
-           s, count=1, flags=re.M | re.S)
-
-head = s.index("## " + stretch)
-s = s[:head] + (
-    f"## {nxt} — opened {today}\n\n"
-    f"**Version:** none. A stretch is versioned when it is deployed.\n"
-    f"**Status:** `brainstorm`, opened by `./scripts/deploy` when {stretch} was\n"
-    f"deployed as {version}.\n"
-    f"**President:** `{president}`.\n"
-    f"**Announcement:** none yet. A stretch with no announcement has not asked\n"
-    f"anybody for anything, which is the correct state on its first day.\n\n"
-) + s[head:]
-open(p, "w", encoding="utf-8").write(s)
+# The register, rewritten as data. This used to be three regular expressions
+# rubbing out prose in docs/stretches.md -- each of which had to match a
+# sentence somebody was free to reword, and one of which had already lost the
+# word `was` by matching one group too few. A dict has no such failure mode.
+p = os.path.join(root, "tools", "stretch.json")
+reg = json.load(open(p, encoding="utf-8"))
+here = reg["stretches"][stretch]
+here["status"] = "deployed"
+here["version"] = version
+here["deployed"] = today
+here["previous_status"] = was
+reg["stretches"][nxt] = {
+    "status": "brainstorm",
+    "version": None,
+    "deployed": None,
+    "president": president,
+    "announcement": [],
+}
+reg["current"] = nxt
+with open(p, "w", encoding="utf-8") as fh:
+    json.dump(reg, fh, indent=2, ensure_ascii=False)
+    fh.write("\n")
 
 # history.md names its sections `Stretch N`, not `EN`. Writing `## E2` there
 # would put a second heading for one stretch into a file that already has
@@ -242,7 +226,7 @@ else:
     t = t[:at] + marker + "\n" + t[at:]
     where = f"inserted a Stretch {n} section"
 open(h, "w", encoding="utf-8").write(t)
-print(f"  wrote docs/stretches.md, and {where} in docs/history.md")
+print(f"  wrote tools/stretch.json, and {where} in docs/history.md")
 PYEOF
 
 echo

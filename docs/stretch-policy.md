@@ -2,10 +2,18 @@
 
 What a stretch is, what ends one, and what designing the next one involves.
 
-[`stretches.md`](stretches.md) is the **log** and this is the **policy**, and they are
-two files because they are held to opposite standards: a policy has to be current
-and the log explicitly does not. One file carrying both would make the licence to
-be stale look like it covered the rules as well.
+This is the **policy**. The two things it governs live elsewhere and are
+deliberately apart: [`../tools/stretch.json`](../tools/stretch.json) is the
+**register** — which stretch we are in, its status, and the version it is to be
+published as, which is what `./scripts/deploy` gates on and must be current;
+[`history.md`](history.md) is the **account** of what each stretch did, which is
+prose and is a person's.
+
+*There was a third file, `stretches.md`, holding a covering-note log with those
+three register fields embedded in it under a banner saying the file was under no
+obligation to be current. It was deleted on 2026-09-14: the exemption was right
+for the log and wrong for fields a deploy gates on, and the log's contents are
+now in the account, where the rest of what a stretch did already was.*
 
 ## What a stretch is
 
@@ -165,12 +173,11 @@ this section guesses it is, and optimising before that would be the same mistake
 as generating a document before anybody has kept one by hand.
 
 The guess, recorded so it can be checked later: **a dry run may already need only
-[`stretches.md`](stretches.md), 199 lines, plus the commands named in the block** —
-because the log entry carries every field the block wants. `Of us` answers
-*applied here*, the prompt answers *asks*, `Suggested notifications` answers
-*informs*, and `removes` is its own row. If that holds, the ordinary path never
-touches this page or [`policy.md`](policy.md)'s 1,791 lines, and the corpus
-growing costs a command nothing.
+[`../tools/stretch.json`](../tools/stretch.json) and the stretch's section of
+[`history.md`](history.md), plus the commands named in the block** — between them
+they carry every field the block wants. If that holds, the ordinary path never
+touches this page or [`policy.md`](policy.md), and the corpus growing costs a
+command nothing.
 
 **If it turns out not to hold, reorganise the record rather than the gates** —
 move what a command needs into the small file it already reads. That is the shape
@@ -266,7 +273,7 @@ EPOCH E1 · dry run
   commit ....... 9942149       git rev-parse --short HEAD
   ci ........... FAIL          tools/bump_check.py --rev 9942149 -> exit 1
   applied here . FAIL          grep -rl "Is there a paper in this" README.md docs/
-  asks ......... 2             docs/stretches.md, E1 - the prompt
+  asks ......... 2             docs/history.md, E1 - the covering note
   informs ...... 3             tools/ecosystem.py -- members
   removes ...... nothing       -
   ---------------------------------------------------------------
@@ -797,7 +804,7 @@ limit, and it works by making a second one cost the first one's visibility.
 this ecosystem has already been given from outside is that governance is the
 cheapest thing here to produce and that it has outrun the trees it governs. A stretch is a governance artifact. The rate at which they are declared is therefore
 evidence about that criticism, in whichever direction it happens to point, and
-[`stretches.md`](stretches.md) is where somebody can count them.
+[`history.md`](history.md) is where somebody can count them.
 
 ## Go only as fast as you understand
 

@@ -133,35 +133,52 @@ def epoch_marker(root: str) -> str:
     return ""
 
 
-def current_stretch(root: str = "") -> str:
-    """The newest stretch in `docs/stretches.md`, or "" if there is none.
+def register(root: str = "") -> dict:
+    """`tools/stretch.json`: which stretch we are in, and what is true of it.
 
-    The log is newest-first, so the first `## E<n>` heading is the current one.
-    Read from the prose rather than from a second file on purpose: a machine-
-    readable copy would be one more thing to keep in step with the log, and the
-    log is already the ground truth for what a stretch is.
+    These three facts used to be read out of the prose of `docs/stretches.md`,
+    on the argument that a machine-readable copy would be one more thing to keep
+    in step with the log. That argument died with the log: there is no prose left
+    for a copy to drift from, and the fields `./scripts/deploy` gates on were
+    sitting under a banner saying the file was under no obligation to be current.
+
+    Returns `{}` when there is no register, which every caller treats as *we do
+    not know* rather than as a value.
     """
     path = os.path.join(root or os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))), "docs", "stretches.md")
+        os.path.abspath(__file__))), "tools", "stretch.json")
     try:
         with open(path, encoding="utf-8") as fh:
-            m = re.search(r"^##\s+(E\d+)\b", fh.read(), re.M)
-    except OSError:
-        return ""
-    return m.group(1) if m else ""
+            return json.load(fh)
+    except (OSError, ValueError):
+        return {}
+
+
+def _current(root: str, field: str) -> str:
+    reg = register(root)
+    cur = reg.get("current", "")
+    return str(reg.get("stretches", {}).get(cur, {}).get(field, "") or "") if cur else ""
+
+
+def current_stretch(root: str = "") -> str:
+    """The stretch we are in, or "" if the register cannot be read."""
+    return str(register(root).get("current", "") or "")
 
 
 def current_status(root: str = "") -> str:
-    """The status of the newest stretch in `docs/stretches.md`, or "" if unreadable."""
-    path = os.path.join(root or os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))), "docs", "stretches.md")
-    try:
-        with open(path, encoding="utf-8") as fh:
-            text = fh.read()
-    except OSError:
-        return ""
-    m = re.search(r"^##\s+E\d+\b.*?^\*\*Status:\*\*\s*`?(\w+)`?", text, re.M | re.S)
-    return m.group(1) if m else ""
+    """The status of that stretch, or "" if unreadable."""
+    return _current(root, "status")
+
+
+def current_version(root: str = "") -> str:
+    """The version that stretch is to be published as, or "" if unrecorded.
+
+    Recorded before the fact so a deploy *names* the number rather than choosing
+    it. It is what the stretch is intended to be published as until `deployed`
+    is set beside it, and disagreeing with it at deploy time is allowed and is
+    worth saying out loud -- somebody wrote it down deliberately.
+    """
+    return _current(root, "version")
 
 
 def ask(rev: str, timeout: int = 20) -> tuple[list[dict], str]:

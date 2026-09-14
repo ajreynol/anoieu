@@ -9,6 +9,13 @@
 #   status_eo --verbose          # ... and why each policy verdict came out
 #   status_eo --check            # is the inventory itself well formed?
 #   status_eo --check --online   # ... and does each remote still agree with it
+#   status_eo --help             # what every column and every value means
+#
+# `--help` carries the key: each column, each value it can take, and what to do
+# about a `N failing` row -- including the part the table cannot show, which is
+# that whose problem it is depends on the status column. A count against a tool
+# that never joined is a measurement and not a shortfall. The table itself
+# prints one line pointing at the key, and not the key.
 #
 # **Not a prompt**, which is why it is here and not in prompts/: no
 # assistant, no turn spent, nothing to review before running it.

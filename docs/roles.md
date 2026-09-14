@@ -381,7 +381,7 @@ are this ecosystem's **main verification system for its own governance**, which
 is a claim worth stating plainly because it is unusual: what verifies a stretch is
 a protocol, not a test suite.
 **Owns:** `tools/bump_check.py`, the approval protocol in `docs/policy.md`,
-`docs/stretch-policy.md` and `docs/stretches.md` — the gates, the block template,
+`docs/stretch-policy.md` and `tools/stretch.json` — the gates, the block template,
 the dry run, the statuses, and the log's entry format.
 **Not this role:** **deciding what a stretch is *for*, which is not a role here
 at all** — it is the human's, and `R27` was allocated to this repository for it

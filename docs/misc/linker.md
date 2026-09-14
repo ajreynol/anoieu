@@ -109,7 +109,7 @@ One place each. If two pages would answer a question, one of them is wrong.
 | how a repository here is arranged | [`policy.md`](../policy.md) |
 | what the work is aiming at | [`vision.md`](../vision.md) |
 | how each tool is doing against that | [`report-card.md`](../report-card.md) |
-| what a stretch is, and where this one stands | [`stretch-policy.md`](../stretch-policy.md), [`stretches.md`](../stretches.md) |
+| what a stretch is, and where this one stands | [`stretch-policy.md`](../stretch-policy.md), [`../../tools/stretch.json`](../../tools/stretch.json) |
 | what a person says to get work done here | [`interface.md`](../interface.md) |
 | what the tool's command line does | [`usage.md`](../usage.md) |
 | everything else about the tool | [`notes.md`](../notes.md), [`fuzzing.md`](../fuzzing.md) |

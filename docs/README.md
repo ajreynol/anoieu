@@ -136,7 +136,7 @@ sources, a dry run, a gate, an exit code, a version — and then the longer half
 not; nothing type-checks; there is no linker; and `deployed` is not `installed`,
 because every downstream effect is somebody else's voluntary act.
 
-[`stretch-policy.md`](stretch-policy.md) and [`stretches.md`](stretches.md) are a pair and
+[`stretch-policy.md`](stretch-policy.md) and [`history.md`](history.md) are a pair and
 are not in the table either. A **stretch** is the span between one global
 announcement and the next. The policy says what one is, what counts as a major
 event within it — a global announcement, and **a role changing hands**, which is

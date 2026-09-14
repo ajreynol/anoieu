@@ -654,8 +654,9 @@ the next a **stretch**, and the boundary is the announcement rather than a date 
 deliberately, because a date would be a cadence and a cadence is a commitment to
 other repositories we are in no position to sign.
 [`stretch-policy.md`](stretch-policy.md) is what one is;
-[`stretches.md`](stretches.md) is the log. From the outside a stretch boundary looks
-like an ordinary commit touching a documentation file.
+[`history.md`](history.md) is the account of the ones that have happened. From
+the outside a stretch boundary looks like an ordinary commit touching a
+documentation file.
 
 **A role changing hands**, and this is the one to detect. It changes who is
 *accountable* rather than what exists: one entry moves between two headings in

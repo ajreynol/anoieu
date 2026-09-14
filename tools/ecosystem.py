@@ -95,6 +95,17 @@ REQUIRED = {
 #: asked of a member's README applies to it unchanged.
 MEMBERS = ("member", "president")
 
+#: The files the office is kept in, and the test for *limbo* -- the registry
+#: recording a repository as president while its tree cannot hold the office.
+#: The office moves by a person editing one line; these are carried by somebody
+#: doing the work, and the gap between the two acts is the state this detects.
+#: Reported against the row and never enforced: the remedy is somebody carrying
+#: files, and a red build carries nothing.
+PRESIDENT_FILES = {
+    "docs/laws.md": "the laws, which the president maintains",
+    "docs/history.md": "its account of its own term",
+}
+
 #: A footing an entry says we *intend*, in `proposed`, while its `status` stays
 #: what is true today. It exists because the associate protocol is drafted and
 #: not decided: recording the intention as the fact would be this file asserting
@@ -107,6 +118,114 @@ PROPOSABLE = ("associate",)
 #: tree, and asking them for anything is what that footing exists to refuse.
 OWN_REPO = ("member", "president", "associate", "candidate")
 
+
+# The key printed under the table. A reader who cannot decode `3 failing` in a
+# `candidate` row cannot tell a disagreement from a measurement, and the table
+# had been printing that distinction for months without saying it anywhere.
+#
+# These are a **copy**: what a footing means is decided in `docs/policy.md`, and
+# what a verdict means is decided by `check()` and by the branches in `main()`
+# below. So the copy is named by its ground truth and compared to it --
+# `key_is_complete` in tests/run.py fails when a footing exists in `REQUIRED`
+# and not here. Nothing compares the prose, which is the half that can still rot.
+
+#: One line per footing, in the order a reader meets them. Keep the keys equal
+#: to `REQUIRED`'s; the value says how to *read the column*, never what the
+#: footing means in full -- that is the policy's, and is linked below.
+FOOTINGS = {
+    "president": "a member, and holds the office. This column is the authority "
+                 "on who that is; a note says so if the tree cannot hold it",
+    "member": "declared membership. Held to the policy, and checked here",
+    "candidate": "has not joined. The policy is addressed to them and binds them to nothing",
+    "associate": "load-bearing for us, and owes us nothing. Never checked",
+    "foundation": "the ecosystem is downstream of it. Asked for nothing, ever",
+    "child": "a project inside another repository, on its parent's footing",
+    "outsider": "outside the ecosystem, tracked so our own numbers have something "
+                "to be compared against",
+}
+
+#: Every value the `policy` column can print, and what it means.
+POLICY_VALUES = (
+    ("ok", "every check that applies to that tree passed"),
+    ("N failing", "N of our checks failed on it"),
+    ("not held", "an associate. Nothing was run, and that is the footing"),
+    ("no checkout", "not on this machine, so nothing could be run"),
+    ("-", "a child or a foundation: not a repository this table checks"),
+)
+
+#: Every value the `channel` column can print, and what it means.
+CHANNEL_VALUES = (
+    ("N for us", "N topics in it are addressed to anoieu"),
+    ("yes", "they keep one, and nothing in it is for us"),
+    ("none", "they keep none. Not a defect: the file is optional"),
+    ("-", "a child or a foundation"),
+)
+
+
+def render_key() -> str:
+    """The legend. Printed by `--help` and by nothing else.
+
+    It ends with what to do about a failing row, because that is the question
+    the table provokes and the one it was answering nowhere: the count is here,
+    the detail is in another program, and which of the two repositories owns the
+    problem depends on a column further left.
+
+    **Not printed under the table.** It is twenty-odd fixed lines against a
+    twenty-four line table, read once and never again, in a command that is run
+    often -- so under the table it is the bulk of the output every time in order
+    to be useful once. The table carries a one-line pointer to it instead, which
+    is the part that cannot be dropped: a legend nobody is told about is not a
+    legend, and *print it every run* and *do not mention it* are both wrong.
+    """
+    values = (tuple(FOOTINGS.items()), POLICY_VALUES, CHANNEL_VALUES)
+    # One width across all three lists, so every description starts in the same
+    # column. Widths computed per list read as three tables that happen to be
+    # adjacent, which is what they looked like when this was first written.
+    w = max(len(k) for group in values for k, _ in group) + 2
+
+    def block(group) -> None:
+        for k, why in group:
+            out.append(f"             {k:<{w}}{why}")
+
+    out = ["key"]
+    out.append("  tool     its id in tools/ecosystem.json -- what every prompt "
+               "here calls it by")
+    out.append("  status   what it owes us, and what we say about it. In full: "
+               "docs/policy.md,")
+    out.append("           \"The footings, and what each one costs whom\"")
+    block(FOOTINGS.items())
+    out.append("  policy   tools/policy_check.py, run over that checkout by this "
+               "command just now")
+    block(POLICY_VALUES)
+    out.append("  channel  their docs/discussion.md, which is optional and which "
+               "most tools do not keep")
+    block(CHANNEL_VALUES)
+    out.append("  moved    days since the last commit in the checkout on this "
+               "disk, not on their remote")
+    out.append("  where    where that checkout is")
+    out.append("")
+    out.append("fixing a `N failing` row")
+    out.append("  The count is all this table has. To see what failed:")
+    out.append("      python3 tools/policy_check.py --root <where>")
+    out.append("  Each FAIL line names the check and what it found.")
+    out.append("  Whose it is to fix depends on the status column, and the two "
+               "cases are not alike.")
+    out.append("    member, president  they declared they follow this, so the "
+               "tree and the claim")
+    out.append("                       disagree. Theirs to fix, and a note "
+               "below says so by name.")
+    out.append("    anything else      they never agreed to any of this. It is a "
+               "measurement and")
+    out.append("                       not a shortfall, nobody owes us the fix, "
+               "and it is not")
+    out.append("                       something to open a topic about.")
+    out.append("  And where the check is wrong -- it fires on something that is "
+               "not a problem,")
+    out.append("  or the policy does not fit a legitimate shape of repository -- "
+               "that one is")
+    out.append("  ours, and it is fixed here in docs/policy.md or "
+               "tools/policy_check.py.")
+    return "\n".join(out)
 
 
 def git(*args, cwd=None):
@@ -510,7 +629,24 @@ def audit(online: bool) -> int:
     return 1 if bad or stale else 0
 
 
+USAGE = """usage: status_eo [--verbose] [--check [--online]] [--health] [--protocol]
+
+  (no arguments)  the table: one row per tool in tools/ecosystem.json
+  --verbose       ... and, per tool, which checks failed and what they found
+  --check         is the inventory itself well formed? No network, no checkouts
+  --check --online  ... and does each remote's README still agree with it
+  --health        the one-line-per-question health report
+  --protocol      where each tool proposed for `associate` stands against the
+                  drafted protocol. Reports, and never fails
+  --help          this, and the key below
+"""
+
+
 def main() -> int:
+    if "--help" in sys.argv or "-h" in sys.argv or "-help" in sys.argv:
+        print(USAGE)
+        print(render_key())
+        return 0
     if "--check" in sys.argv:
         return audit("--online" in sys.argv)
     if "--health" in sys.argv:
@@ -571,6 +707,20 @@ def main() -> int:
                 f"{name} says it follows the shared policy, and {n_fail} of our "
                 "checks fail on its tree. Theirs to fix, not ours. To see what: "
                 f"python3 tools/policy_check.py --root {where_short}")
+        # Limbo. Said against the row rather than left for somebody to notice,
+        # because it is the one state here that is supposed to be brief: while
+        # it lasts nobody is keeping the laws and nothing is recording the term.
+        if status == "president":
+            absent = [f"`{f}` ({why})" for f, why in PRESIDENT_FILES.items()
+                      if not os.path.isfile(os.path.join(path, f))]
+            if absent:
+                notes.append(
+                    f"IN LIMBO: the registry records {name} as president and its "
+                    f"tree does not carry {', '.join(absent)}. The office has "
+                    "moved and the means of holding it have not. Fix it quickly "
+                    "-- carry the files, or put the registry line back. Nothing "
+                    "here fails a build over it")
+
         # A checkout whose directory is not called what the inventory calls it.
         # Said loudly because the quiet version of this cost us a member: the
         # tree was on disk as `eudiamonia`, the inventory said `eudaimonia`, and
@@ -596,6 +746,13 @@ def main() -> int:
         short = where.replace(os.path.expanduser("~"), "~") if where else ""
         print(f"{name:<{w}}{status:<11}{verdict:<12}"
               f"{topics:<10}{moved:<8}{short}")
+
+    # The pointer, not the key. One line, immediately under the table, because
+    # the moment somebody needs the legend is the moment they are looking at a
+    # column they cannot read.
+    print()
+    print("-- what the columns mean, and what to do about a failing row: "
+          "status_eo --help")
 
     if notes:
         print()

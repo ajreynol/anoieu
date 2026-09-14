@@ -20,14 +20,14 @@ actual policy; nothing here governs anything.
 | `make` | `epoch deploy` |
 | the test suite, run before release | anoieu's own CI, at the commit being adopted |
 | the exit code | the `DEPLOY` line of the approval block |
-| the build log | [`stretches.md`](stretches.md) |
+| the build log | [`history.md`](history.md) — the account. The three fields a command reads are [`../tools/stretch.json`](../tools/stretch.json) |
 | a version | the stretch id — `E1` |
 | a lockfile | `ANOIEU_REV`, and [`../tools/deps.lock`](../tools/deps.lock) |
 | `make install` | a member upholding the stretch's contracts — and `installed` is the property of **every** member having done so |
 | the artifact | the commit, plus the announcement saying what is in it |
 | the linker | **nothing.** No reference an announcement makes is ever resolved — see below |
 | the loader | **a person**, carrying the announcement by hand |
-| the object cache — what makes a rebuild incremental | the log entry in [`stretches.md`](stretches.md), which a command reads instead of the whole corpus |
+| the object cache — what makes a rebuild incremental | [`../tools/stretch.json`](../tools/stretch.json), which a command reads instead of the whole corpus |
 | signing, credentials, a package registry | **nothing.** One owner, one keyboard — see below |
 
 ## Where the analogy earns its keep

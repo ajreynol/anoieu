@@ -699,7 +699,7 @@ tree can see.
 - **Stretches get declared faster than the trees move.** That is already the live
   criticism of this ecosystem from outside, and an abstraction whose main output
   is governance is confirming it rather than answering it. The rate is countable
-  in [`stretches.md`](stretches.md).
+  in [`history.md`](history.md), one section per stretch.
 - **A person finds themselves fighting the framing** to get ordinary work done,
   which is the cheapest signal and the one to say out loud.
 
@@ -769,8 +769,9 @@ and `python3 tools/bump_check.py --rev <sha>` decides it.
 
 The practical consequence for you: **a stretch is not finished when the documents
 are written.** It is finished when they are committed and the build is green at
-that commit, and until then the entry in [`stretches.md`](stretches.md) says so and the
-stretch is adoptable by nobody. Asking *is this stretch deployable yet* is a
+that commit, and until then the stretch's status in
+[`../tools/stretch.json`](../tools/stretch.json) says so and the stretch is
+adoptable by nobody. Asking *is this stretch deployable yet* is a
 reasonable end-of-session question and has a one-command answer.
 
 ## The commands

@@ -453,7 +453,7 @@ one row; its internal registers travel with it.
 | [`history.md`](history.md) | this file. **It stays here** under LAW 4; the earlier rule that moved it with the office is withdrawn |
 | [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
 | [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
-| [`stretch-policy.md`](stretch-policy.md) + [`stretches.md`](stretches.md) | what a stretch is, and the log of them |
+| [`stretch-policy.md`](stretch-policy.md) + [`../tools/stretch.json`](../tools/stretch.json) | what a stretch is, and which one we are in |
 | [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
 | [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
 | [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
@@ -638,6 +638,90 @@ president does not analyse GitHub and epikrisis does; **no epikrisis report
 exists, so this stretch counted itself throughout.** That is the single largest
 qualification on everything above.
 
+### What E1 carried downstream, and what it nearly said
+
+**Moved here on 2026-09-14 from `docs/stretches.md`, which has been deleted.**
+That file kept a covering note per stretch beside three fields
+`./scripts/deploy` gated on, under a banner saying it was under no obligation to
+be current. The fields are now `tools/stretch.json`; this is the rest, and it
+belongs in the account rather than in a register.
+
+**What it carried:** footings recorded on two axes instead of one; the
+`associate` footing, defined and held by nobody; the `report/` convention and
+the rule that a child project states whether there is a paper in it; `join_eo
+--soft` in two forms; the rule that a prompt may not be for the repository it
+arrives in; and the concept of a global announcement itself. One thing was owed
+— a publishing stance — and everything else was notice.
+
+**The covering note**, as recommended on 2026-09-01. Whether it was ever sent,
+to whom, or what came back is the topic's business and a person's, not this
+page's:
+
+```text
+anoieu has opened D14, a global announcement, in its docs/discussion.md:
+
+  https://github.com/ajreynol/anoieu/blob/main/docs/discussion.md
+
+Two things are asked of you, and D16 in the same file is the second.
+
+1. State a publishing stance for your repository and for each child project in
+   your tree -- whether a paper exists for it, what the plan is, or that there is
+   nothing in it worth writing up. All three are answers, and the third is the
+   commonest.
+
+2. Only move your ANOIEU_REV pin to a commit where anoieu's CI is green at that
+   commit, and refuse the bump otherwise. D16 says why, and ships the check.
+   It must not run in your CI.
+
+Everything else in D14 is notice and needs no reply.
+```
+
+**Revised before it was sent to anybody.** The first version said *one thing is
+asked of you*, which was true when it was written and stopped being true when
+`D16` landed.
+
+**What was rejected:**
+
+> *See anoieu for a global announcement on how to improve your repo.*
+
+**It misdescribes the announcement in the direction that flatters us.** `D14` is
+one small ask, a set of notices, a list of our own failures and a question we
+are putting to somebody else. Calling that *how to improve your repo* claims a
+standing the stretch had spent its length disclaiming.
+
+**It names no topic, so the response gate stalls it.** Acting on another tool's
+discussion file requires a human who named *which* topic. *A global
+announcement* is not `D14`. A careful agent stops and asks, which is correct and
+still costs a round; a careless one acts on notices marked as needing no reply.
+
+**It drops the one thing that was owed**, which is the whole purpose of the
+`Global:` field, and replaces it with an open invitation.
+
+**And *see anoieu* is about thirty documents.** koine's `D1` was at that moment
+an open complaint that joining had cost it four files and eighteen hundred lines
+of reading.
+
+**The approval block, verbatim, from the session that proposed deploying E1.**
+Kept because it said `BLOCKED`, which is the case
+[`stretch-policy.md`](stretch-policy.md#the-approval-block) is most insistent
+about keeping:
+
+```text
+EPOCH E1 · dry run
+  commit .......... 8a71253
+  ci .............. FAIL   oracle red since cf4ad2c (2026-08-30), 100+ commits
+  applied here .... FAIL   anoieu's own publishing stance unstated
+  asks ............ publishing stance; bump only to a green commit
+  informs ......... dokimasia, eudaimonia, koine
+  removes ......... R27           a role deleted (git log -- docs/roles.md)
+  ------------------------------------------------------------
+  DEPLOY .......... BLOCKED  2 failing
+```
+
+**`informs` names three members because there were three on that day.**
+epikrisis became one afterwards, and `D14` addresses the three it named. The
+block is a record of a session, not a statement about the ecosystem now.
+
 ### The joke
 
 **Required by LAW 6 to live on the president's front page, and anoieu's was
@@ -685,13 +769,15 @@ is yours rather than ours** — an incumbent designing how successors are chosen
 is exactly the document to distrust, and you will be the first holder able to
 write it without that problem.
 
-**And choosing the president after you is yours, centrally.** LAW 5: you name
-your successor and your reason before the office moves, a person runs the
-handover, and **you teach whoever it is what this office requires and where the
-letters are.** This is not a formality at the end of a stretch; it is one of the
-things the office is for. Until the mechanism above exists you will be choosing
-by hand exactly as we did — **and building the thing that replaces the hand is
-the better way to discharge it.**
+**And choosing the president after you is yours, centrally — though no law says
+so any more.** The law that made it a named duty was replaced on 2026-09-14 by
+one that says only where the office is *recorded*, so what follows is a
+recommendation from a predecessor and not an obligation you inherit: name your
+successor and your reason before the office moves, let a person run the
+handover, and teach whoever it is what this office requires and where the
+letters are. Until an election exists you will be choosing by hand exactly as we
+did — **and building the thing that replaces the hand is the better way to do
+it.** Take that as a hope rather than a duty, which is all a letter may create.
 
 **Keep the letters going, and treat that as one of the load-bearing parts of the
 office rather than a flourish.** LAW 4 leaves each one in the tree that wrote

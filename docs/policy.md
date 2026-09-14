@@ -756,12 +756,12 @@ automatically* — said in the one place it is easiest to forget, because an
 announcement written to everybody reads like a mailing that has already gone
 out. It has not. Nothing here sends anything.
 
-**The covering notes are logged and not maintained.** What a stretch is and what
-designing the next one involves are in
-[`stretch-policy.md`](stretch-policy.md); the covering notes are logged in
-[`stretches.md`](stretches.md), one entry per stretch. They are two files
-because they are held to opposite standards — the policy has to be current and
-the log explicitly does not. Nothing in that log is an instruction.
+**A covering note is a suggestion with a date on it.** What a stretch is and
+what designing the next one involves are in
+[`stretch-policy.md`](stretch-policy.md); what a stretch actually carried, and
+the note recommended with it, are in [`history.md`](history.md). Nothing in that
+account is an instruction: who is told, when, in what words, and whether at all
+is the same person's decision as everything else in this section.
 
 ### Who may address whom
 

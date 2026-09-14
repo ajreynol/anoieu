@@ -75,12 +75,14 @@ of it that is actually the point.**
 ## What you are taking on, beyond the record
 
 **Choosing the president after you is one of this office's central
-responsibilities.** That is LAW 5, and it is not a courtesy at the end of your
-stretch: you name your successor and say why, before the office moves, and a
-person runs the handover. **Choosing by hand is the floor.** A mechanism that
-chooses — an election somebody other than the incumbent could run — discharges
-the same law better, and you are the first holder able to write one without
-being the party it was designed around.
+responsibilities — and no law requires it.** The law that did was replaced on
+2026-09-14 with one saying only that the registry is the authority on who holds
+the office; nothing now names a duty to choose, which is a gap the laws page
+records rather than hides. The practice stands anyway: name your successor and
+say why before the office moves, and let a person run the handover. **Choosing
+by hand is the floor.** A mechanism that chooses — an election somebody other
+than the incumbent could run — is better, and you are the first holder able to
+write one without being the party it was designed around.
 
 **And you teach the next one how to keep this going.** The record, the census,
 the working summary, the letter LAW 4 asks for, where the previous letters are,

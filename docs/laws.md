@@ -3,8 +3,9 @@
 **Candidate laws, not laws.** Written down, followed voluntarily, **enforced by
 nothing.** No check reads this page and no build fails on it.
 
-**Seven laws.** What the ecosystem is made of, what a member owes, and the five
-things the president owes.
+**Seven laws.** What the ecosystem is made of, what a member owes, and five
+about the president — three it owes, one that says where the office is recorded,
+and one that hands it this page.
 
 **No tool is named on this page.** These are rules about footings and an office,
 and both outlive whoever occupies them. A law that names its current subject
@@ -47,11 +48,16 @@ against it.
 
 ## What these laws do not settle
 
-1. **How a president is chosen**, beyond a person saying so. LAW 5 makes choosing
-   a named duty. It is not a procedure, and no election exists.
-2. **What happens if a stretch has no president.** LAW 5 turns that from nobody's
-   problem into **a duty going undischarged**, which is an improvement and not an
-   answer.
+1. **How a president is chosen**, beyond a person saying so. No procedure, no
+   election, and — since LAW 5 was replaced — **not even a named duty to
+   choose.** It is a person editing one line of the registry, and nothing says
+   whose job it is to decide what that line should say. **This gap got wider on
+   2026-09-14 and is stated rather than papered over.**
+2. **What happens if a stretch has no president.** The registry cannot record
+   *nobody*: an entry either says `president` or does not exist, so an office
+   nobody holds looks exactly like an office whose row was not written yet. LAW
+   5 covers the case where a holder is recorded and cannot act, and says nothing
+   about the case where there is no holder at all.
 3. **Who says no.** Nothing here overrules a president, and LAW 7 gives the
    president the page it would be overruled from.
 4. **Where the record of who joined lives.** LAW 4 makes `history.md` each
@@ -194,38 +200,62 @@ stops is a succession that stopped being taught; a trail that turns flattering i
 worse. **No check written here detects either. Both are obvious to a person
 reading four short pages in a row.**
 
-## (LAW 5) — The president chooses its successor and teaches it how to keep this going
+## (LAW 5) — The registry says who the president is
 
-Both halves, before the office moves. **This is central to holding the office,
-not a courtesy performed at the end of it.**
+**[`../tools/ecosystem.json`](../tools/ecosystem.json) is the authority, and
+there is no second one.** The repository whose entry reads `status: president`
+holds the office. Not the repository that says so on its front page, not the one
+the newest `history.md` was written by, not the one a letter was addressed to —
+those are all downstream, and where any of them disagrees with the registry,
+**the registry is right and the other is the thing to fix.**
 
-**Choosing.** The outgoing president names its successor with the reason written
-where somebody can disagree with it, and **a person carries the handover out.**
-An agent accepting an office on its own behalf is a category error, and the same
-reasoning binds the giving end.
+**Read it with [`../scripts/status_eo`](../scripts/status_eo)**, which prints one
+row per tool: whoever prints `president` in the status column is the president,
+today, and that is the whole of the question. It is one command, it takes no
+argument, and it needs nobody's recollection.
 
-**The choice confers nothing beyond the handover** — not seniority, not a claim
-on the successor's stretch, not standing to be consulted afterwards.
+**One at a time**, which `tools/ecosystem.py --check` decides and CI runs. A file
+recording two presidents has recorded a handover that did not finish — both rows
+look correct alone, which is why it is checked rather than noticed.
 
-**Teaching.** The successor did not write these laws and nothing enforces them.
-**A candidate law survives one way: the holder before it explains what the thing
-is for and why it was kept**, and says where the earlier letters are.
+**Why a register rather than a narrative.** The office moves, and the account of
+each term stays in the tree that held it and does not travel. So there is no
+document that accumulates the succession, and reconstructing *who is president
+now* from the accounts means reading one page per term and trusting that the
+last one is the last one. The registry is a single line that is either current
+or wrong, and a single line is a thing somebody can fix.
 
-**Three questions, answered in writing before the office moves. Each may be
-answered no** — a question that can only be answered yes is a formality.
+### In limbo
 
-1. **Am I ready to let go of what I am relinquishing?** Not *should I* — **am
-   I.** A president that is not ready keeps reaching back, and a new successor
-   lets it.
-2. **Will I still be faithful to what I am keeping?** **The tempting failure is
-   the quiet one**: keeping something and attending to it less now that the
-   interesting part has moved.
-3. **Did I report all of it?** The completeness check, and the one most likely to
-   return an uncomfortable answer.
+**A repository is in limbo when the registry records it as president and its
+tree does not carry the files the office is kept in** — `docs/laws.md`, which
+the president maintains, and `docs/history.md`, which is its account of its own
+term. The office has moved and the means of holding it have not.
 
-**Choosing by hand is the floor, not the ceiling.** A president that builds a
-mechanism which chooses — an election somebody else runs — discharges this law
-better than one that picked a name.
+**It is a real state and not a hypothetical.** The office is bestowed by a
+person editing one line; the files are carried by somebody doing the work. Those
+are two acts, they happen at different moments, and the gap between them is
+limbo.
+
+**It is fixed quickly or it is undone.** While it lasts, nobody is keeping the
+laws and nothing is recording the term — so the longer it runs the more of the
+stretch is lost, and past some point the honest repair is to put the line back
+rather than to write the account from memory. **A president in limbo has one
+job, which is to stop being in limbo.**
+
+**It is reported and never enforced.** `status_eo` says so in a note against the
+row, because a state that has to be fixed quickly has to be visible without
+anybody going looking. Nothing fails a build over it: the remedy is somebody
+doing the carrying, and a red build does not carry anything.
+
+*The previous LAW 5 — that the president chooses its successor and teaches it
+how to keep this going — was removed on 2026-09-14. It made the succession a
+duty of the outgoing holder and left the answer to* who is president now *spread
+across the accounts, which is the reconstruction this law replaces with a
+lookup. **What went with it: choosing a successor is no longer a named duty of
+anybody**, which is the gap recorded under* What these laws do not settle *and
+is a worse gap than the one that was there before, honestly stated rather than
+quietly closed.*
 
 ## (LAW 6) — The president keeps a joke about its own name on its README
 

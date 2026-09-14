@@ -246,6 +246,89 @@ def inventory_well_formed() -> int:
         print(f"FAIL tools/ecosystem.py with no arguments exited {out.returncode}: "
               f"{(out.stderr or out.stdout).strip().splitlines()[-1:]}")
         bad = bad + ["the default mode"]
+    # The key under the table is a copy: it names every footing, and what a
+    # footing *is* is decided by `REQUIRED` and by docs/policy.md. A footing
+    # added to the inventory and not to the key prints a status the legend
+    # cannot decode, which is the one failure here that looks like nothing.
+    missing = sorted(set(ecosystem.REQUIRED) - set(ecosystem.FOOTINGS))
+    extra = sorted(set(ecosystem.FOOTINGS) - set(ecosystem.REQUIRED))
+    for f in missing:
+        print(f"FAIL the status_eo key does not explain the footing `{f}`")
+        bad = bad + [f"key: {f}"]
+    for f in extra:
+        print(f"FAIL the status_eo key explains `{f}`, which is not a footing "
+              "any entry may hold")
+        bad = bad + [f"key: {f}"]
+    if not missing and not extra:
+        print("ok   the status_eo key explains every footing an entry may hold")
+
+    # Limbo: the registry records a president whose tree cannot hold the office.
+    # It is asserted in both directions because a note that never fires and a
+    # note that always fires look identical from a passing suite, and this one
+    # is silent in the ordinary case by design.
+    import shutil  # noqa: PLC0415
+    import tempfile  # noqa: PLC0415
+    lim = tempfile.mkdtemp(prefix="anoieu-limbo-")
+    try:
+        held = os.path.join(lim, "anoieu")
+        os.makedirs(os.path.join(held, "docs"))
+        subprocess.run(["git", "-C", held, "init", "-q"], check=True)
+        # `laws.md` present and `history.md` absent: half-carried is the state
+        # that actually happens, and the note has to name which half is missing.
+        shutil.copy(os.path.join(root, "docs", "laws.md"),
+                    os.path.join(held, "docs", "laws.md"))
+        mapping = os.path.join(lim, "repos.local")
+        open(mapping, "w").write(f"anoieu {held}\n")
+        env = dict(os.environ, ANOIEU_REPOS=os.path.join(lim, "none"),
+                   ANOIEU_REPOS_FILE=mapping)
+        got = subprocess.run(
+            [sys.executable, os.path.join(root, "tools", "ecosystem.py")],
+            capture_output=True, text=True, env=env, timeout=120).stdout
+        for label, ok in (
+                ("a president missing a file it needs is reported in limbo",
+                 "IN LIMBO" in got),
+                ("and the note names the file that is missing",
+                 "docs/history.md" in got.split("IN LIMBO")[-1].split("\n")[0]),
+                ("a president whose tree carries them is not",
+                 "IN LIMBO" not in out.stdout)):
+            print(("ok   " if ok else "FAIL ") + f"the presidency: {label}")
+            if not ok:
+                bad = bad + [f"limbo: {label}"]
+    finally:
+        shutil.rmtree(lim, ignore_errors=True)
+
+    # The key lives behind `--help`, and the table carries a pointer to it. Both
+    # halves are asserted: a key nothing mentions is a key nobody finds, and a
+    # key printed under every table is the bulk of the output of a command that
+    # is run often. Getting either wrong is invisible from the other.
+    help_out = subprocess.run(
+        [sys.executable, os.path.join(root, "tools", "ecosystem.py"), "--help"],
+        capture_output=True, text=True, timeout=60)
+    for label, want in (("--help prints the key", "key\n" in help_out.stdout),
+                        ("--help exits 0", help_out.returncode == 0),
+                        ("the table does not print the key",
+                         "  tool     its id in" not in out.stdout),
+                        ("the table points at it",
+                         "status_eo --help" in out.stdout)):
+        print(("ok   " if want else "FAIL ") + f"the status_eo key: {label}")
+        if not want:
+            bad = bad + [f"key: {label}"]
+
+    # The three lists are laid out against one shared width computed from all of
+    # them, so an over-long value in any one is a ragged column in the other two
+    # rather than an error.
+    key = ecosystem.render_key()
+    for label, want in (("names the columns the table prints",
+                         all(c in key for c in
+                             ("tool", "status", "policy", "channel", "moved", "where"))),
+                        ("says how to see what a failing row failed",
+                         "policy_check.py --root" in key),
+                        ("says a non-member's count is not a shortfall",
+                         "never agreed" in key)):
+        print(("ok   " if want else "FAIL ") + f"the status_eo key {label}")
+        if not want:
+            bad = bad + [f"key: {label}"]
+
     print(f"-- the inventory is well formed, and the table prints: "
           f"{len(bad)} failure(s), {len(inv)} entries")
     return len(bad)
@@ -734,6 +817,7 @@ def epoch_gate() -> int:
         print(("ok   " if ok else "FAIL ") + f"bump_check {verb} {label}"
               + ("" if ok else f" -- got {got}: {why}"))
 
+    import shutil  # noqa: PLC0415
     import tempfile  # noqa: PLC0415
 
     tmp = tempfile.mkdtemp(prefix="anoieu-epoch-")
@@ -755,12 +839,63 @@ def epoch_gate() -> int:
         ("reads a recorded epoch marker", bump_check.epoch_marker(tmp) == "E7"),
         ("reports no marker as absent, never as a failure",
          bump_check.epoch_marker(HERE) == ""),
-        ("reads the current stretch from the log",
+        ("reads the current stretch from the register",
          re.fullmatch(r"E\d+", bump_check.current_stretch(root) or "") is not None),
+        ("reads its status", bool(bump_check.current_status(root))),
+        ("and the version it is to be published as",
+         re.fullmatch(r"[0-9.]*", bump_check.current_version(root)) is not None),
+        ("reports a missing register as unknown, never as a value",
+         bump_check.current_stretch(tmp) == ""
+         and bump_check.current_status(tmp) == ""),
     ]
     for label, ok in marks:
         failures += 0 if ok else 1
         print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
+
+    # `./scripts/deploy` round-trips the register, and this is the only thing
+    # that runs its write. It used to be three regular expressions against the
+    # prose of a deleted log; now it is a dict, and what has to hold is that
+    # what deploy writes is what bump_check reads back -- the seam that a
+    # hand-rolled rewrite of either side breaks silently.
+    stage = os.path.join(tmp, "roundtrip")
+    os.makedirs(os.path.join(stage, "tools"))
+    os.makedirs(os.path.join(stage, "docs"))
+    shutil.copy(os.path.join(root, "tools", "stretch.json"),
+                os.path.join(stage, "tools", "stretch.json"))
+    shutil.copy(os.path.join(root, "docs", "history.md"),
+                os.path.join(stage, "docs", "history.md"))
+    deploy = open(os.path.join(root, "scripts", "deploy"), encoding="utf-8").read()
+    body = re.search(r"^python3 - \"\$ROOT\".*?\n(.*?)^PYEOF$", deploy, re.M | re.S)
+    if not body:
+        print("FAIL scripts/deploy no longer has a python write block this can run")
+        failures += 1
+    else:
+        script = os.path.join(stage, "write.py")
+        open(script, "w", encoding="utf-8").write(body.group(1))
+        was = bump_check.current_stretch(root)
+        nxt = f"E{int(was[1:]) + 1}"
+        out = subprocess.run([sys.executable, script, stage, was, nxt,
+                              "9.9.9", "kanon", "staged"],
+                             capture_output=True, text=True, timeout=60)
+        reg = json.load(open(os.path.join(stage, "tools", "stretch.json")))
+        for label, ok in (
+                ("deploy's write block runs", out.returncode == 0),
+                ("it advances the register to the next stretch",
+                 bump_check.current_stretch(stage) == nxt),
+                ("which opens at `brainstorm`",
+                 bump_check.current_status(stage) == "brainstorm"),
+                ("the closed stretch is recorded as deployed, with its version",
+                 reg["stretches"].get(was, {}).get("status") == "deployed"
+                 and reg["stretches"][was].get("version") == "9.9.9"),
+                ("and names the status it was deployed from",
+                 reg["stretches"].get(was, {}).get("previous_status") == "staged"),
+                ("the incoming president gets a FIXME in history.md",
+                 f"## Stretch {nxt[1:]} — FIXME"
+                 in open(os.path.join(stage, "docs", "history.md")).read())):
+            failures += 0 if ok else 1
+            print(("ok   " if ok else "FAIL ") + f"deploy: {label}")
+            if not ok and out.returncode != 0:
+                print("     " + (out.stderr or "").strip().replace("\n", "\n     "))
 
     print(f"-- the epoch gate: {failures} failure(s)")
     return failures

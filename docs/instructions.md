@@ -130,8 +130,9 @@ party that cannot make it.*
 ```
 
 One line per tool: what footing it is on, whether our checks pass on it, how
-many topics it has addressed to you, and when it last moved. **It ends in a
-single sentence summarising all of it.**
+many topics it has addressed to you, and when it last moved. `status_eo --help`
+says what every column and every value means, and what to do about a failing
+row. **It ends in a single sentence summarising all of it.**
 
 ```text
 epoch status
