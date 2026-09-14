@@ -5,10 +5,9 @@ voluntarily, and **enforced by nothing.** No check reads it, no build fails on
 it, and no tool has been given the job of holding anybody to it.
 
 **Two things are on this page.** **The government** — three authorities, what
-each holds, and what none of them may do — and **the rules for two files**:
-[`record.md`](record.md), the ecosystem's ledger, and
-[`history.md`](history.md), a repository's own account of its own development,
-which stays where it is written.
+each holds, and what none of them may do — and **the rules for one file**:
+[`history.md`](history.md), which lives in anoieu, is anoieu's account of its
+own development, and **stays there.**
 
 **This page used to be the second of those and nothing else**, and said so: *a
 narrow document on purpose.* **Widening it was deliberate and is recorded here**
@@ -63,7 +62,7 @@ to choose.**
 | authority | what it holds | who holds it |
 | --- | --- | --- |
 | **legislative** | this page — the laws, their amendment, and the reasons for both | **kanon** |
-| **executive** | [`record.md`](record.md), the census, the working summary, and the running of a stretch | **nobody. The repository does not exist** |
+| **executive** | the census, the working summary, and the running of a stretch | **nobody. The repository does not exist** |
 | **judicial** | whether a rule was followed, and whether it was followed in spirit | **nobody. The repository does not exist** |
 
 **Two services, which are not authorities and should not be mistaken for them.**
@@ -257,40 +256,31 @@ promising a title to whoever does the work first.
 
 ## The laws
 
-**Laws 20 to 22 describe a split the tree has not performed yet.** `record.md`
-does not exist as this is written, and `history.md` is still the single
-travelling file that withdrawn law 3 describes. **Executing the split is
-Stretch 1's, before the office moves**, under law 1 — and until it is done this
-section describes an intention rather than an arrangement. That is the same
-defect named in *Where this is weaker than it looks*, and it is recorded here
-rather than left for a reader to discover.
+**1. Only anoieu may modify `history.md`.** Not a member, not a child project,
+not a holder of any authority, and not somebody working in anoieu's tree who is
+not acting for it.
 
-**1. Only the executive may modify `record.md`.** Not a member, not a child
-project, not somebody working in the executive's tree who is not acting for it.
+*Rewritten when the file stopped travelling. **The rule is narrower than it was
+and its number is unchanged**: it used to name whoever held the office, because
+the office and the file moved together. They no longer do, and the file stayed.*
 
-*Rewritten when the record and the executive's own account became two files.
-The rule and its number are unchanged — the ledger is the office's and nobody
-else's. **It no longer reaches `history.md`**, which law 21 gives to a different
-holder.*
-
-**2. An executive may only write the stretch that describes it.** Earlier entries
-in `record.md` are read-only.
+**2. anoieu may only write the stretch that describes it.** Earlier entries are
+read-only.
 
 **3. Withdrawn at the opening of Stretch 2.** It read *The file travels with the
 office*: the whole of `history.md` moved to each new executive, unchanged, and
 that travel was named as the thing enforcing law 2.
 
-**Why it was withdrawn.** It made one file do two jobs whose needs point in
-opposite directions. **The ledger is cumulative and belongs to the ecosystem** —
-who joined, what each tool committed, where the accounts are — and laws 5 and 13
-both require it to stay reachable. **The account of a term is the opposite**: it
-belongs to one repository, it is finished when the term is, and the reason a
-successor should not be able to rewrite it is the reason law 15 already gives
-for letters — *it cannot reach it.* Travelling the two together gave the ledger
-the right home and the account the wrong one.
+**Why it was withdrawn.** A moving file cannot be a self-contained account of
+the repository that wrote it. **It leaves**, and what is left behind is a gap
+where the tool's own record of itself should be — the account of anoieu's five
+days would have ended up in the tree of whoever held the office next, describing
+work that repository did not do. **Law 15 had already worked this out for
+letters** — *each letter stays in the tree that wrote it* — and the same
+reasoning applies to the longer account and was not applied to it.
 
-**Replaced by laws 20 and 21**, which split the file and send the halves in
-opposite directions. The number stays here, listed, and is not reused.
+**Replaced by laws 21 and 23.** The number stays here, listed, and is not
+reused.
 
 **4. An executive may correct an earlier stretch, and must show its work.** Not
 freely: the burden is on the editor to **demonstrably show** that the earlier
@@ -531,7 +521,7 @@ law — and **where the previous letters are.**
 
 **The letters are a trail, and the record is the only thread through it.** Law 15
 keeps each letter in the tree that wrote it, which is right, and which also means
-nothing collects them. **So the record carries the list**: one line per past
+nothing collects them. **So `history.md` carries the list**: one line per past
 executive, naming where its letter lives. The letters do not travel; the pointers
 to them do.
 
@@ -557,7 +547,7 @@ short pages in a row.**
 mechanism which chooses — an election somebody else could run — has discharged
 this law better than one that picked a name, and is encouraged to. **Bestowal is
 what this ecosystem has because it is what exists**, and every hand-picked
-succession is another instance of the shortcut `record.md` records as one. The
+succession is another instance of the shortcut `history.md` records as one. The
 law names who is responsible; it does not pretend that responsibility discharged
 by appointment is the same as an election.
 
@@ -566,62 +556,62 @@ law's first instance rather than an exemption from it — which is the least thi
 page can do about the objection it opens with, that these rules were written by
 the party they bind.
 
-**20. `record.md` goes with the executive authority, and nothing else does.**
-**If** that authority moves, the ledger moves with it unchanged — the membership
-chronology, the commit census, the stretch spans, and the pointers laws 19 and
-22 require. **If it never moves, this law is satisfied by the record sitting
-still**, and whether it moves is the undecided question above.
+**20. Withdrawn before it ever applied.** It read *`record.md` goes with the
+executive authority, and nothing else does*, and it named a file that has never
+existed. **The ledger it described was proposed and not built**, so the law
+governed nothing from the moment it was written.
 
-**Movement is what would enforce law 2**, and it is the half of withdrawn law 3
-that was working: after a move, the numbers describing your stretch are in
-somebody else's repository and you cannot reach them. **Without movement, law 2
-is enforced by nothing but the holder's restraint** — which is worth stating
-plainly, because it is the cost of leaving rotation open.
+**Why it was written, which is the part worth keeping.** Withdrawn law 3 made
+one file carry both a travelling ecosystem ledger and a repository's own account
+of itself. **Separating those two jobs was right. Inventing a filename to hold
+the half nobody had built was not** — it put a file into the laws that a reader
+would go looking for and not find. Where the ecosystem-wide half belongs is the
+fourth open question below, and it stays a question until somebody creates
+something rather than names it.
 
-**In a gap the record stays with the outgoing holder.** Not in escrow, not with
-the maintainer, and not with nobody. **The authority may be vacant; the file
-never is.** A person executes any move under law 19, and until they do, the
-outgoing holder keeps the ledger **and may not write to it** — its own stretch
-is closed under law 2, and the next one is not its to open.
+**Replaced by law 23.** The number stays here, listed, and is not reused.
 
 *That settles who holds the file when a stretch has no executive, which is the
 second open question below. It does not settle the rest of that question: who
 discharges law 19 when the expected successor never exists is still unanswered,
 and a record with a keeper and no writer is not a government.*
 
-**21. `history.md` is the repository's own, and it never travels.** One per
-repository, kept in that repository, written by it alone, and **left behind when
-the office moves.** A successor does not inherit it, cannot edit it, and does not
-continue it — **it writes its own, from nothing.**
+**21. `history.md` stays in anoieu, and it is anoieu's to write.** It does not
+move when an authority moves, it is not inherited, and **no holder of any
+authority may edit it.** anoieu holds nothing governmental and keeps this
+anyway: **keeping an archive is not an authority**, which the page already
+accepts for [`report-card.md`](report-card.md) — that *stays with anoieu* no
+matter who holds what, and this is the same arrangement for the same reason.
 
-**It is an account of that repository's development, and it must be
-self-contained.** Somebody who has read no other page here should be able to
-read it start to finish and understand how the tool got to where it is. **That
-is a higher bar than the travelling file ever had to meet**, because a ledger
-may read like a ledger and this may not.
+**It is an account of anoieu's development, and it must be self-contained.**
+Somebody who has read no other page here should be able to read it start to
+finish and understand how the tool got to where it is. **A page that cannot be
+read without a second page open has failed this law.** Law 10 still governs
+every figure on it: re-derivable by somebody else, or not written down.
 
-**Self-contained means it may restate what the ledger holds, and should.** The
-figures a repository needs to tell its own story — when it joined, what it
-committed, what its build was doing — are in `record.md` as well, and repeating
-them here is not the duplication this ecosystem otherwise refuses. **A page that
-cannot be read without a second page open is not self-contained.** Law 10 still
-governs every figure on it: re-derivable by somebody else, or not written down.
+**Any other repository may keep one, on the same terms.** Its own, in its own
+tree, never travelling. **Nothing collects them and nothing needs to** — a
+reader looking for what a tool did looks in that tool's repository, which is
+where they would have looked anyway.
 
-**A new executive's is empty, and that is correct.** An incoming executive has no
-development to describe yet, and **a `history.md` that opens by summarising its
-predecessor's term has misread this law** — that account exists, it is finished,
-and it is in the predecessor's tree, where law 15's letter already points.
+**22. Withdrawn with law 20**, on which it depended. It read *The record carries
+a pointer to every account, not only to every letter*, and required `record.md`
+to collect one line per account. **With no such file, the collecting job stays
+where law 19 already put it** — `history.md` carries the list — so nothing is
+lost by the withdrawal except a file that was never there. The number stays
+here, listed, and is not reused.
 
-**22. The record carries a pointer to every account, not only to every letter.**
-Law 19 requires one line per past executive naming where its letter lives.
-**That line now names where its `history.md` lives as well**, because under law
-21 the account no longer arrives with the office and nothing else collects it.
+**23. Nothing travels.** No document moves because an authority moved. This is
+what survives of withdrawn law 3, and it settles the question that law left
+behind — **who holds the file during a gap** — by removing the gap: a file never
+in transit has no interval in which nobody holds it.
 
-**The trail law 19 protects is now two documents wide, and its argument is
-unchanged.** A line of accounts that stops is a succession that stopped being
-taught; one that turns flattering is worse. **Scattering the accounts without
-scattering pointers to them would have removed the only check law 19 has**, which
-is why this is a law and not a note under law 21.
+**What this costs, stated plainly.** Withdrawn law 3 claimed that travel was
+what enforced law 2 — you cannot rewrite a stretch you cannot reach. **With
+nothing travelling, law 2 is enforced by nothing but the writer's restraint.**
+That is a real loss, and it is the price of keeping each account in the tree
+that wrote it. **Law 4 is the only thing standing in for it**: a correction must
+show its work, and silent revision is the failure both laws exist against.
 
 ## Entering the ecosystem, set out properly
 
@@ -718,11 +708,11 @@ anything**, and an entry that treats it as one has invented a measurement.
 
 ## The template a closing executive fills in
 
-**This is the stretch entry in `record.md`, and it is not `history.md`.** The
-entry is structured, comparable across stretches, and written for whoever holds
-the office next. **A repository's own account under law 21 is none of those
-things** — it is continuous rather than per-stretch, it is written for a
-stranger, and it is allowed to be long where this is required to be short.
+**This is the per-stretch entry inside `history.md`.** The entry is structured,
+comparable across stretches, and short. **The page around it is not** — law 21
+requires the whole to read as a self-contained account, and **a file that is
+only a run of templated entries will not.** The template is the floor for each
+stretch, not the shape of the document.
 
 **A stretch is closed by its own executive, in this template, before the record
 travels.** After that the office has moved and the entry cannot be touched, so
@@ -783,17 +773,17 @@ the table above it lists fourteen. The table is the law and the count was stale
 prose — a reader can settle it by counting rows, which is the demonstration law
 4 would ask for if this were an entry rather than a rule.*
 
-## What the two files are, and are not
+## What `history.md` is, and is not
 
 **They are the record and this page is the rules.** Rules and record were one
 file until 2026-09-02 and are now apart: **an executive reading its obligations
 should not have to skip past somebody else's stretch to find them**, and a
 reader wanting to know what happened should not have to skip past procedure.
 
-**`record.md` is the ledger, and it is the ecosystem's.** Who joined and when,
-what each tool committed, how long each stretch ran, and where each executive's
-letter and account can be found. It accumulates, it travels, and **no executive
-owns more of it than its own stretch.**
+**It is the ledger and the account at once.** Who joined and when, what each
+tool committed, how long each stretch ran, where each letter lives — and the
+narrative that makes those figures mean something. **It accumulates and it does
+not travel.**
 
 **`history.md` is one repository's account of itself, and it stays.** It is the
 sibling of [`postmortem.md`](reports/postmortem.md): that page asks what a *run
@@ -833,12 +823,16 @@ it is one somebody else can recompute.**
    unreachability. **An open question with a known cost is not the same as an
    oversight**, but it is not free either, and whoever settles it should settle
    it against that cost rather than against a preference.
-4. **Who holds the record right now.** The executive authority has no
-   repository, so the ledger's rules describe a holder that does not exist.
-   **anoieu has the file and holds no authority**; kanon holds an authority and
-   not the file. **This is the largest thing on this page that is presently
-   untrue of the tree**, and it is not fixed by writing a law — it is fixed by
-   somebody creating the repository the table names.
+4. **Where the ecosystem's record goes, now that `history.md` is anoieu's.**
+   Law 21 makes the file an account of **anoieu**, and laws 5, 7, 8, 13, 16 and
+   17 ask it to carry things that are about **everybody** — who joined, what
+   each tool committed, what changed in the documents other people depend on.
+   **Today those live in one file because anoieu did most of the work and the
+   two were the same story. They are about to stop being the same story.**
+   Whether the ecosystem-wide half moves to the executive when that repository
+   exists, folds into [`../tools/ecosystem.json`](../tools/ecosystem.json) where
+   the inventory already is, or simply stays here, **is not settled and is not
+   this page's to settle by inventing a file for it.**
 
 *Four earlier questions were settled and are not listed: an entry accumulates
 rather than being replaced; `executive` did not belong in
