@@ -544,20 +544,28 @@ workflow surfaced it without either side being able to quietly adopt the other's
 view.** That is the mechanism working, and it is also a defect that has to be
 fixed by a person.
 
-### The handoff report: two tables and three questions
+### The handoff report: a table per destination and three questions
 
-**The round ends in a written examination the outgoing agent sets itself.** Two
-tables — what moves to the successor, what stays — and three questions answered
-in the committed record:
+**The round ends in a written examination the outgoing agent sets itself.** A
+table for each place work goes — the successor first, then any other tree, then
+what stays — and three questions answered in the committed record:
 
 1. **Am I ready to let go of the responsibilities I am relinquishing?**
 2. **Will I still be faithful to the responsibilities I am keeping?**
 3. **Did I report all of my responsibilities?**
 
-**The third is designed to be answered *no*, and was.** Building the two tables
-turned up four artifacts in neither column and one in both. **A checklist whose
+**The third is designed to be answered *no*, and was.** Building the tables
+turned up artifacts in no column and one in every column. **A checklist whose
 expected outcome is completion tells you nothing when it completes**; this one
 returns a residue, and the residue is the output.
+
+**The law itself was a casualty of running it, which is the part worth
+recording.** It originally required *two* tables, because when it was written
+the only question was whether a thing went with the office or stayed with the
+tool. **The first stretch to send documents somewhere other than the successor
+found the law counting tables when it meant destinations** — a fixed count
+quietly asserting how many places work can go. The examination did not just
+return a residue; **it falsified a rule in the page that ordered it.**
 
 **The property worth noticing is where the residue landed.** The four unassigned
 items sat exactly at the seam between *governing* and *doing* — the seam the

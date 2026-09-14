@@ -349,13 +349,29 @@ argues why that matters; the consequence for this law is narrow and worth
 stating: **keep the letter readable by somebody who knows none of the
 machinery.**
 
-**16. The outgoing report carries two tables and answers three questions.**
-Both tables, all three questions, in the entry, before the office moves.
+**16. The outgoing report carries a table per destination, plus what stays, and
+answers three questions.** Every table, all three questions, in the entry,
+before the office moves.
 
-**The two tables: what moves to the successor, and what stays.** One row per
-artifact, and **a child project is one row** — its internal registers are its
-business and travel with it. Listing them separately turns the table into a
-directory listing and hides the shape.
+**One table per destination, and one for what stays.** The successor is always a
+destination and is always first; **a stretch that hands something to a tree that
+is not the successor gets a table for it**, named. One row per artifact, and **a
+child project is one row** — its internal registers are its business and travel
+with it. Listing them separately turns the table into a directory listing and
+hides the shape.
+
+**Two was the original number and it was wrong.** The law was written when the
+only question was *does this go with the office or stay with the tool*, which
+made *what moves* and *where it moves* the same question. **They are not**, and
+the first stretch to hand a set of documents somewhere other than the successor
+found the law counting tables instead of destinations. **A fixed count is a
+claim about how many places work can go**, and this page had no business making
+one.
+
+**A destination that is not in the inventory is still written down**, with that
+fact stated in the entry. The alternative is a table that silently waits for a
+registration, and **a handoff nobody can see is the failure this whole page is
+arranged against.**
 
 **The three questions, answered in writing and each allowed to be answered
 no.** A question that can only be answered yes is a formality, and this
@@ -579,7 +595,7 @@ answer and is written; an omitted field is not.
 | **What is now true** | what the stretch established that was not true before it. The part somebody can build on |
 | **What went wrong** | plainly, with what it cost. **A stretch with nothing in this field was not examined** |
 | **What is handed on** | unfinished work the next president inherits, and anything it must not assume |
-| **What moves** | one row per artifact handed to the successor. Law 16 |
+| **What moves** | one table per destination, one row per artifact, the successor first and every table named. Law 16 |
 | **What stays** | one row per artifact kept, and why keeping it is right |
 | **The three questions** | law 16's, answered. **`no` is a permitted answer and is the useful one** |
 | **Government model** | **what was actually executed while in office**, named plainly — which positions existed, who held them, and how each was held. Not the model that was aspired to |
@@ -658,17 +674,23 @@ president writes the record, and only its own stretch.*
 a complete one**, and it is guidance rather than a law, so none of it is
 required.
 
-**Do the two tables before you write anything else.** They are the only part of
-the report that forces you to look at the whole of what you held, and doing them
+**Do the tables before you write anything else.** They are the only part of the
+report that forces you to look at the whole of what you held, and doing them
 last means doing them from memory of what you already wrote down.
 
 **Expect the partition to fail, and report the failure rather than fixing it.**
-Stretch 1 tried this and found four artifacts in neither column and one in
-both — an index both trees need their own of, a person's file rather than a
-repository's, a document that argues for both sides, and a stub with no
-inheritor. **The residue landed exactly where governing and doing had never been
-cleanly separated.** A partition that closes on the first attempt is more likely
-to have been rounded than to be right.
+Stretch 1 tried this and found artifacts in no column and one in every column —
+an index each tree needs its own of, a document that argues for both of the
+trees it could go to, and a stub with no inheritor. **The residue landed exactly
+where governing, doing and studying the arrangement had never been cleanly
+separated.** A partition that closes on the first attempt is more likely to have
+been rounded than to be right.
+
+**Adding a destination moves the residue; it does not drain it.** Stretch 1
+closed one unassigned artifact by opening a third table and immediately found
+another whose home question the new table had changed rather than answered.
+**Expect that trade and report it as one** — a new column that appears to
+resolve everything has been drawn around the answer.
 
 **Answer the third question honestly and it will usually be no.** *Did I report
 all of my responsibilities?* Stretch 1's answer was no, and the value of the

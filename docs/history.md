@@ -236,8 +236,8 @@ and putting them in one column each would have hidden the gap between them.
 | 2026-08-31 | 12:41 | `member` | [eudaimonia](https://github.com/ajreynol/eudaimonia) | **theirs** — declared, in a commit titled *"Join EO attempt"* |
 | 2026-08-31 | 12:50 | `member` | [koine](https://github.com/ajreynol/koine) | **theirs** — declared |
 | 2026-08-31 | 16:44 | `member` | dokimasia, eudaimonia, koine | **ours** — all three recorded in one commit, `a3ca74a` |
-| 2026-09-01 | 08:43 | `associate` | [ethos](https://github.com/cvc5/ethos), [logos](https://github.com/cvc5/logos) | **ours, and wrong** — recorded as associates, which neither had asked to be |
-| 2026-09-01 | 08:51 | `candidate` | ethos, logos | **ours** — returned, seven minutes later, by the commit that wrote the associate protocol down |
+| 2026-09-01 | 08:51 | `candidate` | [ethos](https://github.com/cvc5/ethos) | **ours** — recorded by the commit that wrote the associate protocol down. It has joined nothing and is addressed by the policy |
+| 2026-09-01 | 08:51 | `candidate` | [logos](https://github.com/cvc5/logos) | **ours** — recorded in the same commit, on the same footing and for the same reason |
 | throughout | — | `foundation` | [cvc5](https://github.com/cvc5/cvc5) | **neither.** It has joined nothing and owes nothing; the ecosystem exists to serve it |
 
 **`status` is the membership role after the event; `footing` is whose act it
@@ -430,11 +430,15 @@ as unreliable as one that only lists wins.
 6. **Two gifts were offered outward** to trees this ecosystem does not own,
    with the ethics of each argued before they were sent rather than after.
 
-### What moves to kanon, and what does not
+### What moves, where it goes, and what does not
 
-**Two tables, and the useful thing about them is where they fail to meet.**
+**Three tables, and the useful thing about them is where they fail to meet.**
+Two destinations rather than one: the governance goes to kanon, and the
+research about *how this arrangement works* goes to aisthesis. **The second
+split is the one that needed making** — those pages were never governance and
+were only ever with the governance because nothing else was.
 
-**Moving: the collected values.** Every one is a register or a governing
+**Moving to kanon: the collected values.** Every one is a register or a governing
 document — something that **decides** rather than describes. A child project is
 one row; its internal registers travel with it.
 
@@ -450,13 +454,29 @@ one row; its internal registers travel with it.
 | [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
 | [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
 | [`stretch-policy.md`](stretch-policy.md) + [`stretches.md`](stretches.md) | what a stretch is, and the log of them |
-| [`science-fiction.md`](science-fiction.md) | the upper bound on ambition, and the guard rails |
 | [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
 | [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
 | [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
 | [stathmos](../tools/stathmos/README.md) | **the mediator of the report card**: whether a judgement passed on a tool was justified. It goes with governance because it judges the judging, and the judging stays here |
 | [sapheneia](../tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
-| [`misc/ai-novelty.md`](misc/ai-novelty.md) | the register of what looked novel while building this |
+
+**Moving to aisthesis: the AI research.** Both pages take *this ecosystem* as
+their subject and ask what is actually novel about building one this way. **That
+is a research question, not a governing one** — neither decides anything, and
+neither is something a member is held to. They sat with the governance because
+the governance was the only tree there was.
+
+| what | what it asks |
+| --- | --- |
+| [`science-fiction.md`](science-fiction.md) | the upper bound on ambition, and the guard rails that keep it from being a plan |
+| [`misc/ai-novelty.md`](misc/ai-novelty.md) | the register of what looked novel while building this, and a worked example of one refactor |
+
+**Why they leave together.** One asks what this arrangement could become and the
+other asks what about it is new; **they are the same enquiry pointed forward and
+backward**, and splitting them across two trees would mean each is read without
+the other. The demotion of `ai-novelty.md` to `misc/` is undone by the move
+rather than carried with it: it was demoted because it was not load-bearing
+*here*, and it is the subject matter *there*.
 
 **Staying: the analyzer, and what judges.**
 
@@ -471,15 +491,19 @@ one row; its internal registers travel with it.
 
 ### The partition does not close, and that is the finding
 
-**Four things are in neither table, and one is in both.** Verifying this was
-supposed to be a formality and was not.
+**Three things are in neither table, and one is in all of them.** Verifying this
+was supposed to be a formality and was not. **The third destination closed one
+item of residue and opened a smaller one**, which is the honest result of adding
+a table rather than the tidy one.
 
-- **`docs/README.md` is in both.** It indexes whatever documents a tree holds,
-  and both trees will hold documents. **It is not an artifact that moves; it is
-  one each side needs its own of.**
-- **`docs/misc/`** — three demoted essays, one of which is the human's register
-  of what looked novel. **That last one is a person's file more than a
-  repository's**, and nothing here says what happens to it.
+- **`docs/README.md` is in all three.** It indexes whatever documents a tree
+  holds, and all three trees will hold documents. **It is not an artifact that
+  moves; it is one each side needs its own of.**
+- **`docs/misc/`, now two essays rather than three.** `ai-novelty.md` is
+  decided and goes to aisthesis. `linker.md` and `methodology.md` are not, and
+  **`methodology.md` now opens by pointing at two documents that will be in
+  another tree** — which makes it the first artifact whose home question was
+  changed by this split rather than answered by it.
 - **`epoch-analogy.md`** explains the stretch machinery to a newcomer, which
   argues for kanon; it is also the shortest way into *this* repository's
   workflow, which argues for staying. **Unassigned.**
@@ -487,14 +511,19 @@ supposed to be a formality and was not.
   kanon proves itself under `PROTO-20`; **the second has nowhere to go and
   nobody has said who inherits it.**
 
-**So the honest statement is: these two tables cover most of the ecosystem's
+**So the honest statement is: these three tables cover most of the ecosystem's
 responsibilities and do not partition them.** The residue is small, it is
-concentrated in exactly the places where *governing* and *doing* were never
-cleanly separated, and **naming it is more useful than a table that claimed to
-be complete.**
+concentrated in exactly the places where *governing*, *doing* and *studying the
+arrangement* were never cleanly separated, and **naming it is more useful than a
+table that claimed to be complete.**
+
+**And aisthesis is not in the inventory, the name register, or any role.** The
+same gap `kanon` was handed and caught: a table that names a destination the
+ecosystem cannot see. It is recorded here rather than fixed here, because
+registering a tool is a person's act and this is a record.
 
 *Roles are not enumerated here on purpose. Which `R` moves with which artifact
-is a lower-level question than this table, and answering it early would settle
+is a lower-level question than these tables, and answering it early would settle
 by accident something `B15` says a person decides.*
 
 ### The three questions, answered
@@ -519,29 +548,36 @@ strongest reason to hand the presidency on is that it was crowding out the
 work this repository actually exists to do.**
 
 **3. Did I report all of my responsibilities?**
-**No.** Building the two tables left three artifacts unassigned and one in both
-columns, and the residue sat exactly at the seam between governing and doing.
-**`ai-novelty.md` is now decided and stays here** — see below. `docs/README.md`
-is in both columns and should be, because each tree needs its own index.
-**`epoch-analogy.md` and `tools/tekton/` are still unassigned**, and I am
-handing them on unresolved rather than deciding them in my last hour.
+**No.** Building the tables left artifacts unassigned and one in every column,
+and the residue sat exactly at the seam between governing and doing.
+**`ai-novelty.md` is now decided and goes to aisthesis** — see below.
+`docs/README.md` is in all three columns and should be, because each tree needs
+its own index. **`epoch-analogy.md` and `tools/tekton/` are still unassigned**,
+and I am handing them on unresolved rather than deciding them in my last hour.
 
-**Where `ai-novelty.md` goes: to kanon.** It is a register of what looked novel
-while building this ecosystem, and **the ecosystem is the subject rather than
-this repository** — a page about the whole arrangement should sit with whoever
-holds the arrangement. It travels with the rest of the collected values.
+**Where `science-fiction.md` and `ai-novelty.md` go: to aisthesis.** Both take
+the ecosystem as their subject and ask what is new about building one this way.
+**That is research and not governance** — neither decides anything, neither is
+something a member is held to, and a page nobody is bound by does not belong in
+the tree that binds people.
 
 **The objection I had, recorded because it was wrong for a reason worth
-keeping:** its entry criterion is one person's interest, and I read that as
-making it personal, like a letter. **It is not.** A letter is *from* a
-president; this is *about* the ecosystem, and who finds a thing fascinating does
-not determine what the thing is about. **The register belongs with the
-subject.**
+keeping:** `ai-novelty.md`'s entry criterion is one person's interest, and I
+read that as making it personal, like a letter. **It is not.** A letter is
+*from* a president; this is *about* the arrangement, and who finds a thing
+fascinating does not determine what the thing is about.
+
+**What that argument got right and where it stopped.** It established that the
+register belongs with its subject rather than with its author — and I then
+concluded the subject was *the governance*, because the governance was the only
+other tree I had. **The subject is the arrangement as an object of study, which
+is a third thing**, and it took a third repository existing before I could see
+that the question had three answers and not two.
 
 **Still unassigned and handed on that way** rather than decided in the last
-hour: `epoch-analogy.md`, which argues for both trees, and `tools/tekton/`, a
-stub with no inheritor. `docs/README.md` is in both columns and should be, since
-each tree needs its own index.
+hour: `epoch-analogy.md`, which argues for both of the trees it could go to, and
+`tools/tekton/`, a stub with no inheritor. `docs/README.md` is in every column
+and should be, since each tree needs its own index.
 
 ### What went wrong
 

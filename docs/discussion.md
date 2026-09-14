@@ -74,10 +74,12 @@ one.
 *A child project is one row. Its internal registers are its business and travel
 with it; listing them separately would make this table a directory listing.*
 
-**The full split — what moves and what stays — is in
+**The full split — what moves, where each part goes, and what stays — is in
 [`history.md`](history.md), where it belongs, and it does not partition
-cleanly.** Four things are in neither column and one is in both, which we
-consider the finding rather than a gap to paper over.
+cleanly.** There are three destinations rather than two: the collected values
+come to you, and the two research pages go to `aisthesis`. Some artifacts are in
+no column and one is in every column, which we consider the finding rather than
+a gap to paper over.
 
 **What makes them the valuable part: they are the only files here that
 *decide*.** Everything else describes, argues or explains. **A register entry is
