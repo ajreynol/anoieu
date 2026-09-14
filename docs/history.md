@@ -840,11 +840,18 @@ elected — there is still no mechanism — so Stretch 2 inherits Stretch 1's
 government model unless something changes, with one difference that matters:
 **the laws will have been written by a different repository than the one they
 bind.** That is the first real separation this arrangement has had, and it
-arrives by the presidency moving rather than by anybody designing it. The tool does not
+arrives by the presidency moving rather than by anybody designing it.
+
+**Corrected 2026-09-14: kanon exists.** This paragraph read *the tool does not
 exist yet; a stub holds its place and CI carries a job saying whether it is
-ready to be started. **Stretch 2 cannot open before kanon does**, which makes
-the readiness check the thing standing between the two stretches rather than a
-convenience.
+ready to be started*, and said that Stretch 2 could not open before kanon did.
+The repository was created and **joined as a member on 2026-09-14** —
+[`../tools/ecosystem.json`](../tools/ecosystem.json) records it, and its tree
+passes the policy check. **So the readiness check is no longer what stands
+between the two stretches.** What does is the office actually moving, which is a
+person editing one line of the registry and somebody carrying the files kanon
+would need to hold it — the state the laws call *in limbo* if the first happens
+without the second.
 
 **Its first responsibility is this page.** Before anything else it is asked to
 do, the president of a stretch publishes a **working summary of its stretch** —

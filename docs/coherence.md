@@ -232,8 +232,9 @@ could not ask* are different facts.
 
 ### Why it reports rather than gates
 
-**Every target is *not ready* today** — neither kanon nor tekton exists — so a
-job that failed on that would be red for a reason nobody can fix this week.
+**Not every target is ready** — kanon exists and has joined; tekton does not
+exist — so a job that failed on that would be red for a reason nobody can fix
+this week.
 **A check that is red for months trains everybody to ignore red**, and then the
 checks that matter are ignored too. The job is named for what it does: it
 produces a report, and **a green tick on it means only that we looked.**

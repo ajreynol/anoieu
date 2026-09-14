@@ -126,7 +126,7 @@ change colour on its own cannot be evidence that a commit was good. It belongs a
 the moment of adoption, in a bump script or a person's hands, and nowhere else.
 
 [`../tools/bump_check.py`](../tools/bump_check.py) implements it, published so
-that four members do not each write it:
+that every member does not write it separately:
 
 ```
 python3 tools/bump_check.py --rev <sha>    # may this stretch be adopted?
@@ -717,7 +717,7 @@ on, and usually the first. That is not modesty — it is where most of what a st
 
 **We appear in our own `Involved` list**, and the entry carries an **Of us** row
 saying what the stretch required here and whether it has been done. A stretch that
-names four members and forgets the tree it was designed in has already made the
+names every member and forgets the tree it was designed in has already made the
 mistake this section exists to prevent.
 
 **Applying a rule to ourselves is the cheapest test it will ever get.** A

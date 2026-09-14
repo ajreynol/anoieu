@@ -200,7 +200,8 @@
     "what": "audits how these repositories have changed over time, on evidence a reader can re-derive"
   },
   "kanon": {
-    "status": "candidate",
+    "status": "member",
+    "joined": "anoieu 4d21ec9",
     "repo": "kanon",
     "url": "https://github.com/ajreynol/kanon",
     "what": "the ecosystem's governance out of the analyzer: the policy, its checker, the inventory and the joining scripts"

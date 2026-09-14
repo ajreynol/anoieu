@@ -70,6 +70,13 @@ GENERATED = ["reports/open-findings.md", "reports/corpus.md", "checks.md"]
 HOME_PATH = r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/"
 BINARY = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".ico", ".pyc", ".zip", ".gz"}
 INDEX_EXEMPT = {"README.md"}
+#: A letter from one president to the next is the other thing in `docs/` that is
+#: deliberately unindexed. The laws hold that it is an account and not
+#: documentation -- nothing checks it, and it is in no index -- so indexing it
+#: would be this checker overruling the page it is written to enforce. Matched
+#: by name rather than listed, because the next one is addressed to somebody
+#: whose name nobody here knows yet.
+INDEX_EXEMPT_RE = r"^letter-to-[\w.-]+\.md$"
 COMPETING_ENTRY = ["INTRODUCTION.md", "OVERVIEW.md", "ABOUT.md", "GUIDE.md", "START.md"]
 
 KINDS = {"request", "proposal", "question", "notice", "answer"}
@@ -367,7 +374,7 @@ def check_docs_index() -> list[str]:
         if not path.endswith(".md"):
             continue
         base = os.path.basename(path)
-        if base in INDEX_EXEMPT:
+        if base in INDEX_EXEMPT or re.match(INDEX_EXEMPT_RE, base):
             continue
         if base not in index:
             bad.append(f"{path} is not named in docs/README.md")

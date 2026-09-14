@@ -218,8 +218,9 @@ of six; `git`, `grep` and a person for the rest; and the block typed out by hand
 other entry on this page is work whose consumer does not exist yet. This one has
 a consumer today, running the thing by hand, every time a stretch is considered —
 and the cost of its absence is paid on exactly the occasions when getting it
-wrong is most expensive. `kanon` remains parked by a person and its position
-below is a statement about *when*, not about merit.
+wrong is most expensive. The `kanon` *move* remains parked by a person — the
+repository itself now exists and has joined — and its position below is a
+statement about *when*, not about merit.
 
 ## kanon — the ecosystem's governance, out of the analyzer
 

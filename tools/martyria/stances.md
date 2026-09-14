@@ -279,9 +279,10 @@ correction gets more expensive every stretch and never gets cheaper.**
 
 **What we will not do:**
 
-- **Hand it to something that does not exist.** `kanon` must be built and
-  running before Stretch 1 opens; the readiness check on the front page is what
-  says so, and it is not a formality.
+- **Hand it to something that does not exist.** `kanon` had to be built and
+  running before the office moved; the readiness check on the front page is what
+  said so, and it was not a formality. **It was built, and joined on
+  2026-09-14**, so this one is discharged rather than outstanding.
 - **Hand over the assessment with the office.**
   [`report-card.md`](../../docs/report-card.md) stays here. The record of what
   happened should follow whoever is answerable for it; the grading of everybody

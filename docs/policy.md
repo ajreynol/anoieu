@@ -77,6 +77,13 @@ it has replaced a convention with a directory listing.
 document saying what it is *for*, in a sentence. Adding a document means adding
 a row, and a document not worth a row is not worth adding. Checked.
 
+**Two things in `docs/` are deliberately unindexed**, and the checker skips them
+by name: the index itself, and a **letter from one office-holder to the next**
+— `letter-to-<name>.md`. A letter is an account rather than documentation,
+nothing checks it, and [`laws.md`](laws.md) holds that it is in no index; a row
+in the index would make it the documentation it says it is not. Anything else
+in `docs/` is indexed.
+
 **Written and generated documents are separated and labelled.** A generated
 document says at the top that it is generated and by what, and generators write
 nothing else. Say which of two disciplines applies: *rewritten whole*, where

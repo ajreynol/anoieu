@@ -203,10 +203,11 @@ easier to read than a live one. In the terms of this page:
   installer.
 - **Stays:** `R1` the bug report system, `R2` the analyzer, `R3` the fuzzer,
   `R5` the vision.
-- **Gains:** `kanon`, which has no repository, is not in the inventory, and is a
-  name nobody has claimed.
+- **Gains:** `kanon`, which now exists, has joined as a member, and passes the
+  policy check. **The receiving end of this example stopped being hypothetical
+  on 2026-09-14**; what is still parked is the move itself.
 - **Consumers:** every member, because joining *is* running the checker `R4`
-  owns — four today, and one more with each tool that joins first.
+  owns — one more with each tool that joins. `status_eo` is the count.
 
 The split falls where it does because the argument is about exactly one thing:
 the repository that writes the rules a member is judged by should not also be

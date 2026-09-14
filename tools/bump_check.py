@@ -4,9 +4,9 @@
 A member takes on whatever we have changed by moving a pin -- `ANOIEU_REV` in
 their `anoieu / policy` workflow -- to a commit of this repository. **That bump
 is valid only if this repository's CI is green at exactly that commit**, and this
-is the program that decides it. Published so that four members do not each write
-it; nothing obliges anybody to use this one, and the requirement is the refusal
-rather than the program.
+is the program that decides it. Published so that every member does not write it
+separately; nothing obliges anybody to use this one, and the requirement is the
+refusal rather than the program.
 
 *Internally we plan in stretches and this is what makes one
 deployable -- `docs/stretch-policy.md`. That vocabulary is ours and a member does
