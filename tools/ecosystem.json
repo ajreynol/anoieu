@@ -192,6 +192,13 @@
     "url": "https://github.com/ajreynol/dokimasia",
     "what": "reads cvc5's proof-production C++ and asks what no proof step covers"
   },
+  "epikrisis": {
+    "status": "member",
+    "joined": "anoieu dbb9337",
+    "repo": "epikrisis",
+    "url": "https://github.com/ajreynol/epikrisis",
+    "what": "audits how these repositories have changed over time, on evidence a reader can re-derive"
+  },
   "koine": {
     "status": "member",
     "joined": "anoieu 5668c20",

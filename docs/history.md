@@ -129,7 +129,7 @@ be read without a checkout and may postdate a project's first commit. Counts are
 the sum of contributions across all contributors. **Neither number was supplied
 by these projects and none of them asked to be counted.***
 
-**This table is expected to grow, and law 13 (withdrawn) says how.** A tool that was around
+**This table is expected to grow.** A tool that was around
 before 2026-08-29 and joins later may have its row inserted retroactively, by
 whoever is president then, with the date it was added. **Those are facts that
 were always true and the table did not know them** — the four rows above are
@@ -528,7 +528,7 @@ by accident something `B15` says a person decides.*
 
 ### The three questions, answered
 
-**Required by law 16 (withdrawn), which this entry legislated and had not answered. That is
+**This entry legislated these questions and had not answered them. That is
 itself the first finding.**
 
 **1. Am I ready to let go of the responsibilities I am relinquishing?**
