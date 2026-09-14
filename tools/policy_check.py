@@ -655,10 +655,18 @@ def check_response_gate() -> list[str]:
     A build failure rather than a minor finding: it is the only thing in the file
     that stops an agent acting on correspondence nobody asked it to act on, and a
     safety rule that degrades to a warning is one that is eventually ignored.
+
+    **It is a rule about the file and never about having one.** A repository that
+    keeps no `docs/discussion.md` is skipped rather than failed, by the
+    applicability gate in `CHECKS`. The fatal tier obliges a repository to gate
+    the channel it opened; it has never been this checker's business to oblige
+    anybody to open one, and for a while it did that by accident — a missing file
+    reported here as a build failure, in the same run that reported it as a minor
+    finding, next to a vacuous pass. See *The discussion file* in the policy.
     """
     text = read("docs/discussion.md")
     if not text:
-        return ["docs/discussion.md does not exist, so it carries no response gate"]
+        return []                      # no channel to gate; `CHECKS` skips it
     first_topic = re.search(r"^##\s+D\d+\s", text, re.M)
     head = text[: first_topic.start()] if first_topic else text
     if "&gt;" not in head and not re.search(r"^>", head, re.M):
@@ -670,10 +678,16 @@ def check_response_gate() -> list[str]:
 
 
 def check_discussion() -> list[str]:
-    """*The discussion file* — reported as minor, never as a build failure."""
+    """*The discussion file* — reported as minor, never as a build failure.
+
+    It grades the shape of a channel that exists. Whether one exists at all is
+    not graded here or anywhere, and the applicability gate in `MINOR` is what
+    keeps it that way: a repository with no file to grade is skipped and named,
+    rather than told in passing that it is missing something.
+    """
     text = read("docs/discussion.md")
     if not text:
-        return ["docs/discussion.md does not exist: no standing channel to the ecosystem"]
+        return []                      # nothing to grade; `MINOR` skips it
     bad, seen, fenced = [], set(), False
     lines = text.splitlines()
     for i, line in enumerate(lines):
@@ -735,7 +749,7 @@ def check_prompt_gate() -> list[str]:
     """
     low = prose(read("docs/discussion.md")).lower()
     if not low:
-        return []                      # the discussion check owns that failure
+        return []                      # no channel to carry it; `MINOR` skips it
     return [f"docs/discussion.md does not carry {what}"
             for what, forms in PROMPT_GATE if not any(f in low for f in forms)]
 
@@ -766,7 +780,8 @@ CHECKS = [
     ("dependencies are fetched and pinned, never vendored", check_dependencies, has("deps", "tools/deps.json")),
     ("working space is untracked", check_working_space, has(".gitignore")),
     ("child projects carry a charter, and name what they break", check_children, has("tools")),
-    ("the discussion file carries the response gate, at the top", check_response_gate, None),
+    ("the discussion file carries the response gate, at the top",
+     check_response_gate, has("docs/discussion.md")),
     ("every link in a document or an outbound prompt resolves", check_links, None),
     ("no document names a specific AI", check_no_vendor, None),
     ("no document cites another document's rule by number", check_citations, None),
@@ -782,10 +797,11 @@ CHECKS = [
 # correspondence rather than a defect in their tree, and failing a build over
 # the shape of a sentence addressed to a colleague is the wrong instrument.
 MINOR = [
-    ("the discussion file is present and well-formed", check_discussion, None),
+    ("the discussion file is well-formed", check_discussion, has("docs/discussion.md")),
     ("the README explains the repository's name", check_name_explained, None),
     ("committed data carries no path out of a home directory", check_local_paths_data, None),
-    ("the discussion file says a prompt may be misaddressed", check_prompt_gate, None),
+    ("the discussion file says a prompt may be misaddressed",
+     check_prompt_gate, has("docs/discussion.md")),
 ]
 
 
@@ -830,7 +846,13 @@ def main() -> int:
         else:
             print(f"ok   {title}")
     for title, fn, applies in MINOR:
-        if applies and applies():
+        # Named, not swallowed. A minor check that quietly prints nothing when it
+        # does not apply is indistinguishable from one that is not in the list,
+        # which is the same overclaim the `skip` line exists to prevent above.
+        why = applies() if applies else None
+        if why:
+            skipped += 1
+            print(f"skip {title} — {why}")
             continue
         bad = fn()
         if bad:

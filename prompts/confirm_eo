@@ -123,8 +123,11 @@ than a mood:**
   * **The maintenance note tells a reader something.** Who does the work, and
     what the supervision does not cover. A sentence shaped to satisfy the check
     is the failure mode, not the standard.
-  * **The discussion file is a channel.** Somebody would use it, and ideally
-    somebody has. An empty file with a gate at the top is compliance.
+  * **If they keep a discussion file, it is a channel.** Somebody would use it,
+    and ideally somebody has. An empty file with a gate at the top is
+    compliance. **Keeping none is not a mark against them** and must not be
+    read as one: the policy does not ask for one, so its absence says nothing
+    about this repository and belongs in no band.
   * **They pushed back on something.** The strongest single signal. A repository
     that read our policy and had no objection either did not read it or did not
     say so, and both are worse than an argument.

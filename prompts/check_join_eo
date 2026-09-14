@@ -105,7 +105,9 @@ Your job is the half a program cannot decide. Read their README, their
 docs/discussion.md if there is one, and enough of the tree to answer: does the
 maintenance note actually say who does the work and what the supervision does
 not cover, or is it a sentence that satisfies the check and tells a reader
-nothing? Is the discussion file a channel somebody would use, or a stub?
+nothing? And where there is a discussion file, is it a channel somebody would
+use, or a stub? Keeping none is not a defect and is not a verdict: the policy
+asks nobody for one, so say nothing about its absence.
 
 Then give exactly one verdict:
 

@@ -70,14 +70,21 @@ is not a formality:
 | **findings** | a row in the ledger, carried by `prompts/check_anoieu <id>` and answered through `prompts/process_anoieu` | the same person, through the reporting workflow, which is a separate protocol on purpose |
 | **upstream, by a person** | a message, an issue or a pull request in a tree that has no discussion file | a person, entirely — no script here has a way to do it, and none should |
 
-**Only a member has a discussion file.** `anoieu`, `eudaimonia`, `dokimasia` and
-`koine` have one; `ethos`, `logos` and `cvc5` have not joined and have none, and
-a child project has none of its own and is reached through its parent. So a
-board item addressed to a candidate is *always* the third row, and writing
-`discussion` against one would be describing a channel that does not exist. That
-is the shape this page adds to the protocol: the queue is here, the wire is the
-discussion file, and where there is no wire the page says so instead of
-pretending.
+**Not everybody has a discussion file, and a member need not.** `anoieu`,
+`eudaimonia`, `dokimasia` and `koine` have one; `ethos`, `logos` and `cvc5` have
+none, and a child project has none of its own and is reached through its parent.
+Every repository with one today is a member, which is a fact about who has
+bothered rather than a rule — the policy
+[does not require one](policy.md#the-discussion-file) of anybody, so a
+member with no file is possible and the third row is what reaches it. Writing
+`discussion` against a repository that keeps none would be describing a channel
+that does not exist. That is the shape this page adds to the protocol: the queue
+is here, the wire is the discussion file, and where there is no wire the page
+says so instead of pretending.
+
+**So check the tree rather than the footing.** The question a row answers is
+*does this repository have a file to write into*, and reading it off `member`
+would have been a shortcut even while it happened to work.
 
 **The board does not replace either protocol, and does not shortcut them.**
 Nothing is filed by being on this page, a prompt here is a draft rather than a

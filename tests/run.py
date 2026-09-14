@@ -834,29 +834,61 @@ def adoption_interface() -> int:
     keeps the shape passes, and one that keeps the shape but declares nothing
     fails. Both halves, because a declaration nothing backs and a compliant tree
     that says nothing are the two ways this can be got wrong.
+
+    The last two cases are the discussion file, which is **offered and not
+    required** -- and they are here because the first version of this interface
+    required it by accident and nobody noticed until a repository followed the
+    page and went red. A member that keeps no channel passes; a member that
+    keeps one without the response gate still fails, because that gate is the
+    protocol's one safety rule and making the file optional must not make the
+    gate optional with it. Those two are what stops the relaxation going one
+    step too far.
     """
     import shutil  # noqa: PLC0415
     import tempfile  # noqa: PLC0415
+
+    # (directory, what this case is, declares, the docs/discussion.md to write
+    #  or None for a repository that keeps no channel, wanted exit code)
+    CASES = (
+        ("yes", "a repository that declares membership and keeps the shape passes",
+         True, "gated", 0),
+        ("no", "a repository that keeps the shape but declares nothing fails",
+         False, "gated", 1),
+        ("nochannel", "a member that keeps no discussion file passes",
+         True, None, 0),
+        ("ungated", "a member whose discussion file has lost the response gate fails",
+         True, "ungated", 1),
+    )
 
     checker = os.path.join(os.path.dirname(HERE), "tools", "policy_check.py")
     failures = 0
     tmp = tempfile.mkdtemp(prefix="anoieu-adopt-")
     try:
-        for declares, want in ((True, 0), (False, 1)):
-            root = os.path.join(tmp, "yes" if declares else "no")
+        for name, what, declares, channel, want in CASES:
+            root = os.path.join(tmp, name)
             os.makedirs(os.path.join(root, "docs"))
             subprocess.run(["git", "-C", root, "init", "-q"], check=True)
             open(os.path.join(root, "README.md"), "w").write(
                 "# faketool\n\nA thing.\n\n## The name\n\nfaketool, because it is fake.\n"
                 "\n## How this repository is maintained\n\n"
                 + (DECLARATION if declares else "") + "\nBy a person.\n")
-            open(os.path.join(root, "docs", "discussion.md"), "w").write(
-                "# Discussion\n\n" + GATE + "\n## D1 — hello\n\n"
-                "**To:** anoieu\n**Kind:** notice\n**Status:** open\n"
-                "**Opened:** 2026-08-31\n**Settles when:** somebody says so\n\nWe exist.\n")
-            open(os.path.join(root, "docs", "README.md"), "w").write(
-                "# The documentation\n\n| document | its job |\n| --- | --- |\n"
-                "| [`discussion.md`](discussion.md) | the channel |\n")
+            topic = ("\n## D1 — hello\n\n"
+                     "**To:** anoieu\n**Kind:** notice\n**Status:** open\n"
+                     "**Opened:** 2026-08-31\n**Settles when:** somebody says so\n\n"
+                     "We exist.\n")
+            index = "# The documentation\n\n| document | its job |\n| --- | --- |\n"
+            if channel:
+                open(os.path.join(root, "docs", "discussion.md"), "w").write(
+                    "# Discussion\n\n"
+                    + (GATE if channel == "gated" else "") + topic)
+                index += "| [`discussion.md`](discussion.md) | the channel |\n"
+            else:
+                # Something in docs/ either way, so that the no-channel case is
+                # a repository with documents rather than a repository with an
+                # empty docs/ -- the index check has to have something to do.
+                open(os.path.join(root, "docs", "design.md"), "w").write("# design\n")
+                index += "| [`design.md`](design.md) | how it works |\n"
+            open(os.path.join(root, "docs", "README.md"), "w").write(index)
             open(os.path.join(root, ".gitignore"), "w").write("scratch/\n*.local.md\n")
             # A child project with its own docs/, linking into it the way a
             # child project does. This once failed: the link checker forced
@@ -879,10 +911,7 @@ def adoption_interface() -> int:
                                  capture_output=True, text=True)
             ok = got.returncode == want
             failures += 0 if ok else 1
-            print(("ok   " if ok else "FAIL ")
-                  + ("a repository that declares membership and keeps the shape passes"
-                     if declares else
-                     "a repository that keeps the shape but declares nothing fails"))
+            print(("ok   " if ok else "FAIL ") + what)
             if not ok:
                 print(f"     exit {got.returncode}, wanted {want}")
                 print("     " + got.stdout.strip().replace("\n", "\n     "))
