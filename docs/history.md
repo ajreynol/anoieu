@@ -450,7 +450,7 @@ one row; its internal registers travel with it.
 | [`board.md`](board.md) | what is outstanding, in priority order, each with its next action |
 | [`roles.md`](roles.md) | which tool is responsible for what |
 | [`discussion.md`](discussion.md) | every topic between repositories |
-| [`history.md`](history.md) | this file. **It stays here** under LAW 4; law 3, which moved it with the office, is withdrawn |
+| [`history.md`](history.md) | this file. **It stays here** under LAW 4; the earlier rule that moved it with the office is withdrawn |
 | [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
 | [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
 | [`stretch-policy.md`](stretch-policy.md) + [`stretches.md`](stretches.md) | what a stretch is, and the log of them |

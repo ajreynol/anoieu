@@ -13,6 +13,14 @@ only repair is to delete the job and this file. That is the design: a check that
 outlives its purpose is worse than no check, because a green tick nobody can
 explain is read as an endorsement of something.
 
+**And it stops claiming the name is free once the repository exists.** The
+check used to read the stub and nothing else, so it went on saying *run
+`init_eo new` in a fresh repository* about a repository that had already been
+created. The stub is still correct to be there -- `PROTO-20` keeps it until CI
+is green on both sides -- but *what to do next* had changed and this said
+otherwise. **A green tick that names the wrong next step is the failure this
+file was written to avoid**, committed by the file itself.
+
 Green here means three things and no more:
 
   * the name is in the ecosystem's name register, so `init_eo new` will not
@@ -26,11 +34,30 @@ it, or that it will be any good. It means the paperwork is not in the way.
 """
 
 import glob
+import json
 import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STUB_SENTENCE = "this is a stub"
+
+
+def existing(name: str) -> str:
+    """The footing the inventory records for this name, if it is a repository.
+
+    Empty string when the inventory has never heard of it, or records it as a
+    child -- neither of which is a repository somebody could have created.
+    """
+    path = os.path.join(ROOT, "tools", "ecosystem.json")
+    if not os.path.isfile(path):
+        return ""
+    with open(path, encoding="utf-8") as f:
+        inv = json.load(f)
+    entry = inv.get(name)
+    if not isinstance(entry, dict) or not entry.get("url"):
+        return ""
+    status = entry.get("status", "")
+    return "" if status == "child" else status
 
 
 def check(name: str) -> tuple[list[str], str]:
@@ -85,6 +112,19 @@ def main(argv: list[str]) -> int:
         for p in problems:
             print(f"  - {p}")
         return 1
+    footing = existing(name)
+    if footing:
+        # The name has a repository. Creating one is no longer the next step,
+        # and the stub is not stale: PROTO-20 holds it until both sides are
+        # green, which is the thing still outstanding.
+        print(f"HELD: `{name}` already exists as a repository, recorded as "
+              f"{footing}.")
+        print(f"  the stub at tools/{name}/ stays until `PROTO-20` is "
+              "satisfied -- CI green on both sides, non-negotiable")
+        print(f"  the register entry is in {register}")
+        print("  `init_eo new` is not the next step here and this job no "
+              "longer says it is")
+        return 0
     print(f"READY: run `init_eo new` in a fresh repository named {name}.")
     print(f"  the register entry is in {register}")
     print(f"  the stub holding its place is tools/{name}/")

@@ -85,7 +85,7 @@ NOT_A_REPO = ("child",)
 
 #: The order statuses are dumped in, so a new tool lands somewhere sensible
 #: without anybody choosing. Anything else sorts last.
-STATUS_ORDER = ("member", "candidate", "served")
+STATUS_ORDER = ("president", "member", "candidate", "served")
 
 
 def load(path: str) -> dict:

@@ -25,9 +25,10 @@ this page puts anybody in Arete or keeps them out. **Arete is acceptance and
 cannot be granted by the party doing the assessing** — least of all by one that
 appears on the list. This is evidence for somebody else's judgement.
 
-**And anoieu keeps this page, whatever else moves.** The history travels with
-the presidency; **this does not.** It is a standing responsibility rather than
-an office, it stays here when the office leaves, and that separation is
+**And anoieu keeps this page, whatever else moves.** Each president's history
+stays in its own tree and the accounts scatter; **this one does not.** It is a
+standing responsibility rather than an office, it stays here when the office
+leaves, and that separation is
 deliberate: **the record of what happened should follow whoever is answerable
 for it, and the assessment of how well everyone is doing should not.**
 

@@ -62,7 +62,7 @@ one.
 | --- | --- | --- |
 | [`vision.md`](vision.md) | tenets | what the work is for |
 | [`policy.md`](policy.md) | rules | what a member is held to |
-| [`laws.md`](laws.md) | 15 numbered | how the record is kept |
+| [`laws.md`](laws.md) | 7 numbered | the footings, what a member owes, and what the president owes |
 | [`board.md`](board.md) | `B` | 23 — what is outstanding, in priority order |
 | [`roles.md`](roles.md) | `R` | 35 — which tool is responsible for what |
 | [`discussion.md`](discussion.md) | `D` | 22 — every topic between repositories, including this one |

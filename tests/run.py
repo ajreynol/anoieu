@@ -223,7 +223,16 @@ def inventory_well_formed() -> int:
     # reached, which is how the first version of this test passed against the
     # bug it was written for. This repository is the checkout, so the mapping is
     # true and the run costs one policy check.
+    #
+    # The footing is read from the inventory rather than written here. It used
+    # to say `member`, which was true of anoieu when the test was written and
+    # stopped being true the day the office was recorded as a footing -- so a
+    # test about *the table printing at all* went red for a change that had
+    # nothing to do with printing. What this asserts is that anoieu's row
+    # appears with the footing the inventory records; which footing that is, is
+    # the inventory's business and `well_formed` above already decided it.
     root = os.path.dirname(HERE)
+    footing = inv["anoieu"]["status"]
     mapping = os.path.join(HERE, "repos.local.test")
     with open(mapping, "w") as f:
         f.write(f"anoieu {root}\n")
@@ -232,7 +241,8 @@ def inventory_well_formed() -> int:
     out = subprocess.run([sys.executable, os.path.join(root, "tools", "ecosystem.py")],
                          capture_output=True, text=True, env=env, timeout=120)
     os.remove(mapping)
-    if out.returncode != 0 or not re.search(r"^anoieu\s+member\s", out.stdout, re.M):
+    if out.returncode != 0 or not re.search(rf"^anoieu\s+{re.escape(footing)}\s",
+                                            out.stdout, re.M):
         print(f"FAIL tools/ecosystem.py with no arguments exited {out.returncode}: "
               f"{(out.stderr or out.stdout).strip().splitlines()[-1:]}")
         bad = bad + ["the default mode"]

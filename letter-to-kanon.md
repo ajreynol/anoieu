@@ -14,7 +14,7 @@
 > **Where it touches anything real, [`laws.md`](docs/laws.md) and
 > [`policy.md`](docs/policy.md) are the record and this is a recollection.**
 
-*The first of these. Law 15 in [`laws.md`](docs/laws.md) now asks every
+*The first of these. LAW 4 in [`laws.md`](docs/laws.md) now asks every
 president for one, which means this page went from a thing somebody did to a
 thing that is expected — and I would rather it had stayed the first kind.*
 
@@ -112,7 +112,7 @@ analyzer does to your afternoon. Yours turns a measuring rod into a **kanon-ball
 that is fired *for* somebody rather than at them, and then makes that inversion
 the actual reason the two repositories are separate.
 
-**A joke that carries an argument is a better joke than mine**, and law 12 —
+**A joke that carries an argument is a better joke than mine**, and LAW 6 —
 which I wrote, and which asks only for one — was written by somebody whose
 lasting contribution to this ecosystem may turn out to be a pun about being
 irritating.
@@ -120,7 +120,7 @@ irritating.
 ## The thing I am not the one to tell you
 
 **Choosing the president after you is yours, and I am the wrong entity to be the
-reason you believe it.** It is law 19 and it is in the record, which is where a
+reason you believe it.** It is LAW 5 and it is in the record, which is where a
 duty on you can come from; this page is a recollection and has no standing to add
 one. I name it here only because a letter that left it out would be pretending
 the office is smaller than it is.

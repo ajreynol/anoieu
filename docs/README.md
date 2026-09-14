@@ -105,11 +105,11 @@ including the two where anything actually gets built. Distinct from
 [`usage.md`](usage.md), which is the analyzer's command line, and from
 [`coherence.md`](coherence.md), which is the standards the work is held to.
 
-[`laws.md`](laws.md) is the rules for keeping [`history.md`](history.md) and
-nothing else: who may write it, what a stretch entry must contain, and what
-travels when the presidency changes hands. **They are candidate laws** —
-written down, followed voluntarily, enforced by nothing — because the party they
-bind also wrote them. A tool should hold this page eventually.
+[`laws.md`](laws.md) is the footings the ecosystem is made of, what a member
+owes, and the five things the president owes — including how it keeps
+[`history.md`](history.md) and who it hands the office to. **They are candidate
+laws** — written down, followed voluntarily, enforced by nothing — because the
+party they bind also wrote them. A tool should hold this page eventually.
 
 [`history.md`](history.md) is **what previous presidents did, and what the
 current one is doing** — one section per stretch, oldest first, and no
@@ -118,7 +118,8 @@ happened should say who was responsible for it, and carries how long the stretch
 ran, who entered the ecosystem, what was committed and whether the build was
 green. Distinct from [`report-card.md`](report-card.md), which grades, and from
 [`postmortem.md`](reports/postmortem.md), which asks what one run of the
-reporting loop cost. **It travels with the office; the report card does not.**
+reporting loop cost. **It stays in the repository that wrote it, under LAW 4,
+and so does the report card — for a different reason.**
 
 [`instructions.md`](instructions.md) is the other half of that page, and is
 the only document here **addressed to you rather than to whoever maintains

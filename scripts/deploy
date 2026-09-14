@@ -121,9 +121,12 @@ d = json.load(open(os.path.join(os.environ['ANOIEU_ROOT'], 'tools', 'ecosystem.j
 e = d.get('$PRESIDENT')
 print(e.get('status', '?') if e else 'absent')")
 echo "  president footing:   $FOOTING"
-[ "$FOOTING" = "member" ] || fail "$PRESIDENT is '$FOOTING', not a member.
+case "$FOOTING" in
+  member|president) ;;
+  *) fail "$PRESIDENT is '$FOOTING', not a member.
   An office cannot be handed to a repository that has not joined the thing it
-  would preside over. Run join_eo there, then confirm_eo --president here."
+  would preside over. Run join_eo there, then confirm_eo --president here." ;;
+esac
 
 # 2. the stretch has to be staged before it can be deployed
 echo "  stretch status:      $STATUS"
@@ -212,10 +215,11 @@ marker = f"""## Stretch {n} — FIXME
 **FIXME — for {president}, the incoming president. This section is yours.**
 
 **Written by `./scripts/deploy` on {today}, and it is a placeholder rather than
-an entry.** Nothing here was observed; it is a reminder that the record now
-travels with you.
+an entry.** Nothing here was observed; it is a reminder that a stretch of yours
+is open here and unwritten. Under LAW 4 your own account lives in your own tree
+and this file stays in anoieu; neither of them travels.
 
-**Law 12 first, then the rest.** Put a joke about your own name on your front
+**LAW 6 first, then the rest.** Put a joke about your own name on your front
 page before anything else: it is the cheapest of your obligations and the one
 most likely to be skipped. Then publish the working summary, which is your first
 responsibility and is kept current while the stretch runs rather than written at

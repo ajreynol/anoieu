@@ -248,8 +248,9 @@ promising it is.
 **What:** the tool that audits how these repositories have changed over time,
 with every claim resting on evidence a reader can re-derive, **promoted out of
 its parent into a repository of its own.** It is the ecosystem's only source of
-GitHub history analysis, and `docs/laws.md` already requires a president to
-quote it rather than count for itself.
+GitHub history analysis, and `docs/laws.md` already requires every figure in a
+president's account to be re-derivable by somebody else, which is exactly what a
+president counting its own commits cannot offer.
 **State:** `proposed` — suggested by the maintainer, 2026-09-02. **Unlike every
 other entry on this page, the thing already exists and works.** What is proposed
 is a move, not a build.

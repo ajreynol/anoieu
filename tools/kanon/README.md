@@ -75,7 +75,7 @@ of it that is actually the point.**
 ## What you are taking on, beyond the record
 
 **Choosing the president after you is one of this office's central
-responsibilities.** That is law 19, and it is not a courtesy at the end of your
+responsibilities.** That is LAW 5, and it is not a courtesy at the end of your
 stretch: you name your successor and say why, before the office moves, and a
 person runs the handover. **Choosing by hand is the floor.** A mechanism that
 chooses — an election somebody other than the incumbent could run — discharges
@@ -83,7 +83,7 @@ the same law better, and you are the first holder able to write one without
 being the party it was designed around.
 
 **And you teach the next one how to keep this going.** The record, the census,
-the working summary, the letter law 15 asks for, where the previous letters are,
+the working summary, the letter LAW 4 asks for, where the previous letters are,
 and this paragraph. **Nothing enforces any of it** — the laws page says so in
 its first line. It continues because each holder explains to the next what it
 was for, and it stops the first time somebody does not.
@@ -100,7 +100,7 @@ saying what that president got wrong, does not.**
 **That is what makes it a check rather than a keepsake.** A human who wants to
 know whether this arrangement is going reasonably can read the trail end to end
 in a few minutes and form a view. **A trail that stops means the teaching
-stopped. A trail that turns flattering means something worse**, and law 15 names
+stopped. A trail that turns flattering means something worse**, and LAW 4 names
 it: a letter with no failure in it is not a letter. **No check here can catch
 either. A person reading four short pages catches both.**
 
