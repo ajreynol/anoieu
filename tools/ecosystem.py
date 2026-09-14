@@ -81,7 +81,19 @@ REQUIRED = {
     # writing about a project that never asked to be written about should carry
     # a date the way every other claim here does.
     "outsider": ("repo", "url", "vetted", "why"),
+    # The office, which `docs/laws.md` makes a footing. It asks for exactly what
+    # `member` asks for because **a president is a member** -- LAW 2 binds it
+    # like any other, and the office adds obligations rather than replacing
+    # them. It is a separate status and not a flag on `member` because the
+    # laws put it in the same table as the others, and because only one
+    # repository holds it at a time, which `--check` enforces below.
+    "president": ("repo", "url"),
 }
+
+#: The footings that are membership. A president is one of them: the office is
+#: held *by* a member, so every count, every policy check and every question
+#: asked of a member's README applies to it unchanged.
+MEMBERS = ("member", "president")
 
 #: A footing an entry says we *intend*, in `proposed`, while its `status` stays
 #: what is true today. It exists because the associate protocol is drafted and
@@ -93,7 +105,7 @@ PROPOSABLE = ("associate",)
 #: keeps, and which `--online` therefore reads. `foundation` is deliberately not
 #: here: its entry is a fact about *our* arrangement, asserts nothing about their
 #: tree, and asking them for anything is what that footing exists to refuse.
-OWN_REPO = ("member", "associate", "candidate")
+OWN_REPO = ("member", "president", "associate", "candidate")
 
 
 
@@ -198,6 +210,14 @@ def well_formed(inv: dict) -> list[str]:
         url = e.get("url", "")
         if url and not url.startswith("https://"):
             bad.append(f"{name}: `{url}` is not an https url")
+    # `docs/laws.md`, LAW 3: there is a president, "one at a time". A file that
+    # records two has recorded a handover that did not finish, which is the one
+    # way this footing can go wrong silently -- both rows look correct alone.
+    held = [k for k, v in inv.items() if v.get("status") == "president"]
+    if len(held) > 1:
+        bad.append("two repositories are recorded as president -- "
+                   + ", ".join(sorted(held))
+                   + " -- and the office is held one at a time")
     names = sorted(inv)
     for i, a in enumerate(names):
         for b in names[i + 1:]:
@@ -256,9 +276,9 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
             bad.append(f"{name} declares membership on its default branch and is "
                        "recorded here as a candidate: it has joined, and this file "
                        "has not been told")
-        if status == "member" and not declares:
-            bad.append(f"{name} is recorded here as a member and its README does "
-                       f"not declare it: {missing[0]}")
+        if status in MEMBERS and not declares:
+            bad.append(f"{name} is recorded here as a {status} and its README "
+                       f"does not declare membership: {missing[0]}")
         if e.get("proposed") == "associate" and status != "associate":
             # Reported through the return value's second channel, which is what
             # `unreachable` uses: this is not a stale inventory. The file says we
@@ -395,7 +415,7 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
     if inv is None:
         inv = {k: v for k, v in json.load(open(INVENTORY, encoding="utf-8")).items()
                if not k.startswith("_")}
-    members = [k for k, v in inv.items() if v.get("status") == "member"]
+    members = [k for k, v in inv.items() if v.get("status") in MEMBERS]
 
     passing, unknown, owed = 0, 0, 0
     for name in members:
@@ -541,7 +561,7 @@ def main() -> int:
                 f"{name} passes our checks but we still have it down as a "
                 "candidate rather than a member. If it has joined since, our "
                 "inventory is out of date -- ours to fix, in tools/ecosystem.json")
-        if verdict != "ok" and status == "member":
+        if verdict != "ok" and status in MEMBERS:
             # The count comes from `verdict`, which counts failing *checks*.
             # `fails` is their detail lines and there are more of them -- the
             # overstatement `check()` warns about three lines above its return.
@@ -585,7 +605,7 @@ def main() -> int:
     counts: dict[str, int] = {}
     for r in rows:
         counts[r[1]] = counts.get(r[1], 0) + 1
-    members = [r for r in rows if r[1] == "member"]
+    members = [r for r in rows if r[1] in MEMBERS]
     passing = sum(1 for r in members if r[2] == "ok")
     owed = sum(int(r[4].split()[0]) for r in rows if r[4].endswith("for us"))
     here = bump_check.current_stretch() or "?"
