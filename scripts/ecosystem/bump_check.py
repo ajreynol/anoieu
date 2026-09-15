@@ -8,11 +8,6 @@ is the program that decides it. Published so that every member does not write it
 separately; nothing obliges anybody to use this one, and the requirement is the
 refusal rather than the program.
 
-*Internally we plan in stretches and this is what makes one
-deployable -- `docs/stretch-policy.md`. That vocabulary is ours and a member does
-not need it: the rule below is about a bump, and it holds whether or not anybody
-upstream plans in anything.*
-
 Three properties, and the first is the one everything else follows from.
 
 **It asks about a commit, never about the tip.** Green-at-a-commit is a fact that
@@ -23,7 +18,7 @@ exists to prevent.
 
 **It fails closed.** Not green, not finished, or not reachable -- all refuse.
 That is the opposite of how `scripts/ecosystem/ecosystem.py --check --online` treats an
-unreachable remote, and the difference is that adopting a stretch is *optional and
+unreachable remote, and the difference is that adopting a policy commit is *optional and
 deferrable*: refusing costs a member nothing but a later attempt, where a
 fail-closed check inside a build would turn somebody's tree red for a network
 they do not own.
@@ -34,7 +29,7 @@ and a build that can change colour on its own cannot be evidence that a commit
 was good. It is a command a person or a bump script runs at the moment of
 adoption, and nothing else.
 
-    python3 scripts/ecosystem/bump_check.py --rev 59e8e07     # may this stretch be adopted?
+    python3 scripts/ecosystem/bump_check.py --rev 59e8e07     # may this commit be adopted?
     python3 scripts/ecosystem/bump_check.py --root PATH       # read the pin from a member's workflow
     python3 scripts/ecosystem/bump_check.py --rev X --dry-run # print what it would ask, ask nothing
 
@@ -69,7 +64,7 @@ def verdict(runs: list[dict]) -> tuple[int, str]:
 
     A commit with no check runs at all is `2` and never `0`: *no runs* and *all
     runs passed* are indistinguishable from an empty list, and guessing in the
-    permissive direction here would let a stretch through on a commit CI never
+    permissive direction here would let a policy change through on a commit CI never
     looked at.
     """
     if not runs:
@@ -108,74 +103,11 @@ def pinned_rev(root: str) -> tuple[str, str]:
                 "tip, which the policy allows and this check cannot speak about")
 
 
-def epoch_marker(root: str) -> str:
-    """The `EUNOIA_EPOCH` a repository records, or "" if it records none.
-
-    The marker says which stretch of this ecosystem's *advice* a tree was built
-    against; `pinned_rev` above says which commit of the *checker* it is held to.
-    Two different facts, allowed to disagree, read from the same file because
-    that is where somebody already looks.
-
-    **Absent is the ordinary case and never a failure.** The convention is
-    encouraged and not required, so a tool reading this reports what it finds and
-    grades nobody.
-    """
-    d = os.path.join(root, ".github", "workflows")
-    if not os.path.isdir(d):
-        return ""
-    for name in sorted(os.listdir(d)):
-        if not name.endswith((".yml", ".yaml")):
-            continue
-        text = open(os.path.join(d, name), encoding="utf-8", errors="replace").read()
-        m = re.search(r"^\s*EUNOIA_EPOCH\s*:\s*[\"']?(E\d+)[\"']?\s*$", text, re.M)
-        if m:
-            return m.group(1)
-    return ""
-
-
-def register(root: str = "") -> dict:
-    """`scripts/ecosystem/stretch.json`: which stretch we are in, and what is true of it.
-
-    These facts used to be read out of the prose of `docs/stretches.md`,
-    on the argument that a machine-readable copy would be one more thing to keep
-    in step with the log. That argument died with the log: there is no prose left
-    for a copy to drift from, and the fields a deploy is gated on were
-    sitting under a banner saying the file was under no obligation to be current.
-
-    Returns `{}` when there is no register, which every caller treats as *we do
-    not know* rather than as a value.
-    """
-    here = os.path.dirname(os.path.abspath(__file__))
-    directory = os.path.join(root, "scripts", "ecosystem") if root else here
-    path = os.path.join(directory, "stretch.json")
-    try:
-        with open(path, encoding="utf-8") as fh:
-            return json.load(fh)
-    except (OSError, ValueError):
-        return {}
-
-
-def _current(root: str, field: str) -> str:
-    reg = register(root)
-    cur = reg.get("current", "")
-    return str(reg.get("stretches", {}).get(cur, {}).get(field, "") or "") if cur else ""
-
-
-def current_stretch(root: str = "") -> str:
-    """The stretch we are in, or "" if the register cannot be read."""
-    return str(register(root).get("current", "") or "")
-
-
-def current_status(root: str = "") -> str:
-    """The status of that stretch, or "" if unreadable."""
-    return _current(root, "status")
-
-
 def ask(rev: str, timeout: int = 20) -> tuple[list[dict], str]:
     url = API.format(repo=REPO, rev=rev)
     req = urllib.request.Request(url, headers={
         "Accept": "application/vnd.github+json",
-        "User-Agent": "anoieu-epoch-check",
+        "User-Agent": "anoieu-bump-check",
     })
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310
@@ -215,7 +147,7 @@ def main() -> int:
     runs, why = ask(rev)
     if why:
         print(f"-- REFUSE: {why}")
-        print("   Unverified is refused rather than allowed: adopting a stretch is "
+        print("   Unverified is refused rather than allowed: adopting a policy commit is "
               "optional and\n   deferring costs nothing, so the cautious answer is "
               "the cheap one.")
         return 2
@@ -224,7 +156,7 @@ def main() -> int:
     print(f"-- {'ADOPT' if code == 0 else 'REFUSE'}: {REPO} at {rev} is {reason}")
     if code == 0:
         print("   This says those checks passed at that commit, and nothing about "
-              "whether the\n   stretch is any good -- see docs/reports/"
+              "whether the\n   policy change is any good -- see docs/reports/"
               "reporting-policy.md on silence.")
     return code
 

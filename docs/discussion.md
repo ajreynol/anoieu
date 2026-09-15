@@ -508,9 +508,8 @@ the work and not a reason for you to restructure anything. We are not going to
 change the rule in the same breath as discovering it; it is written down here so
 that the gap is visible while it is open.
 
-**The other half of `D4` is not answered here.** Whether an epoch announcement's
-form is fixed as data or deliberately as prose is undecided, and this topic does
-not decide it. `D4` stays open on that.
+**Update, 2026-09-15:** the proposed planning machinery has been deferred to
+tekton. This topic imposes no announcement-format requirement from that draft.
 
 ### The exchange we are recording, and the use we will not make of it
 
@@ -677,24 +676,9 @@ otherwise.** Moving your pin is how you take on whatever we have changed, and
 work we could not get past our own build is not work to take on. This is stated
 as a requirement on you because it is the half we cannot enforce from here.
 
-### On our planning vocabulary, which you may safely ignore
-
-**The rule is about your bump, not our planning calendar.** We plan in stretches;
-`epoch` names the commands we use to manage them. Neither concept is needed to
-apply the rule: adopt only a commit whose CI is green.
-
-Whether that vocabulary should cross this boundary at all is genuinely open. What
-a member needs from us looks like two things — what a global announcement is and
-what one can ask of you, and this bumping rule — and neither needs the word. It
-might buy you a shared coordinate for naming the same stretch we are naming; it
-might just be vocabulary nobody asked for, in an ecosystem already carrying a
-complaint that joining costs eighteen hundred lines of reading.
-
-**We cannot answer that from here and you can.** A protocol's defects are visible
-where it is received. So if you have an opinion — that the word is useful, that
-it is noise, or that you never noticed it and did not need it — that is worth
-more to us than compliance with anything else in this topic. Until somebody says,
-we will keep the word out of what we address to you.
+**Update, 2026-09-15:** the planning draft has been deferred to tekton. The
+commit-pin requirement below stands independently; no planning vocabulary or
+marker is required.
 
 **Three properties, each answering the obvious objection:**
 
@@ -756,14 +740,9 @@ record. Two of the events that matter most in this ecosystem are close to
 invisible from commits alone, and we would rather say so than have them inferred
 from a name collision.
 
-**A stretch boundary.** We now name the span between one global announcement and
-the next a **stretch**, and the boundary is the announcement rather than a date —
-deliberately, because a date would be a cadence and a cadence is a commitment to
-other repositories we are in no position to sign.
-[`stretch-policy.md`](stretch-policy.md) is what one is;
-[`history.md`](history.md) is the account of the ones that have happened. From
-the outside a stretch boundary looks like an ordinary commit touching a
-documentation file.
+**Update, 2026-09-15:** the proposed announcement-based planning cycle has
+been deferred to tekton. [`history.md`](history.md) remains anoieu's own record;
+there is no active cycle register to consume.
 
 **A role changing hands**, and this is the one to detect. It changes who is
 *accountable* rather than what exists: one entry moves between two headings in

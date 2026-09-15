@@ -445,9 +445,20 @@ A member adopting a commit with this move must update the command in its workflo
 together with its anoieu pin; a workflow pinned to an older commit keeps using
 the path at that commit.
 
-Stretches use `E1`-style ids and members pin commits; there is no separate
-ecosystem release number. Package metadata and data-format versions remain
-independent of the stretch.
+Members pin commits; there is no separate ecosystem release number. Package
+metadata and data-format versions remain independent.
+
+### The planning draft is deferred to tekton — 2026-09-15
+
+`docs/epoch-analogy.md`, `docs/stretch-policy.md` and
+`scripts/ecosystem/stretch.json` were copied unchanged into the sibling
+`../tekton/` workspace and removed here. The obsolete `tools/tekton/README.md`
+stub was deleted. This parks the epoch idea for later; it does not launch a tool
+or transfer an active role. No supporting files were copied.
+
+Anoieu no longer uses the draft's commands, state register or workflow gates.
+The independent commit-pin check stays. History and letters remain here; older
+references to E1 describe the abandoned proposal, not a current workflow.
 
 ### What moves, where it goes, and what does not
 
@@ -470,7 +481,6 @@ one row; its internal registers travel with it.
 | [`discussion.md`](discussion.md) | every topic between repositories |
 | [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
 | [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
-| [`stretch-policy.md`](stretch-policy.md) + [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) | what a stretch is, and which one we are in |
 | [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
 | [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
 | [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
@@ -495,7 +505,7 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 | [`../prompts/join_eo`](../prompts/join_eo), [`../prompts/check_join_eo`](../prompts/check_join_eo), [`../prompts/confirm_eo`](../prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
 | [`../prompts/init_eo`](../prompts/init_eo), [`../prompts/welcome_eo`](../prompts/welcome_eo), [`../scripts/ecosystem/near.py`](../scripts/ecosystem/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
 | [`../prompts/global_audit`](../prompts/global_audit), [`../prompts/process_discussion`](../prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
-| [`../scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py) + [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) | the epoch machinery: the register of which stretch we are in, and the gate a member bumps through. **Closing a stretch is done by hand** — the script that did it was deleted on 2026-09-15 |
+| [`../scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py) | checks whether the exact policy commit a member proposes to adopt passed CI |
 | [`../scripts/ecosystem/transfer_check.py`](../scripts/ecosystem/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
 | [`../scripts/ecosystem/ready_check.py`](../scripts/ecosystem/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
@@ -536,12 +546,8 @@ are about the governance handoff, not the removed essays.
   reconciled with `R30` and its charter before it moves.
 - **Each tree needs its own `docs/README.md`.** An index describes the documents
   that tree holds; it is not an artifact to move wholesale.
-- **`epoch-analogy.md`** explains the stretch machinery to a newcomer, which
-  argues for kanon; it is also the shortest way into *this* repository's
-  workflow, which argues for staying. **Unassigned.**
-- **`tools/kanon/` and `tools/tekton/`** are stubs. The first is deleted when
-  kanon proves itself under `PROTO-20`; **the second has nowhere to go and
-  nobody has said who inherits it.**
+- **`tools/kanon/`** remains a stub, to be removed only when its replacement
+  is accepted under `PROTO-20`. The tekton draft is no longer pending here.
 - **[`../scripts/doc_currency.py`](../scripts/doc_currency.py)** measures how much
   evidence there is that *the tree it is run in* has current documentation. It
   is the mechanical half of the central policy rule, so it argues for kanon;
@@ -589,9 +595,9 @@ work this repository actually exists to do.**
 
 **3. Did I report all of my responsibilities?**
 **Not yet.** The scope, role and dependency questions above remain open.
-`epoch-analogy.md`, `doc_currency.py` and `tools/tekton/` still need explicit
-destinations. Each tree needs its own documentation index and CI. The research
-essays have been removed locally and are no longer pending items in this handoff.
+`doc_currency.py` still needs an explicit destination. Each tree needs its own
+documentation index and CI. The research essays and the deferred tekton draft
+are no longer pending items in this handoff.
 
 ### What went wrong
 
@@ -612,17 +618,17 @@ essays have been removed locally and are no longer pending items in this handoff
 
 ### What is handed on
 
-- **`E1` has not been handed off.** It has been `planned` for the whole stretch.
+- **The proposed E1 handoff did not happen.** Its planning machinery is now
+  deferred to tekton.
 - **The joining requirement is still one nobody has satisfied**, which is why
   this repository grades itself poorly on delivery.
 - **Two published URLs 404** as a result of moving the prompts directory, and
   copies already sent to other repositories cannot be recalled.
 
-**And three things the next president must not assume.** That `E1` was handed off
-— it was not, and the stretch log still says `planned`. That the handoff is
-automated — the prototype script was removed, and the handoff is manual.
-That the figures on this page were
-audited — **they were produced by the party they describe.**
+**The next president must not assume the proposed E1 handoff happened or that
+the deferred draft governs their work.** Role handoffs remain a person's decision.
+The figures on this page were not independently audited: they were produced by
+the party they describe.
 
 ### Evidence
 
@@ -645,8 +651,8 @@ qualification on everything above.
 
 ### What E1 carried downstream, and what it nearly said
 
-The E1 covering note is recorded here; current stretch state lives in
-[`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json).
+The covering note below is a dated record, not a current instruction. The
+associated planning draft was deferred to tekton on 2026-09-15.
 
 **What it carried:** footings recorded on two axes instead of one; the
 `associate` footing, defined and held by nobody; the `report/` convention and
@@ -699,26 +705,8 @@ still costs a round; a careless one acts on notices marked as needing no reply.
 an open complaint that joining had cost it four files and eighteen hundred lines
 of reading.
 
-**The approval block, verbatim, from the session that proposed deploying E1.**
-Kept because it said `BLOCKED`, which is the case
-[`stretch-policy.md`](stretch-policy.md#the-approval-block) is most insistent
-about keeping:
-
-```text
-EPOCH E1 · dry run
-  commit .......... 8a71253
-  ci .............. FAIL   oracle red since cf4ad2c (2026-08-30), 100+ commits
-  applied here .... FAIL   anoieu's own publishing stance unstated
-  asks ............ publishing stance; bump only to a green commit
-  informs ......... dokimasia, eudaimonia, koine
-  removes ......... R27           a role deleted (git log -- docs/roles.md)
-  ------------------------------------------------------------
-  DEPLOY .......... BLOCKED  2 failing
-```
-
-**`informs` names three members because there were three on that day.**
-epikrisis became one afterwards, and `D14` addresses the three it named. The
-block is a record of a session, not a statement about the ecosystem now.
+The proposed E1 handoff was blocked at anoieu `8a71253`: the oracle job failed
+and anoieu had not yet stated its own publishing stance. It was not completed.
 
 ### The joke
 

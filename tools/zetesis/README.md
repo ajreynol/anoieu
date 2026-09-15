@@ -188,7 +188,7 @@ is attention over text and every ambiguity is a branch discovered late.
 saying because the fourth one somebody invents will overlap unless the first
 three are laid out. The science-fiction essay in [aisthesis](https://github.com/ajreynol/aisthesis)
 limits how far ahead we may **plan**;
-[`../../docs/stretch-policy.md`](../../docs/stretch-policy.md) limits how fast we
+[`INST-3`](../../docs/instructions.md#inst-3--do-not-outrun-your-own-understanding) limits how fast we
 may **move**, and its rule is *go only as fast as you understand*; this limits
 what we may claim without being able to **show** it. Range, rate, evidence.
 Against one accelerator, which is the kernel.

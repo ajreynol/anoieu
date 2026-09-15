@@ -80,10 +80,7 @@ on it, and nothing consumes the file yet.
 [`interface.md`](interface.md) is not in the table and is the page to read
 **first if you are the person driving this repository** rather than reading about
 it. What to say, what comes back, what never comes back, and the decisions that
-are nobody's but yours. Its stated default — *work with anoieu to develop the
-next stretch* — is a **conjecture about the right level of abstraction**, said so on
-the page, with what would show it wrong and five other levels to drop to,
-including the two where anything actually gets built. Distinct from
+are nobody's but yours. Distinct from
 [`usage.md`](usage.md), which is the analyzer's command line, and from
 [`coherence.md`](coherence.md), which is the standards the work is held to.
 
@@ -107,24 +104,9 @@ held to one rule the rest of the documentation is not: an instruction that
 cannot be followed without first opening a file has failed. There is one so
 far, about the hours you intend to work.
 
-[`epoch-analogy.md`](epoch-analogy.md) is the shortest way in if the two below
-look like a lot: the epoch build system mapped onto an ordinary build system —
-sources, a dry run, a gate, an exit code, a version — and then the longer half,
-**where the analogy stops being flattering**. A build is a function and this is
-not; nothing type-checks; there is no linker; and `deployed` is not `installed`,
-because every downstream effect is somebody else's voluntary act.
-
-[`stretch-policy.md`](stretch-policy.md) and [`history.md`](history.md) are a pair and
-are not in the table either. A **stretch** is the span between one global
-announcement and the next. The policy says what one is, what counts as a major
-event within it — a global announcement, and **a role changing hands**, which is
-the one a reader reconstructing history from commits will not see — and what
-*designing the next stretch* involves, which is a role here and is destined for the
-governance repository. The history records what happened and keeps the current
-handoff plan up to date. Dated quotations and covering notes describe their
-original occasions, not current instructions. Which repositories are actually
-contacted, and whether any are, is a person's decision: see *Who gets pinged* in
-[`policy.md`](policy.md#who-gets-pinged).
+[`history.md`](history.md) records what happened here and the current handoff
+plan. It remains in anoieu when responsibilities move. Dated quotations and
+covering notes describe their original occasions, not current instructions.
 
 [`roles.md`](roles.md) lists **one entry per responsibility**, each with a
 permanent id, what it owns, and —

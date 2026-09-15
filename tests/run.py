@@ -794,10 +794,10 @@ def protocol_report() -> int:
     return failures
 
 
-def epoch_gate() -> int:
+def pin_adoption_gate() -> int:
     """`scripts/ecosystem/bump_check.py` refuses everything that is not a finished green run.
 
-    This is the gate a downstream member puts in front of adopting a stretch, so
+    This is the gate a downstream member puts in front of adopting a policy commit, so
     the expensive direction is **letting something through**: a member that
     refuses wrongly tries again tomorrow, and one that adopts wrongly has pinned
     itself to a commit our own CI rejected. Every case below that is not an
@@ -834,7 +834,7 @@ def epoch_gate() -> int:
 
     import tempfile  # noqa: PLC0415
 
-    tmp = tempfile.mkdtemp(prefix="anoieu-epoch-")
+    tmp = tempfile.mkdtemp(prefix="anoieu-pin-")
     wf = os.path.join(tmp, ".github", "workflows")
     os.makedirs(wf)
     open(os.path.join(wf, "anoieu.yml"), "w").write(
@@ -847,84 +847,7 @@ def epoch_gate() -> int:
         failures += 0 if ok else 1
         print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
 
-    # the stretch markers the internal tools read
-    open(os.path.join(wf, "anoieu.yml"), "a").write("          EUNOIA_EPOCH: E7\n")
-    marks = [
-        ("reads a recorded epoch marker", bump_check.epoch_marker(tmp) == "E7"),
-        ("reports no marker as absent, never as a failure",
-         bump_check.epoch_marker(HERE) == ""),
-        ("reads the current stretch from the register",
-         re.fullmatch(r"E\d+", bump_check.current_stretch(root) or "") is not None),
-        ("reads its status", bool(bump_check.current_status(root))),
-        ("reports a missing register as unknown, never as a value",
-         bump_check.current_stretch(tmp) == ""
-         and bump_check.current_status(tmp) == ""),
-    ]
-    for label, ok in marks:
-        failures += 0 if ok else 1
-        print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
-
-    print(f"-- the epoch gate: {failures} failure(s)")
-    return failures
-
-
-def epoch_surfaces_agree() -> int:
-    """Every place that restates the epoch commands or statuses says the same
-    thing as the register it copies.
-
-    `epoch help` prints the command set; the syntax-error example prints it
-    again; the help block prints the status vocabulary a third time. Each is a
-    **copy**, and this repository's own position is that a declared ground truth
-    with copies and no comparison is the worst of the three ways it goes wrong,
-    because it looks safe. So the comparison exists, and it is this.
-
-    Ground truth is the command table in `docs/interface.md` and the status table
-    in `docs/stretch-policy.md`. Where a copy disagrees, the table is right.
-    """
-    root = os.path.dirname(HERE)
-    iface = open(os.path.join(root, "docs", "interface.md")).read()
-    policy = open(os.path.join(root, "docs", "stretch-policy.md")).read()
-
-    truth_cmds = set(re.findall(r"^\| `((?:epoch|make) [a-z]+(?: [a-z]+)?)` \|",
-                                iface, re.M))
-    block = re.search(r"```text\n(epoch \u2014 .*?)\n```", iface, re.S)
-    truth_stat = set(re.findall(
-        r"^\| `(sleep|brainstorm|planned|staged|deployed|installed)` \|", policy, re.M))
-
-    failures = 0
-
-    def case(label, got, want):
-        nonlocal failures
-        ok = got == want
-        failures += 0 if ok else 1
-        print(("ok   " if ok else "FAIL ") + label
-              + ("" if ok else f"\n     copy has {sorted(got)}\n     table has {sorted(want)}"))
-
-    if not block:
-        print("FAIL the `epoch help` output block is not in docs/interface.md")
-        print("-- the epoch surfaces: 1 failure(s)")
-        return 1
-    helptext = block.group(1)
-
-    def part(head):
-        m = re.search(rf"^{head}(.*?)(?:\n\n|\Z)", helptext, re.S | re.M)
-        return m.group(1) if m else ""
-
-    case("`epoch help` lists exactly the commands the table defines",
-         set(re.findall(r"^  ((?:epoch|make) [a-z]+(?: [a-z]+)?)\s{2,}\S",
-                        part("commands:"), re.M)),
-         truth_cmds)
-    case("the syntax-error example accepts exactly those commands",
-         {c.strip() for c in re.search(r"accepted: (.+)", iface).group(1).split("|")},
-         truth_cmds)
-    case("`epoch help` names exactly the statuses the policy defines",
-         # the whole `status:` block, not just its first line -- a status named
-         # on a continuation line is still a copy and still has to agree
-         set(re.findall(r"[a-z]+", part("status:")))
-         & {"sleep", "brainstorm", "planned", "staged", "deployed", "installed"},
-         truth_stat)
-
-    print(f"-- the epoch surfaces: {failures} failure(s)")
+    print(f"-- the pin adoption gate: {failures} failure(s)")
     return failures
 
 
@@ -1094,8 +1017,7 @@ def main() -> int:
     failures += join_prompt_agrees()
     failures += note_forms()
     failures += protocol_report()
-    failures += epoch_gate()
-    failures += epoch_surfaces_agree()
+    failures += pin_adoption_gate()
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += install_commands()

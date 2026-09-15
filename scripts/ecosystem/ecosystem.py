@@ -523,15 +523,11 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
     **Offline and cheap on purpose.** Everything here is read off this disk, so
     any surface can render it without deciding whether it can afford to. What
     costs a network call -- whether our build is green at a commit -- is
-    deliberately not here: that is the bump gate's question and `epoch dry run`
-    is where it is asked.
+    deliberately not here: use bump_check.py when considering a new policy pin.
 
     Returned as data rather than printed, because several surfaces render it and
     a second implementation of the rendering is how they drift apart.
     """
-    sys.path.insert(0, HERE)
-    import bump_check  # noqa: PLC0415
-
     if inv is None:
         inv = {k: v for k, v in json.load(open(INVENTORY, encoding="utf-8")).items()
                if not k.startswith("_")}
@@ -561,9 +557,6 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
     except Exception:  # noqa: BLE001
         sleep_tool, clock = None, None
 
-    epoch = bump_check.current_stretch() or "?"
-    status = bump_check.current_status() or "?"
-
     def verdict(ok, unsure=False):
         return "unknown" if unsure else ("ok" if ok else "attention")
 
@@ -572,8 +565,6 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
         ("policy", f"{passing} of {len(members)} passing",
          verdict(passing == len(members), unknown > 0)),
         ("topics owed to us", str(owed), verdict(owed == 0)),
-        ("stretch", f"{epoch}, {status}",
-         verdict(status in ("deployed", "installed"), status == "?")),
         # The one indicator that is about the runner rather than the tree, and
         # the one whose value changes without anybody committing anything. It
         # is marked `attention` outside the window because the mark is the
@@ -657,8 +648,6 @@ def main() -> int:
         inv = json.load(open(INVENTORY, encoding="utf-8"))
         return protocol({k: v for k, v in inv.items() if not k.startswith("_")})
     verbose = "--verbose" in sys.argv
-    sys.path.insert(0, HERE)
-    import bump_check  # noqa: PLC0415
     inv = json.load(open(INVENTORY, encoding="utf-8"))
     rows, notes = [], []
 
@@ -667,11 +656,11 @@ def main() -> int:
             continue
         status = e.get("status", "?")
         if status in ("child", "foundation"):
-            rows.append((name, status, "-", "-", "-", "-", e.get("parent", "")))
+            rows.append((name, status, "-", "-", "-", e.get("parent", "")))
             continue
         path = locate(e.get("repo", name))
         if not path:
-            rows.append((name, status, "no checkout", "-", "-", "-", ""))
+            rows.append((name, status, "no checkout", "-", "-", ""))
             continue
         # An associate is held to none of this, so nothing here runs the checker
         # over its tree. A failure count in that row would be this table
@@ -686,8 +675,7 @@ def main() -> int:
             topics = f"{for_us} for us" if for_us else "yes"
         else:
             topics = "none"
-        rows.append((name, status, verdict, bump_check.epoch_marker(path) or "-",
-                     topics, age(path), path))
+        rows.append((name, status, verdict, topics, age(path), path))
         # Both notes name the disagreement and then say whose move it is.
         # They used to state the rule instead -- "this is the state the check
         # exists to catch" -- which explains the check to somebody who already
@@ -743,7 +731,7 @@ def main() -> int:
     w = max(len(r[0]) for r in rows) + 2
     print(f"{'tool':<{w}}{'status':<11}{'policy':<12}"
           f"{'channel':<10}{'moved':<8}where")
-    for name, status, verdict, epoch, topics, moved, where in rows:
+    for name, status, verdict, topics, moved, where in rows:
         short = where.replace(os.path.expanduser("~"), "~") if where else ""
         print(f"{name:<{w}}{status:<11}{verdict:<12}"
               f"{topics:<10}{moved:<8}{short}")
@@ -765,8 +753,7 @@ def main() -> int:
         counts[r[1]] = counts.get(r[1], 0) + 1
     members = [r for r in rows if r[1] in MEMBERS]
     passing = sum(1 for r in members if r[2] == "ok")
-    owed = sum(int(r[4].split()[0]) for r in rows if r[4].endswith("for us"))
-    here = bump_check.current_stretch() or "?"
+    owed = sum(int(r[3].split()[0]) for r in rows if r[3].endswith("for us"))
 
     #: Plurals not formed by adding an s.
     PLURAL = {"child": "children"}
@@ -780,7 +767,7 @@ def main() -> int:
     print()
     print(f"In short: {parts}; {passing} of {len(members)} members pass their "
           f"policy check, {owed} topic{'s' if owed != 1 else ''} "
-          f"{'are' if owed != 1 else 'is'} owed to us, we are in stretch {here}, "
+          f"{'are' if owed != 1 else 'is'} owed to us, "
           "and how good any of these tools actually are is a judgement kept in "
           "docs/report-card.md rather than in this table.")
     return 0

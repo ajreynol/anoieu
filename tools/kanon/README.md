@@ -112,4 +112,4 @@ cheapest thing in the office.
 
 Deleting it is governed by the handoff protocol in
 [`coherence.md`](../../docs/coherence.md#proto-20--the-handoff-protocol).
-**Deadline: it does not survive the handoff of stretch E1.**
+It stays until a person approves its removal under that protocol.

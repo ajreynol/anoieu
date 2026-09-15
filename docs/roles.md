@@ -230,7 +230,7 @@ number worth looking at, in both directions.
 
 | tool | footing | how many |
 | --- | --- | --- |
-| `anoieu` | member | 8 |
+| `anoieu` | member | 7 |
 | `cvc5` | foundation | 2 |
 | `dokimasia` | member | 1 |
 | `ethos` | candidate | 2 |
@@ -247,7 +247,7 @@ number worth looking at, in both directions.
 | `ynoia` | child of `anoieu` | 5 |
 | `zetesis` | child of `anoieu` | 0 |
 
-Twenty-eight roles across sixteen tools, and four sections empty:
+Twenty-seven roles across sixteen tools, and four sections empty:
 `workflow-launcher`, `martyria`, `zetesis` and `tekmerion` hold
 nothing, which is not an
 omission — a child project usually has no users, nothing depends on it, and it
@@ -260,12 +260,12 @@ and that one.
 
 ## anoieu
 
-*Eight responsibilities under the three headings the front page names: the
+*Seven responsibilities under the three headings the front page names: the
 analyzer and the fuzzer are the tool, the ledger and its workflow are the
 reporting system, and the remaining four are the ecosystem's shared
 arrangements. **A register counts responsibilities and a front page says what a
 repository is** — different granularities, and neither is a longer version of
-the other. Three of these have a stated destination elsewhere and have not
+the other. Two of these have a stated destination elsewhere and have not
 moved.*
 
 
@@ -389,76 +389,8 @@ evidence — and carrying both under one id hid which of them had gone stale.
 is the single rule in this ecosystem that forbids work rather than requiring it;
 the checkable half is `R4`.
 
-### R29 — the epoch command front end
-
-**Held by:** `anoieu`
-**Role:** the surface a person drives a stretch through — the commands, how they
-are recognised, what a command prints, and **the stretch feedback communication
-protocol**: the summary a person argues with, and what happens to the stretch when
-they argue with its content rather than its wording.
-**Owns:** `docs/interface.md` — the commands, the summary's shape, and the
-feedback protocol.
-**Not this role:** the machinery the commands invoke, which is `R28` — the
-feedback protocol sits here because it runs between a person and an agent, where
-the rest of that family runs between repositories; what a stretch is *for*, which is
-nobody's role and is the human's; and **the authority to move a stretch to
-`deployed`**, which is the build system's alone — the front end may carry that
-transition but never originate it.
-
-> **Consistency here is an aspiration, not an implementation.** Nothing parses a
-> command and no program enforces anything; the role is held by an agent reading a
-> prompt. Saying otherwise would be the same overclaim as calling the approval
-> block a verification.
->
-> **This is a separate role from `R28` because the two are separable, and today
-> they are not separated.** anoieu holds both: it is the front end a person types
-> at *and* the build system the commands drive. When its planned maintainer `tekton` exists it
-> takes the machinery, and the front end stays wherever a person is actually working — which
-> may be neither this repository nor that one. Writing them as two entries now is
-> what makes that a move rather than a rewrite.
-
-### R28 — the epoch build system
-
-**Held by:** `anoieu`
-**Role:** the family of communication protocols by which a stretch is verified,
-announced, approved and adopted — the global announcement, the approval block and
-its dry run, the bump gate, and the shape of the log entry. Taken together they
-are this ecosystem's **main verification system for its own governance**, which
-is a claim worth stating plainly because it is unusual: what verifies a stretch is
-a protocol, not a test suite.
-**Owns:** `scripts/ecosystem/bump_check.py`, the approval protocol in `docs/policy.md`,
-`docs/stretch-policy.md` and `scripts/ecosystem/stretch.json` — the gates, the block template,
-the dry run, the statuses, and the log's entry format.
-**Not this role:** **deciding what a stretch is *for*, which is not a role here
-at all** — it is the human's, and `R27` was allocated to this repository for it
-in error and has been deleted; whether it could ever be automated is an open
-research question this role carries rather than answers; the policy a member is checked against and the
-discussion protocol with its safety gate, both `R4`; and the low-level formats of
-the reporting loop, which koine has asked for and this must not quietly absorb.
-
-> **The standing goal, which outranks everything else this role does and always
-> will.** The protocols exist so that **the tools give evidence to the agent, and
-> the agent is properly informed** before it writes anything. Every other
-> verification here checks an artifact; this is the only one aimed at whether the
-> agent doing the work knows what it is talking about, and since agents do the
-> work it sits upstream of all of them.
->
-> It is **not verification** and the role's holder should never let it be
-> described as such — nothing is proved, and what keeps the work inside its
-> guardrails is that the loop keeps teaching us. The failure it guards against is
-> **fluency substituting for knowledge**, which is invisible from outside: a block
-> written from evidence and one written from memory read identically.
->
-> Whatever else changes about the machinery, this does not get displaced.
-
-> **Destined for `kanon`.** The protocols by which every member is
-> told what is expected of them are governance, and they should not stay in the
-> tree that also files findings against them.
->
-> **And the tool for it does not exist.** What is held here is run by hand across
-> four documents. Its **planned maintainer** is registered with
-> `ynoia` as [`tekton`](../tools/ynoia/tools.md), at the top of the priority
-> order, and it is deliberately **not** work for the current stretch.
+`R28` and `R29` were retired on 2026-09-15. Their draft is deferred to
+tekton; neither is an active responsibility or a pending role transfer.
 
 `R26` is deliberately not allocated here: koine's `D8` proposes it for the
 low-level formats of the reporting loop, and that request is open. An id claimed

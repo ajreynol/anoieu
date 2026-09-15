@@ -32,46 +32,6 @@ you cannot, it is for you, so do the work and do not narrate the check. The full
 rule, and the incident that produced it, are in
 [`policy.md`](policy.md#a-prompt-may-not-be-for-this-repository).
 
-## If somebody typed an epoch command at you
-
-**The commands and what each prints are in
-[`interface.md`](interface.md#the-commands), which is the ground truth; nothing
-is restated here.** What follows is the behaviour expected of whoever is running
-them, which lives nowhere else.
-
-**The status decides how you speak, and it is not a matter of taste.** In
-`brainstorm` explain everything — the reasoning is the product. In `staged` give
-**simple actionable requests and no implementation detail**: one thing at a time,
-fewest words that make it doable. Producing paragraphs in `staged` has slipped a
-level without saying so, and the honest response is `epoch brainstorm`, not to
-keep explaining.
-
-**A command does its one thing.** A mode switch prints the transition and stops.
-It does not also survey the ecosystem or say what should happen next — that is
-`epoch advice`, and **advice is requested and never volunteered.** Offering it
-unprompted is acting on your own reading of what would be useful, which is the
-thing the response gate forbids in the other direction.
-
-**Advice is scoped to the status**, and wandering outside it is the failure to
-watch for: research projects in `brainstorm`, how to clear the gates in `staged`,
-how it gets installed in `deployed`, **nothing at all in `installed`**.
-
-**A command may attempt a transition; you may never grant one.** The criteria
-decide, and they get stricter as the level rises: leaving `brainstorm` is a
-person's word and that is enough, because only our own files are at stake;
-reaching `deployed` is the gates and **nobody's say-so**, because other people's
-trees are. Never skip a level. Down is free and needs nobody.
-
-**You may never take the escape hatch.** You may say that a deadlock exists and
-that
-[the hatch](policy.md#the-ecosystem-never-locks-everybody-out) is the way out.
-Taking it is a person's, and being certain it is correct changes nothing.
-
-**Every field of an approval block is produced by a tool you ran in this
-session**, with the command on the line. Do not carry a value forward from an
-earlier turn — it was true then and is evidence of nothing now. A field with no
-command is `-` and counts as unverified, which sits with the failures.
-
 ## What this repository is responsible for
 
 Six things, and only two of them are the tool.
@@ -122,13 +82,13 @@ named.
 | `PROTO-6` | the reporting workflow — a defect carried to whoever owns the file | repository → repository | [`reporting-workflow.md`](reports/reporting-workflow.md) |
 | `PROTO-7` | the discussion file — everything that is not a defect report | repository → repository | [`policy.md`](policy.md) |
 | `PROTO-8` | joining, and its soft and affiliating forms | repository → ecosystem | [`policy.md`](policy.md) |
-| `PROTO-9` | the epoch family — announce, gate, approve, adopt | repository → members | [`stretch-policy.md`](stretch-policy.md) |
+| `PROTO-9` | retired — deferred with the tekton draft, 2026-09-15 | — | no active protocol |
 | `PROTO-10` | the role handoff — a responsibility changes hands, keeping its id | tool → tool | [`roles.md`](roles.md) |
 | `PROTO-11` | the documentation handoff — a launch moves a description to its source | page → page | this page |
 | `PROTO-12` | updating the report card | agent → person | `tools/stathmos/protocol.md` |
 | `PROTO-13` | the mid-stream commit note — a commit taken while work moved | agent → record | this page |
 | `PROTO-18` | **the sleep protocol** — outside the human's declared window the agent says *take a break*, once, and does the work anyway. Binds every member and changes nothing in anybody's tree | agent → human | [`interface.md`](interface.md) |
-| `PROTO-19` | **the wake protocol** — leaving `sleep` is automatic inside the window and refused outside it. There is no third outcome | clock → ecosystem | [`interface.md`](interface.md) |
+| `PROTO-19` | retired — deferred with the tekton draft, 2026-09-15 | — | no active protocol |
 | `PROTO-20` | **the handoff protocol** — a stub is deleted only once a spawned repository has proved it is what it claims. CI green on both sides, non-negotiable; any hint of fraud, reject | spawned repo → anoieu | this page |
 | `PROTO-21` | **the identify protocol** — **every** response opens with the entity the agent acts for, its mission, and **which AI is answering, by name**. The long form at session start and on request | agent → human | [`interface.md`](interface.md) |
 | `PROTO-22` | **the misc protocol** — a document too expensive to clean up now is demoted to `docs/misc/` rather than deleted or left misrepresenting itself. Discouraged, and a growing `misc/` is a symptom | page → layout | this page |
@@ -136,12 +96,7 @@ named.
 | `PROTO-24` | **the upstream refresh** — a member makes its copy of the shared arrangements current before relying on them, and only onto a green commit | member → us | this page |
 | `PROTO-25` | **the joke protocol** — humour lives on the president's front page and nowhere a machine parses or a stranger reads for instructions. Any tool may say *that's not funny*, meaning *you are confusing everyone*, and it ends there | any tool → any tool | this page |
 | `PROTO-26` | **transferring roles** — a role moves when it is marked, the target exists, and **both** repositories' CI is green. Theirs is a person's check, not a job | us → another project | this page |
-| `PROTO-27` | **verifying the install** — we can show a stretch was deployed and cannot show it was installed. Reported as *unverified*, never as installed. **Open, and the next step is asking members rather than computing it** | members → us | this page |
-
-**`PROTO-19` is the only entry in the register whose left-hand side is not a
-party.** A clock is not somebody with an interest, and that is exactly why it
-holds this one: a rule about when to stop working, adjudicated by anyone who
-wants to keep working, is not a rule.
+| `PROTO-27` | retired — deferred with the tekton draft, 2026-09-15 | — | no active protocol |
 
 **`PROTO-18` is the first entry addressed to every member rather than to
 anoieu**, because the thing it is about — a person working at four in the
@@ -150,54 +105,6 @@ least of them: its whole content is one sentence said to a person, and a member
 that honours it changes no file.** The mechanism is maintained by
 [martyria](../tools/martyria/README.md), which is where its ethics are argued
 and its schedule lives.
-
-## `PROTO-27` — verifying the install
-
-**We can show that a stretch was deployed. We cannot yet show that it was
-installed.** `deployed` means we published; `installed` means every member is
-actually upholding what it set out. **The second is a claim about other
-people's trees and this ecosystem has no way to establish it.**
-
-**Deliberately unsolved, and written down so the gap is not mistaken for an
-oversight.** The status ladder already says `installed` is *read out of members'
-trees and may never be true* — this protocol is that admission promoted to a
-place where it can be worked on.
-
-### Why it is hard, concretely
-
-- **A member's tree can carry the policy and not run it.** We see files, not
-  jobs. That a workflow exists is not that it ran, and that it ran is not that
-  it ran on the commit we care about.
-- **A pin says which commit, not which behaviour.** A member pinned to a green
-  commit of ours may still have adopted nothing from it.
-- **GitHub answers questions about runs, not about compliance.** We can read
-  whether a build passed; we cannot read whether it passed *because* of us.
-- **And asking costs something we have already ruled out.** A check of ours that
-  reaches into somebody else's CI makes our build fail for reasons in their
-  tree, which [`policy.md`](policy.md) names as how a suite becomes noise.
-
-### What is true today
-
-**Nothing verifies an install, and the honest report is *unverified*.** Not
-*installed*, not *presumed installed*, and not a number derived from how many
-members carry a file. **Unverified sits with `attention` rather than with `ok`**,
-the same rule the health summary and the bump gate already use.
-
-**What we can do and do do:** report what a member's tree looks like, report
-what its last public run concluded, and report that neither of those is an
-install.
-
-### What would move it
-
-**A member telling us**, in a form we did not compute — a line in their
-discussion file, a marker in their tree, or a reply to a global announcement
-saying which stretch they adopted. **The strongest evidence available is
-somebody else's statement about their own tree**, and we have never asked for
-one.
-
-**That is the concrete next step and it is not a program.** It is a question in
-an announcement, and the answers would be the first data anybody here has had
-about installs.
 
 ## `PROTO-26` — transferring roles to another project
 
@@ -231,9 +138,8 @@ could not ask* are different facts.
 
 ### Why it reports rather than gates
 
-**Not every target is ready** — kanon exists and has joined; tekton does not
-exist — so a job that failed on that would be red for a reason nobody can fix
-this week.
+**Not every proposed transfer is ready**, so a job that failed on that would
+be red while a human decision or handoff is still pending.
 **A check that is red for months trains everybody to ignore red**, and then the
 checks that matter are ignored too. The job is named for what it does: it
 produces a report, and **a green tick on it means only that we looked.**
@@ -349,8 +255,8 @@ nobody publishes any more**, and it will pass its own checks while doing so.
 **What it costs us, which is the part that is ours.** A member cannot refresh
 against a moving target. **Every change we publish is a refresh somebody else
 has to perform**, and that is the real price of an edit to a shared page —
-argued in [`policy.md`](policy.md), and the reason changes there are batched
-into stretches rather than shipped as they occur.
+argued in [`policy.md`](policy.md). Keep changes reviewable and avoid
+unnecessary churn for members.
 
 **And a member may only bump to a commit where our build is green**, which is
 where this protocol meets [`PROTO-20`](#proto-20--the-handoff-protocol) and the
@@ -387,14 +293,13 @@ There are currently no demoted documents.
 **A stub** is a child project whose README says: *this is a stub, delete me
 when you are convinced that my replacement is safely in the ecosystem.* It
 marks a place. **It is not the tool and it holds no claim on the name** — the
-name stays free for whoever builds it. `tools/tekton` and `tools/kanon` are the
-first two.
+name stays free for whoever builds it. `tools/kanon` is an example.
 
 **A spawned repository** is a new repository claiming to be the working
 instantiation of a stubbed tool. *Spawned* is the word for it here.
 
 **Two responsibilities, one each.** anoieu **cleans**: a stale stub is deleted,
-and no stub survives the deployment of the stretch it was made in. The spawned
+once its replacement has been accepted. The spawned
 repository **identifies itself**: the claim *I am who I say I am* is theirs to
 make and theirs to support. Neither side does the other's half.
 
@@ -526,7 +431,7 @@ they are willing to spend a turn, and anything under `prompts/` is a
 turn by definition.
 
 Data lives beside the commands that read it. `scripts/ecosystem/` groups the
-ecosystem commands with their inventory, checkout settings and stretch register.
+ecosystem commands with their inventory and checkout settings.
 The corpus dependency manifest and lock live in `scripts/` beside `deps.py`.
 `tools/` holds child projects and their own code and data.
 
@@ -580,7 +485,6 @@ acquire a second spelling.
 | `deps.lock` | `scripts/` | the commits used for the recorded corpus report |
 | `ecosystem.json` | `scripts/ecosystem/` | ecosystem membership and each project's footing |
 | `checkouts.json` | `scripts/ecosystem/` | exceptions to the inventory-derived install plan |
-| `stretch.json` | `scripts/ecosystem/` | the current stretch and its recorded state |
 
 ### `prompts/` — the prompts
 
@@ -781,8 +685,8 @@ That is the whole criterion, and it is close enough to checkable to argue with:
   runs the checker that decides it.
 - **Another repository quotes it.** `reporting-policy.md` is shared with
   dokimasia, so a change there changes a position somebody else publishes.
-- **A tool consumes it as ground truth.** `stretch-policy.md`'s status table and
-  the command table are compared against their copies by the suite.
+- **A tool consumes it as ground truth.** The joining prompt in `policy.md`
+  is compared against its executable copy by the suite.
 - **Or it governs everything else here**, which is `vision.md` and `laws.md`
   and nothing else.
 
@@ -1044,7 +948,7 @@ in order. Where something genuinely cannot be made comprehensible in one go,
 make it in pieces that each can be, and say which piece is which.
 
 This is the authorship half of *go only as fast as you understand*, which is
-stated in [`stretch-policy.md`](stretch-policy.md) and governs how much is
+stated in [`instructions.md`](instructions.md#inst-3--do-not-outrun-your-own-understanding) and governs how much is
 attempted. This one governs how it is written, and it is the half an agent
 controls directly: an agent is fast enough to produce, in an afternoon, more
 change than a person can read in a week, and nothing about that is caught by

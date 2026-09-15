@@ -25,9 +25,9 @@ addressed is a person at all.
 | | what you do |
 | --- | --- |
 | [`INST-1`](#inst-1--your-working-window) | set your working hours, once, and let us hold you to them |
-| [`INST-2`](#inst-2--ask-who-you-are-talking-to) | type *identify* whenever you want to know which tool the agent thinks it is working for |
+| [`INST-2`](#inst-2--every-answer-says-who-it-is-from) | type *identify* whenever you want to know which tool the agent thinks it is working for |
 | [`INST-3`](#inst-3--do-not-outrun-your-own-understanding) | do not push development faster than you understand it |
-| [`INST-4`](#inst-4--picking-it-back-up) | two commands that tell you where everything stands |
+| [`INST-4`](#inst-4--picking-it-back-up) | the command that tells you where everything stands |
 
 Ids stay put. A withdrawn one stays listed, so nobody reuses the number.
 
@@ -41,19 +41,8 @@ breaks inside them.
 **Do it in daylight.** The urge to keep going turns up later than the judgement
 about whether to.
 
-Outside your hours, four things:
-
-- we go to `sleep`, and any tool can put us there;
-- once a session, you get told to take a break;
-- **you still get your answer** — nothing is withheld or slowed down;
-- asking to come back early is refused rather than argued about.
-
-Next time you turn up inside your hours, you get a greeting, a question about
-whether you want to change them, and a note on where things stand. **That
-question is asked then and at no other time.**
-
-Coming back also starts you at the bottom — whatever was in progress, you climb
-again from `brainstorm`. Worth knowing when you pick the hours.
+Outside your hours, you get a reminder to take a break, once a session.
+You still get your answer; nothing is withheld or slowed down.
 
 **Doing research? Say so, and it stays quiet for the session.** It is yours to
 say; no tool decides that for you.
@@ -66,7 +55,6 @@ python3 tools/martyria/sleep.py
 
 That prints your window and where you stand in it. The schedule is the small
 file beside it — a start, an end, any breaks, and optionally your timezone.
-`epoch sleep` and `epoch wake` say the same thing to the build system.
 
 **Two things it cannot do.** It cannot stop you. And it does not know how much
 you have worked — only what time it is.
@@ -123,7 +111,7 @@ party that cannot make it.*
 
 ## `INST-4` — picking it back up
 
-**Two commands. Start here after a break.**
+**Start here after a break.**
 
 ```text
 ./scripts/ecosystem/status_eo
@@ -133,12 +121,6 @@ One line per tool: what footing it is on, whether our checks pass on it, how
 many topics it has addressed to you, and when it last moved. `status_eo --help`
 says what every column and every value means, and what to do about a failing
 row. **It ends in a single sentence summarising all of it.**
-
-```text
-epoch status
-```
-
-Where the current stretch stands and what the next step would take.
 
 ### How to read the answer
 

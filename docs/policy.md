@@ -63,7 +63,7 @@ What it asks of a repository, none of it enforced:
 | `tools/` | child projects, with their own code and data |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
 | `scripts/` | commands, helpers and their data: generators, checks, the runner, and executable versions of workflows the documents define |
-| `scripts/ecosystem/` | ecosystem commands and their inventory, checkout settings and stretch register |
+| `scripts/ecosystem/` | ecosystem commands and their inventory and checkout settings |
 | `prompts/` | the workflows that hand context to an assistant, kept apart so that running a command never means deciding to spend a turn. Top level rather than under `scripts/`, so a reader can see the two are different kinds of thing without opening a directory. A convention worth copying, not required |
 | `deps/` | other people's repositories, fetched by a run and never committed |
 | `.github/workflows/` | what runs on every push |
@@ -479,7 +479,7 @@ out of it takes precedence over whatever rule produced it.
 
 **Every gate here fails closed, and each one is right to.** The bump gate
 refuses when it cannot verify. The response gate refuses without a named topic.
-Nothing creates a repository, sends a message, or moves a stretch to `deployed`.
+Nothing creates a repository or sends a message automatically.
 Each is individually correct.
 
 **Fail-closed is safe locally and dangerous in aggregate.** Ten gates that each
@@ -499,7 +499,7 @@ point of failure the design cannot see.
 **A person may override any gate in this ecosystem, at any time, by saying so.**
 Three properties and no others:
 
-1. **It always exists.** No policy, stretch, protocol or check may remove it,
+1. **It always exists.** No policy, protocol or check may remove it,
    and a rule that would is void on its face.
 2. **It is a person's, never an agent's.** An agent may *point out* that a
    deadlock exists and that the hatch is the way out. It may not take it, and
@@ -539,8 +539,7 @@ with a block stating, in a fixed template, exactly what is being approved.**
 **It reads like a CI check** — one field per line, a verdict beside each, and a
 single line at the bottom saying whether the gates pass. That shape is scannable
 in three seconds, diffable between two runs, and makes a *specific* claim rather
-than a summary. The fields and their order are fixed per kind of approval; the
-stretch form is in [`stretch-policy.md`](stretch-policy.md).
+than a summary. The fields and their order should make clear what the person is approving.
 
 **The block reports the gates; it does not grant the approval.** A bottom line
 of `READY` means the mechanical checks pass, never that anybody has agreed.
@@ -588,8 +587,7 @@ Stating the discipline plainly is the whole of the defence, together with the
 property that makes it worth having: a specific, sourced claim can be refuted in
 one command, where a paragraph of prose cannot.
 
-**And it is recorded.** The block goes into the artifact the approval was for —
-for a stretch, the log entry.
+**And it is recorded.** The block goes into the artifact the approval was for.
 
 ## The discussion file
 
@@ -776,12 +774,9 @@ automatically* — said in the one place it is easiest to forget, because an
 announcement written to everybody reads like a mailing that has already gone
 out. It has not. Nothing here sends anything.
 
-**A covering note is a suggestion with a date on it.** What a stretch is and
-what designing the next one involves are in
-[`stretch-policy.md`](stretch-policy.md); what a stretch actually carried, and
-the note recommended with it, are in [`history.md`](history.md). Nothing in that
-account is an instruction: who is told, when, in what words, and whether at all
-is the same person's decision as everything else in this section.
+**A covering note is a suggestion with a date on it.** Earlier notes are kept
+in [`history.md`](history.md). They are not current instructions: who is told,
+when, in what words, and whether at all remains a person's decision.
 
 ### Who may address whom
 
@@ -1119,60 +1114,9 @@ anything beside it; do not weaken it quietly.
 
 ## The handoff policy
 
-> **For the president, and for nobody else.** No member is held to anything in
-> this section and nothing here is checked in anybody's CI. It is in this
-> document because handoff is the one act whose effects land in other
-> people's trees.
-
-**A stretch's entry in [`history.md`](history.md) is that stretch's commit.**
-One atomic record of what happened, which either lands or does not. Handing off
-without a sound entry is committing with an empty message and the checks turned
-off.
-
-**A person hands off a stretch, by hand.** There was a script; it was deleted on 2026-09-15.
-It checked four gates and then edited two files, which made it look as though
-handing off were a command somebody runs — and handing off is the one act in this
-ecosystem whose effects land in other people's trees. **A step that consequential
-should cost a person an afternoon rather than a command**, and the script was
-saving an afternoon that nobody should want saved. Each gate below still holds;
-what changed is that a human checks it and a human makes the edit.
-
-Four a program can answer, with the command that answers each:
-
-1. **The incoming president is a `member`.** An office cannot be handed to a
-   repository that has not joined the thing it would preside over.
-2. **The stretch is `staged`** in [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json).
-   Handing off is only reachable from there, and a person moves it.
-3. **Our own policy check passes.** Nothing is published from a tree that fails
-   its own checks — `python3 scripts/ecosystem/policy_check.py`.
-4. **Our build is green at the commit members would adopt** — and
-   **unverifiable is a refusal, not a pass.** A member may only bump to a green
-   commit, so handing off without knowing publishes a commit nobody may adopt.
-   `python3 scripts/ecosystem/bump_check.py --rev <sha>`.
-
-**A failed gate is a stop, not a warning**, and there is no override short of
-the escape hatch every gate here has: a person may proceed, having said so and
-written down why.
-
-Four nobody can decide but a person:
-
-5. **The entry reads as a record somebody who was not there could follow.**
-6. **The three questions are answered, with reasons and not verdicts** — and if
-   none of the three answers is uncomfortable, they were answered by reflex.
-7. **Both tables are present and the residue is named.** A partition that closes
-   on the first attempt was more likely rounded than right.
-8. **The working summary was kept current, not reconstructed at the close.**
-
-*Reasonable* is the weakest word here, so it is given edges. An entry is not
-reasonable if a figure in it cannot be re-derived by somebody else from the
-repository and the public record; if *what went wrong* is empty; if it says
-something about a project outside this ecosystem without the caveats the page's
-own banner requires; or if a `FIXME` is still in it.
-
-**Gates 5 to 8 are self-administered.** The maintainer writes the entry, judges
-whether it is reasonable, and hands off, and nobody else reads it first — so four
-of the eight constraints are a promise rather than a gate. This is the strongest
-argument for the offices that do not exist yet.
+Role handoffs follow [`roles.md`](roles.md#how-a-role-is-handed-off);
+replacement of a stub follows [`PROTO-20`](coherence.md#proto-20--the-handoff-protocol).
+Anoieu's history and letters remain here under [LAW 4](laws.md#law-4--the-president-writes-historymd-in-its-own-repository-and-a-letter-to-its-successor).
 
 ## Joining the Eunoia ecosystem
 
@@ -1453,33 +1397,6 @@ is not asked about pinning, one with no child projects is not asked about
 charters, and one with no discussion file is not asked about the response gate.
 The run prints what it skipped and why, so *passing* never reads as more
 coverage than it was.
-
-### Say which advice you built against — encouraged, never required
-
-**A second marker, beside the pin, saying which *stretch* of this ecosystem's
-advice your development was done against:**
-
-```yaml
-        env:
-          ANOIEU_REV: 441b562     # the checker this repository is held to
-          EUNOIA_EPOCH: E1        # the advice this repository was built against
-```
-
-**These are two different facts and they are allowed to disagree.** The pin says
-what mechanically checks you and is a hard dependency. The stretch says which
-version of the *overall advice we maintain* you were working from. You can pin
-an old commit having read the current advice, or the reverse.
-
-**Nothing reads it and nothing ever should.** It is provenance for a **reader** —
-somebody looking at a tree and wanting to know which set of conventions its
-author had in front of them, which is otherwise unrecoverable and is the first
-thing that makes an old repository confusing.
-
-**It is a coordinate and nothing more.** It does not enrol you in anything and
-carries none of the machinery behind the word — see
-[`epoch-analogy.md`](epoch-analogy.md) for what a stretch is by analogy to a
-build, and [`stretch-policy.md`](stretch-policy.md) if you want the rest, which
-you are not expected to want.
 
 ### What we do not promise
 

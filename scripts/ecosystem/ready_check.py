@@ -3,9 +3,8 @@
 
 **Temporary, on purpose, and built so that it cannot quietly become
 permanent.** It exists so that opening this repository on the web answers *what
-is the next thing to do* without anybody reading a board. It is wired to two CI
-jobs whose names are the whole point: `Ready - init_eo kanon` and
-`Ready - init_eo tekton`.
+is the next thing to do* without anybody reading a board. It is wired to the
+`Ready - init_eo kanon` CI job.
 
 **A missing stub is a failure, not a pass.** When a spawned repository proves
 itself and the stub is deleted under the handoff protocol, this goes red and the
