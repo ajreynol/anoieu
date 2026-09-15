@@ -42,7 +42,7 @@ anywhere it could be read as one, the person is meant.
 
 **Nothing major happens without a person doing it.** No commit, no push, no
 repository, no message to another project, no change of footing, no handover of
-the office, no deployment. Several of those are reserved for a person by an
+the office, no handoff. Several of those are reserved for a person by an
 explicit rule and the rest are reserved by the plain fact that an agent is
 invoked, does what it was asked, and stops.
 

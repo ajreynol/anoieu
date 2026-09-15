@@ -809,7 +809,8 @@ understanding something yet is a reason to slow down **and** a thing to go and
 fix; a stretch held back for a reason nobody can state is not caution, it is the
 diagnosis-without-treatment failure this ecosystem is already criticised for.
 
-[The science-fiction essay in aisthesis](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md) is the sibling rule and the two are
+The science-fiction essay in [aisthesis](https://github.com/ajreynol/aisthesis)
+is the sibling rule and the two are
 easy to confuse. That page limits how far ahead we may **plan**; this limits how
 fast we may **move**. Neither limits how ambitious the work is allowed to be.
 

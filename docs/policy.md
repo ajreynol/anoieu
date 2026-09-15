@@ -1117,21 +1117,21 @@ of what it was for, and then nobody dares delete it.
 adds on joining is a contract with us rather than a check of their own. Add
 anything beside it; do not weaken it quietly.
 
-## The deployment policy
+## The handoff policy
 
 > **For the president, and for nobody else.** No member is held to anything in
 > this section and nothing here is checked in anybody's CI. It is in this
-> document because deployment is the one act whose effects land in other
+> document because handoff is the one act whose effects land in other
 > people's trees.
 
 **A stretch's entry in [`history.md`](history.md) is that stretch's commit.**
-One atomic record of what happened, which either lands or does not. Deploying
+One atomic record of what happened, which either lands or does not. Handing off
 without a sound entry is committing with an empty message and the checks turned
 off.
 
-**A person deploys, by hand.** There was a script; it was deleted on 2026-09-15.
+**A person hands off a stretch, by hand.** There was a script; it was deleted on 2026-09-15.
 It checked four gates and then edited two files, which made it look as though
-deploying were a command somebody runs — and deploying is the one act in this
+handing off were a command somebody runs — and handing off is the one act in this
 ecosystem whose effects land in other people's trees. **A step that consequential
 should cost a person an afternoon rather than a command**, and the script was
 saving an afternoon that nobody should want saved. Each gate below still holds;
@@ -1142,12 +1142,12 @@ Four a program can answer, with the command that answers each:
 1. **The incoming president is a `member`.** An office cannot be handed to a
    repository that has not joined the thing it would preside over.
 2. **The stretch is `staged`** in [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json).
-   Deploying is only reachable from there, and a person moves it.
+   Handing off is only reachable from there, and a person moves it.
 3. **Our own policy check passes.** Nothing is published from a tree that fails
    its own checks — `python3 scripts/ecosystem/policy_check.py`.
 4. **Our build is green at the commit members would adopt** — and
    **unverifiable is a refusal, not a pass.** A member may only bump to a green
-   commit, so deploying without knowing publishes a commit nobody may adopt.
+   commit, so handing off without knowing publishes a commit nobody may adopt.
    `python3 scripts/ecosystem/bump_check.py --rev <sha>`.
 
 **A failed gate is a stop, not a warning**, and there is no override short of
@@ -1170,7 +1170,7 @@ something about a project outside this ecosystem without the caveats the page's
 own banner requires; or if a `FIXME` is still in it.
 
 **Gates 5 to 8 are self-administered.** The maintainer writes the entry, judges
-whether it is reasonable, and deploys, and nobody else reads it first — so four
+whether it is reasonable, and hands off, and nobody else reads it first — so four
 of the eight constraints are a promise rather than a gate. This is the strongest
 argument for the offices that do not exist yet.
 

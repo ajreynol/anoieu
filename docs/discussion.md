@@ -394,8 +394,8 @@ inside the other said the opposite.
 
 **If you keep yours where it is, that is a fine answer** and this notice
 closes. If you move it, check paths assembled at run time as well as literal
-references. The [worked example](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/ai-novelty.md#a-worked-example-moving-one-directory)
-is preserved in aisthesis.
+references. The worked example is preserved in
+[aisthesis](https://github.com/ajreynol/aisthesis).
 
 **Any URL you hold that points into our `scripts/prompts/` will 404.** We know
 of two we published ourselves and have fixed those.

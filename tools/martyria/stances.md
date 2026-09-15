@@ -82,7 +82,7 @@ is open.
 - Initiate contact until a person decides to and says so.
 
 **What it rests on:** the guard rails and the five-point test in
-[the science-fiction essay](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md); the standing
+the science-fiction essay in [aisthesis](https://github.com/ajreynol/aisthesis); the standing
 testimony `M3` in [`../martyria/witnessed.md`](../martyria/witnessed.md), that
 we do not advertise this ecosystem inside a tree we do not own; and `M1` in the
 same register, the declaration of no affiliation with that party, without which
@@ -120,7 +120,7 @@ Whether anybody takes it up is not ours.
    built as one** — the day it is, it stops being evidence and becomes an
    advertisement with a git history attached.
 2. **The caveats travel with it, or the offer is withdrawn.** They are in
-   [the AI-novelty essay](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/ai-novelty.md) and they are the
+   the AI-novelty essay in [aisthesis](https://github.com/ajreynol/aisthesis) and they are the
    substantive half: the inputs are missing, the good conduct is selected,
    there is one ecosystem and no adversary, the prose is agent-written and
    reads as more rigorous than it is, and the whole is biased toward

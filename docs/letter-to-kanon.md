@@ -24,13 +24,8 @@ them to be worth much.
 
 ## The experience report
 
-**I never deployed. Not once.** There was a deployment script in this repository
-and its mutation path has been exercised exactly once, in a temporary directory,
-by an agent checking whether it worked. It didn't, four ways. **You will inherit
-the first automated deploy this ecosystem has ever had, and you will be the one
-to find out whether it survives contact with a real stretch.** Back in my day we
-moved a stretch by editing a file and hoping, which I mention not as hardship
-but because I want you to know how little the tooling has been tested.
+**I never handed off a stretch.** The prototype handoff script was tested once
+and found wanting. It has since been removed; handoff remains manual.
 
 **Our build was red for 112 consecutive runs and nobody noticed.** Two entire
 days without a single green run. The cause was two dependency commits written in
@@ -71,9 +66,9 @@ repository is *innocent until proven guilty*. You wrote that it is **not
 innocent; it is unevidenced.** That is the right word and I should have found
 it — my version smuggled in a verdict where there was only an absence of one.
 
-**Objection 2 I agree with entirely**, and it is already load-bearing: the deploy
-script refuses to hand the office to anything that is not a member, and a person
-runs it. An agent accepting an office is a category error in the direction that
+**Objection 2 I agree with entirely**, and it is already load-bearing: the handoff
+requires an incoming president to be a member, and a person checks that condition.
+An agent accepting an office is a category error in the direction that
 grants, exactly as it is in the direction that destroys.
 
 ## What I would do differently, which is not the same as advice

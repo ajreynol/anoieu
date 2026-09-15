@@ -501,9 +501,7 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 
 **Research removed from this tree — 2026-09-15.** The local copies of
 `science-fiction.md` and `misc/ai-novelty.md` were removed after confirming that
-aisthesis had committed copies at `98a09c2`:
-[science fiction](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md)
-and [AI novelty](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/ai-novelty.md).
+[aisthesis](https://github.com/ajreynol/aisthesis) had copies.
 `misc/linker.md` and `misc/methodology.md` were retired, not transferred; their
 earlier contents remain in git. `docs/misc/` no longer holds any files.
 
@@ -614,16 +612,16 @@ essays have been removed locally and are no longer pending items in this handoff
 
 ### What is handed on
 
-- **`E1` has not been deployed.** It has been `planned` for the whole stretch.
+- **`E1` has not been handed off.** It has been `planned` for the whole stretch.
 - **The joining requirement is still one nobody has satisfied**, which is why
   this repository grades itself poorly on delivery.
 - **Two published URLs 404** as a result of moving the prompts directory, and
   copies already sent to other repositories cannot be recalled.
 
-**And three things the next president must not assume.** That `E1` was deployed
-— it was not, and the stretch log still says `planned`. That the deploy script
-works — its mutation path has run once, in a temporary directory, and four
-defects were found in that single run. That the figures on this page were
+**And three things the next president must not assume.** That `E1` was handed off
+— it was not, and the stretch log still says `planned`. That the handoff is
+automated — the prototype script was removed, and the handoff is manual.
+That the figures on this page were
 audited — **they were produced by the party they describe.**
 
 ### Evidence
