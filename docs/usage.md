@@ -20,13 +20,13 @@ Both spellings are the same program; the examples below use the first.
 ## The rest of the ecosystem
 
 anoieu reports on other people's repositories, so a checkout of this one on its
-own has nothing to read. [`scripts/install_eo`](../scripts/install_eo) is what
+own has nothing to read. [`scripts/ecosystem/install_eo`](../scripts/ecosystem/install_eo) is what
 fetches the rest, and it is the first thing to run on a new machine:
 
 ```bash
-scripts/install_eo                   # clone what is not here yet
-scripts/install_eo --dry-run         # ... or print those commands and run none
-scripts/install_eo --status          # ... or say what is here, and what disagrees
+scripts/ecosystem/install_eo                   # clone what is not here yet
+scripts/ecosystem/install_eo --dry-run         # ... or print those commands and run none
+scripts/ecosystem/install_eo --status          # ... or say what is here, and what disagrees
 ```
 
 **It installs, and `--dry-run` is how you look first** — what the dry run prints
@@ -78,7 +78,7 @@ install that advertised those would be a list of things to go and not find.
 Every tool is printed with **what the ecosystem records about it** — member,
 candidate or served — because *whose repository is this, and on what footing* is
 the question somebody cloning several trees is asking. The words come from
-[`../tools/ecosystem.json`](../tools/ecosystem.json), where a status is a
+[`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json), where a status is a
 decision somebody records rather than a measurement, and `--status` prints the
 same vocabulary as a legend under its table. The commands themselves are printed
 **live rather than commented out**: an inert dump would be a different text from
@@ -97,9 +97,9 @@ the one a real run executes, and the whole point of this one is that it is not.
 | `--dry-run` | print the commands and run none of them |
 | `--no-repos-local` | do not touch `scripts/repos.local` |
 
-What to clone is derived from [`../tools/ecosystem.json`](../tools/ecosystem.json),
+What to clone is derived from [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json),
 so a tool added to the inventory is fetched without anything else being edited.
-`--status` reports where the inventory, the clone list, `tools/deps.json` and
+`--status` reports where the inventory, the clone list, `scripts/deps.json` and
 `scripts/repos.local` disagree, and repairs none of it. The sequence for adding a
 tool is in [`coherence.md`](coherence.md#what-happens-when-we-add-a-new-tool-to-the-ecosystem).
 
@@ -377,9 +377,9 @@ ETHOS=<ethos>/build/src/ethos \
 python3 scripts/sweep.py <dir>...            # run over a corpus: crashes and counts
 python3 scripts/gen_checks_doc.py            # rewrite docs/checks.md from the registry
 python3 scripts/landing.py --check           # did what we closed on a promise land?
-scripts/install_eo                         # install the rest of the ecosystem
-scripts/install_eo --dry-run               # ... or print them and run none
-scripts/install_eo --status                # ... or say what of it is on this machine
+scripts/ecosystem/install_eo                         # install the rest of the ecosystem
+scripts/ecosystem/install_eo --dry-run               # ... or print them and run none
+scripts/ecosystem/install_eo --status                # ... or say what of it is on this machine
 ETHOS=<ethos>/build/src/ethos \
   python3 scripts/oracle_desugar.py          # the desugarer against ethos, case by case
 ```

@@ -56,7 +56,7 @@ write_repos_file() {
 # works -- a checkout under a different name, or several checkouts of one
 # project where only one of them is the one you answer findings from.
 #
-# The projects tools/deps.json tracks, as examples. Uncomment and correct:
+# The projects scripts/deps.json tracks, as examples. Uncomment and correct:
 #
 #     ethos       ~/src/ethos
 #     logos       ~/src/logos

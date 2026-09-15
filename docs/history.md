@@ -261,7 +261,7 @@ the method that produced it is named so the same mistake is visible next time.
 
 **The footings are not one thing.** *Member*, *candidate*, *foundation* and
 *child* are four different relationships, and the register that matters is
-`tools/ecosystem.json` rather than the word *membership*. **A fifth,
+`scripts/ecosystem/ecosystem.json` rather than the word *membership*. **A fifth,
 `associate`, is drafted and unused** — see `laws.md`, where entering is set out
 properly.
 
@@ -404,7 +404,7 @@ evidence beside them, because a stretch entry that only lists difficulties is
 as unreliable as one that only lists wins.
 
 1. **Another repository's build depends on our checker, and has for days.**
-   `scripts/policy_check.py --root` runs in **three** members' CI. That is a
+   `scripts/ecosystem/policy_check.py --root` runs in **three** members' CI. That is a
    published interface with somebody else's build hanging off it — the hardest
    kind of thing to have, and the one that cannot be claimed without their
    trees agreeing.
@@ -434,19 +434,32 @@ as unreliable as one that only lists wins.
 
 The 15 Python scripts and helpers at the top of `tools/` moved to `scripts/`.
 They generate reports, run checks or support commands; none launches an
-assistant. Assistant launchers live in `prompts/`. The dependency manifests and
-lock, ecosystem inventory, checkout settings, stretch register and child projects
-remain in `tools/`.
+assistant. Assistant launchers live in `prompts/`. The first move left the
+dependency manifests and lock, ecosystem inventory, checkout settings and stretch
+register in `tools/` alongside the child projects.
+
+**Extended the same day:** data moved beside its scripts. `scripts/ecosystem/`
+now groups the eight ecosystem commands and helpers with `ecosystem.json`,
+`checkouts.json` and `stretch.json`. The corpus's `deps.json` and `deps.lock`
+moved to `scripts/`, beside `deps.py`. `tools/` now holds child projects and
+their own code and data. `scripts/repos.local` remains the shared, untracked
+checkout map for commands and prompts.
 
 CI commands, test imports, wrappers, prompts and documentation now use the new
 paths. References in this account also use the current locations. The script
 table and layout description now cover the generators and checks alongside the
 existing workflow commands.
 
-The published policy-check command is now `python3 scripts/policy_check.py`.
+The published policy-check command is now `python3 scripts/ecosystem/policy_check.py`.
 A member adopting a commit with this move must update the command in its workflow
 together with its anoieu pin; a workflow pinned to an older commit keeps using
 the path at that commit.
+
+**Simplified the same day:** the ecosystem's separate release number was
+removed from the stretch register, along with its reader, check and version
+table. A stretch is named by its `E1`-style id; members pin the commit they
+adopt. Package metadata and data-format versions serve their own purposes and
+remain independent of the stretch.
 
 ### What moves, where it goes, and what does not
 
@@ -471,7 +484,7 @@ one row; its internal registers travel with it.
 | [`history.md`](history.md) | this file. **It stays here** under LAW 4; the earlier rule that moved it with the office is withdrawn |
 | [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
 | [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
-| [`stretch-policy.md`](stretch-policy.md) + [`../tools/stretch.json`](../tools/stretch.json) | what a stretch is, and which one we are in |
+| [`stretch-policy.md`](stretch-policy.md) + [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) | what a stretch is, and which one we are in |
 | [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
 | [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
 | [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
@@ -492,15 +505,15 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 
 | what | what it does |
 | --- | --- |
-| [`../tools/ecosystem.json`](../tools/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
-| [`../scripts/ecosystem.py`](../scripts/ecosystem.py) + [`../scripts/status_eo`](../scripts/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
-| [`../scripts/install_eo`](../scripts/install_eo) + [`../tools/checkouts.json`](../tools/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
+| [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
+| [`../scripts/ecosystem/ecosystem.py`](../scripts/ecosystem/ecosystem.py) + [`../scripts/ecosystem/status_eo`](../scripts/ecosystem/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
+| [`../scripts/ecosystem/install_eo`](../scripts/ecosystem/install_eo) + [`../scripts/ecosystem/checkouts.json`](../scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
 | [`../prompts/join_eo`](../prompts/join_eo), [`../prompts/check_join_eo`](../prompts/check_join_eo), [`../prompts/confirm_eo`](../prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
-| [`../prompts/init_eo`](../prompts/init_eo), [`../prompts/welcome_eo`](../prompts/welcome_eo), [`../scripts/near.py`](../scripts/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
+| [`../prompts/init_eo`](../prompts/init_eo), [`../prompts/welcome_eo`](../prompts/welcome_eo), [`../scripts/ecosystem/near.py`](../scripts/ecosystem/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
 | [`../prompts/global_audit`](../prompts/global_audit), [`../prompts/process_discussion`](../prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
-| [`../scripts/bump_check.py`](../scripts/bump_check.py) + [`../tools/stretch.json`](../tools/stretch.json) | the epoch machinery: the register of which stretch we are in, and the gate a member bumps through. **Closing a stretch is done by hand** — the script that did it was deleted on 2026-09-15 |
-| [`../scripts/transfer_check.py`](../scripts/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
-| [`../scripts/ready_check.py`](../scripts/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
+| [`../scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py) + [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) | the epoch machinery: the register of which stretch we are in, and the gate a member bumps through. **Closing a stretch is done by hand** — the script that did it was deleted on 2026-09-15 |
+| [`../scripts/ecosystem/transfer_check.py`](../scripts/ecosystem/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
+| [`../scripts/ecosystem/ready_check.py`](../scripts/ecosystem/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
 **Moving to aisthesis: the AI research.** Both pages take *this ecosystem* as
 their subject and ask what is actually novel about building one this way. **That
@@ -525,11 +538,11 @@ rather than carried with it: it was demoted because it was not load-bearing
 | what | why it stays |
 | --- | --- |
 | `anoieu/`, `anoieu_fuzz/`, `tests/` | the analyzer, the fuzzer, and the evidence they rest on. The thing the ecosystem was built to serve |
-| [`../tools/deps.json`](../tools/deps.json), `deps.lock`, [`../scripts/deps.py`](../scripts/deps.py) | the corpus the analyzer is measured on, fetched and pinned |
+| [`../scripts/deps.json`](../scripts/deps.json), `deps.lock`, [`../scripts/deps.py`](../scripts/deps.py) | the corpus the analyzer is measured on, fetched and pinned |
 | [`../scripts/run.py`](../scripts/run.py), [`../scripts/sweep.py`](../scripts/sweep.py), [`../scripts/oracle_desugar.py`](../scripts/oracle_desugar.py) | the run: refresh the sources, measure them, record what came back |
 | `scripts/gen_checks_doc.py`, `gen_corpus_table.py`, `gen_open_findings.py` | the generators of the documents a run writes |
 | [`../scripts/landing.py`](../scripts/landing.py) | the landing audit — whether a finding closed as *fixed upstream* actually landed. It is about the ledger, so it stays with the ledger |
-| [`../scripts/policy_check.py`](../scripts/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
+| [`../scripts/ecosystem/policy_check.py`](../scripts/ecosystem/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
 | [`../prompts/check_anoieu`](../prompts/check_anoieu), [`../prompts/process_anoieu`](../prompts/process_anoieu) | findings out, and answers back |
 | [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |
 | [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
@@ -710,7 +723,7 @@ qualification on everything above.
 **Moved here on 2026-09-14 from `docs/stretches.md`, which has been deleted.**
 That file kept a covering note per stretch beside three fields
 a deploy gated on, under a banner saying it was under no obligation to
-be current. The fields are now `tools/stretch.json`; this is the rest, and it
+be current. The fields are now `scripts/ecosystem/stretch.json`; this is the rest, and it
 belongs in the account rather than in a register.
 
 **What it carried:** footings recorded on two axes instead of one; the
@@ -913,7 +926,7 @@ arrives by the presidency moving rather than by anybody designing it.
 exist yet; a stub holds its place and CI carries a job saying whether it is
 ready to be started*, and said that Stretch 2 could not open before kanon did.
 The repository was created and **joined as a member on 2026-09-14** —
-[`../tools/ecosystem.json`](../tools/ecosystem.json) records it, and its tree
+[`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) records it, and its tree
 passes the policy check. **So the readiness check is no longer what stands
 between the two stretches.** What does is the office actually moving, which is a
 person editing one line of the registry and somebody carrying the files kanon

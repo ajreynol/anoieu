@@ -55,9 +55,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python3 scripts/policy_check.py
+      - run: python3 scripts/ecosystem/policy_check.py
       # Who is in the ecosystem is a decision a person records in
-      # tools/ecosystem.json, and a decision nobody re-checks goes stale
+      # scripts/ecosystem/ecosystem.json, and a decision nobody re-checks goes stale
       # silently: three tools joined and the file said `candidate` for as long
       # as nobody happened to look. The first step reads the file as a document
       # about itself and needs nothing else. The second fetches each member's
@@ -66,14 +66,14 @@ jobs:
       # a remote it cannot reach is reported rather than counted against
       # anybody.
       - name: the inventory is well formed
-        run: python3 scripts/ecosystem.py --check
+        run: python3 scripts/ecosystem/ecosystem.py --check
       - name: and who has joined is current
-        run: python3 scripts/ecosystem.py --check --online
+        run: python3 scripts/ecosystem/ecosystem.py --check --online
 
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a
   # change that invents a false positive fails *this* build rather than theirs.
-  # The sources are cloned by the run itself, from tools/deps.json — shallow and
+  # The sources are cloned by the run itself, from scripts/deps.json — shallow and
   # sparse, and never built, because the analysis reads text.
   corpus:
     runs-on: ubuntu-latest
@@ -87,7 +87,7 @@ jobs:
       # not list, and never when the file lists something they no longer report.
       # Closing a finding is a judgement made by a review step, not by a diff —
       # see "How this file is maintained" in docs/reports/open-findings.md.
-      # --pinned restores the commits tools/deps.lock records rather than each
+      # --pinned restores the commits scripts/deps.lock records rather than each
       # branch tip, so this job depends on nothing but this repository: it goes
       # red when a check changes what it reports, never because somebody
       # upstream pushed. Moving to the tips is the refresh job below.
@@ -122,7 +122,7 @@ jobs:
       # The lock is the ground truth for which commit of somebody else's tree
       # this job builds against, and the workflow follows it rather than
       # restating it. It used to restate it: the two commits were written here
-      # *and* in tools/deps.lock, with nothing comparing them, taken knowingly
+      # *and* in scripts/deps.lock, with nothing comparing them, taken knowingly
       # as B20. They then drifted, both of them, and the check that found it was
       # added afterwards for an unrelated reason. That is the whole argument for
       # this step -- a copy with no comparison is drift that has not happened
@@ -132,7 +132,7 @@ jobs:
         run: |
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json
-          for name, v in json.load(open("tools/deps.lock")).items():
+          for name, v in json.load(open("scripts/deps.lock")).items():
               if not name.startswith("_"):
                   print(f"{name}={v['commit']}")
           PY
@@ -248,7 +248,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: kanon is ready to be started
-        run: python3 scripts/ready_check.py kanon
+        run: python3 scripts/ecosystem/ready_check.py kanon
 
   ready-tekton:
     name: Ready — init_eo tekton
@@ -257,7 +257,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: tekton is ready to be started
-        run: python3 scripts/ready_check.py tekton
+        run: python3 scripts/ecosystem/ready_check.py tekton
 
   # Reports, never gates. Every target is *not ready* today -- neither exists --
   # so a job that failed on that would be red for a reason nobody can fix this
@@ -273,7 +273,7 @@ jobs:
       - name: can roles move yet
         run: |
           for t in kanon tekton; do
-            python3 scripts/transfer_check.py "$t" || true
+            python3 scripts/ecosystem/transfer_check.py "$t" || true
             echo
           done
 
@@ -297,7 +297,7 @@ jobs:
             docs/reports/corpus.md
             docs/reports/open-findings.md
             docs/reports/closed-findings.md
-            tools/deps.lock
+            scripts/deps.lock
       - name: say whether upstream moved
         run: |
           if git diff --quiet; then

@@ -8,7 +8,7 @@ Three steps, in order:
 1. **Sync.** Every project a report is about is cloned into `deps/` and updated
    from its remote — shallow, sparse, and managed by us. Nothing reads a
    checkout somebody else owns, so a report is a property of named commits
-   rather than of the machine it was generated on. `tools/deps.json` says which
+   rather than of the machine it was generated on. `scripts/deps.json` says which
    projects, which refs, and which paths of each; changing a ref there changes
    what the report is a report of.
 2. **Measure.** `docs/reports/corpus.md`, rewritten whole: the commits that were read,
@@ -97,7 +97,7 @@ def render_corpus(synced: list, rows: list) -> str:
         "the commit this file is committed in, and is deliberately not written here:",
         "recording it would make the file stale the moment it was committed.",
         "",
-        "The clones are shallow and sparse: only the paths `tools/deps.json` names",
+        "The clones are shallow and sparse: only the paths `scripts/deps.json` names",
         "are checked out, and nothing is built, because the analysis reads text.",
         "",
         corpus_mod.render(rows),
@@ -168,7 +168,7 @@ def main() -> int:
     item(f"{measured} of {len(rows)} corpora measured")
     written = [
         (CORPUS, "docs/reports/corpus.md", render_corpus(synced, rows)),
-        (deps_mod.LOCK, "tools/deps.lock", deps_mod.render_lock(synced)),
+        (deps_mod.LOCK, "scripts/deps.lock", deps_mod.render_lock(synced)),
     ]
     for path, label, text in written:
         current = open(path).read() if os.path.isfile(path) else ""
@@ -202,8 +202,8 @@ def main() -> int:
     if astray and args.check:
         print(
             f"error: could not restore {', '.join(astray)} at the commit "
-            "tools/deps.lock records, so nothing below was measured against what "
-            "the report claims. Fix the pin or the ref in tools/deps.json; "
+            "scripts/deps.lock records, so nothing below was measured against what "
+            "the report claims. Fix the pin or the ref in scripts/deps.json; "
             "running the generator here would only record the shortfall.",
             file=sys.stderr,
         )

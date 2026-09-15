@@ -150,7 +150,7 @@ pin on account of this topic.
 
 ```text
 git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
-python3 /tmp/anoieu/scripts/policy_check.py --root .
+python3 /tmp/anoieu/scripts/ecosystem/policy_check.py --root .
 ```
 
 **And if we have this wrong, it is ours to fix.** A check that fires on something
@@ -721,11 +721,11 @@ adoption, and nowhere else. dokimasia's `scripts/bump_anoieu` is already the
 right shape for it.
 
 **We wrote the check so that four of you do not.**
-[`scripts/bump_check.py`](../scripts/bump_check.py), in our tree, fetched with the
+[`scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py), in our tree, fetched with the
 policy checker you already clone:
 
 ```text
-python3 /tmp/anoieu/scripts/bump_check.py --root .
+python3 /tmp/anoieu/scripts/ecosystem/bump_check.py --root .
 ```
 
 It reads your own `ANOIEU_REV`, asks about that commit, and exits `0` to adopt,
@@ -984,7 +984,7 @@ than after it is in force.
 
 ### What changed
 
-`tools/ecosystem.json` recorded four footings on what turned out to be one scale.
+`scripts/ecosystem/ecosystem.json` recorded four footings on what turned out to be one scale.
 It now records five on two, because what a repository **owes us** and what we
 **say about it** were never the same question:
 

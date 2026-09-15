@@ -37,13 +37,13 @@ One thing in this ecosystem has actually crossed the boundary and is running in
 other people's builds. It is worth describing exactly, because everything below
 is a generalisation of it and of nothing else.
 
-**`scripts/policy_check.py`, fetched at a pinned commit and run by the member.**
+**`scripts/ecosystem/policy_check.py`, fetched at a pinned commit and run by the member.**
 In their own workflow, a member clones this repository at a commit they chose,
 checks it out, and runs the checker against their own tree:
 
     ANOIEU_REV: <a commit of anoieu>
     git clone ... /tmp/anoieu && git -C /tmp/anoieu checkout "$ANOIEU_REV"
-    python3 /tmp/anoieu/scripts/policy_check.py --root .
+    python3 /tmp/anoieu/scripts/ecosystem/policy_check.py --root .
 
 Six properties make that work, and they are the whole of the method:
 
@@ -56,7 +56,7 @@ Six properties make that work, and they are the whole of the method:
 | **the interface is tested here** | `tests/run.py` runs the checker against a synthetic compliant tree and a synthetic non-compliant one, so the published surface is exercised at home rather than trusted |
 | **it prints what it cannot decide** | every run lists the rules no program can settle, so a pass never reads as more coverage than it was |
 
-**And one negative property, which is load-bearing.** `scripts/bump_check.py` —
+**And one negative property, which is load-bearing.** `scripts/ecosystem/bump_check.py` —
 the program that decides whether a member *may* move their pin — **must never
 run in CI**, because it reads a remote and a build that can change colour
 without a commit cannot be evidence. It is a command a person runs at the moment

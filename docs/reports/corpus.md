@@ -22,7 +22,7 @@ Produced by anoieu `0.2.0`. Which commit of anoieu produced it is
 the commit this file is committed in, and is deliberately not written here:
 recording it would make the file stale the moment it was committed.
 
-The clones are shallow and sparse: only the paths `tools/deps.json` names
+The clones are shallow and sparse: only the paths `scripts/deps.json` names
 are checked out, and nothing is built, because the analysis reads text.
 
 ## The counts

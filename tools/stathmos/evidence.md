@@ -22,7 +22,7 @@ Ledger: the two findings files. Landing: `python3 scripts/landing.py --check`.
 
 ## anoieu
 
-**Adoption, and it is the strongest row on this page.** `scripts/policy_check.py`
+**Adoption, and it is the strongest row on this page.** `scripts/ecosystem/policy_check.py`
 runs in **three trees other than its own** — dokimasia, koine, eudaimonia — one
 workflow each, pinned. Something outside does behave differently because it
 exists, and this is the one place that is true mechanically rather than by
@@ -80,7 +80,7 @@ for.
 ## logos
 
 **It gave us three defects in our own machinery**, by hand, and all three were
-confirmed by our own audit afterwards: two in `scripts/policy_check.py`, and the
+confirmed by our own audit afterwards: two in `scripts/ecosystem/policy_check.py`, and the
 finding that **the joining step cannot be completed correctly** because the pin
 it asks for may only move to a commit our CI is green at and no such commit
 exists.

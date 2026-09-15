@@ -295,7 +295,7 @@ correction gets more expensive every stretch and never gets cheaper.**
   is the tool that should produce them and has not been asked.
 
 **What it rests on:** the role counts in `roles.md`; the entity fields in
-`board.md`; the member list in `tools/ecosystem.json`; the public CI run
+`board.md`; the member list in `scripts/ecosystem/ecosystem.json`; the public CI run
 history; and the joining moments recorded in the inventory. All five are
 re-derivable by anybody with the repository.
 

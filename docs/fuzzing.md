@@ -391,7 +391,7 @@ refuses and logos accepts, and all three are the same fact about logos ignoring
 `include` or reading a term more loosely. One reproducer per *cause* is what the
 ledger is for; one per bucket would be filing the same thing three times.
 
-> **None of it is confirmed against the commits `tools/deps.lock` records.** It
+> **None of it is confirmed against the commits `scripts/deps.lock` records.** It
 > was produced against the binaries on the machine the fuzzer was written on —
 > ethos 0.2.3 from a local build, logos from a local `lake build`. Re-run each
 > reproducer against a pinned build before it is carried anywhere; that is what

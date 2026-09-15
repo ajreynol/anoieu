@@ -86,7 +86,7 @@ any explanation. `anoieu_fuzz/checkers.py:classify` is where that line is drawn,
 and it is drawn on what the checker said rather than on how it exited.
 
 The reproducer is committed beside this finding. Confirm it against a build of
-the commit `tools/deps.lock` records before filing it: a crash in somebody's
+the commit `scripts/deps.lock` records before filing it: a crash in somebody's
 working tree is not news.
 """,
 )

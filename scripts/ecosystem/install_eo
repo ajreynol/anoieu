@@ -3,9 +3,9 @@
 
 Three views of one list, so they cannot drift apart:
 
-    scripts/install_eo                 # clone what is not here yet
-    scripts/install_eo --dry-run       # ... or print the commands, run nothing
-    scripts/install_eo --status        # ... or say what is on this machine
+    scripts/ecosystem/install_eo                 # clone what is not here yet
+    scripts/ecosystem/install_eo --dry-run       # ... or print the commands, run nothing
+    scripts/ecosystem/install_eo --status        # ... or say what is on this machine
 
 **It installs, and `--dry-run` is how you look first.** What the dry run prints
 is exactly what a real run executes, so reading it is a review rather than a
@@ -34,25 +34,25 @@ installs normally and the install *says so*, with the one command that gets you
 the newer copy. Nobody is put on a branch they did not choose, and nothing is
 withheld because a directory inside it moves faster than its default branch.
 
-The list is derived from `tools/ecosystem.json`: every entry that is not a child
+The list is derived from `scripts/ecosystem/ecosystem.json`: every entry that is not a child
 project carries a url and a repo id, and the clone follows from them. Adding a
 tool to the inventory is therefore the whole of adding it here.
-`tools/checkouts.json` holds only the exceptions -- a branch that is not the
+`scripts/ecosystem/checkouts.json` holds only the exceptions -- a branch that is not the
 default, a clone flag, a repo somebody has to decide about -- and nothing has to
 be edited for the ordinary case.
 
 Membership stays a decision a person makes: this file reads
-`tools/ecosystem.json` and never writes it. Where the inventory, the clone list,
-`tools/deps.json` and `scripts/repos.local` disagree, `--status` says so under
+`scripts/ecosystem/ecosystem.json` and never writes it. Where the inventory, the clone list,
+`scripts/deps.json` and `scripts/repos.local` disagree, `--status` says so under
 `note:` and repairs nothing.
 
 Choosing what to include:
 
-    scripts/install_eo --run ethos koine     # just these
-    scripts/install_eo --role member         # by recorded status
-    scripts/install_eo --exclude cvc5        # all but
-    scripts/install_eo --missing             # what is not here yet
-    scripts/install_eo --with-optional       # include the opt-in ones
+    scripts/ecosystem/install_eo --run ethos koine     # just these
+    scripts/ecosystem/install_eo --role member         # by recorded status
+    scripts/ecosystem/install_eo --exclude cvc5        # all but
+    scripts/ecosystem/install_eo --missing             # what is not here yet
+    scripts/ecosystem/install_eo --with-optional       # include the opt-in ones
 
 An id is a repo id or any inventory id it provides, so `ethos-eoc` selects the
 one ethos tree that carries both.
@@ -69,11 +69,10 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-TOOLS = os.path.join(ROOT, "tools")
-CHECKOUTS = os.path.join(TOOLS, "checkouts.json")
-INVENTORY = os.path.join(TOOLS, "ecosystem.json")
-DEPS = os.path.join(TOOLS, "deps.json")
+ROOT = os.path.dirname(os.path.dirname(HERE))
+CHECKOUTS = os.path.join(HERE, "checkouts.json")
+INVENTORY = os.path.join(HERE, "ecosystem.json")
+DEPS = os.path.join(ROOT, "scripts", "deps.json")
 REPOS_FILE = os.environ.get("ANOIEU_REPOS_FILE",
                             os.path.join(ROOT, "scripts", "repos.local"))
 
@@ -104,7 +103,7 @@ def inventory() -> dict:
 def status_meanings() -> dict:
     """What each membership status means, from the file that defines them.
 
-    Read out of `tools/ecosystem.json`'s own comment rather than restated here,
+    Read out of `scripts/ecosystem/ecosystem.json`'s own comment rather than restated here,
     so a status whose meaning is edited there does not go on being advertised
     the old way. Best effort: if that block is reworded past recognition this
     returns nothing and the views print the bare status.
@@ -144,7 +143,7 @@ class Repo:
         self.args = list(over.get("args", []))
         self.opt_in = over.get("opt_in", "")
         self.why = over.get("why", "") or what
-        self.recorded = bool(statuses)       # in tools/ecosystem.json at all
+        self.recorded = bool(statuses)       # in scripts/ecosystem/ecosystem.json at all
         self.children = list(children or [])  # child projects living in this tree
 
     @property
@@ -166,7 +165,7 @@ class Repo:
 
 def plan() -> list[Repo]:
     """Every tree to clone: the inventory, grouped by repository, plus anything
-    `tools/checkouts.json` names that the inventory does not carry yet."""
+    `scripts/ecosystem/checkouts.json` names that the inventory does not carry yet."""
     conf = load(CHECKOUTS)
     over = conf.get("overrides", {})
     order = conf.get("order", [])
@@ -582,7 +581,7 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
         notes += [f"{r.key}: {w}" for w in why]
         rows.append((r.key, r.label(), cell, age(path) if here else "-", path))
         if not r.recorded:
-            notes.append(f"{r.key} is fetched here and is not in tools/ecosystem.json: "
+            notes.append(f"{r.key} is fetched here and is not in scripts/ecosystem/ecosystem.json: "
                          "a status is a decision, so somebody still owes one")
         for c in r.covers:
             if c in mapped and os.path.abspath(mapped[c]) != os.path.abspath(path):
@@ -598,11 +597,11 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
             child_refs = {c["branch"] for c in r.elsewhere}
             wanted = "" if pinned in child_refs else (default_branch(path) if here else "")
             if wanted and pinned != wanted:
-                notes.append(f"{r.key}: tools/deps.json reports on {pinned}, "
+                notes.append(f"{r.key}: scripts/deps.json reports on {pinned}, "
                              f"and the ecosystem works on {wanted}")
             if here and git(path, "rev-parse", "--verify", "--quiet",
                             f"origin/{pinned}")[0] != 0:
-                notes.append(f"{r.key}: tools/deps.json reports on {pinned}, and this "
+                notes.append(f"{r.key}: scripts/deps.json reports on {pinned}, and this "
                              f"checkout has no origin/{pinned} -- gone from the "
                              "remote, or never fetched")
 
@@ -646,7 +645,7 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
     if shown and whole and meanings:
         print()
         print("what the status column says about membership of the Eunoia "
-              "ecosystem, from\ntools/ecosystem.json, where it is a decision "
+              "ecosystem, from\nscripts/ecosystem/ecosystem.json, where it is a decision "
               "somebody records rather than a measurement:")
         for st in shown:
             said = meanings.get(st, "").split(". ")[0]
@@ -658,7 +657,7 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
             print(f"note: {n}")
     print()
     print("What a checkout says, and nothing about what is in it. Membership and "
-          "policy are\n`python3 scripts/ecosystem.py`; whether a tool is any good "
+          "policy are\n`python3 scripts/ecosystem/ecosystem.py`; whether a tool is any good "
           "is not a thing either prints.")
     return 0
 
@@ -702,8 +701,8 @@ def main() -> int:
 
     inv, everything = inventory(), plan()
     for u in unknown(everything, args.ids):
-        print(f"note: {u} is in neither tools/ecosystem.json nor "
-              "tools/checkouts.json, so nothing here fetches it. An inventory "
+        print(f"note: {u} is in neither scripts/ecosystem/ecosystem.json nor "
+              "scripts/ecosystem/checkouts.json, so nothing here fetches it. An inventory "
               "entry -- status, repo, url, what -- is what puts it on the list.")
     # The status view shows the whole list: a row you did not ask about is how
     # you find out something is missing.

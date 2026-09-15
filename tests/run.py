@@ -134,7 +134,7 @@ def witness_coverage() -> None:
 
 def manifest_agrees() -> int:
     """The sources the report is generated from are named in three places —
-    `tools/deps.json`, the targets in `scripts/gen_corpus_table.py`, and the lock
+    `scripts/deps.json`, the targets in `scripts/gen_corpus_table.py`, and the lock
     a run writes. A name that appears in one and not the others makes a corpus
     silently unmeasured, which reads exactly like a corpus with no findings. So
     check it here, where no network is needed."""
@@ -199,14 +199,14 @@ def manifest_agrees() -> int:
 
 
 def inventory_well_formed() -> int:
-    """`tools/ecosystem.json` read as a document about itself.
+    """`scripts/ecosystem/ecosystem.json` read as a document about itself.
 
-    The offline half of `scripts/ecosystem.py --check`, run here so that editing
+    The offline half of `scripts/ecosystem/ecosystem.py --check`, run here so that editing
     the inventory fails at the moment somebody edits it rather than in CI. The
     other half asks each remote whether what we record is still true, and needs
     a network, so it stays a CI step and is not run from the suite.
     """
-    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "scripts"))
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "scripts", "ecosystem"))
     import ecosystem  # noqa: PLC0415
 
     inv = {k: v for k, v in json.load(open(ecosystem.INVENTORY)).items()
@@ -238,12 +238,12 @@ def inventory_well_formed() -> int:
         f.write(f"anoieu {root}\n")
     env = dict(os.environ, ANOIEU_REPOS=os.path.join(HERE, "no-such-dir"),
                ANOIEU_REPOS_FILE=mapping)
-    out = subprocess.run([sys.executable, os.path.join(root, "scripts", "ecosystem.py")],
+    out = subprocess.run([sys.executable, os.path.join(root, "scripts", "ecosystem", "ecosystem.py")],
                          capture_output=True, text=True, env=env, timeout=120)
     os.remove(mapping)
     if out.returncode != 0 or not re.search(rf"^anoieu\s+{re.escape(footing)}\s",
                                             out.stdout, re.M):
-        print(f"FAIL scripts/ecosystem.py with no arguments exited {out.returncode}: "
+        print(f"FAIL scripts/ecosystem/ecosystem.py with no arguments exited {out.returncode}: "
               f"{(out.stderr or out.stdout).strip().splitlines()[-1:]}")
         bad = bad + ["the default mode"]
     # The key under the table is a copy: it names every footing, and what a
@@ -282,7 +282,7 @@ def inventory_well_formed() -> int:
         env = dict(os.environ, ANOIEU_REPOS=os.path.join(lim, "none"),
                    ANOIEU_REPOS_FILE=mapping)
         got = subprocess.run(
-            [sys.executable, os.path.join(root, "scripts", "ecosystem.py")],
+            [sys.executable, os.path.join(root, "scripts", "ecosystem", "ecosystem.py")],
             capture_output=True, text=True, env=env, timeout=120).stdout
         for label, ok in (
                 ("a president missing a file it needs is reported in limbo",
@@ -302,7 +302,7 @@ def inventory_well_formed() -> int:
     # key printed under every table is the bulk of the output of a command that
     # is run often. Getting either wrong is invisible from the other.
     help_out = subprocess.run(
-        [sys.executable, os.path.join(root, "scripts", "ecosystem.py"), "--help"],
+        [sys.executable, os.path.join(root, "scripts", "ecosystem", "ecosystem.py"), "--help"],
         capture_output=True, text=True, timeout=60)
     for label, want in (("--help prints the key", "key\n" in help_out.stdout),
                         ("--help exits 0", help_out.returncode == 0),
@@ -335,7 +335,7 @@ def inventory_well_formed() -> int:
 
 
 def install_commands() -> int:
-    """`scripts/install_eo` installs with `git clone`, and with nothing else.
+    """`scripts/ecosystem/install_eo` installs with `git clone`, and with nothing else.
 
     It is the one command in this repository that changes a machine outside it,
     so what it may execute is checked rather than promised. Three questions, all
@@ -350,7 +350,7 @@ def install_commands() -> int:
     import io  # noqa: PLC0415
     from contextlib import redirect_stdout  # noqa: PLC0415
 
-    path = os.path.join(os.path.dirname(HERE), "scripts", "install_eo")
+    path = os.path.join(os.path.dirname(HERE), "scripts", "ecosystem", "install_eo")
     loader = importlib.machinery.SourceFileLoader("install_eo", path)
     spec = importlib.util.spec_from_loader("install_eo", loader)
     mod = importlib.util.module_from_spec(spec)
@@ -632,7 +632,7 @@ def join_prompt_agrees() -> int:
     the only thing this repository hands to somebody who is joining *nothing*, so
     a sentence in one that has drifted is a claim made on a repository that never
     agreed to anything here. The affiliating one is the note an `associate`
-    carries, and `scripts/ecosystem.py --check --online` reads that note back off
+    carries, and `scripts/ecosystem/ecosystem.py --check --online` reads that note back off
     their README -- so a drift there desynchronises a prompt from a check in
     somebody else's tree.
     """
@@ -661,7 +661,7 @@ def note_forms() -> int:
 
     A member's declaration and the two things a prospective associate might be
     asked for are all a paragraph in somebody else's README, and
-    `scripts/ecosystem.py` tells them apart from a remote. Getting that wrong is
+    `scripts/ecosystem/ecosystem.py` tells them apart from a remote. Getting that wrong is
     not a failed build: it is this repository recording a footing that is not
     true, about a repository that never agreed to anything.
 
@@ -673,7 +673,7 @@ def note_forms() -> int:
     of them fails this test rather than silently changing what a footing means.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "scripts"))
+    sys.path.insert(0, os.path.join(root, "scripts", "ecosystem"))
     import policy_check  # noqa: PLC0415
 
     doc = open(os.path.join(root, "docs", "policy.md")).read()
@@ -730,7 +730,7 @@ def note_forms() -> int:
 
 
 def protocol_report() -> int:
-    """`scripts/ecosystem.py --protocol` reports the right column for each tree.
+    """`scripts/ecosystem/ecosystem.py --protocol` reports the right column for each tree.
 
     The readers are witnessed above; this is the wiring around them, which is the
     half that had never produced a `yes` when it was written. It runs offline
@@ -743,7 +743,7 @@ def protocol_report() -> int:
     repository grading somebody against a rule that does not exist.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "scripts"))
+    sys.path.insert(0, os.path.join(root, "scripts", "ecosystem"))
     import ecosystem  # noqa: PLC0415
 
     doc = open(os.path.join(root, "docs", "policy.md")).read()
@@ -795,7 +795,7 @@ def protocol_report() -> int:
 
 
 def epoch_gate() -> int:
-    """`scripts/bump_check.py` refuses everything that is not a finished green run.
+    """`scripts/ecosystem/bump_check.py` refuses everything that is not a finished green run.
 
     This is the gate a downstream member puts in front of adopting a stretch, so
     the expensive direction is **letting something through**: a member that
@@ -807,7 +807,7 @@ def epoch_gate() -> int:
     network is a test nobody runs.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "scripts"))
+    sys.path.insert(0, os.path.join(root, "scripts", "ecosystem"))
     import bump_check  # noqa: PLC0415
 
     def run(name, status="completed", conclusion="success"):
@@ -847,7 +847,7 @@ def epoch_gate() -> int:
         failures += 0 if ok else 1
         print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
 
-    # the version markers the internal tools read
+    # the stretch markers the internal tools read
     open(os.path.join(wf, "anoieu.yml"), "a").write("          EUNOIA_EPOCH: E7\n")
     marks = [
         ("reads a recorded epoch marker", bump_check.epoch_marker(tmp) == "E7"),
@@ -856,8 +856,6 @@ def epoch_gate() -> int:
         ("reads the current stretch from the register",
          re.fullmatch(r"E\d+", bump_check.current_stretch(root) or "") is not None),
         ("reads its status", bool(bump_check.current_status(root))),
-        ("and the version it is to be published as",
-         re.fullmatch(r"[0-9.]*", bump_check.current_version(root)) is not None),
         ("reports a missing register as unknown, never as a value",
          bump_check.current_stretch(tmp) == ""
          and bump_check.current_status(tmp) == ""),
@@ -964,7 +962,7 @@ def adoption_interface() -> int:
          True, "ungated", 1),
     )
 
-    checker = os.path.join(os.path.dirname(HERE), "scripts", "policy_check.py")
+    checker = os.path.join(os.path.dirname(HERE), "scripts", "ecosystem", "policy_check.py")
     failures = 0
     tmp = tempfile.mkdtemp(prefix="anoieu-adopt-")
     try:

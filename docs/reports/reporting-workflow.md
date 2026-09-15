@@ -75,7 +75,7 @@ Three obligations follow, and they are on us rather than on anybody upstream.
    here was an artefact of the harness rather than a defect — a mutated
    `include` pointing at a file that had never existed.
 2. **Confirm against a pinned build before filing.** A crash in whatever binary
-   was on the machine that found it is not news. `tools/deps.lock` records the
+   was on the machine that found it is not news. `scripts/deps.lock` records the
    commit the rest of the report is measured against; a `FUZ` row filed upstream
    should have been reproduced against a build of it, and the row should say so.
 3. **A disagreement has no owner until somebody gives it one.** The generated
@@ -645,7 +645,7 @@ stopping halfway is safe and the next run picks up whatever is left.
 
 ```text
 Bring the whole report up to date. This is a sweep over every open row in
-docs/reports/open-findings.md, across every project tools/deps.json tracks. It will take
+docs/reports/open-findings.md, across every project scripts/deps.json tracks. It will take
 a while. Work one row at a time and leave the record consistent after each, so
 that stopping partway is safe.
 
@@ -962,7 +962,7 @@ Three steps, each printing what it did:
    property of named commits rather than of the machine that produced it.
 2. **Measure.** [`corpus.md`](corpus.md), rewritten whole: the ref, commit and
    date of each project, and what the checks report on it.
-   [`../tools/deps.lock`](../../tools/deps.lock) records the same commits in full,
+   [`../scripts/deps.lock`](../../scripts/deps.lock) records the same commits in full,
    for a machine. A finding is only true of a version, and the rows in the
    report carry none of their own.
 3. **Findings.** [`open-findings.md`](open-findings.md), appended to.
@@ -992,7 +992,7 @@ about six megabytes and takes a few seconds to create. The one thing that does
 need a built ethos is the differential oracle (`tests/run.py --oracle`), which is
 a separate job.
 
-What is read, and what is deliberately not, is [`tools/deps.json`](../../tools/deps.json):
+What is read, and what is deliberately not, is [`scripts/deps.json`](../../scripts/deps.json):
 
 | project | ref | what we read | what we do not |
 | --- | --- | --- | --- |

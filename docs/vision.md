@@ -26,7 +26,7 @@ is **who is able to settle a question.**
 Policy states facts about a tree: where a file goes, what the README ends with,
 what a child project may import, whether the lock file that pins a measurement
 exists. A program can decide every one of those without holding an opinion, and
-one does — [`scripts/policy_check.py`](../scripts/policy_check.py), on every push. When it goes red
+one does — [`scripts/ecosystem/policy_check.py`](../scripts/ecosystem/policy_check.py), on every push. When it goes red
 something is wrong in a way nobody has to be persuaded of, which is the entire
 value of putting it in CI.
 
@@ -264,7 +264,7 @@ there.
 Six exchanges that have already happened. They are listed because a tenet with
 no instances is a preference, and because the shape of a real exchange is more
 instructive than the rule abstracted from it. Everything below is as of the
-commits [`deps.lock`](../tools/deps.lock) records — cvc5 `aee8742`, ethos `3cf1c03`,
+commits [`deps.lock`](../scripts/deps.lock) records — cvc5 `aee8742`, ethos `3cf1c03`,
 logos `47f29bf`, eudaimonia `45e34e0` — and re-measurable from them.
 
 ### The tools
@@ -630,7 +630,7 @@ absence of that somebody.
 | where a reader arrives | `README.md`, and it must be sufficient on its own |
 | what on that page is fixed | the purpose and the caveat; results move as fast as they arrive |
 | who may strengthen a claim | a person, asked directly, with the evidence attached |
-| what enforces the policy | `scripts/policy_check.py`, in CI |
+| what enforces the policy | `scripts/ecosystem/policy_check.py`, in CI |
 | what enforces the vision | nothing, deliberately — it is argued, not checked |
 | what governs a deliverable | [`../docs/reports/reporting-policy.md`](reports/reporting-policy.md), [`../docs/reports/reporting-workflow.md`](reports/reporting-workflow.md) |
 | where speculative work goes instead | a child project, `tools/X/`, under [`policy.md`](policy.md) |
@@ -652,7 +652,7 @@ on what a paragraph there is allowed to be. Everything on this page governs it
 unchanged — argued and never checked, and a person changes a paragraph — and it
 was split out because it is the half that moves: the tenets are stable, and the
 grading is re-done every round against the commits
-[`deps.lock`](../tools/deps.lock) records.
+[`deps.lock`](../scripts/deps.lock) records.
 
 ## The paper, and the reader nobody here writes for
 

@@ -42,7 +42,7 @@ hand-maintained; being in this section is what once made it look disposable.
 | document | its job |
 | --- | --- |
 | [`open-findings.md`](reports/open-findings.md) | **every finding currently reported**, one row each. *Additive* — see the caution below |
-| [`closed-findings.md`](reports/closed-findings.md) | **internal, and NOT generated** — it is written by the review step and only *read* by the generator, which skips every id in it. **It is the ledger of verdicts and cannot be reconstructed**: delete it and every settled finding is reported to its project again, including the ones somebody already declined. It is listed here because it lives beside the other two, and `scripts/policy_check.py` deliberately leaves it out of its generated list |
+| [`closed-findings.md`](reports/closed-findings.md) | **internal, and NOT generated** — it is written by the review step and only *read* by the generator, which skips every id in it. **It is the ledger of verdicts and cannot be reconstructed**: delete it and every settled finding is reported to its project again, including the ones somebody already declined. It is listed here because it lives beside the other two, and `scripts/ecosystem/policy_check.py` deliberately leaves it out of its generated list |
 | [`corpus.md`](reports/corpus.md) | **what was measured, and what the checks reported on it**: the commits each project was restored to, and the counts taken from them. *Rewritten whole* |
 | [`checks.md`](checks.md) | **one page per check** — what it reports, what it assumes, and what it deliberately does not. Rendered from the registry, so a page cannot drift from the code beside it. *Rewritten whole* |
 
@@ -66,7 +66,7 @@ somebody has to know to look for.
 
 | document | its job |
 | --- | --- |
-| [`policy.md`](policy.md) | **how a repository is arranged**: the layout, the maintenance note every README ends with, and the rules for child projects. Machine-checked by `scripts/policy_check.py` on every push |
+| [`policy.md`](policy.md) | **how a repository is arranged**: the layout, the maintenance note every README ends with, and the rules for child projects. Machine-checked by `scripts/ecosystem/policy_check.py` on every push |
 | [`vision.md`](vision.md) | **what AI-assisted development is aiming at**: six tenets, and the record of what the ecosystem's tools have actually delivered to one another. Argued, never checked — the dividing line is stated on the page |
 | [`report-card.md`](report-card.md) | **how each tool stands against those tenets**, in the register its own README chooses, graded at the commits the lock records. Governed by `vision.md` and split out of it because it is the half that moves — a paragraph is still changed by a person, and it binds nobody |
 
@@ -76,11 +76,11 @@ a question about somebody's intent, a notice that something here is moving under
 them. Its format, and the reason it is kept apart from the findings ledger, are
 in [`policy.md`](policy.md#the-discussion-file).
 
-`python3 scripts/ecosystem.py` prints the ecosystem as a table — who is in it,
+`python3 scripts/ecosystem/ecosystem.py` prints the ecosystem as a table — who is in it,
 whether each passes the policy check, and how long since anything moved. Local,
 about a second, no assistant involved.
 
-[`../scripts/install_eo`](../scripts/install_eo) is the same ecosystem from the
+[`../scripts/ecosystem/install_eo`](../scripts/ecosystem/install_eo) is the same ecosystem from the
 other side, and the first command to run on a new machine: it clones the rest of
 the ecosystem into siblings of this checkout. `--dry-run` prints exactly the
 commands a run would execute — only `git clone`, which the suite checks — and

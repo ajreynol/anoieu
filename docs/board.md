@@ -47,7 +47,7 @@ Each item carries the same fields, in the same order:
 | field | what it holds |
 | --- | --- |
 | **Task** | one line: what is being maintained, not how |
-| **Entities** | the repositories involved, by the ids in [`../tools/ecosystem.json`](../tools/ecosystem.json) — `anoieu`, `cvc5`, `ethos`, `ethos-eoc`, `logos`, `eudaimonia`, `dokimasia`, `koine`, and the child projects `sapheneia`, `ynoia`, `euthyna`. No other name is an entity |
+| **Entities** | the repositories involved, by the ids in [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) — `anoieu`, `cvc5`, `ethos`, `ethos-eoc`, `logos`, `eudaimonia`, `dokimasia`, `koine`, and the child projects `sapheneia`, `ynoia`, `euthyna`. No other name is an entity |
 | **Status** | `ready`, `in progress`, `waiting on <entity>`, `blocked on <what>`, `not started`, or `parked` — plus one clause saying since when or on what |
 | **Channel** | how the prompts below reach the entities they name: `discussion`, `findings`, `upstream, by a person`, or `internal`. The section after this one is what each means |
 | **Next** | the single next issue to fix. One thing, not a plan |
@@ -117,7 +117,7 @@ is the only source of that in the ecosystem. **It has been promoted out of
 eudaimonia into a repository of its own**, which removes the child-of-a-child
 shape our inventory validator rejects and closes the harder of the two remedies
 below. **It is still in no register**: it has no entry in
-[`../tools/ecosystem.json`](../tools/ecosystem.json), so nothing that reads the
+[`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json), so nothing that reads the
 inventory can find it.
 **Entities:** `anoieu`, `epikrisis`
 **Status:** **half closed.** The promotion happened and was eudaimonia's to
@@ -172,7 +172,7 @@ passed — which is what the handoff protocol requires before anything is
 handed over. It says the paperwork is not in the way, and nothing about
 whether the tool should be built. **The job is temporary**: it asserts its
 own stub exists, so deleting the stub turns it red and the only repair is
-to delete the job. See `scripts/ready_check.py`.
+to delete the job. See `scripts/ecosystem/ready_check.py`.
 **Stub:** `tools/tekton/` holds the place, under the handoff protocol in
 [`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
 and not a claim on the name. **It does not survive E1's deployment**: either a
@@ -219,7 +219,7 @@ passed — which is what the handoff protocol requires before anything is
 handed over. It says the paperwork is not in the way, and nothing about
 whether the tool should be built. **The job is temporary**: it asserts its
 own stub exists, so deleting the stub turns it red and the only repair is
-to delete the job. See `scripts/ready_check.py`.
+to delete the job. See `scripts/ecosystem/ready_check.py`.
 **Stub:** `tools/kanon/` holds the place, under the handoff protocol in
 [`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
 and not a claim on the name. **It does not survive E1's deployment**: either a
@@ -236,14 +236,14 @@ commit our own gate refuses is the same problem seen from the other end.
 
 ## B20 — the two commits drifted, exactly as this row was watching for
 
-**Task:** `.github/workflows/ci.yml` and `tools/deps.lock` both named the ethos
+**Task:** `.github/workflows/ci.yml` and `scripts/deps.lock` both named the ethos
 and cvc5 commits, and nothing compared them. Taken deliberately rather than
 building the version that reads the lock, because the alternative was holding up
 a finished stretch for an elegant fix. **This row existed to measure what that
 cost.**
 **Entities:** `anoieu`
 **Status:** **settled, 2026-09-02.** The workflow now reads both commits out of
-`tools/deps.lock` and the duplicates are gone.
+`scripts/deps.lock` and the duplicates are gone.
 **Channel:** **internal** — nothing to send.
 **Next:** nothing. Kept for the result rather than the task.
 **Prompt — `anoieu`:** none. If a third copy of a dependency's commit is ever
@@ -282,7 +282,7 @@ that plus the paragraph naming this ecosystem — and write it into
 [`policy.md`](policy.md) as in force.
 **Prompt — `anoieu`:** do not record either as an associate until the protocol is
 decided; `proposed:` is the field that holds the intention, and
-`scripts/ecosystem.py --protocol` is the report. When it is decided, the section in
+`scripts/ecosystem/ecosystem.py --protocol` is the report. When it is decided, the section in
 `policy.md` stops saying *drafted, and not in force* and the two entries move in
 one commit.
 **Prompt — `ethos`:** we would like to record you as an associate: a footing that
@@ -569,13 +569,13 @@ it.
 **Next:** decide whether the fix is to relativise the seed at promotion time or
 to widen the check to tracked non-Markdown files. Probably both.
 **Prompt — `anoieu`:** the promoter should record a seed as a repository-relative
-path or as the corpus name, never as an absolute one, and `scripts/policy_check.py`
+path or as the corpus name, never as an absolute one, and `scripts/ecosystem/policy_check.py`
 should look outside `*.md` for the same pattern it already forbids there.
 **HUMAN FEEDBACK:**
 
 ## B14 — nothing schedules a run, so the report is as fresh as somebody's memory
 
-**Task:** `scripts/run.py` is run by hand. A ref in `tools/deps.json` pointed at a
+**Task:** `scripts/run.py` is run by hand. A ref in `scripts/deps.json` pointed at a
 branch that had been deleted upstream, and the report kept reporting on it until
 somebody happened to look.
 **Entities:** `anoieu`

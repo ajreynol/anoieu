@@ -126,7 +126,7 @@ party that cannot make it.*
 **Two commands. Start here after a break.**
 
 ```text
-./scripts/status_eo
+./scripts/ecosystem/status_eo
 ```
 
 One line per tool: what footing it is on, whether our checks pass on it, how

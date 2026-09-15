@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # status_eo -- who is in the Eunoia ecosystem, and how each one looks.
 #
-# A short command name for scripts/ecosystem.py, which lives beside this wrapper.
+# A short command name for scripts/ecosystem/ecosystem.py, which lives beside this wrapper.
 #
 #   status_eo                    # the table: status, policy, channel, moved
 #   status_eo --verbose          # ... and why each policy verdict came out

@@ -3,9 +3,8 @@
 What a stretch is, what ends one, and what designing the next one involves.
 
 This is the **policy**. The two things it governs live elsewhere and are
-deliberately apart: [`../tools/stretch.json`](../tools/stretch.json) is the
-**register** — which stretch we are in, its status, and the version it is to be
-published as, which a deploy is gated on and which must be current;
+deliberately apart: [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) is the
+**register** — which stretch we are in and its state, kept current as work moves;
 [`history.md`](history.md) is the **account** of what each stretch did, which is
 prose and is a person's.
 
@@ -21,31 +20,9 @@ now in the account, where the rest of what a stretch did already was.*
 — it is the span a single announcement turned out to cover, named after the
 fact.
 
-**A deployed stretch carries a version, and that changed on 2026-09-02.** This
-page previously said *nothing is versioned against it*, which was true while
-nothing had been deployed. **`E1` is the stretch's name and `0.1.0` is the
-version it is deployed as**, and the two are not alternatives: the name is what
-a member writes in `EUNOIA_EPOCH` to say which advice they built against, and
-the version is what a deployment is called out loud.
-
-**Three version numbers exist in this repository and they mean different
-things.** Conflating them is the mistake this paragraph is here to prevent:
-
-| number | what it versions | where it lives |
-| --- | --- | --- |
-| **`0.1.0`** | **the ecosystem's shared arrangements** — the policy, the protocols, the advice a member adopts | the stretch log, on the deployed stretch |
-| `0.2.0` | the **analyzer**, as a Python package | `pyproject.toml`, `anoieu/__init__.py` |
-| `0.1.0` | the **fuzzer**, as a Python package | `anoieu_fuzz/__init__.py` |
-
-**The last two are unrelated to the first and to each other**, and the collision
-between the fuzzer's `0.1.0` and the ecosystem's is a coincidence rather than a
-correspondence. **Nothing synchronises them and nothing should**: a member
-adopting `0.1.0` of the arrangements is not adopting a version of anybody's
-Python package.
-
-**It is still not a release.** No cadence is promised, no compatibility is
-guaranteed, and a version number is a name for what was published rather than a
-commitment about what comes next.
+**A stretch has an id, such as `E1`, and no separate release number.** A member
+writes that id in `EUNOIA_EPOCH` to name the advice it built against; `ANOIEU_REV`
+pins the exact commit it adopts. Those two identifiers are enough for now.
 
 **The boundary is an announcement and not a date**, because a date would be a
 cadence, and a cadence is a commitment to other repositories that we are in no
@@ -62,7 +39,7 @@ that counts everything is a commit log, and there is one of those already.
 | --- | --- |
 | a global announcement | [`discussion.md`](discussion.md), the topic carrying `Global:` |
 | **a role changing hands** | [`roles.md`](roles.md) — the entry moves under a new heading and the id does not change |
-| a repository joining, or its footing changing | [`../tools/ecosystem.json`](../tools/ecosystem.json) |
+| a repository joining, or its footing changing | [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) |
 | a child project reaching one of its three endings | the project's own README |
 | a convention every member is checked against changing | [`policy.md`](policy.md) |
 
@@ -125,12 +102,12 @@ that called it could turn red without anybody committing — and a build that ca
 change colour on its own cannot be evidence that a commit was good. It belongs at
 the moment of adoption, in a bump script or a person's hands, and nowhere else.
 
-[`../scripts/bump_check.py`](../scripts/bump_check.py) implements it, published so
+[`../scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py) implements it, published so
 that every member does not write it separately:
 
 ```
-python3 scripts/bump_check.py --rev <sha>    # may this stretch be adopted?
-python3 scripts/bump_check.py --root PATH    # read the pin out of a member's workflow
+python3 scripts/ecosystem/bump_check.py --rev <sha>    # may this stretch be adopted?
+python3 scripts/ecosystem/bump_check.py --root PATH    # read the pin out of a member's workflow
 ```
 
 Exit `0` adopt, `1` refuse, `2` refuse as unverified — three codes rather than
@@ -173,7 +150,7 @@ this section guesses it is, and optimising before that would be the same mistake
 as generating a document before anybody has kept one by hand.
 
 The guess, recorded so it can be checked later: **a dry run may already need only
-[`../tools/stretch.json`](../tools/stretch.json) and the stretch's section of
+[`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) and the stretch's section of
 [`history.md`](history.md), plus the commands named in the block** — between them
 they carry every field the block wants. If that holds, the ordinary path never
 touches this page or [`policy.md`](policy.md), and the corpus growing costs a
@@ -219,7 +196,7 @@ Four questions. The first is the hard constraint above and decides by itself; th
 rest are judgement, and the second is the one that is easy to skip because
 nothing in this tree reports it.
 
-**1. Is our build green at the commit?** `python3 scripts/bump_check.py --rev <sha>`.
+**1. Is our build green at the commit?** `python3 scripts/ecosystem/bump_check.py --rev <sha>`.
 No, or unverified, means no.
 
 **2. What is in flight upstream?** Something is usually about to move in a
@@ -243,7 +220,7 @@ that carried it and a `ref:` does not.
 > **The incident.** `cvc5/ethos` is close to merging the essential features of
 > `ethosEoc3` into `main`. Nothing in `E1` depends on that branch — but the
 > `oracle` job in our own CI checks out `ref: ethosEoc3` rather than the commit
-> `tools/deps.lock` records, so a normal end-of-feature-branch deletion would take
+> `scripts/deps.lock` records, so a normal end-of-feature-branch deletion would take
 > that job from *red for an unread reason* to *cannot run at all*.
 >
 > The same defect had already been found and fixed once, in `scripts/deps.py`,
@@ -271,10 +248,10 @@ matters.
 ```text
 EPOCH E1 · dry run
   commit ....... 9942149       git rev-parse --short HEAD
-  ci ........... FAIL          scripts/bump_check.py --rev 9942149 -> exit 1
+  ci ........... FAIL          scripts/ecosystem/bump_check.py --rev 9942149 -> exit 1
   applied here . FAIL          grep -rl "Is there a paper in this" README.md docs/
   asks ......... 2             docs/history.md, E1 - the covering note
-  informs ...... 3             scripts/ecosystem.py -- members
+  informs ...... 3             scripts/ecosystem/ecosystem.py -- members
   removes ...... nothing       -
   ---------------------------------------------------------------
   DEPLOY ....... BLOCKED  2 failing
@@ -558,7 +535,7 @@ bonus.**
 **Whether it is observable at all depends on the contracts, not on us.** `E1`'s
 two happen to be visible from outside: a publishing stance is a section in a
 README, and *bump only to a green commit* is their pin plus
-[`../scripts/bump_check.py`](../scripts/bump_check.py). A future stretch may set a
+[`../scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py). A future stretch may set a
 contract nothing outside can see, and then `installed` is **unknown** — recorded
 as unknown, never assumed in either direction.
 
@@ -618,7 +595,7 @@ implementation, and the likeliest choice is the wrong one below.
 is that only the last of those leaves a trace we may look at:
 
 - **We can see effects.** A pin that moved, a stance that appeared — and
-  [`../scripts/ecosystem.py`](../scripts/ecosystem.py) already reads a member's README
+  [`../scripts/ecosystem/ecosystem.py`](../scripts/ecosystem/ecosystem.py) already reads a member's README
   from its remote, so some of this is mechanical today.
 - **An effect is not reception, and the absence of one is not its absence.** A
   member who read the announcement and decided against it is indistinguishable,

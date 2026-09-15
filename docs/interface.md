@@ -743,7 +743,7 @@ it is almost always waiting on one of these:
 
 - **starting or ending a child project**, and changing its scope;
 - **creating a repository**, which is a security boundary and not a convention;
-- **a footing** in [`../tools/ecosystem.json`](../tools/ecosystem.json) — no
+- **a footing** in [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) — no
   script writes that file;
 - **granting a role**, and approving a handoff;
 - **changing a prompt template**;
@@ -765,12 +765,12 @@ it is almost always waiting on one of these:
 and a downstream tool must refuse it otherwise.** That is a hard constraint
 rather than a judgement call, it is stated in
 [`stretch-policy.md`](stretch-policy.md#the-hard-constraint-a-red-stretch-is-not-deployable),
-and `python3 scripts/bump_check.py --rev <sha>` decides it.
+and `python3 scripts/ecosystem/bump_check.py --rev <sha>` decides it.
 
 The practical consequence for you: **a stretch is not finished when the documents
 are written.** It is finished when they are committed and the build is green at
 that commit, and until then the stretch's status in
-[`../tools/stretch.json`](../tools/stretch.json) says so and the stretch is
+[`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) says so and the stretch is
 adoptable by nobody. Asking *is this stretch deployable yet* is a
 reasonable end-of-session question and has a one-command answer.
 
@@ -927,7 +927,7 @@ commands:
   epoch wake           leave `sleep` — the clock decides, not you
   epoch double check   was a deployment received                (NOT YET SUPPORTED)
 
-health:  rendered at run time by `scripts/ecosystem.py --health` — the values below
+health:  rendered at run time by `scripts/ecosystem/ecosystem.py --health` — the values below
          are an example and are never the values
 
     members            4
@@ -1181,7 +1181,7 @@ not going to happen.
 ### The health summary — one abstraction, several surfaces
 
 **A health summary is a short, fixed list of *indicators*.** Each is a name, a
-value a person can read, and one of three verdicts. `scripts/ecosystem.py --health`
+value a person can read, and one of three verdicts. `scripts/ecosystem/ecosystem.py --health`
 computes it; `health()` returns it as data and `render_health()` draws it, so a
 second surface adds a call rather than a second implementation.
 
@@ -1321,8 +1321,8 @@ Three concrete routes in, none of which involves this page's framing:
   entry per responsibility, with what each owns. *Work on what `R3` owns* scopes
   a session to the fuzzer and its corpus without naming a file.
 - **Read what the machinery says about itself.** `python3
-  scripts/policy_check.py --coverage` prints every rule that is checked, every rule
-  that is not, and why — and `python3 scripts/ecosystem.py` prints the ecosystem as
+  scripts/ecosystem/policy_check.py --coverage` prints every rule that is checked, every rule
+  that is not, and why — and `python3 scripts/ecosystem/ecosystem.py` prints the ecosystem as
   a table. Both take about a second, need no agent, and are the fastest way to
   see the actual state rather than a description of it.
 

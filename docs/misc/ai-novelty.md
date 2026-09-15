@@ -450,10 +450,10 @@ asking a follow-up question.
 > **The plan, in order:**
 >
 > 1. **`git mv scripts/prompts prompts`** — one rename, history follows it.
-> 2. **Code first**, because it's what fails loudly: `scripts/policy_check.py` (a
+> 2. **Code first**, because it's what fails loudly: `scripts/ecosystem/policy_check.py` (a
 >    hardcoded list of all 8 prompt paths, plus the `tracked("scripts/*")` walk),
->    `tests/run.py` (6), `scripts/ecosystem.py`, `scripts/near.py`,
->    `scripts/install_eo`, `scripts/status_eo`, and four prompts that reference
+>    `tests/run.py` (6), `scripts/ecosystem/ecosystem.py`, `scripts/ecosystem/near.py`,
+>    `scripts/ecosystem/install_eo`, `scripts/ecosystem/status_eo`, and four prompts that reference
 >    their siblings.
 > 3. **Fix the coverage hole this opens.** `check_scripts_listed` walks
 >    `scripts/*` and requires every entry to appear in a table in

@@ -25,7 +25,7 @@ an account — `anoieu_fuzz` is one — but the burden is on the name to earn it
 **And the convention has a second reason, found by breaking it.** A child
 project named with an ordinary English word makes every sentence using that word
 ambiguous — proper noun, or common one — and the ambiguity is not only a reading
-cost. `scripts/policy_check.py` decides whether a child project is an island by
+cost. `scripts/ecosystem/policy_check.py` decides whether a child project is an island by
 grepping the tree for **the bare project name**, so a common word matches prose
 about the *subject* rather than about the project, and reports an island break
 that is not one. An unusual name reads unambiguously and greps unambiguously,
@@ -55,7 +55,7 @@ about an hour.
 | **workflow-launcher** | descriptive rather than Greek, and the register's own exception applies: it is a program and not an account. The first hour of a new tool's life, and a register of what this ecosystem's practice turns out to be doing. A child project, in eudaimonia |
 
 **Names chosen outside this ecosystem are not here.** `cvc5` and `ethos-eoc` are
-in [`../ecosystem.json`](../ecosystem.json) and will never be in this table: it
+in [`ecosystem.json`](../../scripts/ecosystem/ecosystem.json) and will never be in this table: it
 registers names *we* reserved, and theirs were settled by other people before any
 of this existed. An entry in the inventory with no row here is a gap only when
 the name was ours to choose.

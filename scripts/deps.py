@@ -25,9 +25,9 @@ from dataclasses import dataclass
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-MANIFEST = os.path.join(ROOT, "tools", "deps.json")
+MANIFEST = os.path.join(HERE, "deps.json")
 DEPS = os.path.join(ROOT, "deps")
-LOCK = os.path.join(ROOT, "tools", "deps.lock")
+LOCK = os.path.join(HERE, "deps.lock")
 
 
 @dataclass

@@ -121,7 +121,7 @@ convention.
 ## Status
 
 **First cut, drafted 2026-08-31.** Read against `user_manual.md` at
-`ethosEoc3` (`3cf1c03`, the commit `tools/deps.lock` records). Every chapter
+`ethosEoc3` (`3cf1c03`, the commit `scripts/deps.lock` records). Every chapter
 exists; the ones on desugaring, evaluation and the type system are the ones
 worth reading, and the chapters on files and on the grammar are thin. Nothing
 here has been checked by anybody who knows Eunoia. The feedback ledger has

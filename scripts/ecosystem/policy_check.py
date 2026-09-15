@@ -15,10 +15,10 @@ to a sentence somebody wrote. The run also prints every policy rule that has
 **no** automated check, because a checker that only lists its own passes reads
 as coverage it does not have.
 
-    python3 scripts/policy_check.py             # check; exit 1 on any failure
-    python3 scripts/policy_check.py --root PATH # check somebody else's checkout
-    python3 scripts/policy_check.py --coverage  # what is checked, and what is not
-    python3 scripts/policy_check.py --version   # which commit of the policy this is
+    python3 scripts/ecosystem/policy_check.py             # check; exit 1 on any failure
+    python3 scripts/ecosystem/policy_check.py --root PATH # check somebody else's checkout
+    python3 scripts/ecosystem/policy_check.py --coverage  # what is checked, and what is not
+    python3 scripts/ecosystem/policy_check.py --version   # which commit of the policy this is
 """
 
 from __future__ import annotations
@@ -28,10 +28,10 @@ import re
 import subprocess
 import sys
 
-HOME = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 #: The repository under test. `--root` points it at somebody else's checkout;
-#: `HOME` stays this one, because a few checks are about anoieu's own files.
-ROOT = HOME
+#: `REPO_ROOT` stays this one, because a few checks are about anoieu's own files.
+ROOT = REPO_ROOT
 POLICY_URL = "ajreynol/anoieu"
 
 # Rules with no automated check, and the honest reason. Printed on every run.
@@ -117,7 +117,7 @@ PROMPT_GATE = [
 def version() -> str:
     """The commit of *this checker*, so a build log records what it was checked
     against. A member pins a commit; the run should say which one it got."""
-    out = subprocess.run(["git", "-C", HOME, "rev-parse", "--short", "HEAD"],
+    out = subprocess.run(["git", "-C", REPO_ROOT, "rev-parse", "--short", "HEAD"],
                          capture_output=True, text=True)
     return out.stdout.strip() or "unknown"
 
@@ -239,7 +239,7 @@ def note_in(text: str) -> list[str]:
 
     Read for a **report** and never for a verdict. Nothing in `CHECKS` calls it,
     nothing fails on it, and the repositories it is asked about are held to none
-    of this. `scripts/ecosystem.py --protocol` is what runs it, so that a person
+    of this. `scripts/ecosystem/ecosystem.py --protocol` is what runs it, so that a person
     deciding the protocol can see who would satisfy which version of it today.
     """
     if not text:
@@ -256,7 +256,7 @@ def declaration_in(text: str) -> list[str]:
     """What is missing from a README's declaration of membership, if anything.
 
     Split out from the check below because a second reader wants the same
-    answer from text it did not read off this disk: `scripts/ecosystem.py --check
+    answer from text it did not read off this disk: `scripts/ecosystem/ecosystem.py --check
     --online` asks it of a README fetched from a remote, to decide whether the
     inventory's record of who has joined is still true. One implementation, so
     the two cannot come to different answers about the same file.
@@ -284,9 +284,9 @@ def declaration_in(text: str) -> list[str]:
 def affiliation_in(text: str) -> list[str]:
     """What is missing from an **affiliating** maintenance note, if anything.
 
-    The note an `associate` in `tools/ecosystem.json` carries: it names the
+    The note an `associate` in `scripts/ecosystem/ecosystem.json` carries: it names the
     ecosystem it works with, and it says it is not held to the policy. Read from
-    a fetched README by `scripts/ecosystem.py --check --online`, exactly as
+    a fetched README by `scripts/ecosystem/ecosystem.py --check --online`, exactly as
     `declaration_in` is for a member -- so both footings that assert something
     about somebody else's tree are decided by reading that tree.
 
@@ -412,7 +412,7 @@ def check_dependencies() -> list[str]:
     bad = []
     if tracked("deps/*"):
         bad.append("deps/ has tracked files: dependencies are vendored, not fetched")
-    for rel in ("tools/deps.json", "tools/deps.lock"):
+    for rel in ("scripts/deps.json", "scripts/deps.lock"):
         if not os.path.exists(os.path.join(ROOT, rel)):
             bad.append(f"{rel} is missing: nothing pins what was read")
     return bad
@@ -805,7 +805,7 @@ def has(*rel):
 
 
 def is_home():
-    return None if os.path.abspath(ROOT) == HOME else "specific to anoieu's own files"
+    return None if os.path.abspath(ROOT) == REPO_ROOT else "specific to anoieu's own files"
 
 
 # (title, check, applies). A check that does not apply is skipped and named:
@@ -817,7 +817,7 @@ CHECKS = [
     ("the README ends with the maintenance note", check_maintenance_note, None),
     ("every document is named in the documentation index", check_docs_index, has("docs")),
     ("every generated document says it is generated", check_generated_labelled, is_home),
-    ("dependencies are fetched and pinned, never vendored", check_dependencies, has("deps", "tools/deps.json")),
+    ("dependencies are fetched and pinned, never vendored", check_dependencies, has("deps", "scripts/deps.json")),
     ("working space is untracked", check_working_space, has(".gitignore")),
     ("child projects carry a charter, and name what they break", check_children, has("tools")),
     ("the discussion file carries the response gate, at the top",
@@ -869,7 +869,7 @@ def main() -> int:
     if "--coverage" in sys.argv:
         coverage()
         return 0
-    if os.path.abspath(ROOT) != HOME:
+    if os.path.abspath(ROOT) != REPO_ROOT:
         print(f"-- {POLICY_URL} {version()} checking {ROOT}")
     failures = skipped = 0
     for title, fn, applies in CHECKS:

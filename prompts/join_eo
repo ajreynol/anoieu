@@ -37,7 +37,7 @@
 # that ran this before, a tree that arrived at the shape independently, and a
 # tree that looks compliant while its pin is stale or points at a commit our
 # build failed. Treat it as a prompt to check the pin, not as a pass. This is
-# the same distinction `genuine` names in tools/ecosystem.json: complying now
+# the same distinction `genuine` names in scripts/ecosystem/ecosystem.json: complying now
 # and having been built this way are different facts, and only the first is
 # visible from the tree.
 #
@@ -52,7 +52,7 @@
 # **independent** note: the repository is part of no other project's ecosystem
 # and names none. --affiliated writes the other: it names the Eunoia ecosystem as
 # one it works with and says it is not held to the policy. The second is what an
-# `associate` in tools/ecosystem.json carries, and it is the only thing an
+# `associate` in scripts/ecosystem/ecosystem.json carries, and it is the only thing an
 # associate is ever asked for.
 #
 # The prompts are deliberately tiny and deliberately stable. Everything that can
@@ -129,7 +129,7 @@ Read it, then do what it says, here:
 3. Run the check and fix what it reports:
 
      git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
-     python3 /tmp/anoieu/scripts/policy_check.py --root .
+     python3 /tmp/anoieu/scripts/ecosystem/policy_check.py --root .
 
 Change nothing the check does not ask for, and add no file it does not ask for.
 Where the page and this prompt disagree, the page is right.

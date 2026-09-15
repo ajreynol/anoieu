@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # global_audit -- where does the whole ecosystem stand?
 #
-# Run it here, in anoieu. It takes the inventory in tools/ecosystem.json, runs
+# Run it here, in anoieu. It takes the inventory in scripts/ecosystem/ecosystem.json, runs
 # the policy checker over every member that is checked out on this machine, and
 # hands the results to an assistant to read across.
 #
@@ -23,7 +23,7 @@ set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$HERE/.." && pwd)
 REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../scripts/repos.local}"
-INVENTORY="$ROOT/tools/ecosystem.json"
+INVENTORY="$ROOT/scripts/ecosystem/ecosystem.json"
 AGENT=claude
 PRINT=0
 SHOW=0
@@ -91,7 +91,7 @@ while IFS=$'\t' read -r name status repo; do
       continue ;;
   esac
   SEEN="$SEEN$path|"
-  out=$(timeout 120 python3 "$ROOT/scripts/policy_check.py" --root "$path" 2>&1 || true)
+  out=$(timeout 120 python3 "$ROOT/scripts/ecosystem/policy_check.py" --root "$path" 2>&1 || true)
   REPORTS="$REPORTS
 === $name ($status) at $path
 $(printf '%s\n' "$out" | sed -n '/^ok\|^FAIL\|^skip\|^minor\|^ /p' | head -40)"
@@ -112,7 +112,7 @@ fuzz anything, or read through anybody's source. If a question needs that, name
 it as a question and stop.
 
 The inventory, which is a list somebody maintains rather than one anything
-derives, is tools/ecosystem.json:
+derives, is scripts/ecosystem/ecosystem.json:
 
 $INVENTORY_TEXT
 
@@ -127,7 +127,7 @@ half is decided by the checker and not by you: quote it, do not re-litigate it.
 Call out anything that declares membership while failing, which is the one state
 that matters, and anything whose status in the inventory looks wrong -- a
 candidate that now passes everything, a member that has stopped. Say it; do not
-edit tools/ecosystem.json, because a status is a decision a person makes.
+edit scripts/ecosystem/ecosystem.json, because a status is a decision a person makes.
 
 **2. Vision.** How the ecosystem is doing against docs/vision.md, as an
 observation and never as a score. There is no checker for this and there must

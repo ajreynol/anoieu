@@ -124,7 +124,7 @@ is that moving the line leaves a mark.** The human-facing half is
 deleting the directory changes nothing anywhere else. A child that breaks that
 has to say so in its charter, and this paragraph is martyria doing it.** It is
 named by
-`scripts/ecosystem.py`, which reads the schedule so the ecosystem's health
+`scripts/ecosystem/ecosystem.py`, which reads the schedule so the ecosystem's health
 summary can show where the human stands. The exception is recorded here rather
 than avoided, because the dependency is real and hiding it would make the
 charter false rather than make the project an island.

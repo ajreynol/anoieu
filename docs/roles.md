@@ -86,7 +86,7 @@ and because a section gets reordered. That is correct rather than a mistake to
 tidy.
 
 **The tool ids are the inventory's**, spelled exactly as
-[`../tools/ecosystem.json`](../tools/ecosystem.json) spells them. That file is
+[`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) spells them. That file is
 the authority on who is in the ecosystem and on what footing; this one adds only
 what each is accountable for. Where the two disagree, the inventory is right and
 this page is stale.
@@ -101,7 +101,7 @@ Each role carries the same fields, in the same order:
 
 | field | what it holds |
 | --- | --- |
-| **Held by** | the tool or tools accountable for it, by their ids in [`../tools/ecosystem.json`](../tools/ecosystem.json). Usually the heading it sits under, and always where a role is held twice |
+| **Held by** | the tool or tools accountable for it, by their ids in [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json). Usually the heading it sits under, and always where a role is held twice |
 | **Role** | the responsibility itself. Two sentences at most |
 | **Owns** | the artifacts that are its to change, and therefore nobody else's |
 | **Not this role** | the nearest neighbouring responsibility, and which role it is — or that it is nobody's |
@@ -127,7 +127,7 @@ not been thought through, and the line between the two halves is where every
 argument about it is actually going to happen.
 
 **3. Name the consumers.** Every tool that depends on one of the roles moving,
-by its id in [`../tools/ecosystem.json`](../tools/ecosystem.json). Where a role
+by its id in [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json). Where a role
 carries a CI contract that is *every member*, and the count is the cost: it
 grows with each tool that joins before the handoff happens, which is usually the
 strongest argument for doing it sooner.
@@ -295,7 +295,7 @@ and **deciding whether a tree complies, which is `R31` and stays here.**
 **Role:** **deciding whether a tree complies with the policy**, whoever wrote
 the policy. The program every member's CI runs, its checks, its two tiers, its
 skip lines, and its refusal to report coverage it does not have.
-**Owns:** `scripts/policy_check.py`, and the `adoption_interface` case in
+**Owns:** `scripts/ecosystem/policy_check.py`, and the `adoption_interface` case in
 `tests/run.py` that holds it to being a published interface.
 **Not this role:** what the rules *are*, which is `R4` and is leaving. This role
 implements somebody else's document and has no standing to change what it says.
@@ -321,7 +321,7 @@ chosen, and it is recorded here because the move is what makes it urgent.
 
 **What it buys, and this is the part worth the split.** Members' workflows do
 not change. The `anoieu / policy` job clones this repository and runs
-`scripts/policy_check.py`; if the checker moved, every member's job would clone
+`scripts/ecosystem/policy_check.py`; if the checker moved, every member's job would clone
 somewhere else and the check would arrive under a different name in their pull
 requests. **Moving the rules costs a member nothing. Moving the checker would
 cost every one of them a commit.**
@@ -357,8 +357,8 @@ generating cases nobody wrote, which is `R3`.
 **Role:** who is in the ecosystem and on what footing, and the commands that
 clone the rest of it beside a checkout, record where each one landed, and report
 what has drifted.
-**Owns:** `tools/ecosystem.json`, `tools/checkouts.json`, `scripts/ecosystem.py`,
-`scripts/install_eo`, `scripts/status_eo`, and the `welcome_eo` prompt.
+**Owns:** `scripts/ecosystem/ecosystem.json`, `scripts/ecosystem/checkouts.json`, `scripts/ecosystem/ecosystem.py`,
+`scripts/ecosystem/install_eo`, `scripts/ecosystem/status_eo`, and the `welcome_eo` prompt.
 **Not this role:** deciding membership — a status is changed by a person and no
 script writes that file — and the rules a member is checked against, which are
 `R4`.
@@ -426,8 +426,8 @@ its dry run, the bump gate, and the shape of the log entry. Taken together they
 are this ecosystem's **main verification system for its own governance**, which
 is a claim worth stating plainly because it is unusual: what verifies a stretch is
 a protocol, not a test suite.
-**Owns:** `scripts/bump_check.py`, the approval protocol in `docs/policy.md`,
-`docs/stretch-policy.md` and `tools/stretch.json` — the gates, the block template,
+**Owns:** `scripts/ecosystem/bump_check.py`, the approval protocol in `docs/policy.md`,
+`docs/stretch-policy.md` and `scripts/ecosystem/stretch.json` — the gates, the block template,
 the dry run, the statuses, and the log's entry format.
 **Not this role:** **deciding what a stretch is *for*, which is not a role here
 at all** — it is the human's, and `R27` was allocated to this repository for it

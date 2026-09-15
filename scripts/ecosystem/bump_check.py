@@ -22,7 +22,7 @@ what we pushed this morning, which is the failure the whole pinning discipline
 exists to prevent.
 
 **It fails closed.** Not green, not finished, or not reachable -- all refuse.
-That is the opposite of how `scripts/ecosystem.py --check --online` treats an
+That is the opposite of how `scripts/ecosystem/ecosystem.py --check --online` treats an
 unreachable remote, and the difference is that adopting a stretch is *optional and
 deferrable*: refusing costs a member nothing but a later attempt, where a
 fail-closed check inside a build would turn somebody's tree red for a network
@@ -34,9 +34,9 @@ and a build that can change colour on its own cannot be evidence that a commit
 was good. It is a command a person or a bump script runs at the moment of
 adoption, and nothing else.
 
-    python3 scripts/bump_check.py --rev 59e8e07     # may this stretch be adopted?
-    python3 scripts/bump_check.py --root PATH       # read the pin from a member's workflow
-    python3 scripts/bump_check.py --rev X --dry-run # print what it would ask, ask nothing
+    python3 scripts/ecosystem/bump_check.py --rev 59e8e07     # may this stretch be adopted?
+    python3 scripts/ecosystem/bump_check.py --root PATH       # read the pin from a member's workflow
+    python3 scripts/ecosystem/bump_check.py --rev X --dry-run # print what it would ask, ask nothing
 
 Exit codes, which are the interface a bump script consumes:
 
@@ -134,9 +134,9 @@ def epoch_marker(root: str) -> str:
 
 
 def register(root: str = "") -> dict:
-    """`tools/stretch.json`: which stretch we are in, and what is true of it.
+    """`scripts/ecosystem/stretch.json`: which stretch we are in, and what is true of it.
 
-    These three facts used to be read out of the prose of `docs/stretches.md`,
+    These facts used to be read out of the prose of `docs/stretches.md`,
     on the argument that a machine-readable copy would be one more thing to keep
     in step with the log. That argument died with the log: there is no prose left
     for a copy to drift from, and the fields a deploy is gated on were
@@ -145,8 +145,9 @@ def register(root: str = "") -> dict:
     Returns `{}` when there is no register, which every caller treats as *we do
     not know* rather than as a value.
     """
-    path = os.path.join(root or os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))), "tools", "stretch.json")
+    here = os.path.dirname(os.path.abspath(__file__))
+    directory = os.path.join(root, "scripts", "ecosystem") if root else here
+    path = os.path.join(directory, "stretch.json")
     try:
         with open(path, encoding="utf-8") as fh:
             return json.load(fh)
@@ -168,17 +169,6 @@ def current_stretch(root: str = "") -> str:
 def current_status(root: str = "") -> str:
     """The status of that stretch, or "" if unreadable."""
     return _current(root, "status")
-
-
-def current_version(root: str = "") -> str:
-    """The version that stretch is to be published as, or "" if unrecorded.
-
-    Recorded before the fact so a deploy *names* the number rather than choosing
-    it. It is what the stretch is intended to be published as until `deployed`
-    is set beside it, and disagreeing with it at deploy time is allowed and is
-    worth saying out loud -- somebody wrote it down deliberately.
-    """
-    return _current(root, "version")
 
 
 def ask(rev: str, timeout: int = 20) -> tuple[list[dict], str]:

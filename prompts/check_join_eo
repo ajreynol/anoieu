@@ -10,7 +10,7 @@
 #
 # It reads their tree and writes nothing to it. Two halves, deliberately split:
 #
-#   scripts/policy_check.py --root decides everything a program can decide, and
+#   scripts/ecosystem/policy_check.py --root decides everything a program can decide, and
 #   its output is quoted into the prompt as fact.
 #
 #   The assistant judges only what is left -- whether a maintenance note says
@@ -88,7 +88,7 @@ if [ -z "$TARGET" ]; then
   exit 2
 fi
 
-REPORT=$(python3 "$ROOT/scripts/policy_check.py" --root "$TARGET" 2>&1 || true)
+REPORT=$(python3 "$ROOT/scripts/ecosystem/policy_check.py" --root "$TARGET" 2>&1 || true)
 
 read -r -d '' PROMPT <<PROMPT_END || true
 Decide where $NAME stands with respect to the Eunoia ecosystem. It is checked

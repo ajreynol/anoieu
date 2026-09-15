@@ -203,7 +203,7 @@ about installs.
 ## `PROTO-26` — transferring roles to another project
 
 **Roles move when both repositories are in order, and *both* is the word doing
-the work.** Ours and theirs. The check is `scripts/transfer_check.py`, and CI
+the work.** Ours and theirs. The check is `scripts/ecosystem/transfer_check.py`, and CI
 carries it as a **report** rather than a gate.
 
 ### What has to be true
@@ -532,9 +532,10 @@ convention: a person can run anything in `scripts/` without deciding whether
 they are willing to spend a turn, and anything under `prompts/` is a
 turn by definition.
 
-`tools/` holds the shared data those commands read and the child projects.
-Dependency manifests and locks, the ecosystem inventory, checkout settings and
-the stretch register stay there; scripts resolve them from the repository root.
+Data lives beside the commands that read it. `scripts/ecosystem/` groups the
+ecosystem commands with their inventory, checkout settings and stretch register.
+The corpus dependency manifest and lock live in `scripts/` beside `deps.py`.
+`tools/` holds child projects and their own code and data.
 
 `repos.local` is the shared map from a repo id to a checkout on this machine. It
 stays at `scripts/repos.local` and **both halves read it**, which is the one
@@ -549,29 +550,44 @@ to it — the first for everything on the list, the second when a tool arrives.
 
 | command | run in | what it does |
 | --- | --- | --- |
-| `install_eo` | here, **first** | the rest of the ecosystem, cloned beside this checkout with `git clone` and nothing else — audited by `tests/run.py`. `--dry-run` prints what it would run; `--status` reads the rows back. [The options](usage.md#the-rest-of-the-ecosystem) |
-| `status_eo` | here | who is in the ecosystem and how each looks: declared or not, whether the policy check passes, whether there is a channel, how long since anything moved. `--check` decides whether the inventory itself is still true, and is what CI runs. `python3 scripts/ecosystem.py --protocol` is the other report: where each tool proposed for the `associate` footing stands against each version of that drafted protocol, read from a checkout where there is one. It reports and never fails |
 | `harvest_cpc_proofs` | here | collects real CPC proofs to seed the fuzzer with |
-| `bump_check.py` | here, or with `--root PATH` | checks whether a policy commit is eligible for adoption |
 | `deps.py` | imported by the runner | fetches the corpus dependencies and reads and renders their lock |
 | `doc_currency.py` | here | measures the evidence that documentation is current |
-| `ecosystem.py` | here | implements `status_eo`, inventory checks and protocol reports |
 | `gen_checks_doc.py` | here | regenerates `docs/checks.md` from the check registry |
 | `gen_corpus_table.py` | imported by the runner | measures corpus findings and renders the results table |
 | `gen_open_findings.py` | here | adds new findings to the ledger; `--check` reports unlisted findings |
 | `landing.py` | here | reports changes awaiting landing; `--check` reads their checkouts |
-| `near.py <id> <id>` | called by ecosystem commands and prompts | prints whether two repository ids are one edit apart |
 | `oracle_desugar.py` | here | compares desugaring results with the ethos binary |
-| `policy_check.py` | here, or with `--root PATH` | checks the repository policy; also run by members in CI |
-| `ready_check.py <name>` | here | checks whether a proposed tool is ready to be started |
 | `run.py` | here | fetches dependencies and generates the corpus report and findings; `--offline --check` checks the local copies |
 | `sweep.py <path>...` | here | reads every signature under the supplied paths and reports failures |
+
+### `scripts/ecosystem/` — ecosystem commands
+
+| command | run in | what it does |
+| --- | --- | --- |
+| `install_eo` | here, **first** | clones the ecosystem beside this checkout. `--dry-run` prints the commands; `--status` reads the checkouts. [The options](usage.md#the-rest-of-the-ecosystem) |
+| `status_eo` | here | prints ecosystem membership, policy results and checkout status; wraps `ecosystem.py` |
+| `bump_check.py` | here, or with `--root PATH` | checks whether a policy commit is eligible for adoption |
+| `ecosystem.py` | here | implements `status_eo`, inventory checks and protocol reports; `--check` checks the inventory, `--protocol` reports associate-protocol adoption |
+| `near.py <id> <id>` | called by ecosystem commands and prompts | prints whether two repository ids are one edit apart |
+| `policy_check.py` | here, or with `--root PATH` | checks the repository policy; also run by members in CI |
+| `ready_check.py <name>` | here | checks whether a proposed tool is ready to be started |
 | `transfer_check.py <name>` | here | reports whether roles are ready to transfer to a project |
 
-`status_eo` is a wrapper around `scripts/ecosystem.py`, and `scripts/policy_check.py`
+`status_eo` is a wrapper around `scripts/ecosystem/ecosystem.py`, and `scripts/ecosystem/policy_check.py`
 has no wrapper on purpose: it is the interface **other repositories** run in
 their CI, so its path is published in [`policy.md`](policy.md) and must not
 acquire a second spelling.
+
+### Data beside the scripts
+
+| file | directory | what it holds |
+| --- | --- | --- |
+| `deps.json` | `scripts/` | the source repositories and paths measured by the corpus runner |
+| `deps.lock` | `scripts/` | the commits used for the recorded corpus report |
+| `ecosystem.json` | `scripts/ecosystem/` | ecosystem membership and each project's footing |
+| `checkouts.json` | `scripts/ecosystem/` | exceptions to the inventory-derived install plan |
+| `stretch.json` | `scripts/ecosystem/` | the current stretch and its recorded state |
 
 ### `prompts/` — the prompts
 
@@ -619,10 +635,10 @@ files. The sequence, which nothing enforces:
 2. [`welcome_eo <id> <path>`](../prompts/welcome_eo) is run here, once there is
    something worth reading. It records the checkout in `scripts/repos.local` —
    the file every other script resolves an id through — **and syncs the
-   ecosystem's own list**, by running `scripts/install_eo --status <id>` and
+   ecosystem's own list**, by running `scripts/ecosystem/install_eo --status <id>` and
    printing what comes back, before it reads the tree and drafts a first message.
 3. That sync reports and never edits. If the tool is not in
-   [`../tools/ecosystem.json`](../tools/ecosystem.json) it says a status is owed,
+   [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) it says a status is owed,
    and a person adds the entry: `status`, `repo`, `url`, `what` — plus `vetted`
    and `why` where the footing is `associate`, because a footing that rests on
    our judgement carries the date somebody made it and what they made it about. Membership is a
@@ -642,7 +658,7 @@ files. The sequence, which nothing enforces:
 4. **The entry is the whole of the work.** `install_eo` derives what to clone
    from the inventory, so the new tool appears in the dump, in `--status`, and in
    `scripts/repos.local` on the next machine with nothing else edited.
-   [`../tools/checkouts.json`](../tools/checkouts.json) carries only what cannot
+   [`../scripts/ecosystem/checkouts.json`](../scripts/ecosystem/checkouts.json) carries only what cannot
    be derived — a clone flag, or a tree nobody should fetch unasked. The
    ordinary case needs none of it.
 5. `join_eo` and `check_join_eo` come later, or never. Joining is its owner's
@@ -666,7 +682,7 @@ The trigger and the edit, in full:
 | a name is taken | a row in `names.md`, **saying where it lives** |
 | a tool moves — a child started, a child graduated, a repository created | the *where it lives* clause on its existing row |
 | a tool on `tools.md` starts existing | its block **leaves** `tools.md`. A page that keeps its graduates is a page whose first entries are all finished work |
-| a tool enters [`../tools/ecosystem.json`](../tools/ecosystem.json) | an entry in `papers.md`, even where the verdict is `no` |
+| a tool enters [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) | an entry in `papers.md`, even where the verdict is `no` |
 
 **The cross-check is one pass and it is worth doing whenever the inventory
 moves.** `ecosystem.json` is the authority on who exists, so anything in it with
@@ -685,7 +701,7 @@ is the smaller of the two.
 ## A finding is about `main`
 
 We report a defect against what a project ships. Every ref in
-[`../tools/deps.json`](../tools/deps.json) is a branch somebody else's users get,
+[`../scripts/deps.json`](../scripts/deps.json) is a branch somebody else's users get,
 and a finding measured on a topic branch is one its owner can close by deleting
 the branch.
 
@@ -704,7 +720,7 @@ exception for being where the work is convenient to read. ethos's own `main` is
 still where the Eunoia manual is read from, and findings against the checker are
 against `main`. `ethosEoc3` contains `main` in full, so measuring the tree there
 measures `main` and the compiler work on top of it; when the branch merges, the
-ref in [`../tools/deps.json`](../tools/deps.json) becomes `main` and the exception
+ref in [`../scripts/deps.json`](../scripts/deps.json) becomes `main` and the exception
 is gone rather than renegotiated.
 
 **And the exception does not reach `install_eo`, which installs a default branch
@@ -718,7 +734,7 @@ default branch is the older one, with the command that gets the newer:
 
 Which is the whole of the accommodation: a fact stated where somebody will read
 it, and a branch nobody is put on without choosing it. The branch is recorded on
-the **child** in [`../tools/ecosystem.json`](../tools/ecosystem.json), because it
+the **child** in [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json), because it
 is a fact about the child rather than about the repository — ethos's own default
 branch is not wrong, and a checker finding is still measured there.
 
@@ -787,7 +803,7 @@ whenever a page feels significant.
 ### The code documentation that qualifies, and the rest that does not
 
 **One thing, and it is not prose: the set of checks a member's CI runs.**
-`scripts/policy_check.py` executes in three other repositories. **Adding a check
+`scripts/ecosystem/policy_check.py` executes in three other repositories. **Adding a check
 changes what somebody else's build does, and removing one changes what it stops
 catching** — both are events in the ordinary sense, and neither is visible in a
 document unless we write it down. [`checks.md`](checks.md) is generated from the
@@ -851,7 +867,7 @@ what the tree actually does needs nobody, and changing the tree to match the
 description is ordinary work.
 
 Unlike the vision, this page **is** machine-checked:
-`python3 scripts/policy_check.py` runs in CI and decides every rule that a program
+`python3 scripts/ecosystem/policy_check.py` runs in CI and decides every rule that a program
 can decide from the tree. Run it before proposing a change here — and if you add
 a rule, either make it checkable or accept that it lands on the checker's
 printed list of what it cannot decide.
@@ -974,7 +990,7 @@ the topic disagree, do nothing — not the overlap, not the safer half — say
 exactly where they differ, and wait for a person to decide. They may override
 after being told, and then the override gets recorded. This is the only rule
 here enforced as a build failure rather than by convention:
-`scripts/policy_check.py` fails when the banner stating it is missing from the top
+`scripts/ecosystem/policy_check.py` fails when the banner stating it is missing from the top
 of the file.
 
 **Nothing here holds credentials that create or publish.** No repository is
@@ -1102,7 +1118,7 @@ over the fix that adds a guard.
 
 **The `policy` job is a contract, and it is the one place where no ground may be
 given.** Everything else here is ours to break and ours to fix on our own
-schedule. `scripts/policy_check.py` is not: other repositories run it in their own
+schedule. `scripts/ecosystem/policy_check.py` is not: other repositories run it in their own
 CI, pinned at a commit of this one, and what it decides is what this repository
 is handing them downstream. So it is never relaxed to turn a build green, never
 made conditional on the rest passing, and never left to rot while something
@@ -1427,7 +1443,7 @@ convenience for us.
 ### When each member joined, and what we were at the time
 
 **Audited 2026-09-02**, from the members' own trees and by running
-`scripts/bump_check.py --rev` against each pin they took. Everything below is
+`scripts/ecosystem/bump_check.py --rev` against each pin they took. Everything below is
 re-derivable; nothing is remembered.
 
 | member | joined at | pinned anoieu at | our CI at that commit |
@@ -1469,7 +1485,7 @@ description once something owns the subject.
 
 ### The ecosystem, and what we cannot see of it
 
-`python3 scripts/ecosystem.py` prints who is in the ecosystem and how each looks:
+`python3 scripts/ecosystem/ecosystem.py` prints who is in the ecosystem and how each looks:
 declared or not, whether the policy check passes, whether there is a channel to
 reach them, how long since anything moved. It is local, takes about a second,
 and involves no assistant — `prompts/global_audit` is the version that has
@@ -1485,28 +1501,28 @@ because a table invites more confidence than it has earned:
   reads it today.
 - **Whether a checkout here is what upstream has.** These are working copies on
   one machine; a stale clone reports a stale answer with no indication that it
-  is one. `scripts/install_eo --status --fetch` answers this much of it —
+  is one. `scripts/ecosystem/install_eo --status --fetch` answers this much of it —
   branch, distance from upstream, whether the tree is dirty — and
-  `scripts/ecosystem.py` still does not read it.
+  `scripts/ecosystem/ecosystem.py` still does not read it.
 - **Anything about the tools themselves.** Not whether they work, not whether
   they are maintained, not whether the thing they produce is any good.
 
 *TODO*, in the order they are worth doing: read each member's `anoieu.yml` for
-its pin and report the distance; carry the distance `scripts/install_eo
+its pin and report the distance; carry the distance `scripts/ecosystem/install_eo
 --status` already measures into this table, so a stale row says so where
 somebody is looking; and give the table a `--json` mode if anything ever wants
 to consume it. None is started.
 
 **Getting the ecosystem onto a machine** is the other half of the same list, and
-it is [`../scripts/install_eo`](../scripts/install_eo). What to clone is derived
+it is [`../scripts/ecosystem/install_eo`](../scripts/ecosystem/install_eo). What to clone is derived
 from the inventory rather than listed again — a url and a repo id are all a clone
 needs, and `ethos` and `ethos-eoc` share a tree because the inventory says they
 share a repo id. It installs by default; `--dry-run` prints exactly the commands
 a run would execute; `--status` reads the rows back off the disk.
-[`../tools/checkouts.json`](../tools/checkouts.json) holds only what cannot be
+[`../scripts/ecosystem/checkouts.json`](../scripts/ecosystem/checkouts.json) holds only what cannot be
 derived: `ethosEoc3`, cvc5's blobless clone, and cvc5 being opt-in. Where the
 lists disagree — something fetched that nobody recorded, something recorded that
-nothing fetches, a ref `tools/deps.json` reports on that the checkout does not
+nothing fetches, a ref `scripts/deps.json` reports on that the checkout does not
 have — `--status` says so under `note:` and repairs nothing, because membership
 is a decision a person makes. [What happens when we add a new
 tool](#what-happens-when-we-add-a-new-tool-to-the-ecosystem) is the sequence in
@@ -1527,7 +1543,7 @@ readiness for us; somebody has to look.
 
 ## Where to start
 
-1. Get the ecosystem: `scripts/install_eo`, then `--status`. Nothing here
+1. Get the ecosystem: `scripts/ecosystem/install_eo`, then `--status`. Nothing here
    reads anything until the other repositories are beside this one, and the
    status view is the fastest way to see what the ecosystem currently is.
 2. Read [`board.md`](board.md) for what is outstanding and in what
@@ -1541,5 +1557,5 @@ readiness for us; somebody has to look.
 4. Check the ladder above before touching any document in it.
 5. If the task is the record itself, the ledger script in *The cheap route* is
    the first thing to build and nothing above it is blocked on the rest.
-6. Run `python3 tests/run.py` and `python3 scripts/policy_check.py`.
+6. Run `python3 tests/run.py` and `python3 scripts/ecosystem/policy_check.py`.
 7. Leave the work staged.
