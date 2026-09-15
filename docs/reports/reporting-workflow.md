@@ -1009,7 +1009,7 @@ the branch. `ethosEoc3` is the single exception, because ethos's `ethos-eoc`
 child project — the compiler, at `tools/eoc` — and the semantics sets are there
 and not on ethos's `main`. The reason, and what a second
 exception would have to show, is [a finding is about
-`main`](../coherence.md#a-finding-is-about-main).
+`main`](../maintenance.md#a-finding-is-about-main).
 
 ### Maintaining the report
 

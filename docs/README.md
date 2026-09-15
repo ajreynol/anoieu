@@ -11,7 +11,7 @@ documents. Each entry points to the page that owns its subject.
 | [`reporting-policy.md`](reports/reporting-policy.md) | **what may be published about somebody else's code, and why.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — twelve of them, each saying whether it is enforced, structural, or an intention nothing but our record backs |
 | [`reporting-workflow.md`](reports/reporting-workflow.md) | **how a finding is handled**: the conventions governing the record, the workflow and prompts for carrying one to whoever can fix it, and for
 sweeping the whole report, and what it takes for another repository to run these checks in its own CI |
-| [`usage.md`](usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together. The *person's* interface to this repository is [`interface.md`](interface.md), below |
+| [`usage.md`](usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together. For work on this repository, start at [`maintenance.md`](maintenance.md) |
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor nobody has started |
 | [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the six above belongs here |
 
@@ -41,107 +41,34 @@ end got right and wrong, what we got wrong, and the two rules the round
 established — that each round leaves the prompts *shorter and clearer*, and that
 a person approves every change to one.
 
-Two more govern **how the work is done** rather than what it found, and are
-written for every repository in the Eunoia ecosystem rather than only this one.
-They live here because a governing document filed beside the code is one
-somebody has to know to look for.
+## Maintenance and records
 
-| document | its job |
-| --- | --- |
-| [`policy.md`](policy.md) | **how a repository is arranged**: the layout, the maintenance note every README ends with, and the rules for child projects. Machine-checked by `scripts/policy_check.py` on every push |
-| [`vision.md`](vision.md) | **what AI-assisted development is aiming at**: six tenets, and the record of what the ecosystem's tools have actually delivered to one another. Argued, never checked — the dividing line is stated on the page |
-| [`report-card.md`](report-card.md) | **how each tool stands against those tenets**, in the register its own README chooses, graded at the commits the lock records. Governed by `vision.md` and split out of it because it is the half that moves — a paragraph is still changed by a person, and it binds nobody |
+[`maintenance.md`](maintenance.md) is the entry point for work on anoieu: its
+responsibilities, retained commands, required checks, and open technical work.
+The [script catalogue](maintenance.md#the-scripts) lists the commands in
+[`../scripts/`](../scripts) and the findings prompts in
+[`../prompts/`](../prompts). The
+[reporting workflow](reports/reporting-workflow.md#the-workflow) defines those
+prompts, and `tests/run.py` checks their executable copies against it.
 
-[`discussion.md`](discussion.md) is the standing channel to the rest of the
-ecosystem for anything that is **not** a defect report — a request, a proposal,
-a question about somebody's intent, a notice that something here is moving under
-them. Its format, and the reason it is kept apart from the findings ledger, are
-in [`policy.md`](policy.md#the-discussion-file).
+[`discussion.md`](discussion.md) is anoieu's correspondence with the ecosystem
+for requests, proposals and questions. Defect reports belong in the findings
+ledger. The shared
+[discussion format](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#the-discussion-file)
+defines those conventions.
 
-`scripts/status_eo` prints the ecosystem as a table — who is in it,
-whether each passes the policy check, and how long since anything moved. Local,
-about a second, no assistant involved.
+[`report-card.md`](report-card.md) is anoieu's assessment of how each tool
+stands against the shared tenets, graded at the commits the lock records. It
+is governed by the shared
+[vision](https://github.com/ajreynol/kanon/blob/main/docs/vision.md).
 
-[`../scripts/install_eo`](../scripts/install_eo) is the same ecosystem from the
-other side, and the first command to run on a new machine: it clones the rest of
-the ecosystem into siblings of this checkout. `--dry-run` prints exactly the
-commands a run would execute — only `git clone`, which the suite checks — and
-`--status` reads the rows back off the disk and says what has drifted. Its options are in
-[`usage.md`](usage.md#the-rest-of-the-ecosystem), and the sequence for adding a
-tool to the list is in
-[`coherence.md`](coherence.md#what-happens-when-we-add-a-new-tool-to-the-ecosystem).
-
-[`board.md`](board.md) is not in the table above either: it is **what is
-outstanding across the ecosystem, in priority order** — at most twenty items,
-each with the next thing to do, the repositories involved, and a prompt for each
-of them. It is kept by hand, `HUMAN FEEDBACK` on an item outranks everything else
-on it, and nothing consumes the file yet.
-
-[`interface.md`](interface.md) is not in the table and is the page to read
-**first if you are the person driving this repository** rather than reading about
-it. What to say, what comes back, what never comes back, and the decisions that
-are nobody's but yours. Distinct from
-[`usage.md`](usage.md), which is the analyzer's command line, and from
-[`coherence.md`](coherence.md), which is the standards the work is held to.
-
-[`laws.md`](laws.md) is the footings the ecosystem is made of, what a member
-owes, and the five things the president owes — including how it keeps
-[`history.md`](history.md) and who it hands the office to. **They are candidate
-laws** — written down, followed voluntarily, enforced by nothing — because the
-party they bind also wrote them. A tool should hold this page eventually.
-
-[`history.md`](history.md) is **anoieu's development record**, including its
-work as president: the stretches, membership changes, delivered work and open
-handoff decisions. **It stays here under LAW 4; a successor keeps its own
-history.** Distinct from [`report-card.md`](report-card.md), which grades, and
-from [`postmortem.md`](reports/postmortem.md), which records one reporting round.
-
-[`instructions.md`](instructions.md) is the other half of that page, and is
-the only document here **addressed to you rather than to whoever maintains
-this**. Where [`interface.md`](interface.md) tells an agent how to behave, this
-tells the human — the person at the terminal — what is theirs to do, and it is
-held to one rule the rest of the documentation is not: an instruction that
-cannot be followed without first opening a file has failed. There is one so
-far, about the hours you intend to work.
-
-[`history.md`](history.md) records what happened here and the current handoff
-plan. It remains in anoieu when responsibilities move. Dated quotations and
-covering notes describe their original occasions, not current instructions.
-
-[`roles.md`](roles.md) lists **one entry per responsibility**, each with a
-permanent id, what it owns, and —
-the field that does most of the work — the nearest thing that is *not* it. The
-page is stratified by the tool that holds each one, and no role is too small: a
-clear seam between two responsibilities is worth more than a short page, so a
-long section is a measurement rather than an untidiness, and an empty one is a
-tool looking for work. Within a section position is the priority; across
-sections nothing is ranked. The board says what is outstanding and in what
-order; this says what everything is for. It also carries the procedure for
-handing a role from one tool to another — proposed on the board so the
-repositories it costs something can disagree with it, and gating nothing while
-the ecosystem is still settling. Kept by hand, and nothing consumes it either.
-
-[`coherence.md`](coherence.md) is not in the table above and is not written for
-a reader of the tool: it is the **maintenance entry point**, for whoever is
-doing the work. What this repository is responsible for, which documents may not
-be changed without asking, and the open technical work on the record itself.
-
-[`../scripts/`](../scripts) holds the commands that run something —
-`install_eo`, `status_eo`, `harvest_cpc_proofs` — and
-[`../prompts/`](../prompts) holds the ones that hand context to
-an assistant: starting a tool, welcoming it, joining, working correspondence, and
-carrying findings both ways. The directory is the whole of the distinction, and
-it is there so that running something never means deciding whether to spend a
-turn. **The table of what each one does, and where it is run, is in
-[`coherence.md`](coherence.md#the-scripts)**, which is also where a new one has to
-be listed. The prompts are the workflow and the scripts are a way of running
-them: [`reporting-workflow.md`](reports/reporting-workflow.md#the-workflow) and
-[`policy.md`](policy.md#joining-the-eunoia-ecosystem) are the documents that
-define them, and `tests/run.py` fails when a script's copy of a prompt has
-drifted from the document it came from.
+[`history.md`](history.md) records anoieu's development and presidency, including
+the handoff. Its [presidential letter](letter-to-kanon.md) is addressed to its
+successor. Dated quotations and covering notes describe their original
+occasions.
 
 `reports/` also holds documents rendered for an audience that will not clone this
 repository, currently [`cpc-audit.html`](reports/cpc-audit.html). They restate
 findings from the sources above rather than adding any, so nothing is filed
-twice. The generators are in [`../tools/`](../tools), and each says at the top
+twice. The generators are in [`../scripts/`](../scripts), and each says at the top
 of the file what it writes and what it refuses to do.

@@ -1,7 +1,7 @@
 # anoieu_fuzz
 
 A second tool shipped from this repository, beside the analyzer. It began as a
-child project under [`docs/policy.md`](../docs/policy.md) and was **folded into
+child project under [`docs/policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) and was **folded into
 the parent** once it had earned its keep: the island rules it had to break in
 order to be useful were the sign that it had stopped being research.
 
@@ -30,7 +30,7 @@ either of them ought to prove.
   generation, mutation of a seed corpus, five verdict-level oracles, and no
   instrumentation anywhere. Coverage guidance, derivations built from the
   calculus and a soundness oracle are named in
-  [ynoia](../tools/ynoia/why-eunoia.md) and do not exist.
+  [ynoia](https://github.com/ajreynol/kanon/blob/main/tools/ynoia/why-eunoia.md) and do not exist.
 - **Not a judgement about which checker is wrong.** A disagreement has a
   direction and nothing more; the reference being stricter than the language
   requires is a live explanation for any of them.

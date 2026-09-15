@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Write `docs/reports/open-findings.md`: every finding this project currently reports.
 
-Maintaining this? Start at `docs/coherence.md`.
+Maintaining this? Start at `docs/maintenance.md`.
 
 Two files, because they answer different questions and have different audiences.
 `docs/reports/open-findings.md` is the report: what anoieu believes and nobody has ruled

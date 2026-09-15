@@ -136,7 +136,7 @@ to what a finding *is* rather than a tidy-up — the first five in logos's words
 further thread, from this side:
 the record is now edited mostly by an assistant, and what must stay true of it
 after such an edit is planned — not built — in
-[`notes.md`](../coherence.md#the-open-technical-work).
+[`maintenance.md`](../maintenance.md#the-open-technical-work).
 
 | what | why it matters | cost of not doing it |
 | --- | --- | --- |

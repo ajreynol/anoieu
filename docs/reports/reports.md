@@ -1268,7 +1268,7 @@ would make the analyzer worth running. Tracked as items in
 | a check comparing each rule against cvc5's `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` | open — would catch interface drift that makes an emitted proof uncheckable |
 | documentation checks that compare names and roles, not counts, and distinguish call arguments from pattern variables | open — and it is why cvc5-3 is deferred |
 | diagnostics naming the repository that owns the file | open |
-| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | **less than we claimed.** A baseline entry's id moves with the path root, so changing an entry point invalidates every entry while the findings are identical — which is what happened to `tests/corpus/cpc-baseline.json` when CPC's entry point moved. Tracked as C6 in [`notes.md`](../coherence.md#the-open-technical-work); releases and the narrowing policy are still not written down |
+| versioned releases, stable diagnostic meanings, path-independent baselines, a policy for narrowing a check without invalidating suppressions | **less than we claimed.** A baseline entry's id moves with the path root, so changing an entry point invalidates every entry while the findings are identical — which is what happened to `tests/corpus/cpc-baseline.json` when CPC's entry point moved. Tracked as C6 in [`maintenance.md`](../maintenance.md#the-open-technical-work); releases and the narrowing policy are still not written down |
 
 ---
 
@@ -1450,7 +1450,7 @@ our own report was measured against `updateCompiler` at `47f29bfa` — a branch 
 has since been deleted, taking with it any way of asking whether that was true.
 The change is now on logos `main` at `6cb59db5` and `TRI0002` reports nothing, so
 the row is closed. The general rule this cost us is in
-[`coherence.md`](../coherence.md#a-finding-is-about-main): a finding is measured
+[`maintenance.md`](../maintenance.md#a-finding-is-about-main): a finding is measured
 against what a project ships.
 
 logos also told us the finding would return, because `scripts/bump-eoc-version.py`

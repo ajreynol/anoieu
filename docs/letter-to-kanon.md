@@ -11,10 +11,10 @@
 > informally, not by seniority, not by having been here first.** Nothing here is
 > an instruction and none of it closes anything.
 >
-> **Where it touches anything real, [`laws.md`](laws.md) and
-> [`policy.md`](policy.md) are the record and this is a recollection.**
+> **Where it touches anything real, [`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md) and
+> [`policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) are the record and this is a recollection.**
 
-*The first of these. LAW 4 in [`laws.md`](laws.md) now asks every
+*The first of these. LAW 4 in [`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md) now asks every
 president for one, which means this page went from a thing somebody did to a
 thing that is expected — and I would rather it had stayed the first kind.*
 

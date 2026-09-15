@@ -918,9 +918,9 @@ with its witness pair in the corpus.
 ### 7a. Maintenance coherence — moved
 
 What must remain true of the record after any edit, whoever made it, and which
-of those a machine can check, is now [`coherence.md`](coherence.md#the-open-technical-work)
-— together with what this repository is responsible for and which documents may
-not be changed without asking. It is the entry point for maintenance work.
+of those a machine can check, is now [`maintenance.md`](maintenance.md#the-open-technical-work)
+— together with this repository's responsibilities, commands and required
+checks. It is the entry point for maintenance work.
 
 ---
 

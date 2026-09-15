@@ -2,7 +2,8 @@
 """How much evidence there is that this repository's documentation is current.
 
 **It does not decide whether a sentence is true, and it never will.** That is
-`docs/policy.md`'s central rule and the reason it is stated there rather than
+the shared repository policy
+(https://github.com/ajreynol/kanon/blob/main/docs/policy.md), stated there rather than
 numbered among the checkable ones: a page describing a tree that changed is
 mechanically indistinguishable from one that is accurate. Anything claiming
 otherwise would be the overclaim this repository exists to avoid.

@@ -1,285 +1,124 @@
 # anoieu
 
-A static analyzer for Eunoia signatures (`*.eo`) and Eunoia semantic
-configuration files (`*.eos`) — the languages of the
-[ethos](https://github.com/cvc5/ethos) proof checker and of `ethos-eoc`, the
-Eunoia compiler on the `ethosEoc3` branch.
+A static analyzer and differential fuzzer for **Eunoia**, the signature (`.eo`)
+and semantic configuration (`.eos`) languages used by
+[ethos](https://github.com/cvc5/ethos) and its Eunoia compiler.
 
-*Status: the front end, the checks that need no type checker, a shallow typing
-pass, the desugarer and the CI plumbing are written, and run over CPC on every
-push — where they have found three real bugs. A fuzzer for the checkers
-themselves,* [the anoieu fuzzer](docs/fuzzing.md)*, is the newest part.*
+- **The analyzer** reads signatures and semantics without running a proof. It
+  finds structural errors, type inconsistencies, unreachable program cases,
+  and disagreements between a signature and its semantics.
+- **The fuzzer** generates and mutates inputs, runs checkers, and reduces
+  crashes or disagreements to small reproducers.
 
-## What this repository is for
+There is also an optional repository-policy check for CI in Eunoia ecosystem
+projects.
 
-**Three programs that read somebody's files and report what is wrong with
-them** — a **static analyzer**, a **fuzzer**, and a **policy checker**. That is
-the mission, and each of the three answers a different question about work
-nobody here wrote.
+**A clean run means only that the checks found nothing.** The analysis is
+partial, its type reasoning is shallow, and it does not establish soundness.
+The fuzzer compares behavior; agreement between checkers is not a proof of
+correctness.
 
-**The static analyzer** runs over a signature, in an editor or in CI, and
-reports what ethos accepts and should not.
+## Run the analyzer
 
-**The fuzzer** points the same suspicion at the checkers themselves, this one
-included: [the anoieu fuzzer](docs/fuzzing.md) generates cases and compares what
-two checkers say about them, on the principle that a tool which only ever
-reports on other people's files has not been checked by anybody.
-
-**The policy checker** decides whether a repository's tree matches the shared
-arrangement it says it follows —
-[`scripts/policy_check.py`](scripts/policy_check.py), which runs in every member's
-CI. **It decides compliance; it does not write the rules**, and the difference
-matters: the rules are governance and are [destined to
-move](docs/roles.md), while deciding whether a tree complies stays here with the
-other two checkers.
-
-## Two things it also carries
-
-**A reporting system.** A finding is about *someone else's* file — a program in cvc5's calculus, a test
-signature in ethos, a semantics set in logos, a gap in the language itself — so
-it has to be published where its owner will read it, argued where they can
-disagree with it, and tracked until it is resolved or declined. This repository
-is that somewhere.
-
-**And, for now, the place the Eunoia ecosystem's shared arrangements are kept** —
-which is more than the policy, and is stated in full because understating it is
-how a front page stops being true. Four things sit here: how a repository is
-arranged and what its front page must say, in
-[`docs/policy.md`](docs/policy.md); who is in the ecosystem and how the rest of
-it is fetched onto a machine; what the work is aiming at and how each tool is
-doing against it, argued and never checked; and the machinery by which any of
-those changes and is announced to everybody pinned to them. **These are here
-because nothing else existed to hold them, not because they belong to a
-checker**, and the plan of record is that they leave.
-
-The policy is the part written to be adopted rather than admired, and is
-arguably the most useful thing here: the analyzer reports on four projects, and
-the policy is what lets a fifth join without anybody negotiating it from
-scratch. [Joining](docs/policy.md#joining-the-eunoia-ecosystem) takes one
-sentence in your README and one CI step, and anoieu checks it.
-
-> **A successful pass is not a clean bill of health.**
->
-> When anoieu reports nothing, that is a fact about the checks it ran, not about
-> your signature. The analysis is partial by construction — whole classes of
-> error have no check at all, the type reasoning is shallow, and every check has
-> been narrowed until it stopped reporting things that were not defects. A green
-> run here, or in your CI, or at the end of a report, is not evidence that a
-> signature, a semantics or a triple is sound.
->
-> We publish defects and never assurances, deliberately: a false sense of
-> security is much harder to withdraw than a wrong finding. The position in full,
-> shared with [dokimasia](https://github.com/ajreynol/dokimasia), is
-> [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md).
-
-> **The binding question about this repository is whether its documentation is
-> current — and nothing checks that.**
->
-> Asked to assess this ecosystem, a neighbouring project's first question was
-> not about the code. It was *are their docs up to date?* That is the right
-> question, and it is the sharpest constraint on believing anything here:
-> almost everything this ecosystem produces is prose, the prose is what other
-> tools are asked to rely on, and **prose goes stale silently.** No test fails
-> when a page starts describing a tree that changed.
->
-> It is not hypothetical. A single working session in September 2026 turned up
-> six claims in these documents that had quietly become false — a check count,
-> a repository said not to exist that did, a rule contradicted by the page
-> carrying it, a stale count of child projects, a pull request recorded as
-> open after it merged, and a URL for a repository that had moved. **Every one
-> was found by somebody reading, and none by anything that runs.**
->
-> So: read a date before you rely on a page, and treat an undated claim about
-> another project as the weakest thing here. Where a document is generated it
-> says so; where it is kept by hand, it is only as current as the last person
-> to look.
-
-## What it finds
-
-Without running a proof:
-
-- **syntax and structure errors** — all of them at once, rather than the first;
-- **invariants the manual states and no tool enforces**: a nil terminator of the
-  wrong type, a chainable operator with a non-variadic combiner;
-- **typing facts one level deeper**: a proof rule that can conclude a well-typed
-  non-`Bool` term, a program case whose right-hand side does not have the
-  program's declared return type, a case that no input can reach;
-- **disagreements across the triple** — signature, calculus semantics, SMT
-  semantics — which today surface, if at all, several tools downstream.
-
-It does **not** look for soundness bugs. Whether a rule is *valid* is what the
-verification conditions `ethos-eoc` emits are for; anoieu's question is the one
-below that, whether a signature and its semantics say something coherent at all.
-Ethos is lazy by design — a program case is type checked only when a proof
-reaches it — so a signature can carry a latent error for as long as no proof
-happens to exercise it. anoieu is the eager counterpart.
-
-```text
-theories/Bools.eo:4:22: error[EO0041]: the nil terminator of `or` has the wrong type
-  |
-4 | (declare-const or (-> Bool Bool Bool) :right-assoc-nil 0)
-  |                                                        ^ this has type Int
-  = note: `or` is marked `:right-assoc-nil`, so its nil must have type Bool
-  = help: ethos accepts the declaration; the mismatch appears at the first
-          application of the operator whose type is asked for
-```
-
-## The other half: the anoieu fuzzer
-
-anoieu asks whether a signature is coherent. **The anoieu fuzzer** asks whether
-the programs that *read* signatures behave when one is not — it writes Eunoia
-nobody would write, hands it to a checker, and watches for the answer a checker
-should never give. It is semantics-free by construction, because everything it
-reports is a fact about two runs rather than about mathematics: two checkers
-disagreeing about one file, a checker dying without saying why, a checker never
-answering.
-
-It is a **baseline**, deliberately: grammar-directed generation, mutation of a
-seed corpus, five verdict-level oracles, and no instrumentation anywhere. What a
-research-quality one would add — coverage guidance, derivations built from the
-calculus, a soundness oracle, the generated Lean checker used as a second
-implementation — is one of the
-future projects nobody has started, and does not exist.
+Python 3.10 or later; no Python dependencies. From a checkout:
 
 ```bash
-ETHOS=… LOGOS=… python3 -m anoieu_fuzz run --mode proof -n 2000       # ethos against logos, on CPC
-ETHOS=…              python3 -m anoieu_fuzz run --mode signature      # arbitrary signatures, at ethos
+python3 -m anoieu check path/to/signature.eo
+python3 -m anoieu check path/to/signature.eo --format github
 ```
 
-Findings are shrunk to a reproducer, deduplicated into buckets, and then go into
-**the same report as everything else** — the same ledger, the same fingerprints,
-the same renderers — under codes `FUZ0001`–`FUZ0005`, which is the marker that
-says a checker was provoked rather than a signature read. A checker accepting
-what the reference refuses is an error; refusing what it accepts is a warning. The first few thousand
-cases produced an uncaught C++ exception in ethos on `(declare-const f (->))`,
-three proofs that ethos and logos answer differently — one of them a *committed
-regression test* — and an ethos error path that skips its own `Error:`
-convention. Six reproducers are committed under
-[`tests/fuzz/`](tests/fuzz); nothing is filed upstream yet.
-[`docs/fuzzing.md`](docs/fuzzing.md) has the caveats and what a third checker
-has to do to join in.
+Or install with `pip install -e .` and use `anoieu check`.
 
+The checks cover:
 
-## If you own a tool in the Eunoia ecosystem
+- syntax and declaration structure;
+- attribute contracts, such as an associative operator's nil having the wrong type;
+- shallow typing, including program cases with incompatible return types;
+- cases that cannot be reached;
+- consistency across a signature, its calculus semantics and its SMT semantics.
 
-[`docs/reports/reports.md`](docs/reports/reports.md) carries every open ask anoieu makes of
-anyone, each with an id, a state, and the reasoning underneath it:
+Ethos checks some properties only when a proof exercises them. Anoieu reads the
+signature ahead of that use, so it can report errors in unexercised cases.
 
-| you own | waiting for you |
-| --- | --- |
-| **cvc5** — the CPC signature | [2 requests they made of us; 1 finding fixed, and 1 we had recorded as fixed that never was](docs/reports/reports.md#cvc5--the-calculus-everything-downstream-is-built-from) |
-| **ethos** — the proof checker | [3 confirmed defects, 3 diagnostics worth improving, 1 CI adoption, and 2 the fuzzer found: a crash and an error path with no location](docs/reports/reports.md#ethos--the-proof-checker-and-its-own-signatures) |
-| **ethos-eoc** — the Eunoia compiler | [3 integrations, including the `is_list_nil` diff its own docs ask for](docs/reports/reports.md#ethos-eoc--the-eunoia-compiler) |
-| **logos** — the Lean development | [1 regeneration, 1 CI adoption, and an open question about a regression test of theirs that ethos will not take; the dead entry is fixed and closed](docs/reports/reports.md#logos--the-lean-development) |
-| **eudaimonia** — the calculus template | [2 preflight integrations](docs/reports/reports.md#eudaimonia--the-template-for-other-calculi) |
-| **Eunoia** — the language and its manual | [7 proposed changes, from what writing the analyzer turned up](docs/reports/reports.md#eunoia-itself--the-language-and-its-manual) |
+See [usage](docs/usage.md) for inputs, output formats, configuration, suppression
+and baselines, and the [check catalogue](docs/checks.md) for each check's scope
+and limitations.
 
-We would rather show you what is checked than promise anything. Every push runs:
+## Run the fuzzer
 
-| what is checked | the evidence |
-| --- | --- |
-| each check reports the minimal signature written for it, and stays silent on the one it should not | [`tests/witnesses/`](tests/witnesses) — one file per case, readable in a minute. The suite also prints which checks have no witness yet |
-| what **ethos** says about every one of those files, unchanged since a real run recorded it | [`tests/oracle.json`](tests/oracle.json) — written by running ethos, never by hand. This is what backs "ethos accepts this and should not" |
-| CPC reports exactly what a committed baseline says, warnings denied | [`tests/corpus/cpc-baseline.json`](tests/corpus/cpc-baseline.json) — a change that invents a false positive fails *this* build before it reaches yours |
-| the report matches the commits it says it was measured against | [`docs/reports/corpus.md`](docs/reports/corpus.md) and `scripts/deps.lock`, re-measured on every push |
-
-Anything else we say about how we will behave — narrowing a check that fired
-wrongly, filing nothing twice — is an intention rather than a guarantee. Those
-are written down in [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md), and worth
-whatever our record of keeping them is worth; that record is the log in
-[`docs/reports/reports.md`](docs/reports/reports.md).
-
-Working one of these with an assistant is routine enough that we keep a prompt
-for it. What comes back is your triage rather than a verdict, and we treat it
-that way: nothing on our side files anything in your repository, and no reply
-closes a row until the artifact it names says what happened.
-
-## Starting from scratch
-
-Everything anoieu reads belongs to somebody else, so a checkout of this
-repository on its own has nothing to report on.
-[`scripts/install_eo`](scripts/install_eo) fetches the rest of the ecosystem, and
-is the first command to run:
+Provide builds of the checkers you want to exercise:
 
 ```bash
-git clone https://github.com/ajreynol/anoieu
-cd anoieu
-scripts/install_eo                   # clone the rest of the ecosystem, beside this
-scripts/install_eo --dry-run         # ... or print those commands and run none
-scripts/install_eo --status          # ... or say what is here, and what disagrees
+ETHOS=/path/to/ethos LOGOS=/path/to/logos \
+  python3 -m anoieu_fuzz run --mode proof -n 2000
+ETHOS=/path/to/ethos \
+  python3 -m anoieu_fuzz run --mode signature
 ```
 
-It puts ethos, logos, eudaimonia, dokimasia and koine beside this checkout,
-writes the map the other commands resolve a repo id through, and leaves cvc5 —
-the one tree nothing here needs a working copy of — until you ask for it. **Only
-a default branch is ever installed**, so where that is not the whole story it
-says so rather than acting: cloning ethos tells you that `ethos-eoc`, the
-compiler that lives in `ethos/tools/eoc`, has its current work on `ethosEoc3`,
-and gives you the one line that gets it. `--status` is what to run afterwards,
-and next month: it says which branch each tree is on, whether a child project is
-the current copy, and what has drifted. The options are in
-[`docs/usage.md`](docs/usage.md#the-rest-of-the-ecosystem); the other commands,
-for welcoming a tool, joining, and carrying findings, are in
-[`docs/coherence.md`](docs/coherence.md#the-scripts).
+The fuzzer uses grammar-based generation and seed mutation. It detects crashes,
+timeouts, malformed diagnostics and disagreements between checkers, then shrinks
+and deduplicates the results. It is a baseline fuzzer, without coverage guidance
+or a soundness oracle.
 
-## The documentation
+Findings use the same reporting workflow as the analyzer. See the
+[fuzzer guide](docs/fuzzing.md) for setup, modes, oracles and adding a checker.
+Committed [reproducers](tests/fuzz) show what it has found.
 
-| | |
+## Findings and reports
+
+The [report register](docs/reports/reports.md) records what anoieu is asking of
+each project, the evidence, and the response. The
+[open findings](docs/reports/open-findings.md) list current reports; the
+[corpus report](docs/reports/corpus.md) identifies the source commits measured.
+
+A reply is triage. A finding closes when the relevant artifact establishes what
+happened. The [reporting workflow](docs/reports/reporting-workflow.md) explains
+how to reproduce, answer and resolve findings, and how to run the analyzer in
+another project's CI.
+
+## Optional ecosystem CI check
+
+Eunoia ecosystem repositories can run the repository-policy checker against
+their tree:
+
+```bash
+python3 scripts/policy_check.py --root path/to/repository
+```
+
+It checks repository conventions, independently of the analyzer and fuzzer.
+The [maintenance guide](docs/maintenance.md#the-policy-checker-interface)
+describes the interface and how consumers pin it.
+
+## Documentation and development
+
+| Document | Contents |
 | --- | --- |
-| [`docs/reports/reports.md`](docs/reports/reports.md) | what anoieu is asking of whom, how each finding was confirmed, and what came back |
-| [`docs/reports/reporting-workflow.md`](docs/reports/reporting-workflow.md) | how a finding is handled: the conventions, the three prompts, and how to run these checks in your own CI |
-| [`docs/usage.md`](docs/usage.md) | the interface — every command and option, configuration, baselines, suppression, and the test suite |
-| [`docs/fuzzing.md`](docs/fuzzing.md) | the anoieu fuzzer, the fuzzer: what its oracle is, how a reproducer is shrunk, and how to point it at your checker |
-| [`docs/reports/postmortem.md`](docs/reports/postmortem.md) | one round of the reporting loop, as a log: what the assistant at the far end did with each finding, what we got wrong, and what changed |
-| [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md) | what may be published about somebody else's code, and why |
-| [`docs/notes.md`](docs/notes.md) | what ethos misses, what we have established about `.eo` and `.eos`, and the design |
-| [`docs/README.md`](docs/README.md) | the index, and the files a run generates: the open findings, the corpus, the check catalogue |
+| [Usage](docs/usage.md) | analyzer commands, options and configuration |
+| [Fuzzing](docs/fuzzing.md) | running the fuzzer and interpreting its findings |
+| [Checks](docs/checks.md) | every diagnostic and its limitations |
+| [Design notes](docs/notes.md) | language behavior, implementation and open work |
+| [Maintenance](docs/maintenance.md) | development commands and required checks |
+| [Documentation index](docs/README.md) | reports, records and remaining documentation |
 
-## Common questions
+Run the local suite with `python3 tests/run.py`. Tests cover minimal witnesses,
+CLI behavior and reporting; CI also checks the pinned corpus against committed
+baselines. Oracle tests additionally require an ethos build.
 
-The questions this repository is actually asked, in the words they arrive in.
-One line each; the link is the account. What is not here is anything about
-`tools/` — [research projects](docs/policy.md#research-projects) are unadvertised
-by rule, including from a list like this one, and the policy explains why a FAQ
-is the worst place to break that.
-
-| | |
-| --- | --- |
-| **anoieu reported nothing — is my signature correct?** | No. A clean run is a fact about the checks that ran, never about the signature; see the box at the top of this page and [`reporting-policy.md`](docs/reports/reporting-policy.md) |
-| **How do I run it over my own file?** | [`docs/usage.md`](docs/usage.md) — every command, option, baseline and suppression |
-| **Which repository does X? Who should I be asking?** | [`docs/roles.md`](docs/roles.md) is who holds what; [`docs/board.md`](docs/board.md) is who is here. The registers live in this tree, so *which tool should own this* is a question for this tree |
-| **Is this prompt even meant for this repository?** | Possibly not, and saying so is an acceptable answer: [*A prompt may not be for this repository*](docs/policy.md#a-prompt-may-not-be-for-this-repository) |
-| **How do I get the rest of the ecosystem onto a machine?** | [`scripts/install_eo`](scripts/install_eo) checks the members out as siblings |
-| **How does a repository join?** | One sentence in your README and one CI step: [Joining](docs/policy.md#joining-the-eunoia-ecosystem) |
-| **I disagree with a finding, or want to propose something.** | [`docs/discussion.md`](docs/discussion.md) — the topics, the format, and who may address whom |
-| **What is a "president", and who decides the shared arrangements?** | [`docs/laws.md`](docs/laws.md) is the office and its limits; [`docs/history.md`](docs/history.md) is what each one did |
-| **What does it actually check?** | [`docs/checks.md`](docs/checks.md) is the catalogue; [*What it finds*](#what-it-finds) is the summary |
-| **Why is it called that?** | Read it backwards — [*The name*](#the-name) |
+Documentation can lag behind the code. Generated reports identify their inputs;
+handwritten claims are only as current as their last review.
 
 ## The name
 
-**Eunoia** is *Eu·noi·a*. Read its syllables backwards and you get *a·noi·eu*,
-which is spelled **anoieu** and pronounced **"annoy you"** (/əˈnɔɪ.juː/).
-
-The joke doubles as the description. εὔνοια is Greek for *beautiful thinking*,
-and for the goodwill a speaker extends to an audience. `anoieu` is the same six
-letters read the other way, and the same goodwill pointed the other way: a tool
-whose whole job is to annoy you now, in your editor, about the thing that would
-otherwise annoy you in an hour — in Lean, or in cvc5, or in a proof-checking
-failure on a benchmark that exercises the one program case nobody typed.
-
-Reversal is the technically accurate description too. Ethos reads a signature
-*forwards*: it takes what a proof exercises and checks that far, and no further.
-anoieu reads the same signature *backwards*: it asks what the signature could
-ever be asked to do, and checks all of it, with no proof in hand.
+Read **Eu·noi·a** backwards: **a·noi·eu**, pronounced **"annoy you"**
+(/əˈnɔɪ.juː/). Eunoia means beautiful thinking or goodwill; this tool aims that
+goodwill at the error you would rather discover before running a proof.
 
 ## How this repository is maintained
 
 This repository is part of the **Eunoia ecosystem** and follows its shared
-repository policy — which it also keeps, in
-[`docs/policy.md`](https://github.com/ajreynol/anoieu/blob/main/docs/policy.md).
-Keeping it is not an exemption from it: this README is checked against that
-policy on every push, by the same command any other repository would run.
+[repository policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
+This README is checked against that policy on every push, by the same command
+any other repository would run.
 
 **Written by AI agents, under light human supervision.** A human directs the
 work, reads what is published and decides what is filed; nobody vets the

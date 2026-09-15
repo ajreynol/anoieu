@@ -1,6 +1,6 @@
 # The report card
 
-*Part of [`vision.md`](vision.md), which is the document that governs it: this
+*Part of [`vision.md`](https://github.com/ajreynol/kanon/blob/main/docs/vision.md), which is the document that governs it: this
 page is argued and never checked, no tool may put a verdict against a tenet, and
 a paragraph here is changed by a person. It is a separate file because it is the
 half that moves — the tenets are stable and these paragraphs are re-graded every
@@ -15,7 +15,7 @@ recognised. **What this page carries is the evidence that would bear on that** �
 how well each tool does the job it says it does.
 
 **The word is defined here because this is the page that assesses it.**
-[`laws.md`](laws.md) says how a position is *held* — bestowed, and revocable by
+[`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md) says how a position is *held* — bestowed, and revocable by
 the person who bestowed it. **It does not grade anybody**, and this page confers
 nothing: acceptance is not the assessor's to grant, and anoieu appears on the
 list it keeps.
@@ -25,12 +25,9 @@ this page puts anybody in Arete or keeps them out. **Arete is acceptance and
 cannot be granted by the party doing the assessing** — least of all by one that
 appears on the list. This is evidence for somebody else's judgement.
 
-**And anoieu keeps this page, whatever else moves.** Each president's history
-stays in its own tree and the accounts scatter; **this one does not.** It is a
-standing responsibility rather than an office, it stays here when the office
-leaves, and that separation is
-deliberate: **the record of what happened should follow whoever is answerable
-for it, and the assessment of how well everyone is doing should not.**
+**Anoieu keeps this page.** It is a standing responsibility, separate from
+ecosystem governance. Each president keeps its own history; this assessment
+remains in anoieu.
 
 How each tool in the ecosystem stands against the six tenets. It is here
 because a vision document with nothing measured against it is a wish, and
@@ -187,7 +184,7 @@ Three fields per tool, named along the ecosystem's convention:
 
 ## Two registers, and the project decides which
 
-[`policy.md`](policy.md) requires every repository to end its README with a note
+[`policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) requires every repository to end its README with a note
 saying how its development is currently run. **That note decides how a paragraph
 here is written** — not our impression of the code, and not a list kept on this
 side that would be stale within a month.

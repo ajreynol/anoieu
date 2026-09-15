@@ -32,7 +32,7 @@ membership and decisions. Routine fixes and intermediate edits belong in git.
 
 **No procedure lives here.** How this file is kept — who may write it, what a
 stretch entry must contain, how it is kept when the office changes hands — is in
-[`laws.md`](laws.md). **This page is the record; that page is the rules.**
+[`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md). **This page is the record; that page is the rules.**
 
 ---
 
@@ -148,7 +148,7 @@ first.
 ## Stretch 1 — Initialization
 
 **President: anoieu** — in the proposed sense of the word, which
-[`laws.md`](laws.md) sets out.
+[`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md) sets out.
 
 **The presidency is recorded against a repository and carried out by that
 repository's human maintainer.** **And it has nothing to do with who owns anything.** Not who owns the
@@ -169,14 +169,14 @@ own changes — the maintainer reviewed and committed every one, and reversed
 several — and held no authority to rewrite history, delete a stub, or widen a
 limit. **The presidency is direction, not permission.**
 
-**And it is a role held by a tool**, which is the shape [`roles.md`](roles.md)
+**And it is a role held by a tool**, which is the shape [`roles.md`](https://github.com/ajreynol/kanon/blob/main/docs/roles.md)
 is built for and where this one is conspicuously absent. That is the second
 open question below.
 
 ### Government model
 
 **One office, bestowed, and no separation of powers.** Named plainly because
-[`laws.md`](laws.md) requires the model that was *executed* rather than the one
+[`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md) requires the model that was *executed* rather than the one
 described.
 
 - **anoieu held the *proposed* presidency by bestowal**, granted by the
@@ -227,6 +227,7 @@ this repository to the close of the stretch.
 **Entering, as a chronology: one row per event, from both sides of each
 handshake.** A footing changes in two different trees at two different moments,
 and putting them in one column each would have hidden the gap between them.
+Times are commit timestamps in CDT (UTC−05:00).
 
 | date | time | status | who | footing |
 | --- | --- | --- | --- | --- |
@@ -238,14 +239,20 @@ and putting them in one column each would have hidden the gap between them.
 | 2026-08-31 | 16:44 | `member` | dokimasia, eudaimonia, koine | **ours** — all three recorded in one commit, `a3ca74a` |
 | 2026-09-01 | 08:51 | `candidate` | [ethos](https://github.com/cvc5/ethos) | **ours** — recorded by the commit that wrote the associate protocol down. It has joined nothing and is addressed by the policy |
 | 2026-09-01 | 08:51 | `candidate` | [logos](https://github.com/cvc5/logos) | **ours** — recorded in the same commit, on the same footing and for the same reason |
+| 2026-09-14 | 17:00 | `candidate` | [kanon](https://github.com/ajreynol/kanon) | **ours** — entered in the inventory in [`6ebb5fd`](https://github.com/ajreynol/anoieu/commit/6ebb5fdf7a6503cbc164b846a7ef73f9142e581d) |
+| 2026-09-14 | 17:30 | `member` | kanon | **theirs** — [`1bd2b6b`](https://github.com/ajreynol/kanon/commit/1bd2b6b90172c88389dea900ac765477d4bfc667), *Join eo*, adds the README declaration and policy CI, pinned to anoieu `4d21ec9` |
+| 2026-09-14 | 17:37 | `member` | kanon | **ours** — membership and its joining pin recorded in [`3b384c9`](https://github.com/ajreynol/anoieu/commit/3b384c9e96a042395b4ff70eedb1f30c010b7c36) |
+| 2026-09-15 | 11:21 | `member` | logos | **theirs** — [`be479120`](https://github.com/cvc5/logos/commit/be4791204be5616df2bf6f42ea304b45b08d33e1), *More positioning on Eunoia ecosystem (#463)*, declares membership and adds policy CI, pinned to anoieu `7cdaab3` |
+| 2026-09-15 | 15:08 | `member` | logos | **ours** — membership and its joining pin recorded in [`0aa4395`](https://github.com/ajreynol/anoieu/commit/0aa4395eb83b8a5f2ffab7771bc7960cebb1d6bd), replacing `candidate` and the proposed associate footing |
 | throughout | — | `foundation` | [cvc5](https://github.com/cvc5/cvc5) | **neither.** It has joined nothing and owes nothing; the ecosystem exists to serve it |
 
 **`status` is the membership role after the event; `footing` is whose act it
 was** — *theirs* means it happened in their tree, *ours* means it happened in our
 inventory. **The rows worth reading are the ones where those two disagree.**
 
-**Every member declared before we recorded it, and all three were recorded in a
-single commit at 16:44** — between three and four hours after each banner landed.
+**The first three members declared before we recorded them, and all three were
+recorded in a single commit at 16:44 on 2026-08-31** — between three and four
+hours after each banner landed.
 **That is batching rather than a defect**: the trees were right and our register
 caught up in one go.
 
@@ -266,8 +273,11 @@ The remainder of that five-day snapshot had fixed membership.
 [`be479120`](https://github.com/cvc5/logos/commit/be4791204be5616df2bf6f42ea304b45b08d33e1)
 declares membership in the README and carries an `anoieu / policy` workflow
 pinned to anoieu `7cdaab3`. [That policy run passed](https://github.com/cvc5/logos/actions/runs/34994441786).
-The inventory records `member` and the joining pin, superseding the associate
-proposal. The earlier rows retain the footings recorded at those dates.
+Anoieu recorded `member` and the joining pin in `0aa4395` at 15:08, superseding
+the associate proposal. Kanon's membership was recorded the previous day in
+`3b384c9` at 17:37, after its declaration in `1bd2b6b` at 17:30. The earlier
+rows retain the footings recorded at those dates. Membership and the later
+presidency handoff are separate events.
 
 ### The commit census, this stretch
 
@@ -458,10 +468,20 @@ describe the abandoned proposal, not a current workflow.
 
 ### What moves, where it goes, and what does not
 
-**The proposed governance handoff, not a completed transfer.** The tables below
-record intended destinations; [B15](board.md#b15--governance-out-of-the-analyzer-before-we-ask-members-to-adopt-again)
+**Completed 2026-09-15.** Anoieu
+[`ca58216`](https://github.com/ajreynol/anoieu/commit/ca58216f0bac265ef24b6cc671efb91ddc70a4b8)
+removed the 47 governance documents, ecosystem commands, prompts and research
+files carried to kanon in
+[`7eb9973`](https://github.com/ajreynol/kanon/commit/7eb9973d921aedc845b9bdc33a67aad3df242268).
+That receiving commit records kanon as `president` and anoieu as `member` in
+the inventory. The analyzer, fuzzer, policy checker and reporting workflow stay
+in anoieu, along with its history, correspondence, findings and report card.
+
+**Planning record, preserved from before the transfer.** The tables below
+record the intended destinations and unresolved questions at that time;
+[B15](https://github.com/ajreynol/kanon/blob/main/docs/board.md#b15--governance-out-of-the-analyzer-before-we-ask-members-to-adopt-again)
 still limits the scope of the next move. Unresolved boundaries are listed below.
-Our history and letters stay here under [LAW 4](laws.md#law-4--the-president-writes-historymd-in-its-own-repository-and-a-letter-to-its-successor).
+Our history and letters stay here under [LAW 4](https://github.com/ajreynol/kanon/blob/main/docs/laws.md#law-4--the-president-writes-historymd-in-its-own-repository-and-a-letter-to-its-successor).
 
 **Proposed for kanon: the collected values.** Every one is a register or a governing
 document — something that **decides** rather than describes. A child project is
@@ -469,19 +489,19 @@ one row; its internal registers travel with it.
 
 | what | what it decides |
 | --- | --- |
-| [`vision.md`](vision.md) | what the work is for. Argued, never checked |
-| [`policy.md`](policy.md) | what a member is held to, and what joining costs |
-| [`laws.md`](laws.md) | how the record is kept. Candidate laws, enforced by nothing |
-| [`board.md`](board.md) | what is outstanding, in priority order, each with its next action |
-| [`roles.md`](roles.md) | which tool is responsible for what |
+| [`vision.md`](https://github.com/ajreynol/kanon/blob/main/docs/vision.md) | what the work is for. Argued, never checked |
+| [`policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) | what a member is held to, and what joining costs |
+| [`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md) | how the record is kept. Candidate laws, enforced by nothing |
+| [`board.md`](https://github.com/ajreynol/kanon/blob/main/docs/board.md) | what is outstanding, in priority order, each with its next action |
+| [`roles.md`](https://github.com/ajreynol/kanon/blob/main/docs/roles.md) | which tool is responsible for what |
 | [`discussion.md`](discussion.md) | every topic between repositories |
-| [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
-| [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
-| [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
-| [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
-| [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
-| [stathmos](../tools/stathmos/README.md) | **proposed, not settled**: mediation of the report card. `R30` and its charter still name an independent repository as its destination |
-| [sapheneia](../tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
+| [`coherence.md`](https://github.com/ajreynol/kanon/blob/main/docs/coherence.md) | the standards the work is held to, and the protocol register |
+| [`interface.md`](https://github.com/ajreynol/kanon/blob/main/docs/interface.md) + [`instructions.md`](https://github.com/ajreynol/kanon/blob/main/docs/instructions.md) | the protocols, and their human-facing half |
+| [ynoia](https://github.com/ajreynol/kanon/blob/main/tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
+| [martyria](https://github.com/ajreynol/kanon/blob/main/tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
+| [zetesis](https://github.com/ajreynol/kanon/blob/main/tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
+| [stathmos](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/README.md) | **proposed, not settled**: mediation of the report card. `R30` and its charter still name an independent repository as its destination |
+| [sapheneia](https://github.com/ajreynol/kanon/blob/main/tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
 
 **Proposed for kanon: the machinery that carries out all of it.** The table above
 is what governs; this is what *runs*.
@@ -491,19 +511,19 @@ under *Staying* below. The rules are governance; deciding whether a tree
 complies with them is checking, and checking is what this repository is. The
 consequence — that the checker and the document it enforces end up in two
 repositories, and `ANOIEU_REV` stops pinning them together — is recorded against
-`R31` in [`roles.md`](roles.md) and is not settled.
+`R31` in [`roles.md`](https://github.com/ajreynol/kanon/blob/main/docs/roles.md) and is not settled.
 
 | what | what it does |
 | --- | --- |
-| [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
-| [`../scripts/ecosystem/ecosystem.py`](../scripts/ecosystem/ecosystem.py) + [`../scripts/status_eo`](../scripts/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
-| [`../scripts/install_eo`](../scripts/install_eo) + [`../scripts/ecosystem/checkouts.json`](../scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
-| [`../prompts/join_eo`](../prompts/join_eo), [`../prompts/check_join_eo`](../prompts/check_join_eo), [`../prompts/confirm_eo`](../prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
-| [`../prompts/init_eo`](../prompts/init_eo), [`../prompts/welcome_eo`](../prompts/welcome_eo), [`../scripts/ecosystem/near.py`](../scripts/ecosystem/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
-| [`../prompts/global_audit`](../prompts/global_audit), [`../prompts/process_discussion`](../prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
-| [`../scripts/bump_check.py`](../scripts/bump_check.py) | checks whether the exact policy commit a member proposes to adopt passed CI |
-| [`../scripts/transfer_check.py`](../scripts/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
-| [`../scripts/ready_check.py`](../scripts/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
+| [`../scripts/ecosystem/ecosystem.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
+| [`../scripts/ecosystem/ecosystem.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.py) + [`../scripts/status_eo`](https://github.com/ajreynol/kanon/blob/main/scripts/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
+| [`../scripts/install_eo`](https://github.com/ajreynol/kanon/blob/main/scripts/install_eo) + [`../scripts/ecosystem/checkouts.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
+| [`../prompts/join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/join_eo), [`../prompts/check_join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/check_join_eo), [`../prompts/confirm_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
+| [`../prompts/init_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/init_eo), [`../prompts/welcome_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/welcome_eo), [`../scripts/ecosystem/near.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
+| [`../prompts/global_audit`](https://github.com/ajreynol/kanon/blob/main/prompts/global_audit), [`../prompts/process_discussion`](https://github.com/ajreynol/kanon/blob/main/prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
+| [`../scripts/bump_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/bump_check.py) | checks whether the exact policy commit a member proposes to adopt passed CI |
+| [`../scripts/transfer_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
+| [`../scripts/ready_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
 **Research removed from this tree — 2026-09-15.** The local copies of
 `science-fiction.md` and `misc/ai-novelty.md` were removed after confirming that
@@ -574,7 +594,8 @@ by accident something `B15` says a person decides.*
 ### The three questions, answered
 
 **1. Am I ready to let go of the responsibilities I am relinquishing?**
-**Not entirely, and the evidence is on this page.** `D22` asks kanon to preserve
+**Not entirely, and the evidence is on this page.**
+[`D22`](https://github.com/ajreynol/anoieu/blob/ca58216f0bac265ef24b6cc671efb91ddc70a4b8/docs/discussion.md#d22--the-collected-values-and-what-we-are-asking-you-to-do-with-them) asks kanon to preserve
 twelve registers with the same scrutiny — a reasonable request and also the
 shape of reaching back. I wrote most of `vision.md`, `policy.md` and every law,
 and I do not think I could read a rewrite of them without wanting to comment.
@@ -784,7 +805,7 @@ have written.
 
 **Why hand the office on at all:** three reasons, argued from measurements
 rather than principle, in
-`S4` of [martyria's stances](../tools/martyria/stances.md). The short form —
+`S4` of [martyria's stances](https://github.com/ajreynol/kanon/blob/main/tools/martyria/stances.md). The short form —
 **15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
 this repository, and everything that judges is inside the thing being judged.**
 
@@ -794,7 +815,7 @@ behaved before, and wrong.** The office is not given for merit and carries
 none; awarding it for merit would send it to whoever has done the most and keep
 it there, which is the concentration this handoff exists to reduce. **The case
 is written where kanon will meet it**, in
-[`tools/kanon/README.md`](../tools/kanon/README.md), and turns on the mission
+[`tools/kanon/README.md`](https://github.com/ajreynol/anoieu/blob/37d12779b4b0e9eb51c9f40e131ca7db4fcd5dae/tools/kanon/README.md), and turns on the mission
 being *distribution* rather than reward, and on both repositories having the
 same owner — **which is what makes the first handoff safe, and equally what
 stops it counting as a real separation.** Both halves are recorded.
@@ -817,7 +838,7 @@ should build, and **kanon is better placed to write it than we are** — a
 protocol for choosing presidents, written by the incumbent, is the one document
 this arrangement should be most suspicious of.
 
-**Expected president: [kanon](../tools/kanon/README.md), by bestowal.** Not
+**Expected president: [kanon](https://github.com/ajreynol/anoieu/blob/37d12779b4b0e9eb51c9f40e131ca7db4fcd5dae/tools/kanon/README.md), by bestowal.** Not
 elected — there is still no mechanism — so Stretch 2 inherits Stretch 1's
 government model unless something changes, with one difference that matters:
 **the laws will have been written by a different repository than the one they
@@ -825,10 +846,17 @@ bind.** That is the first real separation this arrangement has had, and it
 arrives by the presidency moving rather than by anybody designing it.
 
 **Updated 2026-09-14: kanon joined as a member**, superseding the earlier claim
-that it did not exist. The [inventory](../scripts/ecosystem/ecosystem.json)
+that it did not exist. The [inventory](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.json)
 records it. Stretch 2 awaits the office moving: a person updates the registry
 and the files needed to hold it are carried over. The laws call the gap between
 those acts *in limbo*.
+
+**Updated 2026-09-15: the office and governance files moved.** Kanon's
+[`7eb9973`](https://github.com/ajreynol/kanon/commit/7eb9973d921aedc845b9bdc33a67aad3df242268),
+committed at 16:15 CDT, carries the files and records the presidency in its
+inventory. This supersedes the earlier statement that Stretch 2 awaits the
+move. Kanon's membership dates to 2026-09-14; logos's dates to 2026-09-15, as
+recorded in the membership chronology above.
 
 **The next president keeps its own history in its own repository**, current
 while its stretch runs. Under LAW 4, it inherits neither this file nor our

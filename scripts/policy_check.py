@@ -237,13 +237,13 @@ def note_in(text: str) -> list[str]:
 
     A heading saying how the repository is run, and something under it. No
     declaration, no link to us, no workflow, no pin, and nothing about the shape
-    of the tree — see *The associate protocol* in `docs/policy.md`, which says
-    what is still undecided and what would settle it.
+    of the tree. The shared policy describes which parts of the associate
+    protocol remain undecided.
 
     Read for a **report** and never for a verdict. Nothing in `CHECKS` calls it,
     nothing fails on it, and the repositories it is asked about are held to none
-    of this. `scripts/status_eo --protocol` is what runs it, so that a person
-    deciding the protocol can see who would satisfy which version of it today.
+    of this. Ecosystem inventory tooling can use it to report who would satisfy
+    a proposed protocol.
     """
     if not text:
         return ["no README.md, so nothing says how the repository is maintained"]
@@ -258,11 +258,8 @@ def note_in(text: str) -> list[str]:
 def declaration_in(text: str) -> list[str]:
     """What is missing from a README's declaration of membership, if anything.
 
-    Split out from the check below because a second reader wants the same
-    answer from text it did not read off this disk: `scripts/status_eo --check
-    --online` asks it of a README fetched from a remote, to decide whether the
-    inventory's record of who has joined is still true. One implementation, so
-    the two cannot come to different answers about the same file.
+    Split out from the check below so inventory tooling can ask the same
+    question of a fetched README. Both readers use one implementation.
     """
     if not text:
         return ["no README.md, so nothing declares membership"]
@@ -287,11 +284,9 @@ def declaration_in(text: str) -> list[str]:
 def affiliation_in(text: str) -> list[str]:
     """What is missing from an **affiliating** maintenance note, if anything.
 
-    The note an `associate` in `scripts/ecosystem/ecosystem.json` carries: it names the
-    ecosystem it works with, and it says it is not held to the policy. Read from
-    a fetched README by `scripts/status_eo --check --online`, exactly as
-    `declaration_in` is for a member -- so both footings that assert something
-    about somebody else's tree are decided by reading that tree.
+    An associate names the ecosystem it works with and says it is not held to
+    the policy. Inventory tooling can use this reader on a fetched README,
+    just as it uses `declaration_in` for a member.
 
     **This is never a check in `CHECKS`.** It is about a repository that has
     joined nothing, and running it here would be this tree grading somebody who
@@ -350,8 +345,8 @@ def check_name_explained() -> list[str]:
 def check_owner_unadvertised() -> list[str]:
     """The local maintenance page records ownership without front-page credit.
 
-    Home-only: another repository chooses its own attribution. The outgoing
-    governance document may retain its own ownership record until copied.
+    Home-only: another repository chooses its own attribution. A shared
+    governance document may carry its own ownership record independently.
     """
     source = "docs/maintenance.md"
     m = re.search(r"^\*\*Owner:\*\*\s*`[^`]+`\s*[—-]\s*([^.\n]+?)\.", read(source), re.M)

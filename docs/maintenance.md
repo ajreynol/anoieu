@@ -1,14 +1,11 @@
 # Maintaining anoieu
 
-Anoieu owns the analyzer, the fuzzer, the policy checker, and the reporting
-workflow. Shared governance belongs with [kanon](https://github.com/ajreynol/kanon).
-The [handoff record](history.md#what-moves-where-it-goes-and-what-does-not)
-names the files leaving; copying files does not itself transfer an office.
-Our history, correspondence, findings and report card stay here.
+Anoieu owns the analyzer, the fuzzer, the optional ecosystem policy check,
+and the reporting workflow. Its history, correspondence, findings and report
+card are also kept here.
 
 **Owner:** `ajreynol` — Andrew Reynolds, University of Iowa and AWS.
-This is anoieu's accountability record, not front-page attribution. The shared
-policy's ownership record remains in its source file until the handoff.
+This is anoieu's accountability record, not front-page attribution.
 
 ## Working on this tree
 
@@ -42,9 +39,9 @@ to make a test pass. Corpus CI restores the recorded commits with
 `python3 scripts/run.py --pinned --check`; the scheduled refresh measures tips.
 Oracle CI builds the pinned ethos commit and checks parser and fuzzer evidence.
 
-### The policy checker is a retained interface
+### The policy checker interface
 
-Members continue to pin an anoieu commit and run
+Ecosystem repositories can pin an anoieu commit and run
 `scripts/policy_check.py --root PATH`. `--version` identifies that checker
 commit, not a governance document revision. Checks are encoded and tested here;
 they do not fetch or interpret governance documents at runtime. The shared
@@ -54,8 +51,8 @@ home. Vision is argued, never mechanically checked.
 
 Do not relax a check merely to make CI green. A new check must be decidable,
 give an actionable failure, and be tested beyond this tree. Keep downstream
-compatibility explicit: declarations may link either the kanon policy or its
-former anoieu location. Anoieu's owner and script-catalog checks read this page.
+compatibility explicit: declarations may link either the current shared policy
+or its former anoieu location. Anoieu's owner and script-catalog checks read this page.
 
 ## The scripts
 
@@ -82,18 +79,8 @@ Commands are run from the repository root unless noted.
 | `process_anoieu` | process the reply here; `--dry-run` resolves the checkout without starting an assistant |
 
 `scripts/repos.local` is an optional, untracked per-machine checkout map used by
-the findings workflow. It stays local; explicit paths also work.
-
-### Commands in the handoff scope
-
-These are governance handoff inputs, not dependencies of anoieu's retained
-commands. They remain available for copying until the handoff deletes them.
-
-| source directory | files |
-| --- | --- |
-| `scripts/` | `install_eo`, `status_eo`, `bump_check.py`, `ready_check.py`, `transfer_check.py` |
-| `scripts/ecosystem/` | `ecosystem.py`, `near.py`, `ecosystem.json`, `checkouts.json` |
-| `prompts/` | `init_eo`, `welcome_eo`, `join_eo`, `check_join_eo`, `confirm_eo`, `global_audit`, `process_discussion` |
+the findings workflow. Explicit checkout paths also work. Set
+`ANOIEU_REPOS_FILE` to an absolute path to use a different map.
 
 ## A finding is about `main`
 
