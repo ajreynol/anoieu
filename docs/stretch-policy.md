@@ -5,7 +5,7 @@ What a stretch is, what ends one, and what designing the next one involves.
 This is the **policy**. The two things it governs live elsewhere and are
 deliberately apart: [`../tools/stretch.json`](../tools/stretch.json) is the
 **register** — which stretch we are in, its status, and the version it is to be
-published as, which is what `./scripts/deploy` gates on and must be current;
+published as, which a deploy is gated on and which must be current;
 [`history.md`](history.md) is the **account** of what each stretch did, which is
 prose and is a person's.
 

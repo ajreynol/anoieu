@@ -286,6 +286,10 @@ work, reads what is published and decides what is filed; nobody vets the
 internal design, and nothing reaches another project's issue tracker without
 review.
 
+**The human maintainer is the authority here, and the agents are tools.** They
+write most of the text and hold none of it: no decision, no role, no say. Where
+this tree says a repository does something, a person did it.
+
 **And a human runs every `git push` and every `git clone`.** No commit has
 entered the public history of this repository except by a person executing it,
 so a human intention stands behind every one — which is the fact anything

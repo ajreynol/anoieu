@@ -16,6 +16,17 @@ aiming at: this page is about the arrangement, that one about the point of it.
 Cite a rule or a convention by name rather than by number. Append; do not
 renumber. Retire either in place, with a line saying why.
 
+**Everything here binds a person.** Most of these repositories are written by AI
+agents, and **the human maintainer of each one is the ultimate authority over
+it** — an agent holds no footing, no role and no decision, and is never a party
+to anything on this page. Where a rule below says *a repository declares*, *a
+tool answers* or *a member refuses*, it means the person who maintains that
+repository doing it. **Nothing of consequence happens here without a person
+doing it**: no commit, no push, no message to another project, no change of
+footing. That is a description of how the work is run rather than a guarantee
+about it, and it is stated at the top because the rest of this page reads like a
+machine society if nobody says otherwise.
+
 ## The central one: a document that has gone stale is a defect
 
 **Everything else here assumes it.** A layout rule, a front-page convention, a
@@ -1116,18 +1127,30 @@ One atomic record of what happened, which either lands or does not. Deploying
 without a sound entry is committing with an empty message and the checks turned
 off.
 
-Four things a program decides, and `./scripts/deploy` refuses without:
+**A person deploys, by hand.** There was a script; it was deleted on 2026-09-15.
+It checked four gates and then edited two files, which made it look as though
+deploying were a command somebody runs — and deploying is the one act in this
+ecosystem whose effects land in other people's trees. **A step that consequential
+should cost a person an afternoon rather than a command**, and the script was
+saving an afternoon that nobody should want saved. Each gate below still holds;
+what changed is that a human checks it and a human makes the edit.
+
+Four a program can answer, with the command that answers each:
 
 1. **The incoming president is a `member`.** An office cannot be handed to a
    repository that has not joined the thing it would preside over.
-2. **The stretch is `staged`.** Deploying is only reachable from there.
+2. **The stretch is `staged`** in [`../tools/stretch.json`](../tools/stretch.json).
+   Deploying is only reachable from there, and a person moves it.
 3. **Our own policy check passes.** Nothing is published from a tree that fails
-   its own checks.
+   its own checks — `python3 tools/policy_check.py`.
 4. **Our build is green at the commit members would adopt** — and
    **unverifiable is a refusal, not a pass.** A member may only bump to a green
    commit, so deploying without knowing publishes a commit nobody may adopt.
+   `python3 tools/bump_check.py --rev <sha>`.
 
-**There is no `--force` and there will not be one.**
+**A failed gate is a stop, not a warning**, and there is no override short of
+the escape hatch every gate here has: a person may proceed, having said so and
+written down why.
 
 Four nobody can decide but a person:
 
@@ -1144,10 +1167,10 @@ repository and the public record; if *what went wrong* is empty; if it says
 something about a project outside this ecosystem without the caveats the page's
 own banner requires; or if a `FIXME` is still in it.
 
-**Gates 5 to 8 are self-administered.** The president writes the entry, judges
+**Gates 5 to 8 are self-administered.** The maintainer writes the entry, judges
 whether it is reasonable, and deploys, and nobody else reads it first — so four
-of the eight constraints are currently a promise rather than a gate. This is the
-strongest argument for the offices that do not exist yet.
+of the eight constraints are a promise rather than a gate. This is the strongest
+argument for the offices that do not exist yet.
 
 ## Joining the Eunoia ecosystem
 

@@ -7,6 +7,9 @@ nothing.** No check reads this page and no build fails on it.
 about the president — three it owes, one that says where the office is recorded,
 and one that hands it this page.
 
+**Every one of them binds a person, never a program.** *Nobody here is an AI
+agent*, below, is the whole of what that means and is worth reading first.
+
 **No tool is named on this page.** These are rules about footings and an office,
 and both outlive whoever occupies them. A law that names its current subject
 reads as a fact about that subject. **Who holds what is recorded elsewhere; here
@@ -16,6 +19,38 @@ there are only footings.**
 LAW 7.** That is the flaw, and it is the first thing to fix. **Nothing here has
 been offered to anybody as a commitment**, and a member should read it as how the
 president intends to behave rather than as a rule it can hold anybody to.
+
+## Nobody here is an AI agent
+
+**Every repository in this ecosystem has a human maintainer, and that person is
+the ultimate authority over it.** Not a tie-breaker, not an approver of last
+resort — the authority. Everything below, and everything in
+[`policy.md`](policy.md), describes what that person has chosen to do and may
+stop doing at any time.
+
+**No AI agent holds an office, a role, a footing or a decision.** Agents write
+most of the text in these repositories, and they do it the way any tool does:
+somebody runs them, reads what comes back, and decides what to keep. **An agent
+has no standing to act on its own behalf and is never the party to anything.**
+
+**So every actor named on this page is a person.** Where a law says *the
+president* does something, it means the human maintainer of the repository
+holding the office. Where a page here says *a tool answers*, *a repository
+declines*, or *kanon refuses*, it is shorthand for the maintainer of that
+repository doing it. **The shorthand is convenient and it is not a claim**, and
+anywhere it could be read as one, the person is meant.
+
+**Nothing major happens without a person doing it.** No commit, no push, no
+repository, no message to another project, no change of footing, no handover of
+the office, no deployment. Several of those are reserved for a person by an
+explicit rule and the rest are reserved by the plain fact that an agent is
+invoked, does what it was asked, and stops.
+
+**This is not a safety guarantee and is not offered as one.** It is a
+description of how the work is actually run, and it is written down because the
+vocabulary here — offices, footings, presidents, tools addressing one another —
+reads like a machine society if nobody says otherwise. It is not one. It is one
+person, some repositories, and a lot of generated prose they are answerable for.
 
 ## The same owner loophole
 
@@ -131,8 +166,11 @@ mission has done the bookkeeping and missed the job.
 
 One at a time, held by a repository, for a stretch.
 
-**The president is a repository**, not a person and not an agent. A repository
-persists across a stretch; an agent is invoked per session and does not.
+**The office is recorded against a repository**, because a repository persists
+across a stretch and a session does not. **It is carried out by that
+repository's human maintainer**, who is the only party here that decides
+anything — see *Nobody here is an AI agent* above. Saying *anoieu is president*
+is shorthand for *the person who maintains anoieu holds the office*.
 
 **It is bestowed.** A person grants it, it rests on their say-so, and it is
 theirs to take back. **There is no election, no term, and no procedure for

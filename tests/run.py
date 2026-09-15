@@ -832,7 +832,6 @@ def epoch_gate() -> int:
         print(("ok   " if ok else "FAIL ") + f"bump_check {verb} {label}"
               + ("" if ok else f" -- got {got}: {why}"))
 
-    import shutil  # noqa: PLC0415
     import tempfile  # noqa: PLC0415
 
     tmp = tempfile.mkdtemp(prefix="anoieu-epoch-")
@@ -866,51 +865,6 @@ def epoch_gate() -> int:
     for label, ok in marks:
         failures += 0 if ok else 1
         print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
-
-    # `./scripts/deploy` round-trips the register, and this is the only thing
-    # that runs its write. It used to be three regular expressions against the
-    # prose of a deleted log; now it is a dict, and what has to hold is that
-    # what deploy writes is what bump_check reads back -- the seam that a
-    # hand-rolled rewrite of either side breaks silently.
-    stage = os.path.join(tmp, "roundtrip")
-    os.makedirs(os.path.join(stage, "tools"))
-    os.makedirs(os.path.join(stage, "docs"))
-    shutil.copy(os.path.join(root, "tools", "stretch.json"),
-                os.path.join(stage, "tools", "stretch.json"))
-    shutil.copy(os.path.join(root, "docs", "history.md"),
-                os.path.join(stage, "docs", "history.md"))
-    deploy = open(os.path.join(root, "scripts", "deploy"), encoding="utf-8").read()
-    body = re.search(r"^python3 - \"\$ROOT\".*?\n(.*?)^PYEOF$", deploy, re.M | re.S)
-    if not body:
-        print("FAIL scripts/deploy no longer has a python write block this can run")
-        failures += 1
-    else:
-        script = os.path.join(stage, "write.py")
-        open(script, "w", encoding="utf-8").write(body.group(1))
-        was = bump_check.current_stretch(root)
-        nxt = f"E{int(was[1:]) + 1}"
-        out = subprocess.run([sys.executable, script, stage, was, nxt,
-                              "9.9.9", "kanon", "staged"],
-                             capture_output=True, text=True, timeout=60)
-        reg = json.load(open(os.path.join(stage, "tools", "stretch.json")))
-        for label, ok in (
-                ("deploy's write block runs", out.returncode == 0),
-                ("it advances the register to the next stretch",
-                 bump_check.current_stretch(stage) == nxt),
-                ("which opens at `brainstorm`",
-                 bump_check.current_status(stage) == "brainstorm"),
-                ("the closed stretch is recorded as deployed, with its version",
-                 reg["stretches"].get(was, {}).get("status") == "deployed"
-                 and reg["stretches"][was].get("version") == "9.9.9"),
-                ("and names the status it was deployed from",
-                 reg["stretches"].get(was, {}).get("previous_status") == "staged"),
-                ("the incoming president gets a FIXME in history.md",
-                 f"## Stretch {nxt[1:]} — FIXME"
-                 in open(os.path.join(stage, "docs", "history.md")).read())):
-            failures += 0 if ok else 1
-            print(("ok   " if ok else "FAIL ") + f"deploy: {label}")
-            if not ok and out.returncode != 0:
-                print("     " + (out.stderr or "").strip().replace("\n", "\n     "))
 
     print(f"-- the epoch gate: {failures} failure(s)")
     return failures

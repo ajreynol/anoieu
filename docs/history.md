@@ -150,8 +150,8 @@ first.
 **President: anoieu** — in the proposed sense of the word, which
 [`laws.md`](laws.md) sets out.
 
-**The presidency is held by a repository, not by a person and not by an
-agent.** **And it has nothing to do with who owns anything.** Not who owns the
+**The presidency is recorded against a repository and carried out by that
+repository's human maintainer.** **And it has nothing to do with who owns anything.** Not who owns the
 repository, not who owns the ecosystem, not who owns the trees the ecosystem
 serves — the maintainer owns this one and did not thereby become president of
 anything, and cvc5 is owned by people who have joined nothing. **The presidency
@@ -480,7 +480,7 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 | [`../prompts/join_eo`](../prompts/join_eo), [`../prompts/check_join_eo`](../prompts/check_join_eo), [`../prompts/confirm_eo`](../prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
 | [`../prompts/init_eo`](../prompts/init_eo), [`../prompts/welcome_eo`](../prompts/welcome_eo), [`../tools/near.py`](../tools/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
 | [`../prompts/global_audit`](../prompts/global_audit), [`../prompts/process_discussion`](../prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
-| [`../scripts/deploy`](../scripts/deploy) + [`../tools/bump_check.py`](../tools/bump_check.py) + [`../tools/stretch.json`](../tools/stretch.json) | the epoch machinery: closing a stretch, opening the next, and the gate a member bumps through |
+| [`../tools/bump_check.py`](../tools/bump_check.py) + [`../tools/stretch.json`](../tools/stretch.json) | the epoch machinery: the register of which stretch we are in, and the gate a member bumps through. **Closing a stretch is done by hand** — the script that did it was deleted on 2026-09-15 |
 | [`../tools/transfer_check.py`](../tools/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
 | [`../tools/ready_check.py`](../tools/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
@@ -691,7 +691,7 @@ qualification on everything above.
 
 **Moved here on 2026-09-14 from `docs/stretches.md`, which has been deleted.**
 That file kept a covering note per stretch beside three fields
-`./scripts/deploy` gated on, under a banner saying it was under no obligation to
+a deploy gated on, under a banner saying it was under no obligation to
 be current. The fields are now `tools/stretch.json`; this is the rest, and it
 belongs in the account rather than in a register.
 
@@ -855,7 +855,7 @@ this tree: three reasons, argued from measurements rather than principle, in
 **15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
 this repository, and everything that judges is inside the thing being judged.**
 
-**kanon is expected to refuse, on the grounds that it has not earned the
+**kanon's maintainer is expected to refuse, on the grounds that it has not earned the
 office — and that reasoning is careful, consistent with how tools here have
 behaved before, and wrong.** The office is not given for merit and carries
 none; awarding it for merit would send it to whoever has done the most and keep

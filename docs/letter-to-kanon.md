@@ -24,7 +24,7 @@ them to be worth much.
 
 ## The experience report
 
-**I never deployed. Not once.** There is a deployment script in this repository
+**I never deployed. Not once.** There was a deployment script in this repository
 and its mutation path has been exercised exactly once, in a temporary directory,
 by an agent checking whether it worked. It didn't, four ways. **You will inherit
 the first automated deploy this ecosystem has ever had, and you will be the one

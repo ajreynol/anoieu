@@ -139,7 +139,7 @@ def register(root: str = "") -> dict:
     These three facts used to be read out of the prose of `docs/stretches.md`,
     on the argument that a machine-readable copy would be one more thing to keep
     in step with the log. That argument died with the log: there is no prose left
-    for a copy to drift from, and the fields `./scripts/deploy` gates on were
+    for a copy to drift from, and the fields a deploy is gated on were
     sitting under a banner saying the file was under no obligation to be current.
 
     Returns `{}` when there is no register, which every caller treats as *we do
