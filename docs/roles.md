@@ -238,7 +238,7 @@ number worth looking at, in both directions.
 | `eudaimonia` | member | 1 |
 | `euthyna` | child of `eudaimonia` | 1 |
 | `koine` | member | 1 |
-| `logos` | candidate | 3 |
+| `logos` | member | 3 |
 | `martyria` | child of `anoieu` | 0 |
 | `sapheneia` | child of `anoieu` | 1 |
 | `stathmos` | child of `anoieu` | 1 |

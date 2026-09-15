@@ -1,11 +1,7 @@
 # The documentation
 
-**Thirty documents and about 18,700 lines**, which is more than the *one
-obvious place per question* this page was built on, and is being looked at.
-Seven of them are the written core listed below and the rest are named further
-down. **Which of them are load-bearing is not currently known**, and a tool to
-measure that has been requested. If you are looking for content rather than for where
-content lives, every row below leads somewhere better.
+The written core is listed below, followed by generated reports and maintenance
+documents. Each entry points to the page that owns its subject.
 
 ## Written
 
@@ -18,20 +14,6 @@ sweeping the whole report, and what it takes for another repository to run these
 | [`usage.md`](usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together. The *person's* interface to this repository is [`interface.md`](interface.md), below |
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor nobody has started |
 | [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the six above belongs here |
-
-## Demoted
-
-**[`misc/`](misc/) is where a document goes when cleaning it up properly would
-cost more than it is worth today** — see `PROTO-22` in
-[`coherence.md`](coherence.md). Still maintained, still linked, still checked;
-what changes is that it is no longer offered as one of the places a question is
-answered. **The practice is discouraged and a growing `misc/` is a symptom.**
-
-| document | its job |
-| --- | --- |
-| [`ai-novelty.md`](misc/ai-novelty.md) | the mechanics of why this arrangement works, and a worked example of one refactor. Demoted 2026-09-02 |
-| [`linker.md`](misc/linker.md) | the workflow resolved to where each rule is defined, for an agent to load. Demoted 2026-09-02 |
-| [`methodology.md`](misc/methodology.md) | how a practice reaches somebody else's tree, and at what rate. Demoted 2026-09-02 |
 
 ## Generated
 
@@ -111,15 +93,11 @@ owes, and the five things the president owes — including how it keeps
 laws** — written down, followed voluntarily, enforced by nothing — because the
 party they bind also wrote them. A tool should hold this page eventually.
 
-[`history.md`](history.md) is **what previous presidents did, and what the
-current one is doing** — one section per stretch, oldest first, and no
-procedure. Each names the **president** first, because a page about what
-happened should say who was responsible for it, and carries how long the stretch
-ran, who entered the ecosystem, what was committed and whether the build was
-green. Distinct from [`report-card.md`](report-card.md), which grades, and from
-[`postmortem.md`](reports/postmortem.md), which asks what one run of the
-reporting loop cost. **It stays in the repository that wrote it, under LAW 4,
-and so does the report card — for a different reason.**
+[`history.md`](history.md) is **anoieu's development record**, including its
+work as president: the stretches, membership changes, delivered work and open
+handoff decisions. **It stays here under LAW 4; a successor keeps its own
+history.** Distinct from [`report-card.md`](report-card.md), which grades, and
+from [`postmortem.md`](reports/postmortem.md), which records one reporting round.
 
 [`instructions.md`](instructions.md) is the other half of that page, and is
 the only document here **addressed to you rather than to whoever maintains
@@ -142,46 +120,14 @@ announcement and the next. The policy says what one is, what counts as a major
 event within it — a global announcement, and **a role changing hands**, which is
 the one a reader reconstructing history from commits will not see — and what
 *designing the next stretch* involves, which is a role here and is destined for the
-governance repository. The log is the other half and is **the one document here
-allowed to be out of date**: the covering note recommended for handing each
-announcement downstream, with the wording that was rejected, which is the part
-worth keeping. Nothing checks the log and a stale prompt in it is a record rather
-than a defect. Which repositories are actually contacted, and whether any are, is
-a person's decision: see *Who gets pinged* in
+governance repository. The history records what happened and keeps the current
+handoff plan up to date. Dated quotations and covering notes describe their
+original occasions, not current instructions. Which repositories are actually
+contacted, and whether any are, is a person's decision: see *Who gets pinged* in
 [`policy.md`](policy.md#who-gets-pinged).
 
-[`methodology.md`](misc/methodology.md) is the **distribution mechanism**: how a
-practice gets from this repository into a tree whose owner did not write it, and
-at what rate. The worked case is the one thing here that has actually crossed
-the boundary — the policy checker, fetched at a commit a member pins and runs
-against its own tree — and the rest is what generalising that to a command line
-would take, as a checklist rather than a plan. Nothing of it is built beyond the
-one program, and the page says so.
-
-[`science-fiction.md`](science-fiction.md) is **experimental** and is the only
-page here that sets a limit rather than a direction: **the furthest this
-ecosystem allows itself to plan**, with the contradiction against
-[`vision.md`](vision.md) stated rather than smoothed over — the vision governs
-direction and speed, this governs range, and where they conflict the vision
-wins. Two scenarios, each ending in what it *forbids* rather than what it
-enables, and one dated piece of evidence: the first outside approach this
-ecosystem has received, why it is only a candidate for that, and why the posture
-toward it is distrust regardless of who is behind it.
-
-[`linker.md`](misc/linker.md) and [`ai-novelty.md`](misc/ai-novelty.md) are
-**experimental and new**, a pair, and in the table above least of all. The
-first is every rule this repository holds, each resolved to the file that
-defines it and none of them restated — one page an agent can load before
-starting work, so that the corpus gets read on demand rather than in advance.
-It is derived and never authoritative: where a line disagrees with the file it
-names, the file wins. The second is the account of why an artifact of that
-shape is worth having — what the moving parts are and why each is shaped the
-way it is, with what would show each claim false. Neither governs anything,
-nothing consumes either, and both say on the page what would show they are not
-worth keeping.
-
-[`roles.md`](roles.md) is the companion to it and is not in the table either:
-**one entry per responsibility**, each with a permanent id, what it owns, and —
+[`roles.md`](roles.md) lists **one entry per responsibility**, each with a
+permanent id, what it owns, and —
 the field that does most of the work — the nearest thing that is *not* it. The
 page is stratified by the tool that holds each one, and no role is too small: a
 clear seam between two responsibilities is worth more than a short page, so a

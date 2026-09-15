@@ -101,8 +101,7 @@ reader could not tell whether that was a defined thing or a phrase.
 **The scheme is `PROTO-n`, and the ugliness is the point.** A bare letter would
 collide: `R` already means both a role and a request, `P` is a proposal, `D` a
 discussion topic, and prose is full of stray capitals. `PROTO-7` cannot be
-mistaken for anything, reads unambiguously and **greps unambiguously**, which
-this repository has already learned the hard way are the same property.
+mistaken for anything, reads unambiguously and **greps unambiguously**.
 
 **The number is permanent and is never reused.** A protocol that is retired
 keeps its id in this table with a line saying so, because other pages cite it.
@@ -381,13 +380,7 @@ not a filing system** — the count belongs in the health assessment, and a
 directory nobody has emptied in a year is evidence about the project rather than
 about the documents.
 
-**First use, 2026-09-02**: `ai-novelty.md`, `linker.md` and `methodology.md` —
-1,564 lines of essay that mostly cited each other, of which one had a single
-inbound link from the index and nowhere else. **They exist because a subject was
-split rather than because three questions have three homes**, and merging them
-is the work that was not affordable today. `science-fiction.md` was in the same
-group and stays where it is: it holds the ecosystem's upper bounds and its
-guard rails, which is a safety job rather than an essay.
+There are currently no demoted documents.
 
 ## `PROTO-20` — the handoff protocol
 
@@ -666,8 +659,7 @@ files. The sequence, which nothing enforces:
 
 **What the sync is there to prevent** is a tool that exists only on the machine
 of whoever welcomed it: recorded in `repos.local`, absent from the inventory, and
-missing from every other checkout — a state nothing used to report, because each
-half looked complete from where it stood. `welcome_eo` is where it is caught
+missing from every other checkout. `welcome_eo` is where it is caught
 because that is the one moment somebody is already thinking about the new tool.
 
 ## Keeping ynoia's registers true when the ecosystem moves
@@ -1075,13 +1067,6 @@ actually carry.** Anyone may write it, anyone may delete it, at any time,
 without asking — it is a note about the record rather than a record in its own
 right. Nothing waits on it and nothing is blocked by it being there or gone.
 
-> **Noted 2026-09-02, and removable.** Two commits were taken mid-stream and
-> their subjects are misleading. `086f1d9` — *"More additions to why-eunoia"* —
-> changes no line of that file: it is martyria's standing observation grant and
-> zetesis's analysis of its relationship to the kernel. `9d9a33f` — *"Code with
-> prompts idea"* — carries that idea and also the documentation handoff
-> protocol, request `R2`, four factual corrections, and the 103-line deletion of
-> the euthyna description from `why-eunoia.md`.
 This is not a formality: it is the last place where a change to a document that
 binds another repository can be caught.
 
@@ -1159,9 +1144,6 @@ which was a hard failure that every real candidate failed and was, on inspection
 a suggestion about readability. The fourth produced an audited proposal, an
 approved repository and a name.
 
-**The checker also finds things here.** Three dead anchors on its first run, two
-of them made that same day by the person who added the check.
-
 ### What defending it means
 
 **Removing a piece is a decision with a burden of proof, not a tidy-up.** The
@@ -1169,13 +1151,9 @@ cases are on record; if a rule is in the way, name the case, because there is no
 a place to put that argument and somebody on the other end who will answer it.
 
 **The pieces interlock, and that is not decoration.** A declaration is worthless
-without a check; the check is unsafe unpinned, because one rename here turns
-every member red with no commit near them; a pin is unusable without a version to
-print; and the discussion protocol is what allowed all three to be corrected by
-somebody who was not us. Each of those links was put in by an exchange rather
-than designed up front, which is exactly why pulling one out quietly is
-expensive — the chain looks arbitrary until you know which failure each link
-answers.
+without a check; an unpinned check can change a member's build without a commit
+in their tree; a pin identifies the exact checker adopted; and the discussion
+protocol gives members a way to challenge a check.
 
 **The failure mode is treating this as overhead during a rush.** Infrastructure
 is cheapest to delete at the moment it is most load-bearing, and an agent under
@@ -1184,10 +1162,12 @@ simplification.
 
 ### And the honest limit
 
-**Three adopters are not ten.** `eudaimonia`, `dokimasia` and `koine` have
-joined; `ethos` and `logos` have not, and may never. Evidence that this
-coordinates four repositories is not evidence that it coordinates forty, and
-each adopter so far has found things the ones before it did not.
+**Adoption is still small.** The [inventory](../scripts/ecosystem/ecosystem.json)
+records current membership. Logos joined on 2026-09-15; the declaration, pin and
+passing policy run are recorded in [the history](history.md#how-long-it-lasted-and-who-joined).
+Experience with this group does not establish that the arrangement coordinates
+forty repositories, and each adopter so far has found things the ones before it
+did not.
 
 **It has not been free.** [`report-card.md`](report-card.md) records
 that the stretch of work which produced most of this changed nothing about what
@@ -1246,9 +1226,8 @@ real candidate failed and that was, on inspection, a suggestion about being
 readable.
 
 **And there is a stopping rule.** A check earns its place by finding something.
-The anchor check found three dead links on its first run, two of them made that
-same day by the person who added the check. A check that has never fired on
-anything is either perfect or pointless, and the second is the way to bet.
+The anchor check found three dead links on its first run. A check that has never
+fired on anything is either perfect or pointless, and the second is the way to bet.
 
 ## The governance budget
 

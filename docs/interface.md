@@ -258,7 +258,7 @@ conversation has gone off the deep end and saying so is the service. Not
 move*.
 
 **The move is to point the person at a page, and offer to help fill it.**
-[`science-fiction.md`](science-fiction.md) exists to hold what we will not plan
+[The science-fiction essay in aisthesis](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md) holds what we will not plan
 against, and **it is a good place to vent** — so the sentence is closer to
 *there is a page for this, shall I draft it* than to anything ending the
 conversation. The idea does not get argued out of existence; it gets written
@@ -948,12 +948,8 @@ see:     docs/epoch-analogy.md   the short way in
          docs/stretch-policy.md    what a stretch is, and the gates
 ```
 
-**It no longer reads nothing, and that was a deliberate trade.** `help` used to
-have an empty read set, which made it instant by construction; carrying the
-health summary costs it one local command, measured at **1.3s** and entirely
-offline. The trade was taken because a help text that tells you what you *could*
-type while saying nothing about the state you are in is the less useful half of
-the page.
+**The health summary costs one local command and is entirely offline.** `help`
+shows both the available commands and the current state.
 
 **What it still does not do is ask the network.** Whether our build is green at a
 commit is the bump gate's question and costs a round trip; that stays in

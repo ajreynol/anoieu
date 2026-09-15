@@ -145,7 +145,7 @@ it is a question about this tree.
 4. **Stretch: the method for one worked instance.** How an exchange with an
    outside party could be judged from the joint histories of everyone in it,
    with nobody trusted — the hypothesis is in
-   [`../../docs/science-fiction.md`](../../docs/science-fiction.md). The
+   [the science-fiction essay](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md). The
    instances themselves are [`../martyria/`](../martyria/README.md)'s; what is
    owed here is the standard they would be judged against.
 
@@ -180,13 +180,13 @@ governs, decided by a person — and not a page here gradually acquiring weight.
 
 **They pull in opposite directions on purpose, and both are right.** The vision
 is an argument for speed, and the mechanism is not exhortation but the one
-[`../../docs/ai-novelty.md`](../../docs/misc/ai-novelty.md) sets out: clear, precise
+[the AI-novelty essay](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/ai-novelty.md) sets out: clear, precise
 writing is what makes an agent-run ecosystem fast, because the scarce resource
 is attention over text and every ambiguity is a branch discovered late.
 
 **Three brakes now exist and they are not the same brake**, which is worth
 saying because the fourth one somebody invents will overlap unless the first
-three are laid out. [`../../docs/science-fiction.md`](../../docs/science-fiction.md)
+three are laid out. [The science-fiction essay](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md)
 limits how far ahead we may **plan**;
 [`../../docs/stretch-policy.md`](../../docs/stretch-policy.md) limits how fast we
 may **move**, and its rule is *go only as fast as you understand*; this limits

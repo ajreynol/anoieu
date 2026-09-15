@@ -8,12 +8,6 @@ deliberately apart: [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/s
 [`history.md`](history.md) is the **account** of what each stretch did, which is
 prose and is a person's.
 
-*There was a third file, `stretches.md`, holding a covering-note log with those
-three register fields embedded in it under a banner saying the file was under no
-obligation to be current. It was deleted on 2026-09-14: the exemption was right
-for the log and wrong for fields a deploy gates on, and the log's contents are
-now in the account, where the rest of what a stretch did already was.*
-
 ## What a stretch is
 
 **The work between one global announcement and the next.** It has no schedule
@@ -217,19 +211,9 @@ editing it, and a stretch is the wrong moment to be shipping one. Grep for the
 branch names you depend on before deploying; a commit sha outlives the branch
 that carried it and a `ref:` does not.
 
-> **The incident.** `cvc5/ethos` is close to merging the essential features of
-> `ethosEoc3` into `main`. Nothing in `E1` depends on that branch — but the
-> `oracle` job in our own CI checks out `ref: ethosEoc3` rather than the commit
-> `scripts/deps.lock` records, so a normal end-of-feature-branch deletion would take
-> that job from *red for an unread reason* to *cannot run at all*.
->
-> The same defect had already been found and fixed once, in `scripts/deps.py`,
-> whose comment records it: *"it used to clone the ref first, which made the pin
-> only as durable as the branch it happened to be on — logos's went away… and
-> every build went red for a reason none of them was measuring."* Fixed in the
-> restore path and left standing in the workflow. **A lesson learned in one file
-> and not applied to its neighbour is the ordinary shape of this**, and it is why
-> the question is on this list rather than left to somebody remembering.
+For dependency checkouts, use the commits in `scripts/deps.lock` in both restore
+scripts and CI workflows. Fetching a branch first makes even a pinned build
+depend on that branch continuing to exist.
 
 **3. Has the stretch been applied here?** The **Of us** row, and it is a question
 about this tree rather than about the announcement — see the section on being a
@@ -559,10 +543,8 @@ person acting for that role. `tekton` is the **planned maintainer** of the
 machinery `R28` owns, and when it exists the authority does not move — the role
 does not change hands merely because a program starts implementing part of it.
 
-Writing it the other way round was the first draft and it was wrong: an authority
-vested in a tool that does not exist means no stretch can ever deploy, including the
-one that would build the tool. **Vesting it in the role has no bootstrap problem
-to patch**, which is why it is the version that survived.
+Authority stays with the role so deployment does not depend on a planned tool
+existing first.
 
 ### Procedural bugs do not get to block anything
 
@@ -827,7 +809,7 @@ understanding something yet is a reason to slow down **and** a thing to go and
 fix; a stretch held back for a reason nobody can state is not caution, it is the
 diagnosis-without-treatment failure this ecosystem is already criticised for.
 
-[`science-fiction.md`](science-fiction.md) is the sibling rule and the two are
+[The science-fiction essay in aisthesis](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md) is the sibling rule and the two are
 easy to confuse. That page limits how far ahead we may **plan**; this limits how
 fast we may **move**. Neither limits how ambitious the work is allowed to be.
 

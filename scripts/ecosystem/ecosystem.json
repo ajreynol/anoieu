@@ -112,7 +112,7 @@
     "dependencies cost is a different question, and it belongs to the auditor",
     "described in tools/ynoia/requests.md rather than here.",
     "",
-    "A status is changed by a person. scripts/global_audit may report that one",
+    "A status is changed by a person. prompts/global_audit may report that one",
     "looks wrong; it does not edit this file on its own.",
     "",
     "Two further fields, neither of which is a status:",
@@ -170,13 +170,11 @@
     "what": "the Eunoia compiler, and the semantics sets it ships"
   },
   "logos": {
-    "status": "candidate",
-    "proposed": "associate",
+    "status": "member",
+    "joined": "anoieu 7cdaab3",
     "repo": "logos",
     "url": "https://github.com/cvc5/logos",
-    "vetted": "2026-09-01",
-    "what": "the Lean development, and the owner of Cpc.eos",
-    "why": "the ecosystem's trust argument terminates here: nothing else states that the rules cvc5 emits are sound"
+    "what": "the Lean development, and the owner of Cpc.eos"
   },
   "eudaimonia": {
     "status": "member",

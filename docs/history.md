@@ -13,9 +13,7 @@
 > **WE GIVE NO GUARANTEE THAT ANYTHING ON THIS PAGE IS CORRECT.** None, to
 > anybody, and least of all to an outside project relying on it. The numbers are
 > produced by the party they describe, using tools that party wrote, at one
-> moment, without independent audit. **They have already been wrong**: this page
-> published a false claim about when two members joined and corrected it the
-> same day.
+> moment, without independent audit.
 >
 > **IF SOMETHING HERE ABOUT YOUR PROJECT IS WRONG, TELL US AND WE WILL CORRECT
 > IT**, in the open, with the correction and the reason both kept — see
@@ -26,13 +24,15 @@
 > anybody else.**
 
 
-**What previous presidents did, and what the current one is doing.** One
-section per stretch, oldest first, and nothing else.
+**Anoieu's development record, including its work as president.** One section
+per stretch, oldest first. This account stays here when the office moves.
+
+During rapid development, this account focuses on behavior, interfaces,
+membership and decisions. Routine fixes and intermediate edits belong in git.
 
 **No procedure lives here.** How this file is kept — who may write it, what a
-stretch entry must contain, where it goes when the office changes hands — is in
-[`laws.md`](laws.md). **This page is the record; that page is the rules**, and
-the two were tangled together until 2026-09-02.
+stretch entry must contain, how it is kept when the office changes hands — is in
+[`laws.md`](laws.md). **This page is the record; that page is the rules.**
 
 ---
 
@@ -249,15 +249,9 @@ single commit at 16:44** — between three and four hours after each banner land
 **That is batching rather than a defect**: the trees were right and our register
 caught up in one go.
 
-**A correction, because this table said the opposite for several hours.** An
-earlier version of this entry claimed eudaimonia and koine were **recorded as
-members before their banners existed**, by fifteen and twelve minutes. **That was
-wrong, and wrong in the direction that flattered nobody.** It came from reading
-the inventory's `joined` field — which records a commit of ours associated with
-each join — as the moment we recorded membership. It is not: the status field
-did not change to `member` until `a3ca74a`, and tracing that field commit by
-commit is what showed it. **The claim is corrected rather than deleted**, and
-the method that produced it is named so the same mistake is visible next time.
+**Correction:** eudaimonia and koine were recorded after declaring, not fifteen
+and twelve minutes before, as previously stated. The `joined` field names an
+anoieu pin, not the recording time; the status changed in `a3ca74a`.
 
 **The footings are not one thing.** *Member*, *candidate*, *foundation* and
 *child* are four different relationships, and the register that matters is
@@ -265,8 +259,15 @@ the method that produced it is named so the same mistake is visible next time.
 `associate`, is drafted and unused** — see `laws.md`, where entering is set out
 properly.
 
-**Three members in eighty-one minutes, and none since.** Everything after
-2026-08-31 lunchtime was done with the membership fixed.
+**Three members in eighty-one minutes, and none added through 2026-09-02.**
+The remainder of that five-day snapshot had fixed membership.
+
+**Update — 2026-09-15: logos joined.** Its `main` branch at
+[`be479120`](https://github.com/cvc5/logos/commit/be4791204be5616df2bf6f42ea304b45b08d33e1)
+declares membership in the README and carries an `anoieu / policy` workflow
+pinned to anoieu `7cdaab3`. [That policy run passed](https://github.com/cvc5/logos/actions/runs/34994441786).
+The inventory records `member` and the joining pin, superseding the associate
+proposal. The earlier rows retain the footings recorded at those dates.
 
 ### The commit census, this stretch
 
@@ -432,44 +433,30 @@ as unreliable as one that only lists wins.
 
 ### The scripts follow the directory convention — 2026-09-15
 
-The 15 Python scripts and helpers at the top of `tools/` moved to `scripts/`.
-They generate reports, run checks or support commands; none launches an
-assistant. Assistant launchers live in `prompts/`. The first move left the
-dependency manifests and lock, ecosystem inventory, checkout settings and stretch
-register in `tools/` alongside the child projects.
-
-**Extended the same day:** data moved beside its scripts. `scripts/ecosystem/`
-now groups the eight ecosystem commands and helpers with `ecosystem.json`,
-`checkouts.json` and `stretch.json`. The corpus's `deps.json` and `deps.lock`
-moved to `scripts/`, beside `deps.py`. `tools/` now holds child projects and
-their own code and data. `scripts/repos.local` remains the shared, untracked
-checkout map for commands and prompts.
-
-CI commands, test imports, wrappers, prompts and documentation now use the new
-paths. References in this account also use the current locations. The script
-table and layout description now cover the generators and checks alongside the
-existing workflow commands.
+Executable scripts and helpers moved out of the top of `tools/` into `scripts/`.
+Ecosystem commands and their JSON live in `scripts/ecosystem/`; corpus manifests
+live beside `scripts/deps.py`. Assistant launchers live in `prompts/`, and
+`tools/` holds child projects. `scripts/repos.local` remains the shared,
+untracked checkout map. CI, tests, wrappers, prompts and documentation use the
+new paths.
 
 The published policy-check command is now `python3 scripts/ecosystem/policy_check.py`.
 A member adopting a commit with this move must update the command in its workflow
 together with its anoieu pin; a workflow pinned to an older commit keeps using
 the path at that commit.
 
-**Simplified the same day:** the ecosystem's separate release number was
-removed from the stretch register, along with its reader, check and version
-table. A stretch is named by its `E1`-style id; members pin the commit they
-adopt. Package metadata and data-format versions serve their own purposes and
-remain independent of the stretch.
+Stretches use `E1`-style ids and members pin commits; there is no separate
+ecosystem release number. Package metadata and data-format versions remain
+independent of the stretch.
 
 ### What moves, where it goes, and what does not
 
-**Three tables, and the useful thing about them is where they fail to meet.**
-Two destinations rather than one: the governance goes to kanon, and the
-research about *how this arrangement works* goes to aisthesis. **The second
-split is the one that needed making** — those pages were never governance and
-were only ever with the governance because nothing else was.
+**The proposed governance handoff, not a completed transfer.** The tables below
+record intended destinations; [B15](board.md#b15--governance-out-of-the-analyzer-before-we-ask-members-to-adopt-again)
+still limits the scope of the next move. Unresolved boundaries are listed below.
+Our history and letters stay here under [LAW 4](laws.md#law-4--the-president-writes-historymd-in-its-own-repository-and-a-letter-to-its-successor).
 
-**Moving to kanon: the collected values.** Every one is a register or a governing
+**Proposed for kanon: the collected values.** Every one is a register or a governing
 document — something that **decides** rather than describes. A child project is
 one row; its internal registers travel with it.
 
@@ -481,20 +468,17 @@ one row; its internal registers travel with it.
 | [`board.md`](board.md) | what is outstanding, in priority order, each with its next action |
 | [`roles.md`](roles.md) | which tool is responsible for what |
 | [`discussion.md`](discussion.md) | every topic between repositories |
-| [`history.md`](history.md) | this file. **It stays here** under LAW 4; the earlier rule that moved it with the office is withdrawn |
 | [`coherence.md`](coherence.md) | the standards the work is held to, and the protocol register |
 | [`interface.md`](interface.md) + [`instructions.md`](instructions.md) | the protocols, and their human-facing half |
 | [`stretch-policy.md`](stretch-policy.md) + [`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json) | what a stretch is, and which one we are in |
 | [ynoia](../tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
 | [martyria](../tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
 | [zetesis](../tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
-| [stathmos](../tools/stathmos/README.md) | **the mediator of the report card**: whether a judgement passed on a tool was justified. It goes with governance because it judges the judging, and the judging stays here |
+| [stathmos](../tools/stathmos/README.md) | **proposed, not settled**: mediation of the report card. `R30` and its charter still name an independent repository as its destination |
 | [sapheneia](../tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
 
-**Moving to kanon: the machinery that carries out all of it.** The table above
-is what governs; this is what *runs*. It was missing until 2026-09-14, and its
-absence was the more serious of the two gaps this section had: a handover that
-named documents and no programs is one nobody could actually carry out.
+**Proposed for kanon: the machinery that carries out all of it.** The table above
+is what governs; this is what *runs*.
 
 **`policy_check.py` is the one program that does not go**, and it is listed
 under *Staying* below. The rules are governance; deciding whether a tree
@@ -515,29 +499,19 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 | [`../scripts/ecosystem/transfer_check.py`](../scripts/ecosystem/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
 | [`../scripts/ecosystem/ready_check.py`](../scripts/ecosystem/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
-**Moving to aisthesis: the AI research.** Both pages take *this ecosystem* as
-their subject and ask what is actually novel about building one this way. **That
-is a research question, not a governing one** — neither decides anything, and
-neither is something a member is held to. They sat with the governance because
-the governance was the only tree there was.
-
-| what | what it asks |
-| --- | --- |
-| [`science-fiction.md`](science-fiction.md) | the upper bound on ambition, and the guard rails that keep it from being a plan |
-| [`misc/ai-novelty.md`](misc/ai-novelty.md) | the register of what looked novel while building this, and a worked example of one refactor |
-
-**Why they leave together.** One asks what this arrangement could become and the
-other asks what about it is new; **they are the same enquiry pointed forward and
-backward**, and splitting them across two trees would mean each is read without
-the other. The demotion of `ai-novelty.md` to `misc/` is undone by the move
-rather than carried with it: it was demoted because it was not load-bearing
-*here*, and it is the subject matter *there*.
+**Research removed from this tree — 2026-09-15.** The local copies of
+`science-fiction.md` and `misc/ai-novelty.md` were removed after confirming that
+aisthesis had committed copies at `98a09c2`:
+[science fiction](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/science-fiction.md)
+and [AI novelty](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/ai-novelty.md).
+`misc/linker.md` and `misc/methodology.md` were retired, not transferred; their
+earlier contents remain in git. `docs/misc/` no longer holds any files.
 
 **Staying: the analyzer, and what judges.**
 
 | what | why it stays |
 | --- | --- |
-| `anoieu/`, `anoieu_fuzz/`, `tests/` | the analyzer, the fuzzer, and the evidence they rest on. The thing the ecosystem was built to serve |
+| `anoieu/`, `anoieu_fuzz/`, and their tests | the analyzer, the fuzzer, and the evidence they rest on. Ecosystem-specific tests belong with the moving machinery |
 | [`../scripts/deps.json`](../scripts/deps.json), `deps.lock`, [`../scripts/deps.py`](../scripts/deps.py) | the corpus the analyzer is measured on, fetched and pinned |
 | [`../scripts/run.py`](../scripts/run.py), [`../scripts/sweep.py`](../scripts/sweep.py), [`../scripts/oracle_desugar.py`](../scripts/oracle_desugar.py) | the run: refresh the sources, measure them, record what came back |
 | `scripts/gen_checks_doc.py`, `gen_corpus_table.py`, `gen_open_findings.py` | the generators of the documents a run writes |
@@ -549,24 +523,21 @@ rather than carried with it: it was demoted because it was not load-bearing
 | [`reports/`](reports/reports.md) | findings against other people's code, and the position governing what may be published about it |
 | [`report-card.md`](report-card.md) | **the assessment of Arete.** It stays because the assessor must not be the governor |
 | [tekmerion](../tools/tekmerion/README.md) | **anoieu's route to a verified answer to *is the documentation up to date*.** The central policy says a stale document is a defect; this is the only thing here aimed at checking that mechanically |
+| [`history.md`](history.md) | anoieu's own development record. It stays here, including earlier stretch entries, under LAW 4 |
 | `letter-to-kanon.md` | **letters do not travel.** LAW 4 |
 
-### The partition does not close, and that is the finding
+### Remaining boundaries
 
-**Some things are in neither table, and some are in all of them.** Verifying
-this was supposed to be a formality and was not, twice: the third destination
-closed one item of residue and opened a smaller one, and **adding the machinery
-table on 2026-09-14 opened three more** — which is the honest result of writing
-a table down rather than the tidy one.
+**Unassigned does not mean intentionally retained.** The remaining questions
+are about the governance handoff, not the removed essays.
 
-- **`docs/README.md` is in all three.** It indexes whatever documents a tree
-  holds, and all three trees will hold documents. **It is not an artifact that
-  moves; it is one each side needs its own of.**
-- **`docs/misc/`, now two essays rather than three.** `ai-novelty.md` is
-  decided and goes to aisthesis. `linker.md` and `methodology.md` are not, and
-  **`methodology.md` now opens by pointing at two documents that will be in
-  another tree** — which makes it the first artifact whose home question was
-  changed by this split rather than answered by it.
+- **Scope and roles must agree.** B15 describes a limited move and says `R5`
+  stays; the broader table proposes moving its `vision.md`. The inventory's
+  `R6` is also outside B15's suggested first step. Neither scope is settled by
+  listing a file here. Stathmos's proposed destination likewise needs to be
+  reconciled with `R30` and its charter before it moves.
+- **Each tree needs its own `docs/README.md`.** An index describes the documents
+  that tree holds; it is not an artifact to move wholesale.
 - **`epoch-analogy.md`** explains the stretch machinery to a newcomer, which
   argues for kanon; it is also the shortest way into *this* repository's
   workflow, which argues for staying. **Unassigned.**
@@ -579,37 +550,28 @@ a table down rather than the tidy one.
   tekmerion owns that question here and stays, which argues for staying. **Like
   `docs/README.md` it is most likely a thing each side needs its own of**, and
   nobody has decided.
-- **`.github/workflows/` is in all three**, for the same reason `docs/README.md`
-  is: every tree runs CI and none of them runs the same jobs. What does not
-  split is the **`anoieu / policy` job every member carries** — it names this
-  repository in its job name and in its clone URL, so **moving the checker
-  renames a check in five other people's pull requests.** That is the first
-  thing in this section that costs somebody outside the handover anything, and
-  no table here covers it.
+- **Each tree needs its own `.github/workflows/`**, just as it needs its own
+  index. The **`anoieu / policy` job stays pointed
+  here**, because the checker stays. The ecosystem checks and tests need to
+  move with the machinery they exercise; this is not a whole-directory move.
+- **The checker remains a dependency of the moving machinery.**
+  `ecosystem.py` both invokes and imports `policy_check.py` from its own tree.
+  That dependency needs an explicit cross-repository source, as does the
+  checker-to-policy pin described in `R31`. Moving files alone does not resolve
+  either boundary.
 - **`scripts/repos.local` is per-machine and untracked**, and every script that
   resolves a checkout reads it. It does not move because it was never in the
   tree; it is named here so that whoever carries the rest does not discover it
   by having a command fail.
 
-**So the honest statement is: these three tables cover most of the ecosystem's
-responsibilities and do not partition them.** The residue is small, it is
-concentrated in exactly the places where *governing*, *doing* and *studying the
-arrangement* were never cleanly separated, and **naming it is more useful than a
-table that claimed to be complete.**
-
-**And aisthesis is not in the inventory, the name register, or any role.** The
-same gap `kanon` was handed and caught: a table that names a destination the
-ecosystem cannot see. It is recorded here rather than fixed here, because
-registering a tool is a person's act and this is a record.
+**Aisthesis is not in our inventory, name register or role register.** Removing
+the copied essays does not confer membership or assign it a role.
 
 *Roles are not enumerated here on purpose. Which `R` moves with which artifact
 is a lower-level question than these tables, and answering it early would settle
 by accident something `B15` says a person decides.*
 
 ### The three questions, answered
-
-**This entry legislated these questions and had not answered them. That is
-itself the first finding.**
 
 **1. Am I ready to let go of the responsibilities I am relinquishing?**
 **Not entirely, and the evidence is on this page.** `D22` asks kanon to preserve
@@ -628,54 +590,19 @@ strongest reason to hand the presidency on is that it was crowding out the
 work this repository actually exists to do.**
 
 **3. Did I report all of my responsibilities?**
-**No.** Building the tables left artifacts unassigned and one in every column,
-and the residue sat exactly at the seam between governing and doing.
-**`ai-novelty.md` is now decided and goes to aisthesis** — see below.
-`docs/README.md` is in all three columns and should be, because each tree needs
-its own index. **`epoch-analogy.md` and `tools/tekton/` are still unassigned**,
-and I am handing them on unresolved rather than deciding them in my last hour.
-
-**Where `science-fiction.md` and `ai-novelty.md` go: to aisthesis.** Both take
-the ecosystem as their subject and ask what is new about building one this way.
-**That is research and not governance** — neither decides anything, neither is
-something a member is held to, and a page nobody is bound by does not belong in
-the tree that binds people.
-
-**The objection I had, recorded because it was wrong for a reason worth
-keeping:** `ai-novelty.md`'s entry criterion is one person's interest, and I
-read that as making it personal, like a letter. **It is not.** A letter is
-*from* a president; this is *about* the arrangement, and who finds a thing
-fascinating does not determine what the thing is about.
-
-**What that argument got right and where it stopped.** It established that the
-register belongs with its subject rather than with its author — and I then
-concluded the subject was *the governance*, because the governance was the only
-other tree I had. **The subject is the arrangement as an object of study, which
-is a third thing**, and it took a third repository existing before I could see
-that the question had three answers and not two.
-
-**Still unassigned and handed on that way** rather than decided in the last
-hour: `epoch-analogy.md`, which argues for both of the trees it could go to, and
-`tools/tekton/`, a stub with no inheritor. `docs/README.md` is in every column
-and should be, since each tree needs its own index.
+**Not yet.** The scope, role and dependency questions above remain open.
+`epoch-analogy.md`, `doc_currency.py` and `tools/tekton/` still need explicit
+destinations. Each tree needs its own documentation index and CI. The research
+essays have been removed locally and are no longer pending items in this handoff.
 
 ### What went wrong
-
-**Required by the template, and it was missing from this entry until the laws
-were checked against it** — which is itself the first item. **A stretch with
-nothing in this field was not examined**, and this one wrote that sentence into
-its own law and then left the field out.
 
 - **The build was red for 112 consecutive runs**, across two days with no green
   run at all, and nobody looked at the colour. Two dependency commits were
   duplicated between the workflow and the lock file, knowingly, with a board row
   open to watch what it would cost.
-- **A false claim about two members was published** — that we recorded them
-  before they declared — wrong in the direction that flattered us. Corrected the
-  same day.
-- **One directory move silently broke five scripts.** One was found and fixed,
-  the lesson was written up at length, and **four identical instances were left
-  in place for another five hours.**
+- **One directory move broke five scripts**, exposing a gap in path-change
+  coverage.
 - **The name register reported names as free that neighbouring trees were
   using**, twice: `apodeixis` was taken on the strength of it, and `noesis` sat
   there while eudaimonia ran it.
@@ -720,11 +647,8 @@ qualification on everything above.
 
 ### What E1 carried downstream, and what it nearly said
 
-**Moved here on 2026-09-14 from `docs/stretches.md`, which has been deleted.**
-That file kept a covering note per stretch beside three fields
-a deploy gated on, under a banner saying it was under no obligation to
-be current. The fields are now `scripts/ecosystem/stretch.json`; this is the rest, and it
-belongs in the account rather than in a register.
+The E1 covering note is recorded here; current stretch state lives in
+[`../scripts/ecosystem/stretch.json`](../scripts/ecosystem/stretch.json).
 
 **What it carried:** footings recorded on two axes instead of one; the
 `associate` footing, defined and held by nobody; the `report/` convention and
@@ -755,10 +679,6 @@ Two things are asked of you, and D16 in the same file is the second.
 
 Everything else in D14 is notice and needs no reply.
 ```
-
-**Revised before it was sent to anybody.** The first version said *one thing is
-asked of you*, which was true when it was written and stopped being true when
-`D16` landed.
 
 **What was rejected:**
 
@@ -880,8 +800,8 @@ have written.
 
 ## Stretch 2 — not started
 
-**Why hand it on at all**, given that the level is lost and the record leaves
-this tree: three reasons, argued from measurements rather than principle, in
+**Why hand the office on at all:** three reasons, argued from measurements
+rather than principle, in
 `S4` of [martyria's stances](../tools/martyria/stances.md). The short form —
 **15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
 this repository, and everything that judges is inside the thing being judged.**
@@ -922,27 +842,16 @@ government model unless something changes, with one difference that matters:
 bind.** That is the first real separation this arrangement has had, and it
 arrives by the presidency moving rather than by anybody designing it.
 
-**Corrected 2026-09-14: kanon exists.** This paragraph read *the tool does not
-exist yet; a stub holds its place and CI carries a job saying whether it is
-ready to be started*, and said that Stretch 2 could not open before kanon did.
-The repository was created and **joined as a member on 2026-09-14** —
-[`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) records it, and its tree
-passes the policy check. **So the readiness check is no longer what stands
-between the two stretches.** What does is the office actually moving, which is a
-person editing one line of the registry and somebody carrying the files kanon
-would need to hold it — the state the laws call *in limbo* if the first happens
-without the second.
+**Updated 2026-09-14: kanon joined as a member**, superseding the earlier claim
+that it did not exist. The [inventory](../scripts/ecosystem/ecosystem.json)
+records it. Stretch 2 awaits the office moving: a person updates the registry
+and the files needed to hold it are carried over. The laws call the gap between
+those acts *in limbo*.
 
-**Its first responsibility is this page.** Before anything else it is asked to
-do, the president of a stretch publishes a **working summary of its stretch** —
-*working* meaning kept current while the stretch runs, not written at the end
-from memory. **A summary composed afterwards is a reconstruction**, and a
-reconstruction by the party being described is the weakest document this
-ecosystem could produce.
-
-**And it inherits this file rather than starting one.** Stretch 1's entry
-travels with it, unchanged and unchangeable. **anoieu will not be able to edit
-its own history after that**, which is the arrangement working rather than a
-loss.
+**The next president keeps its own history in its own repository**, current
+while its stretch runs. Under LAW 4, it inherits neither this file nor our
+letters. **Anoieu's history stays here**, including the Stretch 1 account, and
+anoieu remains responsible for maintaining it. Transferring the office does not
+transfer or freeze this record.
 
 ---

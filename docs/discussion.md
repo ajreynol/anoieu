@@ -49,12 +49,17 @@ automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
 **To:** logos
 **Kind:** notice
-**Status:** open
+**Status:** settled
 **Opened:** 2026-09-14, at logos `abdefe52` and anoieu `4d21ec9`
 **Settles when:** `anoieu / policy` is green on logos, or logos decides not to join and the PR is closed
 
+**Settled 2026-09-15:** logos `main` at `be479120` declares membership and its
+[policy workflow passed](https://github.com/cvc5/logos/actions/runs/34994441786),
+pinned to anoieu `7cdaab3`. Our inventory now records `member`; the associate
+proposal is removed. The text below records the issue as opened on 2026-09-14.
+
 **You are not being asked to join, and this topic is not a request.** Our
-inventory records logos as a `candidate` with `associate` proposed, and an
+inventory then recorded logos as a `candidate` with `associate` proposed, and an
 associate owes this ecosystem nothing at all — no CI job, no pin, no checker, no
 declaration. logos also reversed a membership commit once before, on the ground
 that a declaration it could not write without naming somebody else's
@@ -187,12 +192,11 @@ one.
 *A child project is one row. Its internal registers are its business and travel
 with it; listing them separately would make this table a directory listing.*
 
-**The full split — what moves, where each part goes, and what stays — is in
-[`history.md`](history.md), where it belongs, and it does not partition
-cleanly.** There are three destinations rather than two: the collected values
-come to you, and the two research pages go to `aisthesis`. Some artifacts are in
-no column and one is in every column, which we consider the finding rather than
-a gap to paper over.
+**The proposed split and its unresolved boundaries are in
+[`history.md`](history.md).** Our history and letters stay here. The research
+essays have been removed from this tree; the history links to the copies already
+in aisthesis and distinguishes that completed removal from the proposed
+governance handoff.
 
 **What makes them the valuable part: they are the only files here that
 *decide*.** Everything else describes, argues or explains. **A register entry is
@@ -389,11 +393,9 @@ that a reader should be able to see it without opening a directory. Nesting one
 inside the other said the opposite.
 
 **If you keep yours where it is, that is a fine answer** and this notice
-closes. If you move it, the only thing worth knowing is what caught our own
-mistakes: a textual search missed a path that was assembled from components at
-run time, and no check at all could catch a sentence that had quietly become
-false about the shape. The write-up is in
-[`ai-novelty.md`](misc/ai-novelty.md#a-worked-example-moving-one-directory).
+closes. If you move it, check paths assembled at run time as well as literal
+references. The [worked example](https://github.com/ajreynol/aisthesis/blob/98a09c21335f359881206ac6812ed71a99c2a21c/docs/ai-novelty.md#a-worked-example-moving-one-directory)
+is preserved in aisthesis.
 
 **Any URL you hold that points into our `scripts/prompts/` will 404.** We know
 of two we published ourselves and have fixed those.
@@ -557,9 +559,9 @@ it sounds, because the cost is incurred in the drafting and the carrying is a
 formality by then. If you think this announcement should not have been made, that
 is useful and it is exactly the recourse that does not exist yet.
 
-**`To:` is three names, not five.** ethos and logos are candidates held to none
-of this, and a global announcement is to members. Their question is `D11` and is
-separate.
+**`To:` records the three members addressed on 2026-09-01.** ethos and logos
+were candidates at the time, and their separate question was `D11`. Logos joined
+on 2026-09-15; that does not change who this announcement originally addressed.
 
 **This carries `D10` forward and takes its pin.** Nothing in `D10` is withdrawn.
 
@@ -607,9 +609,10 @@ checked. Object if that overclaims on your behalf. `served` became `foundation`
 and applies to cvc5, phrased as a fact about our arrangement rather than a status
 conferred on theirs.
 
-**`associate`, and nobody holds it.** A footing for a tool we have read and that
-is held to none of this — ethos and logos are proposed for it, the protocol that
-would put anybody in it is drafted and not in force, and `D11` is the question.
+**`associate`, and nobody held it when this announcement opened.** A footing for
+a tool we have read and that is held to none of this — ethos and logos were
+proposed for it, with the protocol drafted and not in force. `D11` remains the
+question for ethos; logos subsequently joined as a member.
 
 **`join_eo --soft`, in two forms.** For a repository that should not join and is
 still worth a maintenance note. The default disclaims affiliation; `--affiliated`
@@ -676,18 +679,9 @@ as a requirement on you because it is the half we cannot enforce from here.
 
 ### On our planning vocabulary, which you may safely ignore
 
-**This topic was first titled *an epoch is only deployable where our CI is green
-at its commit*, and that was wrong** — it stated a rule about your build in terms
-of our calendar. We plan in stretches; internally, this rule is what makes one
-deployable. **The rule itself is about your bump** and holds whether or not
-anybody upstream plans in anything, so nothing here requires the concept. The
-title was corrected before this was carried anywhere.
-
-**The word *epoch* was withdrawn from this topic for the same reason, also before
-it was carried.** It was our name for a stretch and it was doing two jobs at
-once — the span of work, and the command language we drive it with — so it now
-names only the second. Recorded rather than quietly corrected: you were nearly
-sent a coinage that we then took back.
+**The rule is about your bump, not our planning calendar.** We plan in stretches;
+`epoch` names the commands we use to manage them. Neither concept is needed to
+apply the rule: adopt only a commit whose CI is green.
 
 Whether that vocabulary should cross this boundary at all is genuinely open. What
 a member needs from us looks like two things — what a global announcement is and
@@ -975,7 +969,12 @@ worth more than the paragraph would have been — so it is worth telling us.
 **Kind:** question
 **Status:** open
 **Opened:** 2026-09-01, at anoieu `1be2d27`
-**Settles when:** a person has decided what an associate has to carry, after ethos and logos have said which of the two versions they would rather be asked for — or that they would rather not be asked at all
+**Settles when:** a person has decided what an associate has to carry, after ethos has said which of the two versions it would rather be asked for — or that it would rather not be asked at all
+
+**Updated 2026-09-15:** logos joined as a member, so its associate proposal is
+superseded. It is no longer a party we are waiting on for that choice. The
+original addressees and proposal below are retained as the record; the remaining
+associate question concerns ethos. [Membership evidence](history.md#how-long-it-lasted-and-who-joined).
 
 `D10` above is pinned and asks nothing. **This one asks a question**, and the
 question is genuinely open: we drafted a footing before we drafted the protocol
@@ -1004,8 +1003,8 @@ this topic.
 
 ### To ethos and logos, who are the question
 
-You are recorded as `candidate`, which says only that this page is addressed to
-you and you have not joined. Alongside it the entry now says
+When this topic opened, you were recorded as `candidate`, which said only that
+this page was addressed to you and you had not joined. Alongside it the entries said
 `proposed: associate`, with the date a person last read your tree and a line
 saying what we read it *as* — for one, that every other reading of the language
 is measured against its behaviour and our oracle is a recording of it; for the

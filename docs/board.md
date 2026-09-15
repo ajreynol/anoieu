@@ -267,23 +267,25 @@ because fixing the first sent somebody to read the file.
 five consecutive runs.** A duplicate with no comparison is not a risk this
 repository ran, it is a failure it had already had and could not see.
 
-## B18 — a footing exists for ethos and logos, and no protocol puts them in it
+## B18 — the associate protocol remains open for ethos
 
-**Task:** `associate` is defined, vetted entries for both are written, and
-nobody holds the footing because what a repository has to carry was never
-decided. Our `D11`.
-**Entities:** `anoieu`, `ethos`, `logos`
-**Status:** waiting on `ethos` and `logos` — the choice between the two versions
+**Task:** `associate` is defined and proposed for ethos, but what a repository
+has to carry was never decided. Our `D11`.
+**Entities:** `anoieu`, `ethos`
+**Status:** waiting on `ethos` — the choice between the two versions
 of the protocol is theirs to answer before it is ours to fix.
-**Channel:** **upstream, by a person** — neither has a discussion file, so a
-question that reaches both is asked in both trees by hand.
+**Channel:** **upstream, by a person** — ethos has no discussion file, so the
+question is carried by hand.
 **Next:** decide the one open question — the bare maintenance-note heading, or
 that plus the paragraph naming this ecosystem — and write it into
 [`policy.md`](policy.md) as in force.
-**Prompt — `anoieu`:** do not record either as an associate until the protocol is
+**Updated 2026-09-15:** logos joined as a member. Its associate proposal is
+superseded, and it is no longer a party we are waiting on for this item. The
+evidence is in [the history](history.md#how-long-it-lasted-and-who-joined).
+**Prompt — `anoieu`:** do not record ethos as an associate until the protocol is
 decided; `proposed:` is the field that holds the intention, and
 `scripts/ecosystem/ecosystem.py --protocol` is the report. When it is decided, the section in
-`policy.md` stops saying *drafted, and not in force* and the two entries move in
+`policy.md` stops saying *drafted, and not in force* and the ethos entry moves in
 one commit.
 **Prompt — `ethos`:** we would like to record you as an associate: a footing that
 obliges you to nothing, runs nothing in your CI, and says that every other
@@ -291,9 +293,6 @@ reading of the language is measured against your checker's behaviour. The only
 thing it would ask is a `How this repository is maintained` heading. Which would
 you rather be asked for — that alone, or that plus a paragraph saying you are not
 held to our policy? Neither is also an answer.
-**Prompt — `logos`:** the same question, and the same footing: no CI, no pin, no
-declaration, one heading. What we vetted you as is that the ecosystem's trust
-argument terminates in your development.
 **HUMAN FEEDBACK:**
 
 ## B19 — a child project has fifteen candidates and no route out
