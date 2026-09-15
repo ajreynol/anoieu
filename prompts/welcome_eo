@@ -19,7 +19,7 @@
 #
 # It also syncs the two lists that decide whether anybody else can find the tool:
 # scripts/repos.local, which it writes, and scripts/ecosystem/ecosystem.json, which it reads
-# through scripts/ecosystem/install_eo and reports on rather than editing. Recording a tool
+# through scripts/install_eo and reports on rather than editing. Recording a tool
 # as a member or a candidate is a decision a person makes.
 #
 # **This is a welcome, not an audit.** A new tool has joined nothing: joining is
@@ -163,14 +163,14 @@ fi
 # -- sync the lists that decide whether anybody else can find this tool.
 #    scripts/repos.local, written above, is where *this machine* looks. The
 #    clone list every other machine uses is derived from scripts/ecosystem/ecosystem.json by
-#    scripts/ecosystem/install_eo, so a tool recorded here and not there is one that only
+#    scripts/install_eo, so a tool recorded here and not there is one that only
 #    exists on somebody's laptop -- the failure this step is here to catch. It
 #    reports and does not edit: a status is a decision a person makes.
-SYNC=$(python3 "$ROOT/scripts/ecosystem/install_eo" --status "$NAME" 2>&1 || true)
+SYNC=$(python3 "$ROOT/scripts/install_eo" --status "$NAME" 2>&1 || true)
 echo "-- the ecosystem's own list, for $NAME:" >&2
 printf '%s\n' "$SYNC" | sed 's/^/   /' >&2
 
-REPORT=$(python3 "$ROOT/scripts/ecosystem/policy_check.py" --root "$TARGET" 2>&1 || true)
+REPORT=$(python3 "$ROOT/scripts/policy_check.py" --root "$TARGET" 2>&1 || true)
 
 BRIEF="They left no ynoia-brief.local.md, so what they read is not recorded."
 if [ -f "$TARGET/ynoia-brief.local.md" ]; then

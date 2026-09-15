@@ -9,7 +9,7 @@
     "file -- which is the point, because a second list to maintain is a second",
     "list to forget.",
     "",
-    "**Only a default branch is ever installed.** scripts/ecosystem/install_eo prints and",
+    "**Only a default branch is ever installed.** scripts/install_eo prints and",
     "runs `git clone <url> <dir>` and nothing else: no `-b`, no checkout, no",
     "branch switch. Where a child project's current work is on some other",
     "branch of its parent -- ethos-eoc, on ethosEoc3 -- that is a fact about",

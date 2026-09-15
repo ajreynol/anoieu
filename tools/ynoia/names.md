@@ -25,7 +25,7 @@ an account — `anoieu_fuzz` is one — but the burden is on the name to earn it
 **And the convention has a second reason, found by breaking it.** A child
 project named with an ordinary English word makes every sentence using that word
 ambiguous — proper noun, or common one — and the ambiguity is not only a reading
-cost. `scripts/ecosystem/policy_check.py` decides whether a child project is an island by
+cost. `scripts/policy_check.py` decides whether a child project is an island by
 grepping the tree for **the bare project name**, so a common word matches prose
 about the *subject* rather than about the project, and reports an island break
 that is not one. An unusual name reads unambiguously and greps unambiguously,
@@ -76,7 +76,6 @@ section after it exists.
 
 | name | Greek | what it would be |
 | --- | --- | --- |
-| **tekton** | τέκτων, the builder — the joiner who makes one thing out of parts | deferred research, copied to the sibling `../tekton/` workspace on 2026-09-15. No active role or stub in anoieu |
 | **kanon** | κανών, the measuring rod — the standard a thing is held straight against | **the ecosystem's governance, out of the analyzer**: the policy, its checker, the inventory and the joining scripts, in a repository that is not also the tool that files findings against members. Argued as `B15` on the board and `P2` in [`proposals.md`](proposals.md). **Taken**: the repository exists and joined on 2026-09-14. A stub still holds the place in `tools/kanon/` until the handoff protocol releases it |
 | **nomophylax** | νομοφύλαξ, guardian of the laws — the office that held the statutes and checked that magistrates acted within them | **the tool that maintains `docs/laws.md`**, and checks a closed stretch entry against the rules it was supposed to be written under. Not a lawgiver: amendments stay a person's. Suggested 2026-09-02. It completes a family already here by accident — `dokimasia` scrutinises **before** office, `euthyna` audits **after**, this watches **during**. `thesmos` was the alternative |
 | **euboulia** | εὐβουλία, good counsel — the quality of deliberating well, as against the deliberating itself. It shares its prefix with *eunoia* by construction | **the ethical advisor to whoever holds the laws.** The ecosystem's ethics gathered into one place, advising `nomophylax` and deciding nothing. Would accumulate `martyria` and `zetesis`, which today are child projects of the repository whose conduct they assess. Suggested 2026-09-02. `bouleusis` stays free and stays the better name for anything that decides cases |

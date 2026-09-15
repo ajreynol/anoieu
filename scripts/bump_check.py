@@ -17,7 +17,7 @@ what we pushed this morning, which is the failure the whole pinning discipline
 exists to prevent.
 
 **It fails closed.** Not green, not finished, or not reachable -- all refuse.
-That is the opposite of how `scripts/ecosystem/ecosystem.py --check --online` treats an
+That is the opposite of how `scripts/status_eo --check --online` treats an
 unreachable remote, and the difference is that adopting a policy commit is *optional and
 deferrable*: refusing costs a member nothing but a later attempt, where a
 fail-closed check inside a build would turn somebody's tree red for a network
@@ -29,9 +29,9 @@ and a build that can change colour on its own cannot be evidence that a commit
 was good. It is a command a person or a bump script runs at the moment of
 adoption, and nothing else.
 
-    python3 scripts/ecosystem/bump_check.py --rev 59e8e07     # may this commit be adopted?
-    python3 scripts/ecosystem/bump_check.py --root PATH       # read the pin from a member's workflow
-    python3 scripts/ecosystem/bump_check.py --rev X --dry-run # print what it would ask, ask nothing
+    python3 scripts/bump_check.py --rev 59e8e07     # may this commit be adopted?
+    python3 scripts/bump_check.py --root PATH       # read the pin from a member's workflow
+    python3 scripts/bump_check.py --rev X --dry-run # print what it would ask, ask nothing
 
 Exit codes, which are the interface a bump script consumes:
 

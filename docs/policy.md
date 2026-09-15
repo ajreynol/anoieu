@@ -34,7 +34,7 @@ declaration of membership — each is a claim in prose, and a claim in prose tha
 has quietly stopped being true is worse than one never made, because it carries
 the authority of having been written down and checked by somebody once.
 
-**It is the rule this page cannot check.** `scripts/ecosystem/policy_check.py` decides
+**It is the rule this page cannot check.** `scripts/policy_check.py` decides
 whether a document exists, whether a link resolves, whether a declaration is
 present. No program here decides whether a sentence is still true, and none is
 likely to: a page describing a tree that changed is mechanically
@@ -63,7 +63,7 @@ What it asks of a repository, none of it enforced:
 | `tools/` | child projects, with their own code and data |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
 | `scripts/` | commands, helpers and their data: generators, checks, the runner, and executable versions of workflows the documents define |
-| `scripts/ecosystem/` | ecosystem commands and their inventory and checkout settings |
+| `scripts/ecosystem/` | internal ecosystem helpers, inventory and checkout settings; user-facing commands live directly in `scripts/` |
 | `prompts/` | the workflows that hand context to an assistant, kept apart so that running a command never means deciding to spend a turn. Top level rather than under `scripts/`, so a reader can see the two are different kinds of thing without opening a directory. A convention worth copying, not required |
 | `deps/` | other people's repositories, fetched by a run and never committed |
 | `.github/workflows/` | what runs on every push |
@@ -313,7 +313,7 @@ over the development of a tool is exactly such a change.
 
 **Every prompt an agent receives in this ecosystem may have been meant for a
 different repository in it.** These repositories are deliberately alike: several
-are checked out as siblings by [`../scripts/ecosystem/install_eo`](../scripts/ecosystem/install_eo),
+are checked out as siblings by [`../scripts/install_eo`](../scripts/install_eo),
 they share a layout, a maintenance note in the same place, and prompts written
 to the same shape. The better this page works, the less there is to tell two
 terminals apart.
@@ -865,7 +865,7 @@ as an observation rather than a score, and **what of it is our own defect**.
 
 ### Upholding it
 
-`scripts/ecosystem/policy_check.py` reads this file and splits it across two tiers.
+`scripts/policy_check.py` reads this file and splits it across two tiers.
 
 **The banner is a build failure.** It is the one thing here that stops an agent
 doing something nobody asked for, so a repository whose `discussion.md` has lost
@@ -1020,13 +1020,13 @@ sure somebody asked.
 
 Every rule on this page is a claim about *this tree*, which means a program can
 decide it without holding an opinion — and
-[`scripts/ecosystem/policy_check.py`](../scripts/ecosystem/policy_check.py) decides the ones that are
+[`scripts/policy_check.py`](../scripts/policy_check.py) decides the ones that are
 currently decidable, on every push. That is the property to preserve when adding
 to this page: **a rule nobody can check is a rule worded loosely enough to be
 tightened**, or one that belongs in [`vision.md`](vision.md) instead.
 
-    python3 scripts/ecosystem/policy_check.py              # check; exit 1 on any failure
-    python3 scripts/ecosystem/policy_check.py --coverage   # what is checked, and what is not
+    python3 scripts/policy_check.py              # check; exit 1 on any failure
+    python3 scripts/policy_check.py --coverage   # what is checked, and what is not
 
 The run prints the rules it **cannot** decide alongside the ones it can, each
 with the reason — intent, tone, elapsed time, editorial judgement. That list is
@@ -1061,7 +1061,7 @@ bands.
 
 ### When a member does not meet them, we say so plainly
 
-**In the open, and it is not an accusation.** `scripts/ecosystem/status_eo` prints one
+**In the open, and it is not an accusation.** `scripts/status_eo` prints one
 line per tool and names the disagreement: *this repository says it follows the
 shared policy, and N of our checks fail on its tree.* It also says whose move it
 is, and gives the command that shows what failed.
@@ -1172,7 +1172,7 @@ that they never made.
 **`member` carries a judgement, and only the mechanical half is ever checked.**
 Declaring and passing is decidable from a tree; sharing the approach is a vision
 question, and *Policy is checked; vision is argued* forbids a program from
-deciding it. `scripts/ecosystem/ecosystem.py --check --online` reads one section of one
+deciding it. `scripts/status_eo --check --online` reads one section of one
 README and decides *declares / does not declare*, and nothing more. The
 judgement is what a person writes in the entry and revises by hand.
 
@@ -1219,7 +1219,7 @@ us.** If nobody has answered by **2026-12-01**, the weaker reading is adopted �
 the bare maintenance-note heading, without the paragraph naming this ecosystem —
 and the footing opens on that basis. That is the reading that asks least of
 them. A repository that wants the stronger one can say so at any time, and one
-that wants neither can say that too. `scripts/ecosystem/ecosystem.py --protocol` reports
+that wants neither can say that too. `scripts/status_eo --protocol` reports
 where each proposed associate stands.
 
 ### What is not in this list
@@ -1327,7 +1327,7 @@ jobs:
         run: |
           git clone --quiet https://github.com/ajreynol/anoieu /tmp/anoieu
           git -C /tmp/anoieu checkout --quiet "$ANOIEU_REV"
-      - run: python3 /tmp/anoieu/scripts/ecosystem/policy_check.py --root .
+      - run: python3 /tmp/anoieu/scripts/policy_check.py --root .
 ```
 
 **Pin it.** `ANOIEU_REV` is a commit you choose and move on your own schedule,
@@ -1349,8 +1349,8 @@ and deferring costs you one later attempt. And it **must not run in your CI**:
 it reads a remote, so a build that called it could go red for a network you do
 not own.
 
-[`../scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py) is that check, published so
-every member does not write it separately — `python3 scripts/ecosystem/bump_check.py --root
+[`../scripts/bump_check.py`](../scripts/bump_check.py) is that check, published so
+every member does not write it separately — `python3 scripts/bump_check.py --root
 .` reads your own pin and decides. It exits `0` to adopt, `1` to refuse, and `2`
 to refuse as unverified. Nothing obliges you to use ours; the requirement is the
 refusal, not the program.
@@ -1364,7 +1364,7 @@ separate responsibility from this page — deciding whether a tree complies is
 checking, which is what anoieu is for, while writing the rules is governance and
 is intended to move to another repository. **When it does, one `ANOIEU_REV`
 stops covering both.** Nothing about your workflow changes on that day: the job
-still clones this repository and still runs `scripts/ecosystem/policy_check.py`, because the
+still clones this repository and still runs `scripts/policy_check.py`, because the
 half that moves is the half your CI never touches. **What is undecided is how
 the two stay in step afterwards** — whether the checker pins a commit of the
 page, whether they are released together by agreement, or whether a member ends
@@ -1528,7 +1528,7 @@ Read it, then do what it says, here:
 3. Run the check and fix what it reports:
 
      git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
-     python3 /tmp/anoieu/scripts/ecosystem/policy_check.py --root .
+     python3 /tmp/anoieu/scripts/policy_check.py --root .
 
 Change nothing the check does not ask for, and add no file it does not ask for.
 Where the page and this prompt disagree, the page is right.

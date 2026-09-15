@@ -172,7 +172,7 @@ passed — which is what the handoff protocol requires before anything is
 handed over. It says the paperwork is not in the way, and nothing about
 whether the tool should be built. **The job is temporary**: it asserts its
 own stub exists, so deleting the stub turns it red and the only repair is
-to delete the job. See `scripts/ecosystem/ready_check.py`.
+to delete the job. See `scripts/ready_check.py`.
 **Stub:** `tools/kanon/` holds the place, under the handoff protocol in
 [`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
 and not a claim on the name. It stays until a person approves its removal.
@@ -234,7 +234,7 @@ superseded, and it is no longer a party we are waiting on for this item. The
 evidence is in [the history](history.md#how-long-it-lasted-and-who-joined).
 **Prompt — `anoieu`:** do not record ethos as an associate until the protocol is
 decided; `proposed:` is the field that holds the intention, and
-`scripts/ecosystem/ecosystem.py --protocol` is the report. When it is decided, the section in
+`scripts/status_eo --protocol` is the report. When it is decided, the section in
 `policy.md` stops saying *drafted, and not in force* and the ethos entry moves in
 one commit.
 **Prompt — `ethos`:** we would like to record you as an associate: a footing that
@@ -518,7 +518,7 @@ it.
 **Next:** decide whether the fix is to relativise the seed at promotion time or
 to widen the check to tracked non-Markdown files. Probably both.
 **Prompt — `anoieu`:** the promoter should record a seed as a repository-relative
-path or as the corpus name, never as an absolute one, and `scripts/ecosystem/policy_check.py`
+path or as the corpus name, never as an absolute one, and `scripts/policy_check.py`
 should look outside `*.md` for the same pattern it already forbids there.
 **HUMAN FEEDBACK:**
 

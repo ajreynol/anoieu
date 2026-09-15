@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # status_eo -- who is in the Eunoia ecosystem, and how each one looks.
 #
-# A short command name for scripts/ecosystem/ecosystem.py, which lives beside this wrapper.
+# The public command for the implementation in scripts/ecosystem/ecosystem.py.
 #
 #   status_eo                    # the table: status, policy, channel, moved
 #   status_eo --verbose          # ... and why each policy verdict came out
@@ -24,4 +24,4 @@
 # which is a fact about your disk. Neither answers the other.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
-exec python3 "$HERE/ecosystem.py" "$@"
+exec python3 "$HERE/ecosystem/ecosystem.py" "$@"

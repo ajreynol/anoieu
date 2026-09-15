@@ -55,7 +55,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python3 scripts/ecosystem/policy_check.py
+      - run: python3 scripts/policy_check.py
       # Who is in the ecosystem is a decision a person records in
       # scripts/ecosystem/ecosystem.json, and a decision nobody re-checks goes stale
       # silently: three tools joined and the file said `candidate` for as long
@@ -66,9 +66,9 @@ jobs:
       # a remote it cannot reach is reported rather than counted against
       # anybody.
       - name: the inventory is well formed
-        run: python3 scripts/ecosystem/ecosystem.py --check
+        run: scripts/status_eo --check
       - name: and who has joined is current
-        run: python3 scripts/ecosystem/ecosystem.py --check --online
+        run: scripts/status_eo --check --online
 
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a
@@ -248,7 +248,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: kanon is ready to be started
-        run: python3 scripts/ecosystem/ready_check.py kanon
+        run: python3 scripts/ready_check.py kanon
 
   # Reports, never gates. A green tick means only that readiness was checked;
   # the destination's CI is verified separately before any role moves.
@@ -259,7 +259,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: can roles move yet
-        run: python3 scripts/ecosystem/transfer_check.py kanon || true
+        run: python3 scripts/transfer_check.py kanon || true
 
   refresh:
     if: github.event_name != 'pull_request'

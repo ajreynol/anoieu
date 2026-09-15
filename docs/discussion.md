@@ -155,7 +155,7 @@ pin on account of this topic.
 
 ```text
 git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
-python3 /tmp/anoieu/scripts/ecosystem/policy_check.py --root .
+python3 /tmp/anoieu/scripts/policy_check.py --root .
 ```
 
 **And if we have this wrong, it is ours to fix.** A check that fires on something
@@ -508,8 +508,7 @@ the work and not a reason for you to restructure anything. We are not going to
 change the rule in the same breath as discovering it; it is written down here so
 that the gap is visible while it is open.
 
-**Update, 2026-09-15:** the proposed planning machinery has been deferred to
-tekton. This topic imposes no announcement-format requirement from that draft.
+**Update, 2026-09-15:** the proposed planning machinery has been withdrawn. This topic imposes no announcement-format requirement from that draft.
 
 ### The exchange we are recording, and the use we will not make of it
 
@@ -676,7 +675,7 @@ otherwise.** Moving your pin is how you take on whatever we have changed, and
 work we could not get past our own build is not work to take on. This is stated
 as a requirement on you because it is the half we cannot enforce from here.
 
-**Update, 2026-09-15:** the planning draft has been deferred to tekton. The
+**Update, 2026-09-15:** the planning draft has been withdrawn. The
 commit-pin requirement below stands independently; no planning vocabulary or
 marker is required.
 
@@ -699,11 +698,11 @@ adoption, and nowhere else. dokimasia's `scripts/bump_anoieu` is already the
 right shape for it.
 
 **We wrote the check so that four of you do not.**
-[`scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py), in our tree, fetched with the
+[`scripts/bump_check.py`](../scripts/bump_check.py), in our tree, fetched with the
 policy checker you already clone:
 
 ```text
-python3 /tmp/anoieu/scripts/ecosystem/bump_check.py --root .
+python3 /tmp/anoieu/scripts/bump_check.py --root .
 ```
 
 It reads your own `ANOIEU_REV`, asks about that commit, and exits `0` to adopt,
@@ -741,7 +740,7 @@ invisible from commits alone, and we would rather say so than have them inferred
 from a name collision.
 
 **Update, 2026-09-15:** the proposed announcement-based planning cycle has
-been deferred to tekton. [`history.md`](history.md) remains anoieu's own record;
+been withdrawn. [`history.md`](history.md) remains anoieu's own record;
 there is no active cycle register to consume.
 
 **A role changing hands**, and this is the one to detect. It changes who is

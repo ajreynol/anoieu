@@ -91,7 +91,7 @@ while IFS=$'\t' read -r name status repo; do
       continue ;;
   esac
   SEEN="$SEEN$path|"
-  out=$(timeout 120 python3 "$ROOT/scripts/ecosystem/policy_check.py" --root "$path" 2>&1 || true)
+  out=$(timeout 120 python3 "$ROOT/scripts/policy_check.py" --root "$path" 2>&1 || true)
   REPORTS="$REPORTS
 === $name ($status) at $path
 $(printf '%s\n' "$out" | sed -n '/^ok\|^FAIL\|^skip\|^minor\|^ /p' | head -40)"

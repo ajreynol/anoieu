@@ -14,7 +14,7 @@ unrecorded one is invisible.
 **Never run this in CI.** It is a fact about a clock, not about a tree: it says
 something different every hour, so a build hanging off it would fail for reasons
 that have nothing to do with the code. It shares that property, and that rule,
-with `scripts/ecosystem/bump_check.py`.
+with `scripts/bump_check.py`.
 
 Exit codes, so a shell can branch on it:
 

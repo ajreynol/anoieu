@@ -27,7 +27,7 @@ reports on other people's files has not been checked by anybody.
 
 **The policy checker** decides whether a repository's tree matches the shared
 arrangement it says it follows —
-[`scripts/ecosystem/policy_check.py`](scripts/ecosystem/policy_check.py), which runs in every member's
+[`scripts/policy_check.py`](scripts/policy_check.py), which runs in every member's
 CI. **It decides compliance; it does not write the rules**, and the difference
 matters: the rules are governance and are [destined to
 move](docs/roles.md), while deciding whether a tree complies stays here with the
@@ -198,15 +198,15 @@ closes a row until the artifact it names says what happened.
 
 Everything anoieu reads belongs to somebody else, so a checkout of this
 repository on its own has nothing to report on.
-[`scripts/ecosystem/install_eo`](scripts/ecosystem/install_eo) fetches the rest of the ecosystem, and
+[`scripts/install_eo`](scripts/install_eo) fetches the rest of the ecosystem, and
 is the first command to run:
 
 ```bash
 git clone https://github.com/ajreynol/anoieu
 cd anoieu
-scripts/ecosystem/install_eo                   # clone the rest of the ecosystem, beside this
-scripts/ecosystem/install_eo --dry-run         # ... or print those commands and run none
-scripts/ecosystem/install_eo --status          # ... or say what is here, and what disagrees
+scripts/install_eo                   # clone the rest of the ecosystem, beside this
+scripts/install_eo --dry-run         # ... or print those commands and run none
+scripts/install_eo --status          # ... or say what is here, and what disagrees
 ```
 
 It puts ethos, logos, eudaimonia, dokimasia and koine beside this checkout,
@@ -249,7 +249,7 @@ is the worst place to break that.
 | **How do I run it over my own file?** | [`docs/usage.md`](docs/usage.md) — every command, option, baseline and suppression |
 | **Which repository does X? Who should I be asking?** | [`docs/roles.md`](docs/roles.md) is who holds what; [`docs/board.md`](docs/board.md) is who is here. The registers live in this tree, so *which tool should own this* is a question for this tree |
 | **Is this prompt even meant for this repository?** | Possibly not, and saying so is an acceptable answer: [*A prompt may not be for this repository*](docs/policy.md#a-prompt-may-not-be-for-this-repository) |
-| **How do I get the rest of the ecosystem onto a machine?** | [`scripts/ecosystem/install_eo`](scripts/ecosystem/install_eo) checks the members out as siblings |
+| **How do I get the rest of the ecosystem onto a machine?** | [`scripts/install_eo`](scripts/install_eo) checks the members out as siblings |
 | **How does a repository join?** | One sentence in your README and one CI step: [Joining](docs/policy.md#joining-the-eunoia-ecosystem) |
 | **I disagree with a finding, or want to propose something.** | [`docs/discussion.md`](docs/discussion.md) — the topics, the format, and who may address whom |
 | **What is a "president", and who decides the shared arrangements?** | [`docs/laws.md`](docs/laws.md) is the office and its limits; [`docs/history.md`](docs/history.md) is what each one did |

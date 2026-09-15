@@ -187,7 +187,7 @@ writes the rules a member is judged by *and* files the findings against them.
 the cost grows with every member that joins before it happens.
 **Before it:** `install_eo` settling, so that the audit which reads across the
 policy and the findings is a one-line problem rather than two checkouts.
-**Today:** all of it, inside anoieu — `docs/policy.md`, `scripts/ecosystem/policy_check.py`,
+**Today:** all of it, inside anoieu — `docs/policy.md`, `scripts/policy_check.py`,
 `scripts/ecosystem/ecosystem.json` and the `*_eo` scripts, already consumed by four trees.
 **Why here:** first, and not being worked on, which is the split this field
 exists to make. It is the only entry on this page whose consumers already exist

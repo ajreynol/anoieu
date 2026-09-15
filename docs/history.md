@@ -405,7 +405,7 @@ evidence beside them, because a stretch entry that only lists difficulties is
 as unreliable as one that only lists wins.
 
 1. **Another repository's build depends on our checker, and has for days.**
-   `scripts/ecosystem/policy_check.py --root` runs in **three** members' CI. That is a
+   `scripts/policy_check.py --root` runs in **three** members' CI. That is a
    published interface with somebody else's build hanging off it — the hardest
    kind of thing to have, and the one that cannot be claimed without their
    trees agreeing.
@@ -434,13 +434,14 @@ as unreliable as one that only lists wins.
 ### The scripts follow the directory convention — 2026-09-15
 
 Executable scripts and helpers moved out of the top of `tools/` into `scripts/`.
-Ecosystem commands and their JSON live in `scripts/ecosystem/`; corpus manifests
-live beside `scripts/deps.py`. Assistant launchers live in `prompts/`, and
+User-facing commands live directly in `scripts/`; internal ecosystem helpers
+and JSON stay in `scripts/ecosystem/`. Corpus manifests live beside
+`scripts/deps.py`. Assistant launchers live in `prompts/`, and
 `tools/` holds child projects. `scripts/repos.local` remains the shared,
 untracked checkout map. CI, tests, wrappers, prompts and documentation use the
 new paths.
 
-The published policy-check command is now `python3 scripts/ecosystem/policy_check.py`.
+The published policy-check command is now `python3 scripts/policy_check.py`.
 A member adopting a commit with this move must update the command in its workflow
 together with its anoieu pin; a workflow pinned to an older commit keeps using
 the path at that commit.
@@ -448,17 +449,12 @@ the path at that commit.
 Members pin commits; there is no separate ecosystem release number. Package
 metadata and data-format versions remain independent.
 
-### The planning draft is deferred to tekton — 2026-09-15
+### The planning draft was withdrawn — 2026-09-15
 
-`docs/epoch-analogy.md`, `docs/stretch-policy.md` and
-`scripts/ecosystem/stretch.json` were copied unchanged into the sibling
-`../tekton/` workspace and removed here. The obsolete `tools/tekton/README.md`
-stub was deleted. This parks the epoch idea for later; it does not launch a tool
-or transfer an active role. No supporting files were copied.
-
-Anoieu no longer uses the draft's commands, state register or workflow gates.
-The independent commit-pin check stays. History and letters remain here; older
-references to E1 describe the abandoned proposal, not a current workflow.
+The epoch design documents, state register and obsolete stub were removed.
+Anoieu no longer uses the draft's commands or workflow gates. The independent
+commit-pin check stays. History and letters remain here; older references to E1
+describe the abandoned proposal, not a current workflow.
 
 ### What moves, where it goes, and what does not
 
@@ -500,14 +496,14 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 | what | what it does |
 | --- | --- |
 | [`../scripts/ecosystem/ecosystem.json`](../scripts/ecosystem/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
-| [`../scripts/ecosystem/ecosystem.py`](../scripts/ecosystem/ecosystem.py) + [`../scripts/ecosystem/status_eo`](../scripts/ecosystem/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
-| [`../scripts/ecosystem/install_eo`](../scripts/ecosystem/install_eo) + [`../scripts/ecosystem/checkouts.json`](../scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
+| [`../scripts/ecosystem/ecosystem.py`](../scripts/ecosystem/ecosystem.py) + [`../scripts/status_eo`](../scripts/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
+| [`../scripts/install_eo`](../scripts/install_eo) + [`../scripts/ecosystem/checkouts.json`](../scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
 | [`../prompts/join_eo`](../prompts/join_eo), [`../prompts/check_join_eo`](../prompts/check_join_eo), [`../prompts/confirm_eo`](../prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
 | [`../prompts/init_eo`](../prompts/init_eo), [`../prompts/welcome_eo`](../prompts/welcome_eo), [`../scripts/ecosystem/near.py`](../scripts/ecosystem/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
 | [`../prompts/global_audit`](../prompts/global_audit), [`../prompts/process_discussion`](../prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
-| [`../scripts/ecosystem/bump_check.py`](../scripts/ecosystem/bump_check.py) | checks whether the exact policy commit a member proposes to adopt passed CI |
-| [`../scripts/ecosystem/transfer_check.py`](../scripts/ecosystem/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
-| [`../scripts/ecosystem/ready_check.py`](../scripts/ecosystem/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
+| [`../scripts/bump_check.py`](../scripts/bump_check.py) | checks whether the exact policy commit a member proposes to adopt passed CI |
+| [`../scripts/transfer_check.py`](../scripts/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
+| [`../scripts/ready_check.py`](../scripts/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
 **Research removed from this tree — 2026-09-15.** The local copies of
 `science-fiction.md` and `misc/ai-novelty.md` were removed after confirming that
@@ -524,7 +520,7 @@ earlier contents remain in git. `docs/misc/` no longer holds any files.
 | [`../scripts/run.py`](../scripts/run.py), [`../scripts/sweep.py`](../scripts/sweep.py), [`../scripts/oracle_desugar.py`](../scripts/oracle_desugar.py) | the run: refresh the sources, measure them, record what came back |
 | `scripts/gen_checks_doc.py`, `gen_corpus_table.py`, `gen_open_findings.py` | the generators of the documents a run writes |
 | [`../scripts/landing.py`](../scripts/landing.py) | the landing audit — whether a finding closed as *fixed upstream* actually landed. It is about the ledger, so it stays with the ledger |
-| [`../scripts/ecosystem/policy_check.py`](../scripts/ecosystem/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
+| [`../scripts/policy_check.py`](../scripts/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
 | [`../prompts/check_anoieu`](../prompts/check_anoieu), [`../prompts/process_anoieu`](../prompts/process_anoieu) | findings out, and answers back |
 | [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |
 | [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
@@ -547,7 +543,7 @@ are about the governance handoff, not the removed essays.
 - **Each tree needs its own `docs/README.md`.** An index describes the documents
   that tree holds; it is not an artifact to move wholesale.
 - **`tools/kanon/`** remains a stub, to be removed only when its replacement
-  is accepted under `PROTO-20`. The tekton draft is no longer pending here.
+  is accepted under `PROTO-20`.
 - **[`../scripts/doc_currency.py`](../scripts/doc_currency.py)** measures how much
   evidence there is that *the tree it is run in* has current documentation. It
   is the mechanical half of the central policy rule, so it argues for kanon;
@@ -596,7 +592,7 @@ work this repository actually exists to do.**
 **3. Did I report all of my responsibilities?**
 **Not yet.** The scope, role and dependency questions above remain open.
 `doc_currency.py` still needs an explicit destination. Each tree needs its own
-documentation index and CI. The research essays and the deferred tekton draft
+documentation index and CI. The research essays and the withdrawn planning draft
 are no longer pending items in this handoff.
 
 ### What went wrong
@@ -618,8 +614,8 @@ are no longer pending items in this handoff.
 
 ### What is handed on
 
-- **The proposed E1 handoff did not happen.** Its planning machinery is now
-  deferred to tekton.
+- **The proposed E1 handoff did not happen.** Its planning machinery has been
+  withdrawn.
 - **The joining requirement is still one nobody has satisfied**, which is why
   this repository grades itself poorly on delivery.
 - **Two published URLs 404** as a result of moving the prompts directory, and
@@ -652,7 +648,7 @@ qualification on everything above.
 ### What E1 carried downstream, and what it nearly said
 
 The covering note below is a dated record, not a current instruction. The
-associated planning draft was deferred to tekton on 2026-09-15.
+associated planning draft was withdrawn on 2026-09-15.
 
 **What it carried:** footings recorded on two axes instead of one; the
 `associate` footing, defined and held by nobody; the `report/` convention and

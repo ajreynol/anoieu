@@ -247,12 +247,12 @@ the newest `history.md` was written by, not the one a letter was addressed to â€
 those are all downstream, and where any of them disagrees with the registry,
 **the registry is right and the other is the thing to fix.**
 
-**Read it with [`../scripts/ecosystem/status_eo`](../scripts/ecosystem/status_eo)**, which prints one
+**Read it with [`../scripts/status_eo`](../scripts/status_eo)**, which prints one
 row per tool: whoever prints `president` in the status column is the president,
 today, and that is the whole of the question. It is one command, it takes no
 argument, and it needs nobody's recollection.
 
-**One at a time**, which `scripts/ecosystem/ecosystem.py --check` decides and CI runs. A file
+**One at a time**, which `scripts/status_eo --check` decides and CI runs. A file
 recording two presidents has recorded a handover that did not finish â€” both rows
 look correct alone, which is why it is checked rather than noticed.
 

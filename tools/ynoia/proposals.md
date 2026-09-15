@@ -318,7 +318,7 @@ anoieu is currently three things, and its own README says so: an analyzer, a
 reporting system, and *the place the Eunoia ecosystem's shared policy is kept*.
 The third has grown since that sentence was written. It is now
 [`docs/policy.md`](../../docs/policy.md),
-[`scripts/ecosystem/policy_check.py`](../../scripts/ecosystem/policy_check.py) — which runs in every
+[`scripts/policy_check.py`](../../scripts/policy_check.py) — which runs in every
 member's CI — [`scripts/ecosystem/ecosystem.json`](../../scripts/ecosystem/ecosystem.json),
 [`scripts/ecosystem/ecosystem.py`](../../scripts/ecosystem/ecosystem.py),
 [`prompts/init_eo`](../../prompts/init_eo),
@@ -326,7 +326,7 @@ member's CI — [`scripts/ecosystem/ecosystem.json`](../../scripts/ecosystem/eco
 [`prompts/check_join_eo`](../../prompts/check_join_eo),
 [`prompts/welcome_eo`](../../prompts/welcome_eo),
 [`prompts/global_audit`](../../prompts/global_audit),
-[`scripts/ecosystem/install_eo`](../../scripts/ecosystem/install_eo) and
+[`scripts/install_eo`](../../scripts/install_eo) and
 [`scripts/ecosystem/checkouts.json`](../../scripts/ecosystem/checkouts.json). That is a tool, and it is
 not the analyzer.
 

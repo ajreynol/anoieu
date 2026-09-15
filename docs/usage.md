@@ -20,13 +20,13 @@ Both spellings are the same program; the examples below use the first.
 ## The rest of the ecosystem
 
 anoieu reports on other people's repositories, so a checkout of this one on its
-own has nothing to read. [`scripts/ecosystem/install_eo`](../scripts/ecosystem/install_eo) is what
+own has nothing to read. [`scripts/install_eo`](../scripts/install_eo) is what
 fetches the rest, and it is the first thing to run on a new machine:
 
 ```bash
-scripts/ecosystem/install_eo                   # clone what is not here yet
-scripts/ecosystem/install_eo --dry-run         # ... or print those commands and run none
-scripts/ecosystem/install_eo --status          # ... or say what is here, and what disagrees
+scripts/install_eo                   # clone what is not here yet
+scripts/install_eo --dry-run         # ... or print those commands and run none
+scripts/install_eo --status          # ... or say what is here, and what disagrees
 ```
 
 **It installs, and `--dry-run` is how you look first** — what the dry run prints
@@ -377,9 +377,9 @@ ETHOS=<ethos>/build/src/ethos \
 python3 scripts/sweep.py <dir>...            # run over a corpus: crashes and counts
 python3 scripts/gen_checks_doc.py            # rewrite docs/checks.md from the registry
 python3 scripts/landing.py --check           # did what we closed on a promise land?
-scripts/ecosystem/install_eo                         # install the rest of the ecosystem
-scripts/ecosystem/install_eo --dry-run               # ... or print them and run none
-scripts/ecosystem/install_eo --status                # ... or say what of it is on this machine
+scripts/install_eo                         # install the rest of the ecosystem
+scripts/install_eo --dry-run               # ... or print them and run none
+scripts/install_eo --status                # ... or say what of it is on this machine
 ETHOS=<ethos>/build/src/ethos \
   python3 scripts/oracle_desugar.py          # the desugarer against ethos, case by case
 ```

@@ -295,7 +295,7 @@ and **deciding whether a tree complies, which is `R31` and stays here.**
 **Role:** **deciding whether a tree complies with the policy**, whoever wrote
 the policy. The program every member's CI runs, its checks, its two tiers, its
 skip lines, and its refusal to report coverage it does not have.
-**Owns:** `scripts/ecosystem/policy_check.py`, and the `adoption_interface` case in
+**Owns:** `scripts/policy_check.py`, and the `adoption_interface` case in
 `tests/run.py` that holds it to being a published interface.
 **Not this role:** what the rules *are*, which is `R4` and is leaving. This role
 implements somebody else's document and has no standing to change what it says.
@@ -321,7 +321,7 @@ chosen, and it is recorded here because the move is what makes it urgent.
 
 **What it buys, and this is the part worth the split.** Members' workflows do
 not change. The `anoieu / policy` job clones this repository and runs
-`scripts/ecosystem/policy_check.py`; if the checker moved, every member's job would clone
+`scripts/policy_check.py`; if the checker moved, every member's job would clone
 somewhere else and the check would arrive under a different name in their pull
 requests. **Moving the rules costs a member nothing. Moving the checker would
 cost every one of them a commit.**
@@ -358,7 +358,7 @@ generating cases nobody wrote, which is `R3`.
 clone the rest of it beside a checkout, record where each one landed, and report
 what has drifted.
 **Owns:** `scripts/ecosystem/ecosystem.json`, `scripts/ecosystem/checkouts.json`, `scripts/ecosystem/ecosystem.py`,
-`scripts/ecosystem/install_eo`, `scripts/ecosystem/status_eo`, and the `welcome_eo` prompt.
+`scripts/install_eo`, `scripts/status_eo`, and the `welcome_eo` prompt.
 **Not this role:** deciding membership — a status is changed by a person and no
 script writes that file — and the rules a member is checked against, which are
 `R4`.
@@ -389,8 +389,8 @@ evidence — and carrying both under one id hid which of them had gone stale.
 is the single rule in this ecosystem that forbids work rather than requiring it;
 the checkable half is `R4`.
 
-`R28` and `R29` were retired on 2026-09-15. Their draft is deferred to
-tekton; neither is an active responsibility or a pending role transfer.
+`R28` and `R29` were retired on 2026-09-15. Neither is an active
+responsibility or a pending role transfer.
 
 `R26` is deliberately not allocated here: koine's `D8` proposes it for the
 low-level formats of the reporting loop, and that request is open. An id claimed

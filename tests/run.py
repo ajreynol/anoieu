@@ -201,7 +201,7 @@ def manifest_agrees() -> int:
 def inventory_well_formed() -> int:
     """`scripts/ecosystem/ecosystem.json` read as a document about itself.
 
-    The offline half of `scripts/ecosystem/ecosystem.py --check`, run here so that editing
+    The offline half of `scripts/status_eo --check`, run here so that editing
     the inventory fails at the moment somebody edits it rather than in CI. The
     other half asks each remote whether what we record is still true, and needs
     a network, so it stays a CI step and is not run from the suite.
@@ -238,12 +238,12 @@ def inventory_well_formed() -> int:
         f.write(f"anoieu {root}\n")
     env = dict(os.environ, ANOIEU_REPOS=os.path.join(HERE, "no-such-dir"),
                ANOIEU_REPOS_FILE=mapping)
-    out = subprocess.run([sys.executable, os.path.join(root, "scripts", "ecosystem", "ecosystem.py")],
+    out = subprocess.run([os.path.join(root, "scripts", "status_eo")],
                          capture_output=True, text=True, env=env, timeout=120)
     os.remove(mapping)
     if out.returncode != 0 or not re.search(rf"^anoieu\s+{re.escape(footing)}\s",
                                             out.stdout, re.M):
-        print(f"FAIL scripts/ecosystem/ecosystem.py with no arguments exited {out.returncode}: "
+        print(f"FAIL scripts/status_eo with no arguments exited {out.returncode}: "
               f"{(out.stderr or out.stdout).strip().splitlines()[-1:]}")
         bad = bad + ["the default mode"]
     # The key under the table is a copy: it names every footing, and what a
@@ -282,7 +282,7 @@ def inventory_well_formed() -> int:
         env = dict(os.environ, ANOIEU_REPOS=os.path.join(lim, "none"),
                    ANOIEU_REPOS_FILE=mapping)
         got = subprocess.run(
-            [sys.executable, os.path.join(root, "scripts", "ecosystem", "ecosystem.py")],
+            [os.path.join(root, "scripts", "status_eo")],
             capture_output=True, text=True, env=env, timeout=120).stdout
         for label, ok in (
                 ("a president missing a file it needs is reported in limbo",
@@ -302,7 +302,7 @@ def inventory_well_formed() -> int:
     # key printed under every table is the bulk of the output of a command that
     # is run often. Getting either wrong is invisible from the other.
     help_out = subprocess.run(
-        [sys.executable, os.path.join(root, "scripts", "ecosystem", "ecosystem.py"), "--help"],
+        [os.path.join(root, "scripts", "status_eo"), "--help"],
         capture_output=True, text=True, timeout=60)
     for label, want in (("--help prints the key", "key\n" in help_out.stdout),
                         ("--help exits 0", help_out.returncode == 0),
@@ -335,7 +335,7 @@ def inventory_well_formed() -> int:
 
 
 def install_commands() -> int:
-    """`scripts/ecosystem/install_eo` installs with `git clone`, and with nothing else.
+    """`scripts/install_eo` installs with `git clone`, and with nothing else.
 
     It is the one command in this repository that changes a machine outside it,
     so what it may execute is checked rather than promised. Three questions, all
@@ -350,7 +350,7 @@ def install_commands() -> int:
     import io  # noqa: PLC0415
     from contextlib import redirect_stdout  # noqa: PLC0415
 
-    path = os.path.join(os.path.dirname(HERE), "scripts", "ecosystem", "install_eo")
+    path = os.path.join(os.path.dirname(HERE), "scripts", "install_eo")
     loader = importlib.machinery.SourceFileLoader("install_eo", path)
     spec = importlib.util.spec_from_loader("install_eo", loader)
     mod = importlib.util.module_from_spec(spec)
@@ -632,7 +632,7 @@ def join_prompt_agrees() -> int:
     the only thing this repository hands to somebody who is joining *nothing*, so
     a sentence in one that has drifted is a claim made on a repository that never
     agreed to anything here. The affiliating one is the note an `associate`
-    carries, and `scripts/ecosystem/ecosystem.py --check --online` reads that note back off
+    carries, and `scripts/status_eo --check --online` reads that note back off
     their README -- so a drift there desynchronises a prompt from a check in
     somebody else's tree.
     """
@@ -673,7 +673,7 @@ def note_forms() -> int:
     of them fails this test rather than silently changing what a footing means.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "scripts", "ecosystem"))
+    sys.path.insert(0, os.path.join(root, "scripts"))
     import policy_check  # noqa: PLC0415
 
     doc = open(os.path.join(root, "docs", "policy.md")).read()
@@ -730,7 +730,7 @@ def note_forms() -> int:
 
 
 def protocol_report() -> int:
-    """`scripts/ecosystem/ecosystem.py --protocol` reports the right column for each tree.
+    """`scripts/status_eo --protocol` reports the right column for each tree.
 
     The readers are witnessed above; this is the wiring around them, which is the
     half that had never produced a `yes` when it was written. It runs offline
@@ -795,7 +795,7 @@ def protocol_report() -> int:
 
 
 def pin_adoption_gate() -> int:
-    """`scripts/ecosystem/bump_check.py` refuses everything that is not a finished green run.
+    """`scripts/bump_check.py` refuses everything that is not a finished green run.
 
     This is the gate a downstream member puts in front of adopting a policy commit, so
     the expensive direction is **letting something through**: a member that
@@ -807,7 +807,7 @@ def pin_adoption_gate() -> int:
     network is a test nobody runs.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "scripts", "ecosystem"))
+    sys.path.insert(0, os.path.join(root, "scripts"))
     import bump_check  # noqa: PLC0415
 
     def run(name, status="completed", conclusion="success"):
@@ -885,7 +885,7 @@ def adoption_interface() -> int:
          True, "ungated", 1),
     )
 
-    checker = os.path.join(os.path.dirname(HERE), "scripts", "ecosystem", "policy_check.py")
+    checker = os.path.join(os.path.dirname(HERE), "scripts", "policy_check.py")
     failures = 0
     tmp = tempfile.mkdtemp(prefix="anoieu-adopt-")
     try:

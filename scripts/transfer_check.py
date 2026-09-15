@@ -15,7 +15,7 @@ somebody else's tree, which `docs/policy.md` names as the way a suite becomes
 noise. So the other half is reported as **unverified from here** and is a
 person's step with `--online`.
 
-Exit codes follow `scripts/ecosystem/bump_check.py`, for the same reason it has three:
+Exit codes follow `scripts/bump_check.py`, for the same reason it has three:
 
     0   ready       -- our side is in order, and where checked, theirs
     1   not ready   -- something named below is missing
@@ -33,7 +33,7 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(HERE))
+ROOT = os.path.dirname(HERE)
 
 
 def destined(target: str) -> list[str]:
@@ -57,7 +57,7 @@ def destined(target: str) -> list[str]:
 
 def exists(target: str) -> tuple[bool, str]:
     """Whether the target is somewhere we can point at, and where."""
-    inv = os.path.join(HERE, "ecosystem.json")
+    inv = os.path.join(HERE, "ecosystem", "ecosystem.json")
     try:
         with open(inv, encoding="utf-8") as f:
             d = json.load(f)
@@ -72,7 +72,7 @@ def exists(target: str) -> tuple[bool, str]:
 
 def their_ci(target: str) -> tuple[str, str]:
     """Their build, if we are allowed to ask. Never called from CI."""
-    inv = os.path.join(HERE, "ecosystem.json")
+    inv = os.path.join(HERE, "ecosystem", "ecosystem.json")
     try:
         with open(inv, encoding="utf-8") as f:
             url = json.load(f).get(target, {}).get("url", "")

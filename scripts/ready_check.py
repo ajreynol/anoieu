@@ -38,7 +38,7 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(HERE))
+ROOT = os.path.dirname(HERE)
 STUB_SENTENCE = "this is a stub"
 
 
@@ -48,7 +48,7 @@ def existing(name: str) -> str:
     Empty string when the inventory has never heard of it, or records it as a
     child -- neither of which is a repository somebody could have created.
     """
-    path = os.path.join(HERE, "ecosystem.json")
+    path = os.path.join(HERE, "ecosystem", "ecosystem.json")
     if not os.path.isfile(path):
         return ""
     with open(path, encoding="utf-8") as f:

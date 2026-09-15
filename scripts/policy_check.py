@@ -15,10 +15,10 @@ to a sentence somebody wrote. The run also prints every policy rule that has
 **no** automated check, because a checker that only lists its own passes reads
 as coverage it does not have.
 
-    python3 scripts/ecosystem/policy_check.py             # check; exit 1 on any failure
-    python3 scripts/ecosystem/policy_check.py --root PATH # check somebody else's checkout
-    python3 scripts/ecosystem/policy_check.py --coverage  # what is checked, and what is not
-    python3 scripts/ecosystem/policy_check.py --version   # which commit of the policy this is
+    python3 scripts/policy_check.py             # check; exit 1 on any failure
+    python3 scripts/policy_check.py --root PATH # check somebody else's checkout
+    python3 scripts/policy_check.py --coverage  # what is checked, and what is not
+    python3 scripts/policy_check.py --version   # which commit of the policy this is
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ import re
 import subprocess
 import sys
 
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #: The repository under test. `--root` points it at somebody else's checkout;
 #: `REPO_ROOT` stays this one, because a few checks are about anoieu's own files.
 ROOT = REPO_ROOT
@@ -239,7 +239,7 @@ def note_in(text: str) -> list[str]:
 
     Read for a **report** and never for a verdict. Nothing in `CHECKS` calls it,
     nothing fails on it, and the repositories it is asked about are held to none
-    of this. `scripts/ecosystem/ecosystem.py --protocol` is what runs it, so that a person
+    of this. `scripts/status_eo --protocol` is what runs it, so that a person
     deciding the protocol can see who would satisfy which version of it today.
     """
     if not text:
@@ -256,7 +256,7 @@ def declaration_in(text: str) -> list[str]:
     """What is missing from a README's declaration of membership, if anything.
 
     Split out from the check below because a second reader wants the same
-    answer from text it did not read off this disk: `scripts/ecosystem/ecosystem.py --check
+    answer from text it did not read off this disk: `scripts/status_eo --check
     --online` asks it of a README fetched from a remote, to decide whether the
     inventory's record of who has joined is still true. One implementation, so
     the two cannot come to different answers about the same file.
@@ -286,7 +286,7 @@ def affiliation_in(text: str) -> list[str]:
 
     The note an `associate` in `scripts/ecosystem/ecosystem.json` carries: it names the
     ecosystem it works with, and it says it is not held to the policy. Read from
-    a fetched README by `scripts/ecosystem/ecosystem.py --check --online`, exactly as
+    a fetched README by `scripts/status_eo --check --online`, exactly as
     `declaration_in` is for a member -- so both footings that assert something
     about somebody else's tree are decided by reading that tree.
 

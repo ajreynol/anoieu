@@ -53,7 +53,7 @@ the subject is here. It should work on any member's tree.
 - **Inbound references** — how many other documents name this one. Cheap,
   objective, and the closest single proxy. It ranges from 35 to 1 here.
 - **Whether a check reads it.** A document that is ground truth for a test in
-  `tests/run.py` or `scripts/ecosystem/policy_check.py` cannot be deleted without breaking
+  `tests/run.py` or `scripts/policy_check.py` cannot be deleted without breaking
   something, which is a harder fact than any link count.
 - **Whether it leaves the repository** — published to members, quoted in an
   outbound prompt, or pinned by somebody else's CI. Those cannot be changed
@@ -364,7 +364,7 @@ and the argument goes next door.
 **What:** a check, run against a *diff* rather than a tree, that fails when a
 change deletes the last place something was explained while other documents
 still depend on it.
-**Where:** **not** `scripts/ecosystem/policy_check.py`. That checker reads a tree, is
+**Where:** **not** `scripts/policy_check.py`. That checker reads a tree, is
 published, and runs in other members' CI; this one needs history and would be a
 new obligation on everybody. It belongs in `tests/run.py` here, or in a CI step
 of its own, until it has earned more.

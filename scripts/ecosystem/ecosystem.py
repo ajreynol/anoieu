@@ -6,10 +6,10 @@ reports. It is the thing to run when the question is *where does everything
 stand*; `prompts/global_audit` is the thing to run when the question needs
 somebody to read across the answer and form a view.
 
-    python3 scripts/ecosystem/ecosystem.py            # the table
-    python3 scripts/ecosystem/ecosystem.py --verbose  # and why each policy verdict came out
-    python3 scripts/ecosystem/ecosystem.py --check    # is the inventory itself still true?
-    python3 scripts/ecosystem/ecosystem.py --check --online   # ... and ask each remote
+    scripts/status_eo            # the table
+    scripts/status_eo --verbose  # and why each policy verdict came out
+    scripts/status_eo --check    # is the inventory itself still true?
+    scripts/status_eo --check --online   # ... and ask each remote
 
 Health here means **what can be established from a checkout in about a second**:
 does it declare membership, does the policy check pass, is there a channel to
@@ -195,7 +195,7 @@ def render_key() -> str:
                "docs/policy.md,")
     out.append("           \"The footings, and what each one costs whom\"")
     block(FOOTINGS.items())
-    out.append("  policy   scripts/ecosystem/policy_check.py, run over that checkout by this "
+    out.append("  policy   scripts/policy_check.py, run over that checkout by this "
                "command just now")
     block(POLICY_VALUES)
     out.append("  channel  their docs/discussion.md, which is optional and which "
@@ -207,7 +207,7 @@ def render_key() -> str:
     out.append("")
     out.append("fixing a `N failing` row")
     out.append("  The count is all this table has. To see what failed:")
-    out.append("      python3 scripts/ecosystem/policy_check.py --root <where>")
+    out.append("      python3 scripts/policy_check.py --root <where>")
     out.append("  Each FAIL line names the check and what it found.")
     out.append("  Whose it is to fix depends on the status column, and the two "
                "cases are not alike.")
@@ -225,7 +225,7 @@ def render_key() -> str:
     out.append("  or the policy does not fit a legitimate shape of repository -- "
                "that one is")
     out.append("  ours, and it is fixed here in docs/policy.md or "
-               "scripts/ecosystem/policy_check.py.")
+               "scripts/policy_check.py.")
     return "\n".join(out)
 
 
@@ -265,7 +265,7 @@ def age(path: str) -> str:
 
 def check(path: str) -> tuple[str, list[str]]:
     out = subprocess.run(
-        [sys.executable, os.path.join(ROOT, "scripts", "ecosystem", "policy_check.py"),
+        [sys.executable, os.path.join(ROOT, "scripts", "policy_check.py"),
          "--root", path], capture_output=True, text=True)
     # count the failing *checks*, not their detail lines: one check that reports
     # three things is one thing wrong, and saying "3 fail" overstates it.
@@ -378,7 +378,7 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
     the network, and counting it as a stale inventory would make this job red for
     something nobody here can fix.
     """
-    sys.path.insert(0, HERE)
+    sys.path.insert(0, os.path.dirname(HERE))
     import policy_check  # noqa: PLC0415
 
     bad, unseen = [], []
@@ -465,7 +465,7 @@ def protocol(inv: dict) -> int:
       declares      a full membership declaration, which no associate needs and
                     which would mean the footing is the wrong one
     """
-    sys.path.insert(0, HERE)
+    sys.path.insert(0, os.path.dirname(HERE))
     import policy_check  # noqa: PLC0415
 
     rows = []
@@ -695,7 +695,7 @@ def main() -> int:
             notes.append(
                 f"{name} says it follows the shared policy, and {n_fail} of our "
                 "checks fail on its tree. Theirs to fix, not ours. To see what: "
-                f"python3 scripts/ecosystem/policy_check.py --root {where_short}")
+                f"python3 scripts/policy_check.py --root {where_short}")
         # Limbo. Said against the row rather than left for somebody to notice,
         # because it is the one state here that is supposed to be brief: while
         # it lasts nobody is keeping the laws and nothing is recording the term.

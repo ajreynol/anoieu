@@ -3,9 +3,9 @@
 
 Three views of one list, so they cannot drift apart:
 
-    scripts/ecosystem/install_eo                 # clone what is not here yet
-    scripts/ecosystem/install_eo --dry-run       # ... or print the commands, run nothing
-    scripts/ecosystem/install_eo --status        # ... or say what is on this machine
+    scripts/install_eo                 # clone what is not here yet
+    scripts/install_eo --dry-run       # ... or print the commands, run nothing
+    scripts/install_eo --status        # ... or say what is on this machine
 
 **It installs, and `--dry-run` is how you look first.** What the dry run prints
 is exactly what a real run executes, so reading it is a review rather than a
@@ -48,11 +48,11 @@ Membership stays a decision a person makes: this file reads
 
 Choosing what to include:
 
-    scripts/ecosystem/install_eo --run ethos koine     # just these
-    scripts/ecosystem/install_eo --role member         # by recorded status
-    scripts/ecosystem/install_eo --exclude cvc5        # all but
-    scripts/ecosystem/install_eo --missing             # what is not here yet
-    scripts/ecosystem/install_eo --with-optional       # include the opt-in ones
+    scripts/install_eo --run ethos koine     # just these
+    scripts/install_eo --role member         # by recorded status
+    scripts/install_eo --exclude cvc5        # all but
+    scripts/install_eo --missing             # what is not here yet
+    scripts/install_eo --with-optional       # include the opt-in ones
 
 An id is a repo id or any inventory id it provides, so `ethos-eoc` selects the
 one ethos tree that carries both.
@@ -69,9 +69,9 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(HERE))
-CHECKOUTS = os.path.join(HERE, "checkouts.json")
-INVENTORY = os.path.join(HERE, "ecosystem.json")
+ROOT = os.path.dirname(HERE)
+CHECKOUTS = os.path.join(HERE, "ecosystem", "checkouts.json")
+INVENTORY = os.path.join(HERE, "ecosystem", "ecosystem.json")
 DEPS = os.path.join(ROOT, "scripts", "deps.json")
 REPOS_FILE = os.environ.get("ANOIEU_REPOS_FILE",
                             os.path.join(ROOT, "scripts", "repos.local"))
@@ -657,7 +657,7 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
             print(f"note: {n}")
     print()
     print("What a checkout says, and nothing about what is in it. Membership and "
-          "policy are\n`python3 scripts/ecosystem/ecosystem.py`; whether a tool is any good "
+          "policy are\n`scripts/status_eo`; whether a tool is any good "
           "is not a thing either prints.")
     return 0
 

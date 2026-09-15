@@ -392,7 +392,7 @@ regenerated and diffed on every push, and `--pinned` restoring recorded commits
 so the build goes red for its own reasons only. Tenet 4 is met:
 `reports/cpc-audit.html` for readers who will not clone anything, six shrunk
 reproducers under `tests/fuzz/`, and a ledger carrying an id and a state per row.
-Tenet 1 is now met in the only way that counts: **`scripts/ecosystem/policy_check.py --root`
+Tenet 1 is now met in the only way that counts: **`scripts/policy_check.py --root`
 runs in three repositories that are not this one** — dokimasia, koine and
 eudaimonia — each pinned to a commit of its own choosing, with the interface
 tested here rather than trusted. That is the one place in this ecosystem where

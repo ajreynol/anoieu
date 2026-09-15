@@ -18,7 +18,7 @@
     "full, so measuring it measures `main` and the compiler work on top of it,",
     "and when it merges this ref becomes `main` and the exception is gone.",
     "Adding a second exception is a decision, and docs/coherence.md is where",
-    "the reason has to be written. scripts/ecosystem/install_eo takes no exception at",
+    "the reason has to be written. scripts/install_eo takes no exception at",
     "all: it installs a default branch and says where the newer copy of a",
     "child project is, rather than checking one out."
   ],
