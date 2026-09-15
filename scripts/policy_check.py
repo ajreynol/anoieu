@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Check this repository against `docs/policy.md`, and say what it cannot check.
+"""Check this repository against the shared repository policy, and say what it cannot check.
 
 Policy is a set of claims about a *tree* — where files go, what the README ends
 with, what a child project may import — so a program can decide them without
 asking anybody's opinion. That is the whole reason policy is checked here and
 the vision is not: see "Policy is checked; vision is argued" in
-`docs/vision.md`. **Nothing in this file may ever check `vision.md`.** Whether
+the vision held with governance. **Nothing here may ever check vision.** Whether
 a tool is fruitful yet, whether a claim is oversold, whether a child project has
 earned its keep — those are judgements nobody has the authority to settle, and a
 green tick against one would manufacture an authority that does not exist.
@@ -18,7 +18,7 @@ as coverage it does not have.
     python3 scripts/policy_check.py             # check; exit 1 on any failure
     python3 scripts/policy_check.py --root PATH # check somebody else's checkout
     python3 scripts/policy_check.py --coverage  # what is checked, and what is not
-    python3 scripts/policy_check.py --version   # which commit of the policy this is
+    python3 scripts/policy_check.py --version   # which commit of the checker this is
 """
 
 from __future__ import annotations
@@ -32,7 +32,10 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #: The repository under test. `--root` points it at somebody else's checkout;
 #: `REPO_ROOT` stays this one, because a few checks are about anoieu's own files.
 ROOT = REPO_ROOT
-POLICY_URL = "ajreynol/anoieu"
+CHECKER_REPO = "ajreynol/anoieu"
+POLICY_REPO = "ajreynol/kanon"
+# Accept pre-handoff declarations without making members rewrite their README.
+POLICY_REPOS = (POLICY_REPO, CHECKER_REPO)
 
 # Rules with no automated check, and the honest reason. Printed on every run.
 UNCHECKED = [
@@ -47,9 +50,9 @@ UNCHECKED = [
     ("`tests/` holds the evidence, not only the tests", "readability in a minute is not measurable"),
     ("a workflow is defined in prose", "checked elsewhere: `prompts_agree` in tests/run.py"),
     ("a surface that restates a register is compared to it",
-     "the comparison is per-surface and lives with the surface: `prompts_agree` "
-     "and `join_prompt_agrees` in tests/run.py. Whether one "
-     "exists for a *new* surface is not decidable from here"),
+     "the comparison lives with the surface: `prompts_agree` in tests/run.py "
+     "covers the findings prompts; governance templates belong with governance. "
+     "Whether a new surface has a comparison is not decidable from here"),
     ("coding style", "encouraged and never blocking, so nothing here checks it -- by design"),
     ("a topic is never about somebody else's discussion file",
      "what a topic is *about* is semantic; a heuristic here would misfire on legitimate notices"),
@@ -345,26 +348,22 @@ def check_name_explained() -> list[str]:
 
 
 def check_owner_unadvertised() -> list[str]:
-    """*Unadvertised is not secret* -- the owner is named on the policy page and
-    nowhere else in this tree.
+    """The local maintenance page records ownership without front-page credit.
 
-    The name is read **out of** `policy.md` rather than written here, so this
-    checker is not itself a second copy of the thing it is keeping to one place.
-    Home-only: whether somebody else's repository names a person is entirely
-    their business, and failing their build over it would be absurd.
+    Home-only: another repository chooses its own attribution. The outgoing
+    governance document may retain its own ownership record until copied.
     """
-    m = re.search(r"^\*\*Owner:\*\*\s*`[^`]+`\s*[—-]\s*([^.\n]+?)\.", read("docs/policy.md"), re.M)
+    source = "docs/maintenance.md"
+    m = re.search(r"^\*\*Owner:\*\*\s*`[^`]+`\s*[—-]\s*([^.\n]+?)\.", read(source), re.M)
     if not m:
-        return ["docs/policy.md does not record an owner, so accountability "
-                "rests on nobody"]
+        return [f"{source} does not record an owner, so accountability rests on nobody"]
     name = m.group(1).strip()
     bad = []
     for rel in tracked("*"):
-        if rel == "docs/policy.md" or os.path.splitext(rel)[1] in BINARY:
+        if rel in {source, "docs/policy.md"} or os.path.splitext(rel)[1] in BINARY:
             continue
         if name.lower() in read(rel).lower():
-            bad.append(f"{rel} names the owner; the policy page is the one place, "
-                       "and everywhere else is advertising")
+            bad.append(f"{rel} names the owner; keep anoieu's attribution in {source}")
     return bad
 
 
@@ -647,26 +646,17 @@ def check_declaration_first() -> list[str]:
 
 
 def check_scripts_listed() -> list[str]:
-    """Every command in `scripts/` and `prompts/` appears in the table.
-
-    The cheapest kind of check: its input is the tree, so it cannot rot, and the
-    thing it prevents is the one that actually happened repeatedly -- a script
-    added and documented in a sentence somewhere, until the sentences were the
-    documentation.
-    """
-    table = read("docs/coherence.md")
+    """Every command or helper in scripts/ and prompts/ is locally catalogued."""
+    source = "docs/maintenance.md"
+    table = read(source)
     if not table:
-        return []
-    # Both directories, since the prompts moved up out of `scripts/`. They were
-    # covered before the move by being nested under it, and a rename that
-    # quietly drops eight files out of a check is the failure this repository
-    # is least willing to ship: it reads as a pass.
+        return [f"{source}, the local script catalogue, does not exist"]
     bad = []
     for rel in tracked("scripts/*") + tracked("prompts/*"):
         name = os.path.basename(rel)
         if name.endswith(".local") or f"`{name}" in table:
             continue
-        bad.append(f"{rel} is not in the table in docs/coherence.md")
+        bad.append(f"{rel} is not in the table in {source}")
     return bad
 
 
@@ -710,9 +700,9 @@ def check_declaration_links() -> list[str]:
     note = maintenance_note(read("README.md"))
     if not note or not re.search(MEMBER_CLAIM, note.lower()):
         return []                      # not a declaration; nothing to link from
-    if POLICY_URL in note and "policy.md" in note:
+    if any(repo in note for repo in POLICY_REPOS) and "policy.md" in note:
         return []
-    return [f"the declaration does not link to {POLICY_URL}'s docs/policy.md, so "
+    return [f"the declaration does not link to {POLICY_REPO}'s docs/policy.md, so "
             "a reader is told this repository follows a policy and not where to "
             "read it"]
 
@@ -829,7 +819,7 @@ CHECKS = [
     ("no document names one machine's filesystem", check_local_paths, None),
     ("the membership declaration opens the maintenance note", check_declaration_first, None),
     ("every script is listed where the scripts are listed", check_scripts_listed, is_home),
-    ("the owner is named once, and nowhere else", check_owner_unadvertised, is_home),
+    ("local ownership is recorded without advertising", check_owner_unadvertised, is_home),
 ]
 
 
@@ -856,7 +846,7 @@ def coverage() -> None:
     for rule, why in UNCHECKED:
         print(f"   {rule} — {why}")
     print("-- never to be checked")
-    print("   docs/vision.md, in full — judgement, and nobody has the authority")
+    print("   the shared vision, in full — judgement, and nobody has the authority")
 
 
 def main() -> int:
@@ -864,13 +854,13 @@ def main() -> int:
     if "--root" in sys.argv:
         ROOT = os.path.abspath(sys.argv[sys.argv.index("--root") + 1])
     if "--version" in sys.argv:
-        print(f"{POLICY_URL} {version()}")
+        print(f"{CHECKER_REPO} {version()}")
         return 0
     if "--coverage" in sys.argv:
         coverage()
         return 0
     if os.path.abspath(ROOT) != REPO_ROOT:
-        print(f"-- {POLICY_URL} {version()} checking {ROOT}")
+        print(f"-- {CHECKER_REPO} {version()} checking {ROOT}")
     failures = skipped = 0
     for title, fn, applies in CHECKS:
         why = applies() if applies else None

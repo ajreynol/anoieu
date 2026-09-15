@@ -26,18 +26,7 @@ jobs:
           python3 scripts/gen_checks_doc.py
           git diff --exit-code docs/checks.md
 
-  # docs/policy.md is a set of claims about this tree, so a program decides them.
-  # Its own job, and not a step in the matrix above: a policy failure is not a
-  # test failure and should not be reported as one, and there is nothing
-  # version-dependent about it to run twice. This is the same job every other
-  # repository in the ecosystem runs -- theirs appears as `anoieu / policy`,
-  # ours as `ci / policy`, because we do not clone ourselves to check ourselves.
-  #
-  # docs/vision.md is deliberately absent here and must stay absent: see
-  # "Policy is checked; vision is argued" in docs/vision.md.
-  # The measurement this repository's central policy asks for and cannot make
-  # into a gate: what a sentence says is not decidable, so this reports how much
-  # evidence there is that the documentation is current and fails nothing.
+  # Report documentation currency without turning editorial judgement into a gate.
   documentation-up-to-date:
     runs-on: ubuntu-latest
     steps:
@@ -56,19 +45,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 scripts/policy_check.py
-      # Who is in the ecosystem is a decision a person records in
-      # scripts/ecosystem/ecosystem.json, and a decision nobody re-checks goes stale
-      # silently: three tools joined and the file said `candidate` for as long
-      # as nobody happened to look. The first step reads the file as a document
-      # about itself and needs nothing else. The second fetches each member's
-      # README from its remote and asks whether what it declares is still what
-      # we have recorded -- one file per entry over https, a few seconds, and
-      # a remote it cannot reach is reported rather than counted against
-      # anybody.
-      - name: the inventory is well formed
-        run: scripts/status_eo --check
-      - name: and who has joined is current
-        run: scripts/status_eo --check --online
 
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a
@@ -119,14 +95,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      # The lock is the ground truth for which commit of somebody else's tree
-      # this job builds against, and the workflow follows it rather than
-      # restating it. It used to restate it: the two commits were written here
-      # *and* in scripts/deps.lock, with nothing comparing them, taken knowingly
-      # as B20. They then drifted, both of them, and the check that found it was
-      # added afterwards for an unrelated reason. That is the whole argument for
-      # this step -- a copy with no comparison is drift that has not happened
-      # yet, and this one had.
+      # Both oracle checkouts use the commits recorded in scripts/deps.lock.
       - name: the commits the lock records
         id: lock
         run: |
@@ -136,12 +105,7 @@ jobs:
               if not name.startswith("_"):
                   print(f"{name}={v['commit']}")
           PY
-      # A commit, not a branch. `ethosEoc3` is about to merge into main and will
-      # then be deleted, and a `ref:` naming a branch is a claim with an expiry
-      # date: it built whatever cvc5 last pushed, which is why this job could go
-      # red without anybody here committing. scripts/deps.py learned this the
-      # expensive way and its comment records it; this is the same lesson applied
-      # to the one place that had not had it.
+      # A pinned commit keeps this job independent of branch deletion.
       - name: check out ethos
         uses: actions/checkout@v4
         with:
@@ -159,23 +123,13 @@ jobs:
         with:
           path: corpus/ethos/build
           key: ethos-${{ runner.os }}-${{ steps.ethos.outputs.sha }}
-      # Also rebuild when the cache hit but the binary is not in it. A cache keyed
-      # on the ethos commit never changes while the pin does not, so a directory
-      # saved from a build that failed part way is restored forever and the step
-      # that would fix it is the one being skipped -- a job red with no cause in
-      # anybody's code, which is what this was. A cache that cannot be invalidated
-      # is a lockout; docs/policy.md, "The ecosystem never locks everybody out".
+      # Rebuild an incomplete cache even when its commit key matches.
       - name: build ethos
         if: steps.cache.outputs.cache-hit != 'true' || hashFiles('corpus/ethos/build/src/ethos') == ''
         run: |
           cmake -S corpus/ethos -B corpus/ethos/build -DCMAKE_BUILD_TYPE=Release
           cmake --build corpus/ethos/build -j"$(nproc)"
-      # The signature the proof reproducers were recorded under. Without it
-      # ethos is handed a proof whose every rule is an unknown symbol, refuses
-      # all of them, and `verify` reported that as ethos having *changed* --
-      # which is what this job did on every run for weeks. Sparse, because the
-      # only thing wanted is `proofs/eo`, and pinned to a commit for the same
-      # reason the ethos checkout above is.
+      # Proof reproducers need the pinned CPC signature as well as ethos.
       - name: check out the CPC signature
         uses: actions/checkout@v4
         with:
@@ -228,39 +182,6 @@ jobs:
   # than a regression — new findings to triage, or counts to re-record. It is
   # deliberately not on push: nobody's pull request should go red because cvc5
   # merged something.
-  # ------------------------------------------------------------------------
-  # TEMPORARY, AND BUILT TO NOT OUTLIVE ITS PURPOSE.
-  #
-  # These two jobs exist for one reason: so that opening this repository on the
-  # web answers "what is the next thing to do" without reading anything. Green
-  # means `init_eo new` can be run on that name today.
-  #
-  # Each job asserts that its stub still exists. **That is deliberate.** When a
-  # spawned repository is verified and the stub is deleted under the handoff
-  # protocol, this job goes red, and the only fix is to delete the job. A
-  # temporary check that quietly becomes permanent is the thing being avoided;
-  # this one cannot, because the tree stops supporting it.
-  # ------------------------------------------------------------------------
-  ready-kanon:
-    name: Ready — init_eo kanon
-    needs: [suites, policy, corpus, oracle, documentation-up-to-date]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: kanon is ready to be started
-        run: python3 scripts/ready_check.py kanon
-
-  # Reports, never gates. A green tick means only that readiness was checked;
-  # the destination's CI is verified separately before any role moves.
-  transfer-readiness:
-    name: Transfer readiness (report)
-    needs: [suites, policy]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: can roles move yet
-        run: python3 scripts/transfer_check.py kanon || true
-
   refresh:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest

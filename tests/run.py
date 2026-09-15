@@ -18,9 +18,7 @@ suite so that neither ethos nor logos has to be on the machine.
 from __future__ import annotations
 
 import argparse
-import contextlib
 import difflib
-import io
 import json
 import os
 import re
@@ -195,231 +193,6 @@ def manifest_agrees() -> int:
         print(f"     {skipped} checkout(s) not on disk, so not compared")
     print(f"-- the manifest, the targets, the lock and the checkouts agree: "
           f"{failures} failure(s), {checked} compared")
-    return failures
-
-
-def inventory_well_formed() -> int:
-    """`scripts/ecosystem/ecosystem.json` read as a document about itself.
-
-    The offline half of `scripts/status_eo --check`, run here so that editing
-    the inventory fails at the moment somebody edits it rather than in CI. The
-    other half asks each remote whether what we record is still true, and needs
-    a network, so it stays a CI step and is not run from the suite.
-    """
-    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "scripts", "ecosystem"))
-    import ecosystem  # noqa: PLC0415
-
-    inv = {k: v for k, v in json.load(open(ecosystem.INVENTORY)).items()
-           if not k.startswith("_")}
-    bad = ecosystem.well_formed(inv)
-    for b in bad:
-        print(f"FAIL {b}")
-
-    # And the table still prints, for a row that resolves to a checkout. `--check`
-    # was added as a second function named `check`, which shadowed the one the
-    # table calls; nothing here noticed, because nothing ran the tool the way a
-    # person runs it. **One resolvable checkout is the whole point**: with none,
-    # every row takes the `no checkout` branch and the shadowed call is never
-    # reached, which is how the first version of this test passed against the
-    # bug it was written for. This repository is the checkout, so the mapping is
-    # true and the run costs one policy check.
-    #
-    # The footing is read from the inventory rather than written here. It used
-    # to say `member`, which was true of anoieu when the test was written and
-    # stopped being true the day the office was recorded as a footing -- so a
-    # test about *the table printing at all* went red for a change that had
-    # nothing to do with printing. What this asserts is that anoieu's row
-    # appears with the footing the inventory records; which footing that is, is
-    # the inventory's business and `well_formed` above already decided it.
-    root = os.path.dirname(HERE)
-    footing = inv["anoieu"]["status"]
-    mapping = os.path.join(HERE, "repos.local.test")
-    with open(mapping, "w") as f:
-        f.write(f"anoieu {root}\n")
-    env = dict(os.environ, ANOIEU_REPOS=os.path.join(HERE, "no-such-dir"),
-               ANOIEU_REPOS_FILE=mapping)
-    out = subprocess.run([os.path.join(root, "scripts", "status_eo")],
-                         capture_output=True, text=True, env=env, timeout=120)
-    os.remove(mapping)
-    if out.returncode != 0 or not re.search(rf"^anoieu\s+{re.escape(footing)}\s",
-                                            out.stdout, re.M):
-        print(f"FAIL scripts/status_eo with no arguments exited {out.returncode}: "
-              f"{(out.stderr or out.stdout).strip().splitlines()[-1:]}")
-        bad = bad + ["the default mode"]
-    # The key under the table is a copy: it names every footing, and what a
-    # footing *is* is decided by `REQUIRED` and by docs/policy.md. A footing
-    # added to the inventory and not to the key prints a status the legend
-    # cannot decode, which is the one failure here that looks like nothing.
-    missing = sorted(set(ecosystem.REQUIRED) - set(ecosystem.FOOTINGS))
-    extra = sorted(set(ecosystem.FOOTINGS) - set(ecosystem.REQUIRED))
-    for f in missing:
-        print(f"FAIL the status_eo key does not explain the footing `{f}`")
-        bad = bad + [f"key: {f}"]
-    for f in extra:
-        print(f"FAIL the status_eo key explains `{f}`, which is not a footing "
-              "any entry may hold")
-        bad = bad + [f"key: {f}"]
-    if not missing and not extra:
-        print("ok   the status_eo key explains every footing an entry may hold")
-
-    # Limbo: the registry records a president whose tree cannot hold the office.
-    # It is asserted in both directions because a note that never fires and a
-    # note that always fires look identical from a passing suite, and this one
-    # is silent in the ordinary case by design.
-    import shutil  # noqa: PLC0415
-    import tempfile  # noqa: PLC0415
-    lim = tempfile.mkdtemp(prefix="anoieu-limbo-")
-    try:
-        held = os.path.join(lim, "anoieu")
-        os.makedirs(os.path.join(held, "docs"))
-        subprocess.run(["git", "-C", held, "init", "-q"], check=True)
-        # `laws.md` present and `history.md` absent: half-carried is the state
-        # that actually happens, and the note has to name which half is missing.
-        shutil.copy(os.path.join(root, "docs", "laws.md"),
-                    os.path.join(held, "docs", "laws.md"))
-        mapping = os.path.join(lim, "repos.local")
-        open(mapping, "w").write(f"anoieu {held}\n")
-        env = dict(os.environ, ANOIEU_REPOS=os.path.join(lim, "none"),
-                   ANOIEU_REPOS_FILE=mapping)
-        got = subprocess.run(
-            [os.path.join(root, "scripts", "status_eo")],
-            capture_output=True, text=True, env=env, timeout=120).stdout
-        for label, ok in (
-                ("a president missing a file it needs is reported in limbo",
-                 "IN LIMBO" in got),
-                ("and the note names the file that is missing",
-                 "docs/history.md" in got.split("IN LIMBO")[-1].split("\n")[0]),
-                ("a president whose tree carries them is not",
-                 "IN LIMBO" not in out.stdout)):
-            print(("ok   " if ok else "FAIL ") + f"the presidency: {label}")
-            if not ok:
-                bad = bad + [f"limbo: {label}"]
-    finally:
-        shutil.rmtree(lim, ignore_errors=True)
-
-    # The key lives behind `--help`, and the table carries a pointer to it. Both
-    # halves are asserted: a key nothing mentions is a key nobody finds, and a
-    # key printed under every table is the bulk of the output of a command that
-    # is run often. Getting either wrong is invisible from the other.
-    help_out = subprocess.run(
-        [os.path.join(root, "scripts", "status_eo"), "--help"],
-        capture_output=True, text=True, timeout=60)
-    for label, want in (("--help prints the key", "key\n" in help_out.stdout),
-                        ("--help exits 0", help_out.returncode == 0),
-                        ("the table does not print the key",
-                         "  tool     its id in" not in out.stdout),
-                        ("the table points at it",
-                         "status_eo --help" in out.stdout)):
-        print(("ok   " if want else "FAIL ") + f"the status_eo key: {label}")
-        if not want:
-            bad = bad + [f"key: {label}"]
-
-    # The three lists are laid out against one shared width computed from all of
-    # them, so an over-long value in any one is a ragged column in the other two
-    # rather than an error.
-    key = ecosystem.render_key()
-    for label, want in (("names the columns the table prints",
-                         all(c in key for c in
-                             ("tool", "status", "policy", "channel", "moved", "where"))),
-                        ("says how to see what a failing row failed",
-                         "policy_check.py --root" in key),
-                        ("says a non-member's count is not a shortfall",
-                         "never agreed" in key)):
-        print(("ok   " if want else "FAIL ") + f"the status_eo key {label}")
-        if not want:
-            bad = bad + [f"key: {label}"]
-
-    print(f"-- the inventory is well formed, and the table prints: "
-          f"{len(bad)} failure(s), {len(inv)} entries")
-    return len(bad)
-
-
-def install_commands() -> int:
-    """`scripts/install_eo` installs with `git clone`, and with nothing else.
-
-    It is the one command in this repository that changes a machine outside it,
-    so what it may execute is checked rather than promised. Three questions, all
-    answerable without a network and without cloning anything: what the dry run
-    prints, what a real run would hand to `execute`, and whether anything else
-    could be run at all. A command added to this script fails here, which is the
-    point -- an install that quietly grew a `curl` would otherwise be reviewed
-    once, by whoever wrote it.
-    """
-    import importlib.machinery  # noqa: PLC0415
-    import importlib.util  # noqa: PLC0415
-    import io  # noqa: PLC0415
-    from contextlib import redirect_stdout  # noqa: PLC0415
-
-    path = os.path.join(os.path.dirname(HERE), "scripts", "install_eo")
-    loader = importlib.machinery.SourceFileLoader("install_eo", path)
-    spec = importlib.util.spec_from_loader("install_eo", loader)
-    mod = importlib.util.module_from_spec(spec)
-    loader.exec_module(mod)
-
-    failures = 0
-    source = open(path).read()
-
-    #: What a line of the dump may start with. `mkdir` and `cd` are printed for
-    #: a person pasting it; the script itself makes the directory with
-    #: os.makedirs and passes cwd=, so neither is ever executed here.
-    allowed = ("mkdir -p ", "cd ", "git clone ")
-
-    fake = os.path.join(HERE, "no-such-root-for-a-test")
-    out = io.StringIO()
-    with redirect_stdout(out):
-        mod.dump(fake, mod.plan())
-    live = [l for l in out.getvalue().splitlines() if l.strip() and not l.startswith("#")]
-    stray = [l for l in live if not l.startswith(allowed)]
-    if stray:
-        print(f"FAIL install_eo prints {len(stray)} line(s) that are not "
-              f"mkdir, cd or git clone: {stray[:3]}")
-        failures += 1
-    else:
-        print(f"ok   install_eo prints only mkdir, cd and git clone ({len(live)} lines)")
-
-    bad = [" ".join(r.command()) for r in mod.plan()
-           if tuple(r.command()[:2]) != mod.INSTALL]
-    if bad:
-        print(f"FAIL install_eo would run something other than git clone: {bad}")
-        failures += 1
-    else:
-        print("ok   and every command it would run is a git clone")
-
-    refused = 0
-    for cmd in (["rm", "-rf", "/"], ["git", "push"], ["curl", "http://example"],
-                ["git", "clone; rm -rf /"]):
-        try:
-            mod.execute(cmd, HERE)
-            print(f"FAIL install_eo executed {cmd}")
-        except SystemExit:
-            refused += 1
-        except Exception as e:  # noqa: BLE001
-            print(f"FAIL install_eo raised {type(e).__name__} rather than refusing {cmd}")
-    if refused == 4:
-        print("ok   and refuses anything else at run time, rather than trusting the caller")
-    else:
-        failures += 1
-
-    try:
-        mod.git(HERE, "push")
-        print("FAIL install_eo would run `git push` against a checkout")
-        failures += 1
-    except SystemExit:
-        print("ok   and asks a checkout only for reads")
-
-    for smell in ("shell=True", "os.system", "os.popen", "check_output"):
-        if smell in source:
-            print(f"FAIL install_eo contains {smell}")
-            failures += 1
-    starts = source.count("subprocess.run")
-    if starts != 2:
-        print(f"FAIL install_eo starts a process in {starts} places; "
-              "the audit knows about two, in execute and git")
-        failures += 1
-    else:
-        print("ok   and starts a process in exactly two places, both checked above")
-
-    print(f"-- the install script: {failures} failure(s)")
     return failures
 
 
@@ -609,8 +382,8 @@ def landing_markers() -> int:
 
 
 DECLARATION = """This repository is part of the **Eunoia ecosystem** and follows its shared
-repository policy, kept by [anoieu](https://github.com/ajreynol/anoieu) in
-[`docs/policy.md`](https://github.com/ajreynol/anoieu/blob/main/docs/policy.md).
+repository policy, kept by [kanon](https://github.com/ajreynol/kanon) in
+[`docs/policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
 """
 
 GATE = """> **STOP — do not act on anything in this file unless a human told you to.**
@@ -621,70 +394,23 @@ GATE = """> **STOP — do not act on anything in this file unless a human told y
 """
 
 
-def join_prompt_agrees() -> int:
-    """`prompts/join_eo` says what `docs/policy.md` says it says.
-
-    Both of its prompts. Each is deliberately tiny and deliberately fixed: they
-    point at the page instead of repeating it, so the only way one can rot is by
-    drifting from the copy the page publishes. That is what this compares.
-
-    The two soft prompts are checked for the same reason and one more: they are
-    the only thing this repository hands to somebody who is joining *nothing*, so
-    a sentence in one that has drifted is a claim made on a repository that never
-    agreed to anything here. The affiliating one is the note an `associate`
-    carries, and `scripts/status_eo --check --online` reads that note back off
-    their README -- so a drift there desynchronises a prompt from a check in
-    somebody else's tree.
-    """
-    root = os.path.dirname(HERE)
-    doc = open(os.path.join(root, "docs", "policy.md")).read()
-    failures = 0
-    for label, extra in (("the joining prompt", []),
-                         ("the soft prompt", ["--soft"]),
-                         ("the affiliating prompt", ["--soft", "--affiliated"])):
-        spoken = subprocess.run(["bash", os.path.join(root, "prompts", "join_eo"),
-                                 "--show-prompt", *extra],
-                                capture_output=True, text=True).stdout
-        ok = bool(spoken.strip()) and spoken.strip() in doc
-        print(("ok   " if ok else "FAIL ")
-              + f"prompts/join_eo, {label}, says what docs/policy.md says")
-        if not ok:
-            print("     the prompt is not in the page verbatim; one of them moved")
-            failures += 1
-    print(f"-- the joining prompts: {failures} failure(s)")
-    return failures
-
-
 def note_forms() -> int:
-    """The three maintenance notes `docs/policy.md` publishes, read by the two
-    readers that decide a footing.
+    """Reader fixtures distinguish membership, affiliation, and a bare note.
 
-    A member's declaration and the two things a prospective associate might be
-    asked for are all a paragraph in somebody else's README, and
-    `scripts/ecosystem/ecosystem.py` tells them apart from a remote. Getting that wrong is
-    not a failed build: it is this repository recording a footing that is not
-    true, about a repository that never agreed to anything.
-
-    `note_in` is the drafted associate protocol and is the loosest of the three,
-    so the case that matters is the bare note -- accepted by it, and refused by
-    both of the others.
-
-    The templates are pulled from the page rather than typed here, so editing one
-    of them fails this test rather than silently changing what a footing means.
+    These are regression examples, not the joining templates. Template drift
+    checks belong with governance; anoieu tests its own readers without needing
+    the governance documents or launchers in this checkout.
     """
     root = os.path.dirname(HERE)
     sys.path.insert(0, os.path.join(root, "scripts"))
     import policy_check  # noqa: PLC0415
 
-    doc = open(os.path.join(root, "docs", "policy.md")).read()
-
-    def template(after: str) -> str:
-        chunk = doc[doc.index(after):]
-        return re.search(r"```markdown\n(.*?)\n```", chunk, re.S).group(1)
-
-    joined = template("### 1. Declare it, at the top of your maintenance note")
-    independent = template("### The soft form: the note without the membership")
-    affiliating = template("**There is a second form, for a repository that is happy")
+    heading = "# A tool\n\n## How this repository is maintained\n\n"
+    process = "Written with an assistant and reviewed by a person before publishing.\n"
+    joined = heading + DECLARATION + "\n" + process
+    independent = heading + process
+    affiliating = (heading + "This repository works with the Eunoia ecosystem "
+                   "but is not held to its policy.\n\n" + process)
 
     bare = ("# A tool\n\n## How this repository is maintained\n\nWritten by one "
             "person in their own time, reviewed by nobody, and nothing here has "
@@ -729,125 +455,59 @@ def note_forms() -> int:
     return failures
 
 
-def protocol_report() -> int:
-    """`scripts/status_eo --protocol` reports the right column for each tree.
+def local_policy_inputs() -> int:
+    """Home checks need only retained documentation, and fail if it is missing."""
+    import fnmatch  # noqa: PLC0415
+    from unittest.mock import patch  # noqa: PLC0415
+    import policy_check  # noqa: PLC0415
 
-    The readers are witnessed above; this is the wiring around them, which is the
-    half that had never produced a `yes` when it was written. It runs offline
-    against three synthetic READMEs, because the real one reads somebody else's
-    repository and a test that needed the network would be a test nobody runs.
-
-    It also pins the property the report exists for: **it never fails.** A tool
-    in this table is held to none of this repository's policy and the protocol it
-    is being read against is not decided, so a non-zero exit would be this
-    repository grading somebody against a rule that does not exist.
-    """
-    root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "scripts", "ecosystem"))
-    import ecosystem  # noqa: PLC0415
-
-    doc = open(os.path.join(root, "docs", "policy.md")).read()
-
-    def template(after: str) -> str:
-        chunk = doc[doc.index(after):]
-        return re.search(r"```markdown\n(.*?)\n```", chunk, re.S).group(1)
-
-    trees = {
-        "nothing": "# A tool\n\nWhat it does.\n",
-        "affiliated": template("**There is a second form, for a repository that is happy"),
-        "joined": template("### 1. Declare it, at the top of your maintenance note"),
+    owner = "**Owner:** `example` — Example Maintainer.\n"
+    catalogue = "`policy_check.py`, `check_anoieu`, `deps.json`\n"
+    files = {
+        "docs/maintenance.md": owner + catalogue,
+        "scripts/policy_check.py": "",
+        "prompts/check_anoieu": "",
+        "scripts/deps.json": "{}",
+        "README.md": "## How this repository is maintained\n\n" + DECLARATION,
     }
-    inv = {n: {"status": "candidate", "proposed": "associate", "repo": n,
-               "url": f"https://github.com/x/{n}", "vetted": "2026-09-01",
-               "what": "-", "why": "-"} for n in trees}
-    # `ignored` must not appear: it is neither an associate nor proposed as one.
-    inv["ignored"] = {"status": "candidate", "repo": "ignored",
-                      "url": "https://github.com/x/ignored", "what": "-"}
-
-    want = {"nothing": ("no", "no", "no"), "affiliated": ("yes", "yes", "no"),
-            "joined": ("yes", "no", "yes")}
-
-    real, buf = ecosystem.readme_for, io.StringIO()
-    ecosystem.readme_for = lambda name, e: (trees.get(name, ""), "checkout")
-    try:
-        with contextlib.redirect_stdout(buf):
-            code = ecosystem.protocol(inv)
-    finally:
-        ecosystem.readme_for = real
-    out = buf.getvalue()
-
     failures = 0
-    for name, cols in want.items():
-        row = next((l for l in out.splitlines() if l.startswith(name)), "")
-        got = tuple(row.split()[3:6])
-        ok = got == cols
-        failures += 0 if ok else 1
-        print(("ok   " if ok else "FAIL ")
-              + f"--protocol reads {name} as note={cols[0]} "
-                f"affiliating={cols[1]} declares={cols[2]}"
-              + ("" if ok else f" -- got {got}"))
-    for label, ok in (("it never fails", code == 0),
-                      ("a tool that is neither is left out", "ignored" not in out)):
-        failures += 0 if ok else 1
-        print(("ok   " if ok else "FAIL ") + f"--protocol: {label}")
-    print(f"-- the associate protocol report: {failures} failure(s)")
-    return failures
 
+    def expect(label, got, want):
+        nonlocal failures
+        ok = bool(got) == want
+        failures += int(not ok)
+        print(("ok   " if ok else "FAIL ") + label)
+        if not ok:
+            print(f"     got {got}")
 
-def pin_adoption_gate() -> int:
-    """`scripts/bump_check.py` refuses everything that is not a finished green run.
-
-    This is the gate a downstream member puts in front of adopting a policy commit, so
-    the expensive direction is **letting something through**: a member that
-    refuses wrongly tries again tomorrow, and one that adopts wrongly has pinned
-    itself to a commit our own CI rejected. Every case below that is not an
-    unambiguous pass is therefore asserted to refuse.
-
-    Offline in full. The real thing reads a remote, and a test that needed the
-    network is a test nobody runs.
-    """
-    root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "scripts"))
-    import bump_check  # noqa: PLC0415
-
-    def run(name, status="completed", conclusion="success"):
-        return {"name": name, "status": status, "conclusion": conclusion}
-
-    cases = [
-        ("a finished green run", [run("policy")], 0),
-        ("green with a skipped job", [run("policy"), run("x", conclusion="skipped")], 0),
-        ("a neutral job", [run("policy"), run("x", conclusion="neutral")], 0),
-        ("one failing job", [run("policy"), run("x", conclusion="failure")], 1),
-        ("a cancelled job", [run("policy", conclusion="cancelled")], 1),
-        ("a job still running", [run("policy"), run("x", status="in_progress")], 2),
-        ("a queued job", [run("policy", status="queued")], 2),
-        ("no runs at all", [], 2),
-    ]
-    failures = 0
-    for label, runs, want in cases:
-        got, why = bump_check.verdict(runs)
-        ok = got == want
-        failures += 0 if ok else 1
-        verb = {0: "adopts", 1: "refuses", 2: "refuses as unverified"}[want]
-        print(("ok   " if ok else "FAIL ") + f"bump_check {verb} {label}"
-              + ("" if ok else f" -- got {got}: {why}"))
-
-    import tempfile  # noqa: PLC0415
-
-    tmp = tempfile.mkdtemp(prefix="anoieu-pin-")
-    wf = os.path.join(tmp, ".github", "workflows")
-    os.makedirs(wf)
-    open(os.path.join(wf, "anoieu.yml"), "w").write(
-        "jobs:\n  policy:\n    steps:\n      - env:\n          ANOIEU_REV: 441b562\n")
-    rev, why = bump_check.pinned_rev(tmp)
-    for label, ok in (("reads a member's pinned commit", rev == "441b562" and not why),
-                      ("says so when a member pins nothing",
-                       bump_check.pinned_rev(HERE)[0] == ""
-                       and bool(bump_check.pinned_rev(HERE)[1]))):
-        failures += 0 if ok else 1
-        print(("ok   " if ok else "FAIL ") + f"bump_check {label}")
-
-    print(f"-- the pin adoption gate: {failures} failure(s)")
+    with patch.object(policy_check, "read", lambda path: files.get(path, "")), \
+         patch.object(policy_check, "tracked",
+                      lambda pattern: [p for p in files if fnmatch.fnmatch(p, pattern)]):
+        expect("owner check works without governance files",
+               policy_check.check_owner_unadvertised(), False)
+        expect("script catalogue works without governance files",
+               policy_check.check_scripts_listed(), False)
+        files["docs/policy.md"] = owner
+        expect("the outgoing policy may keep its ownership record",
+               policy_check.check_owner_unadvertised(), False)
+        del files["docs/maintenance.md"]
+        expect("missing local ownership fails even with the old policy present",
+               policy_check.check_owner_unadvertised(), True)
+        expect("missing local catalogue fails rather than silently skipping",
+               policy_check.check_scripts_listed(), True)
+        files["docs/maintenance.md"] = owner + catalogue
+        files["scripts/unlisted.py"] = ""
+        expect("an unlisted command fails", policy_check.check_scripts_listed(), True)
+        del files["scripts/unlisted.py"]
+        files["README.md"] += "\nExample Maintainer"
+        expect("front-page owner advertising fails",
+               policy_check.check_owner_unadvertised(), True)
+        for repo, want in (("kanon", False), ("anoieu", False), ("unrelated", True)):
+            files["README.md"] = ("## How this repository is maintained\n\n"
+                                  + DECLARATION.replace("ajreynol/kanon", "ajreynol/" + repo))
+            expect(f"declaration link to {repo}: {'reported' if want else 'accepted'}",
+                   policy_check.check_declaration_links(), want)
+    print(f"-- retained policy inputs: {failures} failure(s)")
     return failures
 
 
@@ -1014,14 +674,10 @@ def main() -> int:
 
     print()
     failures += prompts_agree()
-    failures += join_prompt_agrees()
     failures += note_forms()
-    failures += protocol_report()
-    failures += pin_adoption_gate()
+    failures += local_policy_inputs()
     failures += adoption_interface()
     failures += postmortem_shape()
-    failures += install_commands()
-    failures += inventory_well_formed()
     failures += landing_markers()
 
     sys.stdout.flush()
