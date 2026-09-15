@@ -25,7 +25,7 @@ an account — `anoieu_fuzz` is one — but the burden is on the name to earn it
 **And the convention has a second reason, found by breaking it.** A child
 project named with an ordinary English word makes every sentence using that word
 ambiguous — proper noun, or common one — and the ambiguity is not only a reading
-cost. `tools/policy_check.py` decides whether a child project is an island by
+cost. `scripts/policy_check.py` decides whether a child project is an island by
 grepping the tree for **the bare project name**, so a common word matches prose
 about the *subject* rather than about the project, and reports an island break
 that is not one. An unusual name reads unambiguously and greps unambiguously,

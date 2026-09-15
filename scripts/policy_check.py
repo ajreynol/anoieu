@@ -15,10 +15,10 @@ to a sentence somebody wrote. The run also prints every policy rule that has
 **no** automated check, because a checker that only lists its own passes reads
 as coverage it does not have.
 
-    python3 tools/policy_check.py             # check; exit 1 on any failure
-    python3 tools/policy_check.py --root PATH # check somebody else's checkout
-    python3 tools/policy_check.py --coverage  # what is checked, and what is not
-    python3 tools/policy_check.py --version   # which commit of the policy this is
+    python3 scripts/policy_check.py             # check; exit 1 on any failure
+    python3 scripts/policy_check.py --root PATH # check somebody else's checkout
+    python3 scripts/policy_check.py --coverage  # what is checked, and what is not
+    python3 scripts/policy_check.py --version   # which commit of the policy this is
 """
 
 from __future__ import annotations
@@ -42,7 +42,8 @@ UNCHECKED = [
     ("rule 8, it cites what it inherited", "whether a citation supports its claim is reading"),
     ("rule 9, it ends with a verdict", "'has gone quiet' is a judgement about elapsed time"),
     ("the maintenance note carries no technical detail", "what counts as technical is editorial"),
-    ("`tools/` is the harness, not the product", "no mechanical test separates the two"),
+    ("commands and helpers live in `scripts/`, assistant launchers in `prompts/`",
+     "no mechanical test distinguishes a command from an assistant launcher"),
     ("`tests/` holds the evidence, not only the tests", "readability in a minute is not measurable"),
     ("a workflow is defined in prose", "checked elsewhere: `prompts_agree` in tests/run.py"),
     ("a surface that restates a register is compared to it",
@@ -238,7 +239,7 @@ def note_in(text: str) -> list[str]:
 
     Read for a **report** and never for a verdict. Nothing in `CHECKS` calls it,
     nothing fails on it, and the repositories it is asked about are held to none
-    of this. `tools/ecosystem.py --protocol` is what runs it, so that a person
+    of this. `scripts/ecosystem.py --protocol` is what runs it, so that a person
     deciding the protocol can see who would satisfy which version of it today.
     """
     if not text:
@@ -255,7 +256,7 @@ def declaration_in(text: str) -> list[str]:
     """What is missing from a README's declaration of membership, if anything.
 
     Split out from the check below because a second reader wants the same
-    answer from text it did not read off this disk: `tools/ecosystem.py --check
+    answer from text it did not read off this disk: `scripts/ecosystem.py --check
     --online` asks it of a README fetched from a remote, to decide whether the
     inventory's record of who has joined is still true. One implementation, so
     the two cannot come to different answers about the same file.
@@ -285,7 +286,7 @@ def affiliation_in(text: str) -> list[str]:
 
     The note an `associate` in `tools/ecosystem.json` carries: it names the
     ecosystem it works with, and it says it is not held to the policy. Read from
-    a fetched README by `tools/ecosystem.py --check --online`, exactly as
+    a fetched README by `scripts/ecosystem.py --check --online`, exactly as
     `declaration_in` is for a member -- so both footings that assert something
     about somebody else's tree are decided by reading that tree.
 

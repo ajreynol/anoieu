@@ -135,7 +135,7 @@ if [ -f "$REPOS_FILE" ]; then
     case "$opath" in "~"*) opath="$HOME${opath#\~}" ;; esac
     [ "$oid" = "$NAME" ] && continue
     [ "$opath" = "$TARGET" ] && soft "$TARGET is already recorded as '$oid'"
-    if [ "$(python3 "$ROOT/tools/near.py" "$NAME" "$oid" 2>/dev/null)" = 1 ]; then
+    if [ "$(python3 "$ROOT/scripts/near.py" "$NAME" "$oid" 2>/dev/null)" = 1 ]; then
       soft "id '$NAME' is one character from '$oid', which is already recorded"
     fi
   done < "$REPOS_FILE"
@@ -170,7 +170,7 @@ SYNC=$(python3 "$ROOT/scripts/install_eo" --status "$NAME" 2>&1 || true)
 echo "-- the ecosystem's own list, for $NAME:" >&2
 printf '%s\n' "$SYNC" | sed 's/^/   /' >&2
 
-REPORT=$(python3 "$ROOT/tools/policy_check.py" --root "$TARGET" 2>&1 || true)
+REPORT=$(python3 "$ROOT/scripts/policy_check.py" --root "$TARGET" 2>&1 || true)
 
 BRIEF="They left no ynoia-brief.local.md, so what they read is not recorded."
 if [ -f "$TARGET/ynoia-brief.local.md" ]; then

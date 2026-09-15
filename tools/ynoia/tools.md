@@ -212,7 +212,7 @@ calling it something else.
 **Before it:** the block's fields settling. They have changed twice in a day, and
 a program written against a template still moving would be rewritten more often
 than run. `nothing` else.
-**Today:** [`../../tools/bump_check.py`](../../tools/bump_check.py) for one gate
+**Today:** [`../../scripts/bump_check.py`](../../scripts/bump_check.py) for one gate
 of six; `git`, `grep` and a person for the rest; and the block typed out by hand.
 **Why here:** **first, displacing `kanon`, and the two are not close.** Every
 other entry on this page is work whose consumer does not exist yet. This one has
@@ -236,7 +236,7 @@ writes the rules a member is judged by *and* files the findings against them.
 the cost grows with every member that joins before it happens.
 **Before it:** `install_eo` settling, so that the audit which reads across the
 policy and the findings is a one-line problem rather than two checkouts.
-**Today:** all of it, inside anoieu — `docs/policy.md`, `tools/policy_check.py`,
+**Today:** all of it, inside anoieu — `docs/policy.md`, `scripts/policy_check.py`,
 `tools/ecosystem.json` and the `*_eo` scripts, already consumed by four trees.
 **Why here:** first, and not being worked on, which is the split this field
 exists to make. It is the only entry on this page whose consumers already exist

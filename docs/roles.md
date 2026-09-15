@@ -295,7 +295,7 @@ and **deciding whether a tree complies, which is `R31` and stays here.**
 **Role:** **deciding whether a tree complies with the policy**, whoever wrote
 the policy. The program every member's CI runs, its checks, its two tiers, its
 skip lines, and its refusal to report coverage it does not have.
-**Owns:** `tools/policy_check.py`, and the `adoption_interface` case in
+**Owns:** `scripts/policy_check.py`, and the `adoption_interface` case in
 `tests/run.py` that holds it to being a published interface.
 **Not this role:** what the rules *are*, which is `R4` and is leaving. This role
 implements somebody else's document and has no standing to change what it says.
@@ -321,7 +321,7 @@ chosen, and it is recorded here because the move is what makes it urgent.
 
 **What it buys, and this is the part worth the split.** Members' workflows do
 not change. The `anoieu / policy` job clones this repository and runs
-`tools/policy_check.py`; if the checker moved, every member's job would clone
+`scripts/policy_check.py`; if the checker moved, every member's job would clone
 somewhere else and the check would arrive under a different name in their pull
 requests. **Moving the rules costs a member nothing. Moving the checker would
 cost every one of them a commit.**
@@ -357,7 +357,7 @@ generating cases nobody wrote, which is `R3`.
 **Role:** who is in the ecosystem and on what footing, and the commands that
 clone the rest of it beside a checkout, record where each one landed, and report
 what has drifted.
-**Owns:** `tools/ecosystem.json`, `tools/checkouts.json`, `tools/ecosystem.py`,
+**Owns:** `tools/ecosystem.json`, `tools/checkouts.json`, `scripts/ecosystem.py`,
 `scripts/install_eo`, `scripts/status_eo`, and the `welcome_eo` prompt.
 **Not this role:** deciding membership — a status is changed by a person and no
 script writes that file — and the rules a member is checked against, which are
@@ -426,7 +426,7 @@ its dry run, the bump gate, and the shape of the log entry. Taken together they
 are this ecosystem's **main verification system for its own governance**, which
 is a claim worth stating plainly because it is unusual: what verifies a stretch is
 a protocol, not a test suite.
-**Owns:** `tools/bump_check.py`, the approval protocol in `docs/policy.md`,
+**Owns:** `scripts/bump_check.py`, the approval protocol in `docs/policy.md`,
 `docs/stretch-policy.md` and `tools/stretch.json` — the gates, the block template,
 the dry run, the statuses, and the log's entry format.
 **Not this role:** **deciding what a stretch is *for*, which is not a role here

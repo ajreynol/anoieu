@@ -41,7 +41,7 @@
     "cvc5": {
       "args": ["--filter=blob:none"],
       "why": "nothing here builds it and only proofs/eo is read, so the blobless clone is the whole of what is wanted -- drop the filter if you intend to build it",
-      "opt_in": "the largest tree here by an order of magnitude, and nothing needs a working copy of it: tools/deps.py fetches proofs/eo shallow and sparse when a report is generated"
+      "opt_in": "the largest tree here by an order of magnitude, and nothing needs a working copy of it: scripts/deps.py fetches proofs/eo shallow and sparse when a report is generated"
     }
   }
 }

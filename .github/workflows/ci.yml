@@ -23,7 +23,7 @@ jobs:
       - run: python3 tests/run.py
       - name: the check catalogue is current
         run: |
-          python3 tools/gen_checks_doc.py
+          python3 scripts/gen_checks_doc.py
           git diff --exit-code docs/checks.md
 
   # docs/policy.md is a set of claims about this tree, so a program decides them.
@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: how much evidence there is that the documentation is current
-        run: python3 tools/doc_currency.py --list
+        run: python3 scripts/doc_currency.py --list
 
   policy:
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python3 tools/policy_check.py
+      - run: python3 scripts/policy_check.py
       # Who is in the ecosystem is a decision a person records in
       # tools/ecosystem.json, and a decision nobody re-checks goes stale
       # silently: three tools joined and the file said `candidate` for as long
@@ -66,9 +66,9 @@ jobs:
       # a remote it cannot reach is reported rather than counted against
       # anybody.
       - name: the inventory is well formed
-        run: python3 tools/ecosystem.py --check
+        run: python3 scripts/ecosystem.py --check
       - name: and who has joined is current
-        run: python3 tools/ecosystem.py --check --online
+        run: python3 scripts/ecosystem.py --check --online
 
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a
@@ -92,9 +92,9 @@ jobs:
       # red when a check changes what it reports, never because somebody
       # upstream pushed. Moving to the tips is the refresh job below.
       - name: the report is current for the recorded versions
-        run: python3 tools/run.py --pinned --check
+        run: python3 scripts/run.py --pinned --check
       - name: every signature is read without falling over
-        run: python3 tools/sweep.py deps/cvc5/proofs/eo deps/ethos/tests
+        run: python3 scripts/sweep.py deps/cvc5/proofs/eo deps/ethos/tests
       - name: CPC reports what the baseline says it reports
         run: |
           python3 -m anoieu check \
@@ -139,7 +139,7 @@ jobs:
       # A commit, not a branch. `ethosEoc3` is about to merge into main and will
       # then be deleted, and a `ref:` naming a branch is a claim with an expiry
       # date: it built whatever cvc5 last pushed, which is why this job could go
-      # red without anybody here committing. tools/deps.py learned this the
+      # red without anybody here committing. scripts/deps.py learned this the
       # expensive way and its comment records it; this is the same lesson applied
       # to the one place that had not had it.
       - name: check out ethos
@@ -248,7 +248,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: kanon is ready to be started
-        run: python3 tools/ready_check.py kanon
+        run: python3 scripts/ready_check.py kanon
 
   ready-tekton:
     name: Ready — init_eo tekton
@@ -257,7 +257,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: tekton is ready to be started
-        run: python3 tools/ready_check.py tekton
+        run: python3 scripts/ready_check.py tekton
 
   # Reports, never gates. Every target is *not ready* today -- neither exists --
   # so a job that failed on that would be red for a reason nobody can fix this
@@ -273,7 +273,7 @@ jobs:
       - name: can roles move yet
         run: |
           for t in kanon tekton; do
-            python3 tools/transfer_check.py "$t" || true
+            python3 scripts/transfer_check.py "$t" || true
             echo
           done
 
@@ -287,7 +287,7 @@ jobs:
           python-version: "3.12"
       - name: what the checks say about the current tips
         run: |
-          python3 tools/run.py
+          python3 scripts/run.py
           git --no-pager diff --stat
       - name: the regenerated report
         uses: actions/upload-artifact@v4
@@ -303,6 +303,6 @@ jobs:
           if git diff --quiet; then
             echo "the tips report exactly what the recorded versions do"
           else
-            echo "::warning::upstream moved; run tools/run.py and commit the result"
+            echo "::warning::upstream moved; run scripts/run.py and commit the result"
             git --no-pager diff -- docs/reports/open-findings.md | head -60
           fi

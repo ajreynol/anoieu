@@ -658,7 +658,7 @@ def show(root: str, repos: list[Repo], inv: dict, do_fetch: bool,
             print(f"note: {n}")
     print()
     print("What a checkout says, and nothing about what is in it. Membership and "
-          "policy are\n`python3 tools/ecosystem.py`; whether a tool is any good "
+          "policy are\n`python3 scripts/ecosystem.py`; whether a tool is any good "
           "is not a thing either prints.")
     return 0
 

@@ -201,7 +201,7 @@ python3 -m anoieu explain EO0041
 Prints what the check says, why it is a check, what ethos does with the same
 file, and how to fix it. The page is written beside the check in the source, so
 the two cannot drift, and `docs/checks.md` is the whole set rendered by
-`tools/gen_checks_doc.py`.
+`scripts/gen_checks_doc.py`.
 
 ### `list-checks` — the inventory
 
@@ -374,14 +374,14 @@ ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle            # ... and assert what ethos says about each
 ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle --record   # ... and re-record it after a change
-python3 tools/sweep.py <dir>...            # run over a corpus: crashes and counts
-python3 tools/gen_checks_doc.py            # rewrite docs/checks.md from the registry
-python3 tools/landing.py --check           # did what we closed on a promise land?
+python3 scripts/sweep.py <dir>...            # run over a corpus: crashes and counts
+python3 scripts/gen_checks_doc.py            # rewrite docs/checks.md from the registry
+python3 scripts/landing.py --check           # did what we closed on a promise land?
 scripts/install_eo                         # install the rest of the ecosystem
 scripts/install_eo --dry-run               # ... or print them and run none
 scripts/install_eo --status                # ... or say what of it is on this machine
 ETHOS=<ethos>/build/src/ethos \
-  python3 tools/oracle_desugar.py          # the desugarer against ethos, case by case
+  python3 scripts/oracle_desugar.py          # the desugarer against ethos, case by case
 ```
 
 `--oracle` compares what ethos says about each witness against

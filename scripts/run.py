@@ -18,9 +18,9 @@ Three steps, in order:
    leaves it only through the review step described in
    `docs/reports/reporting-workflow.md`.
 
-    python3 tools/run.py                 # move to each tip, then measure
-    python3 tools/run.py --pinned --check # re-measure the recorded commits
-    python3 tools/run.py --offline       # measure whatever deps/ already holds
+    python3 scripts/run.py                 # move to each tip, then measure
+    python3 scripts/run.py --pinned --check # re-measure the recorded commits
+    python3 scripts/run.py --offline       # measure whatever deps/ already holds
 
 Two of those are different questions. Without `--pinned` a run asks *what is
 true of the projects now*, which is what produces a new report and what a
@@ -74,7 +74,7 @@ def render_corpus(synced: list, rows: list) -> str:
     out = [
         "# The corpus: what was measured, and what the checks report",
         "",
-        "Written by `tools/run.py`. Nothing here is typed by hand, and anything",
+        "Written by `scripts/run.py`. Nothing here is typed by hand, and anything",
         "that is will be lost on the next run.",
         "",
         "## The versions",
@@ -209,7 +209,7 @@ def main() -> int:
         )
     elif failures:
         print(
-            "error: the report is not current; run `python3 tools/run.py` and commit",
+            "error: the report is not current; run `python3 scripts/run.py` and commit",
             file=sys.stderr,
         )
     return 1 if failures else 0

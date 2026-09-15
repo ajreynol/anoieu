@@ -1,6 +1,6 @@
 # The corpus: what was measured, and what the checks report
 
-Written by `tools/run.py`. Nothing here is typed by hand, and anything
+Written by `scripts/run.py`. Nothing here is typed by hand, and anything
 that is will be lost on the next run.
 
 ## The versions

@@ -165,7 +165,7 @@ def owner_of(record: dict) -> str:
 def rows(corpus: str = "") -> dict[str, dict]:
     """Every promoted finding as a row for `docs/reports/open-findings.md`.
 
-    The shape is `tools/gen_open_findings.py`'s, keyed by the same fingerprint,
+    The shape is `scripts/gen_open_findings.py`'s, keyed by the same fingerprint,
     so the generator merges these with what the checks report and neither side
     knows about the other.
     """

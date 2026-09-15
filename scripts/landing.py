@@ -21,9 +21,9 @@ somebody is processing a reply. That separation is deliberate: the two get
 confused exactly when there is a hurry on, which is when the wrong one is
 skipped.
 
-    python3 tools/landing.py             # what is outstanding, from the ledger
-    python3 tools/landing.py --check     # ... and ask each checkout about it
-    python3 tools/landing.py --repo ethos=/src/ethos --check
+    python3 scripts/landing.py             # what is outstanding, from the ledger
+    python3 scripts/landing.py --check     # ... and ask each checkout about it
+    python3 scripts/landing.py --repo ethos=/src/ethos --check
 
 Checkouts come from `scripts/repos.local` -- the same mapping `process_anoieu`
 uses, and equally optional -- or from `--repo`. A project with no checkout is

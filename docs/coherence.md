@@ -203,7 +203,7 @@ about installs.
 ## `PROTO-26` — transferring roles to another project
 
 **Roles move when both repositories are in order, and *both* is the word doing
-the work.** Ours and theirs. The check is `tools/transfer_check.py`, and CI
+the work.** Ours and theirs. The check is `scripts/transfer_check.py`, and CI
 carries it as a **report** rather than a gate.
 
 ### What has to be true
@@ -525,12 +525,16 @@ that has drifted from this row is.
 
 ## The scripts
 
-**Two kinds, and the directory says which.** `scripts/` holds commands that do
-what they say and run nothing else; `prompts/` holds the ones that
+**Two kinds, and the directory says which.** `scripts/` holds commands and their
+helpers, including generators, checks and the runner; `prompts/` holds the ones that
 assemble context and hand it to an assistant. The partition is the whole of the
 convention: a person can run anything in `scripts/` without deciding whether
 they are willing to spend a turn, and anything under `prompts/` is a
 turn by definition.
+
+`tools/` holds the shared data those commands read and the child projects.
+Dependency manifests and locks, the ecosystem inventory, checkout settings and
+the stretch register stay there; scripts resolve them from the repository root.
 
 `repos.local` is the shared map from a repo id to a checkout on this machine. It
 stays at `scripts/repos.local` and **both halves read it**, which is the one
@@ -546,10 +550,25 @@ to it — the first for everything on the list, the second when a tool arrives.
 | command | run in | what it does |
 | --- | --- | --- |
 | `install_eo` | here, **first** | the rest of the ecosystem, cloned beside this checkout with `git clone` and nothing else — audited by `tests/run.py`. `--dry-run` prints what it would run; `--status` reads the rows back. [The options](usage.md#the-rest-of-the-ecosystem) |
-| `status_eo` | here | who is in the ecosystem and how each looks: declared or not, whether the policy check passes, whether there is a channel, how long since anything moved. `--check` decides whether the inventory itself is still true, and is what CI runs. `python3 tools/ecosystem.py --protocol` is the other report: where each tool proposed for the `associate` footing stands against each version of that drafted protocol, read from a checkout where there is one. It reports and never fails |
+| `status_eo` | here | who is in the ecosystem and how each looks: declared or not, whether the policy check passes, whether there is a channel, how long since anything moved. `--check` decides whether the inventory itself is still true, and is what CI runs. `python3 scripts/ecosystem.py --protocol` is the other report: where each tool proposed for the `associate` footing stands against each version of that drafted protocol, read from a checkout where there is one. It reports and never fails |
 | `harvest_cpc_proofs` | here | collects real CPC proofs to seed the fuzzer with |
+| `bump_check.py` | here, or with `--root PATH` | checks whether a policy commit is eligible for adoption |
+| `deps.py` | imported by the runner | fetches the corpus dependencies and reads and renders their lock |
+| `doc_currency.py` | here | measures the evidence that documentation is current |
+| `ecosystem.py` | here | implements `status_eo`, inventory checks and protocol reports |
+| `gen_checks_doc.py` | here | regenerates `docs/checks.md` from the check registry |
+| `gen_corpus_table.py` | imported by the runner | measures corpus findings and renders the results table |
+| `gen_open_findings.py` | here | adds new findings to the ledger; `--check` reports unlisted findings |
+| `landing.py` | here | reports changes awaiting landing; `--check` reads their checkouts |
+| `near.py <id> <id>` | called by ecosystem commands and prompts | prints whether two repository ids are one edit apart |
+| `oracle_desugar.py` | here | compares desugaring results with the ethos binary |
+| `policy_check.py` | here, or with `--root PATH` | checks the repository policy; also run by members in CI |
+| `ready_check.py <name>` | here | checks whether a proposed tool is ready to be started |
+| `run.py` | here | fetches dependencies and generates the corpus report and findings; `--offline --check` checks the local copies |
+| `sweep.py <path>...` | here | reads every signature under the supplied paths and reports failures |
+| `transfer_check.py <name>` | here | reports whether roles are ready to transfer to a project |
 
-`status_eo` is a wrapper around `tools/ecosystem.py`, and `tools/policy_check.py`
+`status_eo` is a wrapper around `scripts/ecosystem.py`, and `scripts/policy_check.py`
 has no wrapper on purpose: it is the interface **other repositories** run in
 their CI, so its path is published in [`policy.md`](policy.md) and must not
 acquire a second spelling.
@@ -768,7 +787,7 @@ whenever a page feels significant.
 ### The code documentation that qualifies, and the rest that does not
 
 **One thing, and it is not prose: the set of checks a member's CI runs.**
-`tools/policy_check.py` executes in three other repositories. **Adding a check
+`scripts/policy_check.py` executes in three other repositories. **Adding a check
 changes what somebody else's build does, and removing one changes what it stops
 catching** — both are events in the ordinary sense, and neither is visible in a
 document unless we write it down. [`checks.md`](checks.md) is generated from the
@@ -832,7 +851,7 @@ what the tree actually does needs nobody, and changing the tree to match the
 description is ordinary work.
 
 Unlike the vision, this page **is** machine-checked:
-`python3 tools/policy_check.py` runs in CI and decides every rule that a program
+`python3 scripts/policy_check.py` runs in CI and decides every rule that a program
 can decide from the tree. Run it before proposing a change here — and if you add
 a rule, either make it checkable or accept that it lands on the checker's
 printed list of what it cannot decide.
@@ -955,7 +974,7 @@ the topic disagree, do nothing — not the overlap, not the safer half — say
 exactly where they differ, and wait for a person to decide. They may override
 after being told, and then the override gets recorded. This is the only rule
 here enforced as a build failure rather than by convention:
-`tools/policy_check.py` fails when the banner stating it is missing from the top
+`scripts/policy_check.py` fails when the banner stating it is missing from the top
 of the file.
 
 **Nothing here holds credentials that create or publish.** No repository is
@@ -1067,7 +1086,7 @@ other than the tree it was checking.**
   deleted upstream, the clone failed before the pin was ever tried, and the job
   whose entire design is to depend on nothing but this repository went red
   because somebody else removed a ref. The failure it printed was worse than the
-  defect: *the report is not current; run `tools/run.py` and commit* named a fix
+  defect: *the report is not current; run `scripts/run.py` and commit* named a fix
   that would have dropped logos from the lock and recorded the shortfall.
 - A recorded oracle verdict held part of the recording machine's home directory.
   ethos names the source file it was *built* from when it fails internally, and
@@ -1083,7 +1102,7 @@ over the fix that adds a guard.
 
 **The `policy` job is a contract, and it is the one place where no ground may be
 given.** Everything else here is ours to break and ours to fix on our own
-schedule. `tools/policy_check.py` is not: other repositories run it in their own
+schedule. `scripts/policy_check.py` is not: other repositories run it in their own
 CI, pinned at a commit of this one, and what it decides is what this repository
 is handing them downstream. So it is never relaxed to turn a build green, never
 made conditional on the rest passing, and never left to rot while something
@@ -1312,9 +1331,9 @@ transition** and most of the properties stop being properties to check and
 become things that cannot happen:
 
 ```
-tools/ledger.py close  <id> --verdict "..." --evidence <commit|reply|run>
-tools/ledger.py reopen <id> --because "..."
-tools/ledger.py note   <id> "..."
+scripts/ledger.py close  <id> --verdict "..." --evidence <commit|reply|run>
+scripts/ledger.py reopen <id> --because "..."
+scripts/ledger.py note   <id> "..."
 ```
 
 The prompt then says *use this, do not edit the tables*, the same way it already
@@ -1408,7 +1427,7 @@ convenience for us.
 ### When each member joined, and what we were at the time
 
 **Audited 2026-09-02**, from the members' own trees and by running
-`tools/bump_check.py --rev` against each pin they took. Everything below is
+`scripts/bump_check.py --rev` against each pin they took. Everything below is
 re-derivable; nothing is remembered.
 
 | member | joined at | pinned anoieu at | our CI at that commit |
@@ -1450,7 +1469,7 @@ description once something owns the subject.
 
 ### The ecosystem, and what we cannot see of it
 
-`python3 tools/ecosystem.py` prints who is in the ecosystem and how each looks:
+`python3 scripts/ecosystem.py` prints who is in the ecosystem and how each looks:
 declared or not, whether the policy check passes, whether there is a channel to
 reach them, how long since anything moved. It is local, takes about a second,
 and involves no assistant — `prompts/global_audit` is the version that has
@@ -1468,7 +1487,7 @@ because a table invites more confidence than it has earned:
   one machine; a stale clone reports a stale answer with no indication that it
   is one. `scripts/install_eo --status --fetch` answers this much of it —
   branch, distance from upstream, whether the tree is dirty — and
-  `tools/ecosystem.py` still does not read it.
+  `scripts/ecosystem.py` still does not read it.
 - **Anything about the tools themselves.** Not whether they work, not whether
   they are maintained, not whether the thing they produce is any good.
 
@@ -1522,5 +1541,5 @@ readiness for us; somebody has to look.
 4. Check the ladder above before touching any document in it.
 5. If the task is the record itself, the ledger script in *The cheap route* is
    the first thing to build and nothing above it is blocked on the rest.
-6. Run `python3 tests/run.py` and `python3 tools/policy_check.py`.
+6. Run `python3 tests/run.py` and `python3 scripts/policy_check.py`.
 7. Leave the work staged.

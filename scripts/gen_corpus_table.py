@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Count what the checks report on the signatures we can find.
 
-A library rather than a command: `tools/run.py` writes `docs/reports/corpus.md` from
+A library rather than a command: `scripts/run.py` writes `docs/reports/corpus.md` from
 `measure_all()` and `render()` here, together with the versions those counts are
 relative to, because a count without a version is a number that was true once.
 
-    python3 tools/run.py            # rewrite docs/reports/corpus.md
-    python3 tools/run.py --check    # exit 1 if it is stale
+    python3 scripts/run.py            # rewrite docs/reports/corpus.md
+    python3 scripts/run.py --check    # exit 1 if it is stale
 
 A staleness failure means one of two things, and both are worth a look: upstream
 moved, or a check of ours changed what it reports. Neither is an error in
@@ -85,7 +85,7 @@ def not_audited(repo: str, root: str) -> set:
 
 
 # Where the sources live: clones this project manages, never a checkout somebody
-# else owns. See tools/deps.py.
+# else owns. See scripts/deps.py.
 from deps import roots as _dep_roots  # noqa: E402
 
 DEFAULT_ROOTS = _dep_roots()

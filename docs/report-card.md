@@ -392,7 +392,7 @@ regenerated and diffed on every push, and `--pinned` restoring recorded commits
 so the build goes red for its own reasons only. Tenet 4 is met:
 `reports/cpc-audit.html` for readers who will not clone anything, six shrunk
 reproducers under `tests/fuzz/`, and a ledger carrying an id and a state per row.
-Tenet 1 is now met in the only way that counts: **`tools/policy_check.py --root`
+Tenet 1 is now met in the only way that counts: **`scripts/policy_check.py --root`
 runs in three repositories that are not this one** — dokimasia, koine and
 eudaimonia — each pinned to a commit of its own choosing, with the interface
 tested here rather than trusted. That is the one place in this ecosystem where
@@ -423,7 +423,7 @@ instruction has moved up into the arete where it belongs. Two things are
 outstanding and both are older than they should be. **File the two ethos fuzzer
 findings** — the reproducers are committed, nothing is blocking, and they have
 been the obvious next thing for weeks. **Then settle the seven rows closed
-against a fix that never landed**: `tools/landing.py --check` reports all seven
+against a fix that never landed**: `scripts/landing.py --check` reports all seven
 as *not yet*, which means this repository's own count of what it has resolved
 overstates by at least seven, and the tool that says so is ours.
 

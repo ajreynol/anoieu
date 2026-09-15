@@ -252,7 +252,7 @@ row per tool: whoever prints `president` in the status column is the president,
 today, and that is the whole of the question. It is one command, it takes no
 argument, and it needs nobody's recollection.
 
-**One at a time**, which `tools/ecosystem.py --check` decides and CI runs. A file
+**One at a time**, which `scripts/ecosystem.py --check` decides and CI runs. A file
 recording two presidents has recorded a handover that did not finish — both rows
 look correct alone, which is why it is checked rather than noticed.
 

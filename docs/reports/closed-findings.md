@@ -7,7 +7,7 @@ in [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back).
 
 Kept as a file, and kept in git, for three reasons.
 
-1. **It is what makes a verdict stick.** `tools/gen_open_findings.py` skips any
+1. **It is what makes a verdict stick.** `scripts/gen_open_findings.py` skips any
    id listed here. A row simply deleted from the report would be found again on
    the next run, because the finding is still there to be found.
 2. **A row is moved here, never deleted.** Closing is a judgement somebody
@@ -29,7 +29,7 @@ it is booked rather than assumed away. Such a row ends its verdict with
 
     awaiting landing: <project> <branch> <commit>
 
-and `python3 tools/landing.py --check` reads every one of them back and asks the
+and `python3 scripts/landing.py --check` reads every one of them back and asks the
 project's checkout whether that commit has reached the default branch. It is a
 separate pass with its own question -- *did what we closed actually land* -- and
 `tests/run.py` fails if a marker is reworded into something it cannot parse,

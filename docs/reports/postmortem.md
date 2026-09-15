@@ -105,7 +105,7 @@ Updated each round. This is the part to read if you want to know whether the loo
 is paying for itself.
 
 **What is working.** Re-measuring is exact and is one command each way —
-`tools/run.py --pinned` for the checks, `anoieu_fuzz verify` for the reproducers
+`scripts/run.py --pinned` for the checks, `anoieu_fuzz verify` for the reproducers
 — so *does this still hold* is a question with an answer rather than a judgement.
 Moving a row is a two-line edit. The two labels, `TRIAGE:` and `HUMAN RESPONSE:`,
 survived contact with a real reply and did the work they exist for. Naming the
@@ -116,7 +116,7 @@ row confidently instead of hedging.
 **What changed most recently.** A merge is no longer what closes a row — a
 maintainer's acceptance and a commit on a named branch are, and whether the
 change reached anybody's default branch is now a separate pass,
-`tools/landing.py`, asked of the commit rather than of the person. The loop got
+`scripts/landing.py`, asked of the commit rather than of the person. The loop got
 faster and took on a debt to do it; the debt is the seven rows that pass
 currently answers *not yet* for.
 
@@ -274,7 +274,7 @@ three cvc5 rows closed as *fixed upstream* on a fix that never landed, unnoticed
 for three months because a closed id is one nothing re-derives — adopted on
 purpose. So it is booked rather than assumed away. A row closed before its change
 has landed ends its verdict with `awaiting landing: <project> <branch> <commit>`;
-[`tools/landing.py`](../../tools/landing.py) reads those back and asks each
+[`scripts/landing.py`](../../scripts/landing.py) reads those back and asks each
 project's checkout whether the commit has reached its default branch; and
 `tests/run.py` fails if a verdict is reworded into a marker the audit cannot
 parse, which is the only way a row could leave the audit while still owing it.

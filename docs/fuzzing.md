@@ -287,7 +287,7 @@ artefact — a mutated `include` pointing at a file that had never existed.
 ```bash
 python3 -m anoieu_fuzz replay  fuzz-findings/<bucket>/case.eo    # read it, confirm it
 python3 -m anoieu_fuzz promote fuzz-findings/<bucket> --owner ethos --note "..."
-python3 tools/gen_open_findings.py                               # give it a row
+python3 scripts/gen_open_findings.py                               # give it a row
 ```
 
 `promote` copies the reproducer into `tests/fuzz/`, where it is committed

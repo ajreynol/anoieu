@@ -62,7 +62,7 @@ reproducible as a relation directly. It needs:
 It is worth doing first, on its own, for two reasons: it is finishable, and it
 is the layer with an existing differential oracle — this repository already has
 a desugarer checked against a real checker on a committed battery
-(`anoieu/desugar.py`, `tools/oracle_desugar.py`, `tests/desugar/`). A
+(`anoieu/desugar.py`, `scripts/oracle_desugar.py`, `tests/desugar/`). A
 formalization of layer 1 could be validated against that battery on the day it
 was written, which is not true of any other layer.
 

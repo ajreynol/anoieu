@@ -34,7 +34,7 @@ declaration of membership — each is a claim in prose, and a claim in prose tha
 has quietly stopped being true is worse than one never made, because it carries
 the authority of having been written down and checked by somebody once.
 
-**It is the rule this page cannot check.** `tools/policy_check.py` decides
+**It is the rule this page cannot check.** `scripts/policy_check.py` decides
 whether a document exists, whether a link resolves, whether a declaration is
 present. No program here decides whether a sentence is still true, and none is
 likely to: a page describing a tree that changed is mechanically
@@ -60,9 +60,9 @@ What it asks of a repository, none of it enforced:
 | `docs/` | every written document, indexed by `docs/README.md` |
 | `docs/reports/` | everything about the record: the findings ledgers, what was measured, the reporting policy and workflow, the log |
 | `report/` | the paper, where there is one: a LaTeX document for a human who will never clone this repository. Encouraged, never required |
-| `tools/` | the harness: generators, the runner, the dependency manifest — and child projects |
+| `tools/` | shared data: dependency manifests and locks, ecosystem and stretch registers — and child projects |
 | `tests/` | the evidence: the cases, the recorded behaviour of other people's programs, the committed baselines |
-| `scripts/` | executable versions of workflows the documents define |
+| `scripts/` | commands and their helpers: generators, checks, the runner, and executable versions of workflows the documents define |
 | `prompts/` | the workflows that hand context to an assistant, kept apart so that running a command never means deciding to spend a turn. Top level rather than under `scripts/`, so a reader can see the two are different kinds of thing without opening a directory. A convention worth copying, not required |
 | `deps/` | other people's repositories, fetched by a run and never committed |
 | `.github/workflows/` | what runs on every push |
@@ -102,11 +102,11 @@ anything typed in is lost on the next run, or *additive*, where the generator
 may add rows and never remove or rewrite one, so hand-written verdicts survive.
 A generator allowed to delete can quietly delete a regression. Checked.
 
-**`tools/` is the harness, not the product.** Everything that produces, checks
-or measures the repository's own claims, and nothing a user of the tool ever
-invokes. Each generator states at the top of its own file what it writes and
-what it refuses to write. Child projects live here for the adjacent reason:
-neither is part of what the repository ships.
+**Commands and their helpers live in `scripts/`.** This includes the generators,
+checks and runner that produce or measure the repository's own claims. Each
+generator states at the top of its own file what it writes and what it refuses
+to write. Assistant launchers live in `prompts/`; shared data and child projects
+live in `tools/`.
 
 **`tests/` holds the evidence, not only the tests.** A person should be able to
 open one file and see in a minute what a claim rests on: one small case per
@@ -868,7 +868,7 @@ as an observation rather than a score, and **what of it is our own defect**.
 
 ### Upholding it
 
-`tools/policy_check.py` reads this file and splits it across two tiers.
+`scripts/policy_check.py` reads this file and splits it across two tiers.
 
 **The banner is a build failure.** It is the one thing here that stops an agent
 doing something nobody asked for, so a repository whose `discussion.md` has lost
@@ -1023,13 +1023,13 @@ sure somebody asked.
 
 Every rule on this page is a claim about *this tree*, which means a program can
 decide it without holding an opinion — and
-[`tools/policy_check.py`](../tools/policy_check.py) decides the ones that are
+[`scripts/policy_check.py`](../scripts/policy_check.py) decides the ones that are
 currently decidable, on every push. That is the property to preserve when adding
 to this page: **a rule nobody can check is a rule worded loosely enough to be
 tightened**, or one that belongs in [`vision.md`](vision.md) instead.
 
-    python3 tools/policy_check.py              # check; exit 1 on any failure
-    python3 tools/policy_check.py --coverage   # what is checked, and what is not
+    python3 scripts/policy_check.py              # check; exit 1 on any failure
+    python3 scripts/policy_check.py --coverage   # what is checked, and what is not
 
 The run prints the rules it **cannot** decide alongside the ones it can, each
 with the reason — intent, tone, elapsed time, editorial judgement. That list is
@@ -1142,11 +1142,11 @@ Four a program can answer, with the command that answers each:
 2. **The stretch is `staged`** in [`../tools/stretch.json`](../tools/stretch.json).
    Deploying is only reachable from there, and a person moves it.
 3. **Our own policy check passes.** Nothing is published from a tree that fails
-   its own checks — `python3 tools/policy_check.py`.
+   its own checks — `python3 scripts/policy_check.py`.
 4. **Our build is green at the commit members would adopt** — and
    **unverifiable is a refusal, not a pass.** A member may only bump to a green
    commit, so deploying without knowing publishes a commit nobody may adopt.
-   `python3 tools/bump_check.py --rev <sha>`.
+   `python3 scripts/bump_check.py --rev <sha>`.
 
 **A failed gate is a stop, not a warning**, and there is no override short of
 the escape hatch every gate here has: a person may proceed, having said so and
@@ -1226,7 +1226,7 @@ that they never made.
 **`member` carries a judgement, and only the mechanical half is ever checked.**
 Declaring and passing is decidable from a tree; sharing the approach is a vision
 question, and *Policy is checked; vision is argued* forbids a program from
-deciding it. `tools/ecosystem.py --check --online` reads one section of one
+deciding it. `scripts/ecosystem.py --check --online` reads one section of one
 README and decides *declares / does not declare*, and nothing more. The
 judgement is what a person writes in the entry and revises by hand.
 
@@ -1273,7 +1273,7 @@ us.** If nobody has answered by **2026-12-01**, the weaker reading is adopted �
 the bare maintenance-note heading, without the paragraph naming this ecosystem —
 and the footing opens on that basis. That is the reading that asks least of
 them. A repository that wants the stronger one can say so at any time, and one
-that wants neither can say that too. `tools/ecosystem.py --protocol` reports
+that wants neither can say that too. `scripts/ecosystem.py --protocol` reports
 where each proposed associate stands.
 
 ### What is not in this list
@@ -1381,7 +1381,7 @@ jobs:
         run: |
           git clone --quiet https://github.com/ajreynol/anoieu /tmp/anoieu
           git -C /tmp/anoieu checkout --quiet "$ANOIEU_REV"
-      - run: python3 /tmp/anoieu/tools/policy_check.py --root .
+      - run: python3 /tmp/anoieu/scripts/policy_check.py --root .
 ```
 
 **Pin it.** `ANOIEU_REV` is a commit you choose and move on your own schedule,
@@ -1403,8 +1403,8 @@ and deferring costs you one later attempt. And it **must not run in your CI**:
 it reads a remote, so a build that called it could go red for a network you do
 not own.
 
-[`../tools/bump_check.py`](../tools/bump_check.py) is that check, published so
-every member does not write it separately — `python3 tools/bump_check.py --root
+[`../scripts/bump_check.py`](../scripts/bump_check.py) is that check, published so
+every member does not write it separately — `python3 scripts/bump_check.py --root
 .` reads your own pin and decides. It exits `0` to adopt, `1` to refuse, and `2`
 to refuse as unverified. Nothing obliges you to use ours; the requirement is the
 refusal, not the program.
@@ -1418,7 +1418,7 @@ separate responsibility from this page — deciding whether a tree complies is
 checking, which is what anoieu is for, while writing the rules is governance and
 is intended to move to another repository. **When it does, one `ANOIEU_REV`
 stops covering both.** Nothing about your workflow changes on that day: the job
-still clones this repository and still runs `tools/policy_check.py`, because the
+still clones this repository and still runs `scripts/policy_check.py`, because the
 half that moves is the half your CI never touches. **What is undecided is how
 the two stay in step afterwards** — whether the checker pins a commit of the
 page, whether they are released together by agreement, or whether a member ends
@@ -1570,7 +1570,7 @@ said nothing else would be read as a declaration by everybody who has seen one.
 
 This is the note an **associate** would carry under the stronger of the two
 readings still on the table. It is read back from their README by
-`tools/ecosystem.py`, exactly as a declaration is.
+`scripts/ecosystem.py`, exactly as a declaration is.
 
 **A repository that later joins rewrites the section rather than adding to it.**
 The independence paragraph and the membership declaration are contradictory
@@ -1609,7 +1609,7 @@ Read it, then do what it says, here:
 3. Run the check and fix what it reports:
 
      git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
-     python3 /tmp/anoieu/tools/policy_check.py --root .
+     python3 /tmp/anoieu/scripts/policy_check.py --root .
 
 Change nothing the check does not ask for, and add no file it does not ask for.
 Where the page and this prompt disagree, the page is right.

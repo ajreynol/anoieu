@@ -40,7 +40,7 @@ from .vocab import Vocabulary, fallback
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-#: Where a signature is looked for when none is named: the clone `tools/deps.py`
+#: Where a signature is looked for when none is named: the clone `scripts/deps.py`
 #: keeps, so a run in a checkout of this repository needs no arguments.
 SIGNATURE_GUESSES = ("deps/cvc5/proofs/eo/cpc/Cpc.eo",)
 
@@ -376,7 +376,7 @@ def cmd_promote(args) -> int:
         kept.append(where)
         print(f"-- promoted {os.path.relpath(where, ROOT)}")
     print(f"-- {len(kept)} reproducer(s) are now committed evidence. Run "
-          f"`python3 tools/gen_open_findings.py` to give each one a row.")
+          f"`python3 scripts/gen_open_findings.py` to give each one a row.")
     return 0
 
 
@@ -436,7 +436,7 @@ def cmd_verify(args) -> int:
             print("   A proof case checked without its signature is a different "
                   "measurement, not a moved verdict.")
             print("   Name one with CPC=<path-to>/Cpc.eo, or run `python3 "
-                  "tools/deps.py` so that")
+                  "scripts/deps.py` so that")
             print(f"   {SIGNATURE_GUESSES[0]} exists.")
             return 2
 

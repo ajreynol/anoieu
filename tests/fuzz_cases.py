@@ -449,7 +449,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     case(
         "every promoted finding has a row in the ledger",
         not unlisted,
-        f"{len(unlisted)} unlisted; run tools/gen_open_findings.py",
+        f"{len(unlisted)} unlisted; run scripts/gen_open_findings.py",
     )
 
     if promoted:

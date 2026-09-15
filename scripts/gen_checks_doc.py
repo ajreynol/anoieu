@@ -17,7 +17,7 @@ from anoieu.checks import REGISTRY, load_checks  # noqa: E402
 
 HEADER = """# The checks
 
-One page per check, rendered from the registry by `tools/gen_checks_doc.py`;
+One page per check, rendered from the registry by `scripts/gen_checks_doc.py`;
 each page is written beside the check it explains, so the two cannot drift.
 `anoieu explain <CODE>` prints the same text.
 

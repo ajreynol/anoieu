@@ -33,8 +33,8 @@ prose a program cannot read. A check that fires wrongly costs more than it
 saves, so this reports and does not gate, and the number is what has to move
 before gating is worth arguing for.
 
-    python3 tools/doc_currency.py            # the measurement
-    python3 tools/doc_currency.py --list     # and every undated document
+    python3 scripts/doc_currency.py            # the measurement
+    python3 scripts/doc_currency.py --list     # and every undated document
 """
 
 from __future__ import annotations

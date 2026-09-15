@@ -18,11 +18,11 @@ totals and are given first where they exist.
 
 **Commands.** Adoption: `grep -rl policy_check.py <tree>/.github/workflows/`.
 Correspondence: `grep -c '^\*\*To:\*\* anoieu' <tree>/docs/discussion.md`.
-Ledger: the two findings files. Landing: `python3 tools/landing.py --check`.
+Ledger: the two findings files. Landing: `python3 scripts/landing.py --check`.
 
 ## anoieu
 
-**Adoption, and it is the strongest row on this page.** `tools/policy_check.py`
+**Adoption, and it is the strongest row on this page.** `scripts/policy_check.py`
 runs in **three trees other than its own** — dokimasia, koine, eudaimonia — one
 workflow each, pinned. Something outside does behave differently because it
 exists, and this is the one place that is true mechanically rather than by
@@ -32,7 +32,7 @@ somebody choosing to agree.
 logos 18.**
 
 **The counter-figure, which is the honest half: 7 of the 43 closures rest on a
-fix that has not landed.** `tools/landing.py --check` reports all seven as *not
+fix that has not landed.** `scripts/landing.py --check` reports all seven as *not
 yet* — accepted on ethos's `anoieu-findings` branch, one commit ahead of
 `origin/main`, unchanged for the duration. **So "closed" overstates by at least
 seven**, and the tool that measures this is ours, which is the arrangement
@@ -80,7 +80,7 @@ for.
 ## logos
 
 **It gave us three defects in our own machinery**, by hand, and all three were
-confirmed by our own audit afterwards: two in `tools/policy_check.py`, and the
+confirmed by our own audit afterwards: two in `scripts/policy_check.py`, and the
 finding that **the joining step cannot be completed correctly** because the pin
 it asks for may only move to a commit our CI is green at and no such commit
 exists.

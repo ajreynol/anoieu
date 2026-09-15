@@ -125,12 +125,12 @@ that called it could turn red without anybody committing — and a build that ca
 change colour on its own cannot be evidence that a commit was good. It belongs at
 the moment of adoption, in a bump script or a person's hands, and nowhere else.
 
-[`../tools/bump_check.py`](../tools/bump_check.py) implements it, published so
+[`../scripts/bump_check.py`](../scripts/bump_check.py) implements it, published so
 that every member does not write it separately:
 
 ```
-python3 tools/bump_check.py --rev <sha>    # may this stretch be adopted?
-python3 tools/bump_check.py --root PATH    # read the pin out of a member's workflow
+python3 scripts/bump_check.py --rev <sha>    # may this stretch be adopted?
+python3 scripts/bump_check.py --root PATH    # read the pin out of a member's workflow
 ```
 
 Exit `0` adopt, `1` refuse, `2` refuse as unverified — three codes rather than
@@ -219,7 +219,7 @@ Four questions. The first is the hard constraint above and decides by itself; th
 rest are judgement, and the second is the one that is easy to skip because
 nothing in this tree reports it.
 
-**1. Is our build green at the commit?** `python3 tools/bump_check.py --rev <sha>`.
+**1. Is our build green at the commit?** `python3 scripts/bump_check.py --rev <sha>`.
 No, or unverified, means no.
 
 **2. What is in flight upstream?** Something is usually about to move in a
@@ -246,7 +246,7 @@ that carried it and a `ref:` does not.
 > `tools/deps.lock` records, so a normal end-of-feature-branch deletion would take
 > that job from *red for an unread reason* to *cannot run at all*.
 >
-> The same defect had already been found and fixed once, in `tools/deps.py`,
+> The same defect had already been found and fixed once, in `scripts/deps.py`,
 > whose comment records it: *"it used to clone the ref first, which made the pin
 > only as durable as the branch it happened to be on — logos's went away… and
 > every build went red for a reason none of them was measuring."* Fixed in the
@@ -271,10 +271,10 @@ matters.
 ```text
 EPOCH E1 · dry run
   commit ....... 9942149       git rev-parse --short HEAD
-  ci ........... FAIL          tools/bump_check.py --rev 9942149 -> exit 1
+  ci ........... FAIL          scripts/bump_check.py --rev 9942149 -> exit 1
   applied here . FAIL          grep -rl "Is there a paper in this" README.md docs/
   asks ......... 2             docs/history.md, E1 - the covering note
-  informs ...... 3             tools/ecosystem.py -- members
+  informs ...... 3             scripts/ecosystem.py -- members
   removes ...... nothing       -
   ---------------------------------------------------------------
   DEPLOY ....... BLOCKED  2 failing
@@ -558,7 +558,7 @@ bonus.**
 **Whether it is observable at all depends on the contracts, not on us.** `E1`'s
 two happen to be visible from outside: a publishing stance is a section in a
 README, and *bump only to a green commit* is their pin plus
-[`../tools/bump_check.py`](../tools/bump_check.py). A future stretch may set a
+[`../scripts/bump_check.py`](../scripts/bump_check.py). A future stretch may set a
 contract nothing outside can see, and then `installed` is **unknown** — recorded
 as unknown, never assumed in either direction.
 
@@ -618,7 +618,7 @@ implementation, and the likeliest choice is the wrong one below.
 is that only the last of those leaves a trace we may look at:
 
 - **We can see effects.** A pin that moved, a stance that appeared — and
-  [`../tools/ecosystem.py`](../tools/ecosystem.py) already reads a member's README
+  [`../scripts/ecosystem.py`](../scripts/ecosystem.py) already reads a member's README
   from its remote, so some of this is mechanical today.
 - **An effect is not reception, and the absence of one is not its absence.** A
   member who read the announcement and decided against it is indistinguishable,

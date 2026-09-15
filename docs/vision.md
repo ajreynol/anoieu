@@ -26,7 +26,7 @@ is **who is able to settle a question.**
 Policy states facts about a tree: where a file goes, what the README ends with,
 what a child project may import, whether the lock file that pins a measurement
 exists. A program can decide every one of those without holding an opinion, and
-one does — [`tools/policy_check.py`](../tools/policy_check.py), on every push. When it goes red
+one does — [`scripts/policy_check.py`](../scripts/policy_check.py), on every push. When it goes red
 something is wrong in a way nobody has to be persuaded of, which is the entire
 value of putting it in CI.
 
@@ -630,7 +630,7 @@ absence of that somebody.
 | where a reader arrives | `README.md`, and it must be sufficient on its own |
 | what on that page is fixed | the purpose and the caveat; results move as fast as they arrive |
 | who may strengthen a claim | a person, asked directly, with the evidence attached |
-| what enforces the policy | `tools/policy_check.py`, in CI |
+| what enforces the policy | `scripts/policy_check.py`, in CI |
 | what enforces the vision | nothing, deliberately — it is argued, not checked |
 | what governs a deliverable | [`../docs/reports/reporting-policy.md`](reports/reporting-policy.md), [`../docs/reports/reporting-workflow.md`](reports/reporting-workflow.md) |
 | where speculative work goes instead | a child project, `tools/X/`, under [`policy.md`](policy.md) |

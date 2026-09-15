@@ -15,7 +15,7 @@ somebody else's tree, which `docs/policy.md` names as the way a suite becomes
 noise. So the other half is reported as **unverified from here** and is a
 person's step with `--online`.
 
-Exit codes follow `tools/bump_check.py`, for the same reason it has three:
+Exit codes follow `scripts/bump_check.py`, for the same reason it has three:
 
     0   ready       -- our side is in order, and where checked, theirs
     1   not ready   -- something named below is missing

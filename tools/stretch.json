@@ -1,5 +1,5 @@
 {
-  "_comment": "Which stretch we are in, and what is true of it. Written by hand when a stretch closes, and read by tools/bump_check.py; the account of what a stretch did is docs/history.md, which is prose and is a person's. This file holds only what a program decides on: the id, the status, and the version the stretch is to be published as. It replaced docs/stretches.md, which carried these three fields inside a log that declared itself under no obligation to be current -- an exemption that was right for the log and wrong for fields a deploy is gated on.",
+  "_comment": "Which stretch we are in, and what is true of it. Written by hand when a stretch closes, and read by scripts/bump_check.py; the account of what a stretch did is docs/history.md, which is prose and is a person's. This file holds only what a program decides on: the id, the status, and the version the stretch is to be published as. It replaced docs/stretches.md, which carried these three fields inside a log that declared itself under no obligation to be current -- an exemption that was right for the log and wrong for fields a deploy is gated on.",
   "current": "E1",
   "stretches": {
     "E1": {

@@ -422,7 +422,7 @@ docs/reports/reporting-workflow.md is the authority on what you may change. The 
    docs/reports/closed-findings.md. A row is in scope because the reply names it --
    whoever owns it, closed or not. A reply disputing a verdict names a closed row.
 2. Establish what actually happened, which is not what the triage predicted.
-   - EO, DOC, TRI: re-check with \`python3 tools/run.py --pinned\`. It re-derives
+   - EO, DOC, TRI: re-check with \`python3 scripts/run.py --pinned\`. It re-derives
      open rows only; a disputed closed row you check by reading deps/ yourself.
    - FUZ: re-run with \`python3 -m anoieu_fuzz verify\`, \$ETHOS and \$LOGOS pointed
      at builds. A finding that no longer reproduces is strong evidence -- but

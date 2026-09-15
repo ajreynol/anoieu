@@ -95,8 +95,8 @@ if [ -z "$TARGET" ]; then
   exit 2
 fi
 
-REPORT=$(python3 "$ROOT/tools/policy_check.py" --root "$TARGET" 2>&1 || true)
-TRANSFER=$(python3 "$ROOT/tools/transfer_check.py" "$NAME" 2>&1 || true)
+REPORT=$(python3 "$ROOT/scripts/policy_check.py" --root "$TARGET" 2>&1 || true)
+TRANSFER=$(python3 "$ROOT/scripts/transfer_check.py" "$NAME" 2>&1 || true)
 
 read -r -d '' BODY <<PROMPT_END || true
 $NAME has joined. **That is settled and is not the question.** Whether they

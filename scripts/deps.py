@@ -25,9 +25,9 @@ from dataclasses import dataclass
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-MANIFEST = os.path.join(HERE, "deps.json")
+MANIFEST = os.path.join(ROOT, "tools", "deps.json")
 DEPS = os.path.join(ROOT, "deps")
-LOCK = os.path.join(HERE, "deps.lock")
+LOCK = os.path.join(ROOT, "tools", "deps.lock")
 
 
 @dataclass
@@ -173,8 +173,8 @@ def read_lock(path: str = LOCK) -> dict[str, str]:
 
 def render_lock(deps: list[Dep]) -> str:
     body = {
-        "_comment": "Written by tools/run.py. The commits docs/reports/corpus.md reports "
-        "on, in full, so `tools/run.py --pinned` can fetch exactly them. Edited by "
+        "_comment": "Written by scripts/run.py. The commits docs/reports/corpus.md reports "
+        "on, in full, so `scripts/run.py --pinned` can fetch exactly them. Edited by "
         "a run, not by hand.",
     }
     for d in deps:

@@ -6,10 +6,10 @@ reports. It is the thing to run when the question is *where does everything
 stand*; `prompts/global_audit` is the thing to run when the question needs
 somebody to read across the answer and form a view.
 
-    python3 tools/ecosystem.py            # the table
-    python3 tools/ecosystem.py --verbose  # and why each policy verdict came out
-    python3 tools/ecosystem.py --check    # is the inventory itself still true?
-    python3 tools/ecosystem.py --check --online   # ... and ask each remote
+    python3 scripts/ecosystem.py            # the table
+    python3 scripts/ecosystem.py --verbose  # and why each policy verdict came out
+    python3 scripts/ecosystem.py --check    # is the inventory itself still true?
+    python3 scripts/ecosystem.py --check --online   # ... and ask each remote
 
 Health here means **what can be established from a checkout in about a second**:
 does it declare membership, does the policy check pass, is there a channel to
@@ -194,7 +194,7 @@ def render_key() -> str:
                "docs/policy.md,")
     out.append("           \"The footings, and what each one costs whom\"")
     block(FOOTINGS.items())
-    out.append("  policy   tools/policy_check.py, run over that checkout by this "
+    out.append("  policy   scripts/policy_check.py, run over that checkout by this "
                "command just now")
     block(POLICY_VALUES)
     out.append("  channel  their docs/discussion.md, which is optional and which "
@@ -206,7 +206,7 @@ def render_key() -> str:
     out.append("")
     out.append("fixing a `N failing` row")
     out.append("  The count is all this table has. To see what failed:")
-    out.append("      python3 tools/policy_check.py --root <where>")
+    out.append("      python3 scripts/policy_check.py --root <where>")
     out.append("  Each FAIL line names the check and what it found.")
     out.append("  Whose it is to fix depends on the status column, and the two "
                "cases are not alike.")
@@ -224,7 +224,7 @@ def render_key() -> str:
     out.append("  or the policy does not fit a legitimate shape of repository -- "
                "that one is")
     out.append("  ours, and it is fixed here in docs/policy.md or "
-               "tools/policy_check.py.")
+               "scripts/policy_check.py.")
     return "\n".join(out)
 
 
@@ -264,7 +264,7 @@ def age(path: str) -> str:
 
 def check(path: str) -> tuple[str, list[str]]:
     out = subprocess.run(
-        [sys.executable, os.path.join(ROOT, "tools", "policy_check.py"),
+        [sys.executable, os.path.join(ROOT, "scripts", "policy_check.py"),
          "--root", path], capture_output=True, text=True)
     # count the failing *checks*, not their detail lines: one check that reports
     # three things is one thing wrong, and saying "3 fail" overstates it.
@@ -275,7 +275,7 @@ def check(path: str) -> tuple[str, list[str]]:
 
 def near(a: str, b: str) -> bool:
     """Whether two ids are one edit apart, by the same rule `welcome_eo` uses."""
-    out = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "near.py"), a, b],
+    out = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "near.py"), a, b],
                          capture_output=True, text=True)
     return out.stdout.strip() == "1"
 
@@ -377,7 +377,7 @@ def still_true(inv: dict) -> tuple[list[str], list[str]]:
     the network, and counting it as a stale inventory would make this job red for
     something nobody here can fix.
     """
-    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
     import policy_check  # noqa: PLC0415
 
     bad, unseen = [], []
@@ -464,7 +464,7 @@ def protocol(inv: dict) -> int:
       declares      a full membership declaration, which no associate needs and
                     which would mean the footing is the wrong one
     """
-    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
     import policy_check  # noqa: PLC0415
 
     rows = []
@@ -528,7 +528,7 @@ def health(inv: dict | None = None) -> list[tuple[str, str, str]]:
     Returned as data rather than printed, because several surfaces render it and
     a second implementation of the rendering is how they drift apart.
     """
-    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
     import bump_check  # noqa: PLC0415
 
     if inv is None:
@@ -656,7 +656,7 @@ def main() -> int:
         inv = json.load(open(INVENTORY, encoding="utf-8"))
         return protocol({k: v for k, v in inv.items() if not k.startswith("_")})
     verbose = "--verbose" in sys.argv
-    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
     import bump_check  # noqa: PLC0415
     inv = json.load(open(INVENTORY, encoding="utf-8"))
     rows, notes = [], []
@@ -706,7 +706,7 @@ def main() -> int:
             notes.append(
                 f"{name} says it follows the shared policy, and {n_fail} of our "
                 "checks fail on its tree. Theirs to fix, not ours. To see what: "
-                f"python3 tools/policy_check.py --root {where_short}")
+                f"python3 scripts/policy_check.py --root {where_short}")
         # Limbo. Said against the row rather than left for somebody to notice,
         # because it is the one state here that is supposed to be brief: while
         # it lasts nobody is keeping the laws and nothing is recording the term.

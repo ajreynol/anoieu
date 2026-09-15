@@ -27,7 +27,7 @@ reports on other people's files has not been checked by anybody.
 
 **The policy checker** decides whether a repository's tree matches the shared
 arrangement it says it follows —
-[`tools/policy_check.py`](tools/policy_check.py), which runs in every member's
+[`scripts/policy_check.py`](scripts/policy_check.py), which runs in every member's
 CI. **It decides compliance; it does not write the rules**, and the difference
 matters: the rules are governance and are [destined to
 move](docs/roles.md), while deciding whether a tree complies stays here with the

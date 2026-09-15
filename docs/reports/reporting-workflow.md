@@ -32,7 +32,7 @@ can adopt the conventions below by filling the same slots with its own files:
 | **the verdicts** | the internal half: every row that has been ruled on, and what was decided | [`closed-findings.md`](closed-findings.md) |
 | **the id** | a fingerprint stable across edits elsewhere in the file, which everything else refers to | the check's code, the file, and the text of the line |
 | **the catalogue** | what each check assumes, and therefore how it can be wrong | [`checks.md`](../checks.md) |
-| **re-measuring** | one command that restores the exact versions the report was measured against | `python3 tools/run.py --pinned` |
+| **re-measuring** | one command that restores the exact versions the report was measured against | `python3 scripts/run.py --pinned` |
 | **the regression** | where a case goes that would have prevented a wrong finding | `tests/witnesses/` |
 | **the ledger** | the prose history of what was reported and what came of it | [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) |
 | **the frame** | two labels separating what an assistant concluded from what a person decided | `TRIAGE:` and `HUMAN RESPONSE:`, below |
@@ -171,7 +171,7 @@ naming where the change is —
 
     awaiting landing: <project> <branch> <commit>
 
-— and [`tools/landing.py`](../../tools/landing.py) is the audit that reads them
+— and [`scripts/landing.py`](../../scripts/landing.py) is the audit that reads them
 back. It is **a separate pass, with its own question**: *did what we closed
 actually land?* It is asked on its own schedule, against checkouts, and it is
 deliberately not part of processing a reply — the two get confused precisely
@@ -355,7 +355,7 @@ is a substitute for that.
 
 Running the checks needs no permission from anybody: the tool reads what you
 point it at, writes nothing, and needs no network. Verifying a published report
-is equally open — `tools/run.py --pinned --check` restores the recorded commits,
+is equally open — `scripts/run.py --pinned --check` restores the recorded commits,
 so the answer does not depend on who is asking.
 
 Two things are ours: **regenerating the report**, which is a maintainer here
@@ -547,7 +547,7 @@ docs/reports/reporting-workflow.md is the authority on what you may change. The 
    docs/reports/closed-findings.md. A row is in scope because the reply names it --
    whoever owns it, closed or not. A reply disputing a verdict names a closed row.
 2. Establish what actually happened, which is not what the triage predicted.
-   - EO, DOC, TRI: re-check with `python3 tools/run.py --pinned`. It re-derives
+   - EO, DOC, TRI: re-check with `python3 scripts/run.py --pinned`. It re-derives
      open rows only; a disputed closed row you check by reading deps/ yourself.
    - FUZ: re-run with `python3 -m anoieu_fuzz verify`, $ETHOS and $LOGOS pointed
      at builds. A finding that no longer reproduces is strong evidence -- but
@@ -651,7 +651,7 @@ that stopping partway is safe.
 
 Start by measuring the projects as they are now:
 
-  python3 tools/run.py
+  python3 scripts/run.py
 
 That moves every clone to the tip of its ref and appends anything newly
 reported. Rows it adds are new findings and are not this sweep's business. Rows
@@ -950,9 +950,9 @@ machinery, separate audience, and nothing an adopting repository has to run.
 One command does the whole cycle:
 
 ```bash
-python3 tools/run.py                   # move to each tip, then measure
-python3 tools/run.py --pinned --check  # re-measure the recorded commits
-python3 tools/run.py --offline         # measure whatever deps/ already holds
+python3 scripts/run.py                   # move to each tip, then measure
+python3 scripts/run.py --pinned --check  # re-measure the recorded commits
+python3 scripts/run.py --offline         # measure whatever deps/ already holds
 ```
 
 Three steps, each printing what it did:
@@ -1023,7 +1023,7 @@ diff says which.
 [`open-findings.md`](open-findings.md) is the report itself, one row per
 finding, and it is **additive**:
 
-- **`tools/gen_open_findings.py` adds and never removes.** A row is keyed by the
+- **`scripts/gen_open_findings.py` adds and never removes.** A row is keyed by the
   same fingerprint a baseline uses — the code, the file, and the text of the
   line — so it survives edits elsewhere in the file. CI runs `--check`, which
   fails when a finding is unlisted and never when a row is extra.

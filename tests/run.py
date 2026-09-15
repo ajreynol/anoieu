@@ -134,11 +134,11 @@ def witness_coverage() -> None:
 
 def manifest_agrees() -> int:
     """The sources the report is generated from are named in three places —
-    `tools/deps.json`, the targets in `tools/gen_corpus_table.py`, and the lock
+    `tools/deps.json`, the targets in `scripts/gen_corpus_table.py`, and the lock
     a run writes. A name that appears in one and not the others makes a corpus
     silently unmeasured, which reads exactly like a corpus with no findings. So
     check it here, where no network is needed."""
-    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "tools"))
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "scripts"))
     import deps  # noqa: PLC0415
     import gen_corpus_table as corpus  # noqa: PLC0415
 
@@ -162,7 +162,7 @@ def manifest_agrees() -> int:
     locked = deps.read_lock()
     for name in named:
         if name not in locked:
-            print(f"FAIL {name}: no commit in deps.lock; run tools/run.py")
+            print(f"FAIL {name}: no commit in deps.lock; run scripts/run.py")
             failures += 1
 
     # And the fourth thing, which nothing compared until now: the checkouts on
@@ -188,8 +188,8 @@ def manifest_agrees() -> int:
         if got and not (got.startswith(commit) or commit.startswith(got)):
             print(f"FAIL {name}: deps/ is at {got[:8]}, the lock records "
                   f"{commit[:8]} -- the report names a tree that is not here")
-            print("     run `python3 tools/deps.py --pinned` to restore the "
-                  "recorded commits, or `tools/run.py` to record these")
+            print("     run `python3 scripts/deps.py --pinned` to restore the "
+                  "recorded commits, or `scripts/run.py` to record these")
             failures += 1
     if skipped:
         print(f"     {skipped} checkout(s) not on disk, so not compared")
@@ -201,12 +201,12 @@ def manifest_agrees() -> int:
 def inventory_well_formed() -> int:
     """`tools/ecosystem.json` read as a document about itself.
 
-    The offline half of `tools/ecosystem.py --check`, run here so that editing
+    The offline half of `scripts/ecosystem.py --check`, run here so that editing
     the inventory fails at the moment somebody edits it rather than in CI. The
     other half asks each remote whether what we record is still true, and needs
     a network, so it stays a CI step and is not run from the suite.
     """
-    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "tools"))
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "scripts"))
     import ecosystem  # noqa: PLC0415
 
     inv = {k: v for k, v in json.load(open(ecosystem.INVENTORY)).items()
@@ -238,12 +238,12 @@ def inventory_well_formed() -> int:
         f.write(f"anoieu {root}\n")
     env = dict(os.environ, ANOIEU_REPOS=os.path.join(HERE, "no-such-dir"),
                ANOIEU_REPOS_FILE=mapping)
-    out = subprocess.run([sys.executable, os.path.join(root, "tools", "ecosystem.py")],
+    out = subprocess.run([sys.executable, os.path.join(root, "scripts", "ecosystem.py")],
                          capture_output=True, text=True, env=env, timeout=120)
     os.remove(mapping)
     if out.returncode != 0 or not re.search(rf"^anoieu\s+{re.escape(footing)}\s",
                                             out.stdout, re.M):
-        print(f"FAIL tools/ecosystem.py with no arguments exited {out.returncode}: "
+        print(f"FAIL scripts/ecosystem.py with no arguments exited {out.returncode}: "
               f"{(out.stderr or out.stdout).strip().splitlines()[-1:]}")
         bad = bad + ["the default mode"]
     # The key under the table is a copy: it names every footing, and what a
@@ -282,7 +282,7 @@ def inventory_well_formed() -> int:
         env = dict(os.environ, ANOIEU_REPOS=os.path.join(lim, "none"),
                    ANOIEU_REPOS_FILE=mapping)
         got = subprocess.run(
-            [sys.executable, os.path.join(root, "tools", "ecosystem.py")],
+            [sys.executable, os.path.join(root, "scripts", "ecosystem.py")],
             capture_output=True, text=True, env=env, timeout=120).stdout
         for label, ok in (
                 ("a president missing a file it needs is reported in limbo",
@@ -302,7 +302,7 @@ def inventory_well_formed() -> int:
     # key printed under every table is the bulk of the output of a command that
     # is run often. Getting either wrong is invisible from the other.
     help_out = subprocess.run(
-        [sys.executable, os.path.join(root, "tools", "ecosystem.py"), "--help"],
+        [sys.executable, os.path.join(root, "scripts", "ecosystem.py"), "--help"],
         capture_output=True, text=True, timeout=60)
     for label, want in (("--help prints the key", "key\n" in help_out.stdout),
                         ("--help exits 0", help_out.returncode == 0),
@@ -586,13 +586,13 @@ def landing_markers() -> int:
     """Every row closed before its change landed is still reachable by the audit.
 
     Closing on a promise is the one place this repository has been wrong for
-    months at a time, and `tools/landing.py` is the whole of what stops it
+    months at a time, and `scripts/landing.py` is the whole of what stops it
     happening again. The marker it reads lives in free-text prose, so the way it
     fails is a verdict somebody reworded: the row stays closed, the debt stays
     owed, and it silently leaves the audit. That is checked here rather than
     trusted.
     """
-    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "tools"))
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "scripts"))
     import landing  # noqa: PLC0415
 
     failures = 0
@@ -632,7 +632,7 @@ def join_prompt_agrees() -> int:
     the only thing this repository hands to somebody who is joining *nothing*, so
     a sentence in one that has drifted is a claim made on a repository that never
     agreed to anything here. The affiliating one is the note an `associate`
-    carries, and `tools/ecosystem.py --check --online` reads that note back off
+    carries, and `scripts/ecosystem.py --check --online` reads that note back off
     their README -- so a drift there desynchronises a prompt from a check in
     somebody else's tree.
     """
@@ -661,7 +661,7 @@ def note_forms() -> int:
 
     A member's declaration and the two things a prospective associate might be
     asked for are all a paragraph in somebody else's README, and
-    `tools/ecosystem.py` tells them apart from a remote. Getting that wrong is
+    `scripts/ecosystem.py` tells them apart from a remote. Getting that wrong is
     not a failed build: it is this repository recording a footing that is not
     true, about a repository that never agreed to anything.
 
@@ -673,7 +673,7 @@ def note_forms() -> int:
     of them fails this test rather than silently changing what a footing means.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "tools"))
+    sys.path.insert(0, os.path.join(root, "scripts"))
     import policy_check  # noqa: PLC0415
 
     doc = open(os.path.join(root, "docs", "policy.md")).read()
@@ -730,7 +730,7 @@ def note_forms() -> int:
 
 
 def protocol_report() -> int:
-    """`tools/ecosystem.py --protocol` reports the right column for each tree.
+    """`scripts/ecosystem.py --protocol` reports the right column for each tree.
 
     The readers are witnessed above; this is the wiring around them, which is the
     half that had never produced a `yes` when it was written. It runs offline
@@ -743,7 +743,7 @@ def protocol_report() -> int:
     repository grading somebody against a rule that does not exist.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "tools"))
+    sys.path.insert(0, os.path.join(root, "scripts"))
     import ecosystem  # noqa: PLC0415
 
     doc = open(os.path.join(root, "docs", "policy.md")).read()
@@ -795,7 +795,7 @@ def protocol_report() -> int:
 
 
 def epoch_gate() -> int:
-    """`tools/bump_check.py` refuses everything that is not a finished green run.
+    """`scripts/bump_check.py` refuses everything that is not a finished green run.
 
     This is the gate a downstream member puts in front of adopting a stretch, so
     the expensive direction is **letting something through**: a member that
@@ -807,7 +807,7 @@ def epoch_gate() -> int:
     network is a test nobody runs.
     """
     root = os.path.dirname(HERE)
-    sys.path.insert(0, os.path.join(root, "tools"))
+    sys.path.insert(0, os.path.join(root, "scripts"))
     import bump_check  # noqa: PLC0415
 
     def run(name, status="completed", conclusion="success"):
@@ -964,7 +964,7 @@ def adoption_interface() -> int:
          True, "ungated", 1),
     )
 
-    checker = os.path.join(os.path.dirname(HERE), "tools", "policy_check.py")
+    checker = os.path.join(os.path.dirname(HERE), "scripts", "policy_check.py")
     failures = 0
     tmp = tempfile.mkdtemp(prefix="anoieu-adopt-")
     try:
@@ -1121,7 +1121,7 @@ def main() -> int:
         sys.stdout.flush()
         import subprocess as sp  # noqa: PLC0415
 
-        oracle = os.path.join(os.path.dirname(HERE), "tools", "oracle_desugar.py")
+        oracle = os.path.join(os.path.dirname(HERE), "scripts", "oracle_desugar.py")
         p = sp.run([sys.executable, oracle, "--ethos", args.ethos], text=True)
         failures += 1 if p.returncode else 0
 

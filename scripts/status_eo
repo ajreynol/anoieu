@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 # status_eo -- who is in the Eunoia ecosystem, and how each one looks.
 #
-# A wrapper around tools/ecosystem.py, where the code lives. It is here so the
-# command sits beside the other things a person runs, rather than being a path
-# into the harness somebody has to have been told about.
+# A short command name for scripts/ecosystem.py, which lives beside this wrapper.
 #
 #   status_eo                    # the table: status, policy, channel, moved
 #   status_eo --verbose          # ... and why each policy verdict came out
@@ -26,4 +24,4 @@
 # which is a fact about your disk. Neither answers the other.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
-exec python3 "$HERE/../tools/ecosystem.py" "$@"
+exec python3 "$HERE/ecosystem.py" "$@"

@@ -172,7 +172,7 @@ passed — which is what the handoff protocol requires before anything is
 handed over. It says the paperwork is not in the way, and nothing about
 whether the tool should be built. **The job is temporary**: it asserts its
 own stub exists, so deleting the stub turns it red and the only repair is
-to delete the job. See `tools/ready_check.py`.
+to delete the job. See `scripts/ready_check.py`.
 **Stub:** `tools/tekton/` holds the place, under the handoff protocol in
 [`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
 and not a claim on the name. **It does not survive E1's deployment**: either a
@@ -219,7 +219,7 @@ passed — which is what the handoff protocol requires before anything is
 handed over. It says the paperwork is not in the way, and nothing about
 whether the tool should be built. **The job is temporary**: it asserts its
 own stub exists, so deleting the stub turns it red and the only repair is
-to delete the job. See `tools/ready_check.py`.
+to delete the job. See `scripts/ready_check.py`.
 **Stub:** `tools/kanon/` holds the place, under the handoff protocol in
 [`coherence.md`](coherence.md#proto-20--the-handoff-protocol). It is a marker
 and not a claim on the name. **It does not survive E1's deployment**: either a
@@ -282,7 +282,7 @@ that plus the paragraph naming this ecosystem — and write it into
 [`policy.md`](policy.md) as in force.
 **Prompt — `anoieu`:** do not record either as an associate until the protocol is
 decided; `proposed:` is the field that holds the intention, and
-`tools/ecosystem.py --protocol` is the report. When it is decided, the section in
+`scripts/ecosystem.py --protocol` is the report. When it is decided, the section in
 `policy.md` stops saying *drafted, and not in force* and the two entries move in
 one commit.
 **Prompt — `ethos`:** we would like to record you as an associate: a footing that
@@ -396,7 +396,7 @@ step lands, moving to it is one line.
 **Task:** the seven rows closed *awaiting landing* on `ethos` are all still one
 commit off the default branch.
 **Entities:** `ethos`, `anoieu`
-**Status:** waiting on `ethos` — `tools/landing.py --check` reports all seven as
+**Status:** waiting on `ethos` — `scripts/landing.py --check` reports all seven as
 `not yet`, against a checkout fetched today.
 **Channel:** **upstream, by a person** — `ethos` has no discussion file, so asking about a merge is a message somebody sends, not a topic anybody can address.
 **Next:** merge the branch, or tell us it is not going to be merged so the rows
@@ -405,7 +405,7 @@ can be reopened rather than sitting closed on a promise.
 findings you accepted. It is one commit ahead of `main` and has been for the
 duration. Merging it, or saying it will not be merged, is the only thing
 outstanding.
-**Prompt — `anoieu`:** re-run `tools/landing.py --check` after any ethos merge,
+**Prompt — `anoieu`:** re-run `scripts/landing.py --check` after any ethos merge,
 and replace the marker with what landed it. Do not let a second row age the way
 `cvc5-1` did.
 **HUMAN FEEDBACK:**
@@ -569,13 +569,13 @@ it.
 **Next:** decide whether the fix is to relativise the seed at promotion time or
 to widen the check to tracked non-Markdown files. Probably both.
 **Prompt — `anoieu`:** the promoter should record a seed as a repository-relative
-path or as the corpus name, never as an absolute one, and `tools/policy_check.py`
+path or as the corpus name, never as an absolute one, and `scripts/policy_check.py`
 should look outside `*.md` for the same pattern it already forbids there.
 **HUMAN FEEDBACK:**
 
 ## B14 — nothing schedules a run, so the report is as fresh as somebody's memory
 
-**Task:** `tools/run.py` is run by hand. A ref in `tools/deps.json` pointed at a
+**Task:** `scripts/run.py` is run by hand. A ref in `tools/deps.json` pointed at a
 branch that had been deleted upstream, and the report kept reporting on it until
 somebody happened to look.
 **Entities:** `anoieu`
