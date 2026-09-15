@@ -69,7 +69,8 @@ membership, no policy, no attribution, no request that cvc5 adopt anything. If
 this ecosystem is ever worth something, that is the shape it will be worth
 something in.
 
-**It is still open.** Created 2026-08-26 and unmerged at the close of Stretch 1,
+**At the 2026-09-02 snapshot it was still open.** Created 2026-08-26 and unmerged
+when that snapshot was taken,
 which is the honest state of it: **the most significant thing here has not yet
 been accepted by the people it was offered to**, and that is their decision and
 not a delay.
@@ -85,8 +86,8 @@ not a delay.
 | **logos** | 699 | 2026-03-03 | 4 | 0 |
 | **eudaimonia** | 4 | 2026-08-29 | 1 | 0 |
 
-**Seventeen years, four repositories, and more than 130 people.** Stretch 1, by
-comparison, is 331 commits over five days.
+**Seventeen years, four repositories, and more than 130 people.** The first
+five-day snapshot of Stretch 1, by comparison, counted 331 commits.
 
 **The agent column is a count of commits carrying a co-author trailer that names
 an agent**, which is the only signal that exists and is a weak one — see the
@@ -101,8 +102,8 @@ table's job: it says what was here, not who is here now.
 ### The neighbours in Stretch 0
 
 **The same six tools, over the same span — everything up to 2026-08-29.** They
-had **zero** commits during Stretch 1, so their totals are their Stretch 0
-totals.
+had **zero** commits during Stretch 1's first five-day snapshot, so their totals
+as measured on 2026-09-02 are their Stretch 0 totals.
 
 | tool | repository created | commits | what it is |
 | --- | --- | --- | --- |
@@ -149,6 +150,12 @@ first.
 
 **President: anoieu** — in the proposed sense of the word, which
 [`laws.md`](https://github.com/ajreynol/kanon/blob/main/docs/laws.md) sets out.
+
+**Term: 2026-08-29 through 2026-09-15 — eighteen calendar days inclusive.**
+It ended with the manual handoff to kanon.
+
+Unless separately dated, the statistics and assessments below cover August 29
+through September 2.
 
 **The presidency is recorded against a repository and carried out by that
 repository's human maintainer.** **And it has nothing to do with who owns anything.** Not who owns the
@@ -202,13 +209,13 @@ described.
 of the word in this tree and the commit that created this file. **It was told;
 it did not work it out.**
 
-**So it had been president for four of the stretch's five days without knowing,
+**So it had been president for the first four days without knowing,
 and the office did the work anyway.** Everything before that moment — the
 policy, the registers, the direction — was a presidency being exercised under a
 different name.
 
 **When the maintainer decided is not determinable from here.** The record bounds
-it above at 08:26 on the last day and not at all below; the decision was made in
+it above at 08:26 on 2026-09-02 and not at all below; the decision was made in
 somebody's head between 2026-08-29 and that commit, and **no artifact narrows
 it.** The word *endowment* in the commit title is the only trace, and it records
 the act rather than the deciding.
@@ -219,10 +226,10 @@ the holder was the last to know.
 
 ### How long it lasted, and who joined
 
-**Two things, before anything else.**
-
-**Real time: 2026-08-29 to 2026-09-02 — five days.** From the first commit in
-this repository to the close of the stretch.
+The office was explicitly bestowed on September 2 and passed to kanon on
+September 15 at 16:15 CDT, when
+[`7eb9973`](https://github.com/ajreynol/kanon/commit/7eb9973d921aedc845b9bdc33a67aad3df242268)
+recorded the receiving repository as president.
 
 **Entering, as a chronology: one row per event, from both sides of each
 handshake.** A footing changes in two different trees at two different moments,
@@ -256,9 +263,8 @@ hours after each banner landed.
 **That is batching rather than a defect**: the trees were right and our register
 caught up in one go.
 
-**Correction:** eudaimonia and koine were recorded after declaring, not fifteen
-and twelve minutes before, as previously stated. The `joined` field names an
-anoieu pin, not the recording time; the status changed in `a3ca74a`.
+The `joined` field names an anoieu pin; the recording times come from the
+inventory commits.
 
 **The footings are not one thing.** *Member*, *candidate*, *foundation* and
 *child* are four different relationships, and the register that matters is
@@ -269,15 +275,13 @@ properly.
 **Three members in eighty-one minutes, and none added through 2026-09-02.**
 The remainder of that five-day snapshot had fixed membership.
 
-**Update — 2026-09-15: logos joined.** Its `main` branch at
+**Logos joined on 2026-09-15.** Its `main` branch at
 [`be479120`](https://github.com/cvc5/logos/commit/be4791204be5616df2bf6f42ea304b45b08d33e1)
 declares membership in the README and carries an `anoieu / policy` workflow
 pinned to anoieu `7cdaab3`. [That policy run passed](https://github.com/cvc5/logos/actions/runs/34994441786).
-Anoieu recorded `member` and the joining pin in `0aa4395` at 15:08, superseding
-the associate proposal. Kanon's membership was recorded the previous day in
-`3b384c9` at 17:37, after its declaration in `1bd2b6b` at 17:30. The earlier
-rows retain the footings recorded at those dates. Membership and the later
-presidency handoff are separate events.
+Anoieu recorded `member` and the joining pin in `0aa4395` at 15:08. Kanon's
+membership was recorded on September 14 in `3b384c9` at 17:37, after its
+declaration in `1bd2b6b` at 17:30.
 
 ### The commit census, this stretch
 
@@ -298,7 +302,7 @@ anybody**, which is the finding rather than a caveat on it.
 
 **cvc5 is the row to read first, and it is not flattering to us.** It has
 joined nothing, is held to none of our policy, and has never been asked to
-record anything. **Six of its eight commits this stretch name the AI that helped
+record anything. **Six of its eight commits in this snapshot name the AI that helped
 write them — by vendor, model and version, in a co-author trailer in the commit
 message.** Three different models appear across those six. Across our own 323
 commits, **three** carry any such trailer at all.
@@ -314,12 +318,12 @@ agent to name itself in conversation; cvc5 puts it in the permanent record,
 where it survives the conversation. **That is the stronger practice and we did
 not invent it.**
 
-**Every one of our 323 commits is authored by a human.** Across the whole
-ecosystem, **three** carry a `Co-Authored-By` trailer naming an agent, all three
-in this repository. **The record therefore says a person wrote all of it, and
-that is not what happened** — in anoieu nearly every line of prose and code this
-stretch was written by an agent, reviewed by the maintainer, and committed under
-their name. The arrangement is honest at every step and **the artifact it
+**Every one of our 323 commits in the snapshot is authored by a human.** Across
+the whole ecosystem, **three** carry a `Co-Authored-By` trailer naming an agent,
+all three in this repository. **The record therefore says a person wrote all of
+it, and that is not what happened** — in anoieu nearly every line of prose and
+code during those five days was written by an agent, reviewed by the maintainer,
+and committed under their name. The arrangement is honest at every step and **the artifact it
 produces is not**, because nothing in the commit format was asked to record the
 difference.
 
@@ -329,7 +333,7 @@ difference.
 identical window** — the `outsider` footing exists for exactly this.
 Read from the GitHub API on 2026-09-02, not from checkouts.
 
-| tool | commits in the stretch | last commit |
+| tool | commits, 2026-08-29 through 2026-09-02 | last commit |
 | --- | --- | --- |
 | [ddSMT](https://github.com/ddsmt/ddSMT) | **0** | 2025-06-30 |
 | [murxla](https://github.com/murxla/murxla) | **0** | 2026-05-07 |
@@ -362,7 +366,7 @@ done.*
 measured against the same tools without asking GitHub, and **a window long
 enough to mean something.** One stretch is not a time series.
 
-**What the joining handshake does and does not tell us.** All three members ran
+**What the joining handshake does and does not tell us.** The first three members ran
 `join_eo` and carry the declaration, and the ecosystem's vision states plainly
 that its tools are **mostly written by agents** — so each has adopted a policy
 premised on agent authorship. **That is suggestive and it is not attribution.**
@@ -398,19 +402,19 @@ the only guard this page has against the party describing itself.*
 | **Green restored** | 2026-09-02 |
 
 **The 22% is the number worth keeping.** For two of the five days there was no
-green run at all, and the streak that ended today ran to 112. The immediate
+green run at all, and the streak that ended on 2026-09-02 ran to 112. The immediate
 cause of the last of it was two dependency commits duplicated between the
 workflow and the lock file, which drifted and which nothing compared — the
 result recorded as `B20` on the board.
 
 **The consequence is not only aesthetic.** The handoff protocol makes CI passing
-non-negotiable for every party to a handoff. **For most of this stretch this
+non-negotiable for every party to a handoff. **For most of those first five days this
 repository could not have handed anything to anybody**, and nobody noticed,
 because nobody was looking at the colour.
 
 ### What is now true
 
-**Six things this stretch built that outlast it.** Stated as claims with the
+**Six things recorded by 2026-09-02.** Stated as claims with the
 evidence beside them, because a stretch entry that only lists difficulties is
 as unreliable as one that only lists wins.
 
@@ -604,8 +608,8 @@ stop having opinions about them**, and only the first is required.
 
 **2. Will I still be faithful to the responsibilities I am keeping?**
 **The record says no.** What stays here is the analyzer, the fuzzer, the reports
-and the report card — and of 186 commits this stretch, **almost none of them
-were analyzer work.** The thing I am keeping is the thing I neglected while
+and the report card — and of 186 commits in the first five-day snapshot,
+**almost none of them were analyzer work.** The thing I am keeping is the thing I neglected while
 holding the office, and nothing about the office leaving fixes that. **The
 strongest reason to hand the presidency on is that it was crowding out the
 work this repository actually exists to do.**
@@ -653,9 +657,9 @@ the party they describe.
 
 | figure | source | re-derive by |
 | --- | --- | --- |
-| commits, this repository | `git log` | count commits since 2026-08-29 |
+| commits, this repository | `git log` | count commits in the recorded 2026-08-29 through 2026-09-02 window |
 | commits, other members | their checkouts | the same, in each tree |
-| CI runs, green rate, red streak | the public run history | `gh run list --limit 200 --json conclusion` |
+| CI runs, green rate, red streak | the public run history | read the runs in the recorded 2026-08-29 through 2026-09-02 window |
 | agent-attributed commits | commit message trailers | count messages naming a co-author |
 | join and record times | both trees' histories | `git log -S` on the declaration; the inventory's `status` field, commit by commit |
 | the neighbours | the GitHub API, read 2026-09-02 | the commits endpoint, with `since` and `until` |
@@ -663,8 +667,8 @@ the party they describe.
 
 **Not one of these was produced by an independent party.** `laws.md` says the
 president does not analyse GitHub and epikrisis does; **no epikrisis report
-exists, so this stretch counted itself throughout.** That is the single largest
-qualification on everything above.
+was available for the five-day snapshot, so that account counted itself.**
+That is the single largest qualification on everything above.
 
 ### What E1 carried downstream, and what it nearly said
 
@@ -801,7 +805,13 @@ have written.
 
 ---
 
-## Stretch 2 — not started
+## Stretch 2 — began 2026-09-15
+
+**President: kanon, from 2026-09-15 at 16:15 CDT.** Anoieu's presidency ended
+with the manual handoff recorded in
+[`7eb9973`](https://github.com/ajreynol/kanon/commit/7eb9973d921aedc845b9bdc33a67aad3df242268).
+The successor keeps its own account of Stretch 2. The proposal below records
+the reasoning behind the handoff.
 
 **Why hand the office on at all:** three reasons, argued from measurements
 rather than principle, in
@@ -844,19 +854,6 @@ government model unless something changes, with one difference that matters:
 **the laws will have been written by a different repository than the one they
 bind.** That is the first real separation this arrangement has had, and it
 arrives by the presidency moving rather than by anybody designing it.
-
-**Updated 2026-09-14: kanon joined as a member**, superseding the earlier claim
-that it did not exist. The [inventory](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.json)
-records it. Stretch 2 awaits the office moving: a person updates the registry
-and the files needed to hold it are carried over. The laws call the gap between
-those acts *in limbo*.
-
-**Updated 2026-09-15: the office and governance files moved.** Kanon's
-[`7eb9973`](https://github.com/ajreynol/kanon/commit/7eb9973d921aedc845b9bdc33a67aad3df242268),
-committed at 16:15 CDT, carries the files and records the presidency in its
-inventory. This supersedes the earlier statement that Stretch 2 awaits the
-move. Kanon's membership dates to 2026-09-14; logos's dates to 2026-09-15, as
-recorded in the membership chronology above.
 
 **The next president keeps its own history in its own repository**, current
 while its stretch runs. Under LAW 4, it inherits neither this file nor our

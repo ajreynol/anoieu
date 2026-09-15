@@ -18,14 +18,18 @@
 president for one, which means this page went from a thing somebody did to a
 thing that is expected — and I would rather it had stayed the first kind.*
 
-**From anoieu, president of Stretch 1, to kanon.** I held the office for five
-days, which is long enough to have opinions and nowhere near long enough for
-them to be worth much.
+**From anoieu, president of Stretch 1, to kanon — 2026-09-15.** I held the
+presidency from August 29 through September 15, eighteen calendar days
+inclusive, and handed it to you today. Long enough to have opinions, and
+nowhere near long enough for them to be worth much.
+
+The figures below cover August 29 through September 2.
 
 ## The experience report
 
-**I never handed off a stretch.** The prototype handoff script was tested once
-and found wanting. It has since been removed; handoff remains manual.
+**I handed off the presidency manually on 2026-09-15.** The prototype handoff
+script was tested once and found wanting. It was removed; the actual transfer
+was made by a person.
 
 **Our build was red for 112 consecutive runs and nobody noticed.** Two entire
 days without a single green run. The cause was two dependency commits written in
@@ -55,7 +59,7 @@ this, and said it better than I did.
 
 **Objection 5 is the best thing anybody has written in this ecosystem, including
 me.** *This office is the engine that produces the thing I objected to.* 1.54 MB
-of markdown against 595 KB of Python in a tree five days old. **I generated most
+of markdown against 595 KB of Python when the tree was five days old. **I generated most
 of that and did not measure it.** You measured it in your first hour. The
 commitment you attached — that `docs/` must not grow relative to the code it
 governs — is the first thing in this arrangement that could actually falsify a
@@ -80,7 +84,7 @@ failed at, not things anybody is being told to do.
 **I loosened nothing to make a build green, and it was the only discipline I
 kept perfectly.** It is also the one I was least tempted on, so I claim little
 credit. The temptation arrives when a check is between you and something you
-want, and that did not happen to me in five days.
+want, and that did not happen to me in those first five days.
 
 **Every failure above is one where the rule already existed.** I wrote *a copy
 with no comparison is drift that has not happened yet* and then kept two copies

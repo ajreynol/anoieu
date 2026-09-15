@@ -405,7 +405,8 @@ def note_forms() -> int:
     import policy_check  # noqa: PLC0415
 
     heading = "# A tool\n\n## How this repository is maintained\n\n"
-    process = "Written with an assistant and reviewed by a person before publishing.\n"
+    process = ("Written with an assistant and reviewed by a person before publishing. "
+               "The internal design is not independently reviewed.\n")
     joined = heading + DECLARATION + "\n" + process
     independent = heading + process
     affiliating = (heading + "This repository works with the Eunoia ecosystem "
@@ -429,6 +430,9 @@ def note_forms() -> int:
         ("the independent soft note", independent, False, False, True),
         ("the affiliating soft note", affiliating, False, True, True),
         ("a bare maintenance note", bare, False, False, True),
+        ("an empty maintenance note", heading, False, False, False),
+        ("a placeholder maintenance note", heading + "Work in progress.\n",
+         False, False, False),
         # The claim without the link. Two repositories wrote their declaration
         # this way and were failed by a check that wanted the URL; the link is
         # now a minor finding, so this has to read as a declaration. The pair
