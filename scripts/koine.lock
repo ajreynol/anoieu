@@ -1,0 +1,10 @@
+# The commit of koine our bug database is appended to by.
+#
+# A pin is a choice, not a fact: moving it changes what maintains our record.
+# The ecosystem's rule is that a pin only moves to a commit where the other
+# project's CI is green.
+#
+# fc31e8d -- koine_append_db, the whole of koine. The earlier pin, d445add, was
+# a reporting-loop library with a findings record in it; that was deleted on
+# 2026-09-16 when koine was pointed at this one job, and we moved with it.
+fc31e8db07bd29ade2b16fd362998ff0ea84281b

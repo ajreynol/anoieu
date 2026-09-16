@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""Static analysis of every standard target -> the bugs it found -> the database.
+
+Three steps, and the middle one is the only file this script really produces:
+
+1. **run the checks** over the standard targets, wherever they are on this
+   machine;
+2. **dump what they found** -- `scratch/new-bugs.json`, a JSON list of bugs,
+   which is *this run* and nothing else;
+3. **add the new ones to the database** -- `docs/reports/bugs.json`, every bug
+   anoieu has ever found, by handing the dump to koine's `koine_append_db`.
+
+Step 3 is not ours. koine adds what is new, leaves alone what is already there,
+never edits or removes a bug, and prints a conflict when a later run describes a
+known bug differently. Re-running is free: the same dump twice adds nothing.
+
+    scripts/run_static_analysis                  # all three steps
+    scripts/run_static_analysis --no-update      # steps 1 and 2 only
+    scripts/run_static_analysis --target cpc     # one target, repeatable
+    scripts/run_static_analysis --dump FILE      # write the dump somewhere else
+
+**`--no-update` is how you look before you leap.** It writes the dump and stops,
+so you can read what this run found, diff it against the last one, or hand it to
+`koine_append_db --dry-run` yourself. Nothing touches the database.
+
+**The old workflow is untouched.** `scripts/run.py` still syncs `deps/` and
+writes `open-findings.md`; this writes a database and a page of its own beside
+them. Nothing here closes a row, and no verdict is in the database.
+
+**The second producer is an agent.** `prompts/prompt_static_analysis` asks an
+assistant the same question against the same targets and has it write a dump in
+the same shape. Appending that dump is the comparison: koine says how many bugs
+were new, how many were already known, and which descriptions conflict.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime
+import json
+import os
+import subprocess
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, ROOT)
+sys.path.insert(0, HERE)
+
+import koine  # noqa: E402
+import targets as config  # noqa: E402
+from gen_open_findings import collect  # noqa: E402
+
+DB = os.path.join(ROOT, "docs", "reports", "bugs.json")
+DUMP = os.path.join(ROOT, "scratch", "new-bugs.json")
+PAGE = os.path.join(ROOT, "docs", "reports", "static-analysis.md")
+
+TOOL = "anoieu"
+
+HEADER = """# Static analysis
+
+Every bug the checks have found on the standard targets, rendered from
+[`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
+you want the data rather than the table. Both are written by
+[`scripts/run_static_analysis`](../../scripts/run_static_analysis); the database
+is maintained by [koine](https://github.com/ajreynol/koine)'s `koine_append_db`,
+which adds what is new and never edits or removes what is already there.
+
+**This page is the new workflow and it is not yet the report.** The report is
+[`open-findings.md`](open-findings.md), generated the way it always was. Nothing
+here closes a bug and no verdict reached this file: a bug that has been fixed is
+still in the database, with the date it was last seen. What a finding is and what
+settles one stay ours -- see [`reporting-workflow.md`](reporting-workflow.md).
+
+A second producer, an agent driven by
+[`prompts/prompt_static_analysis`](../../prompts/prompt_static_analysis), writes
+a dump in the same shape and appends to the same database.
+"""
+
+
+# -- step 1: what the checks found -------------------------------------------
+
+def name_of(code: str, where: str) -> str:
+    """A bug's name: readable, and stable while it stays on its line.
+
+    `id` is what identifies it -- the fingerprint survives an edit elsewhere in
+    the file -- so this is the half a person reads.
+    """
+    path, _, line = where.rpartition(":")
+    return f"{code}-{os.path.basename(path)}-{line}"
+
+
+def scan(spec: list[dict], where: dict) -> list[dict]:
+    """Run each target, and return one entry per bug, in koine's dump shape."""
+    bugs: dict[str, dict] = {}
+    for t, tup in zip(spec, config.as_tuples(spec)):
+        root = where.get(t["project"], "")
+        if not root or not os.path.isdir(root):
+            print(f"   skipped {t['id']}: no checkout of {t['project']}")
+            continue
+        commit = config.commit_of(root)
+        found = collect(where, targets=[tup], fuzz=False)
+        for fid, row in found.items():
+            if fid in bugs:
+                continue
+            owner = row["owner"]
+            bugs[fid] = {
+                "id": fid,
+                "bug": name_of(row["code"], row["where"]),
+                "tool": TOOL,
+                "description": row["what"],
+                # ours, carried through koine untouched
+                "owner": owner,
+                "code": row["code"],
+                "where": row["where"],
+                "found_at": (commit if owner == t["project"]
+                             else config.commit_of(where.get(owner, "")) or commit),
+            }
+        print(f"   {t['id']:22} {len(found):4} bug(s) in {t['project']} "
+              f"at {commit or '(not a repository)'}")
+    return list(bugs.values())
+
+
+# -- step 3, and the page ----------------------------------------------------
+
+def append(dump: str, dry_run: bool = False) -> int:
+    """Hand the dump to koine. Everything about the database is over there."""
+    script = koine.append_db()
+    print(f"-- koine {koine.version(os.path.dirname(script)) or '(unknown)'}: "
+          f"{os.path.relpath(dump, ROOT)} -> {os.path.relpath(DB, ROOT)}")
+    argv = [sys.executable, script, dump, DB]
+    if dry_run:
+        argv.append("--dry-run")
+    sys.stdout.flush()  # koine writes to the same terminal; keep the log in order
+    return subprocess.run(argv).returncode
+
+
+def render() -> None:
+    """The table, from the database. Our page, our columns."""
+    with open(DB, encoding="utf-8") as fh:
+        bugs = json.load(fh)["bugs"]
+    cols = ("bug", "owner", "code", "where", "description", "first seen", "last seen")
+    lines = [HEADER, "", f"## Every bug found ({len(bugs)})", "",
+             "| " + " | ".join(cols) + " |",
+             "| " + " | ".join("---" for _ in cols) + " |"]
+    for b in bugs:
+        lines.append("| " + " | ".join([
+            f"`{b.get('bug', '')}`",
+            b.get("owner", ""),
+            b.get("code", ""),
+            f"`{b.get('where', '')}`" if b.get("where") else "",
+            b.get("description", "").replace("|", "\\|"),
+            b.get("first_seen", ""),
+            b.get("last_seen", ""),
+        ]) + " |")
+    open(PAGE, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    print(f"-- {os.path.relpath(PAGE, ROOT)}: {len(bugs)} row(s)")
+
+
+# -- the command -------------------------------------------------------------
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--target", action="append", default=[],
+                    help="run only this target id; repeatable")
+    ap.add_argument("--no-update", action="store_true",
+                    help="write the dump and stop: the database is not touched")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="ask koine what it would add, and let it write nothing")
+    ap.add_argument("--dump", default=DUMP, help=f"where to write this run's bugs "
+                    f"(default {os.path.relpath(DUMP, ROOT)})")
+    ap.add_argument("--config", default=config.CONFIG)
+    args = ap.parse_args()
+
+    spec = config.load(args.config)
+    try:
+        spec = config.select(spec, args.target)
+    except KeyError as bad:
+        print(f"-- no such target: {bad}", file=sys.stderr)
+        return 2
+
+    where, said = config.roots()
+    print(f"-- {len(spec)} target(s), paths from {said}")
+    bugs = scan(spec, where)
+
+    os.makedirs(os.path.dirname(os.path.abspath(args.dump)), exist_ok=True)
+    with open(args.dump, "w", encoding="utf-8") as fh:
+        json.dump(bugs, fh, indent=2)
+        fh.write("\n")
+    print(f"-- {os.path.relpath(args.dump, ROOT)}: {len(bugs)} bug(s) found by "
+          f"this run, on {datetime.date.today().isoformat()}")
+
+    if args.no_update:
+        print("-- --no-update: the database was not touched. To apply it:")
+        print(f"   scripts/run_static_analysis   (or: python3 "
+              f"{os.path.relpath(koine.append_db(), ROOT)} "
+              f"{os.path.relpath(args.dump, ROOT)} "
+              f"{os.path.relpath(DB, ROOT)} --dry-run)")
+        return 0
+
+    code = append(args.dump, args.dry_run)
+    if code == 0 and not args.dry_run:
+        render()
+    return code
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

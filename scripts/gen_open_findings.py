@@ -180,11 +180,19 @@ def owner_of(path: str, roots: dict) -> str:
     return "—"
 
 
-def collect(roots: dict) -> dict[str, dict]:
-    """Every finding, keyed by the fingerprint a closing step refers to."""
+def collect(roots: dict, targets: list | None = None, fuzz: bool = True) -> dict[str, dict]:
+    """Every finding, keyed by the fingerprint a closing step refers to.
+
+    `targets` defaults to every standard target, which is what a report is. It
+    is a parameter because `scripts/run_static_analysis` runs them one at a time,
+    so that each row can record which target saw it and at what commit -- a row's
+    absence says nothing until the record says whether anything read its file.
+    `fuzz` is off there for the same reason: the fuzzer is a separate producer
+    and a static analysis run should not claim its findings as something it read.
+    """
     load_checks()
     out: dict[str, dict] = {}
-    for _label, repo, rels, triple in TARGETS:
+    for _label, repo, rels, triple in (TARGETS if targets is None else targets):
         paths = [os.path.join(roots[repo], r) for r in rels]
         needed = list(paths) + (
             [os.path.join(roots[r], rel) for r, rel in triple.values()] if triple else []
@@ -232,8 +240,9 @@ def collect(roots: dict) -> dict[str, dict]:
     # and the findings that came from the other half. They are keyed by the
     # same fingerprint and shaped the same way, so from here down nothing
     # distinguishes them but their code -- which is the point.
-    for key, row in fuzz_rows().items():
-        out.setdefault(key, row)
+    if fuzz:
+        for key, row in fuzz_rows().items():
+            out.setdefault(key, row)
     return out
 
 

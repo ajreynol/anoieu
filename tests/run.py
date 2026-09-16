@@ -381,6 +381,43 @@ def landing_markers() -> int:
     return failures
 
 
+def targets_agree() -> int:
+    """The two workflows describe the same standard targets.
+
+    The old path reads the `TARGETS` literal in `scripts/gen_corpus_table.py`;
+    `scripts/run_static_analysis` and the agent prompt read
+    `scripts/targets.json`. Both are kept while the new workflow proves itself,
+    and two descriptions of one thing that nothing compares is the drift this
+    ecosystem keeps finding -- in a prompt, in a postmortem template, and here
+    it would be in what a report is a report of.
+    """
+    scripts = os.path.join(os.path.dirname(HERE), "scripts")
+    sys.path.insert(0, scripts)
+    import targets as config  # noqa: PLC0415
+    from gen_corpus_table import TARGETS  # noqa: PLC0415
+
+    spec = config.load()
+    listed = config.as_tuples(spec)
+    failures = 0
+    if listed != list(TARGETS):
+        only_json = [t for t in listed if t not in TARGETS]
+        only_py = [t for t in TARGETS if t not in listed]
+        for t in only_json:
+            print(f"FAIL scripts/targets.json has a target TARGETS does not: {t[0]!r}")
+        for t in only_py:
+            print(f"FAIL TARGETS has a target scripts/targets.json does not: {t[0]!r}")
+        if not only_json and not only_py:
+            print("FAIL scripts/targets.json and TARGETS agree on the targets "
+                  "and not on their order")
+        failures = max(1, len(only_json) + len(only_py))
+    ids = [t["id"] for t in spec]
+    for dup in {i for i in ids if ids.count(i) > 1}:
+        print(f"FAIL scripts/targets.json uses the target id {dup!r} twice")
+        failures += 1
+    print(f"-- standard targets: {len(spec)}, {failures} failure(s)")
+    return failures
+
+
 DECLARATION = """This repository is part of the **Eunoia ecosystem** and follows its shared
 [repository policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
 """
@@ -682,6 +719,7 @@ def main() -> int:
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += landing_markers()
+    failures += targets_agree()
 
     sys.stdout.flush()
     print()

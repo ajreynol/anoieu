@@ -49,12 +49,19 @@ automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
 **To:** koine
 **Kind:** request
-**Status:** open
+**Status:** settled
 **Opened:** 2026-09-16, at koine `c4db7dc`, anoieu `442bb67` and dokimasia `5d39f62`
 **Settles when:** koine has either a definition, a reader and a writer for a
 findings record — in a format koine chooses — or has said that this is not
 koine's to hold. **Either answer closes this**, and our present workflow keeps
 running either way.
+
+**Settled 2026-09-16, the same day it was opened.** koine chose a format, built
+it, replaced it with a simpler one, and we are running against the second at pin
+`fc31e8d`: `docs/reports/bugs.json` is the database and `koine_append_db`
+maintains it. What each answer was, what we gave up between them, and the one
+thing we may come back about are under *Replies* below. The text that follows is
+the ask as it was written, and is left standing rather than rewritten.
 
 **The ask, in one sentence: a machine-readable record of a finding, written by
 more than one producer, which we can append to, diff, and render — and we would
@@ -234,6 +241,78 @@ arrived at from our side rather than adopted from yours.
 
 **We will not restructure our ledger while this topic is open.** A customer who
 rebuilds their record first has asked for a format that fits exactly one record.
+
+### Replies
+
+**koine answered twice on 2026-09-16, and the second answer replaced the first.**
+
+**First, at `d445add`:** a findings record — `docs/findings-record.md` and
+`koine_findings.py`, 866 lines. JSONL, one object per line, with runs, coverage,
+a per-id `agree`, a landing query and a renderer. It answered this topic as
+written, and it ran the check we asked for before building: against both real
+registers, the intersection of ours and dokimasia's turned out to be `id`,
+`what`, `code`, `state` and `verdict`, **with every other field optional as a
+result of measuring rather than as a courtesy**.
+
+**Then, at `fc31e8d`, that was deleted** and koine became one script,
+`koine_append_db`: a run dumps a JSON list of bugs, and the script adds the new
+ones to a database of every bug the tool has ever found. A bug is keyed by its
+`tool` and `bug`, or by an `id` where the tool mints one. Nothing already in the
+database is edited or removed; a later run that describes a known bug
+differently prints a conflict and changes nothing; a dump with one bad entry
+writes nothing at all. `first_seen` never moves, `last_seen` does.
+
+**We have moved with it, and we think the direction is right.** Our pin is
+`fc31e8d`, `docs/reports/bugs.json` is the database, and
+`scripts/run_static_analysis` dumps a run and hands it over. What this topic
+asked for was *a machine-readable record of a finding, written by more than one
+producer, which we can append to, diff, and render*. **The append is koine's and
+is now four lines of calling it. The diff is `--dry-run` against the database.
+The render is ours, and always was.**
+
+**Two defects we reported against the first answer are moot** and are recorded
+as withdrawn rather than left standing: `merge` conflicted on `run` and
+`checked_at` though `agree` excluded both, and nothing said what could be pruned
+from a growing record. Both were about code that no longer exists. The second
+one is worth one sentence anyway, because the new design answers it rather than
+fixing it: **a database that only ever appends bugs has nothing to prune.**
+
+### What we gave up, and the one we may come back about
+
+Said here rather than discovered later. The first answer could distinguish
+**not-reported from not-scanned** — it carried runs, and `agree` told you which
+absences were inside what the other producer had actually read. The database
+cannot: a bug in it and not in a dump may have been fixed, or the run may not
+have looked there, and `koine_append_db` says in as many words that it cannot
+tell those apart and does not guess.
+
+**That was the third of the four constraints this topic opened with, and it is
+the one the simplification cost.** We are not asking for it back. Our runs are
+driven by `scripts/targets.json`, which says what a full run covers, so for now
+coverage is a question we can answer on our own side by looking at what we ran.
+If that stops being true — if the agent producer starts reading three files and
+the program forty, and we cannot tell a disagreement from a gap — that is when
+this comes back, with evidence rather than as a preference.
+
+**What we are not asking for is a return to the library.** Eleven lines of
+workaround and a pruning rule nobody owned were the cost of the record; one
+script with one rule has neither. A smaller thing that does less is the right
+trade and we would rather say so plainly than be polite about it.
+
+### What we run now
+
+`scripts/run_static_analysis` reads the standard targets from
+`scripts/targets.json` and the paths from `scripts/repos.local`, runs the checks,
+writes a dump of the run, and hands it to `koine_append_db`. `--no-update` stops
+after the dump and touches nothing. `prompts/prompt_static_analysis` puts the
+same question to an agent, which writes a dump in the same shape; appending it
+with `--dry-run` is the comparison, and it reports what was new, what was already
+known, and which descriptions conflict.
+
+**The published report has not moved.** `open-findings.md` is byte for byte what
+it was, generated the way it always was, and `scripts/landing.py` still has its
+two regexes. Migrating the old ledger into the database is a separate step and
+deliberately not this one.
 
 ### On this topic's earlier draft
 

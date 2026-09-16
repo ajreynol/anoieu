@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+# prompt_static_analysis -- the same static analysis, done by an agent.
+#
+# scripts/run_static_analysis runs the checks over the standard targets and dumps
+# what they found. This asks an assistant the same question against the same
+# targets, and has it write a dump in the same shape. Then the dump goes into the
+# same database, and koine says what was new and what was already known:
+#
+#   prompt_static_analysis                      # every standard target
+#   prompt_static_analysis cpc ethos-tests      # only these
+#   prompt_static_analysis --codex              # codex instead of claude
+#   prompt_static_analysis --show-prompt        # print it and run nothing
+#
+# When the agent has written its dump, appending it is the comparison:
+#
+#   python3 ../koine/koine_append_db scratch/agent-bugs.json \
+#           docs/reports/bugs.json --dry-run
+#
+# **`--dry-run` first, always.** *0 new, N already known* is the two producers
+# agreeing. *M new* is the agent finding what the checks did not -- which is
+# either a real gap in the checks or an invented bug, and telling those apart is
+# a person's job. A conflict is the two describing one bug differently.
+#
+# Run it here, in a checkout of anoieu. Nothing is sent anywhere, nothing is
+# committed, and the agent writes one file.
+
+set -euo pipefail
+
+AGENT=claude
+PRINT=0
+SHOW=0
+OUT="scratch/agent-bugs.json"
+WANT=()
+
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: prompt_static_analysis [--codex] [--out FILE] [--print] [--show-prompt] [TARGET...]
+
+  TARGET          a target id from scripts/targets.json. Omitted, every one.
+  --out FILE      where the agent writes its dump (default scratch/agent-bugs.json)
+  --codex         run codex instead of claude
+  --print         run non-interactively and print the result
+  --show-prompt   print the prompt and exit, running nothing
+USAGE
+  exit 2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --codex) AGENT=codex; shift ;;
+    --claude) AGENT=claude; shift ;;
+    --out) OUT="${2:-}"; [ -n "$OUT" ] || usage; shift 2 ;;
+    --print) PRINT=1; shift ;;
+    --show-prompt) SHOW=1; shift ;;
+    -h|--help) usage ;;
+    -*) echo "prompt_static_analysis: unknown option $1" >&2; usage ;;
+    *) WANT+=("$1"); shift ;;
+  esac
+done
+
+if [ ! -f "$ROOT/scripts/targets.json" ]; then
+  echo "prompt_static_analysis: no scripts/targets.json -- run this in a checkout of anoieu" >&2
+  exit 2
+fi
+
+# The targets, and where each project is on this machine. Both come from the two
+# files the program producer reads, because a second producer told to look
+# somewhere else is not a second producer -- it is a different question.
+TARGETS=$(cd "$ROOT" && python3 scripts/targets.py "${WANT[@]+"${WANT[@]}"}")
+
+read -r -d '' PROMPT <<PROMPT_END || true
+You are the second producer of anoieu's bug database. A program --
+scripts/run_static_analysis -- runs anoieu's checks over a set of targets and
+dumps what it found. You are being asked the same question against the same
+files, by reading them, so that the two dumps can be compared.
+
+**The comparison is by id, so the ids have to match.** An id is
+sha1(code + " " + path + " " + text of the line, stripped)[:16], where the path
+is relative to the owner's project root. Do not invent one:
+
+  python3 scripts/finding_id.py EO0031 proofs/eo/cpc/Cpc.eo 17 --root /the/checkout
+
+The targets, and where each project is on this machine:
+
+$TARGETS
+
+What the checks look for is documented, one page per code, in docs/checks.md.
+**Read it first and work only from codes that exist there.** A bug under a code
+you invented cannot be compared with anything. Do not run
+scripts/run_static_analysis, scripts/sweep.py or the anoieu CLI, and do not read
+docs/reports/bugs.json, scratch/new-bugs.json, open-findings.md or
+closed-findings.md: the whole value of this run is that it is independent of the
+program's answer. If you find yourself about to check what the program said,
+stop -- that is the one thing this producer must not do.
+
+Read the files under the targets above and report what you find. Be honest about
+coverage: better to read three files carefully and say so than to skim forty.
+You will not match the program's recall and you are not being asked to. What is
+being measured is whether, where you both looked, you agreed.
+
+Write $OUT, and nothing else: a JSON list, one object per bug.
+
+[
+  {
+    "id": "<the 16 hex digits from finding_id.py>",
+    "bug": "<CODE>-<basename of the file>-<line>",
+    "tool": "anoieu",
+    "description": "<the claim about that line, one sentence, in the check's terms>",
+    "owner": "<cvc5|ethos|logos|eudaimonia>",
+    "code": "<EO0031>",
+    "where": "<path/inside/that/project.eo>:<line>",
+    "found_at": "<that project's short commit>"
+  }
+]
+
+Four things to get right:
+
+1. \`where\` is relative to the **owner's** project, not to this repository, and
+   \`bug\` is built from the same code, file and line. \`id\` is what identifies
+   it; \`bug\` is the half a person reads.
+2. \`description\` is a claim about that line, in the check's terms. Not advice,
+   not a fix, not a paragraph.
+3. **Do not report the same bug twice.** Two entries with one id are refused by
+   the database, and nothing is written -- a dump with one bad entry applies
+   none of itself.
+4. Report only what a code in docs/checks.md covers. If you notice something
+   real that no code covers, put it in your reply to me as prose -- **not** in
+   the dump. That is a finding about the checks, which is a different
+   conversation.
+
+When the file is written, tell me how many bugs you wrote, which targets you
+actually read and which you did not get to, and anything you were unsure of.
+Then stop: do not append to the database, and change no other file.
+PROMPT_END
+
+if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
+
+mkdir -p "$ROOT/$(dirname "$OUT")"
+echo "-- anoieu at $ROOT"
+echo "-- the agent writes $OUT. Compare it with the database, writing nothing:"
+echo "   python3 \$(python3 -c 'import sys; sys.path.insert(0,\"scripts\"); import koine; print(koine.append_db())') \\"
+echo "           $OUT docs/reports/bugs.json --dry-run"
+echo
+
+cd "$ROOT"
+case "$AGENT" in
+  claude) [ "$PRINT" = 1 ] && exec claude -p "$PROMPT" || exec claude "$PROMPT" ;;
+  codex)  [ "$PRINT" = 1 ] && exec codex exec "$PROMPT" || exec codex "$PROMPT" ;;
+  *) echo "prompt_static_analysis: unknown agent $AGENT" >&2; exit 2 ;;
+esac

@@ -1,0 +1,63 @@
+{
+  "_comment": [
+    "The standard targets: what a static analysis run looks at, by name.",
+    "",
+    "A target is a project and the paths inside it that make up one analysis --",
+    "`Cpc.eo` is a target, ethos's test signatures are another. This file is",
+    "committed, because which files are worth analysing is a claim about the",
+    "ecosystem rather than a fact about a laptop.",
+    "",
+    "**Where each project sits on this machine is not here.** That is",
+    "`scripts/repos.local`, which is gitignored, because a path under somebody's",
+    "home directory is not a claim anybody else can check. Without it a run",
+    "falls back to `deps/`, the clones scripts/deps.py manages.",
+    "",
+    "`tests/run.py` fails if this file and the TARGETS list in",
+    "scripts/gen_corpus_table.py disagree. The old workflow reads that list and",
+    "the new one reads this file, and two descriptions of the same targets that",
+    "nothing compares is the drift this ecosystem keeps finding."
+  ],
+  "targets": [
+    {
+      "id": "cpc",
+      "label": "CPC",
+      "project": "cvc5",
+      "paths": ["proofs/eo/cpc/Cpc.eo"]
+    },
+    {
+      "id": "cpc-expert",
+      "label": "CPC with the expert signature",
+      "project": "cvc5",
+      "paths": ["proofs/eo/cpc/Cpc.eo", "proofs/eo/cpc/expert/CpcExpert.eo"]
+    },
+    {
+      "id": "ethos-tests",
+      "label": "ethos test signatures",
+      "project": "ethos",
+      "paths": ["tests"]
+    },
+    {
+      "id": "logos-defs",
+      "label": "logos installed definitions",
+      "project": "logos",
+      "paths": ["install/defs"]
+    },
+    {
+      "id": "eudaimonia-examples",
+      "label": "eudaimonia examples",
+      "project": "eudaimonia",
+      "paths": ["examples/hello"]
+    },
+    {
+      "id": "cpc-triple",
+      "label": "the CPC triple",
+      "project": "cvc5",
+      "paths": ["proofs/eo/cpc/Cpc.eo"],
+      "triple": {
+        "semantics": ["logos", "install/defs/Cpc.eos"],
+        "smt": ["ethos", "tools/eoc/semantics/smt.eos"],
+        "embedding": ["ethos", "plugins/model_smt/model_smt.eo"]
+      }
+    }
+  ]
+}
