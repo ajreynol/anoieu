@@ -67,7 +67,7 @@ Commands are run from the repository root unless noted.
 | `gen_corpus_table.py` | measure and render the corpus, imported by the runner |
 | `gen_open_findings.py` | add new findings; `--check` reports missing rows |
 | `landing.py` | report changes awaiting landing; `--check` reads checkouts |
-| `run_static_analysis` | run every standard target, dump the bugs, add the new ones to `docs/reports/bugs.json`; `--no-update` writes the dump and stops |
+| `run_static_analysis` | run every standard target, dump the bugs, add the new ones to `docs/reports/bugs.json`; `--dry-run` lists the signatures and analyses nothing, `--no-update` writes the dump and stops |
 | `targets.json`, `targets.py` | the standard targets, and where each project is on this machine |
 | `koine.py`, `koine.lock` | find the pinned [koine](https://github.com/ajreynol/koine), whose `koine_append_db` maintains the bug database |
 | `finding_id.py` | the id of one bug, computed the way the checks compute it |
@@ -81,7 +81,7 @@ Commands are run from the repository root unless noted.
 | --- | --- |
 | `check_anoieu` | answer findings in the repository they concern |
 | `process_anoieu` | process the reply here; `--dry-run` resolves the checkout without starting an assistant |
-| `prompt_static_analysis` | the second producer: an agent runs the same analysis over the same targets and writes a dump in the same shape |
+| `prompt_static_analysis` | the second producer: an agent runs the same analysis over the same targets and writes a dump in the same shape; `--dry-run` lists the same signatures |
 
 `scripts/repos.local` is an optional, untracked per-machine checkout map used by
 the findings workflow. Explicit checkout paths also work. Set

@@ -8,8 +8,13 @@
 #
 #   prompt_static_analysis                      # every standard target
 #   prompt_static_analysis cpc ethos-tests      # only these
+#   prompt_static_analysis --dry-run            # print the signatures, start nothing
 #   prompt_static_analysis --codex              # codex instead of claude
 #   prompt_static_analysis --show-prompt        # print it and run nothing
+#
+# `--dry-run` is the same listing scripts/run_static_analysis --dry-run gives,
+# because it is the same function: what the agent will be pointed at has to be
+# what the checks read, or the two are answering different questions.
 #
 # When the agent has written its dump, appending it is the comparison:
 #
@@ -29,6 +34,7 @@ set -euo pipefail
 AGENT=claude
 PRINT=0
 SHOW=0
+DRY=0
 OUT="scratch/agent-bugs.json"
 WANT=()
 
@@ -36,10 +42,11 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 
 usage() {
   cat >&2 <<'USAGE'
-usage: prompt_static_analysis [--codex] [--out FILE] [--print] [--show-prompt] [TARGET...]
+usage: prompt_static_analysis [--codex] [--out FILE] [--dry-run] [--print] [--show-prompt] [TARGET...]
 
   TARGET          a target id from scripts/targets.json. Omitted, every one.
   --out FILE      where the agent writes its dump (default scratch/agent-bugs.json)
+  --dry-run       print every signature that would be read, and start nothing
   --codex         run codex instead of claude
   --print         run non-interactively and print the result
   --show-prompt   print the prompt and exit, running nothing
@@ -52,6 +59,7 @@ while [ $# -gt 0 ]; do
     --codex) AGENT=codex; shift ;;
     --claude) AGENT=claude; shift ;;
     --out) OUT="${2:-}"; [ -n "$OUT" ] || usage; shift 2 ;;
+    --dry-run) DRY=1; shift ;;
     --print) PRINT=1; shift ;;
     --show-prompt) SHOW=1; shift ;;
     -h|--help) usage ;;
@@ -69,6 +77,8 @@ fi
 # files the program producer reads, because a second producer told to look
 # somewhere else is not a second producer -- it is a different question.
 TARGETS=$(cd "$ROOT" && python3 scripts/targets.py "${WANT[@]+"${WANT[@]}"}")
+
+if [ "$DRY" = 1 ]; then printf '%s\n' "$TARGETS"; exit 0; fi
 
 read -r -d '' PROMPT <<PROMPT_END || true
 You are the second producer of anoieu's bug database. A program --

@@ -92,15 +92,47 @@ def commit_of(path: str) -> str:
 
 
 def describe(spec: list[dict]) -> list[str]:
-    """One line per path a run would read, for a person or for a prompt."""
-    where, _ = roots()
-    out = []
+    """Every signature a run would read, resolved on this machine.
+
+    Concrete on purpose: a target names `tests`, and what is actually analysed is
+    the `.eo` files under it, minus the ones nobody here is the author of. A run
+    that reads nothing and a run that finds nothing print the same *0 bug(s)*, so
+    this is what tells the two apart before either happens.
+    """
+    from gen_corpus_table import not_audited, signatures  # noqa: PLC0415
+
+    where, said = roots()
+    out = [f"paths from {said}"]
+    total = 0
     for t in spec:
         root = where.get(t["project"], "")
         commit = commit_of(root)
+        out.append(f"{t['id']}  ({t['project']} at {commit or 'NOT A REPOSITORY'})")
+        if not root or not os.path.isdir(root):
+            out.append(f"  {root or '?'}   NO CHECKOUT -- this target is skipped")
+            continue
+        skip = not_audited(t["project"], root)
         for p in t["paths"]:
-            out.append(f"  {t['id']:22} {t['project']:12} {os.path.join(root, p)}"
-                       + (f"   (at {commit})" if commit else "   (MISSING)"))
+            full = os.path.join(root, p)
+            if not os.path.exists(full):
+                out.append(f"  {full}   MISSING")
+                continue
+            files = sorted({f for group in signatures([full], skip) for f in group})
+            kind = "directory" if os.path.isdir(full) else "file"
+            out.append(f"  {full}   {kind}, {len(files)} signature(s)")
+            total += len(files)
+        for excluded in sorted(skip):
+            if any(excluded.startswith(os.path.abspath(os.path.join(root, p)))
+                   for p in t["paths"]):
+                out.append(f"  {excluded}   NOT AUDITED -- somebody else is its author")
+        # The triple's companions are read to check the signature against, not
+        # analysed themselves, and they live in other projects. A target that
+        # silently lost one would still run, and report less.
+        for role, (project, rel) in sorted((t.get("triple") or {}).items()):
+            full = os.path.join(where.get(project, "?"), rel)
+            out.append(f"  {full}   {role}, from {project}"
+                       + ("" if os.path.exists(full) else "   MISSING"))
+    out.append(f"{total} signature(s) in {len(spec)} target(s)")
     return out
 
 
