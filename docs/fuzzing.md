@@ -7,6 +7,18 @@ whether it says something coherent; the fuzzer asks whether the programs that
 *read* signatures behave when one is not.
 
 ```bash
+scripts/anoieu_fuzzer                          # ethos against logos, 200 cases
+scripts/anoieu_fuzzer ethos logos 2000         # two checkers, and how hard to try
+scripts/anoieu_fuzzer --dry-run                # which binaries, which signature, run nothing
+```
+
+Two names and a number is the whole of the everyday interface: the checkers to
+compare, and how many cases to write. `anoieu_fuzzer --help` explains what N
+buys, with the measured cost per case. The first name is the reference, which is
+what gives a disagreement its direction. Underneath it is one command, and
+everything it does not carry is still reachable:
+
+```bash
 python3 -m anoieu_fuzz run --mode proof        # ethos against a second checker, on a fixed signature
 python3 -m anoieu_fuzz run --mode signature    # arbitrary signatures, at ethos alone
 ```

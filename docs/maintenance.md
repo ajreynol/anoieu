@@ -71,6 +71,7 @@ Commands are run from the repository root unless noted.
 | `targets.json`, `targets.py` | the standard targets, and where each project is on this machine |
 | `koine.py`, `koine.lock` | find the pinned [koine](https://github.com/ajreynol/koine), whose `koine_append_db` maintains the bug database |
 | `finding_id.py` | the id of one bug, computed the way the checks compute it |
+| `anoieu_fuzzer` | fuzz two checkers against each other: `anoieu_fuzzer ethos logos N`, where N is how many cases; `--dry-run` resolves the binaries and runs nothing. The full interface is `python3 -m anoieu_fuzz run` |
 | `harvest_cpc_proofs` | collect real CPC proofs for the fuzzer |
 | `oracle_desugar.py` | compare desugaring against an ethos binary |
 | `sweep.py` | read every signature under the supplied paths |

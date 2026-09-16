@@ -1,0 +1,229 @@
+#!/usr/bin/env python3
+"""Fuzz two Eunoia checkers against each other.
+
+    anoieu_fuzzer                      # ethos logos, at the default effort
+    anoieu_fuzzer ethos logos 2000     # the same, working harder
+    anoieu_fuzzer --dry-run            # say what would run, and run nothing
+
+Two names and a number. The names are the checkers to compare -- by the
+ecosystem's project ids, the same names `scripts/repos.local` uses -- and the
+number is how much effort to spend. Everything else has a default, and
+`python3 -m anoieu_fuzz run` is still there for the full interface.
+
+**The first name is the reference.** A disagreement is reported in a direction,
+and the reference is the checker that defines, operationally, which files are
+Eunoia -- not the one more likely to be right. Accepting what the reference
+refuses is the serious direction and is reported as an error; refusing what it
+accepts is a completeness gap and is a warning.
+
+**A quiet run is not a clean bill of health.** It means the cases this run
+happened to write did not provoke anything. We publish reproducers, never
+assurances.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, ROOT)
+sys.path.insert(0, HERE)
+
+import targets as config  # noqa: E402
+from anoieu_fuzz.checkers import DEFAULT_CONFIG  # noqa: E402
+
+#: The two this exists for. Any other name works and is configured on the way
+#: through, on the assumption it takes one file and prints one word.
+DEFAULT_CHECKERS = ("ethos", "logos")
+
+#: How many cases when nobody says. About thirteen seconds here -- long enough
+#: to be worth running, short enough to run while you wait.
+DEFAULT_EFFORT = 200
+
+#: Where a checker's binary might be inside its own checkout. Tried in order,
+#: and only after `$ETHOS`-style environment variables, which are the documented
+#: way to say it exactly.
+BUILD_PATHS = ("build/src/{name}", "build/{name}", "bin/{name}",
+               ".lake/build/bin/{name}", "target/release/{name}")
+
+EFFORT_HELP = """\
+N is effort: how many cases the run generates, and nothing subtler.
+
+One case is one generated file, handed to every checker and compared. Measured
+against ethos and logos on this machine, a case costs about 0.07 seconds and the
+cost is linear:
+
+    N       time        N       time
+    200     13s         5000    5min
+    1000    1min        20000   22min
+
+--jobs runs cases at once and divides that. A run that finds something spends
+longer, because it then shrinks the case down to what still provokes it.
+
+**N is not linear in what it finds.** Within a run, a case that reaches a
+diagnostic nothing has reached before is kept and mutated, so a long run
+explores from what it found -- which several short runs cannot do. Between runs
+nothing is remembered except what you promote, so varying --seed is how you
+cover different ground rather than the same ground again.
+
+The default, 200, is the one worth running while you wait. A nightly job wants
+four figures."""
+
+
+def resolve(name: str, where: dict) -> tuple[str, str]:
+    """The binary this name runs, and what said so."""
+    env = os.environ.get(name.upper(), "")
+    if env:
+        return (env if os.path.isfile(env) else shutil.which(env) or ""), f"${name.upper()}"
+    root = where.get(name, "")
+    if root and os.path.isdir(root):
+        for pattern in BUILD_PATHS:
+            candidate = os.path.join(root, pattern.format(name=name))
+            if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+                return candidate, f"built in {root}"
+    found = shutil.which(name)
+    return (found or ""), ("on PATH" if found else "not found")
+
+
+def signature_of(given: str) -> tuple[str, str]:
+    """The fixed signature proofs are written against."""
+    if given:
+        return os.path.abspath(given), "given"
+    env = os.environ.get("CPC", "")
+    if env:
+        return env, "$CPC"
+    guess = os.path.join(ROOT, "deps", "cvc5", "proofs", "eo", "cpc", "Cpc.eo")
+    return guess, ("the deps/ clone" if os.path.isfile(guess) else "MISSING")
+
+
+def config_for(names: list[str], out_dir: str) -> str:
+    """A config file, when a name is not one the fuzzer already knows.
+
+    The checker contract is one file in, one word out, so a third checker is
+    three lines rather than a plugin -- and this writes those three lines.
+    """
+    unknown = [n for n in names if n not in DEFAULT_CONFIG["checkers"]]
+    if not unknown:
+        return ""
+    cfg = {"checkers": dict(DEFAULT_CONFIG["checkers"])}
+    for name in unknown:
+        cfg["checkers"][name] = {"env": name.upper(),
+                                 "modes": {"proof": [name, "{file}"],
+                                           "signature": [name, "{file}"]}}
+    path = os.path.join(out_dir, "anoieu-fuzz.json")
+    os.makedirs(out_dir, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(cfg, fh, indent=2)
+    return path
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(
+        prog="anoieu_fuzzer",
+        description="Fuzz two Eunoia checkers against each other, and report "
+                    "where they disagree or fall over.",
+        epilog=EFFORT_HELP,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("args", nargs="*", metavar="CHECKER CHECKER N",
+                    help=f"two checkers to compare and how much effort to spend "
+                         f"(default: {' '.join(DEFAULT_CHECKERS)} {DEFAULT_EFFORT}). "
+                         f"The first checker is the reference")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="print what would run -- which binaries, which "
+                         "signature, how many cases -- and run nothing")
+    ap.add_argument("--mode", choices=("proof", "signature"), default="proof",
+                    help="write proofs against a fixed signature (default), or "
+                         "write signatures and ask one checker alone")
+    ap.add_argument("--signature", default="",
+                    help="the signature proofs are written against "
+                         "(default: $CPC, or the deps/ clone)")
+    ap.add_argument("--seed", default="0",
+                    help="the seed every case is derived from; vary it across "
+                         "runs to cover different ground (default 0)")
+    ap.add_argument("--jobs", type=int, default=1, help="cases to run at once")
+    ap.add_argument("--out", default="fuzz-findings",
+                    help="where findings are kept (default fuzz-findings/)")
+    ap.add_argument("--", dest="_sep", action="store_true",
+                    help="everything after this goes to `anoieu_fuzz run` "
+                         "untouched, for the flags this face does not carry")
+    # Everything after `--` goes to `anoieu_fuzz run` untouched. Split it off
+    # before argparse sees it: argparse's REMAINDER would swallow this script's
+    # own flags whenever they followed a positional.
+    incoming = sys.argv[1:]
+    extra: list[str] = []
+    if "--" in incoming:
+        cut = incoming.index("--")
+        incoming, extra = incoming[:cut], incoming[cut + 1:]
+    args = ap.parse_args(incoming)
+
+    # Two names and a number, in any of the shapes somebody would type them.
+    names, effort = list(DEFAULT_CHECKERS), DEFAULT_EFFORT
+    given = [a for a in args.args]
+    if given and given[-1].isdigit():
+        effort = int(given.pop())
+    if given:
+        names = given
+    if effort < 1:
+        print("anoieu_fuzzer: N is a number of cases, so it is at least 1",
+              file=sys.stderr)
+        return 2
+
+    where, said = config.roots()
+    signature, sig_from = signature_of(args.signature)
+    found = {name: resolve(name, where) for name in names}
+
+    if args.dry_run or any(not path for path, _ in found.values()):
+        print(f"checkers   (paths from {said})")
+        for name in names:
+            path, how = found[name]
+            role = "reference" if name == names[0] else "compared"
+            print(f"  {name:12} {path or 'NOT FOUND':48} {how}, {role}")
+        if args.mode == "proof":
+            print(f"signature\n  {signature:61} {sig_from}")
+        print(f"effort\n  {effort} case(s), mode {args.mode}, seed {args.seed}, "
+              f"{args.jobs} at a time")
+        print(f"findings\n  {os.path.abspath(args.out)}")
+        missing = [n for n in names if not found[n][0]]
+        if missing and not args.dry_run:
+            print(f"\nanoieu_fuzzer: no binary for {', '.join(missing)}. Put it "
+                  f"on PATH, set ${missing[0].upper()}, or build it in the "
+                  f"checkout scripts/repos.local names.", file=sys.stderr)
+            return 2
+        if args.dry_run:
+            if missing:
+                print(f"\n-- {', '.join(missing)} would not run: no binary")
+            return 0
+
+    argv = [sys.executable, "-m", "anoieu_fuzz", "run",
+            "--mode", args.mode, "-n", str(effort), "--seed", args.seed,
+            "--jobs", str(args.jobs), "--out", args.out,
+            "--reference", names[0]]
+    for name in names:
+        argv += ["--checker", name]
+    if args.mode == "proof" and os.path.isfile(signature):
+        argv += ["--signature", signature]
+    cfg = config_for(names, tempfile.mkdtemp(prefix="anoieu-fuzzer-"))
+    if cfg:
+        argv += ["--config", cfg]
+
+    # A checkout's binary is passed the documented way, rather than by rewriting
+    # the command: `$ETHOS` is how the fuzzer has always been told where one is.
+    env = dict(os.environ)
+    for name in names:
+        path, how = found[name]
+        if path and how.startswith("built in"):
+            env[name.upper()] = path
+
+    sys.stdout.flush()
+    return subprocess.run(argv + extra, cwd=ROOT, env=env).returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
