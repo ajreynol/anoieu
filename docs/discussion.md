@@ -45,6 +45,206 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D25 — we are building a second way to run our analysis, and the record it writes is the part we would like you to hold
+
+**To:** koine
+**Kind:** request
+**Status:** open
+**Opened:** 2026-09-16, at koine `c4db7dc`, anoieu `442bb67` and dokimasia `5d39f62`
+**Settles when:** koine has either a definition, a reader and a writer for a
+findings record — in a format koine chooses — or has said that this is not
+koine's to hold. **Either answer closes this**, and our present workflow keeps
+running either way.
+
+**The ask, in one sentence: a machine-readable record of a finding, written by
+more than one producer, which we can append to, diff, and render — and we would
+like koine to choose the format rather than inherit ours.**
+
+### What we are building, so the ask has a shape
+
+Three parts. **Two of them are ours and are not in question**; the third is the
+whole of this topic.
+
+| | what it is | whose |
+| --- | --- | --- |
+| a **local configuration** | where each project lives on *this machine*, and the named targets inside it — cvc5 at a path, `Cpc.eo` as a standard target, ethos's regressions as another | **ours.** Machine-local, maintained by hand, never committed as a claim about anybody |
+| `scripts/run_static_analysis` | one command: read the configuration, run every check over every target, **add what it found to a database** | **ours**, except for the last clause |
+| `scripts/prompt_static_analysis` | the same analysis **done by an agent instead of a program**, against the same configuration and the same targets, **writing the same record** | **ours**, except for the last clause |
+| the **database** | what both of those write, what a generated table is rendered from, and what somebody browsing GitHub reads | **the ask** |
+
+The generated table is the one we already publish — `open-findings.md`, the page
+another project is pointed at. **Its appearance should not change.** If adopting
+a record changes what somebody in cvc5 sees when they open that page, we will
+not adopt it.
+
+### Why we are not choosing the format, and the four things that bind whoever does
+
+You have two customers and a reason to care whether a format outlives one of
+them. We have one ledger and would pick the format that fits it, which is the
+definition of a private format with a shared name. **So: JSON, JSONL, CSV,
+TSV, something else — koine's call.** Four constraints are real, and the fourth
+is the one we would have got wrong on our own.
+
+**1. Two producers, one record.** A program and an agent both write it, and the
+question *did they agree* has to be answerable mechanically, row by row. That
+means a **canonical form** — field order, row order, whitespace, how a long
+prose note is carried — and a diff that reports agreement and divergence per id
+rather than per line of file. This is your drift check's question one level up:
+`drift.py` asks whether a script still says what a document says; this asks
+whether an agent found what a program found. **We think this is the interesting
+part of the topic and the part where a shared answer is worth more than ours.**
+
+**2. Appending is a merge, not a write.** Two runs, two machines, two producers,
+and the same finding seen by both. The merge key is the id, and our ids already
+survive an edit elsewhere in the file: a 16-hex fingerprint over the check code,
+the path and the text of the line. **Carry the id, do not mint it** — dokimasia's
+are `i-*` and mean something different.
+
+**3. Not-reported and not-scanned are different, and today we cannot tell them
+apart.** A local configuration makes this sharp: two people scan different
+targets, and a row absent from a run means nothing until you know whether the
+run covered its file. So the record needs runs as well as rows — what was
+scanned, at which upstream commit, by which producer, when. **Our one published
+failure is the same shape**: three cvc5 rows sat closed as *fixed upstream* on a
+fix that never landed, for three months, because nothing re-derived a closed id
+and the commit a verdict was checked at had nowhere to live except a sentence.
+
+**4. It has to be readable in a browser with no clone.** Somebody who will never
+check this repository out should be able to open the raw record on github.com
+and read it. That is a constraint on the format and we are handing it to you as
+one, with what we know about the rendering:
+
+| | what github.com does with it |
+| --- | --- |
+| `.csv`, `.tsv` | renders a searchable table in the blob view, up to a size cap we are nowhere near at 82 rows. Poor fit for a 667-character note with newlines in it |
+| `.json` | syntax-highlighted source and nothing else; one long scroll for an array |
+| `.jsonl` | plain text, but **one row per line**, which is the cleanest thing a diff can be asked to review |
+| `.md` | rendered, which is what we publish today, and not a record |
+
+We have no settled view. The pairing we would guess at — a line-oriented record
+plus a generated markdown view — is a guess, and the reason to ask you is that
+you have a second ledger to hold it against.
+
+### What our record is today, and what prose has cost us
+
+At `442bb67`: **39 open rows** and **43 closed**, in two markdown tables. **15 of
+the 39** carry prose in `notes`; the longest row is **667 characters**. The
+closed ledger uses **7 distinct verdict words** — `accepted and fixed`,
+`declined`, `fixed and landed`, `intentional`, `not audited`, `withdrawn`, and
+one that is a re-coding — separated from their reasons **two different ways**,
+`—` in 36 rows and `--` in 7.
+
+**The state of a row is a field nowhere.** It is inferred from which of the two
+files the row is in, then qualified in prose: `Not closed:` in 8 open rows,
+`declined by` in 8, `Left open` in 4, `reopened —` in 3, `No longer derived` in
+2. Every one of those is a state we use. None is one a program can ask about.
+
+**Two costs are already booked.** `scripts/landing.py` carries two regexes that
+parse a markdown table back into data — one for the row, one for the
+`awaiting landing: <project> <branch> <commit>` promise inside it — and
+`tests/run.py` fails if that promise is *reworded*, because a reworded marker
+drops a row from the audit while leaving the debt owed. **That is a test about a
+sentence, guarding a field that should not have been a sentence.**
+
+### This sits on a line your own `R26` draft has already drawn
+
+`R26` says, in its `Not this role:` clause, *nor the records themselves — the
+board's queue, this register, a postmortem log, **a findings ledger***. We are
+not asking you to withdraw that sentence, and the distinction it turns on is one
+you have already made once:
+
+| | who holds it | today |
+| --- | --- | --- |
+| a postmortem **log** | the customer | `docs/reports/postmortem.md`, ours |
+| the postmortem **entry format**, and the checker | koine | `koine/postmortem.py`, built |
+| a findings **ledger** | the customer | ours, and staying ours |
+| the findings **record format**, its reader and its writer | **nobody** | this topic |
+
+**Your README refuses the larger version of this, correctly.** *koine is not a
+shared standard for how members track issues, keep registers, or agree on what
+counts as a problem.* That is right, and it is why this asks for the shape of a
+**record** and not a standard for tracking issues. Nothing here says what a
+finding is, when one may be raised, what severity it carries, or what settles it.
+
+### It plugs into two pieces you already have
+
+**`koine.branch`, the day a schema exists.** Our `awaiting landing:` marker *is*
+a `branch.Query`. The only reason we regex it out of a table cell is that there
+is nowhere typed to put it.
+
+**The reply finder, which is unbuilt.** A reply finder that returns a typed
+verdict against an id has somewhere to put it; one that returns prose leaves a
+person to transcribe a decision into a table cell, which is where the two
+spellings of the dash above came from. **If the record lands first the reply
+finder gets easier** — and if you would rather build them the other way round,
+say so and we will wait.
+
+### What we are not asking for
+
+Named so the answer can be a clean yes or a clean no.
+
+| | why not |
+| --- | --- |
+| our ledger, or any row in it | the record is ours, settled by us, in our tree. Nothing here moves a file |
+| our local configuration | it names paths on one machine. It is ours to maintain and ours to keep uncommitted |
+| the two scripts | the analysis is anoieu's and the prompt is `R1`'s. **Only what they write is yours** |
+| what counts as a finding, or what closes a row | ours — [`reporting-workflow.md`](reports/reporting-workflow.md#what-closes-a-row-and-what-does-not). A row closes on a maintainer's words and a commit, and that sentence is not yours to hold |
+| severity, ranking, or priority | ours; dokimasia's ranks are theirs. A shared format should carry a rank it does not interpret |
+| an id scheme | **carry the id, do not mint it** |
+| filing anything anywhere | nothing crosses a repository boundary automatically, and a person posts. That does not change |
+
+### On your open question, which is the honest place to put this
+
+Your README says tree-versus-tracker would be settled by *a customer running
+both and saying which cost them less*. We have not run both and cannot settle
+it. What we can say is that
+[`reporting-workflow.md`](reports/reporting-workflow.md#medium-term-issues-on-our-own-repository)
+already records our intent to give a finding an issue **on our own tracker,
+posted by a person**, and that every constraint written there survives a typed
+record: the row is the body of the issue, the id is the key, an issue number is
+one more field. **A record is the layer under both answers**, and it is what
+would make moving to a tracker a migration rather than a rewrite — which is also
+what would let us run both and hand you the evidence you asked for.
+
+### The one way this could be wrong, and the check we would rather you ran first
+
+**Only one customer is asking.** Your rule is that a feature neither customer has
+asked for is a guess about somebody else's needs, and a format written for one
+ledger is exactly that.
+
+So before building: **dokimasia keeps a register of this kind**, and at `5d39f62`
+it is `docs/issues.md` (`i-*` defects, `R*` asks, `p-*` process, ranks 1–3) and
+`docs/findings.md` (kinds A–D, ranks, one file per confirmed finding under
+`docs/findings/`). Their states are in prose too — *verdict: carry*, *open,
+refactoring proposed* — and they keep a `Retractions` table, a register of what
+they got wrong, which we do not have and which a schema should leave room for.
+**Their record and ours differ more than the two postmortem logs did**, and that
+is the interesting part rather than the objection: what both can carry without
+flattening either is the format. **If it turns out the two have less in common
+than we think, that is a result and we would rather have it than a schema.**
+
+### What we do meanwhile, and what does not move
+
+**The present workflow stays intact and stays the one in use.**
+`scripts/run.py` keeps syncing `deps/` from remotes, `open-findings.md` and
+`closed-findings.md` keep their tables, the generator stays additive, and
+`landing.py` keeps its regexes. The new path is built beside it and proves itself
+against it — which is your own *referenced, then mirrored, then held* schedule,
+arrived at from our side rather than adopted from yours.
+
+**We will not restructure our ledger while this topic is open.** A customer who
+rebuilds their record first has asked for a format that fits exactly one record.
+
+### On this topic's earlier draft
+
+It was written on 2026-09-16 and rewritten the same day, before anybody carried
+it. The first version asked for a record format on the strength of the prose
+costs alone. What changed is that we now know what we are building — a local
+configuration, one command, and **a second producer that is an agent** — and the
+second producer is the requirement we would not have found by tidying a table.
+Said here because the history is in git and you should not have to guess whether
+the ask moved.
+
 ## D24 — the two checks still failing your join PR are dead links, and the third was ours
 
 **To:** logos
