@@ -4,11 +4,15 @@ A static analyzer and differential fuzzer for **Eunoia**, the signature (`.eo`)
 and semantic configuration (`.eos`) languages used by
 [ethos](https://github.com/cvc5/ethos) and its Eunoia compiler.
 
-- **The analyzer** reads signatures and semantics without running a proof. It
-  finds structural errors, type inconsistencies, unreachable program cases,
-  and disagreements between a signature and its semantics.
-- **The fuzzer** generates and mutates inputs, runs checkers, and reduces
-  crashes or disagreements to small reproducers.
+- **The analyzer** — `scripts/anoieu_analyzer` — reads signatures and semantics
+  without running a proof. It finds structural errors, type inconsistencies,
+  unreachable program cases, and disagreements between a signature and its
+  semantics.
+- **The fuzzer** — `scripts/anoieu_fuzzer` — generates and mutates inputs, runs
+  checkers, and reduces crashes or disagreements to small reproducers.
+
+Both take `--dry-run`, which resolves everything a run would touch and runs
+nothing. Both are one command over a fuller interface that is still there.
 
 There is also an optional repository-policy check for CI in Eunoia ecosystem
 projects.
@@ -21,6 +25,28 @@ correctness.
 ## Run the analyzer
 
 Python 3.10 or later; no Python dependencies. From a checkout:
+
+```bash
+scripts/anoieu_analyzer                 # every standard target, into the bug database
+scripts/anoieu_analyzer --dry-run       # which signatures that means, concretely
+scripts/anoieu_analyzer --no-update     # find the bugs, leave the database alone
+```
+
+That is the entry point for running anoieu over what it watches. It reads the
+standard targets from `scripts/targets.json`, finds each project where
+`scripts/repos.local` says it is on this machine, runs every check, and adds
+whatever is new to [`docs/reports/bugs.json`](docs/reports/bugs.json) — the
+database of every bug anoieu has found, appended to by
+[koine](https://github.com/ajreynol/koine) and rendered as a table in
+[`static-analysis.md`](docs/reports/static-analysis.md). `--dry-run` runs no
+checks: it prints the signature files a run would read, which is what tells a
+run that found nothing apart from a run that read nothing.
+
+`prompts/anoieu_analyzer_agent` puts the same question to an assistant, against
+the same targets, in the same output shape — so the two can be compared.
+
+**To check one signature of your own**, which is what another project wants, the
+analyzer is a command in its own right and needs none of the above:
 
 ```bash
 python3 -m anoieu check path/to/signature.eo
@@ -46,7 +72,21 @@ and limitations.
 
 ## Run the fuzzer
 
-Provide builds of the checkers you want to exercise:
+Two names and a number: the checkers to compare, and how many cases to write.
+
+```bash
+scripts/anoieu_fuzzer                   # ethos against logos, 200 cases
+scripts/anoieu_fuzzer ethos logos 2000  # the same, working harder
+scripts/anoieu_fuzzer --dry-run         # which binaries, which signature, run nothing
+```
+
+The first name is the reference — the checker a disagreement's direction is
+measured against, which is what makes accepting what it refuses the serious
+result. Binaries are found from `$ETHOS`-style variables, from a build inside the
+checkout, or on `PATH`, and `--dry-run` says which won. `anoieu_fuzzer --help`
+explains what N buys, with the measured cost of a case.
+
+Everything that face does not carry is still reachable underneath:
 
 ```bash
 ETHOS=/path/to/ethos LOGOS=/path/to/logos \
@@ -70,6 +110,12 @@ The [report register](docs/reports/reports.md) records what anoieu is asking of
 each project, the evidence, and the response. The
 [open findings](docs/reports/open-findings.md) list current reports; the
 [corpus report](docs/reports/corpus.md) identifies the source commits measured.
+
+The [bug database](docs/reports/bugs.json) is the other half, and a newer one:
+every bug `scripts/anoieu_analyzer` has found, with the date each was first and
+last seen, appended to and never rewritten. It carries no verdicts — a bug
+somebody has ruled on is still in it — so the open findings remain the report,
+and the database remains the record of what was found.
 
 A reply is triage. A finding closes when the relevant artifact establishes what
 happened. The [reporting workflow](docs/reports/reporting-workflow.md) explains
