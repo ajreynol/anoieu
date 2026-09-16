@@ -10,8 +10,8 @@ Two files, and the split between them is the point:
   version on my laptop* is a report about nothing -- which is why `deps/` exists
   and is what a run falls back to.
 
-Both producers read this: `scripts/run_static_analysis` to run the checks, and
-`prompts/prompt_static_analysis` to tell an agent which files to read. A second
+Both producers read this: `scripts/anoieu_analyzer` to run the checks, and
+`prompts/anoieu_analyzer_agent` to tell an agent which files to read. A second
 producer pointed at different files is not a second producer, it is a different
 question.
 """

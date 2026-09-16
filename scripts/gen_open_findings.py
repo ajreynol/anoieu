@@ -184,7 +184,7 @@ def collect(roots: dict, targets: list | None = None, fuzz: bool = True) -> dict
     """Every finding, keyed by the fingerprint a closing step refers to.
 
     `targets` defaults to every standard target, which is what a report is. It
-    is a parameter because `scripts/run_static_analysis` runs them one at a time,
+    is a parameter because `scripts/anoieu_analyzer` runs them one at a time,
     so that each row can record which target saw it and at what commit -- a row's
     absence says nothing until the record says whether anything read its file.
     `fuzz` is off there for the same reason: the fuzzer is a separate producer

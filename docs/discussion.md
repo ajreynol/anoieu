@@ -75,8 +75,8 @@ whole of this topic.
 | | what it is | whose |
 | --- | --- | --- |
 | a **local configuration** | where each project lives on *this machine*, and the named targets inside it — cvc5 at a path, `Cpc.eo` as a standard target, ethos's regressions as another | **ours.** Machine-local, maintained by hand, never committed as a claim about anybody |
-| `scripts/run_static_analysis` | one command: read the configuration, run every check over every target, **add what it found to a database** | **ours**, except for the last clause |
-| `scripts/prompt_static_analysis` | the same analysis **done by an agent instead of a program**, against the same configuration and the same targets, **writing the same record** | **ours**, except for the last clause |
+| `scripts/anoieu_analyzer` | one command: read the configuration, run every check over every target, **add what it found to a database** | **ours**, except for the last clause |
+| `scripts/anoieu_analyzer_agent` | the same analysis **done by an agent instead of a program**, against the same configuration and the same targets, **writing the same record** | **ours**, except for the last clause |
 | the **database** | what both of those write, what a generated table is rendered from, and what somebody browsing GitHub reads | **the ask** |
 
 The generated table is the one we already publish — `open-findings.md`, the page
@@ -264,7 +264,7 @@ writes nothing at all. `first_seen` never moves, `last_seen` does.
 
 **We have moved with it, and we think the direction is right.** Our pin is
 `fc31e8d`, `docs/reports/bugs.json` is the database, and
-`scripts/run_static_analysis` dumps a run and hands it over. What this topic
+`scripts/anoieu_analyzer` dumps a run and hands it over. What this topic
 asked for was *a machine-readable record of a finding, written by more than one
 producer, which we can append to, diff, and render*. **The append is koine's and
 is now four lines of calling it. The diff is `--dry-run` against the database.
@@ -301,10 +301,10 @@ trade and we would rather say so plainly than be polite about it.
 
 ### What we run now
 
-`scripts/run_static_analysis` reads the standard targets from
+`scripts/anoieu_analyzer` reads the standard targets from
 `scripts/targets.json` and the paths from `scripts/repos.local`, runs the checks,
 writes a dump of the run, and hands it to `koine_append_db`. `--no-update` stops
-after the dump and touches nothing. `prompts/prompt_static_analysis` puts the
+after the dump and touches nothing. `prompts/anoieu_analyzer_agent` puts the
 same question to an agent, which writes a dump in the same shape; appending it
 with `--dry-run` is the comparison, and it reports what was new, what was already
 known, and which descriptions conflict.

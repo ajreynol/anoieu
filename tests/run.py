@@ -385,7 +385,7 @@ def targets_agree() -> int:
     """The two workflows describe the same standard targets.
 
     The old path reads the `TARGETS` literal in `scripts/gen_corpus_table.py`;
-    `scripts/run_static_analysis` and the agent prompt read
+    `scripts/anoieu_analyzer` and the agent prompt read
     `scripts/targets.json`. Both are kept while the new workflow proves itself,
     and two descriptions of one thing that nothing compares is the drift this
     ecosystem keeps finding -- in a prompt, in a postmortem template, and here

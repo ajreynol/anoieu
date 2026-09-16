@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """The id of a finding, computed the way the checks compute it.
 
-Two producers write the findings record -- `scripts/run_static_analysis`, which
-is the checks, and an agent driven by `prompts/prompt_static_analysis`. They are
+Two producers write the findings record -- `scripts/anoieu_analyzer`, which
+is the checks, and an agent driven by `prompts/anoieu_analyzer_agent`. They are
 compared **per id**, so an agent that invents its own ids is not comparable with
 the program at all, however good its reading of the file was.
 

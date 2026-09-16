@@ -14,11 +14,11 @@ Step 3 is not ours. koine adds what is new, leaves alone what is already there,
 never edits or removes a bug, and prints a conflict when a later run describes a
 known bug differently. Re-running is free: the same dump twice adds nothing.
 
-    scripts/run_static_analysis                  # all three steps
-    scripts/run_static_analysis --dry-run        # analyse nothing: say what would be read
-    scripts/run_static_analysis --no-update      # steps 1 and 2 only
-    scripts/run_static_analysis --target cpc     # one target, repeatable
-    scripts/run_static_analysis --dump FILE      # write the dump somewhere else
+    scripts/anoieu_analyzer                  # all three steps
+    scripts/anoieu_analyzer --dry-run        # analyse nothing: say what would be read
+    scripts/anoieu_analyzer --no-update      # steps 1 and 2 only
+    scripts/anoieu_analyzer --target cpc     # one target, repeatable
+    scripts/anoieu_analyzer --dump FILE      # write the dump somewhere else
 
 **`--dry-run` runs no checks at all.** It resolves the targets against this
 machine and prints, concretely, every signature file that would be read -- which
@@ -36,7 +36,7 @@ touched.
 writes `open-findings.md`; this writes a database and a page of its own beside
 them. Nothing here closes a row, and no verdict is in the database.
 
-**The second producer is an agent.** `prompts/prompt_static_analysis` asks an
+**The second producer is an agent.** `prompts/anoieu_analyzer_agent` asks an
 assistant the same question against the same targets and has it write a dump in
 the same shape. Appending that dump is the comparison: koine says how many bugs
 were new, how many were already known, and which descriptions conflict.
@@ -71,7 +71,7 @@ HEADER = """# Static analysis
 Every bug the checks have found on the standard targets, rendered from
 [`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
 you want the data rather than the table. Both are written by
-[`scripts/run_static_analysis`](../../scripts/run_static_analysis); the database
+[`scripts/anoieu_analyzer`](../../scripts/anoieu_analyzer); the database
 is maintained by [koine](https://github.com/ajreynol/koine)'s `koine_append_db`,
 which adds what is new and never edits or removes what is already there.
 
@@ -82,7 +82,7 @@ still in the database, with the date it was last seen. What a finding is and wha
 settles one stay ours -- see [`reporting-workflow.md`](reporting-workflow.md).
 
 A second producer, an agent driven by
-[`prompts/prompt_static_analysis`](../../prompts/prompt_static_analysis), writes
+[`prompts/anoieu_analyzer_agent`](../../prompts/anoieu_analyzer_agent), writes
 a dump in the same shape and appends to the same database.
 """
 
@@ -203,7 +203,7 @@ def main() -> int:
 
     if args.no_update:
         print("-- --no-update: the database was not touched. To apply it:")
-        print(f"   scripts/run_static_analysis   (or: python3 "
+        print(f"   scripts/anoieu_analyzer   (or: python3 "
               f"{os.path.relpath(koine.append_db(), ROOT)} "
               f"{os.path.relpath(args.dump, ROOT)} "
               f"{os.path.relpath(DB, ROOT)} --dry-run)")
