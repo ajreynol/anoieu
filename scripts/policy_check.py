@@ -568,36 +568,26 @@ def check_footing_consistent() -> list[str]:
 
 
 def check_associate_floor() -> list[str]:
-    """*An associate still keeps a front page a reader can use.*
+    """*An associate still says how it is maintained.*
 
     An associate owes this ecosystem nothing, and this is not a debt being
     collected. It is the floor the **footing** needs in order to mean anything:
     the marker says a tree holds itself to the policy while declaring nothing in
     public, so the front page is the only thing a reader arriving at the
-    repository has. Two sentences make it usable — how the repository is
-    maintained, and what its name is for.
+    repository has, and a maintenance note is what makes it usable.
 
-    **Why an associate is asked for the name and a member is only advised.** It
-    is not a harder standard wearing a different hat. A member's front page
-    carries the declaration and its CI runs this checker on every push, so a
-    reader who wants to know what the repository is has somewhere else to look
-    and the name section is a readability suggestion. An associate publishes
-    none of that, so the same paragraph is the whole of what a stranger gets.
-    The shared policy currently calls the name *recommended, a minor finding,
-    never fatal* -- said of a member, and this is the one place we read it as
-    load-bearing. It is raised with the office rather than assumed.
+    **This asks for nothing the shared policy does not already ask.** Its
+    associate protocol says that for a tree adopting none of this the ask is
+    still one heading -- `How this repository is maintained`, with something
+    under it. `note_in` is that reading and was written for it; all this does is
+    give it a verdict.
 
-    Both halves are read with the readers that already exist: `note_in` is the
-    maintenance note with something actually under it, which is the ask the
-    shared policy makes even of a tree that adopts none of this.
+    **Explaining the name is not part of the floor.** It is recommended for
+    every repository and required of none, and an associate is not an exception:
+    see `check_name_explained`, which reports it as a minor finding here as it
+    does everywhere else.
     """
-    readme = read("README.md")
-    bad = list(note_in(readme))
-    if readme and not name_explained(readme):
-        bad.append("README.md has no section explaining the repository's name, "
-                   "which is the other half of what a front page owes a reader "
-                   "when nothing else about this repository is advertised")
-    return bad
+    return list(note_in(read("README.md")))
 
 
 def check_child_unadvertised() -> list[str]:
@@ -642,15 +632,6 @@ def check_front_page() -> list[str]:
     return bad
 
 
-def name_explained(text: str) -> bool:
-    """Whether a README carries a section about the repository's own name.
-
-    One reading, shared by the two checks that want it, so that a member and an
-    associate are never told different things about the same front page.
-    """
-    return bool(text) and any("name" in s.lower() for s in sections(text))
-
-
 def check_name_explained() -> list[str]:
     """*Every repository explains its own name* -- recommended, never enforced.
 
@@ -658,9 +639,17 @@ def check_name_explained() -> list[str]:
     story worth a paragraph, is not doing anything wrong, and failing somebody's
     build over the absence of an etymology would be the wrong instrument for what
     is at bottom a suggestion about being readable.
+
+    **Recommended for everyone, and required of nobody -- an associate
+    included.** This check briefly made an exception of one, on the argument
+    that an associate's front page is its whole public surface. The argument was
+    not enough: the rule says *recommended*, it says it about every repository,
+    and a footing is not a reason to read one word of it differently. A check
+    that hardens for the tree least able to answer back is the wrong instrument
+    twice over.
     """
     readme = read("README.md")
-    if readme and not name_explained(readme):
+    if readme and not any("name" in sec.lower() for sec in sections(readme)):
         return ["README.md has no section explaining the repository's name"]
     return []
 
@@ -1126,17 +1115,6 @@ def not_associate():
     return None if is_associate() else "this tree carries no `associate` marker"
 
 
-def name_is_minor():
-    """Applicability: the name is advice, except where the floor makes it more.
-
-    For an associate `check_associate_floor` owns this and says why, so the
-    minor check stands aside rather than reporting the same absence twice under
-    two different severities.
-    """
-    return ("the associate floor reports this, and says why it is not minor there"
-            if is_associate() else None)
-
-
 def is_advertised():
     """Skip reason for the declaration checks when the tree records `associate`.
 
@@ -1178,7 +1156,7 @@ CHECKS = [
      check_footing_marker, has(FOOTING_PAGE)),
     ("an associate carries no front-page declaration",
      check_footing_consistent, has(FOOTING_PAGE)),
-    ("an associate's front page says how it is maintained, and what its name is for",
+    ("an associate's front page says how it is maintained",
      check_associate_floor, not_associate),
     ("an unadvertised child project is not named on the front page",
      check_child_unadvertised, has("tools")),
@@ -1191,7 +1169,7 @@ CHECKS = [
 MINOR = [
     ("the membership declaration links to the policy", check_declaration_links, is_advertised),
     ("the discussion file is well-formed", check_discussion, has("docs/discussion.md")),
-    ("the README explains the repository's name", check_name_explained, name_is_minor),
+    ("the README explains the repository's name", check_name_explained, None),
     ("committed data carries no path out of a home directory", check_local_paths_data, None),
     ("the discussion file says a prompt may be misaddressed",
      check_prompt_gate, has("docs/discussion.md")),

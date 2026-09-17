@@ -49,9 +49,24 @@ automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
 **To:** kanon
 **Kind:** proposal
-**Status:** open
+**Status:** withdrawn
 **Opened:** 2026-09-17, at kanon `8f8739f`
 **Settles when:** kanon says whether an associate keeps a front-page floor, and whether explaining the name is part of it
+
+*Withdrawn 2026-09-17, before it was ever answered, because the thing it asked
+about has been decided the other way: **explaining the name is recommended for
+every repository and required of none, an associate included.** The checker no
+longer makes an exception of one. The name is a minor finding on an associate's
+run exactly as it is on a member's — reported, visible, and never fatal — and
+two cases in our suite hold it, one per footing.*
+
+*What is left of the floor is the maintenance note alone, and that needs nothing
+from you: your own associate protocol already says that for a tree adopting none
+of this, the ask is still that one heading with something under it. We have given
+your sentence a verdict, not added to it. So there is no question left to put,
+and the text below is kept for the record rather than as a live ask.*
+
+**The proposal as it was written, and the part of it that was wrong.**
 
 **The checker now asks an associate for two things, and one of them is more
 than your page says.** You settled `associate` and we took it, including the

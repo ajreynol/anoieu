@@ -733,12 +733,14 @@ def adoption_interface() -> int:
          True, "gated", 1, None, "named", None),
         # The floor an associate keeps. Not a debt: it is what the footing
         # needs to mean anything, since the front page is all a reader gets.
-        ("floor-noname", "an associate whose front page never explains its name "
-         "fails", False, "gated", 1, MARKER, None, "no name"),
+        # It is the maintenance note and nothing else.
         ("floor-emptynote", "an associate whose maintenance note is a bare "
          "heading fails", False, "gated", 1, MARKER, None, "empty note"),
-        # And the same two on a member, which is held to neither: the name is
-        # advice there, and this is what keeps the floor from leaking.
+        # Explaining the name is recommended for every repository and required
+        # of none. These two are the pair that holds it: the footing makes no
+        # difference, and neither tree is failed for the same missing section.
+        ("floor-noname", "an associate whose front page never explains its name "
+         "still passes", False, "gated", 0, MARKER, None, "no name"),
         ("member-noname", "a member whose front page never explains its name "
          "still passes", True, "gated", 0, None, None, "no name"),
     )

@@ -135,9 +135,9 @@ It checks repository conventions, independently of the analyzer and fuzzer.
 A repository with reason not to declare membership on its front page takes the
 `associate` footing, recorded on its own `docs/maintenance.md` along with what
 it holds itself to. It owes this ecosystem nothing; its tree is checked anyway,
-against its own marker. It keeps a front page all the same — a maintenance note
-with something under it, and a section explaining the name — because nothing
-else about the arrangement is advertised for a reader to find.
+against its own marker. It keeps a front page all the same, with a
+maintenance note that has something under it, because nothing else about the
+arrangement is advertised for a reader to find.
 The [maintenance guide](docs/maintenance.md#the-policy-checker-interface)
 describes the interface and how consumers pin it.
 
