@@ -49,18 +49,28 @@ they do not fetch or interpret governance documents at runtime. The shared
 [vision](https://github.com/ajreynol/kanon/blob/main/docs/vision.md) have a separate
 home. Vision is argued, never mechanically checked.
 
-**A membership need not be advertised.** The usual arrangement pairs a
-front-page declaration with a tree that backs it and refuses either alone. A
-repository held to the policy with reason not to announce it — not published
-yet, one person's working tree, an arrangement it would oversell — writes
-`**Footing:** ` and the name `unadvertised-member` on its own
-`docs/maintenance.md` instead, followed by what it is held to. That page is
-where this convention already puts what a repository declines to advertise, so
-the declaration moves there rather than being dropped, and the checker skips the
-two declaration checks **by name** rather than passing them quietly. Everything
-else a member is held to still applies. A child project does the same with
-`unadvertised-child` in its own README, whose claim is about the parent's front
-page and is checked against it.
+**A membership need not be advertised, and `associate` is the footing for it.**
+The usual arrangement pairs a front-page declaration with a tree that backs it
+and refuses either alone. A repository with reason not to announce it — not
+published yet, one person's working tree, an arrangement it would oversell —
+writes `**Footing:** ` and the name `associate` on its own `docs/maintenance.md`
+instead, followed by what it holds itself to. That page is where this convention
+already puts what a repository declines to advertise, so the claim moves there
+rather than being dropped, and the checker skips the two declaration checks **by
+name** rather than passing them quietly.
+
+**An associate owes this ecosystem nothing.** The obligation on that page is
+self-imposed, so the checks run and what they find is read against the marker
+rather than against anything we are due — running them is reading its own claim
+back to it. Whose fault a number is is **not decided here**: the shared register
+knows each repository's footing and prints an associate's count as `tracked`
+rather than `failing`. This checker says which tree it is looking at, words its
+own summary the same way, and leaves the exit code alone — a checker that went
+green on a marker in the tree it is checking would hand every repository a way
+to pass by editing one line.
+
+A child project its parent's front page does not name records `unadvertised-child`
+in its own README; that claim is about the parent and is checked against it.
 
 **Link kanon at `main`, or not at all.** Kanon holds the governing documents,
 so what they say today is what binds this repository: a link into that tree

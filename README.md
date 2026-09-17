@@ -132,9 +132,10 @@ python3 scripts/policy_check.py --root path/to/repository
 ```
 
 It checks repository conventions, independently of the analyzer and fuzzer.
-A repository that is held to the policy and has reason not to say so on its
-front page records the footing `unadvertised-member` on its own
-`docs/maintenance.md` and is held to everything else.
+A repository with reason not to declare membership on its front page takes the
+`associate` footing, recorded on its own `docs/maintenance.md` along with what
+it holds itself to. It owes this ecosystem nothing; its tree is checked anyway,
+against its own marker.
 The [maintenance guide](docs/maintenance.md#the-policy-checker-interface)
 describes the interface and how consumers pin it.
 

@@ -496,7 +496,7 @@ def note_forms() -> int:
 
 
 def footing_forms() -> int:
-    """Reader fixtures for the footing marker an unadvertised member carries.
+    """Reader fixtures for the footing marker an associate carries.
 
     The marker is what a tree trades for the front-page declaration, so it is
     read as strictly as one: it names the footing, and it says what the
@@ -516,43 +516,44 @@ def footing_forms() -> int:
     def page(line: str) -> str:
         return head + owner + "\n" + line + tail
 
-    good = page("**Footing:** `unadvertised-member` — held to the shared "
+    good = page("**Footing:** `associate` — held to the shared "
                 "repository policy; the front page does not say so.\n")
     #: The same claim in somebody else's words. What is checked is that it says
     #: what it is held to, not that it says it our way.
-    reworded = page("**Footing:** `unadvertised-member` — this tree follows the "
+    reworded = page("**Footing:** `associate` — this tree follows the "
                     "shared repository policy and is not advertised as doing so.\n")
     #: A word and no obligation. Matched so that it can be refused: a pattern
     #: that demanded the reason would read this as no marker at all.
-    bare = page("**Footing:** `unadvertised-member`\n")
-    #: Held to nothing, which is an associate's note wearing a member's footing.
-    refusing = page("**Footing:** `unadvertised-member` — not held to the shared "
+    bare = page("**Footing:** `associate`\n")
+    #: Held to nothing, which is the independent soft note wearing this
+    #: footing. A tree that adopts none of this is not an associate.
+    refusing = page("**Footing:** `associate` — not held to the shared "
                     "repository policy.\n")
     #: Says it is held to something and never says to what.
-    vague = page("**Footing:** `unadvertised-member` — follows the usual "
+    vague = page("**Footing:** `associate` — follows the usual "
                  "conventions around here.\n")
     #: A member's ordinary maintenance page. No marker, and that is not a defect.
     plain = head + owner + tail
 
-    # (label, text, is a well-formed unadvertised marker?, the footing recorded)
+    # (label, text, is a well-formed associate marker?, the footing recorded)
     cases = [
-        ("the footing marker", good, True, policy_check.UNADVERTISED),
-        ("the same claim in other words", reworded, True, policy_check.UNADVERTISED),
-        ("a footing with no obligation", bare, False, policy_check.UNADVERTISED),
-        ("a footing that refuses the policy", refusing, False, policy_check.UNADVERTISED),
-        ("a footing held to nothing nameable", vague, False, policy_check.UNADVERTISED),
+        ("the footing marker", good, True, policy_check.ASSOCIATE),
+        ("the same claim in other words", reworded, True, policy_check.ASSOCIATE),
+        ("a footing with no obligation", bare, False, policy_check.ASSOCIATE),
+        ("a footing that refuses the policy", refusing, False, policy_check.ASSOCIATE),
+        ("a footing held to nothing nameable", vague, False, policy_check.ASSOCIATE),
         ("an advertised member's page", plain, False, ""),
         ("no maintenance page at all", "", False, ""),
     ]
     failures = 0
     for label, text, want_ok, want_footing in cases:
-        is_ok = not policy_check.unadvertised_in(text)
+        is_ok = not policy_check.associate_in(text)
         got_footing = policy_check.footing_in(text)[0]
-        for got, want, reader in ((is_ok, want_ok, "unadvertised_in"),
+        for got, want, reader in ((is_ok, want_ok, "associate_in"),
                                   (got_footing, want_footing, "footing_in")):
             ok = got == want
             failures += 0 if ok else 1
-            verb = ("accepts" if want else "refuses") if reader == "unadvertised_in" \
+            verb = ("accepts" if want else "refuses") if reader == "associate_in" \
                 else (f"reads `{want}` in" if want else "reads no footing in")
             print(("ok   " if ok else "FAIL ") + f"{reader} {verb} {label}")
             if not ok and reader == "footing_in":
@@ -581,7 +582,7 @@ def footing_forms() -> int:
          child("**Footing:** `unadvertised-child` — started by a human, and "
                "read-only.\n"), False),
         ("a child carrying the repository footing",
-         child("**Footing:** `unadvertised-member` — held to the policy.\n"), False),
+         child("**Footing:** `associate` — held to the policy.\n"), False),
         ("an ordinary child project", kid + kid_tail, False),
     ]
     for label, text, want_ok in child_cases:
@@ -591,7 +592,7 @@ def footing_forms() -> int:
         print(("ok   " if ok else "FAIL ")
               + f"unadvertised_child_in {'accepts' if want_ok else 'refuses'} {label}")
 
-    print(f"-- the footing an unadvertised membership rests on: {failures} failure(s)")
+    print(f"-- the footing an associate rests on: {failures} failure(s)")
     return failures
 
 
@@ -672,8 +673,8 @@ def adoption_interface() -> int:
     import shutil  # noqa: PLC0415
     import tempfile  # noqa: PLC0415
 
-    #: The footing marker, as the policy asks an unadvertised member to write it.
-    MARKER = ("**Footing:** `unadvertised-member` — held to the shared "
+    #: The footing marker, as the shared policy writes it for an associate.
+    MARKER = ("**Footing:** `associate` — held to the shared "
               "repository policy; the front page does not say so.\n")
 
     #: The child's marker, and what the parent's front page then may not do.
@@ -698,22 +699,24 @@ def adoption_interface() -> int:
          True, None, 0, None, None),
         ("ungated", "a member whose discussion file has lost the response gate fails",
          True, "ungated", 1, None, None),
-        # The unadvertised membership, and the three ways of getting it wrong.
-        # The exemption is narrow by construction: it buys the declaration and
-        # nothing else, which is what the ungated case below is here to hold.
-        ("unadvertised", "an unadvertised member declares on its maintenance page "
-         "and passes without a front-page declaration",
+        # The associate footing, and the three ways of getting it wrong. The
+        # skip is narrow by construction: it covers the declaration and nothing
+        # else, which is what the ungated case below is here to hold. What an
+        # associate's count *means* is the shared register's call; this suite
+        # only holds that the checks still run and still report.
+        ("associate", "an associate declares on its maintenance page and passes "
+         "without a front-page declaration",
          False, "gated", 0, MARKER, None),
         ("advertised-too", "a tree that records the marker and also declares on "
-         "the front page fails, since the membership is advertised after all",
+         "the front page fails; a declared membership is a member's",
          True, "gated", 1, MARKER, None),
         ("hollow", "a marker that names a footing and takes on nothing fails",
-         True, "gated", 1, "**Footing:** `unadvertised-member`\n", None),
+         True, "gated", 1, "**Footing:** `associate`\n", None),
         ("invented", "a marker naming a footing the policy does not define fails",
          True, "gated", 1,
          "**Footing:** `gold-member` — held to the shared repository policy.\n", None),
-        ("unadvertised-ungated",
-         "an unadvertised member is still held to the response gate",
+        ("associate-ungated",
+         "an associate's tree is still checked against the response gate",
          False, "ungated", 1, MARKER, None),
         # The child's half. The marker is a claim about the parent, so the
         # parent's front page is what decides it -- which is why the failing
@@ -782,6 +785,14 @@ def adoption_interface() -> int:
             got = subprocess.run([sys.executable, checker, "--root", root],
                                  capture_output=True, text=True)
             ok = got.returncode == want
+            # An associate's count is a measurement and a member's is a
+            # shortfall, and the summary line is where a reader is told which.
+            # The register upstream decides what to do with the number; this
+            # only holds that the run does not call it a failure.
+            word = "tracked" if (footing == MARKER and not declares) else "failure(s)"
+            if f"-- policy: " in got.stdout and word not in got.stdout:
+                ok = False
+                print(f"     summary does not say {word!r}")
             failures += 0 if ok else 1
             print(("ok   " if ok else "FAIL ") + what)
             if not ok:

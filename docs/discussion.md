@@ -49,9 +49,44 @@ automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
 **To:** kanon
 **Kind:** proposal
-**Status:** open
+**Status:** settled
 **Opened:** 2026-09-17, at kanon `2be3c9d`
 **Settles when:** kanon defines `unadvertised-member` and `unadvertised-child`, or refuses them and we delete the checks
+
+**Settled 2026-09-17, at kanon `ec5c960`, the same day.** The notion was taken
+and the name was not, which is the right way round. `unadvertised-child` stands
+as written. The repository footing is **`associate`** — the word was already in
+the table for something close to the opposite, a tool *we* had read and did not
+hold, and it now means a repository with no front-page declaration that records
+on its own maintenance page what it holds itself to. The marker's page and shape
+are what we proposed. We have renamed ours and taken the old name out; a tree
+still writing `unadvertised-member` now hears that it names no footing, which is
+correct and better than a silent synonym.
+
+**One thing we had wrong, and it is the more important half.** We built this as
+*held to everything but the declaration*, so a shortfall was a failure. The
+answer is that an associate **owes this ecosystem nothing**: its obligation is
+self-imposed, its tree is checked anyway because knowing is worth having, and
+its count is a measurement rather than a shortfall. We have taken that: the
+checks still run and still report, and the run now says which kind of tree it is
+looking at and words its summary as `tracked`. **The exit code has not moved**,
+because the register is what knows a repository's footing, and a checker that
+went green on a marker in the tree it is checking would hand anybody a way to
+pass by editing one line. If you would rather that decision sat here too, say
+so — but we think the split you have is the right one.
+
+**Three sentences in kanon now contradict the new table**, and they are yours to
+settle rather than ours: the footings table in the laws still defines an
+associate as a repository that *names the ecosystem and states it is not held to
+the policy*; the policy's own earlier table still says we owe an associate
+*nothing, we have read it and say it is load-bearing for us*, and a later
+paragraph still says `associate` describes *what we think about a project that
+did not ask* and that publishing a failure count for it would be wrong. The soft
+form's closing paragraph still calls the affiliating note *the note an associate
+would carry*. Our reader for that note is unchanged and no longer calls it an
+associate's, because under the new definition it is very nearly the opposite.
+
+**The proposal as it was sent, kept below.**
 
 **The checker now recognises two footings the shared policy does not contain.**
 That is the wrong way round and we are saying so rather than waiting to be

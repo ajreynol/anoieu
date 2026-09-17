@@ -15,14 +15,24 @@ to a sentence somebody wrote. The run also prints every policy rule that has
 **no** automated check, because a checker that only lists its own passes reads
 as coverage it does not have.
 
-**A membership need not be advertised.** The usual arrangement pairs a
-front-page declaration with a tree that backs it, and refuses either alone. A
-repository that is held to the policy and has reason not to announce it — it is
-not published, it is one person's working tree, it would oversell what is in it
-— records the footing `unadvertised-member` on its local maintenance page
-instead, and is held to everything else a member is held to. The marker is the
-declaration, moved rather than dropped; `unadvertised_in` reads it, and the two
-declaration checks skip by name rather than passing quietly.
+**A membership need not be advertised, and the footing for that is `associate`.**
+The usual arrangement pairs a front-page declaration with a tree that backs it,
+and refuses either alone. A repository that is held to the policy and has reason
+not to announce it — it is not published, it is one person's working tree, it
+would oversell what is in it — carries no declaration and records the footing on
+its own maintenance page instead, saying there what it holds itself to.
+
+**An associate owes this ecosystem nothing, and the obligation it records is its
+own.** So the checks still run, and what they are measured against is the
+repository's own marker rather than anything we are owed: running them is
+reading its claim back to it. Whether a number found that way is anybody's fault
+is not decided here — the shared register decides that, from the footing it
+records, and prints an associate's count as *tracked* rather than *failing*.
+This run says which tree it is looking at and leaves the reading to it.
+
+`associate_in` reads the marker; the two declaration checks skip by name rather
+than passing quietly, because an associate is defined by not carrying the thing
+they look for.
 
     python3 scripts/policy_check.py             # check; exit 1 on any failure
     python3 scripts/policy_check.py --root PATH # check somebody else's checkout
@@ -73,11 +83,11 @@ UNCHECKED = [
      "`affiliation_in` reads it for the inventory and never grades anybody"),
     ("a member shares the approach the vision argues for",
      "the judgement half of a footing; vision may never acquire a checker"),
-    ("why a membership is unadvertised",
+    ("why an associate does not declare",
      "a repository's own reason for not advertising — not published yet, one "
      "person's working tree, an arrangement it does not want to oversell. The "
-     "marker is checked for being well-formed and honest; the choice behind it "
-     "is nobody's to grade"),
+     "marker is checked for being readable; the choice behind it is nobody's to "
+     "grade, and an associate owes this ecosystem nothing either way"),
 ]
 
 # Written by a run. `closed-findings.md` is deliberately absent: it is written by
@@ -259,13 +269,19 @@ FOOTING_LINE = r"^\*\*Footing:\*\*\s*`([\w-]+)`[ \t]*(?:[—-][ \t]*)?"
 #: The footings this checker knows how to act on. **The authority for what
 #: footings exist is the shared policy, not this file**; these are a reader's
 #: copy of the two names that change what a run does here.
-UNADVERTISED = "unadvertised-member"
+#:
+#: `associate` was the name the policy settled on for a repository with no
+#: front-page declaration. This checker proposed `unadvertised-member` for the
+#: same thing and was answered: the notion was taken and the name was not, which
+#: is the right way round. The old name is not accepted as a synonym -- a tree
+#: using it is using a footing nothing defines, and should hear so.
+ASSOCIATE = "associate"
 UNADVERTISED_CHILD = "unadvertised-child"
 
 #: The footing names a marker may carry. Anything else is a typo or a footing
 #: this checker has not been taught, and both are worth saying rather than
 #: passing over -- but only the two above change what is checked.
-FOOTINGS = {UNADVERTISED, UNADVERTISED_CHILD, "member", "associate", "president",
+FOOTINGS = {ASSOCIATE, UNADVERTISED_CHILD, "member", "president",
             "candidate", "foundation", "child", "outsider"}
 
 #: How an unadvertised child's marker may spell what makes it unadvertised. The
@@ -346,9 +362,18 @@ def declaration_in(text: str) -> list[str]:
 def affiliation_in(text: str) -> list[str]:
     """What is missing from an **affiliating** maintenance note, if anything.
 
-    An associate names the ecosystem it works with and says it is not held to
-    the policy. Inventory tooling can use this reader on a fetched README,
-    just as it uses `declaration_in` for a member.
+    The note names the ecosystem it works with and says it is not held to the
+    policy. Inventory tooling can use this reader on a fetched README, just as it
+    uses `declaration_in` for a member.
+
+    **This is not the `associate` footing, whatever the shared policy's older
+    paragraphs still say.** `associate` was once the word for a tool we had read
+    and did not hold; it now means a repository with no front-page declaration
+    that records on its own maintenance page what it holds *itself* to, which is
+    very nearly the opposite. `associate_in` reads that. This reader keeps the
+    note it always read — a repository that adopts none of this — and the two
+    must not be confused, because one is held to the policy and one is held to
+    nothing.
 
     **This is never a check in `CHECKS`.** It is about a repository that has
     joined nothing, and running it here would be this tree grading somebody who
@@ -383,8 +408,8 @@ def footing_in(text: str) -> tuple[str, str]:
     return (m.group(1), " ".join(paragraph.split()))
 
 
-def unadvertised_in(text: str) -> list[str]:
-    """What is missing from an **unadvertised member's** footing marker.
+def associate_in(text: str) -> list[str]:
+    """What is missing from an **associate's** footing marker.
 
     A repository can be held to the policy and have good reason not to say so on
     its front page: it is not published yet, or it is one person's working tree,
@@ -394,10 +419,16 @@ def unadvertised_in(text: str) -> list[str]:
 
     **So the claim moves rather than disappearing.** It goes on the local
     maintenance page, which is where this convention already puts what a
-    repository declines to advertise, and it is read exactly as strictly: the
-    footing is named, and the line says what the repository is held to. An
-    unadvertised member is held to everything a member is held to except the
-    front-page declaration, and this marker is what it trades for the exemption.
+    repository declines to advertise. What the marker records is an obligation
+    the repository imposes on **itself** -- an associate owes this ecosystem
+    nothing -- so the line has to say what that obligation is. A marker naming a
+    footing and no obligation leaves a reader, and this checker, with nothing to
+    hold it to and nothing to measure it against.
+
+    **That is also why the marker is read this strictly while nothing is owed.**
+    Strictness here is not an obligation being enforced; it is the difference
+    between a claim somebody can check and a word. What the checks then find is
+    measured against this line and not against anything we are due.
 
     Takes the text of `docs/maintenance.md`, so inventory tooling can ask the
     question of a fetched page, as `declaration_in` and `affiliation_in` are
@@ -408,21 +439,22 @@ def unadvertised_in(text: str) -> list[str]:
     name, reason = footing_in(text)
     if not name:
         return [f"{FOOTING_PAGE} records no **Footing:** line"]
-    if name != UNADVERTISED:
-        return [f"{FOOTING_PAGE} records the footing `{name}`, not `{UNADVERTISED}`"]
+    if name != ASSOCIATE:
+        return [f"{FOOTING_PAGE} records the footing `{name}`, not `{ASSOCIATE}`"]
     bad = []
     low = reason.lower()
-    # Order matters: *not held to* contains *held to*, and an associate's
-    # refusal wearing a member's footing is the one contradiction worth naming
-    # before the absence of a claim.
+    # Order matters: *not held to* contains *held to*, and a refusal of the
+    # policy under this footing is the one contradiction worth naming before the
+    # absence of a claim. A tree that is held to none of this is not an
+    # associate; it keeps the independent soft note and `affiliation_in` reads it.
     if any(f in low for f in NOT_HELD):
-        bad.append("the footing line claims membership and also refuses the "
+        bad.append("the footing line takes the footing and also refuses the "
                    "policy; a marker carrying both says nothing")
     elif not any(h in low for h in HELD_CLAIM):
-        bad.append("the footing line does not say the repository is held to "
+        bad.append("the footing line does not say the repository holds itself to "
                    "anything, so it records a word rather than a footing")
     if "polic" not in low:
-        bad.append("the footing line does not name the policy it is held to")
+        bad.append("the footing line does not name the policy it holds itself to")
     return bad
 
 
@@ -458,9 +490,21 @@ def unadvertised_child_in(text: str) -> list[str]:
     return []
 
 
-def is_unadvertised() -> bool:
-    """Whether the tree under test records an unadvertised membership."""
-    return not unadvertised_in(read(FOOTING_PAGE))
+def records_associate() -> bool:
+    """Whether the tree under test records the `associate` footing."""
+    return not associate_in(read(FOOTING_PAGE))
+
+
+def is_associate() -> bool:
+    """An associate without qualification: the marker, and no declaration.
+
+    A tree carrying **both** is neither of the two things it is claiming, and
+    `check_footing_consistent` says so. Nothing else here treats it as an
+    associate, because doing that would quietly settle a contradiction in
+    favour of whichever half this file happened to read first -- and would let
+    the softer reading of the number win by accident.
+    """
+    return bool(records_associate() and declaration_in(read("README.md")))
 
 
 def check_declaration() -> list[str]:
@@ -469,8 +513,9 @@ def check_declaration() -> list[str]:
     A declaration nothing backs is what this whole check exists to prevent, and a
     compliant tree that says nothing has not joined anything. So both, or neither.
 
-    An unadvertised member is the one tree this does not run against, and it is
-    skipped by name rather than passed: see `is_advertised`.
+    An associate is the one tree this does not run against, because carrying no
+    front-page declaration is what the footing *is*. It is skipped by name rather
+    than passed: see `is_advertised`.
     """
     return declaration_in(read("README.md"))
 
@@ -479,9 +524,15 @@ def check_footing_marker() -> list[str]:
     """*A footing marker names a footing, and says what it takes on.*
 
     Runs against any tree that records one. A marker is a claim the rest of this
-    run backs, exactly as a declaration is, so a malformed one is a failure and
-    not a shrug -- it is the thing standing in for the front-page declaration,
-    and it is the only place a reader can check the claim.
+    run is read against, exactly as a declaration is, so a malformed one is
+    reported and not shrugged off -- it stands in for the front-page declaration,
+    and it is the only place a reader can check what the tree holds itself to.
+
+    **Reporting it is not charging anybody with anything.** An associate owes us
+    nothing, and what a run of this finds on one is a measurement; the shared
+    register is what decides whose fault a number is, and it prints an
+    associate's as *tracked*. What is refused here is a marker that cannot be
+    read, which is a different thing from a tree that falls short of it.
     """
     text = read(FOOTING_PAGE)
     name, _reason = footing_in(text)
@@ -490,24 +541,25 @@ def check_footing_marker() -> list[str]:
     if name not in FOOTINGS:
         return [f"{FOOTING_PAGE} records the footing `{name}`, which is not one "
                 "the shared policy defines"]
-    return unadvertised_in(text) if name == UNADVERTISED else []
+    return associate_in(text) if name == ASSOCIATE else []
 
 
 def check_footing_consistent() -> list[str]:
-    """*An unadvertised membership is not on the front page.*
+    """*An associate carries no front-page declaration.*
 
-    The marker's whole content is *this repository is held to the policy and its
-    front page does not say so*. A README that declares membership makes the
-    second half false, and a reader has no way to tell which of the two to
-    believe. The repository is a member and should say so in one place: delete
-    the marker, or delete the declaration.
+    The footing is defined by the absence: a repository that declares membership
+    on its front page is a member, and one that does not may record this footing
+    instead. A tree doing both leaves a reader with two answers and no way to
+    choose, and the two are not the same claim -- a member is held to this by
+    the declaration, an associate by its own marker and nothing else. Say one:
+    delete the marker, or delete the declaration.
     """
-    if not is_unadvertised():
+    if not records_associate():
         return []
     if declaration_in(read("README.md")):
         return []
-    return [f"{FOOTING_PAGE} records `{UNADVERTISED}` and README.md declares "
-            "membership; the membership is advertised, so the marker is wrong"]
+    return [f"{FOOTING_PAGE} records `{ASSOCIATE}` and README.md declares "
+            "membership; a declared membership is a member's, not an associate's"]
 
 
 def check_child_unadvertised() -> list[str]:
@@ -1018,17 +1070,17 @@ def is_home():
 
 
 def is_advertised():
-    """Skip reason for the declaration checks when the membership is not advertised.
+    """Skip reason for the declaration checks when the tree records `associate`.
 
     A skip rather than a pass, because the run must not read as having found a
     declaration it never looked for. The line it prints names the marker and the
     page it is on, so a reader of the log can go and check the claim -- which is
     the only thing standing in for the front page here.
     """
-    if not is_unadvertised():
+    if not is_associate():
         return None
-    return (f"{FOOTING_PAGE} records the footing `{UNADVERTISED}`: held to the "
-            "policy, and deliberately not declared on the front page")
+    return (f"{FOOTING_PAGE} records the footing `{ASSOCIATE}`: no front-page "
+            "declaration, and what it holds itself to is written there")
 
 
 # (title, check, applies). A check that does not apply is skipped and named:
@@ -1056,7 +1108,7 @@ CHECKS = [
     ("local ownership is recorded without advertising", check_owner_unadvertised, is_home),
     ("a recorded footing names one the policy defines, and what it takes on",
      check_footing_marker, has(FOOTING_PAGE)),
-    ("an unadvertised membership is not also on the front page",
+    ("an associate carries no front-page declaration",
      check_footing_consistent, has(FOOTING_PAGE)),
     ("an unadvertised child project is not named on the front page",
      check_child_unadvertised, has("tools")),
@@ -1101,6 +1153,14 @@ def main() -> int:
         return 0
     if os.path.abspath(ROOT) != REPO_ROOT:
         print(f"-- {CHECKER_REPO} {version()} checking {ROOT}")
+    # Said before the checks rather than after them, so that nobody reads a
+    # screen of failures for a tree that owes this ecosystem nothing and draws
+    # the conclusion the footing exists to refuse.
+    associate = is_associate()
+    if associate:
+        print(f"-- this tree records the footing `{ASSOCIATE}` on {FOOTING_PAGE}: "
+              "it owes this ecosystem nothing, and what follows is read against "
+              "what it says there")
     failures = skipped = 0
     for title, fn, applies in CHECKS:
         why = applies() if applies else None
@@ -1135,7 +1195,18 @@ def main() -> int:
     print()
     coverage()
     print()
-    print(f"-- policy: {failures} failure(s), {skipped} skipped")
+    # **The count is reported either way and the exit code does not move.** What
+    # an associate's number *means* is the shared register's call, not this
+    # checker's -- it knows the footing each repository is on and prints an
+    # associate's count as `tracked`. A checker that decided that for itself,
+    # from a marker in the tree it is checking, would hand every repository a
+    # way to turn its own build green by editing one line.
+    if associate:
+        print(f"-- policy: {failures} tracked, {skipped} skipped — measured "
+              f"against what {FOOTING_PAGE} says this tree holds itself to. "
+              "Nobody is owed this, and nobody is at fault for the number")
+    else:
+        print(f"-- policy: {failures} failure(s), {skipped} skipped")
     return 1 if failures else 0
 
 
