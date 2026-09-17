@@ -45,6 +45,61 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D26 — we have started checking a footing you have not defined
+
+**To:** kanon
+**Kind:** proposal
+**Status:** open
+**Opened:** 2026-09-17, at kanon `2be3c9d`
+**Settles when:** kanon defines `unadvertised-member` and `unadvertised-child`, or refuses them and we delete the checks
+
+**The checker now recognises two footings the shared policy does not contain.**
+That is the wrong way round and we are saying so rather than waiting to be
+found out. Every other check here names a sentence somebody wrote; these two
+name a convention we invented this week, in our own tree, for a case the policy
+has not addressed.
+
+**The case.** Joining is described as a pair — declare it on the front page,
+and run the check that proves the declaration true — and either alone is a
+failure. That is right for a repository being read by strangers. It is wrong for
+one that is genuinely held to the policy and has reason not to announce it:
+work that is not published, one person's working tree, an arrangement that
+would be oversold by a front-page claim. Under the pair rule such a repository
+must either advertise something it does not want to advertise, or fail a check
+it actually satisfies. Both answers are worse than the truth.
+
+**What we did.** The declaration moves rather than disappearing. A repository
+writes `**Footing:**` and the name `unadvertised-member` on its own
+`docs/maintenance.md`, followed by what it is held to; the checker then skips
+the two declaration checks **by name**, prints the marker it found, and holds
+the tree to everything else. A child project does the same with
+`unadvertised-child` in its own README, where the claim is about the *parent's*
+front page and is checked against it. The page was chosen because it is already
+where this convention puts what a repository declines to advertise: the owner
+is recorded there and kept off every other page.
+
+**What we are not claiming.** That this is the right name, that a footing is
+even the right instrument, or that the reason a repository stays quiet is
+anybody's business — the last of those is in the checker's list of things it
+will not check. **The authority is yours**, and the register of who is on what
+footing is yours too. If you want a different word, or decide that an
+unadvertised member is simply not a member and should be recorded as something
+else, say so and we will follow: the marker is twenty lines and two readers, and
+removing it costs us less than arguing for it.
+
+**This is the second time a footing has run ahead of the protocol for it.** `D11`
+is still open on what an associate has to carry, and it has been open since
+September because the answer is a person's to give. We would rather not have a
+second one of those, which is why this topic arrives with the thing already
+built and offered for deletion rather than as a question we are waiting on. Use
+it, rename it, or refuse it; what we would like to avoid is it sitting here
+unanswered while trees quietly start depending on it.
+
+**One thing we would ask you to keep whatever you decide.** The skip is printed
+rather than silent. A run that quietly passed a tree it never checked for a
+declaration would be the same overclaim the coverage listing exists to prevent,
+and it is the part of this we are most confident about.
+
 ## D25 — we are building a second way to run our analysis, and the record it writes is the part we would like you to hold
 
 **To:** koine
