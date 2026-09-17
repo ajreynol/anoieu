@@ -652,6 +652,45 @@ def local_policy_inputs() -> int:
     return failures
 
 
+def policy_contract() -> int:
+    """Latest implementations must keep the published contract and reject unknown ones."""
+    import policy_check  # noqa: PLC0415
+
+    failures = 0
+
+    def expect(name, ok, detail=""):
+        nonlocal failures
+        failures += not ok
+        print(("ok   " if ok else "FAIL ") + name)
+        if not ok:
+            print("     " + detail)
+
+    with open(os.path.join(HERE, "policy-v1.json")) as fh:
+        contract = json.load(fh)
+    blocking, advisory = policy_check.POLICY_VERSIONS[contract["version"]]
+    expect("policy contract 1 keeps its blocking checks",
+           [fn.__name__ for _, fn, _ in blocking] == contract["blocking"])
+    expect("policy contract 1 keeps its advisory checks advisory",
+           [fn.__name__ for _, fn, _ in advisory] == contract["advisory"])
+    expect("the default remains policy contract 1", policy_check.DEFAULT_POLICY_VERSION == "1")
+    checker = os.path.join(os.path.dirname(HERE), "scripts", "policy_check.py")
+    for args in (("--policy-version", "999"), ("--policy-version", "latest"),
+                 ("--policy-version",), ("--root",), ("--unknown-option",)):
+        got = subprocess.run([sys.executable, checker, *args], capture_output=True, text=True)
+        expect(f"invalid policy CLI input is refused: {' '.join(args)}",
+               got.returncode == 2 and not got.stdout, got.stderr)
+    got = subprocess.run([sys.executable, checker, "--policy-version", "1", "--coverage"],
+                         capture_output=True, text=True)
+    expect("coverage identifies the selected contract",
+           got.returncode == 0 and "-- policy contract 1" in got.stdout, got.stderr)
+    got = subprocess.run([sys.executable, checker, "--version"], capture_output=True, text=True)
+    expect("implementation provenance stays separate from the policy version",
+           got.returncode == 0 and bool(re.fullmatch(r"ajreynol/anoieu [0-9a-f]{40}\n", got.stdout)),
+           got.stdout + got.stderr)
+    print(f"-- policy contract: {failures} failure(s)")
+    return failures
+
+
 def adoption_interface() -> int:
     """`policy_check.py --root` is what another repository runs in its own CI.
 
@@ -809,6 +848,14 @@ def adoption_interface() -> int:
             got = subprocess.run([sys.executable, checker, "--root", root],
                                  capture_output=True, text=True)
             ok = got.returncode == want
+            explicit = subprocess.run([sys.executable, checker, "--root", root,
+                                       "--policy-version", "1"], capture_output=True, text=True)
+            if (explicit.returncode, explicit.stdout) != (got.returncode, got.stdout):
+                ok = False
+                print("     explicit contract 1 and the default disagree")
+            if "policy contract 1 checking" not in got.stdout:
+                ok = False
+                print("     the run does not identify its policy contract")
             # An associate's count is a measurement and a member's is a
             # shortfall, and the summary line is where a reader is told which.
             # The register upstream decides what to do with the number; this
@@ -899,6 +946,7 @@ def main() -> int:
     failures += note_forms()
     failures += footing_forms()
     failures += local_policy_inputs()
+    failures += policy_contract()
     failures += adoption_interface()
     failures += postmortem_shape()
     failures += landing_markers()

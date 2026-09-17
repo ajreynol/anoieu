@@ -44,10 +44,18 @@ Oracle CI builds the pinned ethos commit and checks parser and fuzzer evidence.
 
 ### The policy checker interface
 
-Ecosystem repositories can pin an anoieu commit and run
-`scripts/policy_check.py --root PATH`. `--version` identifies that checker
-commit, not a governance document revision. Checks are encoded and tested here;
-they do not fetch or interpret governance documents at runtime. The shared
+The supported interface is the latest anoieu implementation with a stable
+mechanical contract: `scripts/policy_check.py --policy-version 1 --root PATH`.
+Requirements, applicability and severity remain stable within that version;
+checker bug fixes are allowed. New obligations require a new contract while
+version 1 remains supported. The default stays 1. See the
+[compatibility contract and shared CI workflow](policy-checker.md), including
+the migration still needed in kanon's adoption instructions.
+
+`--version` identifies the checker implementation commit, not the contract or
+a governance document revision. Every run logs the implementation commit and
+contract. Checks are encoded and tested here; they do not fetch or interpret
+governance documents at runtime. The shared
 [policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) and
 [vision](https://github.com/ajreynol/kanon/blob/main/docs/vision.md) have a separate
 home. Vision is argued, never mechanically checked.

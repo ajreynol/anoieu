@@ -38,10 +38,17 @@ they look for.
     python3 scripts/policy_check.py --root PATH # check somebody else's checkout
     python3 scripts/policy_check.py --coverage  # what is checked, and what is not
     python3 scripts/policy_check.py --version   # which commit of the checker this is
+    python3 scripts/policy_check.py --policy-version 1 --root PATH
+
+The checker implementation can advance while a consumer keeps policy contract
+1. Its requirements, applicability and blocking/advisory split are stable;
+fixing an implementation bug is allowed, adding an obligation requires a new
+contract. This version identifies our mechanical checks, not a kanon revision.
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import re
 import subprocess
@@ -55,6 +62,7 @@ CHECKER_REPO = "ajreynol/anoieu"
 POLICY_REPO = "ajreynol/kanon"
 # Accept pre-handoff declarations without making members rewrite their README.
 POLICY_REPOS = (POLICY_REPO, CHECKER_REPO)
+DEFAULT_POLICY_VERSION = "1"
 
 # Rules with no automated check, and the honest reason. Printed on every run.
 UNCHECKED = [
@@ -156,8 +164,8 @@ PROMPT_GATE = [
 
 def version() -> str:
     """The commit of *this checker*, so a build log records what it was checked
-    against. A member pins a commit; the run should say which one it got."""
-    out = subprocess.run(["git", "-C", REPO_ROOT, "rev-parse", "--short", "HEAD"],
+    against even when a consumer follows the latest implementation."""
+    out = subprocess.run(["git", "-C", REPO_ROOT, "rev-parse", "HEAD"],
                          capture_output=True, text=True)
     return out.stdout.strip() or "unknown"
 
@@ -1145,9 +1153,11 @@ def is_advertised():
 
 
 # (title, check, applies). A check that does not apply is skipped and named:
-# passing must never read as more coverage than it was. The set is deliberately
-# small and is expected to grow.
-CHECKS = [
+# passing must never read as more coverage than it was. Contract 1 keeps these
+# requirements and severities: add new obligations in a new contract, with
+# separate implementations where semantics differ. tests/policy-v1.json and
+# the adoption fixtures protect this contract as the implementation advances.
+CHECKS_V1 = (
     ("the README declares membership of the ecosystem", check_declaration, is_advertised),
     ("the front page is the only entry point", check_front_page, None),
     ("the README ends with the maintenance note", check_maintenance_note, None),
@@ -1175,27 +1185,31 @@ CHECKS = [
      check_associate_floor, not_associate),
     ("an unadvertised child project is not named on the front page",
      check_child_unadvertised, has("tools")),
-]
+)
 
 
 # Reported, never fatal. A malformed field block is a lapse in somebody's
 # correspondence rather than a defect in their tree, and failing a build over
 # the shape of a sentence addressed to a colleague is the wrong instrument.
-MINOR = [
+MINOR_V1 = (
     ("the membership declaration links to the policy", check_declaration_links, is_advertised),
     ("the discussion file is well-formed", check_discussion, has("docs/discussion.md")),
     ("the README explains the repository's name", check_name_explained, None),
     ("committed data carries no path out of a home directory", check_local_paths_data, None),
     ("the discussion file says a prompt may be misaddressed",
      check_prompt_gate, has("docs/discussion.md")),
-]
+)
+
+POLICY_VERSIONS = {"1": (CHECKS_V1, MINOR_V1)}
 
 
-def coverage() -> None:
+def coverage(policy_version: str = DEFAULT_POLICY_VERSION) -> None:
+    checks, minor = POLICY_VERSIONS[policy_version]
+    print(f"-- policy contract {policy_version}")
     print("-- checked")
-    for title, _, _a in CHECKS:
+    for title, _, _a in checks:
         print(f"   {title}")
-    for title, _, _a in MINOR:
+    for title, _, _a in minor:
         print(f"   {title} (minor: reported, never fatal)")
     print("-- not checked, and why")
     for rule, why in UNCHECKED:
@@ -1204,18 +1218,27 @@ def coverage() -> None:
     print("   the shared vision, in full — judgement, and nobody has the authority")
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     global ROOT
-    if "--root" in sys.argv:
-        ROOT = os.path.abspath(sys.argv[sys.argv.index("--root") + 1])
-    if "--version" in sys.argv:
+    ap = argparse.ArgumentParser(description="Check a repository against a stable policy contract")
+    ap.add_argument("--root", default=REPO_ROOT, help="repository to check")
+    ap.add_argument("--policy-version", choices=tuple(POLICY_VERSIONS),
+                    default=DEFAULT_POLICY_VERSION,
+                    help="mechanical policy contract (default: %(default)s)")
+    ap.add_argument("--version", action="store_true", help="print the checker implementation commit")
+    ap.add_argument("--coverage", action="store_true", help="describe the selected contract's coverage")
+    args = ap.parse_args(argv)
+    ROOT = os.path.abspath(args.root)
+    checks, minor = POLICY_VERSIONS[args.policy_version]
+    if args.version:
         print(f"{CHECKER_REPO} {version()}")
         return 0
-    if "--coverage" in sys.argv:
-        coverage()
+    if args.coverage:
+        coverage(args.policy_version)
         return 0
-    if os.path.abspath(ROOT) != REPO_ROOT:
-        print(f"-- {CHECKER_REPO} {version()} checking {ROOT}")
+    if not os.path.isdir(ROOT):
+        ap.error(f"repository directory does not exist: {ROOT}")
+    print(f"-- {CHECKER_REPO} {version()} policy contract {args.policy_version} checking {ROOT}")
     # Said before the checks rather than after them, so that nobody reads a
     # screen of failures for a tree that owes this ecosystem nothing and draws
     # the conclusion the footing exists to refuse.
@@ -1225,7 +1248,7 @@ def main() -> int:
               "it owes this ecosystem nothing, and what follows is read against "
               "what it says there")
     failures = skipped = 0
-    for title, fn, applies in CHECKS:
+    for title, fn, applies in checks:
         why = applies() if applies else None
         if why:
             skipped += 1
@@ -1239,7 +1262,7 @@ def main() -> int:
                 print(f"     {b}")
         else:
             print(f"ok   {title}")
-    for title, fn, applies in MINOR:
+    for title, fn, applies in minor:
         # Named, not swallowed. A minor check that quietly prints nothing when it
         # does not apply is indistinguishable from one that is not in the list,
         # which is the same overclaim the `skip` line exists to prevent above.
@@ -1256,7 +1279,7 @@ def main() -> int:
         else:
             print(f"ok   {title}")
     print()
-    coverage()
+    coverage(args.policy_version)
     print()
     # **The count is reported either way and the exit code does not move.** What
     # an associate's number *means* is the shared register's call, not this

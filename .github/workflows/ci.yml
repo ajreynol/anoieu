@@ -53,7 +53,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python3 scripts/policy_check.py
+      - run: python3 scripts/policy_check.py --policy-version 1
 
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a

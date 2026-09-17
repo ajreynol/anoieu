@@ -1,0 +1,33 @@
+{
+  "version": "1",
+  "blocking": [
+    "check_declaration",
+    "check_front_page",
+    "check_maintenance_note",
+    "check_docs_index",
+    "check_generated_labelled",
+    "check_dependencies",
+    "check_working_space",
+    "check_children",
+    "check_response_gate",
+    "check_links",
+    "check_no_vendor",
+    "check_citations",
+    "check_anchors",
+    "check_local_paths",
+    "check_declaration_first",
+    "check_scripts_listed",
+    "check_owner_unadvertised",
+    "check_footing_marker",
+    "check_footing_consistent",
+    "check_associate_floor",
+    "check_child_unadvertised"
+  ],
+  "advisory": [
+    "check_declaration_links",
+    "check_discussion",
+    "check_name_explained",
+    "check_local_paths_data",
+    "check_prompt_gate"
+  ]
+}

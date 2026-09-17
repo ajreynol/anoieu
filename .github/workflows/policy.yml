@@ -1,0 +1,36 @@
+name: policy
+
+on:
+  workflow_call:
+    inputs:
+      policy-version:
+        description: Stable mechanical policy contract
+        type: string
+        default: '1'
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: the repository being checked
+        uses: actions/checkout@v4
+        with:
+          path: target
+          persist-credentials: false
+      - name: the latest anoieu implementation
+        uses: actions/checkout@v4
+        with:
+          repository: ajreynol/anoieu
+          ref: main
+          path: checker
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: check the selected policy contract
+        env:
+          POLICY_VERSION: ${{ inputs.policy-version }}
+        run: python3 checker/scripts/policy_check.py --root target --policy-version "$POLICY_VERSION"

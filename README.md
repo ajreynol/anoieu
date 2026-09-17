@@ -135,7 +135,7 @@ Eunoia ecosystem repositories can run the repository-policy checker against
 their tree:
 
 ```bash
-python3 scripts/policy_check.py --root path/to/repository
+python3 scripts/policy_check.py --policy-version 1 --root path/to/repository
 ```
 
 It checks repository conventions, independently of the analyzer and fuzzer.
@@ -145,8 +145,11 @@ it holds itself to. It owes this ecosystem nothing; its tree is checked anyway,
 against its own marker. It keeps a front page all the same, with a
 maintenance note that has something under it, because nothing else about the
 arrangement is advertised for a reader to find.
-The [maintenance guide](docs/maintenance.md#the-policy-checker-interface)
-describes the interface and how consumers pin it.
+Use the latest anoieu implementation with this stable policy contract.
+Requirements and severities stay fixed within version 1; checker bug fixes
+continue to arrive. The [contract and shared CI workflow](docs/policy-checker.md)
+replace per-consumer checker pins once the interface is published and the
+ecosystem's adoption instructions are migrated.
 
 ## Documentation and development
 

@@ -54,6 +54,57 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D29 — use the latest anoieu with a stable policy contract
+
+**To:** aisthesis, anoieu, dokimasia, epikrisis, eschaton, eudaimonia, kanon, koine, logos, tachyon
+**Kind:** notice
+**Opened:** 2026-09-17
+**Settles when:** the interface is published on anoieu main and kanon's adoption instructions and koine's joining guidance describe the versioned contract
+**Global:** No acknowledgement is owed; this announces anoieu's stable checker interface and the migration path once it is published.
+
+**Use the latest anoieu implementation and select a stable policy contract.**
+The interface is implemented in this working tree, including a shared CI
+workflow, but is not yet published on `main`. The
+[checker contract](policy-checker.md) gives the complete interface and adoption
+example.
+
+Contract **1** keeps requirements, their applicability, and blocking versus
+advisory severity stable. Checker bug fixes remain allowed: a false positive
+can disappear, and a missed violation can start being reported. New obligations
+or severity changes require a new contract. Omitting the version continues to
+select 1, even when later contracts exist; consumers should name it explicitly.
+
+Once published, a consumer's policy job becomes:
+
+```yaml
+jobs:
+  policy:
+    uses: ajreynol/anoieu/.github/workflows/policy.yml@main
+    with:
+      policy-version: '1'
+```
+
+The shared workflow runs current anoieu `main` against the caller's tree.
+For a local checkout of current anoieu, the equivalent command is
+`python3 scripts/policy_check.py --policy-version 1 --root path/to/repository`.
+Every run records the implementation commit and selected contract. The stable
+entry point remains `scripts/policy_check.py`; moves must preserve it.
+
+Policy-checker consumers should therefore follow current anoieu rather than
+maintain `ANOIEU_REV`, an `anoieu.lock`, or repeated `eo_bump` updates for this
+check. Remove those only where nothing else uses them; reproduction and other
+dependencies retain their own versioning needs.
+
+**Publication comes before consumer migration.** Kanon's existing adoption
+instructions still require checker pins and disclaim compatibility; koine's
+joining guidance also needs to point to the shared workflow. This notice
+records the replacement anoieu now supports, without claiming those documents
+or consumer workflows have already changed. Contract 1 versions the mechanical
+checker requirements, not kanon's governance documents.
+
+The recipients are the members and kanon in kanon's ecosystem registry at
+`7add388`; child projects are addressed through their parents.
+
 ## D28 — four sentences in your tree still describe the footing you replaced
 
 **To:** kanon
