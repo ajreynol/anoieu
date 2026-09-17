@@ -32,7 +32,10 @@ python3 scripts/gen_checks_doc.py
 git diff --exit-code docs/checks.md
 ```
 
-The suite needs no external checker unless `--oracle` is requested. If `deps/`
+The suite exercises the real koine append tool, resolved through `$KOINE`, the
+sibling checkout, or the pinned `deps/koine` clone. CI checks out the pin; a
+machine without koine must fetch it. No database implementation is mocked as a
+substitute. The suite needs no external checker unless `--oracle` is requested. If `deps/`
 exists, its checkouts are compared with `scripts/deps.lock`; a clean checkout
 skips those comparisons. Do not silently refresh somebody's working checkouts
 to make a test pass. Corpus CI restores the recorded commits with
@@ -111,12 +114,12 @@ Commands are run from the repository root unless noted.
 | `deps.json`, `deps.lock` | corpus sources and recorded commits |
 | `gen_checks_doc.py` | generate the check catalogue |
 | `gen_corpus_table.py` | measure and render the corpus, imported by the runner |
-| `gen_open_findings.py` | add new findings; `--check` reports missing rows |
+| `gen_open_findings.py` | record findings through koine, add ledger rows and render the static table; `--check` previews through koine and reports missing rows |
 | `landing.py` | report changes awaiting landing; `--check` reads checkouts |
-| `anoieu_analyzer` | run every standard target, dump the bugs, add the new ones to `docs/reports/bugs.json`; `--dry-run` lists the signatures and analyses nothing, `--no-update` writes the dump and stops |
+| `anoieu_analyzer` | run every standard target, dump the bugs, append through koine; `--dry-run` lists signatures and analyses nothing, `--preview` runs the analysis and koine's dry run |
 | `anoieu_fuzzer` | fuzz two checkers against each other: `anoieu_fuzzer ethos logos N`, where N is how many cases; `--dry-run` resolves the binaries and runs nothing. The full interface is `python3 -m anoieu_fuzz run` |
 | `targets.json`, `targets.py` | the standard targets, and where each project is on this machine |
-| `koine.py`, `koine.lock` | find the pinned [koine](https://github.com/ajreynol/koine), whose `koine_append_db` maintains the bug database |
+| `koine.py`, `koine.lock` | resolve the required [koine](https://github.com/ajreynol/koine), falling back to a clone at the pin; delegate its CLI unchanged to `bug_db/koine_append_db` |
 | `finding_id.py` | the id of one bug, computed the way the checks compute it |
 | `harvest_cpc_proofs` | collect real CPC proofs for the fuzzer |
 | `oracle_desugar.py` | compare desugaring against an ethos binary |
@@ -175,9 +178,20 @@ and per-id coverage with a database that carries neither; the smaller thing that
 does less was the right trade, and it is recorded here so that the trade stays
 visible rather than being rediscovered as a defect.
 
+**Koine is the required database writer.** Analyzer runs, fuzzer promotion and
+reporting, and ledger generation all call `bug_db/koine_append_db`; no backend
+setting or alternate writer is supported. Preview modes call koine's own dry
+run. Anoieu supplies finding identities and evidence; koine owns validation,
+deduplication, conflict reporting, dates and database writes. If that interface
+needs a capability it lacks, propose the change to koine rather than implement
+a competing database path here.
+
 **For now we answer coverage on our own side.** `scripts/targets.json` says what
-a full run reads, so *what did we look at* is a question about our own
-configuration rather than about the database.
+a full static run reads. `python3 -m anoieu_fuzz report` records the promoted
+reproducer corpus, with recorded outcomes and the same ids as the ledger;
+[the fuzzer guide](fuzzing.md#recording-through-koine) explains the command.
+Recording performs no replay, so its ingestion dates do not establish that a
+bug still reproduces. Neither producer's dump determines closure.
 
 **What would bring it back.** The second producer is
 `prompts/anoieu_analyzer_agent`, and the two are compared by appending both

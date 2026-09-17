@@ -228,10 +228,10 @@ python3 -m anoieu_fuzz one --seed 7              # print one case; run nothing
 python3 -m anoieu_fuzz replay case.cpc           # what each checker says about a file
 python3 -m anoieu_fuzz shrink case.cpc           # cut a case down to what still provokes it
 python3 -m anoieu_fuzz promote fuzz-findings/X   # keep one: move it into tests/fuzz/
-python3 -m anoieu_fuzz report                    # every promoted finding, as diagnostics
+python3 -m anoieu_fuzz report                    # record through koine, then display diagnostics
 python3 -m anoieu_fuzz verify                    # do they still do what the record says
 python3 -m anoieu_fuzz explain FUZ0002           # what a code means
-python3 -m anoieu_fuzz list-codes                # the four of them
+python3 -m anoieu_fuzz list-codes                # the five of them
 ```
 
 `replay` is how a reproducer is confirmed on another machine, and `shrink` is
@@ -302,11 +302,49 @@ python3 -m anoieu_fuzz promote fuzz-findings/<bucket> --owner ethos --note "..."
 python3 scripts/gen_open_findings.py                               # give it a row
 ```
 
-`promote` copies the reproducer into `tests/fuzz/`, where it is committed
-evidence, beside `tests/witnesses/` which is the same idea for the checks. From
+`promote` copies the reproducer into `tests/fuzz/` and records it through koine
+in `docs/reports/bugs.json`. Commit that evidence beside `tests/witnesses/`,
+which is the same idea for the checks. From
 there it is a finding like any other: a code, an owner, a fingerprint, a row in
 [`open-findings.md`](reports/open-findings.md), and it leaves the open table only when
 somebody rules on it.
+
+### Recording through koine
+
+**Koine is required.** `promote` records the findings it keeps through koine's
+`bug_db/koine_append_db`. `report` records the promoted corpus through the same
+tool before displaying it. There is no backend choice or database format flag:
+
+```bash
+python3 -m anoieu_fuzz report --preview   # koine's own --dry-run
+python3 -m anoieu_fuzz report             # append through koine and display
+python3 -m anoieu_fuzz report --format json  # same append, JSON diagnostics
+```
+
+The input defaults to `tests/fuzz/`, after review and promotion. Anoieu writes
+`scratch/new-fuzz-bugs.json` with the ledger's finding ids, reproducer paths,
+recorded checker outcomes, and both checker names on disagreements. Koine alone
+appends that dump to [`bugs.json`](reports/bugs.json). Re-appending adds no
+duplicates. `--format` controls diagnostic display only; koine's messages go to
+stderr so JSON and SARIF remain readable on stdout.
+
+Both commands exit 0 only after koine succeeds, including for an empty corpus.
+If an append fails, promotion fails and retains the copied evidence and dump;
+fix the dependency or database problem and retry with `report` using the same
+`--corpus`. There is no local database fallback. `scripts/koine.py` locates the
+required tool through `$KOINE`, `../koine`, or a clone at `scripts/koine.lock`;
+those are installation locations, not alternative backends. Run these reporting
+commands from an anoieu checkout, where the corpus, pin and database live.
+
+**Recording does not replay a reproducer.** `first_seen` and `last_seen` in this
+database record ingestion dates, not fresh confirmation against a checker build.
+Use `replay` or `verify` for that. Reporting includes promoted findings already
+ruled on: their decisions remain in the open/closed ledger. Raw candidates in
+`fuzz-findings/` still need review and promotion, and a database append neither
+files a report upstream nor closes a finding. The generated
+[`static-analysis.md`](reports/static-analysis.md) table shows only the static
+subset of this shared database. The ledger generator also calls koine before
+writing its tables; its `--check` mode uses koine's dry run.
 
 ### The codes
 

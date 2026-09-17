@@ -109,15 +109,11 @@ either direction, and lands in the log: **[`reports.md`](reports.md#the-log-what
 | [cvc5-1](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | A | `programs/Strings.eo:42` and `:55` declare `Int` and return `Bool` | reopened — recorded as fixed, never changed |
 | [cvc5-6](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | compare each rule against its `ProofRule` declaration, its children and arguments, and `eo_printer.cpp` reshaping | requested by cvc5; may belong to [dokimasia](https://github.com/ajreynol/dokimasia) instead, see [`notes.md`](../notes.md#8-a-neighbouring-tool) |
 | [cvc5-7](#cvc5--the-calculus-everything-downstream-is-built-from) | cvc5 | B | keep a reproducer with every claim about first use, and derive severity from whether a call can stay stuck | requested by cvc5 |
-| [ethos-1](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/match-simple.eo:11` declares `<` `:right-assoc` with a `Bool` return | open |
 | [ethos-2](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | an unknown attribute warns and is dropped, silently changing what a term means; make it an error, or at least carry the location | proposed |
 | [ethos-3](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | a misordered `declare-rule` field reports as `Expected conclusion`, several lines from the cause | proposed |
 | [ethos-4](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | a program applied to the wrong arity prints without a file or line, and the run still exits `correct` | proposed |
 | [ethos-5](#ethos--the-proof-checker-and-its-own-signatures) | ethos | B | run over `tests/*.eo`, `DOC*` disabled | proposed |
-| [ethos-8](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | **`FUZ0002`** — `(declare-const f (->))` aborts with an uncaught `std::length_error` | open |
-| [ethos-9](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | **`FUZ0003`** — three error paths abort outside the `Error: <file>:<line>` convention, with no location | open |
 | [ethos-6](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | two test signatures use literals whose category they never declare, so `+` gets an untyped nil | open |
-| [ethos-7](#ethos--the-proof-checker-and-its-own-signatures) | ethos | A | `tests/naive-nary.eo:182` — a case of `isPermutation` that can never be reached | open |
 | [eoc-1](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | preflight: have `driver.py` run anoieu over the triple before stage 1, so a missing semantics block is refused at launch rather than at stage 6 | proposed |
 | [eoc-2](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | run over `semantics/*.eos` and the signatures the tests compile | proposed |
 | [eoc-3](#ethos-eoc--the-eunoia-compiler) | ethos-eoc | B | lean on anoieu for its own direction #2 — the diff between the operators the desugar stage forward-declares and the `:is-list-nil` blocks a human wrote | proposed |
@@ -141,6 +137,14 @@ analyzer does differently as a result, are in
 [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back).
 **`cvc5-1` is not settled and is back in the table above:** it was closed on a
 triage that said both signatures now return `Bool`, and they never did.
+
+**Register correction, 2026-09-17:** the earlier `open` labels for ethos-1,
+ethos-7, ethos-8 and the two reported ethos-9 paths lagged behind the verdicts
+already recorded in the log. Their rows, together with the two `symm` docstring
+rows, are closed on `anoieu-findings`@`292201c2`: seven findings awaiting the
+separate landing audit. The third ethos-9 path was not reported or ruled on;
+it remains an observation in the detailed entry below. No new verdict is made
+by this correction.
 
 ### The claim
 

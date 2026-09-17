@@ -15,6 +15,10 @@ means running somebody else's binary, which this job does not have -- so its
 findings come from `tests/fuzz/`, the reproducers a person promoted, and are
 told apart by their `FUZ` code.
 
+Both sources are recorded by koine before any ledger is written. A koine
+failure fails generation. `--check` uses koine's dry run and writes no reports.
+Normal generation also refreshes the static table from the shared database.
+
 **Additive only.** This generator adds rows and never removes one. A finding
 that has stopped being reported stays in the file until something *else* takes
 it out — see "How this file is maintained" in the generated header. The
@@ -34,6 +38,7 @@ closed is a judgement, not a diff.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -48,10 +53,16 @@ from anoieu.semantics import load_set  # noqa: E402
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_corpus_table import DEFAULT_ROOTS, TARGETS, not_audited, signatures  # noqa: E402
+import koine  # noqa: E402
+from targets import commit_of  # noqa: E402
 
 from anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
+from anoieu_fuzz.report import bugs as fuzz_bugs, load as load_fuzz  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB = os.path.join(ROOT, "docs", "reports", "bugs.json")
+DUMP = os.path.join(ROOT, "scratch", "new-report-bugs.json")
+STATIC_PAGE = os.path.join(ROOT, "docs", "reports", "static-analysis.md")
 OUT = os.path.join(ROOT, "docs", "reports", "open-findings.md")
 LEDGER = os.path.join(ROOT, "docs", "reports", "closed-findings.md")
 
@@ -273,6 +284,77 @@ def existing(report: str, ledger: str) -> tuple[list[str], list[str], set[str]]:
     return open_rows, closed_rows, ids
 
 
+STATIC_HEADER = """# Static analysis
+
+Every static finding the checks have found on the standard targets, rendered from
+[`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
+you want the data rather than the table. The analyzer and ledger generator
+render this static subset. The database also records
+[promoted fuzzer findings](../fuzzing.md#recording-through-koine); it
+is maintained exclusively by [koine](https://github.com/ajreynol/koine)'s `koine_append_db`,
+which adds what is new and never edits or removes what is already there.
+
+**This page is the new workflow and it is not yet the report.** The report is
+[`open-findings.md`](open-findings.md), generated the way it always was. Nothing
+here closes a bug and no verdict reached this file: a bug that has been fixed is
+still in the database, with the date it was last seen. What a finding is and what
+settles one stay ours -- see [`reporting-workflow.md`](reporting-workflow.md).
+
+A second producer, an agent driven by
+[`prompts/anoieu_analyzer_agent`](../../prompts/anoieu_analyzer_agent), writes
+a dump in the same shape and appends to the same database.
+"""
+
+
+def render_static(db: str, page: str) -> None:
+    """The table, from the database. Our page, our columns."""
+    with open(db, encoding="utf-8") as fh:
+        bugs = [b for b in json.load(fh)["bugs"]
+                if not b.get("code", "").startswith("FUZ")]
+    cols = ("bug", "owner", "code", "where", "description", "first seen", "last seen")
+    lines = [STATIC_HEADER, "", f"## Every static finding recorded ({len(bugs)})", "",
+             "| " + " | ".join(cols) + " |",
+             "| " + " | ".join("---" for _ in cols) + " |"]
+    for b in bugs:
+        lines.append("| " + " | ".join([
+            f"`{b.get('bug', '')}`",
+            b.get("owner", ""),
+            b.get("code", ""),
+            f"`{b.get('where', '')}`" if b.get("where") else "",
+            b.get("description", "").replace("|", "\\|"),
+            b.get("first_seen", ""),
+            b.get("last_seen", ""),
+        ]) + " |")
+    open(page, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    print(f"-- {os.path.relpath(page, ROOT)}: {len(bugs)} row(s)")
+
+def static_bug(fid: str, row: dict, commit: str) -> dict:
+    """A static row in the input shape koine consumes, shared by both runners."""
+    path, _, line = row["where"].rpartition(":")
+    return {
+        "id": fid,
+        "bug": f"{row['code']}-{os.path.basename(path)}-{line}",
+        "tool": "anoieu",
+        "description": row["what"],
+        "owner": row["owner"],
+        "code": row["code"],
+        "where": row["where"],
+        "found_at": commit,
+    }
+
+
+def record(found: dict, roots: dict, preview: bool = False) -> int:
+    """The ledger generator also records findings through the required koine tool."""
+    bugs = [static_bug(fid, row, commit_of(roots.get(row["owner"], "")))
+            for fid, row in found.items() if not row["code"].startswith("FUZ")]
+    bugs.extend(fuzz_bugs(load_fuzz()))
+    os.makedirs(os.path.dirname(DUMP), exist_ok=True)
+    with open(DUMP, "w", encoding="utf-8") as fh:
+        json.dump(bugs, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
+    return koine.main([DUMP, DB] + (["--dry-run"] if preview else []))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--roots", help="a directory of clones; defaults to deps/")
@@ -284,6 +366,9 @@ def main() -> int:
         roots = {name: os.path.join(args.roots, name) for name in DEFAULT_ROOTS}
 
     found = collect(roots)
+    code = record(found, roots, preview=args.check)
+    if code:
+        return code
     kept, closed, listed = existing(OUT, LEDGER)
     missing = {k: v for k, v in found.items() if k not in listed}
 
@@ -302,6 +387,8 @@ def main() -> int:
         for k, v in sorted(missing.items(), key=lambda kv: kv[1]["where"]):
             print(f"   {k}  {v['owner']}  {v['code']}  {v['where']}", file=sys.stderr)
         return 1
+
+    render_static(DB, STATIC_PAGE)
 
     added = [
         f"| `{k}` | {v['owner']} | {v['code']} | `{v['where']}` | {v['what']} |  |"

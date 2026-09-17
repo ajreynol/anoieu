@@ -125,6 +125,22 @@ def run(*argv: str) -> tuple[int, str, str]:
     return p.returncode, p.stdout, p.stderr
 
 
+def run_reporting(directory: str, *argv: str, koine_root: str = "") -> tuple[int, str, str]:
+    """Exercise the real CLI and koine, with database files isolated from the repo."""
+    env = dict(os.environ)
+    if koine_root:
+        env["KOINE"] = koine_root
+    program = """import os, sys
+from anoieu_fuzz import cli, report
+report.DB = os.path.join(sys.argv[1], 'bugs.json')
+report.DUMP = os.path.join(sys.argv[1], 'new-fuzz-bugs.json')
+raise SystemExit(cli.main(sys.argv[2:]))
+"""
+    p = subprocess.run([sys.executable, "-c", program, directory, *argv],
+                       capture_output=True, text=True, cwd=ROOT, env=env)
+    return p.returncode, p.stdout, p.stderr
+
+
 def cases(d: str) -> list[tuple[str, bool, str]]:
     out: list[tuple[str, bool, str]] = []
 
@@ -491,6 +507,125 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     case("a promoted crash is owned by the checker that crashed",
          got and reporting.owner_of(got[0]) == "ethos",
          reporting.owner_of(got[0]) if got else "-")
+
+    # There is one database writer: the real koine tool. Diagnostic formats
+    # cannot opt out of recording, and a failed append must not claim success.
+    dumped = reporting.bugs(promoted)
+    ledger_rows = reporting.rows()
+    case("koine input uses exactly the promoted ledger ids",
+         {b["id"] for b in dumped} == set(ledger_rows))
+    case("koine input preserves attribution and recorded outcomes",
+         all(b["owner"] == ledger_rows[b["id"]]["owner"]
+             and b["where"] == ledger_rows[b["id"]]["where"]
+             and b["tool"] == "anoieu-fuzz"
+             and b["outcomes"] == r["outcomes"]
+             and b["description"] == r["summary"]
+             and "not replayed" in b["evidence"]
+             and "first_seen" not in b and "last_seen" not in b
+             for b, r in zip(dumped, promoted)))
+    db = os.path.join(d, "bugs.json")
+    rc, o, e = run_reporting(d, "report", "--corpus", corpus_dir, "--preview")
+    case("report previews through koine without writing a database",
+         rc == 0 and "dry run" in e and not os.path.exists(db), e)
+    rc, o, e = run_reporting(d, "report", "--corpus", corpus_dir)
+    case("ordinary report records findings through koine",
+         rc == 0 and "1 new bug(s)" in e and os.path.isfile(db), e)
+    before = open(db).read() if os.path.isfile(db) else ""
+    for fmt in ("json", "sarif", "github"):
+        rc, o, e = run_reporting(d, "report", "--format", fmt, "--corpus", corpus_dir)
+        case(f"{fmt} display still calls koine and adds no duplicates",
+             rc == 0 and "1 already known" in e and open(db).read() == before, e)
+        if fmt in ("json", "sarif"):
+            case(f"koine output does not contaminate {fmt} diagnostics",
+                 isinstance(json.loads(o), (list, dict)), o[:100])
+    failing = os.path.join(d, "failing-koine")
+    os.makedirs(os.path.join(failing, "bug_db"))
+    write(os.path.join(failing, "bug_db"), "koine_append_db",
+          "import sys\nprint('koine refused', file=sys.stderr)\nsys.exit(17)\n")
+    rc, o, e = run_reporting(d, "report", "--corpus", corpus_dir, koine_root=failing)
+    case("a koine failure fails reporting without a fallback or success output",
+         rc == 17 and not o and "koine refused" in e and open(db).read() == before, e)
+    new_corpus = os.path.join(d, "promoted-via-cli")
+    rc, o, e = run_reporting(d, "promote", src, "--corpus", new_corpus,
+                            koine_root=failing)
+    case("promotion cannot succeed when koine refuses",
+         rc == 17 and "promotion incomplete" in e
+         and os.path.isfile(os.path.join(new_corpus, "b-test", "case.eo"))
+         and open(db).read() == before, e)
+    rc, o, e = run_reporting(d, "report", "--corpus", new_corpus)
+    case("report retries a failed promotion through koine",
+         rc == 0 and "1 new bug(s)" in e, e)
+    rc, o, e = run_reporting(d, "promote", src, "--corpus", os.path.join(d, "third-corpus"))
+    case("ordinary promotion records its finding through koine",
+         rc == 0 and "1 new bug(s)" in e and "recorded through koine" in o, e)
+    empty = os.path.join(d, "empty-corpus")
+    os.makedirs(empty)
+    rc, o, e = run_reporting(d, "report", "--format", "json", "--corpus", empty)
+    case("an empty report still calls koine and emits valid JSON",
+         rc == 0 and json.loads(o) == [] and "0 new bug(s)" in e, e)
+    broken_dir = os.path.join(empty, "missing-case")
+    os.makedirs(broken_dir)
+    write(broken_dir, "finding.json", json.dumps({"kind": "crash"}))
+    rc, o, e = run_reporting(d, "report", "--corpus", empty)
+    case("reporting refuses missing evidence without success output",
+         rc == 2 and not o and "no reproducer" in e, e)
+    rc, o, e = run("report", "--format", "koine")
+    case("koine is not a selectable report format", rc == 2 and "invalid choice" in e, e)
+
+    # The legacy generator and analyzer must obey the same requirement. Supply
+    # a static observation without fetching a corpus, and use the real koine
+    # tool with isolated report files. Only the failure test substitutes a tool
+    # that refuses the append; it implements no database behavior.
+    program = """import os, runpy, sys
+script, directory = sys.argv[1:3]
+main = runpy.run_path(script)['main']
+g = main.__globals__
+for key, name in [('DB', 'static-bugs.json'), ('DUMP', 'static-dump.json'),
+                  ('OUT', 'open.md'), ('LEDGER', 'closed.md'),
+                  ('PAGE', 'static.md'), ('STATIC_PAGE', 'static.md')]:
+    g[key] = os.path.join(directory, name)
+if 'gen_open_findings' in script:
+    g['collect'] = lambda roots: {'0123456789abcdef': {
+        'owner': 'ethos', 'code': 'EO0040', 'where': 'case.eo:1', 'what': 'test finding'}}
+    g['load_fuzz'] = lambda: []
+else:
+    g['config'].roots = lambda: ({}, 'test fixture')
+sys.argv = [script, *sys.argv[3:]]
+raise SystemExit(main())
+"""
+    for script in ("scripts/gen_open_findings.py", "scripts/anoieu_analyzer"):
+        with open(os.path.join(d, "open.md"), "w") as fh:
+            fh.write("unchanged ledger\n")
+        env = dict(os.environ, KOINE=failing)
+        p = subprocess.run([sys.executable, "-c", program, script, d],
+                           capture_output=True, text=True, cwd=ROOT, env=env)
+        case(f"{script} fails before writing reports when koine refuses",
+             p.returncode == 17 and "koine refused" in p.stderr
+             and open(os.path.join(d, "open.md")).read() == "unchanged ledger\n"
+             and not os.path.exists(os.path.join(d, "static.md")), p.stderr)
+    p = subprocess.run([sys.executable, "-c", program,
+                        "scripts/gen_open_findings.py", d],
+                       capture_output=True, text=True, cwd=ROOT)
+    case("ledger generation records through koine and refreshes the static table",
+         p.returncode == 0 and "1 new bug(s)" in p.stdout
+         and 'EO0040' in open(os.path.join(d, "static.md")).read()
+         and '0123456789abcdef' in open(os.path.join(d, "open.md")).read(), p.stderr)
+    static_db = open(os.path.join(d, "static-bugs.json")).read()
+    p = subprocess.run([sys.executable, "-c", program,
+                        "scripts/gen_open_findings.py", d, "--check"],
+                       capture_output=True, text=True, cwd=ROOT)
+    case("ledger checking previews through koine without writing the database",
+         p.returncode == 0 and "dry run" in p.stdout
+         and open(os.path.join(d, "static-bugs.json")).read() == static_db, p.stderr)
+    p = subprocess.run([sys.executable, "-c", program,
+                        "scripts/anoieu_analyzer", d, "--preview"],
+                       capture_output=True, text=True, cwd=ROOT)
+    case("analyzer preview uses koine's dry run",
+         p.returncode == 0 and "dry run" in p.stdout
+         and open(os.path.join(d, "static-bugs.json")).read() == static_db, p.stderr)
+    p = subprocess.run([sys.executable, "scripts/anoieu_analyzer", "--no-update"],
+                       capture_output=True, text=True, cwd=ROOT)
+    case("the analyzer has no dump-only bypass", p.returncode == 2, p.stderr)
 
     # verify, against checkers whose answers are known: one agreeing with what
     # was recorded, one that has changed its mind since

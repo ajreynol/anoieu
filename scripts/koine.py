@@ -6,7 +6,10 @@ database of every bug the tool has ever found. It never edits or removes what is
 already there. There is no package and no install step -- a customer pins a
 commit and clones it -- so this is the whole of the integration on our side.
 
-Three places are tried, in order, and the first that has the modules wins:
+    python3 scripts/koine.py DUMP DB --dry-run  # preview any producer's dump
+    python3 scripts/koine.py DUMP DB            # append through koine
+
+Three places are tried, in order, and the first that has the script wins:
 
 1. `$KOINE`, if it is set. What CI uses, and what a bisect uses.
 2. `../koine` beside this repository, which is where it sits on a machine that
@@ -120,3 +123,13 @@ def version(path: str) -> str:
     out = subprocess.run(["git", "-C", path, "rev-parse", "--short", "HEAD"],
                          capture_output=True, text=True)
     return out.stdout.strip() if out.returncode == 0 else ""
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Locate koine and delegate its entire CLI, including validation and help."""
+    return subprocess.run([sys.executable, append_db(),
+                           *(sys.argv[1:] if argv is None else argv)]).returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

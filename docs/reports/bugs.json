@@ -647,6 +647,198 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/sorry.eo:4"
+    },
+    {
+      "id": "147433b3e48ae9d6",
+      "bug": "FUZ0002-crash-ethos-terminate-called-after-throwing-an-instance--fd1900",
+      "tool": "anoieu-fuzz",
+      "description": "ethos crash: terminate called after throwing an instance of 'std::length_error'",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-09-17",
+      "bucket": "crash-ethos-terminate-called-after-throwing-an-instance--fd1900",
+      "code": "FUZ0002",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "crash",
+      "mode": "signature",
+      "note": "a nullary arrow type: minimal form is (declare-const f (->))",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "abnormal",
+          "detail": "terminate called after throwing an instance of 'std::length_error'",
+          "exit": -6,
+          "seconds": 0.083,
+          "status": "crash"
+        }
+      ],
+      "owner": "ethos",
+      "seed": "big:1568",
+      "source": "mutated:seed:reference-query-commands.eo",
+      "where": "tests/fuzz/crash-ethos-terminate-called-after-throwing-an-instance--fd1900/case.eo:2"
+    },
+    {
+      "id": "4de9bb965fa0c04b",
+      "bug": "FUZ0005-disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094",
+      "tool": "anoieu-fuzz",
+      "description": "ethos accepted what logos refused: Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ \"\\u{a}\" \"\\u{6f}rd\")) N)))",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-09-17",
+      "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094",
+      "code": "FUZ0005",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "underaccept",
+      "mode": "proof",
+      "note": "an assume after the first step: ethos allows it, logos will not parse the file",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.023,
+          "status": "correct"
+        },
+        {
+          "checker": "logos",
+          "coarse": "reject",
+          "detail": "Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ \"\\u{a}\" \"\\u{6f}rd\")) N)))",
+          "exit": 1,
+          "seconds": 0.002,
+          "status": "rejected"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "final:715",
+      "source": "mutated:seed:test-string-escape.cpc",
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2"
+    },
+    {
+      "id": "adc98aa79b4861bb",
+      "bug": "FUZ0001-disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf",
+      "tool": "anoieu-fuzz",
+      "description": "logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (SYMBOL).",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-09-17",
+      "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf",
+      "code": "FUZ0001",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "overaccept",
+      "mode": "proof",
+      "note": "logos/test/regress/sexp/test-define.cpc, unmutated: declare-fun is an SMT-LIB command ethos takes only in a reference file",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "reject",
+          "detail": "Error: <path>:N.N: Expected Eunoia command, got `_` (SYMBOL).",
+          "exit": -6,
+          "seconds": 0.095,
+          "status": "rejected"
+        },
+        {
+          "checker": "logos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.003,
+          "status": "correct"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "logos/test/regress/sexp/test-define.cpc",
+      "source": "seed:test-define.cpc",
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf/case.cpc:2"
+    },
+    {
+      "id": "9315026a26d2c2d0",
+      "bug": "FUZ0001-disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92",
+      "tool": "anoieu-fuzz",
+      "description": "logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (LPAREN).",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-09-17",
+      "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92",
+      "code": "FUZ0001",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "overaccept",
+      "mode": "proof",
+      "note": "unmodified output of 'cvc5 --dump-proofs --proof-format=cpc' with the leading 'unsat' removed: the proof is wrapped in one outer ( ... ). ethos refuses it at the first paren; logos unwraps it and checks it. 12 of 14 proofs harvested from cvc5's own regressions behave this way",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "reject",
+          "detail": "Error: <path>:N.N: Expected Eunoia command, got `_` (LPAREN).",
+          "exit": -6,
+          "seconds": 0.089,
+          "status": "rejected"
+        },
+        {
+          "checker": "logos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.003,
+          "status": "correct"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "p19.cpc",
+      "source": "seed:p19.cpc",
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc:2"
+    },
+    {
+      "id": "918dbdb5f068f46c",
+      "bug": "FUZ0003-unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f",
+      "tool": "anoieu-fuzz",
+      "description": "ethos unexplained: Fatal failure within bool ethos::State::includeFile(const std::string&, bool, bool, const ethos::Expr&) at <path>:N",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-09-17",
+      "bucket": "unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f",
+      "code": "FUZ0003",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "unexplained",
+      "mode": "signature",
+      "note": "an unclosed assume-push in a signature; the message speaks of 'including' a file given on the command line",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "abnormal",
+          "detail": "Fatal failure within bool ethos::State::includeFile(const std::string&, bool, bool, const ethos::Expr&) at <path>:N",
+          "exit": -6,
+          "seconds": 0.071,
+          "status": "unexplained"
+        }
+      ],
+      "owner": "ethos",
+      "seed": "big:377",
+      "source": "mutated:seed:segfault-98.eo",
+      "where": "tests/fuzz/unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f/case.eo:2"
+    },
+    {
+      "id": "f419f6265e79b94b",
+      "bug": "FUZ0003-unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94",
+      "tool": "anoieu-fuzz",
+      "description": "ethos unexplained: Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at <path>:N",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-09-17",
+      "bucket": "unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94",
+      "code": "FUZ0003",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "unexplained",
+      "mode": "signature",
+      "note": "declaring a literal category twice; the message has no Error: prefix, no file and no line",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "abnormal",
+          "detail": "Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&) at <path>:N",
+          "exit": -6,
+          "seconds": 0.08,
+          "status": "unexplained"
+        }
+      ],
+      "owner": "ethos",
+      "seed": "big:288",
+      "source": "generated",
+      "where": "tests/fuzz/unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94/case.eo:2"
     }
   ]
 }

@@ -20,6 +20,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
+      - name: the required koine version
+        id: koine
+        run: |
+          python3 -c 'import sys; sys.path.insert(0, "scripts"); import koine; print("commit=" + koine.pinned())' >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: ajreynol/koine
+          ref: ${{ steps.koine.outputs.commit }}
+          path: deps/koine
       - run: python3 tests/run.py
       - name: the check catalogue is current
         run: |
@@ -199,6 +208,8 @@ jobs:
         with:
           name: report
           path: |
+            docs/reports/bugs.json
+            docs/reports/static-analysis.md
             docs/reports/corpus.md
             docs/reports/open-findings.md
             docs/reports/closed-findings.md

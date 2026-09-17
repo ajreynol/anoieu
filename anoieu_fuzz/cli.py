@@ -8,15 +8,16 @@
 
 and, once a run has found something worth keeping:
 
-    anoieu-fuzz promote DIR             # move a reproducer into tests/fuzz/
-    anoieu-fuzz report                  # every promoted finding, as diagnostics
+    anoieu-fuzz promote DIR             # keep a reproducer and record it through koine
+    anoieu-fuzz report                  # record promoted findings through koine, then display
+    anoieu-fuzz report --preview        # ask koine what the append would do
     anoieu-fuzz verify                  # do they still do what the record says
     anoieu-fuzz explain FUZ0002         # what a code means
-    anoieu-fuzz list-codes              # the four of them
+    anoieu-fuzz list-codes              # the five of them
 
-`run` exits 1 when it found something, so a nightly job is one line. `report`
-exits 1 when anything is promoted, which is the same convention `anoieu check`
-uses and means the same thing: there are open findings.
+`run` exits 1 when it found something, so a nightly job is one line. `promote`
+and `report` succeed only when koine succeeds. Diagnostic formats affect
+display only; koine is the required database writer for every report.
 """
 
 from __future__ import annotations
@@ -374,23 +375,44 @@ def cmd_promote(args) -> int:
             print(f"-- {e}", file=sys.stderr)
             return 2
         kept.append(where)
-        print(f"-- promoted {os.path.relpath(where, ROOT)}")
-    print(f"-- {len(kept)} reproducer(s) are now committed evidence. Run "
+        print(f"-- kept {os.path.relpath(where, ROOT)}")
+    paths = {os.path.abspath(path) for path in kept}
+    records = [r for r in reporting.load(args.corpus)
+               if os.path.abspath(r["dir"]) in paths]
+    code = _record(records)
+    if code:
+        print("-- promotion incomplete: reproducers and dump are retained. "
+              "Fix the koine failure and rerun `anoieu-fuzz report` with the "
+              "same --corpus to retry.", file=sys.stderr)
+        return code
+    print(f"-- {len(kept)} reproducer(s) recorded through koine. Run "
           f"`python3 scripts/gen_open_findings.py` to give each one a row.")
     return 0
 
 
+def _record(records: list[dict], preview: bool = False) -> int:
+    try:
+        return reporting.record(records, preview=preview)
+    except (OSError, ValueError) as exc:
+        print(f"-- cannot record findings through koine: {exc}", file=sys.stderr)
+        return 2
+
+
 def cmd_report(args) -> int:
     records = reporting.load(args.corpus)
+    code = _record(records, preview=args.preview)
+    if code:
+        return code
     if not records:
-        print("-- nothing is promoted; a run writes candidates, `promote` keeps one")
+        print(reporting.render([], args.format) if args.format != "text" else
+              "-- nothing is promoted; a run writes candidates, `promote` keeps one")
         return 0
     text = reporting.render(records, args.format, color=not args.no_color)
     print(text.rstrip())
     if args.format == "text":
         print(f"-- {len(records)} promoted finding(s) in "
               f"{os.path.relpath(args.corpus or reporting.CORPUS, ROOT)}")
-    return 1
+    return 0
 
 
 def cmd_verify(args) -> int:
@@ -579,7 +601,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--metamorphic", action="store_true")
     s.set_defaults(fn=cmd_shrink)
 
-    pr = sub.add_parser("promote", help="move a reproducer into the committed corpus")
+    pr = sub.add_parser("promote", help="keep a reproducer and record it through koine")
     pr.add_argument("dir", nargs="+", help="a bucket directory a run wrote")
     pr.add_argument("--owner", default="",
                     help="whose defect this is; defaults to the checker(s) involved")
@@ -587,8 +609,10 @@ def main(argv: list[str] | None = None) -> int:
     pr.add_argument("--corpus", default="", help="where to keep it; defaults to tests/fuzz/")
     pr.set_defaults(fn=cmd_promote)
 
-    rp = sub.add_parser("report", help="every promoted finding, as diagnostics")
-    rp.add_argument("--format", choices=("text", "json", "github", "sarif"), default="text")
+    rp = sub.add_parser("report", help="record promoted findings through koine and display them")
+    rp.add_argument("--format", choices=("text", "json", "github", "sarif"),
+                    default="text", help="diagnostic display format; recording always uses koine")
+    rp.add_argument("--preview", action="store_true", help="use koine's --dry-run to preview the append")
     rp.add_argument("--no-color", action="store_true")
     rp.add_argument("--corpus", default="", help="defaults to tests/fuzz/")
     rp.set_defaults(fn=cmd_report)

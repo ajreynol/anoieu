@@ -16,7 +16,7 @@ known bug differently. Re-running is free: the same dump twice adds nothing.
 
     scripts/anoieu_analyzer                  # all three steps
     scripts/anoieu_analyzer --dry-run        # analyse nothing: say what would be read
-    scripts/anoieu_analyzer --no-update      # steps 1 and 2 only
+    scripts/anoieu_analyzer --preview        # run checks, then koine's --dry-run
     scripts/anoieu_analyzer --target cpc     # one target, repeatable
     scripts/anoieu_analyzer --dump FILE      # write the dump somewhere else
 
@@ -27,14 +27,12 @@ because somebody else is their author, and which are missing. *A run that reads
 nothing and a run that finds nothing both print `0 bug(s)`*, and this is what
 tells them apart before either happens.
 
-**`--no-update` is how you look before you leap.** It runs the checks and writes
-the dump, then stops, so you can read what this run found, diff it against the
-last one, or hand it to `koine_append_db --dry-run` yourself. The database is not
-touched.
+**`--preview` runs the checks and koine's own dry run.** Koine is required for
+every database report, including a preview; there is no dump-only bypass.
 
-**The old workflow is untouched.** `scripts/run.py` still syncs `deps/` and
-writes `open-findings.md`; this writes a database and a page of its own beside
-them. Nothing here closes a row, and no verdict is in the database.
+**The ledger workflow uses koine too.** `scripts/run.py` still syncs `deps/`
+and writes `open-findings.md`; its generator records through koine before
+writing ledger rows. Nothing here closes a row, and no verdict is in the database.
 
 **The second producer is an agent.** `prompts/anoieu_analyzer_agent` asks an
 assistant the same question against the same targets and has it write a dump in
@@ -58,46 +56,14 @@ sys.path.insert(0, HERE)
 
 import koine  # noqa: E402
 import targets as config  # noqa: E402
-from gen_open_findings import collect  # noqa: E402
+from gen_open_findings import collect, static_bug, render_static  # noqa: E402
 
 DB = os.path.join(ROOT, "docs", "reports", "bugs.json")
 DUMP = os.path.join(ROOT, "scratch", "new-bugs.json")
 PAGE = os.path.join(ROOT, "docs", "reports", "static-analysis.md")
 
-TOOL = "anoieu"
-
-HEADER = """# Static analysis
-
-Every bug the checks have found on the standard targets, rendered from
-[`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
-you want the data rather than the table. Both are written by
-[`scripts/anoieu_analyzer`](../../scripts/anoieu_analyzer); the database
-is maintained by [koine](https://github.com/ajreynol/koine)'s `koine_append_db`,
-which adds what is new and never edits or removes what is already there.
-
-**This page is the new workflow and it is not yet the report.** The report is
-[`open-findings.md`](open-findings.md), generated the way it always was. Nothing
-here closes a bug and no verdict reached this file: a bug that has been fixed is
-still in the database, with the date it was last seen. What a finding is and what
-settles one stay ours -- see [`reporting-workflow.md`](reporting-workflow.md).
-
-A second producer, an agent driven by
-[`prompts/anoieu_analyzer_agent`](../../prompts/anoieu_analyzer_agent), writes
-a dump in the same shape and appends to the same database.
-"""
-
 
 # -- step 1: what the checks found -------------------------------------------
-
-def name_of(code: str, where: str) -> str:
-    """A bug's name: readable, and stable while it stays on its line.
-
-    `id` is what identifies it -- the fingerprint survives an edit elsewhere in
-    the file -- so this is the half a person reads.
-    """
-    path, _, line = where.rpartition(":")
-    return f"{code}-{os.path.basename(path)}-{line}"
-
 
 def scan(spec: list[dict], where: dict) -> list[dict]:
     """Run each target, and return one entry per bug, in koine's dump shape."""
@@ -113,18 +79,9 @@ def scan(spec: list[dict], where: dict) -> list[dict]:
             if fid in bugs:
                 continue
             owner = row["owner"]
-            bugs[fid] = {
-                "id": fid,
-                "bug": name_of(row["code"], row["where"]),
-                "tool": TOOL,
-                "description": row["what"],
-                # ours, carried through koine untouched
-                "owner": owner,
-                "code": row["code"],
-                "where": row["where"],
-                "found_at": (commit if owner == t["project"]
-                             else config.commit_of(where.get(owner, "")) or commit),
-            }
+            found_at = (commit if owner == t["project"]
+                        else config.commit_of(where.get(owner, "")) or commit)
+            bugs[fid] = static_bug(fid, row, found_at)
         print(f"   {t['id']:22} {len(found):4} bug(s) in {t['project']} "
               f"at {commit or '(not a repository)'}")
     return list(bugs.values())
@@ -132,37 +89,17 @@ def scan(spec: list[dict], where: dict) -> list[dict]:
 
 # -- step 3, and the page ----------------------------------------------------
 
-def append(dump: str) -> int:
+def append(dump: str, preview: bool = False) -> int:
     """Hand the dump to koine. Everything about the database is over there."""
     where = koine.find()
     script = koine.script_in(where)
     print(f"-- koine {koine.version(where) or '(unknown)'}: "
           f"{os.path.relpath(dump, ROOT)} -> {os.path.relpath(DB, ROOT)}")
     argv = [sys.executable, script, dump, DB]
+    if preview:
+        argv.append("--dry-run")
     sys.stdout.flush()  # koine writes to the same terminal; keep the log in order
     return subprocess.run(argv).returncode
-
-
-def render() -> None:
-    """The table, from the database. Our page, our columns."""
-    with open(DB, encoding="utf-8") as fh:
-        bugs = json.load(fh)["bugs"]
-    cols = ("bug", "owner", "code", "where", "description", "first seen", "last seen")
-    lines = [HEADER, "", f"## Every bug found ({len(bugs)})", "",
-             "| " + " | ".join(cols) + " |",
-             "| " + " | ".join("---" for _ in cols) + " |"]
-    for b in bugs:
-        lines.append("| " + " | ".join([
-            f"`{b.get('bug', '')}`",
-            b.get("owner", ""),
-            b.get("code", ""),
-            f"`{b.get('where', '')}`" if b.get("where") else "",
-            b.get("description", "").replace("|", "\\|"),
-            b.get("first_seen", ""),
-            b.get("last_seen", ""),
-        ]) + " |")
-    open(PAGE, "w", encoding="utf-8").write("\n".join(lines) + "\n")
-    print(f"-- {os.path.relpath(PAGE, ROOT)}: {len(bugs)} row(s)")
 
 
 # -- the command -------------------------------------------------------------
@@ -173,8 +110,8 @@ def main() -> int:
                     help="run only this target id; repeatable")
     ap.add_argument("--dry-run", action="store_true",
                     help="analyse nothing: print the signatures that would be read")
-    ap.add_argument("--no-update", action="store_true",
-                    help="write the dump and stop: the database is not touched")
+    ap.add_argument("--preview", action="store_true",
+                    help="run the checks and preview the append through koine's --dry-run")
     ap.add_argument("--dump", default=DUMP, help=f"where to write this run's bugs "
                     f"(default {os.path.relpath(DUMP, ROOT)})")
     ap.add_argument("--config", default=config.CONFIG)
@@ -202,17 +139,9 @@ def main() -> int:
     print(f"-- {os.path.relpath(args.dump, ROOT)}: {len(bugs)} bug(s) found by "
           f"this run, on {datetime.date.today().isoformat()}")
 
-    if args.no_update:
-        print("-- --no-update: the database was not touched. To apply it:")
-        print(f"   scripts/anoieu_analyzer   (or: python3 "
-              f"{os.path.relpath(koine.append_db(), ROOT)} "
-              f"{os.path.relpath(args.dump, ROOT)} "
-              f"{os.path.relpath(DB, ROOT)} --dry-run)")
-        return 0
-
-    code = append(args.dump)
-    if code == 0:
-        render()
+    code = append(args.dump, preview=args.preview)
+    if code == 0 and not args.preview:
+        render_static(DB, PAGE)
     return code
 
 

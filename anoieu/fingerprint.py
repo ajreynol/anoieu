@@ -11,8 +11,7 @@ has a code, a path and a line of text and nothing else. So the arithmetic is
 `id_of`, which takes those three, and `fingerprint` is the wrapper that pulls
 them off a diagnostic. `scripts/finding_id.py` is the same function on a command
 line, and it is what the agent prompt tells an assistant to use -- because two
-producers whose ids disagree cannot be compared per id, which is the whole
-mechanism of `koine_findings.agree`.
+producers whose ids disagree cannot be deduplicated by `koine_append_db`.
 """
 
 from __future__ import annotations

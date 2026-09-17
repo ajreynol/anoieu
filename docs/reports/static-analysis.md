@@ -1,10 +1,11 @@
 # Static analysis
 
-Every bug the checks have found on the standard targets, rendered from
+Every static finding the checks have found on the standard targets, rendered from
 [`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
-you want the data rather than the table. Both are written by
-[`scripts/anoieu_analyzer`](../../scripts/anoieu_analyzer); the database
-is maintained by [koine](https://github.com/ajreynol/koine)'s `koine_append_db`,
+you want the data rather than the table. The analyzer and ledger generator
+render this static subset. The database also records
+[promoted fuzzer findings](../fuzzing.md#recording-through-koine); it
+is maintained exclusively by [koine](https://github.com/ajreynol/koine)'s `koine_append_db`,
 which adds what is new and never edits or removes what is already there.
 
 **This page is the new workflow and it is not yet the report.** The report is
@@ -18,7 +19,7 @@ A second producer, an agent driven by
 a dump in the same shape and appends to the same database.
 
 
-## Every bug found (54)
+## Every static finding recorded (54)
 
 | bug | owner | code | where | description | first seen | last seen |
 | --- | --- | --- | --- | --- | --- | --- |

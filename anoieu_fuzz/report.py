@@ -6,7 +6,8 @@ sense yet: it has not been read, it may be an artefact of the harness, and the
 binary it was found against may be somebody's working tree.
 
 **Promotion is the step that makes it one.** `anoieu-fuzz promote` copies a
-reproducer into `tests/fuzz/`, where it is committed, and from there it is
+reproducer into `tests/fuzz/` and records it through koine's append tool. The
+reproducer is kept for commit, and from there it is
 exactly like a finding from the checks: it has a code, an owner, a fingerprint,
 a row in [`docs/reports/open-findings.md`](../docs/reports/open-findings.md), and it leaves the
 open table only when somebody rules on it.
@@ -26,6 +27,8 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import subprocess
+import sys
 
 from anoieu.diagnostics import Diagnostic, Severity, Span, SourceMap
 from anoieu.fingerprint import fingerprint
@@ -38,6 +41,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #: Where a promoted reproducer lives. Beside `tests/witnesses/`, which is the
 #: same idea for the checks: one directory, one case, readable in a minute.
 CORPUS = os.path.join(ROOT, "tests", "fuzz")
+DB = os.path.join(ROOT, "docs", "reports", "bugs.json")
+DUMP = os.path.join(ROOT, "scratch", "new-fuzz-bugs.json")
 
 
 def load(corpus: str = "") -> list[dict]:
@@ -182,6 +187,55 @@ def rows(corpus: str = "") -> dict[str, dict]:
             "what": diag.message.replace("|", "\\|"),
         }
     return out
+
+
+def bugs(records: list[dict]) -> list[dict]:
+    """Promoted evidence in koine_append_db's dump format.
+
+    Use the ledger's fingerprint so both records name the same finding. This
+    exports the recorded outcomes; it does not run a checker, assign blame for
+    a disagreement, or say whether a finding is still open. Koine's dates are
+    dates of ingestion, not dates of a fresh reproduction.
+    """
+    out = []
+    for record in records:
+        if not record.get("case") or not os.path.isfile(record["case"]):
+            raise ValueError(f"{record['bucket']}: no reproducer to export")
+        sources = SourceMap()
+        diag = diagnostic(record, sources)
+        bug = {
+            "id": fingerprint(diag, sources, ROOT),
+            "bug": f"{diag.code}-{record['bucket']}",
+            "tool": "anoieu-fuzz",
+            "description": diag.message,
+            "owner": owner_of(record),
+            "code": diag.code,
+            "where": f"{os.path.relpath(diag.span.path, ROOT)}:{diag.span.line}",
+            "evidence": "recorded reproducer; not replayed by this export",
+        }
+        for name in ("bucket", "kind", "mode", "source", "seed", "outcomes", "note"):
+            if name in record:
+                bug[name] = record[name]
+        out.append(bug)
+    return out
+
+
+def record(records: list[dict], preview: bool = False) -> int:
+    """Record promoted evidence through koine, the required database writer.
+
+    Only the dump is ours to write. Forward koine's output to stderr so a
+    diagnostic renderer can still write clean JSON or SARIF to stdout. A
+    refused append leaves the dump and reproducers available for retry.
+    """
+    entries = bugs(records)
+    os.makedirs(os.path.dirname(DUMP), exist_ok=True)
+    with open(DUMP, "w", encoding="utf-8") as fh:
+        json.dump(entries, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
+    command = [sys.executable, os.path.join(ROOT, "scripts", "koine.py"), DUMP, DB]
+    if preview:
+        command.append("--dry-run")
+    return subprocess.run(command, stdout=sys.stderr).returncode
 
 
 def promote(source: str, corpus: str = "", owner: str = "", note: str = "") -> str:

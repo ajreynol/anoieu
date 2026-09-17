@@ -18,7 +18,7 @@
 #
 # When the agent has written its dump, appending it is the comparison:
 #
-#   python3 ../koine/bug_db/koine_append_db scratch/agent-bugs.json \
+#   python3 scripts/koine.py scratch/agent-bugs.json \
 #           docs/reports/bugs.json --dry-run
 #
 # **`--dry-run` first, always.** *0 new, N already known* is the two producers
@@ -150,7 +150,7 @@ if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
 mkdir -p "$ROOT/$(dirname "$OUT")"
 echo "-- anoieu at $ROOT"
 echo "-- the agent writes $OUT. Compare it with the database, writing nothing:"
-echo "   python3 \$(python3 -c 'import sys; sys.path.insert(0,\"scripts\"); import koine; print(koine.append_db())') \\"
+echo "   python3 scripts/koine.py \\"
 echo "           $OUT docs/reports/bugs.json --dry-run"
 echo
 

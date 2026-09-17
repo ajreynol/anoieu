@@ -91,6 +91,14 @@ Everything else — the reply format, the three prompts, what happens to a
 decision — is unchanged. A `FUZ` row is followed up exactly like an `EO` one,
 with the reproducer's path where a signature's path would be.
 
+The append-only [`bugs.json`](bugs.json) is maintained exclusively by koine.
+Fuzzer promotion and `python3 -m anoieu_fuzz report` call its append tool
+automatically, as do the analyzer and ledger generator; see
+[recording through koine](../fuzzing.md#recording-through-koine).
+This records evidence, including already settled findings, without
+replaying it. Database ingestion dates do not replace pinned reproduction or
+the decisions in the open/closed ledger.
+
 ### The findings report
 
 Two tables and one rule.

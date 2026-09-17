@@ -29,7 +29,7 @@ Python 3.10 or later; no Python dependencies. From a checkout:
 ```bash
 scripts/anoieu_analyzer                 # every standard target, into the bug database
 scripts/anoieu_analyzer --dry-run       # which signatures that means, concretely
-scripts/anoieu_analyzer --no-update     # find the bugs, leave the database alone
+scripts/anoieu_analyzer --preview       # find the bugs and ask koine to preview the append
 ```
 
 That is the entry point for running anoieu over what it watches. It reads the
@@ -104,6 +104,11 @@ Findings use the same reporting workflow as the analyzer. See the
 [fuzzer guide](docs/fuzzing.md) for setup, modes, oracles and adding a checker.
 Committed [reproducers](tests/fuzz) show what it has found.
 
+Promotion automatically records findings through koine in the same bug database
+as the analyzer. `python3 -m anoieu_fuzz report` records the promoted corpus and
+displays it; `--preview` calls koine's dry run. Koine is required, and a failed
+append fails the command. See [recording through koine](docs/fuzzing.md#recording-through-koine).
+
 ## Findings and reports
 
 The [report register](docs/reports/reports.md) records what anoieu is asking of
@@ -112,8 +117,10 @@ each project, the evidence, and the response. The
 [corpus report](docs/reports/corpus.md) identifies the source commits measured.
 
 The [bug database](docs/reports/bugs.json) is the other half, and a newer one:
-every bug `scripts/anoieu_analyzer` has found, with the date each was first and
-last seen, appended to and never rewritten. It carries no verdicts — a bug
+static findings and promoted fuzzer findings, recorded exclusively through
+koine, with the date each was first and last ingested. Fuzzer records carry
+recorded outcomes; recording does not replay them. Existing bug content is
+preserved on append. The database carries no verdicts — a bug
 somebody has ruled on is still in it — so the open findings remain the report,
 and the database remains the record of what was found.
 
