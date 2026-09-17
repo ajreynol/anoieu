@@ -59,10 +59,10 @@ ledger. The shared
 [discussion format](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#the-discussion-file)
 defines those conventions.
 
-[`report-card.md`](report-card.md) is anoieu's assessment of how each tool
-stands against the shared tenets, graded at the commits the lock records. It
-is governed by the shared
-[vision](https://github.com/ajreynol/kanon/blob/main/docs/vision.md).
+The assessment of how each tool stands against the shared tenets is no longer
+kept here. [stathmos](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/README.md)
+holds it, and its [report card](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/report-card.md)
+supersedes the edition this repository graded through 2026-09-02.
 
 [`history.md`](history.md) records anoieu's development and presidency, including
 the handoff. Its [presidential letter](letter-to-kanon.md) is addressed to its

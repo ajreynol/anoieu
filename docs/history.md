@@ -549,7 +549,7 @@ earlier contents remain in git. `docs/misc/` no longer holds any files.
 | [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |
 | [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
 | [`reports/`](reports/reports.md) | findings against other people's code, and the position governing what may be published about it |
-| [`report-card.md`](report-card.md) | **the assessment of Arete.** It stays because the assessor must not be the governor |
+| `report-card.md` | **the assessment of Arete**, as the plan read on 2026-09-15: it stayed because the assessor must not be the governor. **Superseded 2026-09-17** — the role moved with stathmos and the page has followed it. [stathmos's edition](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/report-card.md) is the live one; the copy here, last graded 2026-09-02, is removed |
 | [tekmerion](../tools/tekmerion/README.md) | **anoieu's route to a verified answer to *is the documentation up to date*.** The central policy says a stale document is a defect; this is the only thing here aimed at checking that mechanically |
 | [`history.md`](history.md) | anoieu's own development record. It stays here, including earlier stretch entries, under LAW 4 |
 | `letter-to-kanon.md` | **letters do not travel.** LAW 4 |
