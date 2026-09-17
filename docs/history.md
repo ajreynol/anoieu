@@ -483,8 +483,13 @@ in anoieu, along with its history, correspondence, findings and report card.
 
 **Planning record, preserved from before the transfer.** The tables below
 record the intended destinations and unresolved questions at that time;
-[B15](https://github.com/ajreynol/kanon/blob/main/docs/board.md#b15--governance-out-of-the-analyzer-before-we-ask-members-to-adopt-again)
-still limits the scope of the next move. Unresolved boundaries are listed below.
+`B15` limited the scope of the next move as it read then; kanon has since
+closed the item and keeps what is unresolved in [how a role is handed
+off](https://github.com/ajreynol/kanon/blob/main/docs/board.md#a-handoff-of-a-role-is-an-ordinary-item-here).
+**Pages kanon has since removed are named below and not linked.** Kanon's
+`main` is the authority on everything it holds, so a link here goes to `main`
+or nowhere: pinning one would hand a reader a superseded copy of somebody
+else's live rules. Unresolved boundaries are listed below.
 Our history and letters stay here under [LAW 4](https://github.com/ajreynol/kanon/blob/main/docs/laws.md#law-4--the-president-writes-historymd-in-its-own-repository-and-a-letter-to-its-successor).
 
 **Proposed for kanon: the collected values.** Every one is a register or a governing
@@ -499,11 +504,11 @@ one row; its internal registers travel with it.
 | [`board.md`](https://github.com/ajreynol/kanon/blob/main/docs/board.md) | what is outstanding, in priority order, each with its next action |
 | [`roles.md`](https://github.com/ajreynol/kanon/blob/main/docs/roles.md) | which tool is responsible for what |
 | [`discussion.md`](discussion.md) | every topic between repositories |
-| [`coherence.md`](https://github.com/ajreynol/kanon/blob/main/docs/coherence.md) | the standards the work is held to, and the protocol register |
-| [`interface.md`](https://github.com/ajreynol/kanon/blob/main/docs/interface.md) + [`instructions.md`](https://github.com/ajreynol/kanon/blob/main/docs/instructions.md) | the protocols, and their human-facing half |
+| `coherence.md` | the standards the work is held to, and the protocol register |
+| `interface.md` + `instructions.md` | the protocols, and their human-facing half |
 | [ynoia](https://github.com/ajreynol/kanon/blob/main/tools/ynoia/README.md) | whether the arrangement earns its machinery — the names, the future tools, the requests, the proposals |
-| [martyria](https://github.com/ajreynol/kanon/blob/main/tools/martyria/README.md) | actionable ethics: stances, testimony, and the cases against ourselves |
-| [zetesis](https://github.com/ajreynol/kanon/blob/main/tools/zetesis/README.md) | the general inquiry, and where our record cannot support a claim |
+| martyria | actionable ethics: stances, testimony, and the cases against ourselves |
+| zetesis | the general inquiry, and where our record cannot support a claim |
 | [stathmos](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/README.md) | **proposed, not settled**: mediation of the report card. `R30` and its charter still name an independent repository as its destination |
 | [sapheneia](https://github.com/ajreynol/kanon/blob/main/tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
 
@@ -522,12 +527,12 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 | [`../scripts/ecosystem/ecosystem.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
 | [`../scripts/ecosystem/ecosystem.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.py) + [`../scripts/status_eo`](https://github.com/ajreynol/kanon/blob/main/scripts/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
 | [`../scripts/install_eo`](https://github.com/ajreynol/kanon/blob/main/scripts/install_eo) + [`../scripts/ecosystem/checkouts.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
-| [`../prompts/join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/join_eo), [`../prompts/check_join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/check_join_eo), [`../prompts/confirm_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/confirm_eo) | joining, from the inside and the outside, and the grading of a join afterwards |
-| [`../prompts/init_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/init_eo), [`../prompts/welcome_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/welcome_eo), [`../scripts/ecosystem/near.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/near.py) | starting a new tool, recording its checkout, and catching an id one character from an existing one |
+| [`../prompts/join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/join_eo), [`../prompts/check_join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/check_join_eo), `../prompts/confirm_eo` | joining, from the inside and the outside, and the grading of a join afterwards |
+| [`../prompts/init_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/init_eo), `../prompts/welcome_eo`, `../scripts/ecosystem/near.py` | starting a new tool, recording its checkout, and catching an id one character from an existing one |
 | [`../prompts/global_audit`](https://github.com/ajreynol/kanon/blob/main/prompts/global_audit), [`../prompts/process_discussion`](https://github.com/ajreynol/kanon/blob/main/prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
 | [`../scripts/bump_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/bump_check.py) | checks whether the exact policy commit a member proposes to adopt passed CI |
-| [`../scripts/transfer_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/transfer_check.py) | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
-| [`../scripts/ready_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ready_check.py) | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
+| `../scripts/transfer_check.py` | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
+| `../scripts/ready_check.py` | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
 **Research removed from this tree — 2026-09-15.** The local copies of
 `science-fiction.md` and `misc/ai-novelty.md` were removed after confirming that
@@ -815,7 +820,7 @@ the reasoning behind the handoff.
 
 **Why hand the office on at all:** three reasons, argued from measurements
 rather than principle, in
-`S4` of [martyria's stances](https://github.com/ajreynol/kanon/blob/main/tools/martyria/stances.md). The short form —
+`S4` of [martyria's stances](https://github.com/ajreynol/epikrisis/blob/main/tools/martyria/stances.md). The short form —
 **15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
 this repository, and everything that judges is inside the thing being judged.**
 

@@ -47,7 +47,7 @@ silently** — no test fails when a page starts describing a tree that changed.
 **It is not hypothetical.** One working session on 2026-09-02 turned up six
 claims in these documents that had quietly become false, and every one was
 found by somebody reading rather than by anything that runs. That is recorded
-as `F5` in [`../zetesis/findings.md`](https://github.com/ajreynol/kanon/blob/main/tools/zetesis/findings.md), which is where
+as `F5` in [zetesis's `findings.md`](https://github.com/ajreynol/epikrisis/blob/main/tools/zetesis/findings.md), which is where
 the general finding lives; **what is kept here is the evidence, claim by
 claim.**
 
@@ -68,9 +68,9 @@ not, and it does not.
 - **It does not judge whether a claim is worth making**, only whether it holds.
   Whether a page should exist is a question for the budget, not for this.
 - **It does not grade tools.** What a tool weighs against the tenets is
-  [`../stathmos/`](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/README.md); whether our conduct can be shown is
-  [`../martyria/`](https://github.com/ajreynol/kanon/blob/main/tools/martyria/README.md) and
-  [`../zetesis/`](https://github.com/ajreynol/kanon/blob/main/tools/zetesis/README.md). This is about the accuracy of
+  [stathmos](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/README.md); whether our conduct can be shown is
+  [martyria](https://github.com/ajreynol/epikrisis/blob/main/tools/martyria/README.md) and
+  [zetesis](https://github.com/ajreynol/epikrisis/blob/main/tools/zetesis/README.md). This is about the accuracy of
   statements, which is none of those.
 - **It does not certify.** No page gets a badge saying it is current.
 - **It writes only inside this directory.**

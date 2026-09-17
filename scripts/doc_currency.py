@@ -56,7 +56,7 @@ GENERATED = {"docs/checks.md", "docs/reports/corpus.md",
 #: The other repositories this ecosystem talks about. A claim naming one of
 #: these is a claim about a tree we do not control.
 OTHERS = ("cvc5", "ethos", "logos", "eudaimonia", "dokimasia", "koine",
-          "inspect.software")
+          "kanon", "epikrisis", "aisthesis", "inspect.software")
 
 DATE = re.compile(r"\b20\d{2}-[01]\d-[0-3]\d\b")
 

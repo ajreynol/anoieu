@@ -1,8 +1,8 @@
 # Maintaining anoieu
 
 Anoieu owns the analyzer, the fuzzer, the optional ecosystem policy check,
-and the reporting workflow. Its history, correspondence, findings and report
-card are also kept here.
+and the reporting workflow. Its history, correspondence and findings are also
+kept here.
 
 **Owner:** `ajreynol` — Andrew Reynolds, University of Iowa and AWS.
 This is anoieu's accountability record, not front-page attribution.
@@ -48,6 +48,14 @@ they do not fetch or interpret governance documents at runtime. The shared
 [policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) and
 [vision](https://github.com/ajreynol/kanon/blob/main/docs/vision.md) have a separate
 home. Vision is argued, never mechanically checked.
+
+**Link kanon at `main`, or not at all.** Kanon holds the governing documents,
+so what they say today is what binds this repository: a link into that tree
+goes to `main`. Never pin one to a commit — a pinned rule is a superseded copy
+of somebody else's live page, and keeping one here would make anoieu an archive
+of governance it does not hold. Where kanon has removed a page this record
+names, the record names it and does not link it. Pinning anoieu's *own* removed
+material is a different thing and is fine: this tree is ours to archive.
 
 Do not relax a check merely to make CI green. A new check must be decidable,
 give an actionable failure, and be tested beyond this tree. Keep downstream
