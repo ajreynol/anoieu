@@ -3,6 +3,10 @@
 A **child project** under [`docs/policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md). Started by a
 human, read-only, unadvertised, and not part of what this repository ships.
 
+**Footing:** `unadvertised-child` — reached through anoieu and standing on
+anoieu's footing; anoieu's front page does not name it, and this line is what
+makes that checkable rather than merely stated.
+
 ## The name
 
 *τεκμήριον — conclusive evidence, as against σημεῖον, a mere sign that may point

@@ -495,6 +495,106 @@ def note_forms() -> int:
     return failures
 
 
+def footing_forms() -> int:
+    """Reader fixtures for the footing marker an unadvertised member carries.
+
+    The marker is what a tree trades for the front-page declaration, so it is
+    read as strictly as one: it names the footing, and it says what the
+    repository has taken on. The cases that matter are the near-misses — a
+    marker that asserts a word and no obligation, and one that claims membership
+    while refusing the policy — because either would let a tree buy the
+    exemption without paying for it.
+    """
+    root = os.path.dirname(HERE)
+    sys.path.insert(0, os.path.join(root, "scripts"))
+    import policy_check  # noqa: PLC0415
+
+    head = "# Maintaining a tool\n\n"
+    tail = "\n## Working on this tree\n\nKeep commands in `scripts/`.\n"
+    owner = "**Owner:** `someone` — a person somewhere.\n"
+
+    def page(line: str) -> str:
+        return head + owner + "\n" + line + tail
+
+    good = page("**Footing:** `unadvertised-member` — held to the shared "
+                "repository policy; the front page does not say so.\n")
+    #: The same claim in somebody else's words. What is checked is that it says
+    #: what it is held to, not that it says it our way.
+    reworded = page("**Footing:** `unadvertised-member` — this tree follows the "
+                    "shared repository policy and is not advertised as doing so.\n")
+    #: A word and no obligation. Matched so that it can be refused: a pattern
+    #: that demanded the reason would read this as no marker at all.
+    bare = page("**Footing:** `unadvertised-member`\n")
+    #: Held to nothing, which is an associate's note wearing a member's footing.
+    refusing = page("**Footing:** `unadvertised-member` — not held to the shared "
+                    "repository policy.\n")
+    #: Says it is held to something and never says to what.
+    vague = page("**Footing:** `unadvertised-member` — follows the usual "
+                 "conventions around here.\n")
+    #: A member's ordinary maintenance page. No marker, and that is not a defect.
+    plain = head + owner + tail
+
+    # (label, text, is a well-formed unadvertised marker?, the footing recorded)
+    cases = [
+        ("the footing marker", good, True, policy_check.UNADVERTISED),
+        ("the same claim in other words", reworded, True, policy_check.UNADVERTISED),
+        ("a footing with no obligation", bare, False, policy_check.UNADVERTISED),
+        ("a footing that refuses the policy", refusing, False, policy_check.UNADVERTISED),
+        ("a footing held to nothing nameable", vague, False, policy_check.UNADVERTISED),
+        ("an advertised member's page", plain, False, ""),
+        ("no maintenance page at all", "", False, ""),
+    ]
+    failures = 0
+    for label, text, want_ok, want_footing in cases:
+        is_ok = not policy_check.unadvertised_in(text)
+        got_footing = policy_check.footing_in(text)[0]
+        for got, want, reader in ((is_ok, want_ok, "unadvertised_in"),
+                                  (got_footing, want_footing, "footing_in")):
+            ok = got == want
+            failures += 0 if ok else 1
+            verb = ("accepts" if want else "refuses") if reader == "unadvertised_in" \
+                else (f"reads `{want}` in" if want else "reads no footing in")
+            print(("ok   " if ok else "FAIL ") + f"{reader} {verb} {label}")
+            if not ok and reader == "footing_in":
+                print(f"     got {got!r}")
+    # The child's marker is a different claim read by a different reader: a
+    # child stands on its parent's footing and owes nothing of its own, so there
+    # is no obligation to state and none is asked for. What it must say is the
+    # thing a reader cannot check from the child's own page.
+    kid = "# kalon\n\n*κᾰλόν.* A **child project**.\n\n"
+    kid_tail = "\n## What it does\n\nNot much.\n"
+
+    def child(line: str) -> str:
+        return kid + line + kid_tail
+
+    child_cases = [
+        ("the child marker",
+         child("**Footing:** `unadvertised-child` — reached through anoieu, on "
+               "anoieu's footing; the front page does not name it.\n"), True),
+        ("a child marker that wraps a line",
+         child("**Footing:** `unadvertised-child` — reached through anoieu and\n"
+               "standing on its footing; anoieu's front page does not name it.\n"),
+         True),
+        ("a child marker asserting a bare word",
+         child("**Footing:** `unadvertised-child`\n"), False),
+        ("a child marker that says nothing checkable",
+         child("**Footing:** `unadvertised-child` — started by a human, and "
+               "read-only.\n"), False),
+        ("a child carrying the repository footing",
+         child("**Footing:** `unadvertised-member` — held to the policy.\n"), False),
+        ("an ordinary child project", kid + kid_tail, False),
+    ]
+    for label, text, want_ok in child_cases:
+        got = not policy_check.unadvertised_child_in(text)
+        ok = got == want_ok
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ")
+              + f"unadvertised_child_in {'accepts' if want_ok else 'refuses'} {label}")
+
+    print(f"-- the footing an unadvertised membership rests on: {failures} failure(s)")
+    return failures
+
+
 def local_policy_inputs() -> int:
     """Home checks need only retained documentation, and fail if it is missing."""
     import fnmatch  # noqa: PLC0415
@@ -572,29 +672,70 @@ def adoption_interface() -> int:
     import shutil  # noqa: PLC0415
     import tempfile  # noqa: PLC0415
 
+    #: The footing marker, as the policy asks an unadvertised member to write it.
+    MARKER = ("**Footing:** `unadvertised-member` — held to the shared "
+              "repository policy; the front page does not say so.\n")
+
+    #: The child's marker, and what the parent's front page then may not do.
+    CHILD_MARKER = ("**Footing:** `unadvertised-child` — reached through the "
+                    "parent, on the parent's footing; the front page does not "
+                    "name it.\n\n")
+
     # (directory, what this case is, declares, the docs/discussion.md to write
-    #  or None for a repository that keeps no channel, wanted exit code)
+    #  or None for a repository that keeps no channel, wanted exit code, the
+    #  **Footing:** line for docs/maintenance.md or None for no such page)
+    #
+    # `child` below is carried separately: None for the ordinary child project
+    # this suite has always built, "quiet" for one that records the child
+    # marker, and "named" for one that records it while the front page names it
+    # anyway -- the case the check exists for.
     CASES = (
         ("yes", "a repository that declares membership and keeps the shape passes",
-         True, "gated", 0),
+         True, "gated", 0, None, None),
         ("no", "a repository that keeps the shape but declares nothing fails",
-         False, "gated", 1),
+         False, "gated", 1, None, None),
         ("nochannel", "a member that keeps no discussion file passes",
-         True, None, 0),
+         True, None, 0, None, None),
         ("ungated", "a member whose discussion file has lost the response gate fails",
-         True, "ungated", 1),
+         True, "ungated", 1, None, None),
+        # The unadvertised membership, and the three ways of getting it wrong.
+        # The exemption is narrow by construction: it buys the declaration and
+        # nothing else, which is what the ungated case below is here to hold.
+        ("unadvertised", "an unadvertised member declares on its maintenance page "
+         "and passes without a front-page declaration",
+         False, "gated", 0, MARKER, None),
+        ("advertised-too", "a tree that records the marker and also declares on "
+         "the front page fails, since the membership is advertised after all",
+         True, "gated", 1, MARKER, None),
+        ("hollow", "a marker that names a footing and takes on nothing fails",
+         True, "gated", 1, "**Footing:** `unadvertised-member`\n", None),
+        ("invented", "a marker naming a footing the policy does not define fails",
+         True, "gated", 1,
+         "**Footing:** `gold-member` — held to the shared repository policy.\n", None),
+        ("unadvertised-ungated",
+         "an unadvertised member is still held to the response gate",
+         False, "ungated", 1, MARKER, None),
+        # The child's half. The marker is a claim about the parent, so the
+        # parent's front page is what decides it -- which is why the failing
+        # case here changes nothing but the front page.
+        ("quiet-child", "an unadvertised child project the front page leaves out "
+         "passes", True, "gated", 0, None, "quiet"),
+        ("named-child", "an unadvertised child project the front page names fails",
+         True, "gated", 1, None, "named"),
     )
 
     checker = os.path.join(os.path.dirname(HERE), "scripts", "policy_check.py")
     failures = 0
     tmp = tempfile.mkdtemp(prefix="anoieu-adopt-")
     try:
-        for name, what, declares, channel, want in CASES:
+        for name, what, declares, channel, want, footing, child in CASES:
             root = os.path.join(tmp, name)
             os.makedirs(os.path.join(root, "docs"))
             subprocess.run(["git", "-C", root, "init", "-q"], check=True)
             open(os.path.join(root, "README.md"), "w").write(
-                "# faketool\n\nA thing.\n\n## The name\n\nfaketool, because it is fake.\n"
+                "# faketool\n\nA thing.\n"
+                + ("\nIt carries kalon, a child project.\n" if child == "named" else "")
+                + "\n## The name\n\nfaketool, because it is fake.\n"
                 "\n## How this repository is maintained\n\n"
                 + (DECLARATION if declares else "") + "\nBy a person.\n")
             topic = ("\n## D1 — hello\n\n"
@@ -613,6 +754,11 @@ def adoption_interface() -> int:
                 # empty docs/ -- the index check has to have something to do.
                 open(os.path.join(root, "docs", "design.md"), "w").write("# design\n")
                 index += "| [`design.md`](design.md) | how it works |\n"
+            if footing:
+                open(os.path.join(root, "docs", "maintenance.md"), "w").write(
+                    "# Maintaining faketool\n\n" + footing
+                    + "\n## Working on this tree\n\nKeep commands in `scripts/`.\n")
+                index += "| [`maintenance.md`](maintenance.md) | how it is run |\n"
             open(os.path.join(root, "docs", "README.md"), "w").write(index)
             open(os.path.join(root, ".gitignore"), "w").write("scratch/\n*.local.md\n")
             # A child project with its own docs/, linking into it the way a
@@ -626,7 +772,8 @@ def adoption_interface() -> int:
             open(os.path.join(root, "tools", "kalon", "README.md"), "w").write(
                 "# kalon\n\n*\u03ba\u03b1\u03bb\u03cc\u03bd, the fitting thing.*\n\n"
                 "A child project. It does not ship anything.\n\n"
-                "See [the design](docs/design.md).\n")
+                + (CHILD_MARKER if child else "")
+                + "See [the design](docs/design.md).\n")
             subprocess.run(["git", "-C", root, "add", "-A"], check=True,
                            capture_output=True)
             subprocess.run(["git", "-C", root, "-c", "user.email=t@t", "-c",
@@ -715,6 +862,7 @@ def main() -> int:
     print()
     failures += prompts_agree()
     failures += note_forms()
+    failures += footing_forms()
     failures += local_policy_inputs()
     failures += adoption_interface()
     failures += postmortem_shape()

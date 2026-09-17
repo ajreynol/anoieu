@@ -49,6 +49,19 @@ they do not fetch or interpret governance documents at runtime. The shared
 [vision](https://github.com/ajreynol/kanon/blob/main/docs/vision.md) have a separate
 home. Vision is argued, never mechanically checked.
 
+**A membership need not be advertised.** The usual arrangement pairs a
+front-page declaration with a tree that backs it and refuses either alone. A
+repository held to the policy with reason not to announce it — not published
+yet, one person's working tree, an arrangement it would oversell — writes
+`**Footing:** ` and the name `unadvertised-member` on its own
+`docs/maintenance.md` instead, followed by what it is held to. That page is
+where this convention already puts what a repository declines to advertise, so
+the declaration moves there rather than being dropped, and the checker skips the
+two declaration checks **by name** rather than passing them quietly. Everything
+else a member is held to still applies. A child project does the same with
+`unadvertised-child` in its own README, whose claim is about the parent's front
+page and is checked against it.
+
 **Link kanon at `main`, or not at all.** Kanon holds the governing documents,
 so what they say today is what binds this repository: a link into that tree
 goes to `main`. Never pin one to a commit — a pinned rule is a superseded copy

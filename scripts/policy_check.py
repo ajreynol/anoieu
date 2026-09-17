@@ -15,6 +15,15 @@ to a sentence somebody wrote. The run also prints every policy rule that has
 **no** automated check, because a checker that only lists its own passes reads
 as coverage it does not have.
 
+**A membership need not be advertised.** The usual arrangement pairs a
+front-page declaration with a tree that backs it, and refuses either alone. A
+repository that is held to the policy and has reason not to announce it — it is
+not published, it is one person's working tree, it would oversell what is in it
+— records the footing `unadvertised-member` on its local maintenance page
+instead, and is held to everything else a member is held to. The marker is the
+declaration, moved rather than dropped; `unadvertised_in` reads it, and the two
+declaration checks skip by name rather than passing quietly.
+
     python3 scripts/policy_check.py             # check; exit 1 on any failure
     python3 scripts/policy_check.py --root PATH # check somebody else's checkout
     python3 scripts/policy_check.py --coverage  # what is checked, and what is not
@@ -64,6 +73,11 @@ UNCHECKED = [
      "`affiliation_in` reads it for the inventory and never grades anybody"),
     ("a member shares the approach the vision argues for",
      "the judgement half of a footing; vision may never acquire a checker"),
+    ("why a membership is unadvertised",
+     "a repository's own reason for not advertising — not published yet, one "
+     "person's working tree, an arrangement it does not want to oversell. The "
+     "marker is checked for being well-formed and honest; the choice behind it "
+     "is nobody's to grade"),
 ]
 
 # Written by a run. `closed-findings.md` is deliberately absent: it is written by
@@ -214,6 +228,54 @@ NOT_HELD = ["does not adopt", "adopts no", "not held to", "does not follow",
 #: as a minor finding rather than failing anybody's build.
 MEMBER_CLAIM = r"\b(?:part|member)\s+of\s+(?:the\s+)?\**\s*eunoia ecosystem"
 
+#: How a footing line may spell the obligation it takes on -- the mirror of
+#: `NOT_HELD`, and tested after it, because *not held to* contains *held to*.
+HELD_CLAIM = ["held to", "follows", "adopts", "adheres to", "bound by"]
+
+#: The local page a repository uses to record what it declines to put on its
+#: front page. The owner is already recorded here and kept off every other page,
+#: so a membership that is deliberately not advertised is recorded in the same
+#: place, in the same shape, and read the same way.
+FOOTING_PAGE = "docs/maintenance.md"
+
+#: The footing marker, as `check_owner_unadvertised` reads `**Owner:**` from the
+#: same page: a name, then the reason it is being recorded. The reason is not
+#: decoration -- a bare word would let a tree opt out of the declaration check by
+#: asserting a footing and saying nothing about what it has taken on.
+#:
+#: **The reason is optional to the pattern and required by the reader**, which is
+#: deliberate: a marker written without one has to be *matched* in order to be
+#: *refused*. A pattern that demanded the reason would read a bare footing line
+#: as no marker at all, and the tree would fail the declaration check with a
+#: message about its README while the mistake sat in another file.
+#:
+#: The pattern matches the marker; **the reason is the paragraph it opens**, read
+#: to the next blank line by `footing_in`. Every document here wraps at eighty
+#: columns, so a reason that had to fit on one line would be a convention nobody
+#: could follow while writing ordinary prose -- and the failure would be silent,
+#: since the half of the sentence that wrapped is the half that says anything.
+FOOTING_LINE = r"^\*\*Footing:\*\*\s*`([\w-]+)`[ \t]*(?:[—-][ \t]*)?"
+
+#: The footings this checker knows how to act on. **The authority for what
+#: footings exist is the shared policy, not this file**; these are a reader's
+#: copy of the two names that change what a run does here.
+UNADVERTISED = "unadvertised-member"
+UNADVERTISED_CHILD = "unadvertised-child"
+
+#: The footing names a marker may carry. Anything else is a typo or a footing
+#: this checker has not been taught, and both are worth saying rather than
+#: passing over -- but only the two above change what is checked.
+FOOTINGS = {UNADVERTISED, UNADVERTISED_CHILD, "member", "associate", "president",
+            "candidate", "foundation", "child", "outsider"}
+
+#: How an unadvertised child's marker may spell what makes it unadvertised. The
+#: fact being recorded is about the *parent's* front page, so the line has to say
+#: something about it: a child is on its parent's footing and owes nothing of its
+#: own, so there is no obligation clause to ask for and the absence of one is not
+#: a lapse. What is left to state is the thing a reader cannot otherwise check.
+NOT_ADVERTISED = ["not advertised", "unadvertised", "front page does not",
+                  "not named on the front page", "does not name it"]
+
 
 def maintenance_note(text: str) -> str:
     """The body of the README's maintenance note, or "" if there is none.
@@ -307,13 +369,175 @@ def affiliation_in(text: str) -> list[str]:
     return bad
 
 
+def footing_in(text: str) -> tuple[str, str]:
+    """The footing a maintenance page records, and the reason it gives.
+
+    `("", "")` when the page records none, which is the ordinary case: a member
+    declares on its front page and needs no marker, and a repository that has
+    joined nothing has nothing to record.
+    """
+    m = re.search(FOOTING_LINE, text, re.M)
+    if not m:
+        return ("", "")
+    paragraph = re.split(r"\n[ \t]*\n", text[m.end():], maxsplit=1)[0]
+    return (m.group(1), " ".join(paragraph.split()))
+
+
+def unadvertised_in(text: str) -> list[str]:
+    """What is missing from an **unadvertised member's** footing marker.
+
+    A repository can be held to the policy and have good reason not to say so on
+    its front page: it is not published yet, or it is one person's working tree,
+    or advertising an arrangement would oversell what is in it. The declaration
+    and the compliance are separable, and *both, or neither* only ever spoke to
+    the pair being advertised together.
+
+    **So the claim moves rather than disappearing.** It goes on the local
+    maintenance page, which is where this convention already puts what a
+    repository declines to advertise, and it is read exactly as strictly: the
+    footing is named, and the line says what the repository is held to. An
+    unadvertised member is held to everything a member is held to except the
+    front-page declaration, and this marker is what it trades for the exemption.
+
+    Takes the text of `docs/maintenance.md`, so inventory tooling can ask the
+    question of a fetched page, as `declaration_in` and `affiliation_in` are
+    asked of a fetched README.
+    """
+    if not text:
+        return [f"no {FOOTING_PAGE}, so nothing records a footing"]
+    name, reason = footing_in(text)
+    if not name:
+        return [f"{FOOTING_PAGE} records no **Footing:** line"]
+    if name != UNADVERTISED:
+        return [f"{FOOTING_PAGE} records the footing `{name}`, not `{UNADVERTISED}`"]
+    bad = []
+    low = reason.lower()
+    # Order matters: *not held to* contains *held to*, and an associate's
+    # refusal wearing a member's footing is the one contradiction worth naming
+    # before the absence of a claim.
+    if any(f in low for f in NOT_HELD):
+        bad.append("the footing line claims membership and also refuses the "
+                   "policy; a marker carrying both says nothing")
+    elif not any(h in low for h in HELD_CLAIM):
+        bad.append("the footing line does not say the repository is held to "
+                   "anything, so it records a word rather than a footing")
+    if "polic" not in low:
+        bad.append("the footing line does not name the policy it is held to")
+    return bad
+
+
+def unadvertised_child_in(text: str) -> list[str]:
+    """What is missing from an **unadvertised child project's** footing marker.
+
+    A child project is reached through its parent and stands on its parent's
+    footing, owing nothing of its own — so *unadvertised* means something
+    different here than it does for a repository. It is not a membership kept
+    off a front page; it is a project the parent has chosen not to put on its
+    front page at all. Read-only work, a line of enquiry that may not go
+    anywhere, something the parent does not want counted among what it ships.
+
+    **So the marker records a fact about the parent, and the parent's README is
+    what settles it.** The line says the project is not advertised; the check
+    that reads it goes and looks. Nothing is asked about obligations, because a
+    child has none to state.
+
+    Takes the text of `tools/<name>/README.md`, which for a child project is a
+    local page and not a front page — the same reason the membership marker
+    lives on the local maintenance page rather than the README.
+    """
+    if not text:
+        return ["no README.md, so nothing records a footing"]
+    name, reason = footing_in(text)
+    if not name:
+        return ["the README records no **Footing:** line"]
+    if name != UNADVERTISED_CHILD:
+        return [f"the README records the footing `{name}`, not `{UNADVERTISED_CHILD}`"]
+    if not any(f in reason.lower() for f in NOT_ADVERTISED):
+        return ["the footing line does not say the project is unadvertised, so it "
+                "records a word rather than a fact somebody can check"]
+    return []
+
+
+def is_unadvertised() -> bool:
+    """Whether the tree under test records an unadvertised membership."""
+    return not unadvertised_in(read(FOOTING_PAGE))
+
+
 def check_declaration() -> list[str]:
     """*Joining the Eunoia ecosystem* — the claim the rest of this run backs.
 
     A declaration nothing backs is what this whole check exists to prevent, and a
     compliant tree that says nothing has not joined anything. So both, or neither.
+
+    An unadvertised member is the one tree this does not run against, and it is
+    skipped by name rather than passed: see `is_advertised`.
     """
     return declaration_in(read("README.md"))
+
+
+def check_footing_marker() -> list[str]:
+    """*A footing marker names a footing, and says what it takes on.*
+
+    Runs against any tree that records one. A marker is a claim the rest of this
+    run backs, exactly as a declaration is, so a malformed one is a failure and
+    not a shrug -- it is the thing standing in for the front-page declaration,
+    and it is the only place a reader can check the claim.
+    """
+    text = read(FOOTING_PAGE)
+    name, _reason = footing_in(text)
+    if not name:
+        return []
+    if name not in FOOTINGS:
+        return [f"{FOOTING_PAGE} records the footing `{name}`, which is not one "
+                "the shared policy defines"]
+    return unadvertised_in(text) if name == UNADVERTISED else []
+
+
+def check_footing_consistent() -> list[str]:
+    """*An unadvertised membership is not on the front page.*
+
+    The marker's whole content is *this repository is held to the policy and its
+    front page does not say so*. A README that declares membership makes the
+    second half false, and a reader has no way to tell which of the two to
+    believe. The repository is a member and should say so in one place: delete
+    the marker, or delete the declaration.
+    """
+    if not is_unadvertised():
+        return []
+    if declaration_in(read("README.md")):
+        return []
+    return [f"{FOOTING_PAGE} records `{UNADVERTISED}` and README.md declares "
+            "membership; the membership is advertised, so the marker is wrong"]
+
+
+def check_child_unadvertised() -> list[str]:
+    """*An unadvertised child project is not named on the front page.*
+
+    The marker's content is a fact about the parent, so the parent is where it
+    is checked. A child that records the footing and is then named on the front
+    page is advertised, whatever its README says — and the front page is the one
+    a reader believes, because it is the one they see first.
+
+    A child that records no footing is the ordinary case and is not asked to.
+    """
+    bad = []
+    front = read("README.md")
+    for name in child_projects():
+        text = read(f"tools/{name}/README.md")
+        footing, _reason = footing_in(text)
+        if not footing:
+            continue
+        if footing not in FOOTINGS:
+            bad.append(f"tools/{name}: records the footing `{footing}`, which is "
+                       "not one the shared policy defines")
+            continue
+        if footing != UNADVERTISED_CHILD:
+            continue
+        bad += [f"tools/{name}: {b}" for b in unadvertised_child_in(text)]
+        if re.search(rf"\b{re.escape(name)}\b", front):
+            bad.append(f"tools/{name}: records `{UNADVERTISED_CHILD}` and the "
+                       "front page names it; it is advertised after all")
+    return bad
 
 
 def check_front_page() -> list[str]:
@@ -793,11 +1017,25 @@ def is_home():
     return None if os.path.abspath(ROOT) == REPO_ROOT else "specific to anoieu's own files"
 
 
+def is_advertised():
+    """Skip reason for the declaration checks when the membership is not advertised.
+
+    A skip rather than a pass, because the run must not read as having found a
+    declaration it never looked for. The line it prints names the marker and the
+    page it is on, so a reader of the log can go and check the claim -- which is
+    the only thing standing in for the front page here.
+    """
+    if not is_unadvertised():
+        return None
+    return (f"{FOOTING_PAGE} records the footing `{UNADVERTISED}`: held to the "
+            "policy, and deliberately not declared on the front page")
+
+
 # (title, check, applies). A check that does not apply is skipped and named:
 # passing must never read as more coverage than it was. The set is deliberately
 # small and is expected to grow.
 CHECKS = [
-    ("the README declares membership of the ecosystem", check_declaration, None),
+    ("the README declares membership of the ecosystem", check_declaration, is_advertised),
     ("the front page is the only entry point", check_front_page, None),
     ("the README ends with the maintenance note", check_maintenance_note, None),
     ("every document is named in the documentation index", check_docs_index, has("docs")),
@@ -812,9 +1050,16 @@ CHECKS = [
     ("no document cites another document's rule by number", check_citations, None),
     ("every link to a heading finds one", check_anchors, None),
     ("no document names one machine's filesystem", check_local_paths, None),
-    ("the membership declaration opens the maintenance note", check_declaration_first, None),
+    ("the membership declaration opens the maintenance note",
+     check_declaration_first, is_advertised),
     ("every script is listed where the scripts are listed", check_scripts_listed, is_home),
     ("local ownership is recorded without advertising", check_owner_unadvertised, is_home),
+    ("a recorded footing names one the policy defines, and what it takes on",
+     check_footing_marker, has(FOOTING_PAGE)),
+    ("an unadvertised membership is not also on the front page",
+     check_footing_consistent, has(FOOTING_PAGE)),
+    ("an unadvertised child project is not named on the front page",
+     check_child_unadvertised, has("tools")),
 ]
 
 
@@ -822,7 +1067,7 @@ CHECKS = [
 # correspondence rather than a defect in their tree, and failing a build over
 # the shape of a sentence addressed to a colleague is the wrong instrument.
 MINOR = [
-    ("the membership declaration links to the policy", check_declaration_links, None),
+    ("the membership declaration links to the policy", check_declaration_links, is_advertised),
     ("the discussion file is well-formed", check_discussion, has("docs/discussion.md")),
     ("the README explains the repository's name", check_name_explained, None),
     ("committed data carries no path out of a home directory", check_local_paths_data, None),
