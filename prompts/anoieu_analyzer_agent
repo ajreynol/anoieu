@@ -18,7 +18,7 @@
 #
 # When the agent has written its dump, appending it is the comparison:
 #
-#   python3 ../koine/koine_append_db scratch/agent-bugs.json \
+#   python3 ../koine/bug_db/koine_append_db scratch/agent-bugs.json \
 #           docs/reports/bugs.json --dry-run
 #
 # **`--dry-run` first, always.** *0 new, N already known* is the two producers

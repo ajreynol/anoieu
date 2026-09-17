@@ -134,8 +134,9 @@ def scan(spec: list[dict], where: dict) -> list[dict]:
 
 def append(dump: str) -> int:
     """Hand the dump to koine. Everything about the database is over there."""
-    script = koine.append_db()
-    print(f"-- koine {koine.version(os.path.dirname(script)) or '(unknown)'}: "
+    where = koine.find()
+    script = koine.script_in(where)
+    print(f"-- koine {koine.version(where) or '(unknown)'}: "
           f"{os.path.relpath(dump, ROOT)} -> {os.path.relpath(DB, ROOT)}")
     argv = [sys.executable, script, dump, DB]
     sys.stdout.flush()  # koine writes to the same terminal; keep the log in order
