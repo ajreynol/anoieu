@@ -164,3 +164,24 @@ claims that the suite already enforces them all:
 
 Start with preservation and disjointness of ids, then evidence for closure and
 path-independent fingerprints. Prefer a small ledger check over a new service.
+
+### The one thing the bug database cannot tell us
+
+**A bug in the database and not in a run's dump may have been fixed, or the run
+may not have looked there — and nothing distinguishes those.** `koine_append_db`
+says as much in its own words and does not guess. This is a cost we took
+knowingly on 2026-09-16, when koine replaced a findings record that carried runs
+and per-id coverage with a database that carries neither; the smaller thing that
+does less was the right trade, and it is recorded here so that the trade stays
+visible rather than being rediscovered as a defect.
+
+**For now we answer coverage on our own side.** `scripts/targets.json` says what
+a full run reads, so *what did we look at* is a question about our own
+configuration rather than about the database.
+
+**What would bring it back.** The second producer is
+`prompts/anoieu_analyzer_agent`, and the two are compared by appending both
+dumps. If the two producers start reading materially different sets of files —
+the agent three and the program forty — a disagreement and a gap become
+indistinguishable, and that is the point at which to go back to koine with
+evidence rather than with a preference.

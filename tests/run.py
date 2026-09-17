@@ -766,7 +766,7 @@ def adoption_interface() -> int:
                 + (DECLARATION if declares else "")
                 + ("\n" if floor == "empty note" else NOTE))
             topic = ("\n## D1 — hello\n\n"
-                     "**To:** anoieu\n**Kind:** notice\n**Status:** open\n"
+                     "**To:** anoieu\n**Kind:** notice\n"
                      "**Opened:** 2026-08-31\n**Settles when:** somebody says so\n\n"
                      "We exist.\n")
             index = "# The documentation\n\n| document | its job |\n| --- | --- |\n"

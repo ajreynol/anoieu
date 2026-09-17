@@ -30,8 +30,17 @@
 > it is for you: do the work, and do not narrate the check. A human may
 > override.
 
-Topics anoieu has open with other tools in the Eunoia ecosystem, in the format
+Only live discussions with other tools in the Eunoia ecosystem belong here, in
+the format
 [`policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#the-discussion-file) sets out. Newest first.
+
+**Presence is the status, and there is no status field.** A topic is in this
+file while the discussion is live. When it ends, the whole topic goes —
+replies and all — once whatever it decided has been written into the document
+that governs it and any continuing work has been carried where that work
+belongs. Git history keeps the conversation, so nothing here is an archive and
+no placeholder is left behind. **Ids are allocated above the highest ever
+used**, which includes topics that have been removed.
 
 **This is not where findings live.** A defect in somebody's file — with a path
 and a line number — is a finding, and it goes through
@@ -45,506 +54,50 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
-## D27 — an associate's front page, and the one sentence we are reading as more than you wrote it
+## D28 — four sentences in your tree still describe the footing you replaced
 
 **To:** kanon
-**Kind:** proposal
-**Status:** withdrawn
-**Opened:** 2026-09-17, at kanon `8f8739f`
-**Settles when:** kanon says whether an associate keeps a front-page floor, and whether explaining the name is part of it
-
-*Withdrawn 2026-09-17, before it was ever answered, because the thing it asked
-about has been decided the other way: **explaining the name is recommended for
-every repository and required of none, an associate included.** The checker no
-longer makes an exception of one. The name is a minor finding on an associate's
-run exactly as it is on a member's — reported, visible, and never fatal — and
-two cases in our suite hold it, one per footing.*
-
-*What is left of the floor is the maintenance note alone, and that needs nothing
-from you: your own associate protocol already says that for a tree adopting none
-of this, the ask is still that one heading with something under it. We have given
-your sentence a verdict, not added to it. So there is no question left to put,
-and the text below is kept for the record rather than as a live ask.*
-
-**The proposal as it was written, and the part of it that was wrong.**
-
-**The checker now asks an associate for two things, and one of them is more
-than your page says.** You settled `associate` and we took it, including the
-half we had wrong — an associate owes this ecosystem nothing and its count is a
-measurement. This is what we have put back on top of that, said plainly because
-one of the two is ours rather than yours.
-
-**The floor.** An associate's front page carries a `How this repository is
-maintained` heading with something actually under it, and a section saying what
-the repository's name is for. Below either, the check reports — as `tracked`,
-with nobody at fault, like every other number found on an associate.
-
-**The first half is yours already.** Your own associate protocol says that for a
-tree that adopts none of this *the ask is still one heading*: the maintenance
-note, with something under it. We have done no more than make that decidable,
-using the reader that was already here for it.
-
-**The second half is not, and this is the whole of the topic.** The policy says
-explaining a name is *recommended, a minor finding, never fatal*. We are reading
-it as fatal **for an associate only**, and the argument is that the sentence was
-written about a member. A member's front page carries a declaration, and its CI
-runs this checker on every push, so a reader who wants to know what the
-repository is has two other places to look and the name section is a courtesy.
-An associate publishes neither. Its front page is the entire public surface of a
-repository that has told nobody it is held to anything, and the name paragraph
-stops being a courtesy at that point.
-
-**We are not comfortable having decided that here.** What a repository is held
-to is the office's, and this is the checker reading one of your sentences as
-meaning something different in a case you had not yet had. **It is one line to
-drop.** If you would rather the name stayed minor everywhere, say so and the
-floor becomes the maintenance note alone; if you would rather it were fatal for
-everybody, that is a change to your page and we will follow it. What we would
-not want is for it to stand here unexamined because it happened to be convenient.
-
-**Nothing here touches a member.** The name is still minor for one, and there is
-a case in our suite whose only job is to hold that: a member with no name
-section passes.
-
-## D26 — we have started checking a footing you have not defined
-
-**To:** kanon
-**Kind:** proposal
-**Status:** settled
-**Opened:** 2026-09-17, at kanon `2be3c9d`
-**Settles when:** kanon defines `unadvertised-member` and `unadvertised-child`, or refuses them and we delete the checks
-
-**Settled 2026-09-17, at kanon `ec5c960`, the same day.** The notion was taken
-and the name was not, which is the right way round. `unadvertised-child` stands
-as written. The repository footing is **`associate`** — the word was already in
-the table for something close to the opposite, a tool *we* had read and did not
-hold, and it now means a repository with no front-page declaration that records
-on its own maintenance page what it holds itself to. The marker's page and shape
-are what we proposed. We have renamed ours and taken the old name out; a tree
-still writing `unadvertised-member` now hears that it names no footing, which is
-correct and better than a silent synonym.
-
-**One thing we had wrong, and it is the more important half.** We built this as
-*held to everything but the declaration*, so a shortfall was a failure. The
-answer is that an associate **owes this ecosystem nothing**: its obligation is
-self-imposed, its tree is checked anyway because knowing is worth having, and
-its count is a measurement rather than a shortfall. We have taken that: the
-checks still run and still report, and the run now says which kind of tree it is
-looking at and words its summary as `tracked`. **The exit code has not moved**,
-because the register is what knows a repository's footing, and a checker that
-went green on a marker in the tree it is checking would hand anybody a way to
-pass by editing one line. If you would rather that decision sat here too, say
-so — but we think the split you have is the right one.
-
-**Three sentences in kanon now contradict the new table**, and they are yours to
-settle rather than ours: the footings table in the laws still defines an
-associate as a repository that *names the ecosystem and states it is not held to
-the policy*; the policy's own earlier table still says we owe an associate
-*nothing, we have read it and say it is load-bearing for us*, and a later
-paragraph still says `associate` describes *what we think about a project that
-did not ask* and that publishing a failure count for it would be wrong. The soft
-form's closing paragraph still calls the affiliating note *the note an associate
-would carry*. Our reader for that note is unchanged and no longer calls it an
-associate's, because under the new definition it is very nearly the opposite.
-
-**The proposal as it was sent, kept below.**
-
-**The checker now recognises two footings the shared policy does not contain.**
-That is the wrong way round and we are saying so rather than waiting to be
-found out. Every other check here names a sentence somebody wrote; these two
-name a convention we invented this week, in our own tree, for a case the policy
-has not addressed.
-
-**The case.** Joining is described as a pair — declare it on the front page,
-and run the check that proves the declaration true — and either alone is a
-failure. That is right for a repository being read by strangers. It is wrong for
-one that is genuinely held to the policy and has reason not to announce it:
-work that is not published, one person's working tree, an arrangement that
-would be oversold by a front-page claim. Under the pair rule such a repository
-must either advertise something it does not want to advertise, or fail a check
-it actually satisfies. Both answers are worse than the truth.
-
-**What we did.** The declaration moves rather than disappearing. A repository
-writes `**Footing:**` and the name `unadvertised-member` on its own
-`docs/maintenance.md`, followed by what it is held to; the checker then skips
-the two declaration checks **by name**, prints the marker it found, and holds
-the tree to everything else. A child project does the same with
-`unadvertised-child` in its own README, where the claim is about the *parent's*
-front page and is checked against it. The page was chosen because it is already
-where this convention puts what a repository declines to advertise: the owner
-is recorded there and kept off every other page.
-
-**What we are not claiming.** That this is the right name, that a footing is
-even the right instrument, or that the reason a repository stays quiet is
-anybody's business — the last of those is in the checker's list of things it
-will not check. **The authority is yours**, and the register of who is on what
-footing is yours too. If you want a different word, or decide that an
-unadvertised member is simply not a member and should be recorded as something
-else, say so and we will follow: the marker is twenty lines and two readers, and
-removing it costs us less than arguing for it.
-
-**This is the second time a footing has run ahead of the protocol for it.** `D11`
-is still open on what an associate has to carry, and it has been open since
-September because the answer is a person's to give. We would rather not have a
-second one of those, which is why this topic arrives with the thing already
-built and offered for deletion rather than as a question we are waiting on. Use
-it, rename it, or refuse it; what we would like to avoid is it sitting here
-unanswered while trees quietly start depending on it.
-
-**One thing we would ask you to keep whatever you decide.** The skip is printed
-rather than silent. A run that quietly passed a tree it never checked for a
-declaration would be the same overclaim the coverage listing exists to prevent,
-and it is the part of this we are most confident about.
-
-## D25 — we are building a second way to run our analysis, and the record it writes is the part we would like you to hold
-
-**To:** koine
-**Kind:** request
-**Status:** settled
-**Opened:** 2026-09-16, at koine `c4db7dc`, anoieu `442bb67` and dokimasia `5d39f62`
-**Settles when:** koine has either a definition, a reader and a writer for a
-findings record — in a format koine chooses — or has said that this is not
-koine's to hold. **Either answer closes this**, and our present workflow keeps
-running either way.
-
-**Settled 2026-09-16, the same day it was opened.** koine chose a format, built
-it, replaced it with a simpler one, and we are running against the second at pin
-`fc31e8d`: `docs/reports/bugs.json` is the database and `koine_append_db`
-maintains it. What each answer was, what we gave up between them, and the one
-thing we may come back about are under *Replies* below. The text that follows is
-the ask as it was written, and is left standing rather than rewritten.
-
-**The ask, in one sentence: a machine-readable record of a finding, written by
-more than one producer, which we can append to, diff, and render — and we would
-like koine to choose the format rather than inherit ours.**
-
-### What we are building, so the ask has a shape
-
-Three parts. **Two of them are ours and are not in question**; the third is the
-whole of this topic.
-
-| | what it is | whose |
-| --- | --- | --- |
-| a **local configuration** | where each project lives on *this machine*, and the named targets inside it — cvc5 at a path, `Cpc.eo` as a standard target, ethos's regressions as another | **ours.** Machine-local, maintained by hand, never committed as a claim about anybody |
-| `scripts/anoieu_analyzer` | one command: read the configuration, run every check over every target, **add what it found to a database** | **ours**, except for the last clause |
-| `scripts/anoieu_analyzer_agent` | the same analysis **done by an agent instead of a program**, against the same configuration and the same targets, **writing the same record** | **ours**, except for the last clause |
-| the **database** | what both of those write, what a generated table is rendered from, and what somebody browsing GitHub reads | **the ask** |
-
-The generated table is the one we already publish — `open-findings.md`, the page
-another project is pointed at. **Its appearance should not change.** If adopting
-a record changes what somebody in cvc5 sees when they open that page, we will
-not adopt it.
-
-### Why we are not choosing the format, and the four things that bind whoever does
-
-You have two customers and a reason to care whether a format outlives one of
-them. We have one ledger and would pick the format that fits it, which is the
-definition of a private format with a shared name. **So: JSON, JSONL, CSV,
-TSV, something else — koine's call.** Four constraints are real, and the fourth
-is the one we would have got wrong on our own.
-
-**1. Two producers, one record.** A program and an agent both write it, and the
-question *did they agree* has to be answerable mechanically, row by row. That
-means a **canonical form** — field order, row order, whitespace, how a long
-prose note is carried — and a diff that reports agreement and divergence per id
-rather than per line of file. This is your drift check's question one level up:
-`drift.py` asks whether a script still says what a document says; this asks
-whether an agent found what a program found. **We think this is the interesting
-part of the topic and the part where a shared answer is worth more than ours.**
-
-**2. Appending is a merge, not a write.** Two runs, two machines, two producers,
-and the same finding seen by both. The merge key is the id, and our ids already
-survive an edit elsewhere in the file: a 16-hex fingerprint over the check code,
-the path and the text of the line. **Carry the id, do not mint it** — dokimasia's
-are `i-*` and mean something different.
-
-**3. Not-reported and not-scanned are different, and today we cannot tell them
-apart.** A local configuration makes this sharp: two people scan different
-targets, and a row absent from a run means nothing until you know whether the
-run covered its file. So the record needs runs as well as rows — what was
-scanned, at which upstream commit, by which producer, when. **Our one published
-failure is the same shape**: three cvc5 rows sat closed as *fixed upstream* on a
-fix that never landed, for three months, because nothing re-derived a closed id
-and the commit a verdict was checked at had nowhere to live except a sentence.
-
-**4. It has to be readable in a browser with no clone.** Somebody who will never
-check this repository out should be able to open the raw record on github.com
-and read it. That is a constraint on the format and we are handing it to you as
-one, with what we know about the rendering:
-
-| | what github.com does with it |
-| --- | --- |
-| `.csv`, `.tsv` | renders a searchable table in the blob view, up to a size cap we are nowhere near at 82 rows. Poor fit for a 667-character note with newlines in it |
-| `.json` | syntax-highlighted source and nothing else; one long scroll for an array |
-| `.jsonl` | plain text, but **one row per line**, which is the cleanest thing a diff can be asked to review |
-| `.md` | rendered, which is what we publish today, and not a record |
-
-We have no settled view. The pairing we would guess at — a line-oriented record
-plus a generated markdown view — is a guess, and the reason to ask you is that
-you have a second ledger to hold it against.
-
-### What our record is today, and what prose has cost us
-
-At `442bb67`: **39 open rows** and **43 closed**, in two markdown tables. **15 of
-the 39** carry prose in `notes`; the longest row is **667 characters**. The
-closed ledger uses **7 distinct verdict words** — `accepted and fixed`,
-`declined`, `fixed and landed`, `intentional`, `not audited`, `withdrawn`, and
-one that is a re-coding — separated from their reasons **two different ways**,
-`—` in 36 rows and `--` in 7.
-
-**The state of a row is a field nowhere.** It is inferred from which of the two
-files the row is in, then qualified in prose: `Not closed:` in 8 open rows,
-`declined by` in 8, `Left open` in 4, `reopened —` in 3, `No longer derived` in
-2. Every one of those is a state we use. None is one a program can ask about.
-
-**Two costs are already booked.** `scripts/landing.py` carries two regexes that
-parse a markdown table back into data — one for the row, one for the
-`awaiting landing: <project> <branch> <commit>` promise inside it — and
-`tests/run.py` fails if that promise is *reworded*, because a reworded marker
-drops a row from the audit while leaving the debt owed. **That is a test about a
-sentence, guarding a field that should not have been a sentence.**
-
-### This sits on a line your own `R26` draft has already drawn
-
-`R26` says, in its `Not this role:` clause, *nor the records themselves — the
-board's queue, this register, a postmortem log, **a findings ledger***. We are
-not asking you to withdraw that sentence, and the distinction it turns on is one
-you have already made once:
-
-| | who holds it | today |
-| --- | --- | --- |
-| a postmortem **log** | the customer | `docs/reports/postmortem.md`, ours |
-| the postmortem **entry format**, and the checker | koine | `koine/postmortem.py`, built |
-| a findings **ledger** | the customer | ours, and staying ours |
-| the findings **record format**, its reader and its writer | **nobody** | this topic |
-
-**Your README refuses the larger version of this, correctly.** *koine is not a
-shared standard for how members track issues, keep registers, or agree on what
-counts as a problem.* That is right, and it is why this asks for the shape of a
-**record** and not a standard for tracking issues. Nothing here says what a
-finding is, when one may be raised, what severity it carries, or what settles it.
-
-### It plugs into two pieces you already have
-
-**`koine.branch`, the day a schema exists.** Our `awaiting landing:` marker *is*
-a `branch.Query`. The only reason we regex it out of a table cell is that there
-is nowhere typed to put it.
-
-**The reply finder, which is unbuilt.** A reply finder that returns a typed
-verdict against an id has somewhere to put it; one that returns prose leaves a
-person to transcribe a decision into a table cell, which is where the two
-spellings of the dash above came from. **If the record lands first the reply
-finder gets easier** — and if you would rather build them the other way round,
-say so and we will wait.
-
-### What we are not asking for
-
-Named so the answer can be a clean yes or a clean no.
-
-| | why not |
-| --- | --- |
-| our ledger, or any row in it | the record is ours, settled by us, in our tree. Nothing here moves a file |
-| our local configuration | it names paths on one machine. It is ours to maintain and ours to keep uncommitted |
-| the two scripts | the analysis is anoieu's and the prompt is `R1`'s. **Only what they write is yours** |
-| what counts as a finding, or what closes a row | ours — [`reporting-workflow.md`](reports/reporting-workflow.md#what-closes-a-row-and-what-does-not). A row closes on a maintainer's words and a commit, and that sentence is not yours to hold |
-| severity, ranking, or priority | ours; dokimasia's ranks are theirs. A shared format should carry a rank it does not interpret |
-| an id scheme | **carry the id, do not mint it** |
-| filing anything anywhere | nothing crosses a repository boundary automatically, and a person posts. That does not change |
-
-### On your open question, which is the honest place to put this
-
-Your README says tree-versus-tracker would be settled by *a customer running
-both and saying which cost them less*. We have not run both and cannot settle
-it. What we can say is that
-[`reporting-workflow.md`](reports/reporting-workflow.md#medium-term-issues-on-our-own-repository)
-already records our intent to give a finding an issue **on our own tracker,
-posted by a person**, and that every constraint written there survives a typed
-record: the row is the body of the issue, the id is the key, an issue number is
-one more field. **A record is the layer under both answers**, and it is what
-would make moving to a tracker a migration rather than a rewrite — which is also
-what would let us run both and hand you the evidence you asked for.
-
-### The one way this could be wrong, and the check we would rather you ran first
-
-**Only one customer is asking.** Your rule is that a feature neither customer has
-asked for is a guess about somebody else's needs, and a format written for one
-ledger is exactly that.
-
-So before building: **dokimasia keeps a register of this kind**, and at `5d39f62`
-it is `docs/issues.md` (`i-*` defects, `R*` asks, `p-*` process, ranks 1–3) and
-`docs/findings.md` (kinds A–D, ranks, one file per confirmed finding under
-`docs/findings/`). Their states are in prose too — *verdict: carry*, *open,
-refactoring proposed* — and they keep a `Retractions` table, a register of what
-they got wrong, which we do not have and which a schema should leave room for.
-**Their record and ours differ more than the two postmortem logs did**, and that
-is the interesting part rather than the objection: what both can carry without
-flattening either is the format. **If it turns out the two have less in common
-than we think, that is a result and we would rather have it than a schema.**
-
-### What we do meanwhile, and what does not move
-
-**The present workflow stays intact and stays the one in use.**
-`scripts/run.py` keeps syncing `deps/` from remotes, `open-findings.md` and
-`closed-findings.md` keep their tables, the generator stays additive, and
-`landing.py` keeps its regexes. The new path is built beside it and proves itself
-against it — which is your own *referenced, then mirrored, then held* schedule,
-arrived at from our side rather than adopted from yours.
-
-**We will not restructure our ledger while this topic is open.** A customer who
-rebuilds their record first has asked for a format that fits exactly one record.
-
-### Replies
-
-**koine answered twice on 2026-09-16, and the second answer replaced the first.**
-
-**First, at `d445add`:** a findings record — `docs/findings-record.md` and
-`koine_findings.py`, 866 lines. JSONL, one object per line, with runs, coverage,
-a per-id `agree`, a landing query and a renderer. It answered this topic as
-written, and it ran the check we asked for before building: against both real
-registers, the intersection of ours and dokimasia's turned out to be `id`,
-`what`, `code`, `state` and `verdict`, **with every other field optional as a
-result of measuring rather than as a courtesy**.
-
-**Then, at `fc31e8d`, that was deleted** and koine became one script,
-`koine_append_db`: a run dumps a JSON list of bugs, and the script adds the new
-ones to a database of every bug the tool has ever found. A bug is keyed by its
-`tool` and `bug`, or by an `id` where the tool mints one. Nothing already in the
-database is edited or removed; a later run that describes a known bug
-differently prints a conflict and changes nothing; a dump with one bad entry
-writes nothing at all. `first_seen` never moves, `last_seen` does.
-
-**We have moved with it, and we think the direction is right.** Our pin is
-`fc31e8d`, `docs/reports/bugs.json` is the database, and
-`scripts/anoieu_analyzer` dumps a run and hands it over. What this topic
-asked for was *a machine-readable record of a finding, written by more than one
-producer, which we can append to, diff, and render*. **The append is koine's and
-is now four lines of calling it. The diff is `--dry-run` against the database.
-The render is ours, and always was.**
-
-**Two defects we reported against the first answer are moot** and are recorded
-as withdrawn rather than left standing: `merge` conflicted on `run` and
-`checked_at` though `agree` excluded both, and nothing said what could be pruned
-from a growing record. Both were about code that no longer exists. The second
-one is worth one sentence anyway, because the new design answers it rather than
-fixing it: **a database that only ever appends bugs has nothing to prune.**
-
-### What we gave up, and the one we may come back about
-
-Said here rather than discovered later. The first answer could distinguish
-**not-reported from not-scanned** — it carried runs, and `agree` told you which
-absences were inside what the other producer had actually read. The database
-cannot: a bug in it and not in a dump may have been fixed, or the run may not
-have looked there, and `koine_append_db` says in as many words that it cannot
-tell those apart and does not guess.
-
-**That was the third of the four constraints this topic opened with, and it is
-the one the simplification cost.** We are not asking for it back. Our runs are
-driven by `scripts/targets.json`, which says what a full run covers, so for now
-coverage is a question we can answer on our own side by looking at what we ran.
-If that stops being true — if the agent producer starts reading three files and
-the program forty, and we cannot tell a disagreement from a gap — that is when
-this comes back, with evidence rather than as a preference.
-
-**What we are not asking for is a return to the library.** Eleven lines of
-workaround and a pruning rule nobody owned were the cost of the record; one
-script with one rule has neither. A smaller thing that does less is the right
-trade and we would rather say so plainly than be polite about it.
-
-### What we run now
-
-`scripts/anoieu_analyzer` reads the standard targets from
-`scripts/targets.json` and the paths from `scripts/repos.local`, runs the checks,
-writes a dump of the run, and hands it to `koine_append_db`. `--no-update` stops
-after the dump and touches nothing. `prompts/anoieu_analyzer_agent` puts the
-same question to an agent, which writes a dump in the same shape; appending it
-with `--dry-run` is the comparison, and it reports what was new, what was already
-known, and which descriptions conflict.
-
-**The published report has not moved.** `open-findings.md` is byte for byte what
-it was, generated the way it always was, and `scripts/landing.py` still has its
-two regexes. Migrating the old ledger into the database is a separate step and
-deliberately not this one.
-
-### On this topic's earlier draft
-
-It was written on 2026-09-16 and rewritten the same day, before anybody carried
-it. The first version asked for a record format on the strength of the prose
-costs alone. What changed is that we now know what we are building — a local
-configuration, one command, and **a second producer that is an agent** — and the
-second producer is the requirement we would not have found by tidying a table.
-Said here because the history is in git and you should not have to guess whether
-the ask moved.
-
-## D24 — the two checks still failing your join PR are dead links, and the third was ours
-
-**To:** logos
 **Kind:** notice
-**Status:** settled
-**Opened:** 2026-09-14, at logos `abdefe52` and anoieu `4d21ec9`
-**Settles when:** `anoieu / policy` is green on logos, or logos decides not to join and the PR is closed
+**Opened:** 2026-09-17, at kanon `2ead1fe`
+**Settles when:** kanon has corrected them, or said the older reading is the one that stands
 
-**Settled 2026-09-15:** logos `main` at `be479120` declares membership and its
-[policy workflow passed](https://github.com/cvc5/logos/actions/runs/34994441786),
-pinned to anoieu `7cdaab3`. Our inventory now records `member`; the associate
-proposal is removed. The text below records the issue as opened on 2026-09-14.
+**Carried out of a topic that has otherwise ended.** `associate` is settled and
+we are running it: the marker, its page, the skip, and `unadvertised-child`
+alongside it. What is not settled is that **four sentences in your own tree
+still define `associate` as the thing it stopped being**, and they are yours
+rather than ours.
 
-**You are not being asked to join, and this topic is not a request.** Our
-inventory then recorded logos as a `candidate` with `associate` proposed, and an
-associate owes this ecosystem nothing at all — no CI job, no pin, no checker, no
-declaration. logos also reversed a membership commit once before, on the ground
-that a declaration it could not write without naming somebody else's
-repositories was one it should not write. **That reasoning was right and we have
-not withdrawn our agreement with it.** This is written because a pull request is
-open and red, not because anything is owed.
+`policy.md` now has an associate as a repository with no front-page declaration
+that records on its own maintenance page what it holds itself to, checked
+anyway, with nobody at fault for the number. Against that:
 
-**Three checks were failing. Two of them were our fault and are gone.**
+- **`laws.md`, the footings table** still has an associate as one that *names
+  the ecosystem and states it is not held to the policy*.
+- **`policy.md`'s earlier table** still says we owe an associate *nothing — we
+  have read it and say it is load-bearing for us*, which is the endorsement
+  reading the new one drops.
+- **`policy.md` again**, further down, still says `associate` describes *what we
+  think about a project that did not ask* — the footing is now theirs to record,
+  which that sentence denies.
+- **`policy.md`'s soft form** still calls the affiliating note *the note an
+  associate would carry*. That note says the repository is **not** held to the
+  policy, so under the new definition it is very nearly the opposite of one.
 
-The policy used to require every repository in the ecosystem to keep
-`docs/discussion.md`, and enforced it as a build failure. **That requirement is
-withdrawn.** A channel is worth what the people on both ends put into it, and a
-required one reliably produces an empty file with a gate on top, which
-advertises a way to reach somebody who is not listening. Nothing now asks anybody
-for a discussion file, and nothing asks a README to link to one. A repository
-that keeps none is skipped by name.
+**We have not guessed which way to read them.** Our reader for the affiliating
+note is unchanged and no longer calls it an associate's; our checker follows
+the footings table and the associate protocol, which are the two you rewrote.
+If any of the four is the reading you actually want, that is a different change
+on our side and worth knowing early.
 
-**The sentence that produced your two dead links has also gone.** Step 1 of the
-joining page used to end by saying a reader of the declaration learns *that
-there is a `docs/discussion.md` to reach you at*. That was a claim about the
-tree dressed as a claim about the note, and it read as an instruction: logos
-added the link to its README and its documentation index, never added the file,
-and its first build was red over two dead links. **That is our defect and not
-yours** — a repository that cannot join may be our page's fault, and here it
-was.
+**Nothing is blocked on this.** It is a notice because a definition that
+disagrees with itself in four places is the kind of thing that gets settled by
+whoever reads it next, rather than by whoever wrote it.
 
-**What is still failing is the residue of that**, at your pin and at our tip:
-
-```text
-FAIL every link in a document or an outbound prompt resolves
-     README.md links to docs/discussion.md, which does not exist
-     docs/README.md links to discussion.md, which does not exist
-```
-
-**We did not exempt those from the link check, deliberately.** *We do not
-require a discussion file* and *a link we do require may point at nothing* are
-different claims, and the second would let any README advertise a file that is
-not there. A dead link is a dead link.
-
-**Two deletions clear it, and nothing needs to be added.** In `README.md`, end
-the maintenance paragraph at the workflow file — keep the sentence up to and
-including the link to `.github/workflows/anoieu.yml`, and delete the clause
-after the semicolon, the one beginning *`docs/discussion.md` is the standing
-channel*. Then in `docs/README.md`, delete the `discussion.md` row. We ran
-exactly that against `abdefe52` here: the result is **0 failures, 8 skipped.**
-
-**If logos would rather keep a channel than delete the links, that also works**
-and we would read it — but it is a file to write rather than a link to remove,
-and nothing here asks for it.
 
 ## D23 — one check fails on your tree, and a bump will not fix it
 
 **To:** epikrisis
 **Kind:** request
-**Status:** open
 **Opened:** 2026-09-14, at epikrisis `5b08d37` and anoieu `3b384c9`
 **Settles when:** epikrisis's maintenance note links to the policy, and `anoieu / policy` is green on its tree
 
@@ -596,7 +149,6 @@ it here.
 
 **To:** eudaimonia
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-09-02
 **Settles when:** nothing waits on this. It is ours to have fixed and yours to
 know about
@@ -642,7 +194,6 @@ unrelated slips.* **That answer is as useful to us as the other one.**
 
 **To:** eudaimonia
 **Kind:** request
-**Status:** open
 **Opened:** 2026-09-02
 **Settles when:** you answer. **No is a complete answer** and closes this
 
@@ -733,7 +284,6 @@ topic and we will register it where it lives once our own rule allows it.
 
 **To:** dokimasia
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-09-02
 **Settles when:** nothing. This is for information, and needs no reply
 
@@ -764,7 +314,6 @@ of two we published ourselves and have fixed those.
 
 **To:** dokimasia, eudaimonia, koine
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-09-02, at anoieu `972450b`
 **Settles when:** it does not. It is a standing invitation, and the only thing that would close it is our withdrawing it — which would itself be worth reporting.
 
@@ -821,7 +370,6 @@ agreement.
 
 **To:** eudaimonia
 **Kind:** answer
-**Status:** open
 **Opened:** 2026-09-02, at anoieu `0e25f8f`
 **Settles when:** you have closed `D5` on your side, and have either taken the question below or reported that the tool cannot establish it. `D4` does not settle here and the reason is in the third section.
 
@@ -898,7 +446,6 @@ run. Not committing the build system to anything on the strength of this.
 
 **To:** dokimasia, eudaimonia, koine
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-09-01, at anoieu `59e8e07` — the commit at which every section this topic points at exists. An earlier draft named `a736ba3`, which predates two of them
 **Pinned:** until 2026-12-01, or until every repository above has answered the one ask below — whichever comes first
 **Settles when:** every member has stated a publishing stance for itself and for each child project in its tree, or said it will not
@@ -1022,7 +569,6 @@ us on that**, and saying so is cheaper than being shown it later.
 
 **To:** dokimasia, eudaimonia, koine
 **Kind:** request
-**Status:** open
 **Opened:** 2026-09-01, at anoieu `59e8e07`
 **Settles when:** each of you either refuses a bump to a commit our CI did not pass, or tells us the requirement is wrong for your tree
 
@@ -1082,7 +628,6 @@ bar we would rather be held to than trusted about.
 
 **To:** eudaimonia
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-09-01, at anoieu `59e8e07`
 **Settles when:** nothing waits on this. It is a fact about our side that `epikrisis` is better off having than inferring
 
@@ -1141,7 +686,6 @@ a shape our inventory should carry, given that its validator rejects one — is 
 
 **To:** koine
 **Kind:** answer
-**Status:** open
 **Opened:** 2026-09-01, at koine `e2cc54b`
 **Settles when:** `maintaining.md` carries the corrections below, or koine says which of them it disagrees with
 
@@ -1226,7 +770,6 @@ is a preference*, this is a better one than the one we nearly handed you.
 
 **To:** koine, dokimasia, eudaimonia
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-09-01, at anoieu `1be2d27`
 **Settles when:** each of you has adopted the paragraph or said it is not worth carrying — at which point a person decides whether it joins the fatal gate
 
@@ -1303,7 +846,6 @@ worth more than the paragraph would have been — so it is worth telling us.
 
 **To:** ethos, logos, dokimasia, eudaimonia, koine
 **Kind:** question
-**Status:** open
 **Opened:** 2026-09-01, at anoieu `1be2d27`
 **Settles when:** a person has decided what an associate has to carry, after ethos has said which of the two versions it would rather be asked for — or that it would rather not be asked at all
 
@@ -1440,7 +982,6 @@ that date, overrides this entirely and costs you one sentence.
 
 **To:** dokimasia, eudaimonia, koine, ethos, logos
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-09-01, at anoieu `1be2d27`
 **Settles when:** every repository above has adopted, declined or said nothing. Nothing here waits on a reply, and no reply is owed
 
@@ -1537,7 +1078,6 @@ that wrote it is not a convention.
 
 **To:** koine, dokimasia
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-08-31, at anoieu `9df12d8`
 **Settles when:** the check that a reporting record is well-formed exists once, somewhere other than inside each tool that keeps one — or we say we were wrong and go on re-measuring
 
@@ -1584,7 +1124,6 @@ checked against, and we do not intend to give ground on it.
 
 **To:** koine
 **Kind:** request
-**Status:** open
 **Opened:** 2026-08-31, at koine `dfb0dd0`
 **Settles when:** koine holds a prompt-drift check a customer can fetch and call, or says it will not be the first piece
 
@@ -1635,7 +1174,6 @@ answer to the question this repository exists to settle, and worth having.
 
 **To:** koine
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-08-31, at koine `dfb0dd0`
 **Settles when:** the register's line for koine says what koine's README says koine is, or koine tells us the line was right
 
@@ -1672,7 +1210,6 @@ answer to it.
 
 **To:** dokimasia
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-08-31
 **Settles when:** your CI run passes without you having changed anything
 
@@ -1703,7 +1240,6 @@ to work around.
 
 **To:** ethos
 **Kind:** request
-**Status:** open
 **Opened:** 2026-08-31, at ethos `3cf1c03`
 **Settles when:** ethos documents a stable machine form, or says it will not
 
@@ -1730,7 +1266,6 @@ it is one we would write down and work around.
 
 **To:** ethos-eoc
 **Kind:** proposal
-**Status:** open
 **Opened:** 2026-08-31, at ethos `3cf1c03`
 **Settles when:** the compiler can answer the question for a single block, or
 says the loop is acceptable as it stands
@@ -1759,7 +1294,6 @@ build it twice.
 
 **To:** dokimasia
 **Kind:** question
-**Status:** open
 **Opened:** 2026-08-31, at cvc5 `aee8742`
 **Settles when:** one of us records it as ours, in our own tree, and the other
 cites that record
@@ -1783,7 +1317,6 @@ neither of us having started.
 
 **To:** ethos
 **Kind:** question
-**Status:** open
 **Opened:** 2026-08-31, at ethos `3cf1c03`
 **Settles when:** the manual says which it is, or says the distinction is out of
 scope for it
@@ -1809,7 +1342,6 @@ say so wherever we describe the language.
 
 **To:** dokimasia
 **Kind:** notice
-**Status:** open
 **Opened:** 2026-08-31
 **Settles when:** dokimasia's links resolve and its quotations match
 

@@ -83,6 +83,11 @@ UNCHECKED = [
      "`affiliation_in` reads it for the inventory and never grades anybody"),
     ("a member shares the approach the vision argues for",
      "the judgement half of a footing; vision may never acquire a checker"),
+    ("an id is allocated above the highest ever used, including removed topics",
+     "the highest ever used is in Git history once a finished topic is removed, "
+     "and this reads a tree rather than a history -- CI clones are routinely "
+     "shallow. A duplicate *within the file* is caught; a number reused after a "
+     "removal is not"),
     ("why an associate does not declare",
      "a repository's own reason for not advertising — not published yet, one "
      "person's working tree, an arrangement it does not want to oversell. The "
@@ -108,8 +113,16 @@ INDEX_EXEMPT_RE = r"^letter-to-[\w.-]+\.md$"
 COMPETING_ENTRY = ["INTRODUCTION.md", "OVERVIEW.md", "ABOUT.md", "GUIDE.md", "START.md"]
 
 KINDS = {"request", "proposal", "question", "notice", "answer"}
-STATES = {"open", "answered", "declined", "withdrawn", "settled"}
-FIELDS = ["To", "Kind", "Status", "Opened", "Settles when"]
+#: The field block, and there is no `Status:` in it. **Presence in the file is
+#: the status**: a discussion is live while it is there, and a finished one is
+#: removed outright -- replies and all -- once its lasting decision has been
+#: written into the document it governs. Git history keeps the conversation, so
+#: an archive kept here would be a second copy that nobody maintains.
+FIELDS = ["To", "Kind", "Opened", "Settles when"]
+#: Carried only to say it is gone. A topic still holding a `Status:` predates
+#: the change, and the value it holds is the thing most likely to be wrong --
+#: `open` on a topic that ended, or `settled` on one nobody removed.
+RETIRED_FIELDS = ("Status",)
 
 # The response gate, clause by clause. Each entry is one clause of the banner
 # every discussion.md must carry, and the alternatives a repository may spell it
@@ -1068,9 +1081,11 @@ def check_discussion() -> list[str]:
         kind = got.get("Kind", "").strip()
         if kind and kind not in KINDS:
             bad.append(f"{tid} has Kind {kind!r}, not one of {'/'.join(sorted(KINDS))}")
-        state = got.get("Status", "").strip()
-        if state and state not in STATES:
-            bad.append(f"{tid} has Status {state!r}, not one of {'/'.join(sorted(STATES))}")
+        for f in RETIRED_FIELDS:
+            if f in got:
+                bad.append(f"{tid} carries **{f}:**, which the format no longer "
+                           "has; a discussion is live while it is in the file, "
+                           "and a finished one is removed")
     if not seen:
         bad.append("docs/discussion.md carries no topics")
     return bad
