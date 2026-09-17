@@ -677,6 +677,12 @@ def adoption_interface() -> int:
     MARKER = ("**Footing:** `associate` — held to the shared "
               "repository policy; the front page does not say so.\n")
 
+    #: What a maintenance note looks like when somebody has written one. The
+    #: floor asks for twelve words, which is the shared policy's way of saying
+    #: *a heading with something under it* without asking anybody to write an essay.
+    NOTE = ("\nWritten by one person in their own time, and reviewed by nobody "
+            "else at all.\n")
+
     #: The child's marker, and what the parent's front page then may not do.
     CHILD_MARKER = ("**Footing:** `unadvertised-child` — reached through the "
                     "parent, on the parent's footing; the front page does not "
@@ -692,13 +698,13 @@ def adoption_interface() -> int:
     # anyway -- the case the check exists for.
     CASES = (
         ("yes", "a repository that declares membership and keeps the shape passes",
-         True, "gated", 0, None, None),
+         True, "gated", 0, None, None, None),
         ("no", "a repository that keeps the shape but declares nothing fails",
-         False, "gated", 1, None, None),
+         False, "gated", 1, None, None, None),
         ("nochannel", "a member that keeps no discussion file passes",
-         True, None, 0, None, None),
+         True, None, 0, None, None, None),
         ("ungated", "a member whose discussion file has lost the response gate fails",
-         True, "ungated", 1, None, None),
+         True, "ungated", 1, None, None, None),
         # The associate footing, and the three ways of getting it wrong. The
         # skip is narrow by construction: it covers the declaration and nothing
         # else, which is what the ungated case below is here to hold. What an
@@ -706,41 +712,57 @@ def adoption_interface() -> int:
         # only holds that the checks still run and still report.
         ("associate", "an associate declares on its maintenance page and passes "
          "without a front-page declaration",
-         False, "gated", 0, MARKER, None),
+         False, "gated", 0, MARKER, None, None),
         ("advertised-too", "a tree that records the marker and also declares on "
          "the front page fails; a declared membership is a member's",
-         True, "gated", 1, MARKER, None),
+         True, "gated", 1, MARKER, None, None),
         ("hollow", "a marker that names a footing and takes on nothing fails",
-         True, "gated", 1, "**Footing:** `associate`\n", None),
+         True, "gated", 1, "**Footing:** `associate`\n", None, None),
         ("invented", "a marker naming a footing the policy does not define fails",
          True, "gated", 1,
-         "**Footing:** `gold-member` — held to the shared repository policy.\n", None),
+         "**Footing:** `gold-member` — held to the shared repository policy.\n", None, None),
         ("associate-ungated",
          "an associate's tree is still checked against the response gate",
-         False, "ungated", 1, MARKER, None),
+         False, "ungated", 1, MARKER, None, None),
         # The child's half. The marker is a claim about the parent, so the
         # parent's front page is what decides it -- which is why the failing
         # case here changes nothing but the front page.
         ("quiet-child", "an unadvertised child project the front page leaves out "
-         "passes", True, "gated", 0, None, "quiet"),
+         "passes", True, "gated", 0, None, "quiet", None),
         ("named-child", "an unadvertised child project the front page names fails",
-         True, "gated", 1, None, "named"),
+         True, "gated", 1, None, "named", None),
+        # The floor an associate keeps. Not a debt: it is what the footing
+        # needs to mean anything, since the front page is all a reader gets.
+        ("floor-noname", "an associate whose front page never explains its name "
+         "fails", False, "gated", 1, MARKER, None, "no name"),
+        ("floor-emptynote", "an associate whose maintenance note is a bare "
+         "heading fails", False, "gated", 1, MARKER, None, "empty note"),
+        # And the same two on a member, which is held to neither: the name is
+        # advice there, and this is what keeps the floor from leaking.
+        ("member-noname", "a member whose front page never explains its name "
+         "still passes", True, "gated", 0, None, None, "no name"),
     )
 
     checker = os.path.join(os.path.dirname(HERE), "scripts", "policy_check.py")
     failures = 0
     tmp = tempfile.mkdtemp(prefix="anoieu-adopt-")
     try:
-        for name, what, declares, channel, want, footing, child in CASES:
+        for name, what, declares, channel, want, footing, child, floor in CASES:
             root = os.path.join(tmp, name)
             os.makedirs(os.path.join(root, "docs"))
             subprocess.run(["git", "-C", root, "init", "-q"], check=True)
+            # The note is a real one rather than a stub: the associate floor
+            # asks for a heading with something actually under it, so a
+            # three-word placeholder would fail every associate case here for a
+            # reason none of them is about.
             open(os.path.join(root, "README.md"), "w").write(
                 "# faketool\n\nA thing.\n"
                 + ("\nIt carries kalon, a child project.\n" if child == "named" else "")
-                + "\n## The name\n\nfaketool, because it is fake.\n"
-                "\n## How this repository is maintained\n\n"
-                + (DECLARATION if declares else "") + "\nBy a person.\n")
+                + ("" if floor == "no name" else
+                   "\n## The name\n\nfaketool, because it is fake.\n")
+                + "\n## How this repository is maintained\n\n"
+                + (DECLARATION if declares else "")
+                + ("\n" if floor == "empty note" else NOTE))
             topic = ("\n## D1 — hello\n\n"
                      "**To:** anoieu\n**Kind:** notice\n**Status:** open\n"
                      "**Opened:** 2026-08-31\n**Settles when:** somebody says so\n\n"

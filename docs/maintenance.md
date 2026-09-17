@@ -69,6 +69,22 @@ own summary the same way, and leaves the exit code alone — a checker that went
 green on a marker in the tree it is checking would hand every repository a way
 to pass by editing one line.
 
+**One thing is still asked of an associate, and it is not a debt.** The front
+page is the only thing a reader arriving at the repository has, since nothing
+about the arrangement is advertised anywhere else — so it carries a
+`How this repository is maintained` heading with something actually under it,
+and a section saying what the name is for. That is the floor the footing needs
+in order to mean anything, and a tree below it is reported like any other
+number: as `tracked`, with nobody at fault.
+
+**The name half is ours to justify and is raised with the office.** The shared
+policy calls explaining a name *recommended, a minor finding, never fatal* —
+said of a member, whose front page carries a declaration and whose CI runs this
+checker on every push. An associate publishes neither, so the same paragraph is
+the whole of what a stranger gets, and this is the one place we read it as
+load-bearing. For a member it stays minor, and the minor check stands aside for
+an associate so the same absence is never reported twice.
+
 A child project its parent's front page does not name records `unadvertised-child`
 in its own README; that claim is about the parent and is checked against it.
 

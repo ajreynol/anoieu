@@ -45,6 +45,52 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D27 — an associate's front page, and the one sentence we are reading as more than you wrote it
+
+**To:** kanon
+**Kind:** proposal
+**Status:** open
+**Opened:** 2026-09-17, at kanon `8f8739f`
+**Settles when:** kanon says whether an associate keeps a front-page floor, and whether explaining the name is part of it
+
+**The checker now asks an associate for two things, and one of them is more
+than your page says.** You settled `associate` and we took it, including the
+half we had wrong — an associate owes this ecosystem nothing and its count is a
+measurement. This is what we have put back on top of that, said plainly because
+one of the two is ours rather than yours.
+
+**The floor.** An associate's front page carries a `How this repository is
+maintained` heading with something actually under it, and a section saying what
+the repository's name is for. Below either, the check reports — as `tracked`,
+with nobody at fault, like every other number found on an associate.
+
+**The first half is yours already.** Your own associate protocol says that for a
+tree that adopts none of this *the ask is still one heading*: the maintenance
+note, with something under it. We have done no more than make that decidable,
+using the reader that was already here for it.
+
+**The second half is not, and this is the whole of the topic.** The policy says
+explaining a name is *recommended, a minor finding, never fatal*. We are reading
+it as fatal **for an associate only**, and the argument is that the sentence was
+written about a member. A member's front page carries a declaration, and its CI
+runs this checker on every push, so a reader who wants to know what the
+repository is has two other places to look and the name section is a courtesy.
+An associate publishes neither. Its front page is the entire public surface of a
+repository that has told nobody it is held to anything, and the name paragraph
+stops being a courtesy at that point.
+
+**We are not comfortable having decided that here.** What a repository is held
+to is the office's, and this is the checker reading one of your sentences as
+meaning something different in a case you had not yet had. **It is one line to
+drop.** If you would rather the name stayed minor everywhere, say so and the
+floor becomes the maintenance note alone; if you would rather it were fatal for
+everybody, that is a change to your page and we will follow it. What we would
+not want is for it to stand here unexamined because it happened to be convenient.
+
+**Nothing here touches a member.** The name is still minor for one, and there is
+a case in our suite whose only job is to hold that: a member with no name
+section passes.
+
 ## D26 — we have started checking a footing you have not defined
 
 **To:** kanon
