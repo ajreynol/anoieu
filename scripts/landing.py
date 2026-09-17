@@ -15,7 +15,11 @@ verdict with a marker naming where the change is:
 
     awaiting landing: <project> <branch> <commit>
 
-and this reads them back. It is a **separate pass with its own question** -- did
+and this reads them back. **A verdict also opens with one of seven words**, of
+which `accepted and fixed` is the one that owes that marker -- because a marker
+in prose can be reworded out of existence and a required word cannot. See
+`OUTCOMES` below, and *The verdict vocabulary, and why it is closed* in
+`docs/reports/reporting-workflow.md`, which defines it. It is a **separate pass with its own question** -- did
 what we closed actually land -- asked on its own schedule rather than while
 somebody is processing a reply. That separation is deliberate: the two get
 confused exactly when there is a hurry on, which is when the wrong one is
@@ -52,6 +56,67 @@ MARKER = re.compile(
     r"awaiting landing:\s+(?P<project>\S+)\s+(?P<branch>\S+)\s+(?P<commit>[0-9a-f]{7,40})\b"
 )
 _ROW = re.compile(r"^\|\s*`([0-9a-f]{16})`\s*\|")
+
+#: **What a verdict may open with, and which of them owes a marker.** The copy
+#: that runs; the definition is *The verdict vocabulary, and why it is closed* in
+#: `docs/reports/reporting-workflow.md`, and `tests/run.py` compares the two.
+#:
+#: The vocabulary exists because the marker is prose and the way this audit
+#: fails is a verdict somebody reworded -- *it will land shortly* is closed, owes
+#: the debt, and matches nothing. No pattern closes that: the absence of a phrase
+#: is not detectable in free text. What is detectable is a **required** word, so
+#: the outcome is required and `accepted and fixed` has to say where the change
+#: is. Rewording now leaves the vocabulary rather than leaving the audit.
+PROMISE, LANDED, SETTLED = "promise", "landed", "settled"
+OUTCOMES = {
+    "accepted and fixed": PROMISE,
+    "fixed and landed": LANDED,
+    "declined": SETTLED,
+    "intentional": SETTLED,
+    "not audited": SETTLED,
+    "withdrawn": SETTLED,
+    "re-coded": SETTLED,
+}
+
+
+def verdicts(path: str = LEDGER) -> list[tuple[str, str, bool]]:
+    """One `(id, opening-word-or-empty, carries-a-marker)` per closed row."""
+    out = []
+    with open(path) as f:
+        for line in f:
+            m = _ROW.match(line)
+            if not m:
+                continue
+            cell = line.strip().strip("|").split("|")[-1].strip()
+            word = next((w for w in OUTCOMES if cell.startswith(w)), "")
+            out.append((m.group(1), word, bool(MARKER.search(line))))
+    return out
+
+
+def unreadable(path: str = LEDGER) -> list[str]:
+    """Rows whose verdict opens with nothing in the vocabulary.
+
+    A verdict outside the list is not a style lapse: it is a row whose outcome
+    nothing can read, which is how a debt leaves this audit without leaving the
+    ledger.
+    """
+    return [fid for fid, word, _ in verdicts(path) if not word]
+
+
+def undeclared(path: str = LEDGER) -> list[str]:
+    """Rows closed on a promise that do not say where the change is."""
+    return [fid for fid, word, marked in verdicts(path)
+            if OUTCOMES.get(word) == PROMISE and not marked]
+
+
+def overdeclared(path: str = LEDGER) -> list[str]:
+    """Rows that carry a landing marker and are not closed on a promise.
+
+    A settled or landed row still naming a branch to watch is a contradiction
+    somebody has to resolve, and it inflates the outstanding count.
+    """
+    return [fid for fid, word, marked in verdicts(path)
+            if marked and word and OUTCOMES[word] != PROMISE]
 
 
 class Outstanding:
@@ -163,6 +228,7 @@ def main() -> int:
     args = ap.parse_args()
 
     bad = malformed()
+    unread, owing, contradictory = unreadable(), undeclared(), overdeclared()
     items = read_ledger()
 
     print(f"-- {len(items)} row(s) closed before the change landed")
@@ -189,10 +255,23 @@ def main() -> int:
         if unknown:
             print(f"-- {len(unknown)} could not be answered -- that is an unaudited row, not a clean one")
 
+    problems = 0
     if bad:
         print(f"-- {len(bad)} verdict(s) say `awaiting landing` and do not parse: {', '.join(bad)}")
-        return 1
-    return 0
+        problems += len(bad)
+    if unread:
+        print(f"-- {len(unread)} verdict(s) open with nothing in the vocabulary: "
+              f"{', '.join(unread)}")
+        problems += len(unread)
+    if owing:
+        print(f"-- {len(owing)} row(s) closed on a promise do not say where the "
+              f"change is: {', '.join(owing)}")
+        problems += len(owing)
+    if contradictory:
+        print(f"-- {len(contradictory)} row(s) carry a landing marker and are not "
+              f"closed on a promise: {', '.join(contradictory)}")
+        problems += len(contradictory)
+    return 1 if problems else 0
 
 
 if __name__ == "__main__":

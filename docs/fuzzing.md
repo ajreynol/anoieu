@@ -32,7 +32,8 @@ python3 -m anoieu_fuzz run --mode signature    # arbitrary signatures, at ethos 
 >
 > The floor is worth having on its own terms. In its first few thousand cases it
 > found a crash in ethos, three proofs ethos and logos answer differently, and an
-> ethos error path that carries no location — and a floor is what makes
+> ethos error path that carries no location — three of which ethos accepted and
+> fixed on a branch, read 2026-09-17 — and a floor is what makes
 > "research-quality" a measurable claim about a successor rather than an
 > adjective.
 

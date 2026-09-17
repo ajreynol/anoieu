@@ -30,7 +30,11 @@ it is booked rather than assumed away. Such a row ends its verdict with
     awaiting landing: <project> <branch> <commit>
 
 and `python3 scripts/landing.py --check` reads every one of them back and asks the
-project's checkout whether that commit has reached the default branch. It is a
+project's checkout whether that commit has reached the default branch. **Every
+verdict here opens with one of seven words** -- the list and its reason are in
+[the verdict vocabulary](reporting-workflow.md#the-verdict-vocabulary-and-why-it-is-closed)
+-- and `accepted and fixed` is the one that has to carry the marker, so a
+verdict reworded past the audit now leaves the vocabulary instead. It is a
 separate pass with its own question -- *did what we closed actually land* -- and
 `tests/run.py` fails if a marker is reworded into something it cannot parse,
 because that would drop a row from the audit while leaving the debt owed. When a

@@ -106,10 +106,63 @@ of governance it does not hold. Where kanon has removed a page this record
 names, the record names it and does not link it. Pinning anoieu's *own* removed
 material is a different thing and is fine: this tree is ours to archive.
 
-Do not relax a check merely to make CI green. A new check must be decidable,
-give an actionable failure, and be tested beyond this tree. Keep downstream
+Do not relax a check merely to make CI green; what a new one owes is below,
+under [adding a check](#adding-a-check-to-the-policy-checker). Keep downstream
 compatibility explicit: declarations may link either the current shared policy
 or its former anoieu location. Anoieu's owner and script-catalog checks read this page.
+
+## Adding a check to the policy checker
+
+The checker is the one program here that runs on other people's builds, so a
+check is not a change to this repository — it is a change to theirs. It lands
+permanently, it fires at moments nobody chose, and it is nearly never deleted.
+**And it is a change to a published contract**: a new obligation, or an existing
+one applied to more repositories, needs a new
+[policy version](policy-checker.md), never a bug fix. Four conditions before one
+goes in.
+
+**It is decidable without an opinion.** Where answering it needs judgement it
+belongs in the shared vision, which must never acquire a checker.
+
+**It has been run against a tree this repository did not write.** Every false
+positive so far was found by somebody else's repository and none by ours, which is
+not luck: this is the one tree shaped like the checker's assumptions. Run a new
+check against every checkout on the machine before it lands. A check that has only
+ever seen this tree has not been tested.
+
+**Its message names the fix.** A failure somebody has to interpret costs more than
+the defect it found, and they are reading it in a red build on a schedule that is
+not theirs.
+
+**It stays true without curation.** The expensive kind is the check whose *data*
+rots — a list of vendor names, a registry of tools, anything that has to be updated
+as the world changes rather than as the tree does. There is one of those already,
+`VENDORS`, and it is the check most likely to be wrong a year from now. Prefer a
+check whose only input is the repository in front of it.
+
+### Why this is a limit and not a ritual
+
+The failure mode is a set of checks large enough that keeping it honest is the
+work. Three things produce it, and each looks like diligence.
+
+**A check that fires wrongly costs more than it can ever save** — somebody else's
+afternoon, and the credibility of the whole set, because a maintainer who has been
+sent one spurious failure reads the next one differently, including the true ones.
+
+**Every check is a migration**, and *we do not pay it*. A repository that passes
+today and fails tomorrow does work it did not ask for at a moment it did not
+choose; the contract makes that survivable and does not make it free.
+
+**Checks accumulate and are almost never removed.** So the question at the point of
+adding one is not *is this true* but *will I defend this in a year, on somebody
+else's repository, when it fails inconveniently*. Anything short of yes belongs in
+the minor tier, which is what that tier is for.
+
+**And there is a stopping rule.** A check earns its place by finding something. The
+anchor check found three dead links on its first run. A check that has never fired
+on anything is either perfect or pointless, and the second is the way to bet.
+
+*This section is kanon's text, offered in their `D10` and taken.*
 
 ## The scripts
 
@@ -123,7 +176,7 @@ Commands are run from the repository root unless noted.
 | `gen_checks_doc.py` | generate the check catalogue |
 | `gen_corpus_table.py` | measure and render the corpus, imported by the runner |
 | `gen_open_findings.py` | record findings through koine, add ledger rows and render the static table; `--check` previews through koine and reports missing rows |
-| `landing.py` | report changes awaiting landing; `--check` reads checkouts |
+| `landing.py` | report changes awaiting landing, and read every closed verdict against [the verdict vocabulary](reports/reporting-workflow.md#the-verdict-vocabulary-and-why-it-is-closed); `--check` reads checkouts |
 | `anoieu_analyzer` | run every standard target, dump the bugs, append through koine; `--dry-run` lists signatures and analyses nothing, `--preview` runs the analysis and koine's dry run |
 | `anoieu_fuzzer` | fuzz two checkers against each other: `anoieu_fuzzer ethos logos N`, where N is how many cases; `--dry-run` resolves the binaries and runs nothing. The full interface is `python3 -m anoieu_fuzz run` |
 | `targets.json`, `targets.py` | the standard targets, and where each project is on this machine |

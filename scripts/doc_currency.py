@@ -55,8 +55,13 @@ GENERATED = {"docs/checks.md", "docs/reports/corpus.md",
 
 #: The other repositories this ecosystem talks about. A claim naming one of
 #: these is a claim about a tree we do not control.
+#: This is a list whose *data* rots rather than its logic -- a repository that
+#: joins next month is a cross-project claim nothing here notices. Adding a name
+#: is how it keeps up; see *Adding a check to the policy checker* in
+#: docs/maintenance.md on why this shape is the expensive kind.
 OTHERS = ("cvc5", "ethos", "logos", "eudaimonia", "dokimasia", "koine",
-          "kanon", "epikrisis", "aisthesis", "inspect.software")
+          "kanon", "epikrisis", "aisthesis", "eschaton", "tachyon",
+          "inspect.software")
 
 DATE = re.compile(r"\b20\d{2}-[01]\d-[0-3]\d\b")
 

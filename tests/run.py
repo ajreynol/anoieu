@@ -196,6 +196,59 @@ def manifest_agrees() -> int:
     return failures
 
 
+#: A run's summary, read from the block above its sections. Its own function
+#: because the two ways it used to be wrong are both invisible from the log --
+#: it returned `None` and the caller skipped the entry in silence, and it
+#: stopped at a blank line so the length limit could be evaded by pressing
+#: return. `postmortem_reader()` holds both.
+SUMMARY = re.compile(r"^\*\*Summary:\*\*(.*?)(?=^\*\*[A-Za-z][\w ]*:\*\*|\Z)", re.S | re.M)
+
+
+def postmortem_summary(head: str) -> str | None:
+    """The summary in `head`, whitespace normalised, or None if there is none.
+
+    It reads on to the **next field** rather than to the next blank line: a
+    limit a blank line gets past is advisory, and nothing said so.
+    """
+    m = SUMMARY.search(head)
+    if not m:
+        return None
+    summary = " ".join(m.group(1).split())
+    return summary or None
+
+
+def postmortem_reader() -> int:
+    """The summary reader itself, against the shapes that used to defeat it.
+
+    Both were reported by koine, from a second implementation of this check, and
+    both are the direction that looks fine: the check reported success. A
+    regression here is not a style preference -- it is the 250-character limit
+    ceasing to be a limit, with nothing in the output saying so.
+    """
+    WRAPPED = "**Summary:**\nEthos aborted on a malformed type.\n"
+    EVASION = "**Summary:** Short.\n\n" + ("x" * 480) + "\n"
+    PLAIN = "**Summary:** One sentence.\n\n**Resolution:** fixed.\n"
+    EMPTY = "**Tool:** ethos\n\n**Summary:**\n\n**Resolution:** fixed.\n"
+    cases = (
+        ("a summary that starts on the next line is read, not skipped",
+         WRAPPED, "Ethos aborted on a malformed type."),
+        ("a blank line does not end the field, so the limit binds",
+         EVASION, "Short. " + "x" * 480),
+        ("an ordinary summary stops at the next field", PLAIN, "One sentence."),
+        ("a `Summary:` with nothing under it reads as absent", EMPTY, None),
+    )
+    failures = 0
+    for what, head, want in cases:
+        got = postmortem_summary(head)
+        ok = got == want
+        failures += 0 if ok else 1
+        print(("ok   " if ok else "FAIL ") + what)
+        if not ok:
+            print(f"     read {got!r}, wanted {want!r}")
+    print(f"-- the postmortem summary reader: {failures} failure(s)")
+    return failures
+
+
 def postmortem_shape() -> int:
     """The log's own conventions, since a convention nothing checks is a wish.
 
@@ -230,10 +283,20 @@ def postmortem_shape() -> int:
                   "those fields belong to the run, not to a finding")
             failures += 1
 
-        m = re.search(r"^\*\*Summary:\*\* (.+?)(?=\n\*\*|\n\n|\Z)", head, re.S | re.M)
-        if not m:
+        # **Read on to the next field, and fail when there is no match.** Two
+        # ways this check used to stop working without saying so: a `Summary:`
+        # whose text starts on the following line matched nothing and was
+        # `continue`d past -- measured against neither limit, reported as a
+        # pass -- and the old lookahead ended the field at a blank line, so the
+        # 250-character limit was evadable by pressing return. Six characters
+        # counted with four hundred and eighty following. A summary a reader
+        # cannot find is itself a defect, so the no-match case is a failure.
+        summary = postmortem_summary(head)
+        if summary is None:
+            print(f"FAIL postmortem {title!r}: no readable summary after "
+                  "`**Summary:**`")
+            failures += 1
             continue
-        summary = " ".join(m.group(1).split())
         if len(summary) > LIMIT:
             print(f"FAIL postmortem {title!r}: summary is {len(summary)} "
                   f"characters, at most {LIMIT}")
@@ -372,12 +435,84 @@ def landing_markers() -> int:
     for fid in landing.malformed():
         print(f"FAIL closed row {fid} says `awaiting landing` and does not parse")
         failures += 1
+    # The half a reworded marker gets past: an outcome outside the vocabulary,
+    # a promise that names no branch, or a marker on a row that is not a
+    # promise. See "The verdict vocabulary, and why it is closed".
+    for fid in landing.unreadable():
+        print(f"FAIL closed row {fid} opens with no verdict the vocabulary knows")
+        failures += 1
+    for fid in landing.undeclared():
+        print(f"FAIL closed row {fid} is `accepted and fixed` and does not say "
+              "where the change is")
+        failures += 1
+    for fid in landing.overdeclared():
+        print(f"FAIL closed row {fid} carries a landing marker and is not closed "
+              "on a promise")
+        failures += 1
     items = landing.read_ledger()
     for item in items:
         if not re.fullmatch(r"[0-9a-f]{7,40}", item.commit):
             print(f"FAIL closed row {item.id} names an unusable commit {item.commit!r}")
             failures += 1
+    failures += verdict_vocabulary(landing)
     print(f"-- rows closed before landing: {len(items)}, {failures} failure(s)")
+    return failures
+
+
+def verdict_vocabulary(landing) -> int:
+    """`landing.OUTCOMES` and the document that defines it say the same words.
+
+    A surface that restates a register declares its ground truth and is compared
+    to it; here the register is *The verdict vocabulary, and why it is closed*
+    in `docs/reports/reporting-workflow.md` and the copy is the dict that runs.
+    Without this the two drift, and a verdict the document permits stops being
+    one the audit accepts -- which reads as a defect in somebody's ledger.
+
+    The three synthetic rows are the reason the vocabulary exists at all: the
+    reworded verdict that no pattern catches, and a promise with nothing to
+    watch.
+    """
+    failures = 0
+    doc = os.path.join(os.path.dirname(HERE), "docs", "reports",
+                       "reporting-workflow.md")
+    text = open(doc).read()
+    body = text.split("#### The verdict vocabulary")[1].split("\n### ")[0]
+    named = set(re.findall(r"^\| `([a-z -]+)` \|", body, re.M))
+    if named != set(landing.OUTCOMES):
+        print(f"FAIL the verdict vocabulary differs: document {sorted(named)}, "
+              f"scripts/landing.py {sorted(landing.OUTCOMES)}")
+        failures += 1
+
+    import tempfile  # noqa: PLC0415
+    ROWS = (
+        "| `1111111111111111` | ethos | EO0001 | `a.eo:1` | x | "
+        "accepted and fixed -- ethos: it will land shortly |\n",
+        "| `2222222222222222` | ethos | EO0001 | `a.eo:2` | x | "
+        "fixed eventually -- ethos: reworded out of the vocabulary |\n",
+        "| `3333333333333333` | ethos | EO0001 | `a.eo:3` | x | "
+        "declined -- ethos: no. awaiting landing: ethos b 1234567 |\n",
+    )
+    with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as fh:
+        fh.write("| id | owner | code | where | what | verdict |\n")
+        fh.writelines(ROWS)
+        fake = fh.name
+    try:
+        cases = (
+            ("a promise reworded out of its marker is caught",
+             landing.undeclared(fake), ["1111111111111111"]),
+            ("a verdict outside the vocabulary is caught",
+             landing.unreadable(fake), ["2222222222222222"]),
+            ("a marker on a row that is not a promise is caught",
+             landing.overdeclared(fake), ["3333333333333333"]),
+        )
+        for what, got, want in cases:
+            ok = got == want
+            failures += 0 if ok else 1
+            print(("ok   " if ok else "FAIL ") + what)
+            if not ok:
+                print(f"     got {got}, wanted {want}")
+    finally:
+        os.unlink(fake)
     return failures
 
 
@@ -809,6 +944,16 @@ def adoption_interface() -> int:
                      "**Opened:** 2026-08-31\n**Settles when:** somebody says so\n\n"
                      "We exist.\n")
             index = "# The documentation\n\n| document | its job |\n| --- | --- |\n"
+            # A page whose job is to show a reader what to copy. The quoted
+            # path inside the fence does not exist and is not a link to it --
+            # this once failed every case here, because the link checker read
+            # the fence as prose. Reported by koine, whose own page had to put
+            # the path in backticks to get past it: the workaround was the
+            # defect, demonstrated.
+            open(os.path.join(root, "docs", "example.md"), "w").write(
+                "# example\n\nCopy this:\n\n```python\n"
+                'path = "docs/no-such-page.md"\n```\n')
+            index += "| [`example.md`](example.md) | what to copy |\n"
             if channel:
                 open(os.path.join(root, "docs", "discussion.md"), "w").write(
                     "# Discussion\n\n"
@@ -948,6 +1093,7 @@ def main() -> int:
     failures += local_policy_inputs()
     failures += policy_contract()
     failures += adoption_interface()
+    failures += postmortem_reader()
     failures += postmortem_shape()
     failures += landing_markers()
     failures += targets_agree()

@@ -44,8 +44,13 @@ answer differently — one of them now a committed regression test. Six
 reproducers are under [`../tests/fuzz/`](../tests/fuzz), and each is verified
 against a real build on every push.
 
-Nothing it found has been filed upstream yet, which is a fact about us rather
-than about the findings.
+**Three of them have been carried, accepted and fixed** — the crash and two
+error paths that reached no `Error: <file>:<line>` — on ethos's `anoieu-findings`
+branch at `292201c2`, read 2026-09-17. They are closed here **before the change
+has landed**, which is a debt rather than a result:
+[`landing.py`](../scripts/landing.py) is the audit that reads it back, and it
+answers *not yet* for all three. What closes a row is in
+[the reporting workflow](../docs/reports/reporting-workflow.md#what-closes-a-row-and-what-does-not).
 
 ## Running it
 

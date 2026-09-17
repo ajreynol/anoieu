@@ -497,10 +497,24 @@ the tool. The current division:
 | `sem_compile.py` | `.eos` reference-level checks: every helper is written out, a case binds what it names, natives exist with the right arity, embedding types exist, block ordering, `--check` staleness |
 | `model-smt` stage | every declared symbol has a semantics block |
 | Lean / cvc5 | everything the compiler declined to check, one full regeneration later |
+| [dokimasia](https://github.com/ajreynol/dokimasia)'s `SIG` facet | the `src/proof/eo/` seam **from the emitter's side**: each `ProofRule` cvc5 can print against its declaration in `proofs/eo/`, and each `SkolemId` the solver constructs against what the seam will print |
 
 [`notes.md`](notes.md#what-ethos-misses-and-why) sets out the same division by
 mechanism -- why ethos does not report what it does not report -- with the
 verified examples behind each.
+
+**The seam is divided by direction rather than by artifact**, which is
+dokimasia's proposal and we take it: they check *cvc5 emits something the
+signature does not declare*, reading the C++ that recovers what is constructed
+and what the printer reshapes; anoieu checks *the signature declares something in
+a shape nothing emits*, which is a question about the signature's own health.
+Read at cvc5 `40a4bb7e4`, 2026-09-17, their check reports 130 printable
+`ProofRule`s against 620 declared with every printable one declared, **24
+`SkolemId`s the seam refuses**, and one arity disagreement on `SUBS`. The half
+nobody was looking at was the skolems. What it does not compare is the
+documented arity against the *printer's* reshaped signature, which is a third
+account of the same rule and the closest to what ethos sees; that gap is theirs
+and they say so.
 
 The gaps `ethos/docs/README.md` names itself — the `:is-list-nil` diff,
 exclusion closure, forward declarations never defined, a checkable unit smaller

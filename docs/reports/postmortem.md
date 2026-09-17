@@ -130,6 +130,20 @@ Nineteen rows came back, seven fixed and ten declined, and it was the ten that
 needed the process work — a fix has to survive somebody reading a diff, and a
 "nothing needs doing" has to survive nobody saying anything.
 
+**With the maintainer, and it is a prompt change.** koine asks that the prompts
+say a tree can change underneath a session, and that when one does the agent
+reports it rather than absorbing it — *what moved, whether it is committed or
+only staged, when the reading was last good, and what the agent did not do
+because of it*, to the person in the session and nowhere else. Their evidence is
+three instances on one machine inside fifteen minutes, one of them a customer's
+working tree where a harness read 6 failures in 6 cases that a clean clone of the
+same HEAD reports as 0 — a repair that would have looked exactly like
+maintenance. It is not the session-coherence rule: that drift is inside the
+agent and steerable, and this one has an end outside the session entirely. **A
+person approves every change to a prompt template**, so it is staged here rather
+than applied, and the three prompts it would touch are `check_anoieu`,
+`process_anoieu` and `anoieu_analyzer_agent`. koine's `D10`, 2026-09-02.
+
 **Outstanding.** Seven suggestions from the far end, none yet built, each a change
 to what a finding *is* rather than a tidy-up — the first five in logos's words, in
 `anoieu-dev-response.md` in that repository, and the last two from ethos. A

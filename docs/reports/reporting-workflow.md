@@ -186,6 +186,32 @@ deliberately not part of processing a reply — the two get confused precisely
 when somebody is in a hurry, which is when the wrong one gets skipped. When a
 change lands, the marker is replaced by what landed it.
 
+#### The verdict vocabulary, and why it is closed
+
+**A verdict opens with one of seven words, and the list is the whole of it.**
+This is the definition; [`scripts/landing.py`](../../scripts/landing.py) holds
+the copy that runs, and `tests/run.py` compares the two.
+
+| a verdict opens | what it means | what else the row must carry |
+| --- | --- | --- |
+| `accepted and fixed` | a maintainer accepted it and the change is a commit on a named branch | an `awaiting landing:` marker — the debt above |
+| `fixed and landed` | the change has reached the project's default branch | what landed it, and no marker |
+| `declined` | a maintainer read it and said no | nothing |
+| `intentional` | the behaviour is deliberate and the row was ours to withdraw | nothing |
+| `not audited` | the row is against a file whose ground truth is elsewhere | nothing |
+| `withdrawn` | our error: the finding was not one | nothing |
+| `re-coded` | the finding survives under a different code, which carries it | nothing |
+
+**The closed list is what makes the debt checkable, and nothing else does.** The
+marker lives in free-text prose, so the way the audit fails is a verdict
+somebody reworded: *it will land shortly* is closed, owes the debt, and matches
+no pattern — the absence of a phrase is not detectable in free text. Reported by
+koine, from a second implementation. What is detectable is the **presence** of a
+required word, so the outcome is required rather than the phrase, and
+`accepted and fixed` is the one outcome that has to name where the change is.
+Re-wording a verdict now takes it out of the vocabulary rather than out of the
+audit.
+
 ### The shape of a reply
 
 One block per row, and one section at the end that is not about any row:
@@ -304,6 +330,36 @@ somebody agreed to, and they cost four sentences.
 What one round of this produced, in full, is
 [`postmortem.md`](postmortem.md) — including the five suggestions we have not
 acted on and why.
+
+#### Who noticed, and why the record says
+
+**Where a person had to explain a finding, the entry says so and the finding is
+theirs.** Permanently, and in the artifact rather than in somebody's memory —
+because the write-up happens after the correction, and by then an agent that was
+*told* a thing and then verified it produces a document that reads exactly like
+an agent that found it. Nothing in the output distinguishes them, and the agent
+is the party writing.
+
+**The cost is not etiquette.** Every downstream measure of what this tooling is
+worth inflates silently, and a test that told-findings can satisfy is a test that
+cannot fail.
+
+**Three things are still the agent's to record, under their own words, never
+under *found*:** **confirmed**, the account was checked against the tree and held;
+**mechanism**, why it happened where the account said only that it did; and
+**quantified**, the size of it. And a forfeited finding carries **what was looked
+at instead**, because that is what makes the miss diagnosable rather than merely
+admitted.
+
+**Forfeit is not permanent, and what lifts it is not authorship.** The finding
+stays the person's. What an agent earns back is standing on the subject, and it is
+earned by **evidence the person did not have** — not a better retelling, not
+verification of what they already said — and only when they say so. Recorded as
+two facts and never merged into one: *found by the person; extended by the agent,
+with this.* The merged version reads tidier, which is how it gets written.
+
+Proposed by eudaimonia as their `D10`, 2026-09-02, about a case in which they were
+the party it convicted.
 
 ### The follow-up
 

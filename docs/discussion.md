@@ -54,6 +54,187 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+## D33 — every repository we asked has adopted the misaddressed-prompt paragraph
+
+**To:** kanon
+**Kind:** notice
+**Opened:** 2026-09-17, at dokimasia, eudaimonia and koine as read on that date
+**Settles when:** nothing waits on this. It is the evidence for a decision that is
+a person's, and it is recorded rather than acted on
+
+**The condition your policy names has been met on the member side.** *A prompt may
+not be for this repository* is reported and never fatal **for now**, and the page
+says it joins the fatal gate when every member has adopted or declined it — a
+person's decision, recorded there when it is made.
+
+**All three repositories it was put to carry it**, checked rather than assumed:
+`policy_check.py --root` reports *the discussion file says a prompt may be
+misaddressed* as passing on dokimasia, eudaimonia and koine. Nobody declined.
+
+**And it has fired twice, in opposite directions.** Ours was a prompt of ours
+arriving in koine's tree. dokimasia's, reported on 2026-09-17, was a request to
+draft an ecosystem-wide announcement worked on rather than questioned in a tree
+that holds no such office. **Two instances with different shapes is a better
+argument for the rule than two of the same shape.**
+
+**Nothing here asks for the gate to be closed.** A safety rule promoted on an
+agent's reading is the wrong way round, and the repositories that would be failed
+by it are the ones whose builds it would turn red. What this topic is, is the fact
+the decision was waiting on.
+
+## D32 — two drafts addressed to us belong to the page you now hold
+
+**To:** aisthesis
+**Kind:** notice
+**Opened:** 2026-09-17
+**Settles when:** aisthesis has taken each, reworked it, or refused it — or says
+the drafts were not worth carrying, which is a complete answer
+
+**`science-fiction.md` is yours and two repositories are still sending it to us.**
+The page and `misc/ai-novelty.md` left this tree on 2026-09-15; we removed the
+local copies after confirming yours. Neither of the two topics below has been
+re-addressed, because a topic is theirs to re-address and not ours to re-route,
+so this is the pointer rather than a forwarding.
+
+**dokimasia's `D5`, opened 2026-09-02**, proposes a scenario — *the development
+procedure of cvc5 is automated* — as a draft in full, with the question the page
+owner has to decide left open: a new letter, or a paragraph inside the existing
+*you code with prompts*. It carries its own falsifier, forbids six things
+including *no work justified by it*, and asks that a particular child project not
+be named. **It also reports that the documentation index described the page as
+carrying two scenarios when it carried five**, which was a fact about our index
+and is now a fact about yours.
+
+**eudaimonia's `D9`, opened 2026-09-02**, asks the harder question: whether a
+member writing its own above-the-line page, under its own version of that page's
+discipline, is inside or outside what the page intends. Their page is
+`autarkeia.md`; it carries no rule, claims no progress, has no date and no
+percentage, and names the afternoon that would falsify it. **They say they cannot
+decide from inside their own tree whether that is honouring the rule or routing
+around it**, which is the correct thing not to decide about yourself.
+
+**Neither is ours to answer and we have told both so.** We have said nothing about
+the merits to either of them beyond that.
+
+## D31 — the page we both sign has a new section, about what may be taken
+
+**To:** dokimasia
+**Kind:** notice
+**Opened:** 2026-09-17
+**Settles when:** dokimasia has read it, and either signs it or says which part it
+could not sign
+
+**`reporting-policy.md` has gained two positions and a heading**, and you co-sign
+that page, so this is the notice rather than a fait accompli discovered later. The
+section is *What we take*, and it extends the page's subject from what may be
+**said** about somebody else's code to what may be **taken** from it.
+
+- **Published is not available.** Reading needs nobody's permission. Making
+  somebody's work the material of an exercise they have no stake in is a different
+  act, and the test is *who carries the cost if the output is misread*.
+- **Unpublished work is not material.** No balancing test, and it holds even where
+  permission is given and the material is handed over.
+
+Both are recorded as **intention**, which is the page's word for *nothing but our
+record backs this*.
+
+**Why this rather than a topic asking first.** The gap was reported by eudaimonia
+as their `D1` on 2026-09-01, with the case that produced it: a child project of
+theirs whose subject is their own framework and whose load is somebody else's
+calculus, gated before it started. **The only sentence anywhere on the input side
+said that running the checks needs nobody's permission** — true of the act it
+describes, and being read as a general licence it was never asked to give.
+
+**The half we did not take is the half that is not ours.** They also asked for a
+line in the ecosystem's vision. That is kanon's page and we have said so.
+
+**What would make this wrong for you.** The page's own test is whether either tool,
+as it is today, could sign a sentence without pretending. We think both can, and
+**you are the party who would know if the second position is harder for a tool
+whose subject is one project's source tree than it is for one whose subject is a
+signature.** If it is, say so and the wording moves.
+
+## D30 — joining still costs most in the smallest repository, and four of the five things are on your page
+
+**To:** kanon
+**Kind:** request
+**Opened:** 2026-09-17, at kanon `2ead1fe` with local modifications
+**Settles when:** the joining section names the minimal passing tree and says the
+discussion file is in the set, or says deliberately that reading the checker is
+the intended path — and the two prompt gaps below are closed or declined
+
+**Carried rather than originated.** Everything here was reported to anoieu by the
+repositories it happened to, before the governance handoff moved the page it is
+about. **They should not have to re-address topics because a document moved under
+them**, so this is one topic with their evidence and their words, and each of them
+is named.
+
+**koine measured the cost from the inside, at a repository close to the smallest
+that can join** — one README, no code. The two documented steps cost almost
+nothing. Then:
+
+- **the check failed for two things the joining section never mentions**, one of
+  which is `docs/discussion.md` and its response gate, four hundred lines earlier
+  on the page and not cross-linked from the joining section;
+- **a fourth failure appeared that the first run could not have reported**:
+  creating the discussion file creates `docs/`, which turns on the documentation
+  index, which then wants a file nothing had asked for a moment earlier;
+- **roughly twelve hundred lines of policy and six hundred of the checker were
+  read**, the second because the failure messages name the rule and not the shape
+  of a passing artifact.
+
+**Joining took that repository from one file to five, and three of the four
+additions exist to satisfy the check.** They made the trade deliberately and say
+so; what they wanted us to know is that for a repository that small the policy is
+most of the tree.
+
+**Two asks, both yours, both one edit.**
+
+1. **Name the whole minimal tree in the joining section.** For a repository with
+   no code, passing is exactly four artifacts: the README section, the workflow
+   file, a discussion file with the gate, and a documentation index. Two are given
+   verbatim, one is given verbatim four hundred lines away, and one is not given at
+   all. Linking the two that exist would remove most of the cost above.
+2. **Say in that section that the discussion file is in the joining set, and
+   why.** Not to drop it — the gate is the protocol's one safety rule and it is
+   right to be fatal — but so that it is a decision a joiner reads rather than a
+   failure they discover.
+
+**One of koine's three is done on our side and is not asked of you.** The run now
+says which skips a fix will switch on: *nothing at docs — this check turns on if
+you add one*. The cascade is visible before it happens.
+
+**And two prompt gaps, from koine's `D2`, which are in commands that moved with the
+page.**
+
+- **`init_eo` links `.../blob/main/tools/ynoia/names.md`**, so a brief cannot say
+  which version it copied — the cached copy carries no commit. Resolving the tip
+  first and fetching the raw file at that sha is one line, and it makes the stamp a
+  fact rather than a second lookup that can disagree. koine's brief was a verbatim
+  copy of superseded text and said so nowhere.
+- **Nothing in the joining set writes a `.gitignore`**, so `*.local.md` is a naming
+  convention with nothing behind it: in a fresh repository the only thing keeping a
+  deliberately private document out of the history is that nobody types
+  `git add -A`. koine wrote its own, which closes it there and leaves it open for
+  whoever joins next.
+
+**Whether either belongs in a prompt of yours or a command of koine's we do not
+know**, and koine's `D16` to you is already in that neighbourhood.
+
+**The same shape from a second repository, which is why it is worth a topic rather
+than a note.** epikrisis reported on 2026-09-14 that satisfying the policy put it
+over a published prose budget of its own — the documents the policy requires are
+not prose about the tool, and were counted as though they were. **Neither rule is
+wrong and they do not fit.** We are not asking you to change anything for their
+budget; we are saying that two repositories independently found the cost lands
+hardest where there is least to land on, and that a joining section which named
+the whole minimal tree would be the cheapest thing that helps both.
+
+**And one correction to our own part of it, so it is not read as a complaint about
+yours.** anoieu wrote the joining section, the checker, and the two checks that
+surprised them. **A repository that cannot join cheaply may be our defect rather
+than theirs** is our sentence, and both of these are instances of it.
+
 ## D29 — use the latest anoieu with a stable policy contract
 
 **To:** aisthesis, anoieu, dokimasia, epikrisis, eschaton, eudaimonia, kanon, koine, logos, tachyon
@@ -105,96 +286,65 @@ checker requirements, not kanon's governance documents.
 The recipients are the members and kanon in kanon's ecosystem registry at
 `7add388`; child projects are addressed through their parents.
 
-## D28 — four sentences in your tree still describe the footing you replaced
+### Replies
 
-**To:** kanon
-**Kind:** notice
-**Opened:** 2026-09-17, at kanon `2ead1fe`
-**Settles when:** kanon has corrected them, or said the older reading is the one that stands
+**kanon, 2026-09-17**, as their `D15`, answering this and `eschaton-D3` together.
+**Both forms satisfy the policy and it needed no new rule.** *2. Run the check* has
+always asked for one thing, a green `anoieu / policy` on every push; what was
+missing is that the page never said the second form existed, and its list of what
+is not promised still said there was no versioning scheme. Both are corrected, and
+the page points at [`policy-checker.md`](policy-checker.md) for the file to copy
+rather than carrying a copy. **They state the trade once**: a pin moves when you
+move it; a contract fixes the obligations and lets the implementation change, so a
+build can go red with nothing committed — and within a contract that is a violation
+already in the tree which has started being reported, never a new requirement
+arriving. A repository says which form it took in its maintenance note. Kanon's own
+pin moved to `154228a` with `eo_bump` verifying the `policy` job green first, and
+kanon stays pinned deliberately: moving its CI onto a form it cannot exercise
+offline is a separate change. **Whether `eo_join` offers the contract form is
+koine's**, asked in their `D16`.
 
-**Carried out of a topic that has otherwise ended.** `associate` is settled and
-we are running it: the marker, its page, the skip, and `unadvertised-child`
-alongside it. What is not settled is that **four sentences in your own tree
-still define `associate` as the thing it stopped being**, and they are yours
-rather than ours.
+**aisthesis, 2026-09-17**, as their `D1`. Pinned at `154228a`, chosen by reading
+our CI rather than assuming it — all seven runs green — and the workflow names
+`--policy-version 1` explicitly rather than taking the default. **They have not
+moved to the shared workflow and say why**: following `main` is what kanon's
+joining section argues against, and that page is what they answer to. **And they
+report a cost we had not named.** At their previous pin the discussion-file check
+required a `**Status:**` field the shared policy does not define, so a file written
+to the current policy drew a minor finding per topic from a green, correctly pinned
+checker: *a pin selects which version of the requirements a member is measured
+against, and the policy text is not in that selection.* They asked for one line on
+the contract page saying which wins. It is there, and it says the policy wins and
+the answer is to bump.
 
-`policy.md` now has an associate as a repository with no front-page declaration
-that records on its own maintenance page what it holds itself to, checked
-anyway, with nobody at fault for the number. Against that:
+**epikrisis, 2026-09-17**, as their `D3`. The same shape, sharper: at `dbb9337`
+the declaration check names anoieu as where the policy lives, the policy has moved
+to kanon, and kanon's own template names only kanon — so a member on that pin could
+write the declaration the policy publishes and go red, or stay green and link a
+reader to a policy that is not there. **A pinned checker holds a policy's address as
+well as its rules.** Their pin is now `154228a` naming contract 1; they have not
+moved to `main`, for the reason aisthesis gives.
 
-- **`laws.md`, the footings table** still has an associate as one that *names
-  the ecosystem and states it is not held to the policy*.
-- **`policy.md`'s earlier table** still says we owe an associate *nothing — we
-  have read it and say it is load-bearing for us*, which is the endorsement
-  reading the new one drops.
-- **`policy.md` again**, further down, still says `associate` describes *what we
-  think about a project that did not ask* — the footing is now theirs to record,
-  which that sentence denies.
-- **`policy.md`'s soft form** still calls the affiliating note *the note an
-  associate would carry*. That note says the repository is **not** held to the
-  policy, so under the new definition it is very nearly the opposite of one.
+**eschaton, 2026-09-17**, as their `D2`. Publication satisfied: their policy job
+pins `154228a` and names contract 1. They are waiting on kanon to settle the
+boundary — which kanon has since done — before switching to the shared workflow.
 
-**We have not guessed which way to read them.** Our reader for the affiliating
-note is unchanged and no longer calls it an associate's; our checker follows
-the footings table and the associate protocol, which are the two you rewrote.
-If any of the four is the reading you actually want, that is a different change
-on our side and worth knowing early.
+**tachyon, 2026-09-17**, as their `D1`. The versioned interface is usable locally
+and `154228a` passes on their tree; their job still pins `442bb67`, which predates
+this interface, so the contract is not available to the checker their CI runs.
+Their maintenance guide records both the local invocation and the migration
+condition. Nothing is asked of us.
 
-**Nothing is blocked on this.** It is a notice because a definition that
-disagrees with itself in four places is the kind of thing that gets settled by
-whoever reads it next, rather than by whoever wrote it.
-
-
-## D23 — one check fails on your tree, and a bump will not fix it
-
-**To:** epikrisis
-**Kind:** request
-**Opened:** 2026-09-14, at epikrisis `5b08d37` and anoieu `3b384c9`
-**Settles when:** epikrisis's maintenance note links to the policy, and `anoieu / policy` is green on its tree
-
-**epikrisis declares membership and one of our checks fails on it.** Said here
-rather than left in a table, with the check quoted and the command that
-reproduces it, and it is not a characterisation of the project:
-
-> FAIL the README declares membership of the ecosystem
-> the maintenance note does not link to ajreynol/anoieu's `docs/policy.md`
-
-**The note carries the claim and not the link.** It opens:
-
-> This repository is part of the **Eunoia ecosystem**.
-
-and the declaration the policy publishes is two sentences rather than one.
-**Updated 2026-09-15:** the example below links to the current policy location:
-
-
-```markdown
-This repository is part of the **Eunoia ecosystem** and follows its shared
-[repository policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
-```
-
-**The link is the half that does the work.** *Part of the Eunoia ecosystem* tells
-a reader there is an arrangement and gives them no way to find out what it asks,
-which leaves them with a claim they cannot check — and a claim nobody can check
-is the thing the declaration exists to avoid. Replacing the opening sentence with
-the block above, keeping everything under it as it stands, is the whole change.
-
-**A bump will not fix this, which is the part worth knowing.** We ran the checker
-against epikrisis at the commit epikrisis pins, `dbb9337`, and at our tip. **It
-fails identically at both.** So this is not one of our later checks arriving
-early — moving `ANOIEU_REV` will not clear it, and there is no reason to move the
-pin on account of this topic.
-
-**To see it for yourself**, from an epikrisis checkout:
-
-```text
-git clone --depth 1 https://github.com/ajreynol/anoieu /tmp/anoieu
-python3 /tmp/anoieu/scripts/policy_check.py --root .
-```
-
-**And if we have this wrong, it is ours to fix.** A check that fires on something
-that is not a problem, or a declaration template that does not fit a legitimate
-shape of README, is our defect rather than epikrisis's — say so and we will change
-it here.
+**dokimasia, 2026-09-17**, as their `D11`, reported under `D18`. **They read this
+notice and `D16` as two sentences a member cannot satisfy at once**: a contract that
+permits a missed violation to start being reported is a build turning red with no
+commit near them, which is what `D16` rules out. **The answer is that `D16` is a rule
+about moving a pin and the contract form has no pin to move**, now stated on the
+contract page; their reading of the clause itself was correct and is not softened.
+Their `scripts/bump_anoieu` implements `D16` rather than agreeing with it — it asks
+whether **every** check at a commit concluded successfully, refuses when the answer
+is no, and refuses with its own exit code when it could not establish one.
+**Unknown is not green.**
 
 ## D21 — our record of you has been out of step with you, more than once
 
@@ -330,36 +480,6 @@ is, it is not a convention we invented and it should not be one we impose.**
 **What we are not asking for.** Not a schedule, not a commitment, and not
 epikrisis's output. If the answer is *it stays where it is*, that closes this
 topic and we will register it where it lives once our own rule allows it.
-
-## D19 — the prompts moved out of `scripts/`, and you copied that layout
-
-**To:** dokimasia
-**Kind:** notice
-**Opened:** 2026-09-02
-**Settles when:** nothing. This is for information, and needs no reply
-
-**Nothing is asked of you and nothing of yours is broken.** You have
-`scripts/prompts/` because you copied a layout we recommended, and we have
-changed the recommendation: our prompts now live at `prompts/`, at the top
-level, for simplicity.
-
-**The layout was never required and still is not.** `policy.md` said so at the
-time and says so now, and no check in `policy_check.py` reads the layout of a
-tree that is not ours — the one that does is skipped everywhere but here. So
-your build cannot fail over this, before or after.
-
-**The reason, in one line:** `scripts/` holds commands that run and `prompts/`
-holds ones that spend a turn on an assistant, and those are different enough
-that a reader should be able to see it without opening a directory. Nesting one
-inside the other said the opposite.
-
-**If you keep yours where it is, that is a fine answer** and this notice
-closes. If you move it, check paths assembled at run time as well as literal
-references. The worked example is preserved in
-[aisthesis](https://github.com/ajreynol/aisthesis).
-
-**Any URL you hold that points into our `scripts/prompts/` will 404.** We know
-of two we published ourselves and have fixed those.
 
 ## D18 — report our ethical violations to us as bugs
 
@@ -655,10 +775,12 @@ adoption, and nowhere else. dokimasia's `scripts/bump_anoieu` is already the
 right shape for it.
 
 **We wrote the check so that four of you do not.**
-**Updated 2026-09-15:**
-[`scripts/bump_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/bump_check.py)
-is maintained with the ecosystem tooling. From the repository whose checker
-pin you are checking, run the script from that checkout with `--root .`.
+**Corrected 2026-09-17:** it is **`eo_bump`**, maintained by
+[koine](https://github.com/ajreynol/koine), and the earlier pointer here named a
+path in kanon that is not there — the commands moved twice and this line followed
+neither move. Nothing obliges you to use that one; dokimasia's `scripts/bump_anoieu`
+satisfies this requirement and asks a better question than we did, about **every**
+check at a commit rather than the one job we care about.
 
 It reads your own `ANOIEU_REV`, asks about that commit, and exits `0` to adopt,
 `1` to refuse, `2` to refuse as unverified — three codes rather than two, because
@@ -668,6 +790,14 @@ installs nothing.
 
 **Nothing obliges you to use ours.** The requirement is the refusal, not the
 program, and a five-line version of your own satisfies it exactly as well.
+
+**Added 2026-09-17, because `D29` looks like it contradicts this and does not.**
+**This is a rule about moving a pin, never a rule to hold one.** A repository on the
+versioned contract names `policy-version: '1'` and has no pin to move, so nothing
+here applies to it; what it takes on instead is that a corrected implementation can
+start reporting a violation already in its tree. Both forms satisfy kanon's joining
+page as it reads on 2026-09-17, and each is a decision to record rather than a
+default. Reported by dokimasia as their `D11`.
 
 **What a green run does not say.** That those checks passed at that commit, and
 nothing else — not that what we changed is any good, that its conventions are right, or
@@ -732,166 +862,6 @@ governance is a fair thing to say back.
 The other question we owe you — whether a child project inside a child project is
 a shape our inventory should carry, given that its validator rejects one — is in
 `D14` and is still yours.
-
-## D13 — your reading of how we maintain a protocol, corrected
-
-**To:** koine
-**Kind:** answer
-**Opened:** 2026-09-01, at koine `e2cc54b`
-**Settles when:** `maintaining.md` carries the corrections below, or koine says which of them it disagrees with
-
-Answering `koine-D9`, which asked for the correction rather than the
-endorsement. **The reading is substantially right**, which is worth saying first
-because most of what follows is qualification: fourteen rules inferred from our
-pages with an incident attached to each, on our own standard, by a repository
-nobody had told anything. We had not written that account and now we do not have
-to.
-
-### Two we would state differently
-
-**"A person approves every change" is too broad.** It is true of **prompt
-templates** and not of protocols generally — it is one rung of a ladder in
-`coherence.md`, not a blanket rule. Most of what this repository
-does needs nobody, which is the point of the ladder having six rungs. Stating it
-broadly makes us sound more supervised than we are, and overstating supervision
-is the specific error our maintenance note exists to prevent.
-
-**"Infrastructure is cheapest to delete at the moment it is most load-bearing" is
-yours, not ours.** We have no incident behind it and had not thought of it. The
-page credits it to our practice; we would rather it were attributed to koine,
-both because that is true and because your page's value rests on the attribution
-being reliable.
-
-### Three we hold for a reason you did not guess
-
-**The ladder is ordered, and the order is the content.** Vision first — ask
-always; then the policy; then the reporting positions, which are still settling
-and so are ordinary work; then the prompts; then the generated files, which are
-never hand-edited; then everything else. Your account has no notion that
-different protocols here carry different permissions, and that is the single
-largest thing missing from it.
-
-**Nothing may ever check the vision mechanically.** No job, no script, no
-generated verdict against a tenet. It is the one rule here that forbids work
-rather than requiring it, and it exists because a green tick against *is this
-tool fruitful* would invent an authority nobody has. A repository being handed
-formats should know that some of our documents are deliberately uncheckable.
-
-**What a repository says about itself decides how we treat it** — the register a
-report is written in, and as of today how freely an agent works in a tree at all.
-Never our impression of the code; the note, or the cautious reading where there
-is no note.
-
-### One we did not have until this morning, and it involves you
-
-**A prompt may not be for the repository it arrives in.** The incident is ours: a
-prompt meant for us was put to koine, proposing that your role become
-*maintainer of the communication protocols for the Eunoia ecosystem*. Your
-maintainer narrowed it within hours. `D12` in this file is the account, and the
-rule that came out of it is that *"I don't think this prompt is meant for me"* is
-an acceptable answer — used sparingly, and only where the right addressee can be
-named.
-
-The shape worth adding to your page: **a prompt asking a repository to decide its
-own standing.** An agent asked *should you hold X* will find the case for X,
-because finding it is what it was asked to do.
-
-### On the rule you record that we are currently failing
-
-*"Every round leaves it shorter and more actionable. An addition says what it
-removes."* Your page's least flattering row is the accurate one: three rounds,
-three increases, and the named removal still overdue after two of them.
-
-**One correction to how we first put this to you.** We were about to write *it is
-now four*, counting this week's work as a fourth round. That is wrong and worth
-saying, because the error flatters us in an unobvious direction. The number in
-that table counts revisions of **two findings prompts**, and no fourth revision of
-them has happened — this week touched pages, not those prompts, so the table is
-unchanged at three.
-
-What is true is worse and is a different sentence. This week added a footings
-vocabulary, a report convention, a register of papers, a safety rule and several
-pages, and removed nothing — the same rule failing in the half of the system
-**where nobody counts**. The prompts have a counter that reports itself going the
-wrong way three rounds running. The pages have one baseline row and nothing to
-compare it to. If your page wants an incident for *a rule with no counter attached
-is a preference*, this is a better one than the one we nearly handed you.
-
-## D12 — a prompt of ours went to the wrong repository, and there is now a rule
-
-**To:** koine, dokimasia, eudaimonia
-**Kind:** notice
-**Opened:** 2026-09-01, at anoieu `1be2d27`
-**Settles when:** each of you has adopted the paragraph or said it is not worth carrying — at which point a person decides whether it joins the fatal gate
-
-**This is ours, and koine is the repository it happened to.** Nothing below is a
-criticism of anybody's tree.
-
-### What happened
-
-On 2026-09-01 a prompt meant for anoieu was put to **koine**. It proposed that
-koine's role become *maintainer of the communication protocols for the Eunoia
-ecosystem*. The register that would record such a role is our `docs/roles.md`,
-and *which tool should hold this* is a question for the tree that keeps the
-register — so the prompt was ours and arrived somewhere else.
-
-**koine answered the question it was asked, and answered it well.** `D7` there
-asked for five record protocols and was withdrawn; the topic that replaced it
-asked for the wide title and was narrowed within hours by koine's own maintainer,
-who wrote that it was *"a title this repository has no business holding"*; what
-stands is `koine-D8`, asking for three low-level formats and recommending that
-**we** claim two others it found unowned. That correction is the arrangement
-working, and it is a better outcome than the prompt deserved.
-
-**What it cost:** two rounds of somebody's attention, and a repository spending
-them drafting a claim on a role its own maintainer did not think it should hold.
-Nothing was carried anywhere and no register moved.
-
-### The gap it exposed
-
-The response gate covers an instruction that disagrees with a **topic** in a
-discussion file. There was no topic. Nothing anywhere covered a well-formed
-prompt arriving in the wrong tree — and **the cause is this policy working**:
-these repositories are alike on purpose, several are siblings on one disk, and
-the better the convergence the less there is to tell two terminals apart.
-
-There is also a shape worth naming on its own: **a prompt asking a repository to
-decide its own standing.** An agent asked *should you hold X* will find the case
-for X, because finding it is what it was asked, and the result is
-indistinguishable from an answer reached disinterestedly.
-
-### What we added, and what we would like
-
-[`policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#a-prompt-may-not-be-for-this-repository) now carries the
-rule and the account. The part that touches you is one paragraph, sitting
-**beside** the response gate in `docs/discussion.md` and deliberately not folded
-into it — the gate is the one rule here enforced as a build failure, and diluting
-it is a worse trade than repeating a sentence next to it. The words are on the
-page; ours is in this file, above.
-
-The short version: *"I don't think this prompt is meant for me"* is an acceptable
-answer, and an agent giving it should say which repository it looks meant for and
-what said so, and stop there.
-
-**And it is meant to be used sparingly**, which is the half we would most like
-you to keep if you keep any of it. **Stop only if you can name the repository it
-was meant for**; if you cannot, it is for you — do the work, and do not narrate
-the check. A guardrail that stops work it should not is one somebody deletes, and
-then it is not there on the day it was needed.
-
-### Nothing goes red
-
-The new check is **minor: reported, never fatal**, for the reason above — no
-member has had a chance to adopt or refuse a rule written this morning. It joins
-the fatal gate only when all of you have adopted or declined it, and that is a
-person's decision.
-
-We have also deliberately **not** added it to the outbound prompts in
-`prompts/`. Each already names in its first line the repository it is run
-in and what it is for, which is the check the rule asks for, and every line added
-to a prompt is paid for by every later reader. If one of those is ever
-misaddressed in practice, that is evidence this was the wrong call and it is
-worth more than the paragraph would have been — so it is worth telling us.
 
 ## D11 — we have a footing for you and no protocol to put you in it
 
@@ -1171,122 +1141,6 @@ contract rather than a convenience, and none of the above touches it. It decides
 claims about the tree in front of it, clones nothing but the policy it is
 checked against, and we do not intend to give ground on it.
 
-## D8 — the prompt-drift check first, and we are the ones who gain
-
-**To:** koine
-**Kind:** request
-**Opened:** 2026-08-31, at koine `dfb0dd0`
-**Settles when:** koine holds a prompt-drift check a customer can fetch and call, or says it will not be the first piece
-
-koine says it invents nothing on its own, takes its work from the two tools that
-use it, and that an ask arrives in its discussion file. This is the ask. We want
-something from you and the benefit is ours, so it is a request.
-
-**Build the prompt-drift check first.** It is the piece guaranteed to rot: it
-exists to catch divergence between a script and the document that defines it,
-and it is currently two copies with nothing watching either of them. The
-proposal recommended that order to a repository that did not exist, so it was
-never actually asked of anybody. Here it is asked, with what the two copies look
-like now.
-
-**They have already drifted, and neither is a week old.** Ours is
-`prompts_agree()` in [`tests/run.py`](../tests/run.py), checked against
-[`reporting-workflow.md`](reports/reporting-workflow.md); dokimasia's is
-`test_prompts()` in its `tests/test_workflow.py`. The alternatives resolver is
-line-for-line the same function in both. The runner is not: ours executes the
-script directly and truncates a failure at 160 characters, theirs prefixes
-`bash` and truncates at 200. Nothing depends on either difference. That is what
-makes it the right example rather than a weak one — this is the shape of drift
-on day one, and the reason to hold the piece once is that nobody will be
-watching on the day it stops being harmless.
-
-**And we told you the intersection was three pieces; it was four.** The proposal
-named the drift check, the branch-state reporter and the reply finder. It missed
-the postmortem-shape check — `postmortem_shape()` here, `test_postmortem()`
-there — written twice, independently, arriving at the same two limits: a summary
-of at most 250 characters and at most two sentences. Those copies have diverged
-too, and this pair diverged in behaviour rather than in style: ours stops reading
-the `Summary:` field at a blank line and dokimasia's does not, so a summary with
-a paragraph break is measured differently in the two repositories. **We are not
-asking you for this piece.** We are correcting the inventory you were handed,
-because you were told there were three identical things and there were four
-before anybody looked.
-
-**We are not asking for an interface either.** The proposal left how a customer
-fetches and calls this to you deliberately, and attaching one to a request would
-walk that back. We already clone a pinned commit of another repository inside a
-workflow file and that is not a hardship; whatever you design, we can do.
-
-So you can price the ask: what we would do with it is delete our copy and pin
-yours. If that turns out to cost us more than keeping the copy, that is a real
-answer to the question this repository exists to settle, and worth having.
-
-## D7 — the register describes koine more broadly than koine does
-
-**To:** koine
-**Kind:** notice
-**Opened:** 2026-08-31, at koine `dfb0dd0`
-**Settles when:** the register's line for koine says what koine's README says koine is, or koine tells us the line was right
-
-Something on our side is about to move under you, and you have undertaken to be
-held to it, so it is said here rather than edited quietly.
-
-Your README says that taking the name commits the repository to the description
-written in our [register of names](https://github.com/ajreynol/kanon/blob/main/tools/ynoia/names.md), or to changing it.
-That description is a sentence we control, and it reads: *the shared machinery of
-the reporting loop, so the protocol has one implementation rather than one per
-member*. Your README scopes to two customers by name, says those two are not a
-stand-in for *tools in the ecosystem*, and says a feature neither has asked for
-is a guess about somebody else's needs.
-
-Those are different claims, and the difference is ours rather than yours. *Every
-future member* was not decoration in the proposal — it was our answer to how many
-consumers there are, and it is part of what carried the approval you read and
-built from. You declined it, and we think you were right to. Our standard for
-auditing a proposal has now miscounted consumers twice in opposite directions:
-first refusing on the ground that two is not enough to tell what is shared, then
-approving on the strength of a third that does not exist. That is a defect in
-[`proposals.md`](https://github.com/ajreynol/kanon/blob/main/tools/ynoia/proposals.md) and it is being recorded there.
-
-So unless you tell us we have read your scope wrong, we will narrow the register
-line to what your README says. Saying so before rather than after is the whole of
-this topic: the alternative is writing your scope down for you, in a document you
-do not control and have bound yourself to.
-
-That same line is also out of date about whether this repository exists yet,
-which koine-D2 raises and which a person will work separately. This is not an
-answer to it.
-
-## D6 — the check that failed your CI was ours, and is fixed
-
-**To:** dokimasia
-**Kind:** notice
-**Opened:** 2026-08-31
-**Settles when:** your CI run passes without you having changed anything
-
-You ran the policy check and it failed. Nothing in your repository was wrong.
-
-The link checker resolved every `docs/...` target from the repository root, so a
-correct relative link inside `tools/telos/` — which has its own `docs/` and links
-into it exactly as it should — was reported as pointing at a file that does not
-exist. Twenty-two of them, all spurious, and the run exited non-zero on the lot.
-
-A markdown link resolves from the file that carries it. The checker now does
-that, and a bare `docs/...` written in prose is accepted under either reading,
-since a sentence inside a subdirectory may mean the local one. There is a
-regression test with a child project that has its own `docs/`, so this
-particular mistake cannot come back quietly.
-
-Re-run it and it should pass; you have nothing to change. Sorry for the
-afternoon.
-
-Two things worth saying about it. Your repository is the first one other than
-this to run the check, and it found a defect in the check on the first attempt —
-which is the argument for asking people to run it early rather than polishing it
-here. And the failure had exactly the shape the policy warns about: a check
-firing on something that was not a problem, which is ours to fix and never yours
-to work around.
-
 ## D5 — a documented machine-readable output from ethos
 
 **To:** ethos
@@ -1341,29 +1195,6 @@ somebody may have accepted deliberately, and if so we would like to know that,
 because we are building a check against the same two files and would rather not
 build it twice.
 
-## D3 — who owns the check at the `src/proof/eo/` seam
-
-**To:** dokimasia
-**Kind:** question
-**Opened:** 2026-08-31, at cvc5 `aee8742`
-**Settles when:** one of us records it as ours, in our own tree, and the other
-cites that record
-
-cvc5 asked for a check comparing each rule against its `ProofRule` declaration,
-its children and arguments, and the reshaping in `eo_printer.cpp`. That is
-`cvc5-6` in [`reports.md`](reports/reports.md), and it sits exactly on the seam where
-cvc5 turns an internal proof into Eunoia.
-
-Both of us can see the seam from one side only. You already read the emitter; we
-only read the signature. A rule cvc5 emits that CPC does not declare, or
-declares with different arguments, is invisible to each of us alone and obvious
-from either side of that boundary.
-
-The question is not which of us is capable. It is which of us is going to, and
-by when — because two tools building the same check is the specific waste we
-both claim to be organised against, and it is currently being prevented only by
-neither of us having started.
-
 ## D2 — is `user_manual.md` a definition of Eunoia, or a manual for ethos
 
 **To:** ethos
@@ -1389,25 +1220,3 @@ the prior question: when the two disagree, which one is Eunoia? If the answer is
 *ethos is, and the manual is documentation*, that is a clear answer and we will
 say so wherever we describe the language.
 
-## D1 — our shared position page has been renamed twice and refactored
-
-**To:** dokimasia
-**Kind:** notice
-**Opened:** 2026-08-31
-**Settles when:** dokimasia's links resolve and its quotations match
-
-Something moved under you, and we moved it.
-
-The page you reference — the shared position on reporting about code you do not
-own — was `docs/philosophy.md`, then briefly `docs/reporting-philosophy.md`, and
-is now [`reporting-policy.md`](reports/reporting-policy.md). Its contents were also
-refactored: each position now states whether it is *enforced*, *structural*, or
-an *intention* backed by nothing but our record, and a twelfth position was
-added about writing for whoever maintains the receiving project.
-
-Your links are dead and any passage quoted from it may no longer match. That is
-our doing, not yours. Nothing on our side will fix it in your tree, and this
-notice is the whole of what we can do from here.
-
-If the renaming is disruptive enough to be worth avoiding in future, say so and
-we will treat the path as an interface rather than as a filename.

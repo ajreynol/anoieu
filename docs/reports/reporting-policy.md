@@ -162,6 +162,45 @@ repository to end its README with a note on how its development is run — and
 never by our impression of the code. Where there is no such note, the first
 register applies, because guessing wrong in that direction is the cheaper error.
 
+## What we take
+
+The three positions above this line are about **output**. These two are about
+**input**, and the gap they fill was found by eudaimonia walking into it: the
+only sentence anywhere on the subject said that running the checks needs nobody's
+permission, which is true of the act it describes and was never asked to license
+anything else. Raised as eudaimonia's `D1`, 2026-09-01.
+
+**13. Published is not available.** *(intention.)* Reading a published artifact
+needs nobody's permission, and neither tool asks for any. **Making somebody's
+work the material of an exercise they have no stake in is a different act**, and
+the licence for the first is not the licence for the second. The test we use is
+*who carries the cost if the output is misread*: where the subject of an exercise
+has no stake in the question, no say in how it is phrased and nothing to gain
+from the answer, being within one's rights is not the standard that matters, and
+asking is cheap. This is deliberately vague at the edges — every tool here reads
+work whose authors did not ask to be read, and a rule that fired on all of it
+would stop the work. **What it is not vague about is the direction to err in.**
+
+**14. Unpublished work is not material.** *(intention.)* Not drafts, not
+preprints shared in confidence, not unreleased rule sets, not somebody's working
+branch — **and this holds even where permission is given and the material is
+handed over**, because what its authors have is the sole right to develop and
+publish it first, and a tool that consumes it takes the most valuable thing they
+have in exchange for nothing. There is no balancing test here and no exception
+for good intentions.
+
+**Why it is here and not in a checker.** Consent is not decidable from a tree. A
+check firing on the shape of a paragraph would be a check firing on something
+that is not a problem, which is the one thing this ecosystem is clearest about,
+so [`policy_check.py`](../../scripts/policy_check.py) says nothing about either
+position and never will.
+
+**What is still open.** eudaimonia also asked for a line in the ecosystem's
+vision, which is [kanon](https://github.com/ajreynol/kanon)'s page and not ours;
+nothing here decides it. And **no case is known in which this ecosystem has taken
+anybody's unpublished work** — which is the reason to write the positions down
+now, since a rule adopted after an incident is read as an apology.
+
 ## What is claimed, and what is not
 
 We do not control who runs these tools: they are public and read whatever they
@@ -196,8 +235,5 @@ Whoever edits a position should know what else moves.
 | [anoieu](https://github.com/ajreynol/anoieu) | keeps the page; its own documents implement it |
 | [dokimasia](https://github.com/ajreynol/dokimasia) | references it from its README, findings and workflow documents |
 
-> **Outstanding.** This page was `docs/philosophy.md`, then
-> `docs/reporting-philosophy.md`, and its positions have since been retiered and
-> extended. dokimasia's links and any quotation of it are stale. Nothing here
-> fixes that — position 10 forbids it — so it is a person's errand, and it is
-> unfiled.
+**Read against dokimasia's tree on 2026-09-17, every link of theirs into this
+repository resolves**, which is what closes the errand this note used to carry.

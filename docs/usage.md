@@ -208,6 +208,10 @@ theories/Bools.eo:4:22: error[EO0041]: the nil terminator of `or` has the wrong 
           application of the operator whose type is asked for
 ```
 
+The `help` line above describes ethos's behaviour as read on 2026-09-17; a
+`note` or `help` that says what another checker does carries a date for the same
+reason a finding does.
+
 Paths are relative to the entry point's directory, so a log reads the same
 whichever machine wrote it. The caret is on the text that produced the finding,
 which for a desugared term is the surface it was written as. `note` lines carry

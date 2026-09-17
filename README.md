@@ -63,8 +63,9 @@ The checks cover:
 - cases that cannot be reached;
 - consistency across a signature, its calculus semantics and its SMT semantics.
 
-Ethos checks some properties only when a proof exercises them. Anoieu reads the
-signature ahead of that use, so it can report errors in unexercised cases.
+Ethos checks some properties only when a proof exercises them — read against
+ethos on 2026-09-17. Anoieu reads the signature ahead of that use, so it can
+report errors in unexercised cases.
 
 See [usage](docs/usage.md) for inputs, output formats, configuration, suppression
 and baselines, and the [check catalogue](docs/checks.md) for each check's scope
@@ -145,11 +146,16 @@ it holds itself to. It owes this ecosystem nothing; its tree is checked anyway,
 against its own marker. It keeps a front page all the same, with a
 maintenance note that has something under it, because nothing else about the
 arrangement is advertised for a reader to find.
-Use the latest anoieu implementation with this stable policy contract.
-Requirements and severities stay fixed within version 1; checker bug fixes
-continue to arrive. The [contract and shared CI workflow](docs/policy-checker.md)
-replace per-consumer checker pins once the interface is published and the
-ecosystem's adoption instructions are migrated.
+**A repository picks one of two forms and says which.** It pins a checker
+commit, or it names a contract and follows the latest implementation through
+[a shared CI workflow](.github/workflows/policy.yml). Within version 1 the
+requirements, their applicability and the blocking/advisory split stay fixed;
+checker bug fixes continue to arrive, so a contract consumer's build can go red
+with nothing committed — which means a violation already in the tree has started
+being reported, never a new requirement arriving. A pin moves only when its
+repository moves it. The [contract page](docs/policy-checker.md) is the authority
+on what each form fixes; kanon's joining instructions carry both, read
+2026-09-17.
 
 ## Documentation and development
 

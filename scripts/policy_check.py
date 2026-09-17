@@ -96,6 +96,15 @@ UNCHECKED = [
      "and this reads a tree rather than a history -- CI clones are routinely "
      "shallow. A duplicate *within the file* is caught; a number reused after a "
      "removal is not"),
+    ("every written document lives in `docs/` and is named in the index",
+     "the index half is checked; the *lives in `docs/`* half is not -- a "
+     "committed document at the repository root is enumerated by nothing here. "
+     "Widening it is an obligation rather than a fix, so it is a contract 2 "
+     "candidate in docs/policy-checker.md"),
+    ("a link into another repository in this ecosystem resolves",
+     "every `http` target is skipped, so a cross-repository link is the one link "
+     "nothing resolves. Also a contract 2 candidate: it would turn a member red "
+     "for a rename in a tree they do not own"),
     ("why an associate does not declare",
      "a repository's own reason for not advertising — not published yet, one "
      "person's working tree, an arrangement it does not want to oversell. The "
@@ -844,7 +853,14 @@ def check_links() -> list[str]:
         if not os.path.isfile(full):
             continue
         here = os.path.dirname(full)
-        text = read(rel)
+        # **Fenced code is not prose, and a path inside it is not a link.** A
+        # quoted repo-relative path in a `python` example is a string literal
+        # somebody is being shown how to type, and reporting it as a dead link
+        # fires on something that is not a problem -- twice, for a page whose
+        # whole job is to show a reader what to copy. `check_anchors` below and
+        # `postmortem_shape()` in tests/run.py already read this way; this is
+        # the same argument, made in the same file, arriving late.
+        text = prose(read(rel))
         # A markdown link resolves from the file that carries it, always -- a
         # child project with its own docs/ writes `](docs/x.md)` and means its
         # own. A bare `docs/...` in prose or in a prompt is conventionally
@@ -1114,13 +1130,44 @@ def check_prompt_gate() -> list[str]:
             for what, forms in PROMPT_GATE if not any(f in low for f in forms)]
 
 
+def working_changes() -> tuple[int, int]:
+    """How far `ROOT` is from its own last commit: `(modified, untracked)`.
+
+    Untracked paths count, and so does the absence they leave behind: Git
+    records no empty directory, so a tree can hold `docs/` locally and in no
+    commit. A path that is not a repository, or a Git that will not answer,
+    counts as zero -- this line exists to explain a disagreement between a local
+    run and a published one, never to create one.
+    """
+    try:
+        out = subprocess.run(["git", "-C", ROOT, "status", "--porcelain"],
+                             capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError):
+        return 0, 0
+    if out.returncode != 0:
+        return 0, 0
+    lines = [ln for ln in out.stdout.splitlines() if ln.strip()]
+    untracked = sum(1 for ln in lines if ln.startswith("??"))
+    return len(lines) - untracked, untracked
+
+
 def has(*rel):
-    """Applicability: the check runs only where the thing it is about exists."""
+    """Applicability: the check runs only where the thing it is about exists.
+
+    **The skip says that a fix will switch it on**, because these are the skips
+    that cascade. A joiner adding `docs/discussion.md` creates `docs/`, which
+    turns on the documentation index, which then wants a file nothing had asked
+    for a moment earlier; somebody who fixed exactly what the run printed and
+    stopped got a red build with no warning that they would. Reported by koine,
+    from its own joining run. The other applicability functions describe what a
+    tree *is* and do not have this shape.
+    """
     def applies():
         for r in rel:
             if os.path.exists(os.path.join(ROOT, r)):
                 return None
-        return "nothing at " + " or ".join(rel)
+        return ("nothing at " + " or ".join(rel)
+                + " — this check turns on if you add one")
     return applies
 
 
@@ -1239,6 +1286,17 @@ def main(argv: list[str] | None = None) -> int:
     if not os.path.isdir(ROOT):
         ap.error(f"repository directory does not exist: {ROOT}")
     print(f"-- {CHECKER_REPO} {version()} policy contract {args.policy_version} checking {ROOT}")
+    # **What the published job sees is the committed tree, and this does not.**
+    # kanon's `policy` job passed while a local run of the same checker failed,
+    # on an empty `docs/` that Git does not record -- the checker was identical
+    # and the filesystem was not. A local verdict that disagrees with a build is
+    # worth one line rather than an investigation, so the run says which kind of
+    # tree it read. Diagnostic only: nothing about the verdict or the exit code
+    # depends on it.
+    changed, untracked = working_changes()
+    if changed or untracked:
+        print(f"-- this checkout has {changed} modified and {untracked} untracked "
+              "path(s); a published job reads the committed tree instead")
     # Said before the checks rather than after them, so that nobody reads a
     # screen of failures for a tree that owes this ecosystem nothing and draws
     # the conclusion the footing exists to refuse.

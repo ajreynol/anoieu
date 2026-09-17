@@ -486,10 +486,14 @@ record the intended destinations and unresolved questions at that time;
 `B15` limited the scope of the next move as it read then; kanon has since
 closed the item and keeps what is unresolved in [how a role is handed
 off](https://github.com/ajreynol/kanon/blob/main/docs/board.md#a-handoff-of-a-role-is-an-ordinary-item-here).
-**Pages kanon has since removed are named below and not linked.** Kanon's
-`main` is the authority on everything it holds, so a link here goes to `main`
-or nowhere: pinning one would hand a reader a superseded copy of somebody
-else's live rules. Unresolved boundaries are listed below.
+**Pages and commands kanon has since removed are named below and not linked.**
+Kanon's `main` is the authority on everything it holds, so a link here goes to
+`main` or nowhere: pinning one would hand a reader a superseded copy of somebody
+else's live rules. **Read against kanon's tree on 2026-09-17, the ecosystem
+commands and prompts in the second table are not in it**; several of them are
+[koine](https://github.com/ajreynol/koine)'s `eo_cmd/` today. This table records
+where they were proposed to go, which is what a planning record is for, and
+naming them is as far as it goes. Unresolved boundaries are listed below.
 Our history and letters stay here under [LAW 4](https://github.com/ajreynol/kanon/blob/main/docs/laws.md#law-4--the-president-writes-historymd-in-its-own-repository-and-a-letter-to-its-successor).
 
 **Proposed for kanon: the collected values.** Every one is a register or a governing
@@ -525,12 +529,12 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 | what | what it does |
 | --- | --- |
 | [`../scripts/ecosystem/ecosystem.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
-| [`../scripts/ecosystem/ecosystem.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.py) + [`../scripts/status_eo`](https://github.com/ajreynol/kanon/blob/main/scripts/status_eo) | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
-| [`../scripts/install_eo`](https://github.com/ajreynol/kanon/blob/main/scripts/install_eo) + [`../scripts/ecosystem/checkouts.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
-| [`../prompts/join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/join_eo), [`../prompts/check_join_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/check_join_eo), `../prompts/confirm_eo` | joining, from the inside and the outside, and the grading of a join afterwards |
-| [`../prompts/init_eo`](https://github.com/ajreynol/kanon/blob/main/prompts/init_eo), `../prompts/welcome_eo`, `../scripts/ecosystem/near.py` | starting a new tool, recording its checkout, and catching an id one character from an existing one |
-| [`../prompts/global_audit`](https://github.com/ajreynol/kanon/blob/main/prompts/global_audit), [`../prompts/process_discussion`](https://github.com/ajreynol/kanon/blob/main/prompts/process_discussion) | the sweep across every member, and working what another repository has addressed to us |
-| [`../scripts/bump_check.py`](https://github.com/ajreynol/kanon/blob/main/scripts/bump_check.py) | checks whether the exact policy commit a member proposes to adopt passed CI |
+| [`../scripts/ecosystem/ecosystem.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.py) + `../scripts/status_eo` | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
+| `../scripts/install_eo` + [`../scripts/ecosystem/checkouts.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
+| `../prompts/join_eo`, `../prompts/check_join_eo`, `../prompts/confirm_eo` | joining, from the inside and the outside, and the grading of a join afterwards |
+| `../prompts/init_eo`, `../prompts/welcome_eo`, `../scripts/ecosystem/near.py` | starting a new tool, recording its checkout, and catching an id one character from an existing one |
+| `../prompts/global_audit`, `../prompts/process_discussion` | the sweep across every member, and working what another repository has addressed to us |
+| `../scripts/bump_check.py` | checks whether the exact policy commit a member proposes to adopt passed CI |
 | `../scripts/transfer_check.py` | whether roles are ready to move — **the program that carries out this section.** It goes with the thing it serves |
 | `../scripts/ready_check.py` | temporary by construction, and it asserts its own stub exists. **It may be dead before the move**: it goes red the moment `tools/kanon/` is deleted, and the only repair is to delete it |
 
@@ -867,3 +871,73 @@ anoieu remains responsible for maintaining it. Transferring the office does not
 transfer or freeze this record.
 
 ---
+
+### Correspondence answered, and four checks that were passing wrongly — 2026-09-17
+
+**Thirty-nine topics across eight repositories named anoieu**, and none of them
+had an answer in this tree. They are answered now, in
+[`replies.md`](replies.md), staged for a person to carry; that file is new and is
+what this repository had been doing in an unindexed document at the repository
+root. **The single largest class of answer was *that page is not ours any
+more*** — the governance documents, the registers, the roles, the prompts and the
+research pages left on 2026-09-15, and nobody who had addressed a topic to anoieu
+had any way to know which half of it had moved.
+
+**Four checks were reported by koine as passing when they should not, and all
+four are fixed.**
+
+| what | how it failed | what it is now |
+| --- | --- | --- |
+| `check_links` | read fenced code, so a quoted path in an example was a dead link | reads `prose()`, like `check_anchors` beside it; every adoption fixture carries a fenced example |
+| `postmortem_shape()` | a wrapped `**Summary:**` matched nothing and was skipped in silence | `postmortem_summary()`, and no readable summary is a failure |
+| the 250-character limit | ended the field at a blank line, so pressing return evaded it | reads on to the next field, which is dokimasia's reading and koine's |
+| `landing.malformed()` | needed the words *awaiting landing* before it would complain | **a closed verdict opens with one of seven words**, and `accepted and fixed` owes a marker |
+
+**The fourth is the one worth keeping the reasoning for.** koine said no regex
+closes it and they were right: the absence of a phrase is not detectable in free
+text. What is detectable is the **presence of a required word**, so the outcome
+became the required thing and the phrase became its consequence. A verdict
+reworded past the audit now leaves the vocabulary instead.
+
+**Three of the four had been reported twice** — opened 2026-09-01 and re-checked
+at `9794f31` the same day — and were fixed in under an hour. A report we had
+already been given twice was not a report we were short of evidence for.
+
+**Two diagnostics were added rather than two checks.** A skip that exists because
+a path is absent now says *this check turns on if you add one*, which is koine's
+joining cascade made visible before it happens; and a run against a working
+directory says how far that tree is from its own last commit, which is the cause
+of the disagreement kanon reported between a local verdict and a published one.
+Both are output rather than requirements, so both are available under contract 1.
+
+**Eight dangling links were found in this file by hand.** Every one pointed at a
+command or prompt in kanon that is not there — they moved out of here and then
+out of kanon — and `check_links` cannot see any of them, because it skips
+everything beginning with `http`. dokimasia asked for exactly this check on
+2026-08-31 and it is still declined: it would be a new obligation, so it is a
+contract 2 candidate, and unpinned it would turn every member red for a rename
+here. **Ten of theirs, then eight of ours, is the argument for it and does not
+change the answer.**
+
+**What was taken from other trees.** kanon's *Adding a check*, offered in their
+`D10` and now in [`maintenance.md`](maintenance.md). dokimasia's reading of a
+postmortem summary, which was right where ours was wrong. dokimasia's `SIG` facet,
+cited in [`notes.md`](notes.md) as the emitter half of the `src/proof/eo/` seam —
+which closes the question of who builds that check with the answer *they did*.
+eudaimonia's two positions on what may be taken from work a tool does not own,
+appended to [`reporting-policy.md`](reports/reporting-policy.md) as *What we
+take*. **None of it was ours and all of it was offered.**
+
+**Ten topics were removed from [`discussion.md`](discussion.md)** — `D1`, `D3`,
+`D6`, `D7`, `D8`, `D12`, `D13`, `D19`, `D23` and `D28` — each on evidence in the
+tree that answered it rather than on elapsed time. Four were answered in one
+topic by dokimasia, one by epikrisis, one by kanon, and three were settled by
+their subject having moved: a register that no longer exists, a check koine
+built, and a correction koine carried.
+
+**And the trees moved while this was being written**, which is koine's `D10`
+happening to the work of answering koine's `D10`. Seven of the eight discussion
+files on this machine were edited between the first read and the last; one
+repository's was untracked at the moment it was answered. Every reply says what
+it was read against and on what date, which is the remedy koine asked for, applied
+by hand because the rule that would have asked for it is with the maintainer.
