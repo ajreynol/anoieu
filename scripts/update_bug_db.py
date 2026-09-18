@@ -17,9 +17,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from anoieu.reporting import gen_open_findings as findings
-from anoieu.reporting import koine
-from anoieu.reporting import targets
+from anoieu_analyzer.reporting import gen_open_findings as findings
+from anoieu_analyzer.reporting import koine
+from anoieu_analyzer.reporting import targets
 
 
 def missing_inputs(spec: list[dict], roots: dict) -> list[str]:
@@ -51,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
         print("\n".join(targets.describe(spec)))
     missing = missing_inputs(spec, roots)
     if missing:
-        print("-- missing inputs; configure config/repos.local or prepare deps/ "
+        print("-- missing inputs; configure anoieu_analyzer/reporting/config/repos.local or prepare deps/ "
               "before refreshing the database:", file=sys.stderr)
         for path in missing:
             print(f"   {path}", file=sys.stderr)

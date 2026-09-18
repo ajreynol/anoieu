@@ -74,5 +74,5 @@ occasions.
 `reports/` also holds documents rendered for an audience that will not clone this
 repository, currently [`cpc-audit.html`](reports/cpc-audit.html). They restate
 findings from the sources above rather than adding any, so nothing is filed
-twice. The generators are in [`anoieu/reporting/`](../anoieu/reporting), and each says at the top
+twice. The generators are in [`anoieu_analyzer/reporting/`](../anoieu_analyzer/reporting), and each says at the top
 of the file what it writes and what it refuses to do.

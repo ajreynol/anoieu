@@ -552,10 +552,10 @@ earlier contents remain in git. `docs/misc/` no longer holds any files.
 | what | why it stays |
 | --- | --- |
 | `anoieu/`, `anoieu_fuzz/`, and their tests | the analyzer, the fuzzer, and the evidence they rest on. Ecosystem-specific tests belong with the moving machinery |
-| [`../scripts/deps.json`](../config/deps.json), `deps.lock`, [`../scripts/deps.py`](../anoieu/reporting/deps.py) | the corpus the analyzer is measured on, fetched and pinned |
+| [`../scripts/deps.json`](../anoieu_analyzer/reporting/config/deps.json), `deps.lock`, [`../scripts/deps.py`](../anoieu_analyzer/reporting/deps.py) | the corpus the analyzer is measured on, fetched and pinned |
 | [`../scripts/run.py`](../scripts/run.py), [`../scripts/sweep.py`](../tests/sweep.py), [`../scripts/oracle_desugar.py`](../tests/oracle_desugar.py) | the run: refresh the sources, measure them, record what came back |
 | `scripts/gen_checks_doc.py`, `gen_corpus_table.py`, `gen_open_findings.py` | the generators of the documents a run writes |
-| [`../scripts/landing.py`](../anoieu/reporting/landing.py) | the landing audit — whether a finding closed as *fixed upstream* actually landed. It is about the ledger, so it stays with the ledger |
+| [`../scripts/landing.py`](../anoieu_analyzer/reporting/landing.py) | the landing audit — whether a finding closed as *fixed upstream* actually landed. It is about the ledger, so it stays with the ledger |
 | [`../scripts/policy_check.py`](../scripts/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
 | [`../prompts/check_anoieu`](../prompts/check_anoieu), [`../prompts/process_anoieu`](../prompts/process_anoieu) | findings out, and answers back |
 | [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |

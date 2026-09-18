@@ -444,7 +444,7 @@ All three need the `.eos` front end, which is the next milestone.
 is a copy of cvc5's `Cpc.eo` rather than something logos wrote, and cvc5's
 `Cpc.eo` is the ground truth — so auditing the copy files cvc5's findings under
 logos's name, seventeen times as it turned out. It is no longer read at all
-(`NOT_AUDITED` in `anoieu/reporting/gen_corpus_table.py`), and whether the copy has drifted
+(`NOT_AUDITED` in `anoieu_analyzer/reporting/gen_corpus_table.py`), and whether the copy has drifted
 from the original is a sync check — planned, in cvc5's CI — rather than
 anything a static analyzer should be reporting. What is left for logos is what
 logos owns: `Cpc.eos`, the semantics, and what the fuzzer turned up about the
@@ -726,7 +726,7 @@ in [`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci).
 | [`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) | what has been reported to another repository, and what happened to it |
 | [`reporting-workflow.md`](reporting-workflow.md#running-it-in-ci) | running this in ethos, ethos-eoc, logos and cvc5 |
 | [`checks.md`](../checks.md) | every check and its manual page, generated from the registry |
-| [`closed-findings.md`](closed-findings.md) | every finding ruled on, with its verdict; `anoieu/reporting/landing.py` audits the ones closed before their fix landed |
+| [`closed-findings.md`](closed-findings.md) | every finding ruled on, with its verdict; `anoieu_analyzer/reporting/landing.py` audits the ones closed before their fix landed |
 | [`corpus.md`](corpus.md) | what the checks report on every signature we can find, generated and checked in CI |
 | [`reports.md`](reports.md#the-workings-how-each-finding-was-confirmed) | what the first runs found, and every false positive that had to be shed first |
 | [`notes.md`](../notes.md#what-ethos-misses-and-why) | why ethos does not report these itself, by mechanism |
@@ -745,7 +745,7 @@ accepts without a word.
 Reproduce with:
 
 ```bash
-python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo
+python3 -m anoieu_analyzer check <cvc5>/proofs/eo/cpc/Cpc.eo
 python3 tests/sweep.py <ethos>/tests <logos>/install/defs <eudaimonia>/examples
 ETHOS=<ethos>/build/src/ethos python3 tests/run.py --oracle
 ```
@@ -931,7 +931,7 @@ cvc5's `Cpc.eo`, logos's `Cpc.eos`, ethos's `smt.eos` and the embedding they are
 written against, checked together:
 
 ```bash
-python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo \
+python3 -m anoieu_analyzer check <cvc5>/proofs/eo/cpc/Cpc.eo \
   --semantics <logos>/install/defs/Cpc.eos \
   --smt-semantics <ethos>/tools/eoc/semantics/smt.eos \
   --embedding <ethos>/plugins/model_smt/model_smt.eo
@@ -1101,7 +1101,7 @@ analyzer does differently now.
 | **not audited** | 17 | every row against `logos/install/defs/Cpc.cached.eo` |
 | **declined, and the reason holds** | 2 | `logos-4`'s `declare-fun` case, `logos-5` |
 | **withdrawn — our error** | 1 | `logos-4`'s indexed-operator case |
-| **accepted, closed, awaiting landing** | 7 | ethos-1, ethos-7, ethos-8, ethos-9 and the `symm` docstring — seven rows on `anoieu-findings`@`292201c2`, tracked by `anoieu/reporting/landing.py` |
+| **accepted, closed, awaiting landing** | 7 | ethos-1, ethos-7, ethos-8, ethos-9 and the `symm` docstring — seven rows on `anoieu-findings`@`292201c2`, tracked by `anoieu_analyzer/reporting/landing.py` |
 | **accepted, and landed on `main`** | 1 | `logos-2`, closed at logos `6cb59db5` after four days open against a branch that was later deleted |
 | **declined, not yet confirmed** | 8 | the three ethos `EO0084` rows, `conclusion-spec.eo`, the four `eo-definitions.eo` rows |
 | **our error, not yet withdrawn** | 2 | the two ethos `Nary.eo` rows |
@@ -1121,7 +1121,7 @@ Changes the analyzer made as a result:
   promoted reproducer turned out to differ from the committed file it came from
   by a cut the reference had never looked at (`logos-4`);
 - **files a project did not author are not audited** (`NOT_AUDITED` in
-  `anoieu/reporting/gen_corpus_table.py`), after seventeen rows were filed against logos
+  `anoieu_analyzer/reporting/gen_corpus_table.py`), after seventeen rows were filed against logos
   for a copy of somebody else's signature;
 - **a pattern's head is read in the scope that binds it** (`EO0054`), after two
   rows against ethos resolved a program's own parameter against a
@@ -1129,7 +1129,7 @@ Changes the analyzer made as a result:
   `Nary.eo` rows);
 - **a merge is no longer what closes a row** — a maintainer's acceptance and a
   commit on a named branch are, with the landing tracked separately by
-  [`anoieu/reporting/landing.py`](../../anoieu/reporting/landing.py) so that the shortcut is booked rather
+  [`anoieu_analyzer/reporting/landing.py`](../../anoieu_analyzer/reporting/landing.py) so that the shortcut is booked rather
   than forgotten (`ethos`, seven rows).
 
 ---
@@ -1319,7 +1319,7 @@ the finding, and while the checks are still moving that is a bad trade. What the
 change costs is stated where it is taken on, in
 [what closes a row](reporting-workflow.md#what-closes-a-row-and-what-does-not):
 each of the seven verdicts ends with `awaiting landing: ethos anoieu-findings
-292201c2`, and `python3 -m anoieu.reporting.landing --check` is the pass that asks whether
+292201c2`, and `python3 -m anoieu_analyzer.reporting.landing --check` is the pass that asks whether
 that commit has reached `main` yet. Today it answers *not yet* for all seven,
 which is the correct answer and a recorded one rather than an assumed one.
 

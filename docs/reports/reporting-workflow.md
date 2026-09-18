@@ -87,7 +87,7 @@ Three obligations follow, and they are on us rather than on anybody upstream.
    here was an artefact of the harness rather than a defect — a mutated
    `include` pointing at a file that had never existed.
 2. **Confirm against a pinned build before filing.** A crash in whatever binary
-   was on the machine that found it is not news. `config/deps.lock` records the
+   was on the machine that found it is not news. `anoieu_analyzer/reporting/config/deps.lock` records the
    commit the rest of the report is measured against; a `FUZ` row filed upstream
    should have been reproduced against a build of it, and the row should say so.
 3. **A disagreement has no owner until somebody gives it one.** The generated
@@ -191,7 +191,7 @@ naming where the change is —
 
     awaiting landing: <project> <branch> <commit>
 
-— and [`anoieu/reporting/landing.py`](../../anoieu/reporting/landing.py) is the audit that reads them
+— and [`anoieu_analyzer/reporting/landing.py`](../../anoieu_analyzer/reporting/landing.py) is the audit that reads them
 back. It is **a separate pass, with its own question**: *did what we closed
 actually land?* It is asked on its own schedule, against checkouts, and it is
 deliberately not part of processing a reply — the two get confused precisely
@@ -201,7 +201,7 @@ change lands, the marker is replaced by what landed it.
 #### The verdict vocabulary, and why it is closed
 
 **A verdict opens with one of seven words, and the list is the whole of it.**
-This is the definition; [`anoieu/reporting/landing.py`](../../anoieu/reporting/landing.py) holds
+This is the definition; [`anoieu_analyzer/reporting/landing.py`](../../anoieu_analyzer/reporting/landing.py) holds
 the copy that runs, and `tests/run.py` compares the two.
 
 | a verdict opens | what it means | what else the row must carry |
@@ -721,7 +721,7 @@ stopping halfway is safe and the next run picks up whatever is left.
 
 ```text
 Bring the whole report up to date. This is a sweep over every open row in
-docs/reports/open-findings.md, across every project config/deps.json tracks. It will take
+docs/reports/open-findings.md, across every project anoieu_analyzer/reporting/config/deps.json tracks. It will take
 a while. Work one row at a time and leave the record consistent after each, so
 that stopping partway is safe.
 
@@ -885,19 +885,19 @@ nobody has triaged. Four steps, each safe to stop at:
 **1. Report only.** Annotations appear on pull requests; nothing fails.
 
 ```yaml
-- run: python3 -m anoieu check <entry points> --format github
+- run: python3 -m anoieu_analyzer check <entry points> --format github
   continue-on-error: true
 ```
 
 **2. Baseline, and fail on new errors.** Record today, block tomorrow's:
 
 ```bash
-python3 -m anoieu check <entry points> --baseline .anoieu-baseline.json --update-baseline
+python3 -m anoieu_analyzer check <entry points> --baseline .anoieu-baseline.json --update-baseline
 git add .anoieu-baseline.json
 ```
 
 ```yaml
-- run: python3 -m anoieu check --baseline .anoieu-baseline.json
+- run: python3 -m anoieu_analyzer check --baseline .anoieu-baseline.json
 ```
 
 **3. Fail on new warnings too**, by adding `--deny-warnings`. Do this once the
@@ -931,7 +931,7 @@ a renumbering is **major**; a fix that narrows a check is a **patch**, because i
 can only reduce what a repository sees.
 
 For a repository that would rather not take a PyPI dependency, anoieu is pure
-Python with no dependencies of its own: a git submodule and `python3 -m anoieu`
+Python with no dependencies of its own: a git submodule and `python3 -m anoieu_analyzer`
 works identically.
 
 ### Severity policy, per repository
@@ -954,7 +954,7 @@ codebase, so a repository may re-pitch them. What we would suggest:
 ```
 
 Put that at the repository root, or beside the signatures — discovery walks up
-from the entry point — and the CI job becomes `python3 -m anoieu check`.
+from the entry point — and the CI job becomes `python3 -m anoieu_analyzer check`.
 
 ### What a job looks like
 
@@ -1038,7 +1038,7 @@ Three steps, each printing what it did:
    property of named commits rather than of the machine that produced it.
 2. **Measure.** [`corpus.md`](corpus.md), rewritten whole: the ref, commit and
    date of each project, and what the checks report on it.
-   [`../config/deps.lock`](../../config/deps.lock) records the same commits in full,
+   [`../anoieu_analyzer/reporting/config/deps.lock`](../../anoieu_analyzer/reporting/config/deps.lock) records the same commits in full,
    for a machine. A finding is only true of a version, and the rows in the
    report carry none of their own.
 3. **Findings.** [`open-findings.md`](open-findings.md), appended to.
@@ -1068,7 +1068,7 @@ about six megabytes and takes a few seconds to create. The one thing that does
 need a built ethos is the differential oracle (`tests/run.py --oracle`), which is
 a separate job.
 
-What is read, and what is deliberately not, is [`config/deps.json`](../../config/deps.json):
+What is read, and what is deliberately not, is [`anoieu_analyzer/reporting/config/deps.json`](../../anoieu_analyzer/reporting/config/deps.json):
 
 | project | ref | what we read | what we do not |
 | --- | --- | --- | --- |
@@ -1099,7 +1099,7 @@ diff says which.
 [`open-findings.md`](open-findings.md) is the report itself, one row per
 finding, and it is **additive**:
 
-- **`anoieu/reporting/gen_open_findings.py` adds and never removes.** A row is keyed by the
+- **`anoieu_analyzer/reporting/gen_open_findings.py` adds and never removes.** A row is keyed by the
   same fingerprint a baseline uses — the code, the file, and the text of the
   line — so it survives edits elsewhere in the file. CI runs `--check`, which
   fails when a finding is unlisted and never when a row is extra.

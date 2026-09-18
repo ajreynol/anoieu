@@ -28,10 +28,10 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from anoieu.checks import REGISTRY, Context, load_checks, run_all  # noqa: E402
-from anoieu.cli import _embedding_vocabulary  # noqa: E402
-from anoieu.loader import load  # noqa: E402
-from anoieu.semantics import load_set  # noqa: E402
+from anoieu_analyzer.checks import REGISTRY, Context, load_checks, run_all  # noqa: E402
+from anoieu_analyzer.cli import _embedding_vocabulary  # noqa: E402
+from anoieu_analyzer.loader import load  # noqa: E402
+from anoieu_analyzer.semantics import load_set  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WITNESSES = os.path.join(HERE, "witnesses")
@@ -117,7 +117,7 @@ def witness_coverage() -> None:
     exists — which is how a number stops being read. Saying it every run is what
     keeps it from drifting quietly.
     """
-    from anoieu.checks import REGISTRY  # noqa: PLC0415
+    from anoieu_analyzer.checks import REGISTRY  # noqa: PLC0415
 
     load_checks()
     covered: set[str] = set()
@@ -132,12 +132,12 @@ def witness_coverage() -> None:
 
 def manifest_agrees() -> int:
     """The sources the report is generated from are named in three places —
-    `config/deps.json`, the targets in `anoieu/reporting/gen_corpus_table.py`, and the lock
+    `anoieu_analyzer/reporting/config/deps.json`, the targets in `anoieu_analyzer/reporting/gen_corpus_table.py`, and the lock
     a run writes. A name that appears in one and not the others makes a corpus
     silently unmeasured, which reads exactly like a corpus with no findings. So
     check it here, where no network is needed."""
-    from anoieu.reporting import deps  # noqa: PLC0415
-    from anoieu.reporting import gen_corpus_table as corpus  # noqa: PLC0415
+    from anoieu_analyzer.reporting import deps  # noqa: PLC0415
+    from anoieu_analyzer.reporting import gen_corpus_table as corpus  # noqa: PLC0415
 
     failures = 0
     named = {d.name for d in deps.manifest()}
@@ -421,13 +421,13 @@ def landing_markers() -> int:
     """Every row closed before its change landed is still reachable by the audit.
 
     Closing on a promise is the one place this repository has been wrong for
-    months at a time, and `anoieu/reporting/landing.py` is the whole of what stops it
+    months at a time, and `anoieu_analyzer/reporting/landing.py` is the whole of what stops it
     happening again. The marker it reads lives in free-text prose, so the way it
     fails is a verdict somebody reworded: the row stays closed, the debt stays
     owed, and it silently leaves the audit. That is checked here rather than
     trusted.
     """
-    from anoieu.reporting import landing  # noqa: PLC0415
+    from anoieu_analyzer.reporting import landing  # noqa: PLC0415
 
     failures = 0
     for fid in landing.malformed():
@@ -478,7 +478,7 @@ def verdict_vocabulary(landing) -> int:
     named = set(re.findall(r"^\| `([a-z -]+)` \|", body, re.M))
     if named != set(landing.OUTCOMES):
         print(f"FAIL the verdict vocabulary differs: document {sorted(named)}, "
-              f"anoieu/reporting/landing.py {sorted(landing.OUTCOMES)}")
+              f"anoieu_analyzer/reporting/landing.py {sorted(landing.OUTCOMES)}")
         failures += 1
 
     import tempfile  # noqa: PLC0415
@@ -517,15 +517,15 @@ def verdict_vocabulary(landing) -> int:
 def targets_agree() -> int:
     """The two workflows describe the same standard targets.
 
-    The old path reads the `TARGETS` literal in `anoieu/reporting/gen_corpus_table.py`;
+    The old path reads the `TARGETS` literal in `anoieu_analyzer/reporting/gen_corpus_table.py`;
     `scripts/anoieu_analyzer` and the agent prompt read
-    `config/targets.json`. Both are kept while the new workflow proves itself,
+    `anoieu_analyzer/reporting/config/targets.json`. Both are kept while the new workflow proves itself,
     and two descriptions of one thing that nothing compares is the drift this
     ecosystem keeps finding -- in a prompt, in a postmortem template, and here
     it would be in what a report is a report of.
     """
-    from anoieu.reporting import targets as config  # noqa: PLC0415
-    from anoieu.reporting.gen_corpus_table import TARGETS  # noqa: PLC0415
+    from anoieu_analyzer.reporting import targets as config  # noqa: PLC0415
+    from anoieu_analyzer.reporting.gen_corpus_table import TARGETS  # noqa: PLC0415
 
     spec = config.load()
     listed = config.as_tuples(spec)
@@ -534,16 +534,16 @@ def targets_agree() -> int:
         only_json = [t for t in listed if t not in TARGETS]
         only_py = [t for t in TARGETS if t not in listed]
         for t in only_json:
-            print(f"FAIL config/targets.json has a target TARGETS does not: {t[0]!r}")
+            print(f"FAIL anoieu_analyzer/reporting/config/targets.json has a target TARGETS does not: {t[0]!r}")
         for t in only_py:
-            print(f"FAIL TARGETS has a target config/targets.json does not: {t[0]!r}")
+            print(f"FAIL TARGETS has a target anoieu_analyzer/reporting/config/targets.json does not: {t[0]!r}")
         if not only_json and not only_py:
-            print("FAIL config/targets.json and TARGETS agree on the targets "
+            print("FAIL anoieu_analyzer/reporting/config/targets.json and TARGETS agree on the targets "
                   "and not on their order")
         failures = max(1, len(only_json) + len(only_py))
     ids = [t["id"] for t in spec]
     for dup in {i for i in ids if ids.count(i) > 1}:
-        print(f"FAIL config/targets.json uses the target id {dup!r} twice")
+        print(f"FAIL anoieu_analyzer/reporting/config/targets.json uses the target id {dup!r} twice")
         failures += 1
     print(f"-- standard targets: {len(spec)}, {failures} failure(s)")
     return failures

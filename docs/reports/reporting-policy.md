@@ -9,7 +9,7 @@
 > [reporting workflow](reporting-workflow.md) is deprecated alongside it.
 
 Anoieu already records analyzer and promoted fuzzer findings through Koine's
-`bug_db/koine_append_db` in [`bug_db/bugs.json`](../../bug_db/bugs.json). That integration does not
+`bug_db_manager/koine_append_db` in [`bug_db/bugs.json`](../../bug_db/bugs.json). That integration does not
 yet replace the reporting lifecycle: triage, verdicts and closure evidence still
 live in the existing findings ledgers. Continue using the existing commands and
 preserve those records while the replacement is developed. See the
@@ -129,7 +129,7 @@ withdrawn when it misfires.
 the version it was measured at; a number carries whatever regenerates it. Not a
 virtue but a testable property — a report about "the version on my laptop" is a
 report about nothing, and a row nobody can re-measure cannot be argued with.
-`config/deps.lock` records the commits, and a CI job re-measures them and fails
+`anoieu_analyzer/reporting/config/deps.lock` records the commits, and a CI job re-measures them and fails
 when the report is no longer current for the versions it names. Argument is
 exempt, being checkable by reading it; quantities are not.
 

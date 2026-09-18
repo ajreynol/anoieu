@@ -10,8 +10,11 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
-anoieu = "anoieu.cli:main"
+anoieu = "anoieu_analyzer.cli:main"
 anoieu-fuzz = "anoieu_fuzz.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["anoieu*", "anoieu_fuzz*"]
+include = ["anoieu_analyzer*", "anoieu_fuzz*"]
+
+[tool.setuptools.package-data]
+"anoieu_analyzer.reporting" = ["config/*.json", "config/*.lock"]

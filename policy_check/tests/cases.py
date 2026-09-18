@@ -242,6 +242,51 @@ def local_policy_inputs() -> int:
     return failures
 
 
+def dependency_layouts() -> int:
+    """Moving configuration must neither lose pins nor break older consumers."""
+    from pathlib import Path  # noqa: PLC0415
+    import tempfile  # noqa: PLC0415
+    from unittest.mock import patch  # noqa: PLC0415
+    from policy_check import checker  # noqa: PLC0415
+
+    cases = [
+        (f"paired dependency files in {directory}",
+         [f"{directory}/deps.json", f"{directory}/deps.lock"], [])
+        for directory in ("scripts", "config", "anoieu_analyzer/reporting/config")
+    ] + [
+        ("missing lock in the moved configuration",
+         ["anoieu_analyzer/reporting/config/deps.json"],
+         ["anoieu_analyzer/reporting/config/deps.lock"]),
+        ("manifest and lock in different directories cannot form a pair",
+         ["config/deps.json", "anoieu_analyzer/reporting/config/deps.lock"],
+         ["config/deps.lock", "anoieu_analyzer/reporting/config/deps.json"]),
+        ("dependency checkout without any pin files", [],
+         ["config/deps.json", "config/deps.lock"]),
+    ]
+    applies = next(applies for _, check, applies in checker.CHECKS_V1
+                   if check is checker.check_dependencies)
+    failures = 0
+    for label, files, missing in cases:
+        with tempfile.TemporaryDirectory() as directory:
+            for rel in files:
+                path = Path(directory, rel)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("{}\n")
+            if not files:
+                Path(directory, "deps").mkdir()
+            with patch.object(checker, "ROOT", directory), \
+                 patch.object(checker, "tracked", return_value=[]):
+                got = checker.check_dependencies()
+                ok = not applies() and sorted(got) == sorted(
+                    f"{rel} is missing: nothing pins what was read" for rel in missing)
+        failures += not ok
+        print(("ok   " if ok else "FAIL ") + label)
+        if not ok:
+            print(f"     got {got}")
+    print(f"-- dependency layouts: {failures} failure(s)")
+    return failures
+
+
 def policy_contract() -> int:
     """Latest implementations must keep the published contract and reject unknown ones."""
     from policy_check import checker as policy_check  # noqa: PLC0415
@@ -477,5 +522,6 @@ def adoption_interface() -> int:
 
 def main() -> int:
     failures = sum(check() for check in (
-        note_forms, footing_forms, local_policy_inputs, policy_contract, adoption_interface))
+        note_forms, footing_forms, local_policy_inputs, dependency_layouts,
+        policy_contract, adoption_interface))
     return 1 if failures else 0

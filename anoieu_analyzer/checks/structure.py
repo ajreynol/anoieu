@@ -161,7 +161,7 @@ def include_cycle(ctx: Context) -> Iterator[Diagnostic]:
             code="EO0011",
             severity=Severity.WARNING,
             message="include cycle: " + " -> ".join(os.path.basename(p) for p in cyc),
-            span=__import__("anoieu.diagnostics", fromlist=["Span"]).Span(path, 1, 1),
+            span=__import__("anoieu_analyzer.diagnostics", fromlist=["Span"]).Span(path, 1, 1),
         )
 
 

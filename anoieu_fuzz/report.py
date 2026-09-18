@@ -30,9 +30,9 @@ import shutil
 import subprocess
 import sys
 
-from anoieu.diagnostics import Diagnostic, Severity, Span, SourceMap
-from anoieu.fingerprint import fingerprint
-from anoieu.reporting.database import render as render_database
+from anoieu_analyzer.diagnostics import Diagnostic, Severity, Span, SourceMap
+from anoieu_analyzer.fingerprint import fingerprint
+from anoieu_analyzer.reporting.database import render as render_database
 
 from .checkers import DEFAULT_CONFIG, from_config
 from .codes import CODES, code_for
@@ -171,7 +171,7 @@ def owner_of(record: dict) -> str:
 def rows(corpus: str = "") -> dict[str, dict]:
     """Every promoted finding as a row for `docs/reports/open-findings.md`.
 
-    The shape is `anoieu/reporting/gen_open_findings.py`'s, keyed by the same fingerprint,
+    The shape is `anoieu_analyzer/reporting/gen_open_findings.py`'s, keyed by the same fingerprint,
     so the generator merges these with what the checks report and neither side
     knows about the other.
     """
@@ -233,7 +233,7 @@ def record(records: list[dict], preview: bool = False) -> int:
     with open(DUMP, "w", encoding="utf-8") as fh:
         json.dump(entries, fh, indent=2, ensure_ascii=False)
         fh.write("\n")
-    command = [sys.executable, "-m", "anoieu.reporting.koine", DUMP, DB]
+    command = [sys.executable, "-m", "anoieu_analyzer.reporting.koine", DUMP, DB]
     if preview:
         command.append("--dry-run")
     code = subprocess.run(command, stdout=sys.stderr, cwd=ROOT).returncode
@@ -290,7 +290,7 @@ def render(records: list[dict], fmt: str = "text", color: bool = False) -> str:
     like what they are -- two findings from one project -- distinguished by
     their code and by nothing else they have to remember to do.
     """
-    from anoieu.diagnostics import (  # noqa: PLC0415
+    from anoieu_analyzer.diagnostics import (  # noqa: PLC0415
         render_github,
         render_json,
         render_sarif,

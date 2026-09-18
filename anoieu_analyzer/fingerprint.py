@@ -9,7 +9,7 @@ does not touch that line.
 `Diagnostic` they have just produced; an agent working the same targets by hand
 has a code, a path and a line of text and nothing else. So the arithmetic is
 `id_of`, which takes those three, and `fingerprint` is the wrapper that pulls
-them off a diagnostic. `anoieu/reporting/finding_id.py` is the same function on a command
+them off a diagnostic. `anoieu_analyzer/reporting/finding_id.py` is the same function on a command
 line, and it is what the agent prompt tells an assistant to use -- because two
 producers whose ids disagree cannot be deduplicated by `koine_append_db`.
 """

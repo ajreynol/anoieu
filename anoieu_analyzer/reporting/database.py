@@ -1,7 +1,7 @@
 """Render the shared bug database as Markdown for GitHub browsing.
 
-    python3 -m anoieu.reporting.database          # refresh the view
-    python3 -m anoieu.reporting.database --check  # fail if the view is stale
+    python3 -m anoieu_analyzer.reporting.database          # refresh the view
+    python3 -m anoieu_analyzer.reporting.database --check  # fail if the view is stale
 """
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ def markdown(db: str) -> str:
         groups.append(("Other producers", other))
     lines = [
         "# Bug database", "",
-        "Generated from [bugs.json](bugs.json) by `anoieu.reporting.database`.",
+        "Generated from [bugs.json](bugs.json) by `anoieu_analyzer.reporting.database`.",
         "Do not edit this view by hand. [Update instructions](README.md).", "",
         "This is the history of recorded findings, including resolved ones; it does",
         "not assign open/closed status. Dates record ingestion, not fresh reproduction.",
@@ -101,7 +101,7 @@ def main() -> int:
         page = os.path.join(os.path.dirname(DB), "bugs.md")
         current = open(page, encoding="utf-8").read() if os.path.isfile(page) else ""
         if current != markdown(DB):
-            print("bug_db/bugs.md is stale; run python3 -m anoieu.reporting.database")
+            print("bug_db/bugs.md is stale; run python3 -m anoieu_analyzer.reporting.database")
             return 1
         print("bug_db/bugs.md is current")
     else:

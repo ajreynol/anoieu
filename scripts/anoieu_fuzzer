@@ -6,7 +6,7 @@
     anoieu_fuzzer --dry-run            # say what would run, and run nothing
 
 Two names and a number. The names are the checkers to compare -- by the
-ecosystem's project ids, the same names `config/repos.local` uses -- and the
+ecosystem's project ids, the same names `anoieu_analyzer/reporting/config/repos.local` uses -- and the
 number is how much effort to spend. Everything else has a default, and
 `python3 -m anoieu_fuzz run` is still there for the full interface.
 
@@ -35,7 +35,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-from anoieu.reporting import targets as config  # noqa: E402
+from anoieu_analyzer.reporting import targets as config  # noqa: E402
 from anoieu_fuzz.checkers import DEFAULT_CONFIG  # noqa: E402
 
 #: The two this exists for. Any other name works and is configured on the way
@@ -193,7 +193,7 @@ def main() -> int:
         if missing and not args.dry_run:
             print(f"\nanoieu_fuzzer: no binary for {', '.join(missing)}. Put it "
                   f"on PATH, set ${missing[0].upper()}, or build it in the "
-                  f"checkout config/repos.local names.", file=sys.stderr)
+                  f"checkout anoieu_analyzer/reporting/config/repos.local names.", file=sys.stderr)
             return 2
         if args.dry_run:
             if missing:

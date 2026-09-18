@@ -878,7 +878,7 @@ possible if that changes.
 #### Shape
 
 ```
-anoieu/
+anoieu_analyzer/
   syntax/     lexer, recovering parser, CST with spans   -- both languages
   resolve/    include graph, scopes, overload sets, the symbol table
   desugar/    the surface -> core map (n-ary, :list, binder, chainable,
@@ -910,7 +910,7 @@ questions become `anoieu query` rather than a code change, and the reports in
 | **M0** ✅ | parser + CST + include graph, `check` with Tier-0 findings only | reads every `.eo` in ethos, cvc5, logos and eudaimonia without falling over; the corpus is established |
 | **M1** ✅ | resolution, attribute contracts, dead code, docstring lint, `stats` | 30 checks, a witness apiece, and real findings on CPC and on `ethos/tests` -- see [`reports.md`](reports/reports.md#the-workings-how-each-finding-was-confirmed) |
 | **M2** ✅ | desugaring + `desugar`/`symbol` commands, validated against ethos | the surface↔core map, and the conformance harness: 34 cases, one per policy, agreeing with ethos term for term |
-| **M3** ◐ | type checker → rule conclusions, program cases, `define` bodies, overload ambiguity | the flagship checks; the reason the tool exists. The *shallow* half is written -- the type of a term where its head settles it, with a callee's type parameters bound from the arguments (`anoieu/typing.py`) -- which is what found the CPC return-type bug. What it still cannot do: type a term whose head is a parameter, follow `eo::` evaluation, or check a `define` body against a use site |
+| **M3** ◐ | type checker → rule conclusions, program cases, `define` bodies, overload ambiguity | the flagship checks; the reason the tool exists. The *shallow* half is written -- the type of a term where its head settles it, with a callee's type parameters bound from the arguments (`anoieu_analyzer/typing.py`) -- which is what found the CPC return-type bug. What it still cannot do: type a term whose head is a parameter, follow `eo::` evaluation, or check a `define` body against a use site |
 | **M4** ✅ | `.eos` front end + triple checks, baselines, JSON/SARIF | the CI plumbing (see [`reporting-workflow.md`](reports/reporting-workflow.md#running-it-in-ci)) and the `.eos` reader, which is vocabulary-agnostic by design because the language is moving: five checks over the triple, including the `is-list-nil` diff and exclusion closure the compiler's own documentation asks for. The first run over the real CPC triple -- cvc5's signature, logos's semantics, ethos's SMT semantics -- reported one dead entry and nothing else |
 | **M5** | LSP, doc generation, opt-in solver obligations | the daily-driver interface |
 

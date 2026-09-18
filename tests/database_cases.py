@@ -9,7 +9,7 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from anoieu.reporting import database
+from anoieu_analyzer.reporting import database
 
 
 def main() -> int:

@@ -25,11 +25,11 @@ import os
 import sys
 
 
-from anoieu.checks import Context, load_checks, run_all  # noqa: E402
-from anoieu.cli import _embedding_vocabulary  # noqa: E402
-from anoieu.diagnostics import Severity  # noqa: E402
-from anoieu.loader import load  # noqa: E402
-from anoieu.semantics import load_set  # noqa: E402
+from anoieu_analyzer.checks import Context, load_checks, run_all  # noqa: E402
+from anoieu_analyzer.cli import _embedding_vocabulary  # noqa: E402
+from anoieu_analyzer.diagnostics import Severity  # noqa: E402
+from anoieu_analyzer.loader import load  # noqa: E402
+from anoieu_analyzer.semantics import load_set  # noqa: E402
 
 from . import ROOT
 
@@ -83,7 +83,7 @@ def not_audited(repo: str, root: str) -> set:
 
 
 # Where the sources live: clones this project manages, never a checkout somebody
-# else owns. See anoieu/reporting/deps.py.
+# else owns. See anoieu_analyzer/reporting/deps.py.
 from .deps import roots as _dep_roots  # noqa: E402
 
 DEFAULT_ROOTS = _dep_roots()

@@ -743,14 +743,24 @@ def check_generated_labelled() -> list[str]:
     return bad
 
 
+DEPENDENCY_CONFIG_DIRS = ("scripts", "config", "anoieu_analyzer/reporting/config")
+
+
 def check_dependencies() -> list[str]:
     """*Dependencies are fetched and pinned, never vendored*."""
     bad = []
     if tracked("deps/*"):
         bad.append("deps/ has tracked files: dependencies are vendored, not fetched")
-    for rel in ("config/deps.json", "config/deps.lock"):
-        if not os.path.exists(os.path.join(ROOT, rel)):
-            bad.append(f"{rel} is missing: nothing pins what was read")
+    # Layout changes do not change the obligation: each manifest needs its
+    # matching lock. Retain the layouts used by existing contract consumers.
+    directories = [directory for directory in DEPENDENCY_CONFIG_DIRS
+                   if any(os.path.exists(os.path.join(ROOT, directory, name))
+                          for name in ("deps.json", "deps.lock"))]
+    for directory in directories or ["config"]:
+        for name in ("deps.json", "deps.lock"):
+            rel = f"{directory}/{name}"
+            if not os.path.isfile(os.path.join(ROOT, rel)):
+                bad.append(f"{rel} is missing: nothing pins what was read")
     return bad
 
 
@@ -1210,7 +1220,8 @@ CHECKS_V1 = (
     ("the README ends with the maintenance note", check_maintenance_note, None),
     ("every document is named in the documentation index", check_docs_index, has("docs")),
     ("every generated document says it is generated", check_generated_labelled, is_home),
-    ("dependencies are fetched and pinned, never vendored", check_dependencies, has("deps", "config/deps.json")),
+    ("dependencies are fetched and pinned, never vendored", check_dependencies,
+     has("deps", *(f"{directory}/deps.json" for directory in DEPENDENCY_CONFIG_DIRS))),
     ("working space is untracked", check_working_space, has(".gitignore")),
     ("child projects carry a charter, and name what they break", check_children, has("tools")),
     ("the discussion file carries the response gate, at the top",

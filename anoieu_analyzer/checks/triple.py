@@ -8,7 +8,7 @@ needs, and says nothing otherwise.
 Written to survive the `.eos` language moving: nothing here enumerates the forms
 of a set. What it uses is which names a set defines, which names it mentions, and
 what its entries say about themselves by attribute -- all of which a new form
-inherits for free. See `anoieu/semantics.py`.
+inherits for free. See `anoieu_analyzer/semantics.py`.
 """
 
 from __future__ import annotations

@@ -53,10 +53,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-from anoieu.reporting import koine  # noqa: E402
-from anoieu.reporting import targets as config  # noqa: E402
-from anoieu.reporting.gen_open_findings import collect, static_bug, render_static  # noqa: E402
-from anoieu.reporting.database import render as render_database
+from anoieu_analyzer.reporting import koine  # noqa: E402
+from anoieu_analyzer.reporting import targets as config  # noqa: E402
+from anoieu_analyzer.reporting.gen_open_findings import collect, static_bug, render_static  # noqa: E402
+from anoieu_analyzer.reporting.database import render as render_database
 
 DB = os.path.join(ROOT, "bug_db", "bugs.json")
 DUMP = os.path.join(ROOT, "scratch", "new-bugs.json")

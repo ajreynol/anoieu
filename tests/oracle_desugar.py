@@ -27,9 +27,9 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from anoieu.desugar import Scope, curry, desugar, uncurry  # noqa: E402
-from anoieu.loader import _params_from, load  # noqa: E402
-from anoieu.syntax.parser import Node, parse  # noqa: E402
+from anoieu_analyzer.desugar import Scope, curry, desugar, uncurry  # noqa: E402
+from anoieu_analyzer.loader import _params_from, load  # noqa: E402
+from anoieu_analyzer.syntax.parser import Node, parse  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)

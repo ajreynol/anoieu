@@ -33,8 +33,8 @@ scripts/anoieu_analyzer --preview       # find the bugs and ask koine to preview
 ```
 
 That is the entry point for running anoieu over what it watches. It reads the
-standard targets from `config/targets.json`, finds each project where
-`config/repos.local` says it is on this machine, runs every check, and adds
+standard targets from `anoieu_analyzer/reporting/config/targets.json`, finds each project where
+`anoieu_analyzer/reporting/config/repos.local` says it is on this machine, runs every check, and adds
 whatever is new to [`bug_db/bugs.json`](bug_db/bugs.json) — the
 database of every bug anoieu has found, appended to by
 [koine](https://github.com/ajreynol/koine) and rendered as a table in
@@ -49,8 +49,8 @@ the same targets, in the same output shape — so the two can be compared.
 analyzer is a command in its own right and needs none of the above:
 
 ```bash
-python3 -m anoieu check path/to/signature.eo
-python3 -m anoieu check path/to/signature.eo --format github
+python3 -m anoieu_analyzer check path/to/signature.eo
+python3 -m anoieu_analyzer check path/to/signature.eo --format github
 ```
 
 Or install with `pip install -e .` and use `anoieu check`.

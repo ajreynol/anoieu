@@ -18,7 +18,7 @@
 #
 # When the agent has written its dump, appending it is the comparison:
 #
-#   python3 -m anoieu.reporting.koine scratch/agent-bugs.json \
+#   python3 -m anoieu_analyzer.reporting.koine scratch/agent-bugs.json \
 #           bug_db/bugs.json --dry-run
 #
 # **`--dry-run` first, always.** *0 new, N already known* is the two producers
@@ -44,7 +44,7 @@ usage() {
   cat >&2 <<'USAGE'
 usage: anoieu_analyzer_agent [--codex] [--out FILE] [--dry-run] [--print] [--show-prompt] [TARGET...]
 
-  TARGET          a target id from config/targets.json. Omitted, every one.
+  TARGET          a target id from anoieu_analyzer/reporting/config/targets.json. Omitted, every one.
   --out FILE      where the agent writes its dump (default scratch/agent-bugs.json)
   --dry-run       print every signature that would be read, and start nothing
   --codex         run codex instead of claude
@@ -68,15 +68,15 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-if [ ! -f "$ROOT/config/targets.json" ]; then
-  echo "anoieu_analyzer_agent: no config/targets.json -- run this in a checkout of anoieu" >&2
+if [ ! -f "$ROOT/anoieu_analyzer/reporting/config/targets.json" ]; then
+  echo "anoieu_analyzer_agent: no anoieu_analyzer/reporting/config/targets.json -- run this in a checkout of anoieu" >&2
   exit 2
 fi
 
 # The targets, and where each project is on this machine. Both come from the two
 # files the program producer reads, because a second producer told to look
 # somewhere else is not a second producer -- it is a different question.
-TARGETS=$(cd "$ROOT" && python3 -m anoieu.reporting.targets "${WANT[@]+"${WANT[@]}"}")
+TARGETS=$(cd "$ROOT" && python3 -m anoieu_analyzer.reporting.targets "${WANT[@]+"${WANT[@]}"}")
 
 if [ "$DRY" = 1 ]; then printf '%s\n' "$TARGETS"; exit 0; fi
 
@@ -90,7 +90,7 @@ files, by reading them, so that the two dumps can be compared.
 sha1(code + " " + path + " " + text of the line, stripped)[:16], where the path
 is relative to the owner's project root. Do not invent one:
 
-  python3 -m anoieu.reporting.finding_id EO0031 proofs/eo/cpc/Cpc.eo 17 --root /the/checkout
+  python3 -m anoieu_analyzer.reporting.finding_id EO0031 proofs/eo/cpc/Cpc.eo 17 --root /the/checkout
 
 The targets, and where each project is on this machine:
 
@@ -151,7 +151,7 @@ if [ "$SHOW" = 1 ]; then printf '%s\n' "$PROMPT"; exit 0; fi
 mkdir -p "$ROOT/$(dirname "$OUT")"
 echo "-- anoieu at $ROOT"
 echo "-- the agent writes $OUT. Compare it with the database, writing nothing:"
-echo "   python3 -m anoieu.reporting.koine \\"
+echo "   python3 -m anoieu_analyzer.reporting.koine \\"
 echo "           $OUT bug_db/bugs.json --dry-run"
 echo
 

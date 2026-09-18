@@ -1,13 +1,13 @@
 """Where koine is on this machine, and which commit of it we are using.
 
 [koine](https://github.com/ajreynol/koine) keeps bug databases: its
-`bug_db/koine_append_db` takes a run's dump of bugs and adds the new ones to a
+`bug_db_manager/koine_append_db` takes a run's dump of bugs and adds the new ones to a
 database of every bug the tool has ever found. It never edits or removes what is
 already there. There is no package and no install step -- a customer pins a
 commit and clones it -- so this is the whole of the integration on our side.
 
-    python3 -m anoieu.reporting.koine DUMP DB --dry-run  # preview any producer's dump
-    python3 -m anoieu.reporting.koine DUMP DB            # append through koine
+    python3 -m anoieu_analyzer.reporting.koine DUMP DB --dry-run  # preview any producer's dump
+    python3 -m anoieu_analyzer.reporting.koine DUMP DB            # append through koine
 
 Three places are tried, in order, and the first that has the script wins:
 
@@ -20,13 +20,9 @@ Three places are tried, in order, and the first that has the script wins:
 what our record is checked by. The ecosystem's rule is that a pin only moves to
 a commit where the other project's CI is green.
 
-**The script moved on 2026-09-17**, from the root of a checkout to `bug_db/`,
-when koine gave each of its two purposes a directory of its own. The script
-itself did not change. A checkout from before the move is still koine and its
-script still works, but it is not the commit `koine.lock` names -- so `find`
-says so rather than passing over it for a clone without a word. Being passed
-over in silence is how a machine that develops both repositories stops testing
-the checkout it is editing.
+**The implementation moved to `bug_db_manager/` on 2026-09-18.** Koine removed
+the old `bug_db/` directory. We require the current implementation, so an older
+checkout is reported before falling back to the pin.
 """
 
 from __future__ import annotations
@@ -43,13 +39,14 @@ CLONE = os.path.join(ROOT, "deps", "koine")
 #: What we use, as paths inside a checkout. A directory without this is not
 #: koine, whatever it is called -- worth checking, because `../koine` is a guess
 #: about a layout.
-MODULES = (os.path.join("bug_db", "koine_append_db"),)
+MODULES = (os.path.join("bug_db_manager", "koine_append_db"),)
 
 #: Where that same script lived before the move. Read only to tell *koine, but
 #: older than our pin* apart from *not koine*: the root name still exists after
 #: the move, as a tombstone that exits rather than appending, so a checkout is
 #: from before the move only when it has one of these and none of MODULES.
-BEFORE_MOVE = ("koine_append_db", os.path.join("scripts", "koine_append_db"))
+BEFORE_MOVE = (os.path.join("bug_db", "koine_append_db"),
+               "koine_append_db", os.path.join("scripts", "koine_append_db"))
 
 
 def pinned() -> str:
@@ -95,14 +92,14 @@ def find(clone: bool = True) -> str:
     for candidate in candidates:
         if _is_before_move(candidate):
             print(f"-- {candidate} is koine from before koine_append_db moved "
-                  f"to {MODULES[0]} on 2026-09-17, so it is being passed over. "
+                  f"to {MODULES[0]} on 2026-09-18, so it is being passed over. "
                   "Pull that checkout, or point $KOINE at one at the commit in "
-                  "config/koine.lock.", file=sys.stderr)
+                  "anoieu_analyzer/reporting/config/koine.lock.", file=sys.stderr)
     if not clone:
         raise SystemExit(
             "koine is not on this machine. Set $KOINE, put a checkout at "
             f"{os.path.join(os.path.dirname(ROOT), 'koine')}, or let "
-            "anoieu/reporting/koine.py clone it into deps/koine"
+            "anoieu_analyzer/reporting/koine.py clone it into deps/koine"
         )
     return _clone()
 

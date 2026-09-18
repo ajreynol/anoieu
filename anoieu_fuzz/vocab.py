@@ -5,7 +5,7 @@ is a list of names it may write down, and a rough idea of where each one fits:
 `or` takes Bools, `str.++` takes sequences, `refl` is a rule with one argument
 and no premises. All of that is in the declarations themselves, and anoieu
 already reads those -- so this module is a projection of
-`anoieu.model.Signature` onto the handful of facts a generator uses, and
+`anoieu_analyzer.model.Signature` onto the handful of facts a generator uses, and
 nothing else. It is the only place anoieu-fuzz touches the analyzer, and it
 touches the front end rather than the checks.
 
@@ -171,7 +171,7 @@ def _sort_key(node, params: set[str]) -> str:
 
 def from_signature(sig, name: str = "") -> Vocabulary:
     """Project a loaded signature onto what a generator can use."""
-    from anoieu.shape import arrow_parts, strip_requires  # noqa: PLC0415
+    from anoieu_analyzer.shape import arrow_parts, strip_requires  # noqa: PLC0415
 
     voc = Vocabulary(name=name or os.path.basename(getattr(sig, "root", "") or "?"))
     voc.sorts = list(BUILTIN_SORTS)
@@ -228,7 +228,7 @@ def load(path: str | list[str], name: str = "") -> tuple[Vocabulary, str]:
     its own signature is somebody's finding rather than ours.
     """
     try:
-        from anoieu.loader import load as load_signature  # noqa: PLC0415
+        from anoieu_analyzer.loader import load as load_signature  # noqa: PLC0415
 
         res = load_signature(path)
     except Exception as e:  # the analyzer is a dependency, not an authority

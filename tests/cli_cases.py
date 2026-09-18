@@ -49,7 +49,7 @@ NIL_SUPPRESSED = """(declare-const Int Type)
 
 def run(*argv: str) -> tuple[int, str, str]:
     p = subprocess.run(
-        [sys.executable, "-m", "anoieu", *argv],
+        [sys.executable, "-m", "anoieu_analyzer", *argv],
         capture_output=True,
         text=True,
         cwd=ROOT,

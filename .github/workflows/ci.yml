@@ -23,7 +23,7 @@ jobs:
       - name: the required koine version
         id: koine
         run: |
-          python3 -c 'from anoieu.reporting import koine; print("commit=" + koine.pinned())' >> "$GITHUB_OUTPUT"
+          python3 -c 'from anoieu_analyzer.reporting import koine; print("commit=" + koine.pinned())' >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           repository: ajreynol/koine
@@ -32,10 +32,10 @@ jobs:
       - run: python3 tests/run.py
       - name: the check catalogue is current
         run: |
-          python3 -m anoieu.reporting.gen_checks_doc
+          python3 -m anoieu_analyzer.reporting.gen_checks_doc
           git diff --exit-code docs/checks.md
       - name: the bug database browsing view is current
-        run: python3 -m anoieu.reporting.database --check
+        run: python3 -m anoieu_analyzer.reporting.database --check
 
   # Report documentation currency without turning editorial judgement into a gate.
   documentation-up-to-date:
@@ -60,7 +60,7 @@ jobs:
   # The half that protects the repositories anoieu runs in: every signature we
   # can find is read, and CPC is checked against a baseline committed here, so a
   # change that invents a false positive fails *this* build rather than theirs.
-  # The sources are cloned by the run itself, from config/deps.json — shallow and
+  # The sources are cloned by the run itself, from anoieu_analyzer/reporting/config/deps.json — shallow and
   # sparse, and never built, because the analysis reads text.
   corpus:
     runs-on: ubuntu-latest
@@ -74,7 +74,7 @@ jobs:
       # not list, and never when the file lists something they no longer report.
       # Closing a finding is a judgement made by a review step, not by a diff —
       # see "How this file is maintained" in docs/reports/open-findings.md.
-      # --pinned restores the commits config/deps.lock records rather than each
+      # --pinned restores the commits anoieu_analyzer/reporting/config/deps.lock records rather than each
       # branch tip, so this job depends on nothing but this repository: it goes
       # red when a check changes what it reports, never because somebody
       # upstream pushed. Moving to the tips is the refresh job below.
@@ -84,14 +84,14 @@ jobs:
         run: python3 tests/sweep.py deps/cvc5/proofs/eo deps/ethos/tests
       - name: CPC reports what the baseline says it reports
         run: |
-          python3 -m anoieu check \
+          python3 -m anoieu_analyzer check \
             deps/cvc5/proofs/eo/cpc/Cpc.eo \
             deps/cvc5/proofs/eo/cpc/expert/CpcExpert.eo \
             --baseline tests/corpus/cpc-baseline.json \
             --deny-warnings
       - name: the CPC triple agrees with itself
         run: |
-          python3 -m anoieu check deps/cvc5/proofs/eo/cpc/Cpc.eo \
+          python3 -m anoieu_analyzer check deps/cvc5/proofs/eo/cpc/Cpc.eo \
             --semantics deps/logos/install/defs/Cpc.eos \
             --smt-semantics deps/ethos/tools/eoc/semantics/smt.eos \
             --embedding deps/ethos/plugins/model_smt/model_smt.eo \
@@ -106,13 +106,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      # Both oracle checkouts use the commits recorded in config/deps.lock.
+      # Both oracle checkouts use the commits recorded in anoieu_analyzer/reporting/config/deps.lock.
       - name: the commits the lock records
         id: lock
         run: |
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json
-          for name, v in json.load(open("config/deps.lock")).items():
+          for name, v in json.load(open("anoieu_analyzer/reporting/config/deps.lock")).items():
               if not name.startswith("_"):
                   print(f"{name}={v['commit']}")
           PY
@@ -216,7 +216,7 @@ jobs:
             docs/reports/corpus.md
             docs/reports/open-findings.md
             docs/reports/closed-findings.md
-            config/deps.lock
+            anoieu_analyzer/reporting/config/deps.lock
       - name: say whether upstream moved
         run: |
           if git diff --quiet; then

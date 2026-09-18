@@ -17,8 +17,8 @@ import traceback
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from anoieu.checks import Context, load_checks, run_all  # noqa: E402
-from anoieu.loader import load  # noqa: E402
+from anoieu_analyzer.checks import Context, load_checks, run_all  # noqa: E402
+from anoieu_analyzer.loader import load  # noqa: E402
 
 
 def files(paths: list[str]) -> list[str]:

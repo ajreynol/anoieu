@@ -37,6 +37,7 @@ from anoieu_fuzz.gen import (  # noqa: E402
 )
 from anoieu_fuzz.triage import Corpus, Finding, judge, shrink  # noqa: E402
 from anoieu_fuzz import report as reporting  # noqa: E402
+from anoieu_analyzer.reporting import koine  # noqa: E402
 
 # A checker that accepts anything whose parentheses balance. It stands for the
 # permissive side of a disagreement.
@@ -465,7 +466,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     case(
         "every promoted finding has a row in the ledger",
         not unlisted,
-        f"{len(unlisted)} unlisted; run python3 -m anoieu.reporting.gen_open_findings",
+        f"{len(unlisted)} unlisted; run python3 -m anoieu_analyzer.reporting.gen_open_findings",
     )
 
     if promoted:
@@ -544,7 +545,15 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     failing = os.path.join(d, "failing-koine")
     os.makedirs(os.path.join(failing, "bug_db"))
     write(os.path.join(failing, "bug_db"), "koine_append_db",
+          "raise SystemExit('obsolete Koine path was invoked')\n")
+    case("an old Koine layout is recognized but cannot supply the writer",
+         koine._is_before_move(failing) and not koine._is_koine(failing))
+    os.makedirs(os.path.join(failing, "bug_db_manager"))
+    write(os.path.join(failing, "bug_db_manager"), "koine_append_db",
           "import sys\nprint('koine refused', file=sys.stderr)\nsys.exit(17)\n")
+    case("the current manager takes precedence over an obsolete Koine path",
+         koine._is_koine(failing) and not koine._is_before_move(failing)
+         and koine.script_in(failing) == os.path.join(failing, "bug_db_manager", "koine_append_db"))
     rc, o, e = run_reporting(d, "report", "--corpus", corpus_dir, koine_root=failing)
     case("a koine failure fails reporting without a fallback or success output",
          rc == 17 and not o and "koine refused" in e and open(db).read() == before, e)
@@ -596,7 +605,7 @@ else:
 sys.argv = [script, *sys.argv[3:]]
 raise SystemExit(main())
 """
-    for script in ("anoieu.reporting.gen_open_findings", "scripts/anoieu_analyzer"):
+    for script in ("anoieu_analyzer.reporting.gen_open_findings", "scripts/anoieu_analyzer"):
         with open(os.path.join(d, "open.md"), "w") as fh:
             fh.write("unchanged ledger\n")
         env = dict(os.environ, KOINE=failing)
@@ -607,7 +616,7 @@ raise SystemExit(main())
              and open(os.path.join(d, "open.md")).read() == "unchanged ledger\n"
              and not os.path.exists(os.path.join(d, "static.md")), p.stderr)
     p = subprocess.run([sys.executable, "-c", program,
-                        "anoieu.reporting.gen_open_findings", d],
+                        "anoieu_analyzer.reporting.gen_open_findings", d],
                        capture_output=True, text=True, cwd=ROOT)
     case("ledger generation records through koine and refreshes the static table",
          p.returncode == 0 and "1 new bug(s)" in p.stdout
@@ -615,7 +624,7 @@ raise SystemExit(main())
          and '0123456789abcdef' in open(os.path.join(d, "open.md")).read(), p.stderr)
     static_db = open(os.path.join(d, "static-bugs.json")).read()
     p = subprocess.run([sys.executable, "-c", program,
-                        "anoieu.reporting.gen_open_findings", d, "--check"],
+                        "anoieu_analyzer.reporting.gen_open_findings", d, "--check"],
                        capture_output=True, text=True, cwd=ROOT)
     case("ledger checking previews through koine without writing the database",
          p.returncode == 0 and "dry run" in p.stdout

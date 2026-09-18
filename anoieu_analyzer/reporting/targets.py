@@ -2,10 +2,10 @@
 
 Two files, and the split between them is the point:
 
-* `config/targets.json` is **committed**. Which files are worth
+* `anoieu_analyzer/reporting/config/targets.json` is **committed**. Which files are worth
   analysing -- `Cpc.eo`, ethos's test signatures -- is a claim about the
   ecosystem, and one anybody can check.
-* `config/repos.local` is **gitignored**. A path under somebody's home
+* `anoieu_analyzer/reporting/config/repos.local` is **gitignored**. A path under somebody's home
   directory is not a claim anybody else can check, and a report about *the
   version on my laptop* is a report about nothing -- which is why `deps/` exists
   and is what a run falls back to.
@@ -75,7 +75,7 @@ def roots() -> tuple[dict, str]:
                 local[name] = os.path.expanduser(where.strip())
         found = {n: p for n, p in local.items() if os.path.isdir(p)}
         if found:
-            return {**DEFAULT_ROOTS, **found}, "config/repos.local"
+            return {**DEFAULT_ROOTS, **found}, "anoieu_analyzer/reporting/config/repos.local"
     return dict(DEFAULT_ROOTS), "deps/"
 
 

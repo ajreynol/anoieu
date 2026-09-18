@@ -6,7 +6,7 @@ of a rule that no proof has used yet, or about the right-hand side of a program
 case no proof has reached, so a signature can carry a rule that cannot be
 applied and a case that cannot be evaluated, indefinitely.
 
-These checks ask. They ask shallowly -- see `anoieu/typing.py` -- and say
+These checks ask. They ask shallowly -- see `anoieu_analyzer/typing.py` -- and say
 nothing wherever the answer is not readable off the declarations.
 """
 

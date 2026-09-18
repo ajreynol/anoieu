@@ -1,6 +1,6 @@
 # Bug database
 
-Generated from [bugs.json](bugs.json) by `anoieu.reporting.database`.
+Generated from [bugs.json](bugs.json) by `anoieu_analyzer.reporting.database`.
 Do not edit this view by hand. [Update instructions](README.md).
 
 This is the history of recorded findings, including resolved ones; it does

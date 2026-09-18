@@ -11,7 +11,7 @@ accepted.
 Python 3.10 or later, no dependencies. From a checkout:
 
 ```bash
-python3 -m anoieu <command>          # run in place
+python3 -m anoieu_analyzer <command>          # run in place
 pip install -e .                     # or install, which gives you `anoieu`
 ```
 
@@ -22,8 +22,8 @@ Both spellings are the same program; the examples below use the first.
 Point the analyzer at your own Eunoia signatures and semantic configuration
 files. For the projects included in anoieu's reports, the corpus runner fetches
 and pins the source files it measures using
-[`config/deps.json`](../config/deps.json) and
-[`config/deps.lock`](../config/deps.lock). See
+[`anoieu_analyzer/reporting/config/deps.json`](../anoieu_analyzer/reporting/config/deps.json) and
+[`anoieu_analyzer/reporting/config/deps.lock`](../anoieu_analyzer/reporting/config/deps.lock). See
 [maintaining the report](reports/reporting-workflow.md#maintaining-the-report)
 and [a finding is about `main`](maintenance.md#a-finding-is-about-main).
 
@@ -56,9 +56,9 @@ read under two entry points is read once, and a finding reported twice is
 reported once:
 
 ```bash
-python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo
-python3 -m anoieu check <cvc5>/proofs/eo/cpc/{Cpc.eo,expert/CpcExpert.eo}
-python3 -m anoieu check          # the entry points a nearby anoieu.json names
+python3 -m anoieu_analyzer check <cvc5>/proofs/eo/cpc/Cpc.eo
+python3 -m anoieu_analyzer check <cvc5>/proofs/eo/cpc/{Cpc.eo,expert/CpcExpert.eo}
+python3 -m anoieu_analyzer check          # the entry points a nearby anoieu.json names
 ```
 
 Three things follow from that.
@@ -81,7 +81,7 @@ was given the legs it needs and says nothing otherwise, so a run with one leg
 answers what one leg can answer:
 
 ```bash
-python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo \
+python3 -m anoieu_analyzer check <cvc5>/proofs/eo/cpc/Cpc.eo \
   --semantics <logos>/install/defs/Cpc.eos \
   --smt-semantics <ethos>/tools/eoc/semantics/smt.eos \
   --embedding <ethos>/plugins/model_smt/model_smt.eo
@@ -92,7 +92,7 @@ python3 -m anoieu check <cvc5>/proofs/eo/cpc/Cpc.eo \
 ### `check` — the one you will use
 
 ```bash
-python3 -m anoieu check FILE [options]
+python3 -m anoieu_analyzer check FILE [options]
 ```
 
 Reads the signature, runs every check that is on, and prints what it found.
@@ -122,18 +122,18 @@ warning under `--deny-warnings`), **2** the command itself was wrong.
 ### `explain` — the manual page of a check
 
 ```bash
-python3 -m anoieu explain EO0041
+python3 -m anoieu_analyzer explain EO0041
 ```
 
 Prints what the check says, why it is a check, what ethos does with the same
 file, and how to fix it. The page is written beside the check in the source, so
 the two cannot drift, and `docs/checks.md` is the whole set rendered by
-`anoieu/reporting/gen_checks_doc.py`.
+`anoieu_analyzer/reporting/gen_checks_doc.py`.
 
 ### `list-checks` — the inventory
 
 ```bash
-python3 -m anoieu list-checks
+python3 -m anoieu_analyzer list-checks
 ```
 
 Every code, one line each, marked when it is off by default.
@@ -141,8 +141,8 @@ Every code, one line each, marked when it is off by default.
 ### `desugar` — what the parser builds
 
 ```bash
-python3 -m anoieu desugar Cpc.eo --term '(or a b c)' --curried
-python3 -m anoieu desugar Cpc.eo --term '(or x xs)' --params '((x Bool) (xs Bool :list))'
+python3 -m anoieu_analyzer desugar Cpc.eo --term '(or a b c)' --curried
+python3 -m anoieu_analyzer desugar Cpc.eo --term '(or x xs)' --params '((x Bool) (xs Bool :list))'
 ```
 
 ```text
@@ -162,7 +162,7 @@ parameter list to be read under, which is what a `:list` annotation needs;
 ### `symbol` — one symbol, and everything a run knows about it
 
 ```bash
-python3 -m anoieu symbol str.++ Cpc.eo
+python3 -m anoieu_analyzer symbol str.++ Cpc.eo
 ```
 
 ```text
@@ -182,7 +182,7 @@ python3 -m anoieu symbol str.++ Cpc.eo
 ### `stats` — what a signature holds
 
 ```bash
-python3 -m anoieu stats <cvc5>/proofs/eo/cpc/Cpc.eo
+python3 -m anoieu_analyzer stats <cvc5>/proofs/eo/cpc/Cpc.eo
 ```
 
 ```text
@@ -289,8 +289,8 @@ Raise them in `anoieu.json` where the volume is real:
 ## In a pipeline
 
 ```bash
-python3 -m anoieu check Cpc.eo --format github     # annotations in GitHub Actions
-python3 -m anoieu check Cpc.eo --format json | jq '.[] | select(.severity=="error")'
+python3 -m anoieu_analyzer check Cpc.eo --format github     # annotations in GitHub Actions
+python3 -m anoieu_analyzer check Cpc.eo --format json | jq '.[] | select(.severity=="error")'
 ```
 
 The JSON is a flat list, one object per finding, with `code`, `severity`,
@@ -306,8 +306,8 @@ ETHOS=<ethos>/build/src/ethos \
 ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle --record   # ... and re-record it after a change
 python3 tests/sweep.py <dir>...            # run over a corpus: crashes and counts
-python3 -m anoieu.reporting.gen_checks_doc            # rewrite docs/checks.md from the registry
-python3 -m anoieu.reporting.landing --check           # did what we closed on a promise land?
+python3 -m anoieu_analyzer.reporting.gen_checks_doc            # rewrite docs/checks.md from the registry
+python3 -m anoieu_analyzer.reporting.landing --check           # did what we closed on a promise land?
 ETHOS=<ethos>/build/src/ethos \
   python3 tests/oracle_desugar.py          # the desugarer against ethos, case by case
 ```
@@ -341,9 +341,9 @@ def my_check(ctx: Context) -> Iterator[Diagnostic]:
 ```
 
 `ctx.signature` is the whole include closure: `decls`, `programs`, `rules`,
-`defines`, `literals`, and the indexes over them. `anoieu/resolve.py` is how you
+`defines`, `literals`, and the indexes over them. `anoieu_analyzer/resolve.py` is how you
 get from a name to what it means -- it follows `define` aliases and knows the
-builtin signature -- and `anoieu/typing.py` answers what type a term has where
+builtin signature -- and `anoieu_analyzer/typing.py` answers what type a term has where
 its head settles it, or `None`, which is the answer to respect.
 
 Then write `tests/witnesses/EO0099-bad.eo` with a `; expect: EO0099` line, and a

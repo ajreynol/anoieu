@@ -416,8 +416,8 @@ Error: Type checking failed: Checking application of and
 
   <section>
     <h2>Reproducing this</h2>
-    <pre><code>python3 -m anoieu check &lt;cvc5&gt;/proofs/eo/cpc/Cpc.eo
-python3 -m anoieu check &lt;cvc5&gt;/proofs/eo/cpc/expert/CpcExpert.eo
+    <pre><code>python3 -m anoieu_analyzer check &lt;cvc5&gt;/proofs/eo/cpc/Cpc.eo
+python3 -m anoieu_analyzer check &lt;cvc5&gt;/proofs/eo/cpc/expert/CpcExpert.eo
 python3 tests/sweep.py &lt;ethos&gt;/tests &lt;logos&gt;/install/defs &lt;eudaimonia&gt;/examples
 ETHOS=&lt;ethos&gt;/build/src/ethos python3 tests/run.py --oracle</code></pre>
     <p>The last command is the one that says whether a finding is news: it runs ethos over every
