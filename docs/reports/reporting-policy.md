@@ -1,4 +1,25 @@
-# Reporting on code you do not own
+# Reporting on code you do not own (DEPRECATED)
+
+> [!WARNING]
+> **DEPRECATED for anoieu as of 2026-09-18. Do not adopt this as the current
+> reporting policy.** This document is retained as historical reference.
+> It is due to be replaced by a formal reporting policy using
+> [Koine's shared tooling](https://github.com/ajreynol/koine).
+> **The replacement and migration are pending.** The
+> [reporting workflow](reporting-workflow.md) is deprecated alongside it.
+
+Anoieu already records analyzer and promoted fuzzer findings through Koine's
+`bug_db/koine_append_db` in [`bugs.json`](bugs.json). That integration does not
+yet replace the reporting lifecycle: triage, verdicts and closure evidence still
+live in the existing findings ledgers. Continue using the existing commands and
+preserve those records while the replacement is developed. See the
+[replacement work](../maintenance.md#replace-the-deprecated-reporting-policy)
+for the scope of the migration.
+
+The text below describes the former policy, including its claims about shared
+adoption and enforcement; it is not a statement of current authority.
+
+## Historical policy
 
 The shared position of [anoieu](https://github.com/ajreynol/anoieu) and
 [dokimasia](https://github.com/ajreynol/dokimasia). The tools have nothing in

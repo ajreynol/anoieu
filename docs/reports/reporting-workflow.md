@@ -1,4 +1,16 @@
-# Reporting policy
+# Reporting workflow (DEPRECATED)
+
+> [!WARNING]
+> **DEPRECATED for anoieu as of 2026-09-18.** This is the legacy workflow for
+> the [deprecated reporting policy](reporting-policy.md). Do not adopt it as a
+> new reporting standard. A formal replacement using
+> [Koine's shared tooling](https://github.com/ajreynol/koine) is planned;
+> **migration is pending**. See the
+> [replacement work](../maintenance.md#replace-the-deprecated-reporting-policy).
+
+The conventions and prompts below remain here to document the existing commands
+and records during the transition. Preserve finding ids, verdicts and evidence;
+deprecation does not close findings or migrate the ledgers into Koine.
 
 How a finding is handled from the moment a check reports it: the record it
 goes into, the conventions that govern that record, the workflow for carrying it

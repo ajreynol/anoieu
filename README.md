@@ -112,6 +112,13 @@ append fails the command. See [recording through koine](docs/fuzzing.md#recordin
 
 ## Findings and reports
 
+> [!WARNING]
+> **The [reporting policy](docs/reports/reporting-policy.md) and
+> [workflow](docs/reports/reporting-workflow.md) are DEPRECATED (2026-09-18).**
+> A formal replacement using Koine's shared tooling is planned; migration is
+> pending. Existing commands and findings records remain in use. See the
+> [replacement work](docs/maintenance.md#replace-the-deprecated-reporting-policy).
+
 The [report register](docs/reports/reports.md) records what anoieu is asking of
 each project, the evidence, and the response. The
 [open findings](docs/reports/open-findings.md) list current reports; the
@@ -126,7 +133,7 @@ somebody has ruled on is still in it — so the open findings remain the report,
 and the database remains the record of what was found.
 
 A reply is triage. A finding closes when the relevant artifact establishes what
-happened. The [reporting workflow](docs/reports/reporting-workflow.md) explains
+happened. The [legacy reporting workflow](docs/reports/reporting-workflow.md) explains
 how to reproduce, answer and resolve findings, and how to run the analyzer in
 another project's CI.
 
@@ -202,5 +209,6 @@ entered the public history of this repository except by a person executing it,
 so a human intention stands behind every one — which is the fact anything
 reading this history needs in order to interpret it, and it is stated here
 because it will not stay true by accident. **If that changes, this paragraph
-changes with it**, and the change is announced rather than discovered. [`docs/reports/reporting-policy.md`](docs/reports/reporting-policy.md) says what that does and does
-not cover, and why the intended audience is experts.
+changes with it**, and the change is announced rather than discovered. The
+[deprecated reporting policy](docs/reports/reporting-policy.md) preserves the
+historical discussion of that scope and the intended expert audience.

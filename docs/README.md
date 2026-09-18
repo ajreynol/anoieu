@@ -8,9 +8,8 @@ documents. Each entry points to the page that owns its subject.
 | document | its job |
 | --- | --- |
 | [`reports.md`](reports/reports.md) | **what anoieu has to say about other people's code**: what it is asking of each project, how each finding was confirmed, and what came back when it was filed |
-| [`reporting-policy.md`](reports/reporting-policy.md) | **what may be published about somebody else's code, and what may be taken from it.** The position anoieu shares with [dokimasia](https://github.com/ajreynol/dokimasia) — fourteen of them, each saying whether it is enforced, structural, or an intention nothing but our record backs |
-| [`reporting-workflow.md`](reports/reporting-workflow.md) | **how a finding is handled**: the conventions governing the record, the workflow and prompts for carrying one to whoever can fix it, and for
-sweeping the whole report, and what it takes for another repository to run these checks in its own CI |
+| [`reporting-policy.md`](reports/reporting-policy.md) | **DEPRECATED (2026-09-18).** Historical publishing policy; a formal replacement using Koine's shared tooling is pending. See the [replacement work](maintenance.md#replace-the-deprecated-reporting-policy). |
+| [`reporting-workflow.md`](reports/reporting-workflow.md) | **DEPRECATED (2026-09-18).** Legacy conventions and prompts retained for the existing commands and records while the Koine-based replacement is developed. |
 | [`usage.md`](usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together. For work on this repository, start at [`maintenance.md`](maintenance.md) |
 | [`policy-checker.md`](policy-checker.md) | **the stable policy-checker contract** — latest implementation, versioned requirements and severities, the shared CI workflow, and the migration from consumer commit pins |
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor nobody has started |
@@ -51,7 +50,7 @@ responsibilities, retained commands, required checks, and open technical work.
 The [script catalogue](maintenance.md#the-scripts) lists the commands in
 [`../scripts/`](../scripts) and the findings prompts in
 [`../prompts/`](../prompts). The
-[reporting workflow](reports/reporting-workflow.md#the-workflow) defines those
+[legacy reporting workflow](reports/reporting-workflow.md#the-workflow) defines those
 prompts, and `tests/run.py` checks their executable copies against it.
 
 [`discussion.md`](discussion.md) is anoieu's correspondence with the ecosystem
