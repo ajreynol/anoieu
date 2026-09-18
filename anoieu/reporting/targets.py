@@ -2,10 +2,10 @@
 
 Two files, and the split between them is the point:
 
-* [`targets.json`](targets.json) is **committed**. Which files are worth
+* `config/targets.json` is **committed**. Which files are worth
   analysing -- `Cpc.eo`, ethos's test signatures -- is a claim about the
   ecosystem, and one anybody can check.
-* [`repos.local`](repos.local) is **gitignored**. A path under somebody's home
+* `config/repos.local` is **gitignored**. A path under somebody's home
   directory is not a claim anybody else can check, and a report about *the
   version on my laptop* is a report about nothing -- which is why `deps/` exists
   and is what a run falls back to.
@@ -23,12 +23,9 @@ import os
 import subprocess
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-CONFIG = os.path.join(HERE, "targets.json")
-LOCAL = os.path.join(HERE, "repos.local")
-
-sys.path.insert(0, HERE)
+from . import ROOT, CONFIG_DIR
+CONFIG = os.path.join(CONFIG_DIR, "targets.json")
+LOCAL = os.path.join(CONFIG_DIR, "repos.local")
 
 
 def load(path: str = CONFIG) -> list[dict]:
@@ -65,7 +62,7 @@ def as_tuples(spec: list[dict]) -> list[tuple]:
 
 def roots() -> tuple[dict, str]:
     """Where each project is, and what said so."""
-    from gen_corpus_table import DEFAULT_ROOTS  # noqa: PLC0415
+    from .gen_corpus_table import DEFAULT_ROOTS  # noqa: PLC0415
 
     if os.path.isfile(LOCAL):
         local = {}
@@ -78,7 +75,7 @@ def roots() -> tuple[dict, str]:
                 local[name] = os.path.expanduser(where.strip())
         found = {n: p for n, p in local.items() if os.path.isdir(p)}
         if found:
-            return {**DEFAULT_ROOTS, **found}, "scripts/repos.local"
+            return {**DEFAULT_ROOTS, **found}, "config/repos.local"
     return dict(DEFAULT_ROOTS), "deps/"
 
 
@@ -99,7 +96,7 @@ def describe(spec: list[dict]) -> list[str]:
     that reads nothing and a run that finds nothing print the same *0 bug(s)*, so
     this is what tells the two apart before either happens.
     """
-    from gen_corpus_table import not_audited, signatures  # noqa: PLC0415
+    from .gen_corpus_table import not_audited, signatures  # noqa: PLC0415
 
     where, said = roots()
     out = [f"paths from {said}"]

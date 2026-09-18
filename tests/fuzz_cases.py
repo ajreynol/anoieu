@@ -465,7 +465,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     case(
         "every promoted finding has a row in the ledger",
         not unlisted,
-        f"{len(unlisted)} unlisted; run scripts/gen_open_findings.py",
+        f"{len(unlisted)} unlisted; run python3 -m anoieu.reporting.gen_open_findings",
     )
 
     if promoted:
@@ -530,6 +530,9 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     rc, o, e = run_reporting(d, "report", "--corpus", corpus_dir)
     case("ordinary report records findings through koine",
          rc == 0 and "1 new bug(s)" in e and os.path.isfile(db), e)
+    case("fuzzer reporting refreshes its GitHub view",
+         "## Fuzzer" in open(os.path.join(d, "bugs.md")).read()
+         and got[0]["summary"] in open(os.path.join(d, "bugs.md")).read())
     before = open(db).read() if os.path.isfile(db) else ""
     for fmt in ("json", "sarif", "github"):
         rc, o, e = run_reporting(d, "report", "--format", fmt, "--corpus", corpus_dir)
@@ -578,7 +581,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     # that refuses the append; it implements no database behavior.
     program = """import os, runpy, sys
 script, directory = sys.argv[1:3]
-main = runpy.run_path(script)['main']
+main = (runpy.run_path(script) if script.startswith('scripts/') else runpy.run_module(script))['main']
 g = main.__globals__
 for key, name in [('DB', 'static-bugs.json'), ('DUMP', 'static-dump.json'),
                   ('OUT', 'open.md'), ('LEDGER', 'closed.md'),
@@ -593,7 +596,7 @@ else:
 sys.argv = [script, *sys.argv[3:]]
 raise SystemExit(main())
 """
-    for script in ("scripts/gen_open_findings.py", "scripts/anoieu_analyzer"):
+    for script in ("anoieu.reporting.gen_open_findings", "scripts/anoieu_analyzer"):
         with open(os.path.join(d, "open.md"), "w") as fh:
             fh.write("unchanged ledger\n")
         env = dict(os.environ, KOINE=failing)
@@ -604,7 +607,7 @@ raise SystemExit(main())
              and open(os.path.join(d, "open.md")).read() == "unchanged ledger\n"
              and not os.path.exists(os.path.join(d, "static.md")), p.stderr)
     p = subprocess.run([sys.executable, "-c", program,
-                        "scripts/gen_open_findings.py", d],
+                        "anoieu.reporting.gen_open_findings", d],
                        capture_output=True, text=True, cwd=ROOT)
     case("ledger generation records through koine and refreshes the static table",
          p.returncode == 0 and "1 new bug(s)" in p.stdout
@@ -612,7 +615,7 @@ raise SystemExit(main())
          and '0123456789abcdef' in open(os.path.join(d, "open.md")).read(), p.stderr)
     static_db = open(os.path.join(d, "static-bugs.json")).read()
     p = subprocess.run([sys.executable, "-c", program,
-                        "scripts/gen_open_findings.py", d, "--check"],
+                        "anoieu.reporting.gen_open_findings", d, "--check"],
                        capture_output=True, text=True, cwd=ROOT)
     case("ledger checking previews through koine without writing the database",
          p.returncode == 0 and "dry run" in p.stdout
@@ -635,9 +638,9 @@ raise SystemExit(main())
         ROOT, "tests", "witnesses", "EO0031-bad.eo")).read())
     combined_db = os.path.join(update_dir, "bugs.json")
     combined_page = os.path.join(update_dir, "static.md")
+    combined_view = os.path.join(update_dir, "bugs.md")
     combined_dump = os.path.join(update_dir, "dump.json")
     update_program = """import os, runpy, sys
-sys.path.insert(0, os.path.join(os.getcwd(), 'scripts'))
 main = runpy.run_path('scripts/update_bug_db.py')['main']
 g = main.__globals__
 directory, corpus = sys.argv[1:3]
@@ -668,7 +671,8 @@ raise SystemExit(main(sys.argv[3:]))
     p = update("--preview")
     case("combined preview scans both sources without writing the database or table",
          p.returncode == 0 and "dry run" in p.stdout and os.path.isfile(combined_dump)
-         and not os.path.exists(combined_db) and not os.path.exists(combined_page), p.stderr)
+         and not os.path.exists(combined_db) and not os.path.exists(combined_page)
+         and not os.path.exists(combined_view), p.stderr)
     p = update()
     combined = json.load(open(combined_db))["bugs"] if os.path.isfile(combined_db) else []
     case("one update records actual static and fuzzer findings in the same database",
@@ -681,10 +685,15 @@ raise SystemExit(main(sys.argv[3:]))
          p.returncode == 0 and json.load(open(combined_db))["bugs"] == combined, p.stderr)
     saved_db = open(combined_db).read()
     saved_page = open(combined_page).read()
+    saved_view = open(combined_view).read()
+    case("the combined update refreshes the GitHub view for both producers",
+         all(b["id"] in saved_view for b in combined)
+         and "## Static analyzer" in saved_view and "## Fuzzer" in saved_view)
     p = update(koine_root=failing)
     case("a refused combined append preserves the database and rendered table",
          p.returncode == 17 and open(combined_db).read() == saved_db
-         and open(combined_page).read() == saved_page, p.stderr)
+         and open(combined_page).read() == saved_page
+         and open(combined_view).read() == saved_view, p.stderr)
     os.rename(witness, witness + ".missing")
     p = update()
     case("a missing static input fails before changing the shared artifact",

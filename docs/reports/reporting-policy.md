@@ -129,7 +129,7 @@ withdrawn when it misfires.
 the version it was measured at; a number carries whatever regenerates it. Not a
 virtue but a testable property — a report about "the version on my laptop" is a
 report about nothing, and a row nobody can re-measure cannot be argued with.
-`scripts/deps.lock` records the commits, and a CI job re-measures them and fails
+`config/deps.lock` records the commits, and a CI job re-measures them and fails
 when the report is no longer current for the versions it names. Argument is
 exempt, being checkable by reading it; quantities are not.
 

@@ -24,8 +24,6 @@ import collections
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from anoieu.checks import Context, load_checks, run_all  # noqa: E402
 from anoieu.cli import _embedding_vocabulary  # noqa: E402
@@ -33,7 +31,7 @@ from anoieu.diagnostics import Severity  # noqa: E402
 from anoieu.loader import load  # noqa: E402
 from anoieu.semantics import load_set  # noqa: E402
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from . import ROOT
 
 # Each target: a label, the signatures of one profile, and optionally the other
 # legs of a triple. Paths are relative to a repository root named below.
@@ -85,8 +83,8 @@ def not_audited(repo: str, root: str) -> set:
 
 
 # Where the sources live: clones this project manages, never a checkout somebody
-# else owns. See scripts/deps.py.
-from deps import roots as _dep_roots  # noqa: E402
+# else owns. See anoieu/reporting/deps.py.
+from .deps import roots as _dep_roots  # noqa: E402
 
 DEFAULT_ROOTS = _dep_roots()
 

@@ -5,7 +5,7 @@ Robustness first: a front end that reads the wild corpus without falling over is
 what M0 is for. The counts are the second thing this says, and they are the
 input to tuning a check's severity.
 
-    python3 scripts/sweep.py <dir-or-file>...
+    python3 tests/sweep.py <dir-or-file>...
 """
 
 from __future__ import annotations

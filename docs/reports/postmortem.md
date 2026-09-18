@@ -116,7 +116,7 @@ row confidently instead of hedging.
 **What changed most recently.** A merge is no longer what closes a row — a
 maintainer's acceptance and a commit on a named branch are, and whether the
 change reached anybody's default branch is now a separate pass,
-`scripts/landing.py`, asked of the commit rather than of the person. The loop got
+`anoieu/reporting/landing.py`, asked of the commit rather than of the person. The loop got
 faster and took on a debt to do it; the debt is the seven rows that pass
 currently answers *not yet* for.
 
@@ -288,7 +288,7 @@ three cvc5 rows closed as *fixed upstream* on a fix that never landed, unnoticed
 for three months because a closed id is one nothing re-derives — adopted on
 purpose. So it is booked rather than assumed away. A row closed before its change
 has landed ends its verdict with `awaiting landing: <project> <branch> <commit>`;
-[`scripts/landing.py`](../../scripts/landing.py) reads those back and asks each
+[`anoieu/reporting/landing.py`](../../anoieu/reporting/landing.py) reads those back and asks each
 project's checkout whether the commit has reached its default branch; and
 `tests/run.py` fails if a verdict is reworded into a marker the audit cannot
 parse, which is the only way a row could leave the audit while still owing it.

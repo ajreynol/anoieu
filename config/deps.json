@@ -1,7 +1,7 @@
 {
   "_comment": [
     "The projects a report is generated from. Each is cloned into deps/ by",
-    "scripts/deps.py, shallow and sparse: only the paths named below are checked",
+    "anoieu/reporting/deps.py, shallow and sparse: only the paths named below are checked",
     "out, and no history is fetched, because the analysis reads text and never",
     "builds anything.",
     "",

@@ -22,8 +22,8 @@ Both spellings are the same program; the examples below use the first.
 Point the analyzer at your own Eunoia signatures and semantic configuration
 files. For the projects included in anoieu's reports, the corpus runner fetches
 and pins the source files it measures using
-[`scripts/deps.json`](../scripts/deps.json) and
-[`scripts/deps.lock`](../scripts/deps.lock). See
+[`config/deps.json`](../config/deps.json) and
+[`config/deps.lock`](../config/deps.lock). See
 [maintaining the report](reports/reporting-workflow.md#maintaining-the-report)
 and [a finding is about `main`](maintenance.md#a-finding-is-about-main).
 
@@ -128,7 +128,7 @@ python3 -m anoieu explain EO0041
 Prints what the check says, why it is a check, what ethos does with the same
 file, and how to fix it. The page is written beside the check in the source, so
 the two cannot drift, and `docs/checks.md` is the whole set rendered by
-`scripts/gen_checks_doc.py`.
+`anoieu/reporting/gen_checks_doc.py`.
 
 ### `list-checks` — the inventory
 
@@ -305,11 +305,11 @@ ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle            # ... and assert what ethos says about each
 ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle --record   # ... and re-record it after a change
-python3 scripts/sweep.py <dir>...            # run over a corpus: crashes and counts
-python3 scripts/gen_checks_doc.py            # rewrite docs/checks.md from the registry
-python3 scripts/landing.py --check           # did what we closed on a promise land?
+python3 tests/sweep.py <dir>...            # run over a corpus: crashes and counts
+python3 -m anoieu.reporting.gen_checks_doc            # rewrite docs/checks.md from the registry
+python3 -m anoieu.reporting.landing --check           # did what we closed on a promise land?
 ETHOS=<ethos>/build/src/ethos \
-  python3 scripts/oracle_desugar.py          # the desugarer against ethos, case by case
+  python3 tests/oracle_desugar.py          # the desugarer against ethos, case by case
 ```
 
 `--oracle` compares what ethos says about each witness against

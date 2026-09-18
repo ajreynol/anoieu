@@ -7,7 +7,7 @@
 # 567c4a1 -- koine_append_db moved to bug_db/koine_append_db, when koine gave
 # each of its two purposes (bug databases, and the eo command) a directory of
 # its own. The script itself is byte-identical to the one at the earlier pin,
-# fc31e8d, so this moves a path and nothing else; scripts/koine.py moved with
+# fc31e8d, so this moves a path and nothing else; anoieu/reporting/koine.py moved with
 # it. koine's CI at this commit is test_append_db.py and test_install_eo_cmd.py,
 # and both pass.
 #

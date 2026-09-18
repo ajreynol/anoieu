@@ -8,7 +8,7 @@ Three steps, in order:
 1. **Sync.** Every project a report is about is cloned into `deps/` and updated
    from its remote — shallow, sparse, and managed by us. Nothing reads a
    checkout somebody else owns, so a report is a property of named commits
-   rather than of the machine it was generated on. `scripts/deps.json` says which
+   rather than of the machine it was generated on. `config/deps.json` says which
    projects, which refs, and which paths of each; changing a ref there changes
    what the report is a report of.
 2. **Measure.** `docs/reports/corpus.md`, rewritten whole: the commits that were read,
@@ -49,10 +49,9 @@ ROOT = os.path.dirname(HERE)
 CORPUS = os.path.join(ROOT, "docs", "reports", "corpus.md")
 
 sys.path.insert(0, ROOT)
-sys.path.insert(0, HERE)
 
-import deps as deps_mod  # noqa: E402
-import gen_corpus_table as corpus_mod  # noqa: E402
+from anoieu.reporting import deps as deps_mod  # noqa: E402
+from anoieu.reporting import gen_corpus_table as corpus_mod  # noqa: E402
 
 from anoieu import __version__  # noqa: E402
 
@@ -97,7 +96,7 @@ def render_corpus(synced: list, rows: list) -> str:
         "the commit this file is committed in, and is deliberately not written here:",
         "recording it would make the file stale the moment it was committed.",
         "",
-        "The clones are shallow and sparse: only the paths `scripts/deps.json` names",
+        "The clones are shallow and sparse: only the paths `config/deps.json` names",
         "are checked out, and nothing is built, because the analysis reads text.",
         "",
         corpus_mod.render(rows),
@@ -168,7 +167,7 @@ def main() -> int:
     item(f"{measured} of {len(rows)} corpora measured")
     written = [
         (CORPUS, "docs/reports/corpus.md", render_corpus(synced, rows)),
-        (deps_mod.LOCK, "scripts/deps.lock", deps_mod.render_lock(synced)),
+        (deps_mod.LOCK, "config/deps.lock", deps_mod.render_lock(synced)),
     ]
     for path, label, text in written:
         current = open(path).read() if os.path.isfile(path) else ""
@@ -191,10 +190,10 @@ def main() -> int:
         ("Appending anything new to the report", "gen_open_findings.py"),
     ):
         step(title)
-        cmd = [sys.executable, os.path.join(HERE, script)] + passthrough
+        cmd = [sys.executable, "-m", "anoieu.reporting." + script.removesuffix(".py")] + passthrough
         if args.check:
             cmd.append("--check")
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
         for line in (result.stdout + result.stderr).splitlines():
             item(line.lstrip("- ").strip())
         failures += 1 if result.returncode else 0
@@ -202,8 +201,8 @@ def main() -> int:
     if astray and args.check:
         print(
             f"error: could not restore {', '.join(astray)} at the commit "
-            "scripts/deps.lock records, so nothing below was measured against what "
-            "the report claims. Fix the pin or the ref in scripts/deps.json; "
+            "config/deps.lock records, so nothing below was measured against what "
+            "the report claims. Fix the pin or the ref in config/deps.json; "
             "running the generator here would only record the shortfall.",
             file=sys.stderr,
         )

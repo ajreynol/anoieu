@@ -9,8 +9,10 @@ This is anoieu's accountability record, not front-page attribution.
 
 ## Working on this tree
 
-Keep commands in `scripts/`, assistant launchers in `prompts/`, and evidence in
-`tests/`. List new documents in [the index](README.md) and new scripts below.
+Keep top-level human commands in `scripts/`, assistant launchers in `prompts/`,
+and analyzer/fuzzer evidence in `tests/`. Policy code and tests live together in
+`policy_check/`; reusable reporting code belongs in `anoieu/reporting/`.
+List new documents in [the index](README.md) and new scripts below.
 Keep generated reports under their generators: the open-findings ledger is
 additive, and the closed-findings ledger is hand-maintained and irreplaceable.
 The shared database artifact lives in [`bug_db/`](../bug_db/README.md), with
@@ -34,8 +36,9 @@ repository, say which one; otherwise handle the request here.
 ```bash
 python3 tests/run.py
 python3 scripts/policy_check.py
-python3 scripts/doc_currency.py --list
-python3 scripts/gen_checks_doc.py
+python3 -m policy_check.currency --list
+python3 -m anoieu.reporting.gen_checks_doc
+python3 -m anoieu.reporting.database --check
 git diff --exit-code docs/checks.md
 ```
 
@@ -43,158 +46,58 @@ The suite exercises the real koine append tool, resolved through `$KOINE`, the
 sibling checkout, or the pinned `deps/koine` clone. CI checks out the pin; a
 machine without koine must fetch it. No database implementation is mocked as a
 substitute. The suite needs no external checker unless `--oracle` is requested. If `deps/`
-exists, its checkouts are compared with `scripts/deps.lock`; a clean checkout
+exists, its checkouts are compared with `config/deps.lock`; a clean checkout
 skips those comparisons. Do not silently refresh somebody's working checkouts
 to make a test pass. Corpus CI restores the recorded commits with
 `python3 scripts/run.py --pinned --check`; the scheduled refresh measures tips.
 Oracle CI builds the pinned ethos commit and checks parser and fuzzer evidence.
 
-### The policy checker interface
+### Policy checking
 
-The supported interface is the latest anoieu implementation with a stable
-mechanical contract: `scripts/policy_check.py --policy-version 1 --root PATH`.
-Requirements, applicability and severity remain stable within that version;
-checker bug fixes are allowed. New obligations require a new contract while
-version 1 remains supported. The default stays 1. See the
-[compatibility contract and shared CI workflow](policy-checker.md), including
-the migration still needed in kanon's adoption instructions.
-
-`--version` identifies the checker implementation commit, not the contract or
-a governance document revision. Every run logs the implementation commit and
-contract. Checks are encoded and tested here; they do not fetch or interpret
-governance documents at runtime. The shared
-[policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) and
-[vision](https://github.com/ajreynol/kanon/blob/main/docs/vision.md) have a separate
-home. Vision is argued, never mechanically checked.
-
-**A membership need not be advertised, and `associate` is the footing for it.**
-The usual arrangement pairs a front-page declaration with a tree that backs it
-and refuses either alone. A repository with reason not to announce it — not
-published yet, one person's working tree, an arrangement it would oversell —
-writes `**Footing:** ` and the name `associate` on its own `docs/maintenance.md`
-instead, followed by what it holds itself to. That page is where this convention
-already puts what a repository declines to advertise, so the claim moves there
-rather than being dropped, and the checker skips the two declaration checks **by
-name** rather than passing them quietly.
-
-**An associate owes this ecosystem nothing.** The obligation on that page is
-self-imposed, so the checks run and what they find is read against the marker
-rather than against anything we are due — running them is reading its own claim
-back to it. Whose fault a number is is **not decided here**: the shared register
-knows each repository's footing and prints an associate's count as `tracked`
-rather than `failing`. This checker says which tree it is looking at, words its
-own summary the same way, and leaves the exit code alone — a checker that went
-green on a marker in the tree it is checking would hand every repository a way
-to pass by editing one line.
-
-**One thing is still asked of an associate, and it is not a debt.** The front
-page is the only thing a reader arriving at the repository has, since nothing
-about the arrangement is advertised anywhere else — so it carries a
-`How this repository is maintained` heading with something actually under it.
-That is the floor the footing needs in order to mean anything, and it asks for
-nothing the shared policy does not: its associate protocol already says that for
-a tree adopting none of this, the ask is still that one heading. A tree below it
-is reported like any other number found on an associate — as `tracked`, with
-nobody at fault.
-
-**Explaining the name is not part of the floor.** It is recommended for every
-repository and required of none, and a footing is not a reason to read that
-differently: an associate with no name section is told so as a minor finding,
-exactly as a member is, and neither is failed for it.
-
-A child project its parent's front page does not name records `unadvertised-child`
-in its own README; that claim is about the parent and is checked against it.
-
-**Link kanon at `main`, or not at all.** Kanon holds the governing documents,
-so what they say today is what binds this repository: a link into that tree
-goes to `main`. Never pin one to a commit — a pinned rule is a superseded copy
-of somebody else's live page, and keeping one here would make anoieu an archive
-of governance it does not hold. Where kanon has removed a page this record
-names, the record names it and does not link it. Pinning anoieu's *own* removed
-material is a different thing and is fine: this tree is ours to archive.
-
-Do not relax a check merely to make CI green; what a new one owes is below,
-under [adding a check](#adding-a-check-to-the-policy-checker). Keep downstream
-compatibility explicit: declarations may link either the current shared policy
-or its former anoieu location. Anoieu's owner and script-catalog checks read this page.
-
-## Adding a check to the policy checker
-
-The checker is the one program here that runs on other people's builds, so a
-check is not a change to this repository — it is a change to theirs. It lands
-permanently, it fires at moments nobody chose, and it is nearly never deleted.
-**And it is a change to a published contract**: a new obligation, or an existing
-one applied to more repositories, needs a new
-[policy version](policy-checker.md), never a bug fix. Four conditions before one
-goes in.
-
-**It is decidable without an opinion.** Where answering it needs judgement it
-belongs in the shared vision, which must never acquire a checker.
-
-**It has been run against a tree this repository did not write.** Every false
-positive so far was found by somebody else's repository and none by ours, which is
-not luck: this is the one tree shaped like the checker's assumptions. Run a new
-check against every checkout on the machine before it lands. A check that has only
-ever seen this tree has not been tested.
-
-**Its message names the fix.** A failure somebody has to interpret costs more than
-the defect it found, and they are reading it in a red build on a schedule that is
-not theirs.
-
-**It stays true without curation.** The expensive kind is the check whose *data*
-rots — a list of vendor names, a registry of tools, anything that has to be updated
-as the world changes rather than as the tree does. There is one of those already,
-`VENDORS`, and it is the check most likely to be wrong a year from now. Prefer a
-check whose only input is the repository in front of it.
-
-### Why this is a limit and not a ritual
-
-The failure mode is a set of checks large enough that keeping it honest is the
-work. Three things produce it, and each looks like diligence.
-
-**A check that fires wrongly costs more than it can ever save** — somebody else's
-afternoon, and the credibility of the whole set, because a maintainer who has been
-sent one spurious failure reads the next one differently, including the true ones.
-
-**Every check is a migration**, and *we do not pay it*. A repository that passes
-today and fails tomorrow does work it did not ask for at a moment it did not
-choose; the contract makes that survivable and does not make it free.
-
-**Checks accumulate and are almost never removed.** So the question at the point of
-adding one is not *is this true* but *will I defend this in a year, on somebody
-else's repository, when it fails inconveniently*. Anything short of yes belongs in
-the minor tier, which is what that tier is for.
-
-**And there is a stopping rule.** A check earns its place by finding something. The
-anchor check found three dead links on its first run. A check that has never fired
-on anything is either perfect or pointless, and the second is the way to bet.
-
-*This section is kanon's text, offered in their `D10` and taken.*
+The implementation, contract, adoption fixtures and maintenance guidance live
+in [`policy_check/`](../policy_check/README.md). Run its focused suite with
+`python3 -m policy_check.tests`; the full suite runs it too. The human command
+`python3 scripts/policy_check.py` forwards to that package.
 
 ## The scripts
 
 Commands are run from the repository root unless noted.
 
+`scripts/` contains only these top-level human commands. Implementation helpers
+live in `anoieu/reporting/`, policy responsibilities in `policy_check/`, and
+source configuration and pins in `config/`.
+
 | file in `scripts/` | purpose |
 | --- | --- |
-| `run.py` | fetch the corpus and generate reports; `--pinned --check` checks recorded commits |
-| `deps.py` | corpus checkout and lock helpers, imported by the runner |
-| `deps.json`, `deps.lock` | corpus sources and recorded commits |
-| `gen_checks_doc.py` | generate the check catalogue |
-| `gen_corpus_table.py` | measure and render the corpus, imported by the runner |
-| `gen_open_findings.py` | record findings through koine, add ledger rows and render the static table; `--check` previews through koine and reports missing rows |
-| `landing.py` | report changes awaiting landing, and read every closed verdict against [the verdict vocabulary](reports/reporting-workflow.md#the-verdict-vocabulary-and-why-it-is-closed); `--check` reads checkouts |
-| `anoieu_analyzer` | run every standard target, dump the bugs, append through koine; `--dry-run` lists signatures and analyses nothing, `--preview` runs the analysis and koine's dry run |
-| `update_bug_db.py` | check required inputs, analyse all static targets and record them with the promoted fuzzer corpus in `bug_db/bugs.json` through Koine; `--dry-run` checks setup, `--preview` previews the combined append |
-| `anoieu_fuzzer` | fuzz two checkers against each other: `anoieu_fuzzer ethos logos N`, where N is how many cases; `--dry-run` resolves the binaries and runs nothing. The full interface is `python3 -m anoieu_fuzz run` |
-| `targets.json`, `targets.py` | the standard targets, and where each project is on this machine |
-| `koine.py`, `koine.lock` | resolve the required [koine](https://github.com/ajreynol/koine), falling back to a clone at the pin; delegate its CLI unchanged to `bug_db/koine_append_db` |
-| `finding_id.py` | the id of one bug, computed the way the checks compute it |
-| `harvest_cpc_proofs` | collect real CPC proofs for the fuzzer |
-| `oracle_desugar.py` | compare desugaring against an ethos binary |
-| `sweep.py` | read every signature under the supplied paths |
-| `policy_check.py` | check this tree, or another tree with `--root PATH` |
-| `doc_currency.py` | report evidence of documentation currency without gating |
+| `anoieu_analyzer` | run static analysis and record findings through Koine |
+| `anoieu_fuzzer` | start a fuzzing campaign; accepts checker names and effort |
+| `update_bug_db.py` | refresh the shared database and GitHub view from both producers |
+| `run.py` | restore or refresh corpus sources and regenerate the legacy reports |
+| `policy_check.py` | check repository policy; stable launcher for `policy_check/` |
+| `harvest_cpc_proofs` | collect proof seeds for fuzzing from cvc5 benchmarks |
+
+Specialist maintenance commands run as modules from the repository root:
+
+| file | command | purpose |
+| --- | --- | --- |
+| `gen_checks_doc.py` | `python3 -m anoieu.reporting.gen_checks_doc` | regenerate the check catalogue |
+| `gen_open_findings.py` | `python3 -m anoieu.reporting.gen_open_findings` | update legacy findings ledgers and database views; `--check` previews |
+| `database.py` | `python3 -m anoieu.reporting.database` | render the GitHub view; `--check` detects staleness |
+| `landing.py` | `python3 -m anoieu.reporting.landing --check` | check the evidence for findings awaiting landing |
+| `finding_id.py` | `python3 -m anoieu.reporting.finding_id` | compute a finding id for agent-produced evidence |
+| `koine.py` | `python3 -m anoieu.reporting.koine DUMP DB` | pass a dump to the required Koine writer |
+| `currency.py` | `python3 -m policy_check.currency --list` | report documentation currency without gating |
+| `sweep.py` | `python3 tests/sweep.py PATH...` | exercise the analyzer on a tree of signatures |
+| `oracle_desugar.py` | `python3 tests/oracle_desugar.py` | compare desugaring with an ethos build |
+
+The `deps.py`, `targets.py` and `gen_corpus_table.py` modules in `anoieu/reporting/` supply
+checkout resolution, target selection and measurement to the commands above.
+In `config/`, `deps.json` and `deps.lock` name corpus sources and versions;
+`targets.json` defines analysis targets; `koine.lock` pins Koine.
+`bug_db/` holds the data artifact and its generated browsing view.
+The former `doc_currency.py` command moved to `policy_check/currency.py` on
+2026-09-18. Helpers now run as modules; the six human launchers above retain
+their command paths. The local checkout map moved to `config/repos.local`.
 
 | file in `prompts/` | purpose |
 | --- | --- |
@@ -202,14 +105,14 @@ Commands are run from the repository root unless noted.
 | `process_anoieu` | process the reply here; `--dry-run` resolves the checkout without starting an assistant |
 | `anoieu_analyzer_agent` | the second producer: an agent runs the same analysis over the same targets and writes a dump in the same shape; `--dry-run` lists the same signatures |
 
-`scripts/repos.local` is an optional, untracked per-machine checkout map used by
+`config/repos.local` is an optional, untracked per-machine checkout map used by
 the findings workflow. Explicit checkout paths also work. Set
 `ANOIEU_REPOS_FILE` to an absolute path to use a different map.
 
 ## A finding is about `main`
 
 Report defects against what a project ships, not a topic branch that can be
-deleted. The corpus refs are recorded in [deps.json](../scripts/deps.json).
+deleted. The corpus refs are recorded in [deps.json](../config/deps.json).
 Its existing ethos exception uses `ethosEoc3` for the compiler and semantics
 developed there; remove that exception when the shipped branch changes. Any
 new exception needs its reason recorded here. A branch containing a proposed
@@ -301,7 +204,7 @@ deduplication, conflict reporting, dates and database writes. If that interface
 needs a capability it lacks, propose the change to koine rather than implement
 a competing database path here.
 
-**For now we answer coverage on our own side.** `scripts/targets.json` says what
+**For now we answer coverage on our own side.** `config/targets.json` says what
 a full static run reads. `python3 -m anoieu_fuzz report` records the promoted
 reproducer corpus, with recorded outcomes and the same ids as the ledger;
 [the fuzzer guide](fuzzing.md#recording-through-koine) explains the command.

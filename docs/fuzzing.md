@@ -300,7 +300,7 @@ artefact — a mutated `include` pointing at a file that had never existed.
 ```bash
 python3 -m anoieu_fuzz replay  fuzz-findings/<bucket>/case.eo    # read it, confirm it
 python3 -m anoieu_fuzz promote fuzz-findings/<bucket> --owner ethos --note "..."
-python3 scripts/gen_open_findings.py                               # give it a row
+python3 -m anoieu.reporting.gen_open_findings                               # give it a row
 ```
 
 `promote` copies the reproducer into `tests/fuzz/` and records it through koine
@@ -332,8 +332,8 @@ stderr so JSON and SARIF remain readable on stdout.
 Both commands exit 0 only after koine succeeds, including for an empty corpus.
 If an append fails, promotion fails and retains the copied evidence and dump;
 fix the dependency or database problem and retry with `report` using the same
-`--corpus`. There is no local database fallback. `scripts/koine.py` locates the
-required tool through `$KOINE`, `../koine`, or a clone at `scripts/koine.lock`;
+`--corpus`. There is no local database fallback. `anoieu/reporting/koine.py` locates the
+required tool through `$KOINE`, `../koine`, or a clone at `config/koine.lock`;
 those are installation locations, not alternative backends. Run these reporting
 commands from an anoieu checkout, where the corpus, pin and database live.
 
@@ -442,7 +442,7 @@ refuses and logos accepts, and all three are the same fact about logos ignoring
 `include` or reading a term more loosely. One reproducer per *cause* is what the
 ledger is for; one per bucket would be filing the same thing three times.
 
-> **None of it is confirmed against the commits `scripts/deps.lock` records.** It
+> **None of it is confirmed against the commits `config/deps.lock` records.** It
 > was produced against the binaries on the machine the fuzzer was written on —
 > ethos 0.2.3 from a local build, logos from a local `lake build`. Re-run each
 > reproducer against a pinned build before it is carried anywhere; that is what

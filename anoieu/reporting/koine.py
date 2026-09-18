@@ -6,8 +6,8 @@ database of every bug the tool has ever found. It never edits or removes what is
 already there. There is no package and no install step -- a customer pins a
 commit and clones it -- so this is the whole of the integration on our side.
 
-    python3 scripts/koine.py DUMP DB --dry-run  # preview any producer's dump
-    python3 scripts/koine.py DUMP DB            # append through koine
+    python3 -m anoieu.reporting.koine DUMP DB --dry-run  # preview any producer's dump
+    python3 -m anoieu.reporting.koine DUMP DB            # append through koine
 
 Three places are tried, in order, and the first that has the script wins:
 
@@ -35,9 +35,8 @@ import os
 import subprocess
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-LOCK = os.path.join(HERE, "koine.lock")
+from . import ROOT, CONFIG_DIR
+LOCK = os.path.join(CONFIG_DIR, "koine.lock")
 URL = "https://github.com/ajreynol/koine.git"
 CLONE = os.path.join(ROOT, "deps", "koine")
 
@@ -98,12 +97,12 @@ def find(clone: bool = True) -> str:
             print(f"-- {candidate} is koine from before koine_append_db moved "
                   f"to {MODULES[0]} on 2026-09-17, so it is being passed over. "
                   "Pull that checkout, or point $KOINE at one at the commit in "
-                  "scripts/koine.lock.", file=sys.stderr)
+                  "config/koine.lock.", file=sys.stderr)
     if not clone:
         raise SystemExit(
             "koine is not on this machine. Set $KOINE, put a checkout at "
             f"{os.path.join(os.path.dirname(ROOT), 'koine')}, or let "
-            "scripts/koine.py clone it into deps/koine"
+            "anoieu/reporting/koine.py clone it into deps/koine"
         )
     return _clone()
 

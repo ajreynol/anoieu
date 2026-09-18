@@ -11,13 +11,14 @@ from __future__ import annotations
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from . import ROOT
+
 
 from anoieu.checks import REGISTRY, load_checks  # noqa: E402
 
 HEADER = """# The checks
 
-One page per check, rendered from the registry by `scripts/gen_checks_doc.py`;
+One page per check, rendered from the registry by `anoieu/reporting/gen_checks_doc.py`;
 each page is written beside the check it explains, so the two cannot drift.
 `anoieu explain <CODE>` prints the same text.
 
@@ -44,7 +45,7 @@ def main() -> int:
         if not chk.default_on:
             out.append("\n*Off by default; run with `--pedantic` or `--only " + code + "`.*")
         out.append("\n" + (chk.page or "(no manual page yet)") + "\n")
-    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "checks.md")
+    path = os.path.join(ROOT, "docs", "checks.md")
     with open(path, "w") as f:
         f.write("\n".join(out).rstrip() + "\n")
     print(f"-- wrote {os.path.relpath(path)} ({len(codes)} checks)")

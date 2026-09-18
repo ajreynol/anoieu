@@ -255,7 +255,7 @@ than theirs** is our sentence, and both of these are instances of it.
 **Use the latest anoieu implementation and select a stable policy contract.**
 The interface is implemented in this working tree, including a shared CI
 workflow, but is not yet published on `main`. The
-[checker contract](policy-checker.md) gives the complete interface and adoption
+[checker contract](../policy_check/README.md) gives the complete interface and adoption
 example.
 
 Contract **1** keeps requirements, their applicability, and blocking versus
@@ -302,7 +302,7 @@ The recipients are the members and kanon in kanon's ecosystem registry at
 always asked for one thing, a green `anoieu / policy` on every push; what was
 missing is that the page never said the second form existed, and its list of what
 is not promised still said there was no versioning scheme. Both are corrected, and
-the page points at [`policy-checker.md`](policy-checker.md) for the file to copy
+the page points at [`policy-checker.md`](../policy_check/README.md) for the file to copy
 rather than carrying a copy. **They state the trade once**: a pin moves when you
 move it; a contract fixes the obligations and lets the implementation change, so a
 build can go red with nothing committed — and within a contract that is a violation

@@ -33,8 +33,8 @@ scripts/anoieu_analyzer --preview       # find the bugs and ask koine to preview
 ```
 
 That is the entry point for running anoieu over what it watches. It reads the
-standard targets from `scripts/targets.json`, finds each project where
-`scripts/repos.local` says it is on this machine, runs every check, and adds
+standard targets from `config/targets.json`, finds each project where
+`config/repos.local` says it is on this machine, runs every check, and adds
 whatever is new to [`bug_db/bugs.json`](bug_db/bugs.json) — the
 database of every bug anoieu has found, appended to by
 [koine](https://github.com/ajreynol/koine) and rendered as a table in
@@ -123,6 +123,9 @@ python3 scripts/update_bug_db.py            # analyse and record both sources
 Use `--preview` to analyse without changing the database. The
 [database README](bug_db/README.md) covers setup, adding new fuzzer findings,
 and what the ingestion dates mean.
+**[Browse all recorded bugs on GitHub](bug_db/bugs.md)** in the generated table,
+with links to source locations and reproducers. Recording commands refresh it
+alongside the JSON.
 
 > [!WARNING]
 > **The [reporting policy](docs/reports/reporting-policy.md) and
@@ -158,6 +161,9 @@ their tree:
 python3 scripts/policy_check.py --policy-version 1 --root path/to/repository
 ```
 
+The implementation, contract and focused tests live in
+[`policy_check/`](policy_check/README.md); the script is the stable human launcher.
+
 It checks repository conventions, independently of the analyzer and fuzzer.
 A repository with reason not to declare membership on its front page takes the
 `associate` footing, recorded on its own `docs/maintenance.md` along with what
@@ -172,7 +178,7 @@ requirements, their applicability and the blocking/advisory split stay fixed;
 checker bug fixes continue to arrive, so a contract consumer's build can go red
 with nothing committed — which means a violation already in the tree has started
 being reported, never a new requirement arriving. A pin moves only when its
-repository moves it. The [contract page](docs/policy-checker.md) is the authority
+repository moves it. The [contract page](policy_check/README.md) is the authority
 on what each form fixes; kanon's joining instructions carry both, read
 2026-09-17.
 

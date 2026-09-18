@@ -52,11 +52,11 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
-sys.path.insert(0, HERE)
 
-import koine  # noqa: E402
-import targets as config  # noqa: E402
-from gen_open_findings import collect, static_bug, render_static  # noqa: E402
+from anoieu.reporting import koine  # noqa: E402
+from anoieu.reporting import targets as config  # noqa: E402
+from anoieu.reporting.gen_open_findings import collect, static_bug, render_static  # noqa: E402
+from anoieu.reporting.database import render as render_database
 
 DB = os.path.join(ROOT, "bug_db", "bugs.json")
 DUMP = os.path.join(ROOT, "scratch", "new-bugs.json")
@@ -141,6 +141,7 @@ def main() -> int:
 
     code = append(args.dump, preview=args.preview)
     if code == 0 and not args.preview:
+        render_database(DB)
         render_static(DB, PAGE)
     return code
 

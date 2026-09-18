@@ -12,7 +12,7 @@ documents. Each entry points to the page that owns its subject.
 | [`reporting-policy.md`](reports/reporting-policy.md) | **DEPRECATED (2026-09-18).** Historical publishing policy; a formal replacement using Koine's shared tooling is pending. See the [replacement work](maintenance.md#replace-the-deprecated-reporting-policy). |
 | [`reporting-workflow.md`](reports/reporting-workflow.md) | **DEPRECATED (2026-09-18).** Legacy conventions and prompts retained for the existing commands and records while the Koine-based replacement is developed. |
 | [`usage.md`](usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together. For work on this repository, start at [`maintenance.md`](maintenance.md) |
-| [`policy-checker.md`](policy-checker.md) | **the stable policy-checker contract** — latest implementation, versioned requirements and severities, the shared CI workflow, and the migration from consumer commit pins |
+| [`policy_check/README.md`](../policy_check/README.md) | **policy-checking responsibilities and contract** (formerly `policy-checker.md`) — implementation, versioned requirements and severities, focused tests, maintenance guidance and the shared CI workflow |
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor nobody has started |
 | [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the six above belongs here |
 
@@ -29,6 +29,7 @@ hand-maintained; being in this section is what once made it look disposable.
 | [`corpus.md`](reports/corpus.md) | **what was measured, and what the checks reported on it**: the commits each project was restored to, and the counts taken from them. *Rewritten whole* |
 | [`checks.md`](checks.md) | **one page per check** — what it reports, what it assumes, and what it deliberately does not. Rendered from the registry, so a page cannot drift from the code beside it. *Rewritten whole* |
 | [`bug_db/bugs.json`](../bug_db/bugs.json) | **the database, and the raw data** — static findings and promoted fuzzer findings, one JSON object each. The analyzer, fuzzer promotion/reporting commands and ledger generator always call [koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds entries and updates ingestion dates while preserving existing bug content. Decisions remain in the findings ledgers. |
+| [`bug_db/bugs.md`](../bug_db/bugs.md) | **the GitHub browsing view**, rendered from the JSON for both producers with evidence links; refreshed by recording commands and checked by CI |
 | [`static-analysis.md`](reports/static-analysis.md) | **the static subset rendered from the database**, the new workflow's page. `open-findings.md` remains the report, and nothing here closes a bug. *Rewritten whole, from the database* |
 
 > **The two findings files are not like the others.** `corpus.md` and
@@ -73,5 +74,5 @@ occasions.
 `reports/` also holds documents rendered for an audience that will not clone this
 repository, currently [`cpc-audit.html`](reports/cpc-audit.html). They restate
 findings from the sources above rather than adding any, so nothing is filed
-twice. The generators are in [`../scripts/`](../scripts), and each says at the top
+twice. The generators are in [`anoieu/reporting/`](../anoieu/reporting), and each says at the top
 of the file what it writes and what it refuses to do.

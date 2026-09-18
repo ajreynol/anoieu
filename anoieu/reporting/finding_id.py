@@ -8,8 +8,8 @@ the program at all, however good its reading of the file was.
 
 So this is the one piece of arithmetic both producers share:
 
-    python3 scripts/finding_id.py EO0031 proofs/eo/cpc/Cpc.eo 17
-    python3 scripts/finding_id.py EO0031 proofs/eo/cpc/Cpc.eo --line '(declare-const x Int)'
+    python3 -m anoieu.reporting.finding_id EO0031 proofs/eo/cpc/Cpc.eo 17
+    python3 -m anoieu.reporting.finding_id EO0031 proofs/eo/cpc/Cpc.eo --line '(declare-const x Int)'
 
 Given a path that exists, it reads the line itself; given `--line` it takes the
 text as handed. The path is **relative to the owner's tree**, not to this one.
@@ -21,7 +21,8 @@ import argparse
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from . import ROOT
+
 
 from anoieu.fingerprint import id_of  # noqa: E402
 

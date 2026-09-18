@@ -23,11 +23,10 @@ import os
 import subprocess
 from dataclasses import dataclass
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-MANIFEST = os.path.join(HERE, "deps.json")
+from . import ROOT, CONFIG_DIR
+MANIFEST = os.path.join(CONFIG_DIR, "deps.json")
 DEPS = os.path.join(ROOT, "deps")
-LOCK = os.path.join(HERE, "deps.lock")
+LOCK = os.path.join(CONFIG_DIR, "deps.lock")
 
 
 @dataclass

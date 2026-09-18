@@ -25,11 +25,11 @@ somebody is processing a reply. That separation is deliberate: the two get
 confused exactly when there is a hurry on, which is when the wrong one is
 skipped.
 
-    python3 scripts/landing.py             # what is outstanding, from the ledger
-    python3 scripts/landing.py --check     # ... and ask each checkout about it
-    python3 scripts/landing.py --repo ethos=/src/ethos --check
+    python3 -m anoieu.reporting.landing             # what is outstanding, from the ledger
+    python3 -m anoieu.reporting.landing --check     # ... and ask each checkout about it
+    python3 -m anoieu.reporting.landing --repo ethos=/src/ethos --check
 
-Checkouts come from `scripts/repos.local` -- the same mapping `process_anoieu`
+Checkouts come from `config/repos.local` -- the same mapping `process_anoieu`
 uses, and equally optional -- or from `--repo`. A project with no checkout is
 reported as unknown rather than skipped: an audit that quietly drops what it
 could not reach is the thing it exists to prevent.
@@ -46,10 +46,9 @@ import re
 import subprocess
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
+from . import ROOT, CONFIG_DIR
 LEDGER = os.path.join(ROOT, "docs", "reports", "closed-findings.md")
-REPOS = os.path.join(ROOT, "scripts", "repos.local")
+REPOS = os.path.join(CONFIG_DIR, "repos.local")
 
 #: The marker a row closed on a promise carries, in its verdict cell.
 MARKER = re.compile(

@@ -34,8 +34,8 @@ prose a program cannot read. A check that fires wrongly costs more than it
 saves, so this reports and does not gate, and the number is what has to move
 before gating is worth arguing for.
 
-    python3 scripts/doc_currency.py            # the measurement
-    python3 scripts/doc_currency.py --list     # and every undated document
+    python3 -m policy_check.currency            # the measurement
+    python3 -m policy_check.currency --list     # and every undated document
 """
 
 from __future__ import annotations
@@ -51,14 +51,15 @@ ROOT = os.path.dirname(HERE)
 #: Rewritten whole by a generator on every run, so staleness is not a property
 #: they can have. Counting them would flatter the number.
 GENERATED = {"docs/checks.md", "docs/reports/corpus.md",
-             "docs/reports/open-findings.md", "docs/reports/closed-findings.md"}
+             "docs/reports/open-findings.md", "docs/reports/closed-findings.md",
+             "bug_db/bugs.md"}
 
 #: The other repositories this ecosystem talks about. A claim naming one of
 #: these is a claim about a tree we do not control.
 #: This is a list whose *data* rots rather than its logic -- a repository that
 #: joins next month is a cross-project claim nothing here notices. Adding a name
 #: is how it keeps up; see *Adding a check to the policy checker* in
-#: docs/maintenance.md on why this shape is the expensive kind.
+#: policy_check/maintenance.md on why this shape is the expensive kind.
 OTHERS = ("cvc5", "ethos", "logos", "eudaimonia", "dokimasia", "koine",
           "kanon", "epikrisis", "aisthesis", "eschaton", "tachyon",
           "inspect.software")
@@ -69,7 +70,10 @@ DATE = re.compile(r"\b20\d{2}-[01]\d-[0-3]\d\b")
 def tracked() -> list[str]:
     out = subprocess.run(["git", "-C", ROOT, "ls-files", "*.md"],
                          capture_output=True, text=True).stdout.split()
-    return [p for p in out if not p.startswith("deps/")]
+    # Git still lists a removed path until its deletion is staged. Assess the
+    # documents present in this working tree, including during a file move.
+    return [p for p in out if not p.startswith("deps/")
+            and os.path.isfile(os.path.join(ROOT, p))]
 
 
 def main() -> int:

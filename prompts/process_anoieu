@@ -13,7 +13,7 @@
 #   process_anoieu --dry-run logos          # what this would do; no agent
 #
 # The first argument is a *synonym* for a directory. It is resolved in three
-# steps: an existing path is used as it stands; otherwise scripts/repos.local is
+# steps: an existing path is used as it stands; otherwise config/repos.local is
 # consulted, which maps repo ids to directories on this machine and is written
 # on the first run of any kind; otherwise a directory of that name is looked for under
 # $ANOIEU_REPOS (colon-separated, default $HOME). Nothing is tracked or synced
@@ -34,7 +34,7 @@ set -euo pipefail
 #    different name, or several checkouts of one project where only one is the
 #    one you answer findings from.
 HERE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../scripts/repos.local}"
+REPOS_FILE="${ANOIEU_REPOS_FILE:-$HERE/../config/repos.local}"
 
 write_repos_file() {
   cat > "$REPOS_FILE" <<'TEMPLATE'
@@ -56,7 +56,7 @@ write_repos_file() {
 # works -- a checkout under a different name, or several checkouts of one
 # project where only one of them is the one you answer findings from.
 #
-# The projects scripts/deps.json tracks, as examples. Uncomment and correct:
+# The projects config/deps.json tracks, as examples. Uncomment and correct:
 #
 #     ethos       ~/src/ethos
 #     logos       ~/src/logos
@@ -127,7 +127,7 @@ usage() {
 usage: process_anoieu [--status | --dry-run | --show-prompt]
                      [--codex] [--print] [--no-postm] [--branch NAME] NAME [ID]
 
-  NAME            a directory, or a repo id: looked up in scripts/repos.local
+  NAME            a directory, or a repo id: looked up in config/repos.local
                   (written on the first run), then under $ANOIEU_REPOS (default $HOME)
   ID              an anoieu finding id (16 hex digits) or register id (ethos-8).
                   Omitted, every reply in that repository is processed.

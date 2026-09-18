@@ -11,9 +11,9 @@ prints one in a type error, so each case is compiled into a definition whose
 Both sides are then un-curried and compared as terms, so neither printer's
 habits matter.
 
-    python3 scripts/oracle_desugar.py                     # the whole battery
-    python3 scripts/oracle_desugar.py --verbose           # print every case
-    python3 scripts/oracle_desugar.py --ethos <path>
+    python3 tests/oracle_desugar.py                     # the whole battery
+    python3 tests/oracle_desugar.py --verbose           # print every case
+    python3 tests/oracle_desugar.py --ethos <path>
 """
 
 from __future__ import annotations

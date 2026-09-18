@@ -18,7 +18,7 @@ date*.**
 **The central policy of this ecosystem is that a document which has gone stale
 is a defect.** Everything else about that policy is argued; this is the only
 thing here aimed at making it **checkable** — evidence, claim by claim, that
-what a page says is still true of the tree it describes. `scripts/doc_currency.py`
+what a page says is still true of the tree it describes. `policy_check/currency.py`
 measures whether a document carries a date, which is evidence about evidence.
 **This project is the part that would measure the claim itself.** Aristotle draws the distinction sharply and it is the standard
 this project is held to: **what would have to be true for a claim in these

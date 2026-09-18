@@ -32,6 +32,7 @@ import sys
 
 from anoieu.diagnostics import Diagnostic, Severity, Span, SourceMap
 from anoieu.fingerprint import fingerprint
+from anoieu.reporting.database import render as render_database
 
 from .checkers import DEFAULT_CONFIG, from_config
 from .codes import CODES, code_for
@@ -170,7 +171,7 @@ def owner_of(record: dict) -> str:
 def rows(corpus: str = "") -> dict[str, dict]:
     """Every promoted finding as a row for `docs/reports/open-findings.md`.
 
-    The shape is `scripts/gen_open_findings.py`'s, keyed by the same fingerprint,
+    The shape is `anoieu/reporting/gen_open_findings.py`'s, keyed by the same fingerprint,
     so the generator merges these with what the checks report and neither side
     knows about the other.
     """
@@ -232,10 +233,13 @@ def record(records: list[dict], preview: bool = False) -> int:
     with open(DUMP, "w", encoding="utf-8") as fh:
         json.dump(entries, fh, indent=2, ensure_ascii=False)
         fh.write("\n")
-    command = [sys.executable, os.path.join(ROOT, "scripts", "koine.py"), DUMP, DB]
+    command = [sys.executable, "-m", "anoieu.reporting.koine", DUMP, DB]
     if preview:
         command.append("--dry-run")
-    return subprocess.run(command, stdout=sys.stderr).returncode
+    code = subprocess.run(command, stdout=sys.stderr, cwd=ROOT).returncode
+    if code == 0 and not preview:
+        render_database(DB)
+    return code
 
 
 def promote(source: str, corpus: str = "", owner: str = "", note: str = "") -> str:
