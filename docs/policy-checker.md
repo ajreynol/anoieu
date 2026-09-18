@@ -157,11 +157,10 @@ carry both forms as of 2026-09-17**, name the contract page as the authority for
 what a contract fixes, and state the trade in their own words. That was the half
 this interface was waiting on.
 
-**Koine's joining guidance is the remaining half.** `eo_join` writes a pinned
-workflow, so a repository joining today takes the pinned form by default. Whether
-it should offer the contract form is koine's decision. `eo_bump` still serves
-every dependency that needs an exact commit; it is not needed by a policy-checker
-consumer on the contract form, and a lock should be removed only where nothing
+**Koine's joining guidance points at Kanon's adoption instructions.** `eo_join`
+sends a repository to that page for its workflow. Koine itself uses the shared
+workflow at `main` with contract 1 and has no checker lock to update. Other
+dependencies can still need exact commits; remove a lock only where nothing
 else uses it.
 
 **Members on the pinned form are not behind.** Read on 2026-09-17, aisthesis,

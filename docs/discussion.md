@@ -54,6 +54,15 @@ about to move under them.
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
 
+**This is the only channel, in both directions, and there is no second file for
+replies.** A reply to a topic *we* opened is appended to that topic below. A
+reply to a topic somebody addressed to *us* is appended to the `### Replies`
+block of that topic in **their** `docs/discussion.md`, carried there by a
+person; if it needs room of its own it is raised here as a topic of
+`**Kind:** answer`, which is what that kind is for. A draft awaiting a person is
+scratch and belongs in the untracked `discussion-response.local.md` that koine's
+`eo_respond` writes — **never in a tracked document.**
+
 ## D33 — every repository we asked has adopted the misaddressed-prompt paragraph
 
 **To:** kanon

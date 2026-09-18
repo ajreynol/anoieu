@@ -14,8 +14,7 @@ sweeping the whole report, and what it takes for another repository to run these
 | [`usage.md`](usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together. For work on this repository, start at [`maintenance.md`](maintenance.md) |
 | [`policy-checker.md`](policy-checker.md) | **the stable policy-checker contract** — latest implementation, versioned requirements and severities, the shared CI workflow, and the migration from consumer commit pins |
 | [`fuzzing.md`](fuzzing.md) | **the other half**: the anoieu fuzzer, which writes Eunoia nobody would write and hands it to a checker. What its oracle is, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker, and what it is deliberately not: a baseline, whose research-quality successor nobody has started |
-| [`replies.md`](replies.md) | **what we owe the other repositories**: one drafted reply per topic whose `To:` names anoieu, staged for a person to carry and deleted once it has been. The channel in the other direction is [`discussion.md`](discussion.md) |
-| [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the seven above belongs here |
+| [`notes.md`](notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open. Anything that does not belong in the six above belongs here |
 
 ## Generated
 

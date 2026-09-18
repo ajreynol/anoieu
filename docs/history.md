@@ -875,10 +875,10 @@ transfer or freeze this record.
 ### Correspondence answered, and four checks that were passing wrongly — 2026-09-17
 
 **Thirty-nine topics across eight repositories named anoieu**, and none of them
-had an answer in this tree. They are answered now, in
-[`replies.md`](replies.md), staged for a person to carry; that file is new and is
-what this repository had been doing in an unindexed document at the repository
-root. **The single largest class of answer was *that page is not ours any
+had an answer in this tree. They are answered now, drafted for a person to
+carry.
+
+**The single largest class of answer was *that page is not ours any
 more*** — the governance documents, the registers, the roles, the prompts and the
 research pages left on 2026-09-15, and nobody who had addressed a topic to anoieu
 had any way to know which half of it had moved.
