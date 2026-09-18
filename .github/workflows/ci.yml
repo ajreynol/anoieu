@@ -208,7 +208,7 @@ jobs:
         with:
           name: report
           path: |
-            docs/reports/bugs.json
+            bug_db/bugs.json
             docs/reports/static-analysis.md
             docs/reports/corpus.md
             docs/reports/open-findings.md

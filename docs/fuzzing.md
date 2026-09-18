@@ -304,7 +304,7 @@ python3 scripts/gen_open_findings.py                               # give it a r
 ```
 
 `promote` copies the reproducer into `tests/fuzz/` and records it through koine
-in `docs/reports/bugs.json`. Commit that evidence beside `tests/witnesses/`,
+in `bug_db/bugs.json`. Commit that evidence beside `tests/witnesses/`,
 which is the same idea for the checks. From
 there it is a finding like any other: a code, an owner, a fingerprint, a row in
 [`open-findings.md`](reports/open-findings.md), and it leaves the open table only when
@@ -325,7 +325,7 @@ python3 -m anoieu_fuzz report --format json  # same append, JSON diagnostics
 The input defaults to `tests/fuzz/`, after review and promotion. Anoieu writes
 `scratch/new-fuzz-bugs.json` with the ledger's finding ids, reproducer paths,
 recorded checker outcomes, and both checker names on disagreements. Koine alone
-appends that dump to [`bugs.json`](reports/bugs.json). Re-appending adds no
+appends that dump to [`bug_db/bugs.json`](../bug_db/bugs.json). Re-appending adds no
 duplicates. `--format` controls diagnostic display only; koine's messages go to
 stderr so JSON and SARIF remain readable on stdout.
 

@@ -627,6 +627,75 @@ raise SystemExit(main())
                        capture_output=True, text=True, cwd=ROOT)
     case("the analyzer has no dump-only bypass", p.returncode == 2, p.stderr)
 
+    # The one-command update must combine both real producers into one real
+    # Koine append, and refuse unavailable inputs before changing the artifact.
+    update_dir = os.path.join(d, "combined")
+    os.makedirs(update_dir)
+    witness = write(update_dir, "case.eo", open(os.path.join(
+        ROOT, "tests", "witnesses", "EO0031-bad.eo")).read())
+    combined_db = os.path.join(update_dir, "bugs.json")
+    combined_page = os.path.join(update_dir, "static.md")
+    combined_dump = os.path.join(update_dir, "dump.json")
+    update_program = """import os, runpy, sys
+sys.path.insert(0, os.path.join(os.getcwd(), 'scripts'))
+main = runpy.run_path('scripts/update_bug_db.py')['main']
+g = main.__globals__
+directory, corpus = sys.argv[1:3]
+spec = [{'id': 'fixture', 'label': 'fixture', 'project': 'ethos', 'paths': ['case.eo']}]
+g['targets'].load = lambda: spec
+g['targets'].roots = lambda: ({'ethos': directory}, 'test fixture')
+findings = g['findings']
+findings.DB = os.path.join(directory, 'bugs.json')
+findings.DUMP = os.path.join(directory, 'dump.json')
+findings.STATIC_PAGE = os.path.join(directory, 'static.md')
+from anoieu_fuzz import report
+findings.load_fuzz = lambda: report.load(corpus)
+raise SystemExit(main(sys.argv[3:]))
+"""
+
+    def update(*args, koine_root=""):
+        env = dict(os.environ)
+        if koine_root:
+            env["KOINE"] = koine_root
+        return subprocess.run([sys.executable, "-c", update_program,
+                               update_dir, corpus_dir, *args],
+                              capture_output=True, text=True, cwd=ROOT, env=env)
+
+    p = update("--dry-run")
+    case("combined dry run checks setup without writing a dump or database",
+         p.returncode == 0 and "promoted fuzzer finding(s)" in p.stdout
+         and not os.path.exists(combined_dump) and not os.path.exists(combined_db), p.stderr)
+    p = update("--preview")
+    case("combined preview scans both sources without writing the database or table",
+         p.returncode == 0 and "dry run" in p.stdout and os.path.isfile(combined_dump)
+         and not os.path.exists(combined_db) and not os.path.exists(combined_page), p.stderr)
+    p = update()
+    combined = json.load(open(combined_db))["bugs"] if os.path.isfile(combined_db) else []
+    case("one update records actual static and fuzzer findings in the same database",
+         p.returncode == 0 and {b["tool"] for b in combined} == {"anoieu", "anoieu-fuzz"}
+         and any(b["code"] == "EO0031" for b in combined)
+         and {b["id"] for b in reporting.bugs(reporting.load(corpus_dir))}
+         <= {b["id"] for b in combined}, p.stderr)
+    p = update()
+    case("repeating the combined update preserves both producers without duplicates",
+         p.returncode == 0 and json.load(open(combined_db))["bugs"] == combined, p.stderr)
+    saved_db = open(combined_db).read()
+    saved_page = open(combined_page).read()
+    p = update(koine_root=failing)
+    case("a refused combined append preserves the database and rendered table",
+         p.returncode == 17 and open(combined_db).read() == saved_db
+         and open(combined_page).read() == saved_page, p.stderr)
+    os.rename(witness, witness + ".missing")
+    p = update()
+    case("a missing static input fails before changing the shared artifact",
+         p.returncode == 2 and "missing inputs" in p.stderr
+         and open(combined_db).read() == saved_db
+         and open(combined_page).read() == saved_page, p.stderr)
+    write(update_dir, "case.eo", "; no duplicate declaration remains\n(declare-const Int Type)\n")
+    p = update()
+    case("a finding no longer reported remains in the database without an inferred closure",
+         p.returncode == 0 and json.load(open(combined_db))["bugs"] == combined, p.stderr)
+
     # verify, against checkers whose answers are known: one agreeing with what
     # was recorded, one that has changed its mind since
     vdir = os.path.join(d, "vcorpus", "b-verify")

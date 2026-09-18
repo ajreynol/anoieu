@@ -7,6 +7,7 @@ documents. Each entry points to the page that owns its subject.
 
 | document | its job |
 | --- | --- |
+| [`bug_db/README.md`](../bug_db/README.md) | **the shared bug database artifact**: setup, one-command updates from the analyzer and promoted fuzzer corpus, and the remaining closure work |
 | [`reports.md`](reports/reports.md) | **what anoieu has to say about other people's code**: what it is asking of each project, how each finding was confirmed, and what came back when it was filed |
 | [`reporting-policy.md`](reports/reporting-policy.md) | **DEPRECATED (2026-09-18).** Historical publishing policy; a formal replacement using Koine's shared tooling is pending. See the [replacement work](maintenance.md#replace-the-deprecated-reporting-policy). |
 | [`reporting-workflow.md`](reports/reporting-workflow.md) | **DEPRECATED (2026-09-18).** Legacy conventions and prompts retained for the existing commands and records while the Koine-based replacement is developed. |
@@ -27,7 +28,7 @@ hand-maintained; being in this section is what once made it look disposable.
 | [`closed-findings.md`](reports/closed-findings.md) | **internal, and NOT generated** — it is written by the review step and only *read* by the generator, which skips every id in it. **It is the ledger of verdicts and cannot be reconstructed**: delete it and every settled finding is reported to its project again, including the ones somebody already declined. It is listed here because it lives beside the other two, and `scripts/policy_check.py` deliberately leaves it out of its generated list |
 | [`corpus.md`](reports/corpus.md) | **what was measured, and what the checks reported on it**: the commits each project was restored to, and the counts taken from them. *Rewritten whole* |
 | [`checks.md`](checks.md) | **one page per check** — what it reports, what it assumes, and what it deliberately does not. Rendered from the registry, so a page cannot drift from the code beside it. *Rewritten whole* |
-| [`bugs.json`](reports/bugs.json) | **the database, and the raw data** — static findings and promoted fuzzer findings, one JSON object each. The analyzer, fuzzer promotion/reporting commands and ledger generator always call [koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds entries and updates ingestion dates while preserving existing bug content. Decisions remain in the findings ledgers. |
+| [`bug_db/bugs.json`](../bug_db/bugs.json) | **the database, and the raw data** — static findings and promoted fuzzer findings, one JSON object each. The analyzer, fuzzer promotion/reporting commands and ledger generator always call [koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds entries and updates ingestion dates while preserving existing bug content. Decisions remain in the findings ledgers. |
 | [`static-analysis.md`](reports/static-analysis.md) | **the static subset rendered from the database**, the new workflow's page. `open-findings.md` remains the report, and nothing here closes a bug. *Rewritten whole, from the database* |
 
 > **The two findings files are not like the others.** `corpus.md` and

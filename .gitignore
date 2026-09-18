@@ -19,5 +19,8 @@ scripts/repos.local
 # transient working space (shared policy: "Working space is untracked")
 scratch/
 
+# Koine's runtime database lock; the database itself is tracked.
+/bug_db/*.lock
+
 # private working notes, untracked by intent
 *.local.md

@@ -19,7 +19,7 @@
 # When the agent has written its dump, appending it is the comparison:
 #
 #   python3 scripts/koine.py scratch/agent-bugs.json \
-#           docs/reports/bugs.json --dry-run
+#           bug_db/bugs.json --dry-run
 #
 # **`--dry-run` first, always.** *0 new, N already known* is the two producers
 # agreeing. *M new* is the agent finding what the checks did not -- which is
@@ -99,8 +99,9 @@ $TARGETS
 What the checks look for is documented, one page per code, in docs/checks.md.
 **Read it first and work only from codes that exist there.** A bug under a code
 you invented cannot be compared with anything. Do not run
-scripts/anoieu_analyzer, scripts/sweep.py or the anoieu CLI, and do not read
-docs/reports/bugs.json, scratch/new-bugs.json, open-findings.md or
+scripts/anoieu_analyzer, scripts/update_bug_db.py, scripts/sweep.py or the anoieu
+CLI, and do not read bug_db/bugs.json, scratch/new-bugs.json,
+scratch/new-report-bugs.json, open-findings.md or
 closed-findings.md: the whole value of this run is that it is independent of the
 program's answer. If you find yourself about to check what the program said,
 stop -- that is the one thing this producer must not do.
@@ -151,7 +152,7 @@ mkdir -p "$ROOT/$(dirname "$OUT")"
 echo "-- anoieu at $ROOT"
 echo "-- the agent writes $OUT. Compare it with the database, writing nothing:"
 echo "   python3 scripts/koine.py \\"
-echo "           $OUT docs/reports/bugs.json --dry-run"
+echo "           $OUT bug_db/bugs.json --dry-run"
 echo
 
 cd "$ROOT"

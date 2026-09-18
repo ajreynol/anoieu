@@ -35,7 +35,7 @@ scripts/anoieu_analyzer --preview       # find the bugs and ask koine to preview
 That is the entry point for running anoieu over what it watches. It reads the
 standard targets from `scripts/targets.json`, finds each project where
 `scripts/repos.local` says it is on this machine, runs every check, and adds
-whatever is new to [`docs/reports/bugs.json`](docs/reports/bugs.json) — the
+whatever is new to [`bug_db/bugs.json`](bug_db/bugs.json) — the
 database of every bug anoieu has found, appended to by
 [koine](https://github.com/ajreynol/koine) and rendered as a table in
 [`static-analysis.md`](docs/reports/static-analysis.md). `--dry-run` runs no
@@ -112,6 +112,18 @@ append fails the command. See [recording through koine](docs/fuzzing.md#recordin
 
 ## Findings and reports
 
+**The shared artifact is [`bug_db/`](bug_db/README.md): one database for the
+static analyzer and promoted fuzzer findings.** Refresh both with one command:
+
+```bash
+python3 scripts/update_bug_db.py --dry-run  # check the inputs and Koine setup
+python3 scripts/update_bug_db.py            # analyse and record both sources
+```
+
+Use `--preview` to analyse without changing the database. The
+[database README](bug_db/README.md) covers setup, adding new fuzzer findings,
+and what the ingestion dates mean.
+
 > [!WARNING]
 > **The [reporting policy](docs/reports/reporting-policy.md) and
 > [workflow](docs/reports/reporting-workflow.md) are DEPRECATED (2026-09-18).**
@@ -124,7 +136,7 @@ each project, the evidence, and the response. The
 [open findings](docs/reports/open-findings.md) list current reports; the
 [corpus report](docs/reports/corpus.md) identifies the source commits measured.
 
-The [bug database](docs/reports/bugs.json) is the other half, and a newer one:
+The [bug database](bug_db/bugs.json) is the persistent record:
 static findings and promoted fuzzer findings, recorded exclusively through
 koine, with the date each was first and last ingested. Fuzzer records carry
 recorded outcomes; recording does not replay them. Existing bug content is
@@ -173,6 +185,7 @@ on what each form fixes; kanon's joining instructions carry both, read
 | [Checks](docs/checks.md) | every diagnostic and its limitations |
 | [Design notes](docs/notes.md) | language behavior, implementation and open work |
 | [Maintenance](docs/maintenance.md) | development commands and required checks |
+| [Bug database](bug_db/README.md) | the shared artifact, setup and one-command updates |
 | [Documentation index](docs/README.md) | reports, records and remaining documentation |
 
 Run the local suite with `python3 tests/run.py`. Tests cover minimal witnesses,

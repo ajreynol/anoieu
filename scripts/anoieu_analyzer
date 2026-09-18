@@ -7,7 +7,7 @@ Three steps, and the middle one is the only file this script really produces:
    machine;
 2. **dump what they found** -- `scratch/new-bugs.json`, a JSON list of bugs,
    which is *this run* and nothing else;
-3. **add the new ones to the database** -- `docs/reports/bugs.json`, every bug
+3. **add the new ones to the database** -- `bug_db/bugs.json`, every bug
    anoieu has ever found, by handing the dump to koine's `koine_append_db`.
 
 Step 3 is not ours. koine adds what is new, leaves alone what is already there,
@@ -58,7 +58,7 @@ import koine  # noqa: E402
 import targets as config  # noqa: E402
 from gen_open_findings import collect, static_bug, render_static  # noqa: E402
 
-DB = os.path.join(ROOT, "docs", "reports", "bugs.json")
+DB = os.path.join(ROOT, "bug_db", "bugs.json")
 DUMP = os.path.join(ROOT, "scratch", "new-bugs.json")
 PAGE = os.path.join(ROOT, "docs", "reports", "static-analysis.md")
 

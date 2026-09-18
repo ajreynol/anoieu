@@ -9,7 +9,7 @@
 > [reporting workflow](reporting-workflow.md) is deprecated alongside it.
 
 Anoieu already records analyzer and promoted fuzzer findings through Koine's
-`bug_db/koine_append_db` in [`bugs.json`](bugs.json). That integration does not
+`bug_db/koine_append_db` in [`bug_db/bugs.json`](../../bug_db/bugs.json). That integration does not
 yet replace the reporting lifecycle: triage, verdicts and closure evidence still
 live in the existing findings ledgers. Continue using the existing commands and
 preserve those records while the replacement is developed. See the

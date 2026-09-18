@@ -13,6 +13,10 @@ Keep commands in `scripts/`, assistant launchers in `prompts/`, and evidence in
 `tests/`. List new documents in [the index](README.md) and new scripts below.
 Keep generated reports under their generators: the open-findings ledger is
 additive, and the closed-findings ledger is hand-maintained and irreplaceable.
+The shared database artifact lives in [`bug_db/`](../bug_db/README.md), with
+static and promoted fuzzer findings in one `bugs.json`. Refresh both with
+`python3 scripts/update_bug_db.py`; use `--dry-run` to check setup or `--preview`
+to analyse without changing the database.
 The [deprecated reporting workflow](reports/reporting-workflow.md) still documents
 the existing findings prompts; the suite compares their executable copies with
 that document until they are migrated.
@@ -181,6 +185,7 @@ Commands are run from the repository root unless noted.
 | `gen_open_findings.py` | record findings through koine, add ledger rows and render the static table; `--check` previews through koine and reports missing rows |
 | `landing.py` | report changes awaiting landing, and read every closed verdict against [the verdict vocabulary](reports/reporting-workflow.md#the-verdict-vocabulary-and-why-it-is-closed); `--check` reads checkouts |
 | `anoieu_analyzer` | run every standard target, dump the bugs, append through koine; `--dry-run` lists signatures and analyses nothing, `--preview` runs the analysis and koine's dry run |
+| `update_bug_db.py` | check required inputs, analyse all static targets and record them with the promoted fuzzer corpus in `bug_db/bugs.json` through Koine; `--dry-run` checks setup, `--preview` previews the combined append |
 | `anoieu_fuzzer` | fuzz two checkers against each other: `anoieu_fuzzer ethos logos N`, where N is how many cases; `--dry-run` resolves the binaries and runs nothing. The full interface is `python3 -m anoieu_fuzz run` |
 | `targets.json`, `targets.py` | the standard targets, and where each project is on this machine |
 | `koine.py`, `koine.lock` | resolve the required [koine](https://github.com/ajreynol/koine), falling back to a clone at the pin; delegate its CLI unchanged to `bug_db/koine_append_db` |
@@ -230,6 +235,30 @@ triage, verdicts or closure. The replacement needs to:
 
 Until then, keep using the existing commands and preserving the current records.
 Marking the documents deprecated is not a completed migration.
+
+**The database artifact has moved.** As of 2026-09-18, both producers and the
+legacy ledger generator use [`bug_db/bugs.json`](../bug_db/bugs.json).
+`update_bug_db.py` provides one update for both producers; the data move preserves
+all existing records. This completes the storage change, while lifecycle and
+closure support remain pending.
+
+**Closure assessment needs a Koine capability, not a comparison of two dumps.**
+The desired update should identify findings eligible for closure from a
+successful, comparable run that actually covered the relevant input and check.
+It needs recorded run scope, source and analyzer versions, enabled checks and
+skips, plus an explicit outcome when a finding's identity can no longer be
+matched. Fuzzer evidence must come from a replay. Assessments and eventual
+close/reopen decisions must preserve the original finding and their supporting
+evidence.
+
+**No closure-specific request is recorded yet (checked 2026-09-18).** Our
+[`D9`](discussion.md#d9--we-are-going-to-stop-proving-our-report-by-re-running-our-tools)
+describes record consistency, not automatic closure. Koine's `D13` reply in its
+[discussion file](https://github.com/ajreynol/koine/blob/main/docs/discussion.md)
+offers the bug database invariants and no shared reporting-record checker.
+The requirements above are a local proposal for a future request; they have not
+been sent or implemented. The current updater records observations and preserves
+the existing verdicts.
 
 ### Preserve the findings record
 

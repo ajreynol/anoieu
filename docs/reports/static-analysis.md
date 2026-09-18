@@ -1,7 +1,7 @@
 # Static analysis
 
 Every static finding the checks have found on the standard targets, rendered from
-[`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
+[`bug_db/bugs.json`](../../bug_db/bugs.json) -- which is the database itself, and the file to read if
 you want the data rather than the table. The analyzer and ledger generator
 render this static subset. The database also records
 [promoted fuzzer findings](../fuzzing.md#recording-through-koine); it

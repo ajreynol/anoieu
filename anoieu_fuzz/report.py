@@ -41,7 +41,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #: Where a promoted reproducer lives. Beside `tests/witnesses/`, which is the
 #: same idea for the checks: one directory, one case, readable in a minute.
 CORPUS = os.path.join(ROOT, "tests", "fuzz")
-DB = os.path.join(ROOT, "docs", "reports", "bugs.json")
+DB = os.path.join(ROOT, "bug_db", "bugs.json")
 DUMP = os.path.join(ROOT, "scratch", "new-fuzz-bugs.json")
 
 

@@ -60,7 +60,7 @@ from anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
 from anoieu_fuzz.report import bugs as fuzz_bugs, load as load_fuzz  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB = os.path.join(ROOT, "docs", "reports", "bugs.json")
+DB = os.path.join(ROOT, "bug_db", "bugs.json")
 DUMP = os.path.join(ROOT, "scratch", "new-report-bugs.json")
 STATIC_PAGE = os.path.join(ROOT, "docs", "reports", "static-analysis.md")
 OUT = os.path.join(ROOT, "docs", "reports", "open-findings.md")
@@ -287,7 +287,7 @@ def existing(report: str, ledger: str) -> tuple[list[str], list[str], set[str]]:
 STATIC_HEADER = """# Static analysis
 
 Every static finding the checks have found on the standard targets, rendered from
-[`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
+[`bug_db/bugs.json`](../../bug_db/bugs.json) -- which is the database itself, and the file to read if
 you want the data rather than the table. The analyzer and ledger generator
 render this static subset. The database also records
 [promoted fuzzer findings](../fuzzing.md#recording-through-koine); it
