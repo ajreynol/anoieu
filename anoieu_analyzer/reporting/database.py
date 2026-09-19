@@ -106,7 +106,7 @@ def markdown(db: str) -> str:
         "links use the originally recorded source commit; fuzzer links open the",
         "committed reproducers. The reasoning behind a verdict is `closed_why` in",
         "the [database itself](bugs.json), and what a change meant is",
-        "[experience.md](experience.md).", "",
+        "[experience.md](../docs/experience.md).", "",
         "| Producer | Recorded findings | Open |", "| --- | ---: | ---: |",
     ]
     for title, entries in groups:

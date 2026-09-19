@@ -139,7 +139,7 @@ Existing content is preserved on append. The
 
 **A finding closes on a commit, not on a dump**, and never on absence. What each
 project has since done about what we found is
-[`experience.md`](bug_db/experience.md); what a verdict may say, and the audit
+[`experience.md`](docs/experience.md); what a verdict may say, and the audit
 that reads the outstanding ones back, is
 [Closure](bug_db/README.md#closure).
 
@@ -198,7 +198,7 @@ A document lives with the thing it describes: the analyzer's documents are in
 | [`policy_check/maintenance.md`](policy_check/maintenance.md) | **how a check is added or changed**, and which shapes of check are the expensive kind |
 | [`bug_db/README.md`](bug_db/README.md) | **the shared findings artifact**: setup, one-command updates from both producers, and what a closure may write onto an entry |
 | [`bug_db/reporting-policy.md`](bug_db/reporting-policy.md) | **what may be said about code we do not own**: what separates a candidate published under our own name from a finding carried to its owner, what may be taken as material, and what tier each position is enforced at |
-| [`bug_db/experience.md`](bug_db/experience.md) | **what the projects we watch did with what we found**: one section per upstream change that closed an observation, and what each run taught us about our own tooling |
+| [`docs/experience.md`](docs/experience.md) | **every interaction we have had with the projects we watch**: one entry per episode, oldest first — a change they merged on our evidence, an ask they rejected, or a correction they put to us |
 | [`docs/maintenance.md`](docs/maintenance.md) | **the maintainer's entry point**: responsibilities, the command catalogue, the checks before handing off a change, and the open technical work |
 | [`docs/discussion.md`](docs/discussion.md) | **correspondence with the other tools**: live questions, proposals, notices and replies. A defect with a path and a line number is not here; it is a finding |
 | [`docs/history.md`](docs/history.md) | **how things came to be**, and the only page that may carry an account of it |

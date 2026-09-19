@@ -163,7 +163,7 @@ def shrink(case: Case, probe: Probe, bucket: str, budget: int = 120) -> tuple[Ca
     a reproducer promoted from `test-indexed-op.cpc` with the `_` cut out of
     line 4 by this function, while the reference had refused at line 3
     throughout, and a note that named the cut as the cause. See
-    `bug_db/experience.md`.
+    `docs/experience.md`.
     """
     if case.source.startswith("seed:"):
         return case, 0

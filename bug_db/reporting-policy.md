@@ -11,7 +11,7 @@ restrict who runs these tools or what they do with the output.
 It is **not** the mechanics. How a finding is recorded is
 [`bug_db/README.md`](README.md), how one is closed is
 [Closure](README.md#closure), and what a project did with one is
-[`experience.md`](experience.md). Those change with the tooling; this changes
+[`experience.md`](../docs/experience.md). Those change with the tooling; this changes
 when a position changes.
 
 ## What backs a position
@@ -134,7 +134,7 @@ settles the matter is the artifact they produce — a merged change, a run that 
 longer fails, an answer to a question. The half we get wrong under pressure is
 the negative one: **failing to find a settling artifact settles nothing.** Two
 incidents in this repository's record are that mistake in each direction, and
-they are written up in [`experience.md`](experience.md).
+they are written up in [`experience.md`](../docs/experience.md).
 
 **10. Nothing crosses a repository boundary automatically.** *(structural, and
 the strongest form available.)* No issue opened, no change filed, no comment

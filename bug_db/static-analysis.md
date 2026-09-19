@@ -15,7 +15,7 @@ its dates -- the status is the `closed_verdict` on the database entry, put there
 by [`prompts/close_bug_db`](../prompts/close_bug_db) against a named commit, and
 `open` means nobody has ruled rather than that a check was re-run. The reasoning
 behind a verdict is `closed_why` in the database; what the change meant is
-[`experience.md`](experience.md).
+[`experience.md`](../docs/experience.md).
 
 A second producer, an agent driven by
 [`prompts/anoieu_analyzer_agent`](../prompts/anoieu_analyzer_agent), writes

@@ -26,7 +26,14 @@
     "`main` costs no coverage. Dropped 2026-09-19.",
     "",
     "Adding an exception is a decision, and docs/maintenance.md is where the",
-    "reason has to be written."
+    "reason has to be written.",
+    "",
+    "**A url is the project's own repository, never a fork of it.** logos was",
+    "recorded here as `ajreynol/logos`, a mirror that shares history with the",
+    "project and is not the project: cvc5's own commits link",
+    "`cvc5/logos/pull/...`, and the ecosystem register records the url as",
+    "`cvc5/logos`. A finding is about what a project ships, so the evidence link",
+    "beside it has to reach the tree that ships it. Corrected 2026-09-19."
   ],
   "cvc5": {
     "url": "https://github.com/cvc5/cvc5.git",
@@ -41,7 +48,7 @@
     "reads": "the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool"
   },
   "logos": {
-    "url": "https://github.com/ajreynol/logos.git",
+    "url": "https://github.com/cvc5/logos.git",
     "ref": "main",
     "paths": ["install/defs"],
     "reads": "the installed signature and the CPC semantics logos owns"

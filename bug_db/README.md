@@ -117,7 +117,7 @@ prompts/close_bug_db --use-local ethos=/src/ethos
 It closes a finding on exactly two conditions: **a named commit** somebody can
 fetch, and **the claim re-read as false in the source today**. It writes two
 things and nothing else -- the closure fields on the entry here, and a section
-in [`experience.md`](experience.md) saying what the change meant.
+in [`experience.md`](../docs/experience.md) saying what the change meant.
 
 ### What a closure puts on an entry
 
@@ -172,5 +172,5 @@ read them and the `check_anoieu` / `process_anoieu` prompts are **removed**.
 Every verdict, every hand-written note and every outstanding landing they held
 was migrated onto the entries here and carries `migrated_from` saying so; the
 reasoning that was in `reports.md` and `postmortem.md` is in
-[`experience.md`](experience.md). Nothing was dropped, and nothing
+[`experience.md`](../docs/experience.md). Nothing was dropped, and nothing
 outside this database records a verdict any more.

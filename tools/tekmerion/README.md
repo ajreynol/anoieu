@@ -85,12 +85,12 @@ not, and it does not.
 no role and certifies nothing.
 
 **The register has its first entries**, from one working session in the parent's
-tree on 2026-09-19: fifteen claims that had gone false, every one conclusive,
+tree on 2026-09-19: seventeen claims that had gone false, every one conclusive,
 and exactly one of them found by anything that runs. They are in
 [`docs/register.md`](docs/register.md) with what would have caught each — and
-seven of the fifteen have no mechanical form at all.
+seven of the seventeen have no mechanical form at all.
 
-**The honest position is still the uncomfortable one.** Fifteen is how many one
+**The honest position is still the uncomfortable one.** Seventeen is how many one
 session found, not how many there are, and the evidence that this ecosystem's
 documentation is accurate remains *somebody read it* — now for a named set of
 claims on a named date, which is the difference between this page and the last
@@ -98,7 +98,7 @@ one. Until far more is recorded claim by claim, the parent's front-page caveat
 is the truthful summary and this project's own existence is the admission.
 
 **What the first pass turned up that the parent has to decide**, rather than
-this project: four of the fifteen are links into another repository, which the
+this project: four of the seventeen are links into another repository, which the
 parent's checker skips by design and deliberately. A child asks for nothing on
 its own behalf, so the ask sits in the parent's discussion file, in the parent's
 voice.

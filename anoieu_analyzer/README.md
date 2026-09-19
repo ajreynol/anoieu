@@ -22,7 +22,7 @@ scripts/anoieu_analyzer                      # every standard target, into the b
 What a run *finds* is not here. Findings are recorded in
 [`bug_db/`](../bug_db/README.md), what may be said about them is the
 [reporting policy](../bug_db/reporting-policy.md), and what the projects did
-about them is [`experience.md`](../bug_db/experience.md).
+about them is [`experience.md`](../docs/experience.md).
 
 ## What is in this directory
 

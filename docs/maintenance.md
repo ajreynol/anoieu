@@ -49,7 +49,7 @@ to analyse without changing the database.
 **There is one record of a verdict and one place to write it**: the closure
 fields on a database entry, defined by [Closure](../bug_db/README.md#closure)
 and written only by [`close_bug_db`](../prompts/close_bug_db). What came of a
-finding afterwards is [`experience.md`](../bug_db/experience.md). The findings ledgers this
+finding afterwards is [`experience.md`](experience.md). The findings ledgers this
 replaced were removed on 2026-09-19; [`history.md`](history.md) records what the
 migration carried.
 Nothing is filed or pushed without human direction.
@@ -177,6 +177,22 @@ the commit was measured on whenever the commit came from the lock, and
 `tests/run.py` compares the committed page with the lock. **A run that moves to a
 tip still reports the manifest's ref**, because then it is the one that moved.
 
+## Outstanding, and it is a person's
+
+**Seven ethos closures are ready to move from `accepted and fixed` to `fixed and
+landed`.** They were closed against the branch `anoieu-findings` at `292201c2`;
+that work landed on ethos `main` on 2026-09-18, squashed, as
+[#241](https://github.com/cvc5/ethos/pull/241) / `39f2f90c`. Confirm and move
+them with:
+
+```bash
+python3 -m anoieu_analyzer.reporting.verdicts --check --repo ethos=/path/to/ethos
+```
+
+which now names the commit that carries the change. **Replacing an entry's
+`awaiting_landing` with the commit that landed it is a person's**, which is why
+this is a note rather than a diff — see [Closure](../bug_db/README.md#closure).
+
 ## The open technical work
 
 ### What the closure fields still owe
@@ -206,7 +222,7 @@ in the project's own history. It sidesteps the missing capability rather than
 supplying it: it never compares two dumps, and a row closes only on a named
 commit plus the claim re-read as false in the source today. It writes the
 closure fields on the database entry and a section in
-[`experience.md`](../bug_db/experience.md), and leaves both uncommitted. `FUZ` findings
+[`experience.md`](experience.md), and leaves both uncommitted. `FUZ` findings
 stay open there, as they must — a replay is the only evidence that closes one,
 and reading a commit is not a replay.
 

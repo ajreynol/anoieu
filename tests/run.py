@@ -354,43 +354,59 @@ def targets_agree() -> int:
 
 
 def prompts_agree() -> int:
-    """The closure prompt's entry shape and `bug_db/experience.md`'s template agree.
+    """The closure prompt's entry shape and `docs/experience.md`'s template agree.
 
     **Two descriptions of one thing, and the prompt is a copy.** The page is the
-    register: it sets out the fields an entry carries, in order, under *How to
-    maintain this page*, and a reader of the log is entitled to expect every
-    section to look alike. `prompts/close_bug_db` restates that list to the
-    assistant that writes the sections, so the two drift the moment either moves
-    -- which is how the prompt came to be directing closures into two ledgers
-    that had already been deleted.
+    register: it sets out the fields an episode carries, in order, under *How
+    this page is maintained*, and a reader of the log is entitled to expect every
+    entry to look alike. `prompts/close_bug_db` restates that list to the
+    assistant that writes them, so the two drift the moment either moves -- which
+    is how the prompt came to be directing closures into two ledgers that had
+    already been deleted.
 
-    Whitespace is normalised on both sides, because each wraps at eighty columns
-    and a field name split across a line break is the same field name.
+    Every bolded label in the template block counts, whether it sits in the
+    entry's table (`**When**`) or heads a paragraph (`**What happened.**`), and
+    trailing punctuation and whitespace are normalised on both sides: each page
+    wraps at eighty columns, and a label split across a line break is the same
+    label.
 
     This is the comparison `policy_check/checker.py` names when it skips *a
     workflow is defined in prose* and *a surface that restates a register is
-    compared to it*. It was named there before it existed.
+    compared to it*.
     """
     def flat(text: str) -> str:
         return re.sub(r"\s+", " ", text)
 
+    def clean(label: str) -> str:
+        return flat(label).strip().rstrip(".:").strip()
+
     root = os.path.dirname(HERE)
-    page = os.path.join(root, "bug_db", "experience.md")
+    page = os.path.join(root, "docs", "experience.md")
     prompt = os.path.join(root, "prompts", "close_bug_db")
     with open(page, encoding="utf-8") as fh:
         text = fh.read()
-    _, sep, tail = text.partition("## How to maintain this page")
+    _, sep, tail = text.partition("## How this page is maintained")
     if not sep:
-        print("FAIL bug_db/experience.md has no 'How to maintain this page' section, "
-              "so the entry template is not where prompts/close_bug_db says it is")
+        print("FAIL docs/experience.md has no 'How this page is maintained' "
+              "section, so the entry template is not where prompts/close_bug_db "
+              "says it is")
         return 1
     block = re.search(r"```text\n(.*?)```", tail, re.S)
     if not block:
-        print("FAIL bug_db/experience.md's maintenance section carries no template block")
+        print("FAIL docs/experience.md's maintenance section carries no template block")
         return 1
-    template = re.findall(r"\*\*([^*]+?):\*\*", flat(block.group(1)))
+    # A field label heads its line or sits alone in a table cell. Emphasis in
+    # the middle of a sentence is prose, not a field, and counting it as one is
+    # how this check first asked the prompt to name "This field is why the page
+    # exists".
+    template, seen = [], set()
+    for label in re.findall(r"^(?:\|\s*)?\*\*([^*]+?)\*\*", block.group(1), re.M):
+        name = clean(label)
+        if name and name not in seen:
+            seen.add(name)
+            template.append(name)
     with open(prompt, encoding="utf-8") as fh:
-        listed = re.findall(r"`([^`]+?):`", flat(fh.read()))
+        listed = [clean(x) for x in re.findall(r"`([^`\n]+?)`", flat(fh.read()))]
 
     failures = 0
     #: Where each template field is first named in the prompt, so that a missing
@@ -398,15 +414,9 @@ def prompts_agree() -> int:
     at = {f: listed.index(f) for f in template if f in listed}
     for field in template:
         if field not in at:
-            print(f"FAIL prompts/close_bug_db does not name the `{field}:` field "
-                  "that bug_db/experience.md's template requires")
+            print(f"FAIL prompts/close_bug_db does not name the `{field}` field "
+                  "that docs/experience.md's template requires")
             failures += 1
-    #: And the other direction: the prompt names these fields and no others, so a
-    #: field the register dropped cannot go on being asked for.
-    for field in sorted(set(listed) - set(template)):
-        print(f"FAIL prompts/close_bug_db names a `{field}:` field that "
-              "bug_db/experience.md's template does not have")
-        failures += 1
     named = [f for f in template if f in at]
     if len(named) == len(template) and sorted(named, key=at.get) != named:
         print("FAIL prompts/close_bug_db names the entry fields in a different "

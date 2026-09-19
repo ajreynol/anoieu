@@ -411,7 +411,7 @@ never let the tool assign an owner to a disagreement — are in
 
 Five findings are promoted, and they are in the database rather than here:
 [`bug_db/bugs.json`](../bug_db/bugs.json) has the entries, and
-[`experience.md`](../bug_db/experience.md) has what came of them. In short, from the first
+[`experience.md`](../docs/experience.md) has what came of them. In short, from the first
 few thousand cases:
 
 | kind | reproducer | what happens |
@@ -428,7 +428,7 @@ came from a seed run as it stands, the reference had refused on a line the
 shrinker then went on to edit, and the `_` was gone because `shrink` cut it — the
 bucket held throughout, since it says nothing about *where* a refusal happened.
 The shrinker no longer touches a seed run as it stands, and the write-up is in
-[`experience.md`](../bug_db/experience.md). The
+[`experience.md`](../docs/experience.md). The
 `declare-fun` row above came the same way and survived only because the shrinker
 happened to find nothing to cut — which is the point: running a seed as it stands
 is the cheapest thing this fuzzer does, and it is the one place where shrinking

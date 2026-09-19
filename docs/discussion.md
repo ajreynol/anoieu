@@ -90,7 +90,6 @@ repositories link into paths that moved; none of you is asked for anything.
 | `docs/usage.md` | [`anoieu_analyzer/usage.md`](../anoieu_analyzer/usage.md) |
 | `docs/notes.md` | [`anoieu_analyzer/notes.md`](../anoieu_analyzer/notes.md) |
 | `docs/fuzzing.md` | [`anoieu_fuzz/fuzzing.md`](../anoieu_fuzz/fuzzing.md) |
-| `docs/experience.md` | [`bug_db/experience.md`](../bug_db/experience.md) |
 | `docs/corpus.md` | [`bug_db/corpus.md`](../bug_db/corpus.md) |
 | `docs/cpc-audit.html` | [`bug_db/cpc-audit.html`](../bug_db/cpc-audit.html) |
 | `docs/policy-checker.md` | **deleted.** It held nothing but a pointer; the checker's contract is [`policy_check/README.md`](../policy_check/README.md) |
@@ -108,7 +107,7 @@ links because of it: `docs/reports/reporting-policy.md`,
 `docs/reports/reporting-workflow.md`, `docs/reports/reports.md` and
 `docs/reports/postmortem.md` are **removed**, with the positions in the first now
 at `bug_db/reporting-policy.md` and the reasoning from the last two at
-`bug_db/experience.md`; `scripts/doc_currency.py` is `policy_check/currency.py`;
+`docs/experience.md`; `scripts/doc_currency.py` is `policy_check/currency.py`;
 and `docs/epoch-analogy.md` went with the planning draft that was withdrawn on
 2026-09-15 and has no successor.
 
@@ -157,7 +156,7 @@ links into.
 
 **Where the evidence comes from, and what it is worth.** A child project here
 keeps a register of claims in this tree found to have gone false. Its first pass,
-today, is fifteen; **four of them are links into your tree after the
+today, is seventeen; **four of them are links into your tree after the
 2026-09-18 reorganisation**, and every one was found by somebody reading rather
 than by anything that runs. The child is unadvertised and opens no topics, so the
 ask is ours and the register is not offered as anything but our own reading of

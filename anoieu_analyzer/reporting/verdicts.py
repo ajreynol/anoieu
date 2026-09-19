@@ -28,7 +28,9 @@ A project with no checkout is reported as unknown rather than skipped: an audit
 that quietly drops what it could not reach is the thing it exists to prevent.
 
 Nothing here writes. When a change lands, a person replaces the entry's
-`awaiting_landing` with the commit that landed it.
+`awaiting_landing` with the commit that landed it -- and where a pull request was
+squashed or rebased, `--check` names the commit that carries the change so that
+the person is not left to find it.
 """
 
 from __future__ import annotations
@@ -125,20 +127,76 @@ def _checkouts(overrides: list[str] | None) -> dict[str, str]:
     return repos
 
 
-def _landed(root: str, commit: str) -> bool | None:
-    """Has `commit` reached the checkout's default branch? None if unaskable."""
-    if not os.path.isdir(os.path.join(root, ".git")):
-        return None
+def _git(root: str, *args: str) -> str:
     try:
-        head = subprocess.run(
-            ["git", "-C", root, "symbolic-ref", "--short", "refs/remotes/origin/HEAD"],
-            capture_output=True, text=True, timeout=30)
-        branch = head.stdout.strip() or "origin/main"
+        r = subprocess.run(["git", "-C", root, *args],
+                           capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return ""
+    return r.stdout if r.returncode == 0 else ""
+
+
+def _patch_id(root: str, commit: str) -> str:
+    """What `commit` changes, independent of which commit carries it.
+
+    `git patch-id --stable` over the commit's own diff. Two commits with the
+    same patch id are the same change, which is what survives a rebase or a
+    squash.
+    """
+    diff = _git(root, "show", "--no-color", commit)
+    if not diff:
+        return ""
+    try:
+        r = subprocess.run(["git", "-C", root, "patch-id", "--stable"],
+                           input=diff, capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return ""
+    return r.stdout.split()[0] if r.stdout.split() else ""
+
+
+def _landed(root: str, commit: str) -> tuple[str, str]:
+    """Has the change reached the default branch, and under which commit?
+
+    Returns one of `LANDED`, `not yet` or `unknown`, and the commit that carries
+    it where that is not the one we recorded.
+
+    **Asking only whether the commit is an ancestor of the default branch is the
+    wrong question**, and it answered *no* forever for every project that
+    squash-merges. ethos accepted seven findings on a branch, merged them as one
+    squashed pull request, and this audit went on reporting the debt as
+    outstanding — under-reporting in the safe direction, which is worse than it
+    sounds: an audit that cannot ever clear an item is one people stop reading.
+
+    So the exact question is asked first, and where it says no, the change is
+    looked for by **patch id** among the commits the default branch has that the
+    recorded commit's branch point does not. A rebase or a squash of a single
+    commit preserves the patch id; a squash of several does not, and that case
+    is still reported as `not yet` rather than guessed at.
+    """
+    if not root or not os.path.isdir(os.path.join(root, ".git")):
+        return "unknown", ""
+    branch = _git(root, "symbolic-ref", "--short",
+                  "refs/remotes/origin/HEAD").strip() or "origin/main"
+    if not _git(root, "rev-parse", "--verify", "--quiet", commit + "^{commit}"):
+        return "unknown", ""
+    try:
         r = subprocess.run(["git", "-C", root, "merge-base", "--is-ancestor",
                             commit, branch], capture_output=True, timeout=30)
-        return r.returncode == 0
+        if r.returncode == 0:
+            return "LANDED", ""
     except (OSError, subprocess.SubprocessError):
-        return None
+        return "unknown", ""
+
+    want = _patch_id(root, commit)
+    if not want:
+        return "not yet", ""
+    base = _git(root, "merge-base", commit, branch).strip()
+    if not base:
+        return "not yet", ""
+    for line in _git(root, "log", "--format=%H", f"{base}..{branch}").split():
+        if _patch_id(root, line) == want:
+            return "LANDED", line
+    return "not yet", ""
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -172,12 +230,11 @@ def main(argv: list[str] | None = None) -> int:
     for b in owed:
         m = b["awaiting_landing"]
         where = f"{m['project']} {m['branch']}@{m['commit']}"
-        state = "unknown"
+        state, carried = "unknown", ""
         if args.check:
-            root = repos.get(m["project"])
-            got = _landed(root, m["commit"]) if root else None
-            state = {True: "LANDED", False: "not yet", None: "unknown"}[got]
-        print(f"   {state:8s} {b['id']}  {where}")
+            state, carried = _landed(repos.get(m["project"], ""), m["commit"])
+        note = f"  -- landed as {carried[:12]}" if carried else ""
+        print(f"   {state:8s} {b['id']}  {where}{note}")
     return 1 if failures else 0
 
 

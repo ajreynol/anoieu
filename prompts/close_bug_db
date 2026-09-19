@@ -39,7 +39,7 @@ reporting an empty one.
 anywhere. The reading is the assistant's, in a session a person is driving.
 
 **It writes two things: the closure fields on a database entry, and a section
-in `bug_db/experience.md`.** koine is still the only thing that *adds* an entry to
+in `docs/experience.md`.** koine is still the only thing that *adds* an entry to
 `bug_db/bugs.json` -- this never creates one, never edits a claim, and never
 touches an entry it did not close. What it adds is the verdict, the reasoning,
 the commit and the date, on entries that were open when the run began. Both
@@ -75,7 +75,7 @@ LISTED = 30
 DEPS = os.path.join(CONFIG_DIR, "deps.json")
 LOCK = os.path.join(CONFIG_DIR, "deps.lock")
 DB = os.path.join(ROOT, "bug_db", "bugs.json")
-EXPERIENCE = os.path.join(ROOT, "bug_db", "experience.md")
+EXPERIENCE = os.path.join(ROOT, "docs", "experience.md")
 
 _ROW = re.compile(r"^\|\s*`([0-9a-f]{16})`\s*\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|")
 
@@ -494,39 +494,49 @@ it; see what to write, below.
     come from their generators. Re-render the views once you are done:
     `python3 -m anoieu_analyzer.reporting.database`.
 
-(b) **The log.** One section per closing change in `bug_db/experience.md`, under
-    *The log*, newest first, in the shape that file sets out under *How to
-    maintain this page* -- `Commit:`, `Closed:`, `Summary:`, `What the change
-    did:`, `Not closed:`, `Attribution:` and `Learned:`, in that order, with
-    `Not closed:` omitted when there is nothing to put in it. One section per
-    pull request, whatever number of observations it closed, because the unit is
-    the change and not the row. `tests/run.py` compares that field list with the
-    template on the page, so changing one means changing both.
+(b) **The log.** `docs/experience.md` is a log of **episodes**, oldest first,
+    numbered `E<n>`. An episode is something that passed between this repository
+    and a project it reports on, and the bar is that **a maintainer of that
+    project spent attention on it** -- they merged, rejected or acted on
+    something of ours, or put a correction to us. A window that closed nothing
+    earns no entry, and neither does a mistake of ours that nobody there saw.
+
+    Use the shape that file sets out under *How this page is maintained* --
+    `When`, `Kind`, `Ours`, `Theirs` and `Outcome` in the table, then
+    `What happened`, then `Not closed` where there is something to put in it,
+    then `What we learned`. `tests/run.py` compares that field list with this
+    prompt, so changing one means changing both.
+
+    **One entry per episode, not per observation and not per window.** A change
+    that closed twenty-five rows is one entry naming all of them. The next id is
+    one above the highest ever used, ids are never reused, and an entry is never
+    rewritten to say something else -- a later entry corrects it by id.
 
     **Link every commit and pull request to the project it belongs to**, taking
     the remote from `config/deps.json`. A commit's link text is its short sha and
     its target is the remote followed by `/commit/` and the full sha; a pull
     request's link text is `#` and the number, and its target is the remote
-    followed by `/pull/` and the number. The template on the page shows both. A
-    reader checking a claim here against the diff should not need a checkout.
+    followed by `/pull/` and the number. A reader checking a claim here against
+    the diff should not need a checkout.
 
-    `Summary:` is two sentences and 250 characters at most, written for somebody
-    who works on neither project: no identities, no check codes, no procedure.
-    `Not closed:` names any observation this change was expected to close and did
-    not, with what was re-read to establish that -- the field exists because a
-    window that closes eleven rows and quietly leaves a twelfth reads as complete.
-    `Learned:` is the field that makes this a post-mortem rather than a
-    changelog, and the one a thin window drops first.
+    `What happened` is written for somebody who works on neither project: no
+    check codes in the first sentence, and enough of the mechanism that a reader
+    could go and check it. `Not closed` names any observation the change was
+    expected to close and did not, with what was re-read to establish that --
+    the field exists because a change that closes eleven rows and quietly leaves
+    a twelfth reads as complete. `What we learned` is the field that makes this a
+    post-mortem rather than a changelog, and the one a thin window drops first.
 
-    Record whether the change cites us under `Attribution:`, and do not argue
+    Record whether the change cites us in `Kind` or `Outcome`, and do not argue
     for it -- attribution is secondary, and a fix a project found on its own
     still closed an observation of ours and is still evidence the check was
     pointing at something real.
 
-    **Anything a window taught you about *our* tooling** -- a stale baseline, a
-    check that failed open, a rename that will read as a disappearance -- goes
-    under *What a run learned about itself* in the same file, one line each, and
-    an empty section is the honest result when a run turned up nothing.
+    **Anything a window taught you about *our* tooling** goes under *What a run
+    learned about itself* in `docs/history.md` instead -- a stale baseline, a
+    check that failed open, a rename that will read as a disappearance. One line
+    each, newest first, and an empty section is the honest result when a run
+    turned up nothing about us.
 
 Record the date as {when} where a date is called for.
 
@@ -666,7 +676,7 @@ def main():
                   file=sys.stderr)
         for name in quiet_names:
             print(f"--   {name}: nothing open", file=sys.stderr)
-        print("--   writing bug_db/bugs.json and bug_db/experience.md here",
+        print("--   writing bug_db/bugs.json and docs/experience.md here",
               file=sys.stderr)
         command = (["codex", "exec"] if args.noninteractive else ["codex"]) if args.codex else (
                    ["claude", "-p"] if args.noninteractive else ["claude"])

@@ -20,7 +20,7 @@ has not been checked.
 
 ## 2026-09-19 — the first pass, from one session in the parent's tree
 
-**Fifteen claims, every one τεκμήριον, and one of them found by a job going
+**Seventeen claims, every one τεκμήριον, and one of them found by a job going
 red — the only one.** This is
 [zetesis's `F5`](https://github.com/ajreynol/epikrisis/blob/main/tools/zetesis/findings.md)
 with instances attached: the parent's CI was green throughout, its policy checker
@@ -45,13 +45,15 @@ said what they say.**
 | 13 | the tree as a whole | the shared policy says anoieu keeps the reporting policy | no such page existed for a day: it was deleted with the workflow it was filed beside, and the only statement of it left was a summary inside a live discussion topic |
 | 14 | `docs/discussion.md`, a live standing invitation | two child projects "exist here", and a report against this repository is recorded in `tools/martyria/reports.md` | both left with epikrisis on 2026-09-14; `tools/` here holds one child and that path does not exist. The invitation had been telling other tools for five weeks where to send something, and the place was not there |
 | 15 | `bug_db/corpus.md` | ethos was measured on ref `ethosEoc3` at `fe74fe40e7f1` | the generator reads the ref from `config/deps.json`, which had been changed to `main` — so regenerating the page made it say `main` beside a commit that is not on `main`. **The parent's CI was red on this**, and the only repair its own error message offered was to commit the false version |
+| 16 | `config/deps.json` | logos is at `https://github.com/ajreynol/logos.git` | the project is `cvc5/logos` — cvc5's own commits link `cvc5/logos/pull/…`, and the ecosystem register records that url. The manifest named a personal mirror as the project we publish findings about |
+| 17 | `verdicts.py --check` output | seven ethos closures are still owed a landing | the change had landed on ethos `main` as [#241](https://github.com/cvc5/ethos/pull/241), squash-merged under a new commit id. The audit asked whether the *branch* commit was an ancestor of `main`, which it will never be, so it reported the debt as outstanding for a change that was already in |
 
 **Re-derive any row** by resolving the path it names against the tree it names,
 at the commit this entry was written. Rows 5 through 15 are settled by reading
-one file in the parent's own checkout; rows 1 through 4 need the other
+one file in the parent's own checkout; rows 1 through 4, 16 and 17 need the other
 repository, which is the finding below.
 
-### What the fifteen say, which is more than fifteen facts
+### What the seventeen say, which is more than seventeen facts
 
 **Four of the six stale links are into another repository, and the parent's
 checker skips every one by design.** `check_links` resolves every committed path
@@ -64,7 +66,7 @@ tree they do not own — which makes this **a gap somebody chose rather than
 missed**, and the honest measurement of it is a count like the one above rather
 than an argument.
 
-**Three of the fifteen are a document describing the tree it sits in.** Rows 6,
+**Three of the seventeen are a document describing the tree it sits in.** Rows 6,
 7 and 8 are the parent's own checker making claims about the parent's own tree
 and about the shared policy, wrongly, on every run. That is the worst shape a
 stale claim takes: it carries the authority of something that executes.
@@ -85,7 +87,7 @@ reads wider than it is. Row 15 sharpens it further: **a generator is itself a
 claim about the world**, and when its inputs come from two registers that
 disagree, regeneration is how the falsehood gets committed.
 
-**And the count nobody can calibrate is the one that matters.** Fifteen is how
+**And the count nobody can calibrate is the one that matters.** Seventeen is how
 many one session found, not how many there are. The register says what was
 checked; it says nothing about the rest, and the parent's own reporting policy
 forbids turning that into a coverage number.
@@ -105,8 +107,10 @@ forbids turning that into a coverage number.
 | 13 | asserting that a responsibility the shared policy assigns this repository has a page | no |
 | 14 | resolving a committed path named in a code span, not only one inside a link | no — the link checks read Markdown link targets, and this was neither a link nor `http` |
 | 15 | comparing the generated page's ref against the lock that supplied its commit | **now yes**, in `tests/run.py`; and the generator takes both halves from the lock |
+| 16 | comparing a manifest url against the ecosystem register's url for the same project | no — the register is another repository's file, which is the row 1–4 problem again |
+| 17 | asking by patch identity rather than by ancestry | **now yes**, in `verdicts.py`, which also names the commit that carries the change |
 
-**Seven of fifteen have no mechanical form at all**, which is the project's own
+**Seven of seventeen have no mechanical form at all**, which is the project's own
 question answering itself: the evidence that these documents are accurate is
 still *somebody read them*, and this register is the record of which somebody,
 when, and what they found.
