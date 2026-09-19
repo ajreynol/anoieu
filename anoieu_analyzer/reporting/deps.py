@@ -66,7 +66,8 @@ def _git(*args: str, cwd: str | None = None) -> tuple[int, str]:
     return out.returncode, (out.stdout + out.stderr).strip()
 
 
-def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "") -> Dep:
+def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "",
+         pin_ref: str = "") -> Dep:
     """Bring one project's clone to a commit: the tip of its ref, or `pin`.
 
     The clone is ours, so this is allowed to be blunt about it — a hard reset
@@ -77,6 +78,15 @@ def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "") -
     run over a recorded version measures the same bytes it measured before --
     and it asks for the commit by name, so a branch that has since been renamed
     or deleted is not something a pinned run can trip over.
+
+    **`pin_ref` is the branch that commit was measured on, and a pinned restore
+    reports it instead of the manifest's.** The two are the same until somebody
+    changes a ref in `deps.json`, and then they are not: the manifest says what
+    is *watched now* while the lock says what was *measured*. Printing the first
+    beside the second put `docs/corpus.md` in the position of asserting that a
+    commit on one branch was the tip of another -- which happened the day the
+    ethos exception was dropped, and made a generated page state something
+    false while passing its own `--check`.
     """
     dep.path = os.path.join(deps_dir, dep.name)
     exists = os.path.isdir(os.path.join(dep.path, ".git"))
@@ -147,14 +157,32 @@ def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "") -
             dep.full = head
             dep.sha = dep.full[:12]
             dep.date = _git("log", "-1", "--format=%cs", cwd=dep.path)[1]
+    # **The ref reported must describe the commit reported**, and only a run
+    # that moved the checkout itself knows the manifest's ref describes it.
+    #
+    # - unpinned: this run fetched the manifest ref's tip, so the two agree by
+    #   construction and the manifest is right.
+    # - pinned, or offline on the locked commit: the commit came from the lock,
+    #   so the ref it was measured on is the lock's -- which is a different fact
+    #   from what `deps.json` watches today, and stops being the same one the
+    #   moment somebody changes a ref there.
+    #
+    # `pin_ref` overrides for a caller that knows better.
+    if pin_ref:
+        dep.ref = pin_ref
+    elif (pin or offline) and dep.full and read_lock().get(dep.name) == dep.full:
+        dep.ref = read_lock_refs().get(dep.name) or dep.ref
     return dep
 
 
 def sync_all(
-    deps_dir: str = DEPS, offline: bool = False, pins: dict | None = None
+    deps_dir: str = DEPS, offline: bool = False, pins: dict | None = None,
+    pin_refs: dict | None = None,
 ) -> list[Dep]:
     pins = pins or {}
-    return [sync(d, deps_dir, offline, pins.get(d.name, "")) for d in manifest()]
+    pin_refs = pin_refs or {}
+    return [sync(d, deps_dir, offline, pins.get(d.name, ""), pin_refs.get(d.name, ""))
+            for d in manifest()]
 
 
 def read_lock(path: str = LOCK) -> dict[str, str]:
@@ -164,10 +192,24 @@ def read_lock(path: str = LOCK) -> dict[str, str]:
     plenty to recognise a commit and not enough to fetch one. This file is the
     same fact written for a machine, and is what `--pinned` restores.
     """
+    return {name: entry["commit"] for name, entry in read_lock_entries(path).items()}
+
+
+def read_lock_refs(path: str = LOCK) -> dict[str, str]:
+    """The ref each recorded commit was on when it was measured.
+
+    Separate from the manifest's ref on purpose: see `sync`.
+    """
+    return {name: entry.get("ref", "")
+            for name, entry in read_lock_entries(path).items()}
+
+
+def read_lock_entries(path: str = LOCK) -> dict[str, dict]:
+    """The lock, less its comment."""
     if not os.path.isfile(path):
         return {}
     with open(path) as f:
-        return {k: v["commit"] for k, v in json.load(f).items() if not k.startswith("_")}
+        return {k: v for k, v in json.load(f).items() if not k.startswith("_")}
 
 
 def render_lock(deps: list[Dep]) -> str:

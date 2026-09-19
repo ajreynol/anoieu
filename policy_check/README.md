@@ -30,6 +30,17 @@ an anoieu commit pin. The contract selects the requirements the consumer is
 checked against. `--version` prints the full implementation commit; every check
 run logs that commit, the selected contract, and the repository being checked.
 
+**What a joining repository is actually asked for is two files**, and everything
+else this checker carries reports `skip` naming the path that would switch it on
+— *nothing at docs/discussion.md — this check turns on if you add one*, and so
+for the documentation index, `.gitignore`, `tools/` and the rest. Measured by
+kanon on 2026-09-18 against a tree of exactly the README and the workflow their
+joining section gives, at contract 1: **0 failures, 14 skipped**. A discussion
+file is **not** in that set — the response gate becomes fatal only once one
+exists — and a cascade cannot happen, because there is no first failure to
+trigger it. Kanon's joining section is the authority on what is asked; this
+paragraph says what the checker does with it.
+
 ## What version 1 promises
 
 Version 1 is the mechanical contract supported when this interface was
@@ -65,6 +76,15 @@ and child projects with both the default and explicit version 1. A new version
 must have its own registry entry and fixtures while these continue to pass.
 Bug fixes need a regression case demonstrating the implementation error; a new
 requirement must not be introduced as a bug fix.
+
+**What a link may point at is one of those fixes, made 2026-09-19.** The anchor
+check recognised heading slugs only, so a valid link to an explicit
+`<a id="...">` anchor — a numbered subclause, or an alias retained so that links
+written before a renumbering keep resolving — was reported as a missing heading,
+and the only way past it was to promote a paragraph to a heading. Reported by
+kanon as their `D20`. Widening what counts as a target can only turn a failure
+into a pass, so it stays inside contract 1; the regression case is
+`anchor_targets` in [`tests/cases.py`](tests/cases.py).
 
 ## Which requirement governs the `anoieu / policy` job
 
@@ -182,7 +202,18 @@ workflow at `main` with contract 1 and has no checker lock to update. Other
 dependencies can still need exact commits; remove a lock only where nothing
 else uses it.
 
-**Members on the pinned form are not behind.** Read on 2026-09-17, aisthesis,
-epikrisis, eschaton and tachyon each pin deliberately and say why, and dokimasia
-pins with a bump script that refuses a commit anoieu's CI was not green at.
-**That is the requirement working**, not a migration that has stalled.
+**Members on the pinned form are not behind.** Read on 2026-09-19, five repositories
+call the shared workflow and name contract 1 — epikrisis, kanon, koine, logos and
+tachyon — and four pin deliberately: aisthesis and eschaton at `154228a`,
+eudaimonia at `dc2c613`, and dokimasia through a lock its own `bump_anoieu`
+refuses to move onto a commit anoieu's CI was not green at. **That is the
+requirement working**, not a migration that has stalled.
+
+**And a pin holds a policy's address as well as its rules**, which is the cost
+epikrisis reported in their `D5` and the reason they left the pinned form. A
+member sitting on a commit from before the governance handoff has a checker whose
+declaration check names the repository the policy used to live in, so writing the
+declaration the policy publishes turns their build red while keeping it green
+links a reader to a policy that is not there. Nothing can fix that at the old
+commit; the contract form is what removes the trap, and naming the trade is the
+whole of what a member needs in order to choose.

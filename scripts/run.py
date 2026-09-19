@@ -135,6 +135,9 @@ def main() -> int:
     failures = 0
 
     pinned = deps_mod.read_lock() if args.pinned else {}
+    # The ref each pinned commit was measured on, which is not necessarily the
+    # ref watched today. See `deps.sync`.
+    pinned_refs = deps_mod.read_lock_refs() if args.pinned else {}
     step(
         "Using deps/ as it stands"
         if args.offline
@@ -144,7 +147,8 @@ def main() -> int:
     )
     synced = []
     for dep in deps_mod.manifest():
-        d = deps_mod.sync(dep, deps_dir, args.offline, pinned.get(dep.name, ""))
+        d = deps_mod.sync(dep, deps_dir, args.offline, pinned.get(dep.name, ""),
+                          pinned_refs.get(dep.name, ""))
         synced.append(d)
         item(f"{d.name:11} {d.ref:16} {d.status:24} {d.sha}")
     if any(not d.sha for d in synced):

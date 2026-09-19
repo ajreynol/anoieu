@@ -190,6 +190,36 @@ def manifest_agrees() -> int:
             failures += 1
     if skipped:
         print(f"     {skipped} checkout(s) not on disk, so not compared")
+
+    # And the fifth: the ref `docs/corpus.md` reports beside each commit.
+    #
+    # **A generated page can be current against its generator and false about
+    # the world**, and this is the shape that took. The table's ref came from
+    # `deps.json`, which says what is *watched now*, while its commit came from
+    # the lock, which says what was *measured*. The two agreed until the ethos
+    # exception was dropped on 2026-09-19 -- after which the page asserted that
+    # a commit on `ethosEoc3` was ethos's `main`, and the corpus job went red on
+    # the committed tree with the only fix on offer being to write the false
+    # version. The lock is the register for both halves; this compares the page
+    # against it.
+    corpus_page = os.path.join(root, "docs", "corpus.md")
+    if os.path.isfile(corpus_page):
+        with open(corpus_page, encoding="utf-8") as fh:
+            rows = dict(re.findall(r"^\| \*\*(\w[\w-]*)\*\* \| `([^`]+)` \|",
+                                   fh.read(), re.M))
+        for name, entry in sorted(deps.read_lock_entries().items()):
+            want, got = entry.get("ref", ""), rows.get(name)
+            if got is None:
+                print(f"FAIL docs/corpus.md has no row for {name}, which the "
+                      "lock records a commit for")
+                failures += 1
+            elif want and got != want:
+                print(f"FAIL docs/corpus.md says {name} was measured on "
+                      f"{got!r}; the lock records the commit as {want!r}")
+                print("     the ref reported has to describe the commit "
+                      "reported -- see `sync` in anoieu_analyzer/reporting/deps.py")
+                failures += 1
+
     print(f"-- the manifest, the targets, the lock and the checkouts agree: "
           f"{failures} failure(s), {checked} compared")
     return failures
@@ -323,6 +353,70 @@ def targets_agree() -> int:
     return failures
 
 
+def prompts_agree() -> int:
+    """The closure prompt's entry shape and `docs/experience.md`'s template agree.
+
+    **Two descriptions of one thing, and the prompt is a copy.** The page is the
+    register: it sets out the fields an entry carries, in order, under *How to
+    maintain this page*, and a reader of the log is entitled to expect every
+    section to look alike. `prompts/close_bug_db` restates that list to the
+    assistant that writes the sections, so the two drift the moment either moves
+    -- which is how the prompt came to be directing closures into two ledgers
+    that had already been deleted.
+
+    Whitespace is normalised on both sides, because each wraps at eighty columns
+    and a field name split across a line break is the same field name.
+
+    This is the comparison `policy_check/checker.py` names when it skips *a
+    workflow is defined in prose* and *a surface that restates a register is
+    compared to it*. It was named there before it existed.
+    """
+    def flat(text: str) -> str:
+        return re.sub(r"\s+", " ", text)
+
+    root = os.path.dirname(HERE)
+    page = os.path.join(root, "docs", "experience.md")
+    prompt = os.path.join(root, "prompts", "close_bug_db")
+    with open(page, encoding="utf-8") as fh:
+        text = fh.read()
+    _, sep, tail = text.partition("## How to maintain this page")
+    if not sep:
+        print("FAIL docs/experience.md has no 'How to maintain this page' section, "
+              "so the entry template is not where prompts/close_bug_db says it is")
+        return 1
+    block = re.search(r"```text\n(.*?)```", tail, re.S)
+    if not block:
+        print("FAIL docs/experience.md's maintenance section carries no template block")
+        return 1
+    template = re.findall(r"\*\*([^*]+?):\*\*", flat(block.group(1)))
+    with open(prompt, encoding="utf-8") as fh:
+        listed = re.findall(r"`([^`]+?):`", flat(fh.read()))
+
+    failures = 0
+    #: Where each template field is first named in the prompt, so that a missing
+    #: field and a reordered one are told apart.
+    at = {f: listed.index(f) for f in template if f in listed}
+    for field in template:
+        if field not in at:
+            print(f"FAIL prompts/close_bug_db does not name the `{field}:` field "
+                  "that docs/experience.md's template requires")
+            failures += 1
+    #: And the other direction: the prompt names these fields and no others, so a
+    #: field the register dropped cannot go on being asked for.
+    for field in sorted(set(listed) - set(template)):
+        print(f"FAIL prompts/close_bug_db names a `{field}:` field that "
+              "docs/experience.md's template does not have")
+        failures += 1
+    named = [f for f in template if f in at]
+    if len(named) == len(template) and sorted(named, key=at.get) != named:
+        print("FAIL prompts/close_bug_db names the entry fields in a different "
+              f"order from the template: {sorted(named, key=at.get)} against {named}")
+        failures += 1
+    print(f"-- the entry template and its prompt: {len(template)} field(s), "
+          f"{failures} failure(s)")
+    return failures
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--oracle", action="store_true",
@@ -394,6 +488,7 @@ def main() -> int:
     failures += policy_cases.main()
     failures += verdict_audit()
     failures += targets_agree()
+    failures += prompts_agree()
 
     sys.stdout.flush()
     print()

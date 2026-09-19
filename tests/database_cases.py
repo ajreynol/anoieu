@@ -27,15 +27,34 @@ def main() -> int:
              "description": "reproducer removed when the finding was withdrawn"},
             {"id": "old", "tool": "anoieu", "code": "EO0031", "owner": "cvc5",
              "where": "old.eo:1", "description": "record without a measured commit"},
+            # A closure the view has to show, and the debt it must not hide.
+            {"id": "landed", "tool": "anoieu", "code": "EO0031", "owner": "cvc5",
+             "where": "landed.eo:1", "description": "ruled on and landed",
+             "closed_verdict": "fixed and landed", "closed_on": "2026-09-19",
+             "closed_commit": "0123456789abcdef0123456789abcdef01234567"},
+            {"id": "pending", "tool": "anoieu", "code": "EO0031", "owner": "ethos",
+             "where": "pending.eo:1", "description": "accepted, change not on main",
+             "closed_verdict": "accepted and fixed", "closed_on": "2026-09-19",
+             "awaiting_landing": {"project": "ethos", "branch": "topic",
+                                  "commit": "89abcde"}},
         ]}), encoding="utf-8")
         before = db.read_bytes()
         database.render(str(db))
         view = (Path(directory) / "bugs.md").read_text(encoding="utf-8")
         cases = [
             ("rendering preserves the database byte for byte", db.read_bytes() == before),
-            ("both producers appear with their recorded counts",
-             "[Static analyzer](#static-analyzer) | 2" in view
-             and "[Fuzzer](#fuzzer) | 2" in view),
+            ("both producers appear with their recorded and open counts",
+             "[Static analyzer](#static-analyzer) | 4 | 2 |" in view
+             and "[Fuzzer](#fuzzer) | 2 | 2 |" in view),
+            # The view used to render no closure at all, so every ruled-on
+            # finding read as a live defect in somebody else's code.
+            ("a ruled-on finding shows its verdict and links the closing commit",
+             "fixed and landed ([`0123456`](https://github.com/cvc5/cvc5/commit/"
+             "0123456789abcdef0123456789abcdef01234567))" in view),
+            ("a finding nobody has ruled on reads as open",
+             "| record without a measured commit | open |" in view),
+            ("a closure whose change has not landed says so",
+             "accepted and fixed<br>not landed: ethos topic" in view),
             ("static evidence links to the measured commit and encoded source path",
              "https://github.com/cvc5/cvc5/blob/abcdef1/proofs/eo/a%20b.eo#L7" in view),
             ("fuzzer evidence links to the committed reproducer",

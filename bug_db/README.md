@@ -6,9 +6,9 @@ that have since been resolved. Koine's `bug_db_manager/koine_append_db` is its o
 writer; Koine provides the tooling, and this directory holds anoieu's data.
 
 **[Browse the bug database](bugs.md)** directly on GitHub. The generated page
-shows both producers, diagnostic descriptions, ingestion dates, and links to
-source locations or committed reproducers. Open the **Preview** tab if GitHub
-shows the Markdown source. No server or local setup is needed to read it.
+shows both producers, each finding's description and status, ingestion dates, and
+links to source locations or committed reproducers. Open the **Preview** tab if
+GitHub shows the Markdown source. No server or local setup is needed to read it.
 
 The database moved here from `docs/reports/bugs.json` on 2026-09-18, preserving
 every record and date.
@@ -40,9 +40,10 @@ start a fuzzing campaign, or replay the recorded fuzzer cases.
 - **Static inputs:** [`anoieu_analyzer/reporting/config/targets.json`](../anoieu_analyzer/reporting/config/targets.json) names the
   targets. Set their checkout paths in the gitignored `anoieu_analyzer/reporting/config/repos.local`
   (one `project /path/to/checkout` per line), or use the managed `deps/` clones.
-  `python3 scripts/run.py --pinned` prepares those clones at the recorded commits
-  and regenerates the legacy reports too. The update command refuses missing
-  configured input paths instead of silently recording a partial refresh.
+  `python3 scripts/run.py --pinned` prepares those clones at the recorded
+  commits and re-measures them into [`docs/corpus.md`](../docs/corpus.md). The
+  update command refuses missing configured input paths instead of silently
+  recording a partial refresh.
 - **Koine:** [`anoieu_analyzer/reporting/koine.py`](../anoieu_analyzer/reporting/koine.py) finds `$KOINE`, then
   `../koine`, then `deps/koine`. A normal update or preview can clone the commit
   in [`anoieu_analyzer/reporting/config/koine.lock`](../anoieu_analyzer/reporting/config/koine.lock) into `deps/koine` if needed;
@@ -70,8 +71,8 @@ For just one producer, `scripts/anoieu_analyzer` updates the static findings and
 `python3 -m anoieu_fuzz report` records the promoted fuzzer corpus. Both accept
 `--preview` and write to this same database.
 
-The updater, analyzer, fuzzer reporting/promotion and legacy ledger generator
-refresh `bugs.md` after a successful append. To render existing data without
+The updater, the analyzer, and fuzzer reporting and promotion each refresh
+`bugs.md` after a successful append. To render existing data without
 running either producer, use `python3 -m anoieu_analyzer.reporting.database`. Its
 `--check` mode detects a stale view, and CI runs that check. A direct append with
 the low-level Koine command needs this render step. Commit `bugs.md` alongside

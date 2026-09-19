@@ -14,6 +14,20 @@ from enum import Enum
 from typing import Iterable
 
 
+#: Where this tool is published, written once because two SARIF fields restate
+#: it and a third document links to the catalogue it points into. It was
+#: `cvc5/anoieu` in both fields until 2026-09-19 -- a repository that does not
+#: exist, in the one output a machine follows rather than a person -- so the
+#: constant is the register and `tests/cli_cases.py` compares the copies to it.
+REPOSITORY = "https://github.com/ajreynol/anoieu"
+
+#: The page each rule's `helpUri` points into, and the anchor scheme it uses:
+#: one `## <CODE>` heading per check, so GitHub's anchor is the code lowercased.
+#: `anoieu_analyzer/reporting/gen_checks_doc.py` writes it and the same test
+#: checks every anchor emitted here is one that page carries.
+CHECK_CATALOGUE = REPOSITORY + "/blob/main/docs/checks.md"
+
+
 class Severity(str, Enum):
     ERROR = "error"
     WARNING = "warning"
@@ -166,8 +180,7 @@ def render_sarif(diags: Iterable[Diagnostic], root: str) -> str:
             {
                 "id": d.code,
                 "shortDescription": {"text": d.message},
-                "helpUri": "https://github.com/cvc5/anoieu/blob/main/docs/checks.md#"
-                + d.code.lower(),
+                "helpUri": CHECK_CATALOGUE + "#" + d.code.lower(),
             },
         )
         results.append(
@@ -196,7 +209,7 @@ def render_sarif(diags: Iterable[Diagnostic], root: str) -> str:
                 "tool": {
                     "driver": {
                         "name": "anoieu",
-                        "informationUri": "https://github.com/cvc5/anoieu",
+                        "informationUri": REPOSITORY,
                         "rules": list(rules.values()),
                     }
                 },

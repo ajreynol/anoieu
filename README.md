@@ -123,9 +123,11 @@ python3 scripts/update_bug_db.py            # analyse and record both sources
 Use `--preview` to analyse without changing the database. The
 [database README](bug_db/README.md) covers setup, adding new fuzzer findings,
 and what the ingestion dates mean.
-**[Browse all recorded bugs on GitHub](bug_db/bugs.md)** in the generated table,
-with links to source locations and reproducers. Recording commands refresh it
-alongside the JSON.
+**[Browse all recorded bugs on GitHub](bug_db/bugs.md)** in the generated
+table, which carries each finding's status beside its claim — the verdict
+recorded against it, or `open` where nobody has ruled — with links to source
+locations, reproducers and the change a finding closed on. Recording commands
+refresh it alongside the JSON.
 
 The [bug database](bug_db/bugs.json) is the persistent record, and the only
 one: static findings and promoted fuzzer findings, recorded exclusively through
@@ -140,6 +142,10 @@ project has since done about what we found is
 [`experience.md`](docs/experience.md); what a verdict may say, and the audit
 that reads the outstanding ones back, is
 [Closure](bug_db/README.md#closure).
+
+What may be said about code we do not own — what separates a candidate published
+under our own name from a finding carried to its owner, and what may be taken as
+material at all — is the [reporting policy](docs/reporting-policy.md).
 
 ## Optional ecosystem CI check
 
@@ -202,6 +208,8 @@ This repository is part of the **Eunoia ecosystem** and follows its shared
 [repository policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
 This README is checked against that policy on every push, by the same command
 any other repository would run.
+
+**Human maintainers:** [the current list in policy.md](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#human-maintainers).
 
 **Written by AI agents, under light human supervision.** A human directs the
 work, reads what is published and decides what is filed; nobody vets the

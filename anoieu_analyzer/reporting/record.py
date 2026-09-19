@@ -144,11 +144,13 @@ and is maintained exclusively by
 [koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds what
 is new and never edits or removes what is already there.
 
-**A row here is a claim, not a verdict.** Recording is additive, so a finding
-that has since been fixed still has its entry and its dates. What was decided
-about one is the `closed_verdict` on its database entry, put there by
-[`prompts/close_bug_db`](../prompts/close_bug_db) against a named commit and
-written up in [`experience.md`](../docs/experience.md).
+**A row is a claim; the status column is what was decided about it.**
+Recording is additive, so a finding that has since been fixed keeps its entry and
+its dates -- the status is the `closed_verdict` on the database entry, put there
+by [`prompts/close_bug_db`](../prompts/close_bug_db) against a named commit, and
+`open` means nobody has ruled rather than that a check was re-run. The reasoning
+behind a verdict is `closed_why` in the database; what the change meant is
+[`experience.md`](../docs/experience.md).
 
 A second producer, an agent driven by
 [`prompts/anoieu_analyzer_agent`](../prompts/anoieu_analyzer_agent), writes
@@ -161,8 +163,15 @@ def render_static(db: str, page: str) -> None:
     with open(db, encoding="utf-8") as fh:
         bugs = [b for b in json.load(fh)["bugs"]
                 if not b.get("code", "").startswith("FUZ")]
-    cols = ("bug", "owner", "code", "where", "description", "first seen", "last seen")
-    lines = [STATIC_HEADER, "", f"## Every static finding recorded ({len(bugs)})", "",
+    cols = ("bug", "owner", "code", "where", "description", "status",
+            "first seen", "last seen")
+    # A table with no status column reads as a list of live defects in somebody
+    # else's code, whatever the prose above it says. The count says how many are
+    # still open beside how many were ever recorded.
+    still_open = sum(1 for b in bugs if not b.get("closed_verdict"))
+    lines = [STATIC_HEADER, "",
+             f"## Every static finding recorded ({len(bugs)}, of which {still_open} open)",
+             "",
              "| " + " | ".join(cols) + " |",
              "| " + " | ".join("---" for _ in cols) + " |"]
     for b in bugs:
@@ -172,6 +181,7 @@ def render_static(db: str, page: str) -> None:
             b.get("code", ""),
             f"`{b.get('where', '')}`" if b.get("where") else "",
             b.get("description", "").replace("|", "\\|"),
+            b.get("closed_verdict", "") or "open",
             b.get("first_seen", ""),
             b.get("last_seen", ""),
         ]) + " |")

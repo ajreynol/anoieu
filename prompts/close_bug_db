@@ -495,13 +495,26 @@ it; see what to write, below.
     `python3 -m anoieu_analyzer.reporting.database`.
 
 (b) **The log.** One section per closing change in `docs/experience.md`, under
-    *The log*, newest first, in the shape that file sets out under *The shape of
-    an entry* -- `Commit:`, `Closed:`, `Summary:`, `What the change did:`,
-    `Attribution:` and `Learned:`. One section per pull request, whatever number
-    of observations it closed, because the unit is the change and not the row.
+    *The log*, newest first, in the shape that file sets out under *How to
+    maintain this page* -- `Commit:`, `Closed:`, `Summary:`, `What the change
+    did:`, `Not closed:`, `Attribution:` and `Learned:`, in that order, with
+    `Not closed:` omitted when there is nothing to put in it. One section per
+    pull request, whatever number of observations it closed, because the unit is
+    the change and not the row. `tests/run.py` compares that field list with the
+    template on the page, so changing one means changing both.
+
+    **Link every commit and pull request to the project it belongs to**, taking
+    the remote from `config/deps.json`. A commit's link text is its short sha and
+    its target is the remote followed by `/commit/` and the full sha; a pull
+    request's link text is `#` and the number, and its target is the remote
+    followed by `/pull/` and the number. The template on the page shows both. A
+    reader checking a claim here against the diff should not need a checkout.
 
     `Summary:` is two sentences and 250 characters at most, written for somebody
     who works on neither project: no identities, no check codes, no procedure.
+    `Not closed:` names any observation this change was expected to close and did
+    not, with what was re-read to establish that -- the field exists because a
+    window that closes eleven rows and quietly leaves a twelfth reads as complete.
     `Learned:` is the field that makes this a post-mortem rather than a
     changelog, and the one a thin window drops first.
 

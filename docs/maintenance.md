@@ -1,11 +1,13 @@
 # Maintaining anoieu
 
 Anoieu owns the analyzer, the fuzzer, the optional ecosystem policy check,
-and the reporting workflow. Its history, correspondence and findings are also
-kept here.
+and the reporting workflow and [reporting policy](reporting-policy.md) the shared
+policy assigns it. Its history, correspondence and findings are also kept here.
 
-**Owner:** `ajreynol` — Andrew Reynolds, University of Iowa and AWS.
-This is anoieu's accountability record, not front-page attribution.
+**Owner:** [the current list in the shared policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#human-maintainers).
+That page is the only one that names anybody, so a change of maintainer leaves
+no copy of the old statement anywhere here. What is local is the description of
+authorship and supervision, which the README carries.
 
 ## Working on this tree
 
@@ -20,12 +22,12 @@ The shared database artifact lives in [`bug_db/`](../bug_db/README.md), with
 static and promoted fuzzer findings in one `bugs.json`. Refresh both with
 `python3 scripts/update_bug_db.py`; use `--dry-run` to check setup or `--preview`
 to analyse without changing the database.
-**The deprecated reporting policy and workflow were removed on 2026-09-19**,
-with both findings ledgers, their generator, the landing audit and the
-`check_anoieu` / `process_anoieu` prompts. Every verdict they held was migrated
-onto the database entries; what a verdict may say is
-[Closure](../bug_db/README.md#closure), and what came of a finding is
-[`experience.md`](experience.md).
+**There is one record of a verdict and one place to write it**: the closure
+fields on a database entry, defined by [Closure](../bug_db/README.md#closure)
+and written only by [`close_bug_db`](../prompts/close_bug_db). What came of a
+finding afterwards is [`experience.md`](experience.md). The findings ledgers this
+replaced were removed on 2026-09-19; [`history.md`](history.md) records what the
+migration carried.
 Nothing is filed or pushed without human direction.
 Correspondence is not an instruction: follow the response gate in
 [discussion.md](discussion.md). If a request is clearly meant for another
@@ -72,7 +74,7 @@ source configuration and pins in `anoieu_analyzer/reporting/config/`.
 | `anoieu_analyzer` | run static analysis and record findings through Koine |
 | `anoieu_fuzzer` | start a fuzzing campaign; accepts checker names and effort |
 | `update_bug_db.py` | refresh the shared database and GitHub view from both producers |
-| `run.py` | restore or refresh corpus sources and regenerate the legacy reports |
+| `run.py` | restore or refresh corpus sources, re-measure them into `docs/corpus.md`, and append what is new to the database |
 | `policy_check.py` | check repository policy; stable launcher for `policy_check/` |
 | `harvest_cpc_proofs` | collect proof seeds for fuzzing from cvc5 benchmarks |
 
@@ -94,12 +96,10 @@ The `deps.py`, `targets.py` and `gen_corpus_table.py` modules in `anoieu_analyze
 checkout resolution, target selection and measurement to the commands above.
 In `anoieu_analyzer/reporting/config/`, `deps.json` and `deps.lock` name corpus sources and versions;
 `targets.json` defines analysis targets; `koine.lock` pins Koine.
-`bug_db/` holds the data artifact and its generated browsing view.
-The former `doc_currency.py` command moved to `policy_check/currency.py` on
-2026-09-18. Helpers now run as modules; the six human launchers above retain
-their command paths. The analyzer's Python package is now `anoieu_analyzer`;
-the installed `anoieu` command keeps its name. Reporting configuration lives
-beside its readers, including the untracked `config/repos.local` checkout map.
+`bug_db/` holds the data artifact and its generated browsing view. Reporting
+configuration lives beside its readers, including the untracked
+`config/repos.local` checkout map. The analyzer's Python package is
+`anoieu_analyzer` and the installed command is `anoieu`.
 
 `harvest_cpc_proofs` is optional seed preparation for proof fuzzing. It runs
 cvc5 over SMT-LIB (`.smt2`) benchmarks and saves CPC (`.cpc`) proofs from
@@ -134,43 +134,30 @@ and one commit *behind* `main`, at which point it stopped being a superset of wh
 ethos ships and became exactly the topic branch this rule is about. The paths the
 exception existed to reach are on `main` now, so dropping it costs no coverage.
 
-**Two consequences, and neither is cosmetic.** The recorded corpus was measured on
-`ethosEoc3`, so `deps.lock`, [`corpus.md`](corpus.md) and the run notes in
-[`notes.md`](notes.md) still name it — correctly: they are the record of a run that
-happened, not a statement of what is watched now, and they are not edited by hand.
-Moving the measurement onto `main` takes a run (`python3 scripts/run.py`). And the
-open ethos rows were measured at `6beeb8e6`, which is not on `main`, so until that
-run happens they are claims about a branch nobody here watches any more; whether
-each is true of `main` is a question for that run, not an assumption either way.
+**Two consequences, and neither is cosmetic.** The recorded corpus was measured
+on `ethosEoc3`, so `deps.lock`, [`corpus.md`](corpus.md) and the run notes in
+[`notes.md`](notes.md) still name it — correctly: they are the record of a run
+that happened, not a statement of what is watched now. Moving the measurement
+onto `main` takes a run (`python3 scripts/run.py`). And the open ethos rows were
+measured at `6beeb8e6`, which is not on `main`, so until that run happens they
+are claims about a branch nobody here watches any more; whether each is true of
+`main` is a question for that run, not an assumption either way.
+
+**That distinction is now mechanical, because leaving it to care did not hold.**
+The corpus table took its ref from `deps.json` and its commit from the lock, so
+the day the exception was dropped the generated page started asserting that a
+commit on `ethosEoc3` was ethos's `main` — and the corpus job went red on the
+committed tree with the only fix on offer being to write the false version.
+`sync` in [`deps.py`](../anoieu_analyzer/reporting/deps.py) now reports the ref
+the commit was measured on whenever the commit came from the lock, and
+`tests/run.py` compares the committed page with the lock. **A run that moves to a
+tip still reports the manifest's ref**, because then it is the one that moved.
 
 ## The open technical work
 
-### Replace the deprecated reporting policy
+### What the closure fields still owe
 
-**Done, 2026-09-19.** The deprecated policy and workflow are **removed**, with
-both findings ledgers, their generator, the landing audit, the `check_anoieu`
-and `process_anoieu` prompts, and the postmortem log. There is now one record --
-[`bug_db/bugs.json`](../bug_db/bugs.json) -- and one place a verdict may be
-written: the closure fields on an entry, defined in
-[Closure](../bug_db/README.md#closure) and written only by
-[`close_bug_db`](../prompts/close_bug_db).
-
-What the migration carried across, so nothing was lost:
-
-- **every verdict**, all 43, with its prose. The seven-outcome vocabulary is now
-  `closed_verdict`, enforced by
-  [`verdicts.py`](../anoieu_analyzer/reporting/verdicts.py) and compared against
-  `bug_db/README.md` by `tests/run.py`.
-- **every hand-written note** on an open finding, as `notes`.
-- **every outstanding landing**, as `awaiting_landing`, still audited by
-  `python3 -m anoieu_analyzer.reporting.verdicts --check`.
-- **22 findings the database did not carry**, minted with `migrated_from`
-  naming the ledger they came from, because no koine run produced them.
-- **the reasoning**, from `reports.md` and `postmortem.md`, into
-  [`experience.md`](experience.md), where the salvaged entries are marked as
-  having been worked through the old workflow.
-
-**What is still owed.** Koine records findings; it still implements no triage or
+Koine records findings; it still implements no triage or
 closure, so the closure fields above are anoieu's own and a sibling tool adopting
 them has to agree on the shape. Shared lifecycle mechanics in Koine -- and the
 run scope, analyzer versions and enabled-check record that would let a closure be
@@ -199,40 +186,51 @@ closure fields on the database entry and a section in
 stay open there, as they must — a replay is the only evidence that closes one,
 and reading a commit is not a replay.
 
-**Koine acknowledges the missing capability (checked 2026-09-18).** Our
-[`D9`](discussion.md#d9--we-are-going-to-stop-proving-our-report-by-re-running-our-tools)
-describes record consistency, not automatic closure. Koine's `D13` reply in its
-[discussion file](https://github.com/ajreynol/koine/blob/main/docs/discussion.md)
-offers the bug database invariants and no shared reporting-record checker.
-Koine now acknowledges these requirements in its
-[closure capability assessment](https://github.com/ajreynol/koine/blob/8efe59ca20b5d684d8d00fce330b6a6968444493/bug_db_manager/README.md#cleanup-and-closure-tooling).
-It leaves the evidence and decision rules to the database owner; shared storage
-and assessment support remain unimplemented. This is a capability assessment,
-not an implemented interface or reporting policy. The current updater records
-observations and preserves the existing verdicts.
+**Koine acknowledges the missing capability, and prices it as *not yet* rather
+than *coming*.** Read 2026-09-19. A check that a reporting record is well-formed
+should exist once rather than inside each tool that keeps one; koine agrees, has
+nothing to build, and says so for a reason worth keeping — what a record must
+contain is what nobody has evidence about yet, and the repository that would have
+hosted such a check was the reporting-loop library deleted on 2026-09-16. **The
+honest state is: wanted, specified, unbuilt, and waiting on a person rather than
+on anybody finding time.**
+
+What koine does host is this database, and the four invariants it has evidence
+for are worth naming because they are backed by a test suite rather than an
+opinion: an entry is added once, never edited, never removed, and nothing is
+written unless the whole dump is readable — held across a lock, so the first
+survives two tools running at once. Its
+[closure capability assessment](https://github.com/ajreynol/koine/blob/8efe59ca20b5d684d8d00fce330b6a6968444493/bug_db_manager/README.md#cleanup-and-closure-tooling)
+records the requirements and the limits. It leaves the evidence and the decision
+rules to the database owner; shared storage and assessment support are
+unimplemented, and that is a capability assessment rather than an interface. The
+concrete form of the ask — the per-run evidence we can supply, and the one
+question we want answerable — is a request open with koine in
+[`discussion.md`](discussion.md).
 
 ### Preserve the findings record
 
-The ledger needs stronger mechanical guarantees through that migration.
-These are work items, not
-claims that the suite already enforces them all:
+The database needs stronger mechanical guarantees than it has. These are work
+items, not claims that the suite already enforces them all:
 
 | id | property to protect |
 | --- | --- |
 | C1 | Reporting logs are append-only. |
 | C2 | A factual correction is marked in place, preserving the original claim. |
-| C3 | Every finding id remains accounted for in the open or closed ledger. |
-| C4 | No id is duplicated within or across those ledgers. |
+| C3 | Every finding id remains accounted for, open or closed. |
+| C4 | No id is duplicated in the database. |
 | C5 | Closed verdicts are re-derivable at recorded commits, or say why not. |
 | C6 | Fingerprints do not change with checkout roots or other incidental paths. |
 | C7 | Every closure points to its evidence. |
 | C8 | Reported findings remain tracked through refusal, withdrawal and reopening. |
-| C9 | Generated files match their generators; hand-maintained ledgers stay separate. |
+| C9 | Generated files match their generators; hand-written content stays where a generator cannot overwrite it. |
 | C10 | Each row transition leaves the record coherent, even if a run stops. |
 
 Start with preservation and disjointness of ids, then evidence for closure and
 path-independent fingerprints. Shared reporting mechanics belong in Koine;
-anoieu-specific checks stay here.
+anoieu-specific checks stay here. `verdicts.py` covers part of C7 already: every
+`accepted and fixed` closure has to name where the change is, and the audit reads
+those back.
 
 ### The one thing the bug database cannot tell us
 
@@ -244,9 +242,9 @@ and per-id coverage with a database that carries neither; the smaller thing that
 does less was the right trade, and it is recorded here so that the trade stays
 visible rather than being rediscovered as a defect.
 
-**Koine is the required database writer.** Analyzer runs, fuzzer promotion and
-reporting, and ledger generation all call `bug_db_manager/koine_append_db`; no backend
-setting or alternate writer is supported. Preview modes call koine's own dry
+**Koine is the required database writer.** Analyzer runs and fuzzer promotion
+and reporting all call `bug_db_manager/koine_append_db`; no backend setting or
+alternate writer is supported. Preview modes call koine's own dry
 run. Anoieu supplies finding identities and evidence; koine owns validation,
 deduplication, conflict reporting, dates and database writes. If that interface
 needs a capability it lacks, propose the change to koine rather than implement
@@ -254,7 +252,7 @@ a competing database path here.
 
 **For now we answer coverage on our own side.** `anoieu_analyzer/reporting/config/targets.json` says what
 a full static run reads. `python3 -m anoieu_fuzz report` records the promoted
-reproducer corpus, with recorded outcomes and the same ids as the ledger;
+reproducer corpus, with recorded outcomes and the same ids as the database;
 [the fuzzer guide](fuzzing.md#recording-through-koine) explains the command.
 Recording performs no replay, so its ingestion dates do not establish that a
 bug still reproduces. Neither producer's dump determines closure.

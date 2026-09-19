@@ -12,11 +12,15 @@ from __future__ import annotations
 import collections
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
+
+from policy_check.checker import CHECKER_REPO  # noqa: E402
 
 NIL_BAD = """(declare-const Int Type)
 (declare-consts <numeral> Int)
@@ -193,6 +197,29 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     except Exception as e:  # noqa: BLE001
         ok, res = False, str(e)
     case("sarif parses and names the rule", ok, "" if ok else str(res))
+
+    # The SARIF URLs are a surface that restates two registers: the repository
+    # this tool is published from, and the anchors in the generated check
+    # catalogue. Neither comparison existed, and the repository half was wrong
+    # -- every SARIF run GitHub ingested pointed at a repository that does not
+    # exist. The ground truths are elsewhere on purpose: `CHECKER_REPO`, which
+    # the declaration check already depends on, says which repository this is,
+    # and `docs/checks.md` carries the anchors. A test that read the constant it
+    # is checking would pass on any value.
+    try:
+        doc = json.loads(o)
+        driver = doc["runs"][0]["tool"]["driver"]
+        urls = [driver["informationUri"]] + [r["helpUri"] for r in driver["rules"]]
+        expected = "https://github.com/" + CHECKER_REPO
+        catalogue = open(os.path.join(ROOT, "docs", "checks.md")).read()
+        anchors = {h.lower() for h in re.findall(r"^## (\S+)", catalogue, re.M)}
+        wrong = [u for u in urls if not u.startswith(expected)]
+        missing = [r["helpUri"] for r in driver["rules"]
+                   if r["helpUri"].rsplit("#", 1)[-1] not in anchors]
+    except Exception as e:  # noqa: BLE001
+        wrong, missing = [str(e)], []
+    case("sarif points at the repository this tool is published from", not wrong, str(wrong))
+    case("and every helpUri anchor is one docs/checks.md carries", not missing, str(missing))
 
     rc, o, _ = run("check", bad, "--format", "github")
     case("github annotations are emitted", o.startswith("::error file="), o.splitlines()[:1])

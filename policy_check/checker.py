@@ -60,11 +60,24 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT = REPO_ROOT
 CHECKER_REPO = "ajreynol/anoieu"
 POLICY_REPO = "ajreynol/kanon"
+#: Where the ecosystem's accountable people are named, and the only place they
+#: are. Every other page that has to identify ownership links this anchor, so
+#: that a change of maintainer does not leave copies of the old statement
+#: behind. `check_owner_unadvertised` reads it; the authority is the policy.
+MAINTAINERS_ANCHOR = "docs/policy.md#human-maintainers"
 # Accept pre-handoff declarations without making members rewrite their README.
 POLICY_REPOS = (POLICY_REPO, CHECKER_REPO)
 DEFAULT_POLICY_VERSION = "1"
 
 # Rules with no automated check, and the honest reason. Printed on every run.
+#
+# **Every line here is a rule the shared policy actually carries.** *A repository
+# with a result writes it up in `report/`* was in this list and is not in
+# `policy.md` or `vision.md`: the convention was anoieu's, announced in our `D14`
+# while this repository held the policy, and it did not survive the handoff to
+# kanon. dokimasia reported that twice, as their `D10` and `D15`, before it was
+# taken out on 2026-09-19. A line here is read as *the policy asks this and we
+# cannot check it*, which is a claim about somebody else's document.
 UNCHECKED = [
     ("rule 1, a human starts one", "intent; no artifact records who asked"),
     ("rule 6, additive never authoritative", "a claim about tone, not about the tree"),
@@ -75,17 +88,21 @@ UNCHECKED = [
     ("commands and helpers live in `scripts/`, assistant launchers in `prompts/`",
      "no mechanical test distinguishes a command from an assistant launcher"),
     ("`tests/` holds the evidence, not only the tests", "readability in a minute is not measurable"),
-    ("a workflow is defined in prose", "checked elsewhere: `prompts_agree` in tests/run.py"),
+    ("a workflow is defined in prose",
+     "checked elsewhere, per workflow: `prompts_agree` compares the closure "
+     "entry template with the prompt that writes one, and `verdict_vocabulary` "
+     "compares the verdicts Closure defines with the module that enforces them "
+     "-- both in tests/run.py. Whether a workflow added tomorrow has a "
+     "comparison is not decidable from here"),
     ("a surface that restates a register is compared to it",
-     "the comparison lives with the surface: `prompts_agree` in tests/run.py "
-     "covers the findings prompts; governance templates belong with governance. "
+     "the comparison lives with the surface, and tests/run.py holds three: "
+     "`prompts_agree`, `verdict_vocabulary` and `targets_agree`. The SARIF "
+     "helpUri is compared with the check catalogue in tests/cli_cases.py. "
      "Whether a new surface has a comparison is not decidable from here"),
     ("coding style", "encouraged and never blocking, so nothing here checks it -- by design"),
     ("a topic is never about somebody else's discussion file",
      "what a topic is *about* is semantic; a heuristic here would misfire on legitimate notices"),
     ("do not add a file per assistant", "a convention about what not to create"),
-    ("a repository with a result writes it up in `report/`",
-     "whether work is worth a paper is a judgement, and the vision may never acquire a checker"),
     ("the soft form of the maintenance note",
      "about a repository held to none of this, so no check here runs against one; "
      "`affiliation_in` reads it for the inventory and never grades anybody"),
@@ -685,22 +702,40 @@ def check_name_explained() -> list[str]:
 
 
 def check_owner_unadvertised() -> list[str]:
-    """The local maintenance page records ownership without front-page credit.
+    """*Ownership is identified by a link to the shared list, not by a name.*
 
-    Home-only: another repository chooses its own attribution. A shared
-    governance document may carry its own ownership record independently.
+    The policy asks every README, maintenance note, prompt and report to link
+    the authoritative list "instead of repeating the maintainers' names,
+    personal handles or affiliations", and says in as many words that the name
+    appears *in no maintenance note*: unadvertised is not secret, so the name
+    stays where it can be relied on -- a commit log, and that one page -- rather
+    than where it works as promotion.
+
+    **This check required the opposite until 2026-09-19.** It read an
+    `**Owner:** `handle` -- Name.` line off `docs/maintenance.md` and failed
+    when that name appeared anywhere else, so the only tree it accepted was one
+    the policy forbids, and ours carried a handle and two employers because of
+    it. What it decides now is the requirement as written: the page links the
+    list, and no page substitutes a person for that link.
+
+    Home-only. Another repository chooses its own attribution, and the policy
+    notes this requirement is not mechanically checked across the ecosystem;
+    widening it is an added obligation rather than a fix, so it is kanon's to
+    ask for and belongs to a later contract.
     """
     source = "docs/maintenance.md"
-    m = re.search(r"^\*\*Owner:\*\*\s*`[^`]+`\s*[—-]\s*([^.\n]+?)\.", read(source), re.M)
-    if not m:
-        return [f"{source} does not record an owner, so accountability rests on nobody"]
-    name = m.group(1).strip()
     bad = []
+    if MAINTAINERS_ANCHOR not in read(source):
+        bad.append(f"{source} does not link `{MAINTAINERS_ANCHOR}`, so who is "
+                   "accountable is recorded nowhere a reader can follow")
     for rel in tracked("*"):
-        if rel in {source, "docs/policy.md"} or os.path.splitext(rel)[1] in BINARY:
+        if os.path.splitext(rel)[1] in BINARY:
             continue
-        if name.lower() in read(rel).lower():
-            bad.append(f"{rel} names the owner; keep anoieu's attribution in {source}")
+        for m in re.finditer(r"^\*\*Owner:\*\*[ \t]*(.*)$", read(rel), re.M):
+            if MAINTAINERS_ANCHOR not in m.group(1):
+                bad.append(f"{rel} records ownership as `{m.group(1).strip()}`; "
+                           f"link `{MAINTAINERS_ANCHOR}` instead of naming a "
+                           "person, a handle or an affiliation")
     return bad
 
 
@@ -901,12 +936,39 @@ def slug(heading: str) -> str:
     return re.sub(r"\s", "-", h)
 
 
+#: An explicit anchor: `<a id="...">` or `<a name="...">`. GitHub renders one and
+#: links to it, so a document may give a target to something that is not a
+#: heading -- a numbered subclause, or an alias kept so that an old link still
+#: resolves after a renumbering.
+EXPLICIT_ANCHOR = r"""<a\s+(?:id|name)\s*=\s*["']([^"']+)["']"""
+
+
+def anchors_in(text: str) -> set[str]:
+    """Every anchor a reader can reach in one document, lowercased.
+
+    **Two kinds, and only one of them is a heading.** A heading's anchor is its
+    slug, and that was the whole of what this recognised until 2026-09-19 --
+    which made a valid link to an explicit anchor read as a missing heading, and
+    the only way past it was to promote a paragraph to a heading it should not
+    be. kanon's `D20` reported that against us by name: the laws there carry
+    dotted subclauses with explicit anchors, plus aliases retained so that links
+    written before a renumbering keep working, and none of those is a heading.
+
+    Widening what counts as a valid anchor can only turn a failure into a pass,
+    so it is a fix inside contract 1 rather than a new obligation.
+    """
+    return ({slug(h) for h in re.findall(r"^#{1,6}\s+(.+?)\s*$", text, re.M)}
+            | {a.lower() for a in re.findall(EXPLICIT_ANCHOR, text)})
+
+
 def check_anchors() -> list[str]:
     """A link to a heading that does not exist, in a document in this tree.
 
     The half of a moved document that a plain link check misses: the file still
     resolves and the section it names is gone. This is the damage a reorganised
     documentation tree does silently, and it costs nothing to keep true.
+
+    An explicit `<a id>` anchor counts as a target; `anchors_in` says why.
     """
     bad = []
     for rel in tracked("*.md"):
@@ -918,11 +980,10 @@ def check_anchors() -> list[str]:
             if not os.path.isfile(full):
                 continue                      # the link check owns that failure
             with open(full, encoding="utf-8") as fh:
-                heads = {slug(h) for h in re.findall(r"^#{1,6}\s+(.+?)\s*$",
-                                                     prose(fh.read()), re.M)}
-            if anchor.lower() not in heads:
-                bad.append(f"{rel} links to {target}#{anchor}, and that heading "
-                           "is not in it")
+                targets = anchors_in(prose(fh.read()))
+            if anchor.lower() not in targets:
+                bad.append(f"{rel} links to {target}#{anchor}, and neither a "
+                           "heading nor an explicit anchor there answers to it")
     return bad
 
 

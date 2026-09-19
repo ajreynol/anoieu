@@ -62,6 +62,9 @@ GENERATED = {"docs/checks.md", "docs/corpus.md",
 #: policy_check/maintenance.md on why this shape is the expensive kind.
 OTHERS = ("cvc5", "ethos", "logos", "eudaimonia", "dokimasia", "koine",
           "kanon", "epikrisis", "aisthesis", "eschaton", "tachyon",
+          # Repositories in the register that this list had not caught up with,
+          # added 2026-09-19: eunoia and paideia are members, iogos an associate.
+          "eunoia", "paideia", "iogos",
           "inspect.software")
 
 DATE = re.compile(r"\b20\d{2}-[01]\d-[0-3]\d\b")

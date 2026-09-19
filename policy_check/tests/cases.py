@@ -101,7 +101,8 @@ def footing_forms() -> int:
 
     head = "# Maintaining a tool\n\n"
     tail = "\n## Working on this tree\n\nKeep commands in `scripts/`.\n"
-    owner = "**Owner:** `someone` — a person somewhere.\n"
+    owner = ("**Owner:** [the list](https://github.com/ajreynol/kanon/blob/"
+             "main/docs/policy.md#human-maintainers).\n")
 
     def page(line: str) -> str:
         return head + owner + "\n" + line + tail
@@ -192,7 +193,11 @@ def local_policy_inputs() -> int:
     from unittest.mock import patch  # noqa: PLC0415
     from policy_check import checker as policy_check  # noqa: PLC0415
 
-    owner = "**Owner:** `example` — Example Maintainer.\n"
+    #: The ownership statement the policy asks for: a link to the one page that
+    #: names anybody. The name form this used to require is `named` below.
+    owner = ("**Owner:** [the current list](https://github.com/ajreynol/kanon/"
+             "blob/main/" + policy_check.MAINTAINERS_ANCHOR + ").\n")
+    named = "**Owner:** `example` — Example Maintainer.\n"
     catalogue = "`policy_check.py`, `close_bug_db`, `deps.json`\n"
     files = {
         "docs/maintenance.md": owner + catalogue,
@@ -214,15 +219,17 @@ def local_policy_inputs() -> int:
     with patch.object(policy_check, "read", lambda path: files.get(path, "")), \
          patch.object(policy_check, "tracked",
                       lambda pattern: [p for p in files if fnmatch.fnmatch(p, pattern)]):
-        expect("owner check works without governance files",
+        expect("ownership recorded as a link to the shared list is accepted",
                policy_check.check_owner_unadvertised(), False)
         expect("script catalogue works without governance files",
                policy_check.check_scripts_listed(), False)
-        files["docs/policy.md"] = owner
-        expect("the outgoing policy may keep its ownership record",
-               policy_check.check_owner_unadvertised(), False)
+        # The requirement the check used to enforce, and the one the policy
+        # forbids: the maintenance note repeating the name and the handle.
+        files["docs/maintenance.md"] = named + catalogue
+        expect("ownership recorded as a name instead of the link fails",
+               policy_check.check_owner_unadvertised(), True)
         del files["docs/maintenance.md"]
-        expect("missing local ownership fails even with the old policy present",
+        expect("no ownership statement at all fails",
                policy_check.check_owner_unadvertised(), True)
         expect("missing local catalogue fails rather than silently skipping",
                policy_check.check_scripts_listed(), True)
@@ -230,9 +237,12 @@ def local_policy_inputs() -> int:
         files["scripts/unlisted.py"] = ""
         expect("an unlisted command fails", policy_check.check_scripts_listed(), True)
         del files["scripts/unlisted.py"]
-        files["README.md"] += "\nExample Maintainer"
-        expect("front-page owner advertising fails",
+        # Placing it is what the policy refuses, so a second page substituting a
+        # person for the link fails even when the maintenance note is right.
+        files["README.md"] += "\n" + named
+        expect("a second page naming an owner instead of linking fails",
                policy_check.check_owner_unadvertised(), True)
+        files["README.md"] = "## How this repository is maintained\n\n" + DECLARATION
         for repo, want in (("kanon", False), ("anoieu", False), ("unrelated", True)):
             files["README.md"] = ("## How this repository is maintained\n\n"
                                   + DECLARATION.replace("ajreynol/kanon", "ajreynol/" + repo))
@@ -520,8 +530,48 @@ def adoption_interface() -> int:
     return failures
 
 
+def anchor_targets() -> int:
+    """What a link may point at: a heading, or an explicit anchor.
+
+    The second half was missing, so a valid link to a numbered subclause read as
+    a missing heading and the only way past the check was to promote a paragraph
+    to a heading. kanon reported that against us in its `D20`; a document there
+    carries dotted subclauses with explicit anchors, and retains old anchors as
+    aliases after a renumbering so that links written earlier keep resolving.
+    Both of those are exactly the case below.
+    """
+    from policy_check import checker as policy_check  # noqa: PLC0415
+
+    page = (
+        "# A law page\n\n"
+        "## LAW 4 — presidential records\n\n"
+        '<a id="law-43--evidence-for-figures"></a>\n'
+        '<a id="law-42--the-old-number-for-the-same-provision"></a>\n\n'
+        "(4.3) Figures are re-derivable.\n\n"
+        "```\n<a id=\"inside-a-fence\"></a>\n```\n"
+    )
+    targets = policy_check.anchors_in(policy_check.prose(page))
+    cases = [
+        ("a heading is a target", "law-4--presidential-records" in targets),
+        ("an explicit anchor is a target too",
+         "law-43--evidence-for-figures" in targets),
+        ("a retained alias resolves to the same page",
+         "law-42--the-old-number-for-the-same-provision" in targets),
+        ("a paragraph that is not a heading needs no promotion",
+         "43-figures-are-re-derivable" not in targets),
+        ("an anchor inside a fence is a sample, not a target",
+         "inside-a-fence" not in targets),
+    ]
+    failures = 0
+    for label, passed in cases:
+        print(("ok   " if passed else "FAIL ") + label)
+        failures += not passed
+    print(f"-- what a link may point at: {failures} failure(s)")
+    return failures
+
+
 def main() -> int:
     failures = sum(check() for check in (
         note_forms, footing_forms, local_policy_inputs, dependency_layouts,
-        policy_contract, adoption_interface))
+        policy_contract, adoption_interface, anchor_targets))
     return 1 if failures else 0

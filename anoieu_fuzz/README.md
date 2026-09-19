@@ -30,7 +30,7 @@ either of them ought to prove.
   generation, mutation of a seed corpus, five verdict-level oracles, and no
   instrumentation anywhere. Coverage guidance, derivations built from the
   calculus and a soundness oracle are named in
-  [ynoia](https://github.com/ajreynol/kanon/blob/main/tools/ynoia/why-eunoia.md) and do not exist.
+  [ynoia](https://github.com/ajreynol/kanon/blob/main/tools/ynoia/docs/why-eunoia.md) and do not exist.
 - **Not a judgement about which checker is wrong.** A disagreement has a
   direction and nothing more; the reference being stricter than the language
   requires is a live explanation for any of them.

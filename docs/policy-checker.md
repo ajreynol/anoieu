@@ -1,8 +1,14 @@
-# Policy checker documentation moved
+# The policy checker
 
-As of 2026-09-18, the contract and adoption instructions live in
-[`policy_check/README.md`](../policy_check/README.md), beside the implementation,
-focused tests and maintenance guidance. This page preserves existing links.
+The checker's contract, adoption instructions, requirement list and severities
+are in [`policy_check/README.md`](../policy_check/README.md), beside the
+implementation and its focused tests.
 
-The supported command remains `python3 scripts/policy_check.py --policy-version 1
---root PATH`; its implementation now lives in `policy_check/`.
+This page is a pointer and holds nothing of its own. It exists because other
+repositories link to this path. Read 2026-09-19.
+
+The supported command is:
+
+```bash
+python3 scripts/policy_check.py --policy-version 1 --root PATH
+```

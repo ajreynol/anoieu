@@ -517,7 +517,7 @@ one row; its internal registers travel with it.
 | martyria | actionable ethics: stances, testimony, and the cases against ourselves |
 | zetesis | the general inquiry, and where our record cannot support a claim |
 | [stathmos](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/README.md) | **proposed, not settled**: mediation of the report card. `R30` and its charter still name an independent repository as its destination |
-| [sapheneia](https://github.com/ajreynol/kanon/blob/main/tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
+| [sapheneia](https://github.com/ajreynol/eunoia/blob/main/tools/sapheneia/README.md) | Eunoia described as a language definition rather than as a checker's input |
 
 **Proposed for kanon: the machinery that carries out all of it.** The table above
 is what governs; this is what *runs*.
@@ -532,7 +532,7 @@ repositories, and `ANOIEU_REV` stops pinning them together — is recorded again
 | what | what it does |
 | --- | --- |
 | [`../scripts/ecosystem/ecosystem.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.json) | **the inventory** — who is in this and on what footing. Under the laws it is also **the authority on who is president**, which makes it the one file that says where the office is |
-| [`../scripts/ecosystem/ecosystem.py`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.py) + `../scripts/status_eo` | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
+| [`../scripts/ecosystem/`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/ecosystem.json) + `../scripts/status_eo` | the program that reads the inventory and the command a person runs: the table, the well-formedness audit, and the associate-protocol report |
 | `../scripts/install_eo` + [`../scripts/ecosystem/checkouts.json`](https://github.com/ajreynol/kanon/blob/main/scripts/ecosystem/checkouts.json) | how the rest of the ecosystem is fetched onto a machine |
 | `../prompts/join_eo`, `../prompts/check_join_eo`, `../prompts/confirm_eo` | joining, from the inside and the outside, and the grading of a join afterwards |
 | `../prompts/init_eo`, `../prompts/welcome_eo`, `../scripts/ecosystem/near.py` | starting a new tool, recording its checkout, and catching an id one character from an existing one |
@@ -561,7 +561,7 @@ earlier contents remain in git. `docs/misc/` no longer holds any files.
 | [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |
 | [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
 | [`../bug_db/`](../bug_db/README.md), [`experience.md`](experience.md) | findings against other people's code, what came of them, and the position governing what may be published about it |
-| `report-card.md` | **the assessment of Arete**, as the plan read on 2026-09-15: it stayed because the assessor must not be the governor. **Superseded 2026-09-17** — the role moved with stathmos and the page has followed it. [stathmos's edition](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/report-card.md) is the live one; the copy here, last graded 2026-09-02, is removed |
+| `report-card.md` | **the assessment of Arete**, as the plan read on 2026-09-15: it stayed because the assessor must not be the governor. **Superseded 2026-09-17** — the role moved with stathmos and the page has followed it. [stathmos's edition](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/docs/report-card.md) is the live one; the copy here, last graded 2026-09-02, is removed |
 | [tekmerion](../tools/tekmerion/README.md) | **anoieu's route to a verified answer to *is the documentation up to date*.** The central policy says a stale document is a defect; this is the only thing here aimed at checking that mechanically |
 | [`history.md`](history.md) | anoieu's own development record. It stays here, including earlier stretch entries, under LAW 4 |
 | `letter-to-kanon.md` | **letters do not travel.** LAW 4 |
@@ -693,6 +693,15 @@ the rule that a child project states whether there is a paper in it; `join_eo
 --soft` in two forms; the rule that a prompt may not be for the repository it
 arrives in; and the concept of a global announcement itself. One thing was owed
 — a publishing stance — and everything else was notice.
+
+**What did not survive the handoff, recorded because it was announced to every
+member as a rule.** The `report/` convention is in neither `policy.md` nor
+`vision.md` under kanon, read 2026-09-19. Dokimasia reported that twice; the only
+place in the shared machinery still naming it was this repository's own checker
+coverage list, which is where a reader would take it for kanon's rule, and it was
+removed from that list on 2026-09-19. All three addressees of the announcement
+stated a publishing stance, so the announcement itself is settled and removed;
+whether the convention should exist at all is a question addressed to kanon.
 
 **The covering note**, as recommended on 2026-09-01. Whether it was ever sent,
 to whom, or what came back is the topic's business and a person's, not this
