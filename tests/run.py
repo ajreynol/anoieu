@@ -195,313 +195,87 @@ def manifest_agrees() -> int:
     return failures
 
 
-#: A run's summary, read from the block above its sections. Its own function
-#: because the two ways it used to be wrong are both invisible from the log --
-#: it returned `None` and the caller skipped the entry in silence, and it
-#: stopped at a blank line so the length limit could be evaded by pressing
-#: return. `postmortem_reader()` holds both.
-SUMMARY = re.compile(r"^\*\*Summary:\*\*(.*?)(?=^\*\*[A-Za-z][\w ]*:\*\*|\Z)", re.S | re.M)
+def verdict_audit() -> int:
+    """Every closure in the database is readable, and its debt is still tracked.
 
-
-def postmortem_summary(head: str) -> str | None:
-    """The summary in `head`, whitespace normalised, or None if there is none.
-
-    It reads on to the **next field** rather than to the next blank line: a
-    limit a blank line gets past is advisory, and nothing said so.
+    Closing before a change lands is the one place this repository has been
+    wrong for months at a time, and
+    `anoieu_analyzer/reporting/verdicts.py` is the whole of what stops it
+    happening again. The way that fails is a verdict somebody reworded: the
+    finding stays closed, the debt stays owed, and it silently leaves the audit.
+    That is checked here rather than trusted.
     """
-    m = SUMMARY.search(head)
-    if not m:
-        return None
-    summary = " ".join(m.group(1).split())
-    return summary or None
-
-
-def postmortem_reader() -> int:
-    """The summary reader itself, against the shapes that used to defeat it.
-
-    Both were reported by koine, from a second implementation of this check, and
-    both are the direction that looks fine: the check reported success. A
-    regression here is not a style preference -- it is the 250-character limit
-    ceasing to be a limit, with nothing in the output saying so.
-    """
-    WRAPPED = "**Summary:**\nEthos aborted on a malformed type.\n"
-    EVASION = "**Summary:** Short.\n\n" + ("x" * 480) + "\n"
-    PLAIN = "**Summary:** One sentence.\n\n**Resolution:** fixed.\n"
-    EMPTY = "**Tool:** ethos\n\n**Summary:**\n\n**Resolution:** fixed.\n"
-    cases = (
-        ("a summary that starts on the next line is read, not skipped",
-         WRAPPED, "Ethos aborted on a malformed type."),
-        ("a blank line does not end the field, so the limit binds",
-         EVASION, "Short. " + "x" * 480),
-        ("an ordinary summary stops at the next field", PLAIN, "One sentence."),
-        ("a `Summary:` with nothing under it reads as absent", EMPTY, None),
-    )
-    failures = 0
-    for what, head, want in cases:
-        got = postmortem_summary(head)
-        ok = got == want
-        failures += 0 if ok else 1
-        print(("ok   " if ok else "FAIL ") + what)
-        if not ok:
-            print(f"     read {got!r}, wanted {want!r}")
-    print(f"-- the postmortem summary reader: {failures} failure(s)")
-    return failures
-
-
-def postmortem_shape() -> int:
-    """The log's own conventions, since a convention nothing checks is a wish.
-
-    One `Tool:`/`Summary:`/`Resolution:` block per run, none on the sections
-    beneath it, and a summary short enough to stay a summary. The shape is
-    written out in docs/reports/postmortem.md itself; this is the half a reader cannot
-    enforce by reading.
-    """
-    LIMIT, SENTENCES = 250, 2
-    path = os.path.join(os.path.dirname(HERE), "docs", "reports", "postmortem.md")
-    text = re.sub(r"```.*?```", "", open(path).read(), flags=re.S)  # not the template
-
-    # a run section is a level-2 heading that starts with a date
-    runs = re.split(r"^## (?=\d{4}-\d{2}-\d{2} )", text, flags=re.M)[1:]
-    failures = 0
-    if not runs:
-        print("FAIL docs/reports/postmortem.md has no run sections")
-        return 1
-
-    for run in runs:
-        title = run.splitlines()[0].strip()
-        head, _, rest = run.partition("\n### ")
-        for field in ("Tool:", "Summary:", "Resolution:"):
-            n = len(re.findall(rf"^\*\*{field}\*\*", head, re.M))
-            if n != 1:
-                print(f"FAIL postmortem {title!r}: {n} {field} lines above the "
-                      f"sections, expected 1")
-                failures += 1
-        stray = re.findall(r"^\*\*(Tool|Summary|Resolution):\*\*", rest, re.M)
-        if stray:
-            print(f"FAIL postmortem {title!r}: {sorted(set(stray))} on a section; "
-                  "those fields belong to the run, not to a finding")
-            failures += 1
-
-        # **Read on to the next field, and fail when there is no match.** Two
-        # ways this check used to stop working without saying so: a `Summary:`
-        # whose text starts on the following line matched nothing and was
-        # `continue`d past -- measured against neither limit, reported as a
-        # pass -- and the old lookahead ended the field at a blank line, so the
-        # 250-character limit was evadable by pressing return. Six characters
-        # counted with four hundred and eighty following. A summary a reader
-        # cannot find is itself a defect, so the no-match case is a failure.
-        summary = postmortem_summary(head)
-        if summary is None:
-            print(f"FAIL postmortem {title!r}: no readable summary after "
-                  "`**Summary:**`")
-            failures += 1
-            continue
-        if len(summary) > LIMIT:
-            print(f"FAIL postmortem {title!r}: summary is {len(summary)} "
-                  f"characters, at most {LIMIT}")
-            failures += 1
-        n = len(re.findall(r"[.!?](?:\s|$)", summary))
-        if n > SENTENCES:
-            print(f"FAIL postmortem {title!r}: summary is {n} sentences, "
-                  f"at most {SENTENCES}")
-            failures += 1
-
-    print(f"-- the postmortem log: {len(runs)} run(s), {failures} failure(s)")
-    return failures
-
-
-def prompts_agree() -> int:
-    """The two scripts say what `docs/reports/reporting-workflow.md` says they say.
-
-    The document is what every project was promised; the scripts under
-    `scripts/` are a convenience that holds a copy so nobody has to paste one.
-    A copy that has drifted is worse than no copy, because the drift is
-    invisible from the side that matters -- somebody in ethos or logos reading
-    a prompt they were sent.
-
-    Only the body is compared. The scope line and the branch are what the
-    scripts fill in, and are the reason they exist.
-    """
-    import re  # noqa: PLC0415
-    import subprocess as sp  # noqa: PLC0415
-
-    root = os.path.dirname(HERE)
-    doc = open(os.path.join(root, "docs", "reports", "reporting-workflow.md")).read()
-
-    # The whole of each prompt, both forms. A script holds the document's text
-    # around one or two substituted spans, and the document writes both sides of
-    # each with a "-- or, ... --" marker between them. Resolving the marker lets
-    # the comparison cover every line, rather than anchoring part way down and
-    # leaving the rest unchecked -- which is how a stale paragraph once survived
-    # a rewrite of the text above it.
-    def body(start: str, end: str) -> str:
-        chunk = doc[doc.index(start) : doc.index(end)]
-        return re.search(r"```text\n(.*?)\n```", chunk, re.S).group(1)
-
-    def resolve(text: str, marker: str, alt: bool) -> str:
-        """Keep one side of an alternatives block and drop the marker.
-
-        The block is the run of lines before the marker back to the last blank
-        line, the marker, and the run after it up to the next blank line.
-        """
-        lines = text.split("\n")
-        i = next(k for k, l in enumerate(lines) if l.strip() == marker)
-        a = max((k for k in range(i) if not lines[k].strip()), default=-1) + 1
-        b = next((k for k in range(i + 1, len(lines)) if not lines[k].strip()),
-                 len(lines))
-        keep = lines[i + 1 : b] if alt else lines[a:i]
-        return "\n".join(lines[:a] + keep + lines[b:])
-
-    def spoken(argv: list[str]) -> str:
-        got = sp.run(argv, cwd=root, capture_output=True, text=True)
-        if got.returncode != 0:
-            return f"!! {argv[0]}: {(got.stderr or got.stdout).strip()[:160]}"
-        return got.stdout
+    from anoieu_analyzer.reporting import verdicts  # noqa: PLC0415
 
     failures = 0
-    cases: list[tuple[str, str, str]] = []
-
-    one = body("### Prompt one", "### Prompt two")
-    two = body("### Prompt two", "### Prompt three")
-    SWEEP, POSTM = "-- or, for the sweep form --", "-- or, with --no-postm --"
-
-    # prompt two's opening differs by design -- the document says "paste a link",
-    # the script has already resolved a checkout -- so compare from TRIAGE down,
-    # and separately its own scope sentence is a variable the script fills in.
-    def from_triage(text: str) -> str:
-        return text[text.index("TRIAGE: is an assistant") :].strip()
-
-    def drop_scope(text: str) -> str:
-        """The one sentence each side words for the run it is doing."""
-        out = []
-        for para in text.split("\n\n"):
-            if para.lstrip().startswith("Working in the anoieu repository"):
-                continue
-            if para.startswith("Process ") or para.startswith("Address "):
-                continue
-            out.append(para)
-        return "\n\n".join(out).strip()
-
-    for name, argv, want, fix in (
-        ("check_anoieu, one id",
-         ["bash", "prompts/check_anoieu", "--show-prompt", "ID"],
-         resolve(one, SWEEP, alt=False),
-         lambda s: s.replace("anoieu-ID", "BRANCH")),
-        ("check_anoieu, the sweep",
-         ["bash", "prompts/check_anoieu", "--show-prompt"],
-         resolve(one, SWEEP, alt=True).replace("PROJECT", "anoieu"),
-         lambda s: s.replace("anoieu-findings", "BRANCH")),
-        ("process_anoieu",
-         ["bash", "prompts/process_anoieu", "--show-prompt", "--no-check", root],
-         drop_scope(from_triage(resolve(two, POSTM, alt=False))),
-         lambda s: drop_scope(from_triage(s))),
-        ("process_anoieu --no-postm",
-         ["bash", "prompts/process_anoieu", "--show-prompt", "--no-check",
-          "--no-postm", root],
-         drop_scope(from_triage(resolve(two, POSTM, alt=True))),
-         lambda s: drop_scope(from_triage(s))),
-    ):
-        cases.append((name, want.strip(), fix(spoken(argv)).strip()))
-
-    for name, want, got in cases:
-        if want == got:
-            print(f"ok   scripts/{name} says what reporting-workflow.md says")
-            continue
+    for fid in verdicts.unreadable():
+        print(f"FAIL closed entry {fid} has a verdict the vocabulary does not know")
         failures += 1
-        print(f"FAIL scripts/{name} has drifted from docs/reports/reporting-workflow.md")
-        for line in difflib.unified_diff(
-            want.splitlines(), got.splitlines(), "document", "script", lineterm=""
-        ):
-            print(f"     {line}")
-    print(f"-- the outbound prompts: {failures} failure(s)")
-    return failures
-
-
-def landing_markers() -> int:
-    """Every row closed before its change landed is still reachable by the audit.
-
-    Closing on a promise is the one place this repository has been wrong for
-    months at a time, and `anoieu_analyzer/reporting/landing.py` is the whole of what stops it
-    happening again. The marker it reads lives in free-text prose, so the way it
-    fails is a verdict somebody reworded: the row stays closed, the debt stays
-    owed, and it silently leaves the audit. That is checked here rather than
-    trusted.
-    """
-    from anoieu_analyzer.reporting import landing  # noqa: PLC0415
-
-    failures = 0
-    for fid in landing.malformed():
-        print(f"FAIL closed row {fid} says `awaiting landing` and does not parse")
+    for fid in verdicts.malformed():
+        print(f"FAIL closed entry {fid} has an awaiting_landing that names no place to look")
         failures += 1
-    # The half a reworded marker gets past: an outcome outside the vocabulary,
-    # a promise that names no branch, or a marker on a row that is not a
-    # promise. See "The verdict vocabulary, and why it is closed".
-    for fid in landing.unreadable():
-        print(f"FAIL closed row {fid} opens with no verdict the vocabulary knows")
-        failures += 1
-    for fid in landing.undeclared():
-        print(f"FAIL closed row {fid} is `accepted and fixed` and does not say "
+    for fid in verdicts.undeclared():
+        print(f"FAIL closed entry {fid} is `accepted and fixed` and does not say "
               "where the change is")
         failures += 1
-    for fid in landing.overdeclared():
-        print(f"FAIL closed row {fid} carries a landing marker and is not closed "
-              "on a promise")
+    for fid in verdicts.overdeclared():
+        print(f"FAIL closed entry {fid} carries a landing and is not closed on a promise")
         failures += 1
-    items = landing.read_ledger()
-    for item in items:
-        if not re.fullmatch(r"[0-9a-f]{7,40}", item.commit):
-            print(f"FAIL closed row {item.id} names an unusable commit {item.commit!r}")
-            failures += 1
-    failures += verdict_vocabulary(landing)
-    print(f"-- rows closed before landing: {len(items)}, {failures} failure(s)")
+    owed = verdicts.outstanding()
+    failures += verdict_vocabulary(verdicts)
+    print(f"-- closures recorded before landing: {len(owed)}, {failures} failure(s)")
     return failures
 
 
-def verdict_vocabulary(landing) -> int:
-    """`landing.OUTCOMES` and the document that defines it say the same words.
+def verdict_vocabulary(verdicts) -> int:
+    """`verdicts.OUTCOMES` and the document that defines it say the same words.
 
     A surface that restates a register declares its ground truth and is compared
-    to it; here the register is *The verdict vocabulary, and why it is closed*
-    in `docs/reports/reporting-workflow.md` and the copy is the dict that runs.
-    Without this the two drift, and a verdict the document permits stops being
-    one the audit accepts -- which reads as a defect in somebody's ledger.
+    to it; here the register is *Closure* in `bug_db/README.md` and the copy is
+    the dict that runs. Without this the two drift, and a verdict the document
+    permits stops being one the audit accepts -- which reads as a defect in
+    somebody's database.
 
-    The three synthetic rows are the reason the vocabulary exists at all: the
+    The three synthetic entries are the reason the vocabulary exists at all: the
     reworded verdict that no pattern catches, and a promise with nothing to
     watch.
     """
+    import json  # noqa: PLC0415
+    import tempfile  # noqa: PLC0415
+
     failures = 0
-    doc = os.path.join(os.path.dirname(HERE), "docs", "reports",
-                       "reporting-workflow.md")
+    doc = os.path.join(os.path.dirname(HERE), "bug_db", "README.md")
     text = open(doc).read()
-    body = text.split("#### The verdict vocabulary")[1].split("\n### ")[0]
+    body = text.split("**A verdict is one of seven words")[1].split("\n### ")[0]
     named = set(re.findall(r"^\| `([a-z -]+)` \|", body, re.M))
-    if named != set(landing.OUTCOMES):
+    if named != set(verdicts.OUTCOMES):
         print(f"FAIL the verdict vocabulary differs: document {sorted(named)}, "
-              f"anoieu_analyzer/reporting/landing.py {sorted(landing.OUTCOMES)}")
+              f"anoieu_analyzer/reporting/verdicts.py {sorted(verdicts.OUTCOMES)}")
         failures += 1
 
-    import tempfile  # noqa: PLC0415
-    ROWS = (
-        "| `1111111111111111` | ethos | EO0001 | `a.eo:1` | x | "
-        "accepted and fixed -- ethos: it will land shortly |\n",
-        "| `2222222222222222` | ethos | EO0001 | `a.eo:2` | x | "
-        "fixed eventually -- ethos: reworded out of the vocabulary |\n",
-        "| `3333333333333333` | ethos | EO0001 | `a.eo:3` | x | "
-        "declined -- ethos: no. awaiting landing: ethos b 1234567 |\n",
-    )
-    with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as fh:
-        fh.write("| id | owner | code | where | what | verdict |\n")
-        fh.writelines(ROWS)
+    BUGS = [
+        {"id": "1" * 16, "closed_verdict": "accepted and fixed",
+         "closed_why": "it will land shortly"},
+        {"id": "2" * 16, "closed_verdict": "fixed eventually",
+         "closed_why": "reworded out of the vocabulary"},
+        {"id": "3" * 16, "closed_verdict": "declined", "closed_why": "no",
+         "awaiting_landing": {"project": "ethos", "branch": "b", "commit": "1234567"}},
+        {"id": "4" * 16, "closed_verdict": "accepted and fixed", "closed_why": "x",
+         "awaiting_landing": {"project": "ethos", "branch": "", "commit": "1234567"}},
+    ]
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
+        json.dump({"bugs": BUGS}, fh)
         fake = fh.name
     try:
         cases = (
-            ("a promise reworded out of its marker is caught",
-             landing.undeclared(fake), ["1111111111111111"]),
+            ("a promise with nothing to watch is caught",
+             verdicts.undeclared(fake), ["1" * 16]),
             ("a verdict outside the vocabulary is caught",
-             landing.unreadable(fake), ["2222222222222222"]),
-            ("a marker on a row that is not a promise is caught",
-             landing.overdeclared(fake), ["3333333333333333"]),
+             verdicts.unreadable(fake), ["2" * 16]),
+            ("a landing on an entry that is not a promise is caught",
+             verdicts.overdeclared(fake), ["3" * 16]),
+            ("a landing that names no branch is caught",
+             verdicts.malformed(fake), ["4" * 16]),
         )
         for what, got, want in cases:
             ok = got == want
@@ -521,7 +295,7 @@ def targets_agree() -> int:
     `scripts/anoieu_analyzer` and the agent prompt read
     `anoieu_analyzer/reporting/config/targets.json`. Both are kept while the new workflow proves itself,
     and two descriptions of one thing that nothing compares is the drift this
-    ecosystem keeps finding -- in a prompt, in a postmortem template, and here
+    ecosystem keeps finding -- in a prompt, in a generated page, and here
     it would be in what a report is a report of.
     """
     from anoieu_analyzer.reporting import targets as config  # noqa: PLC0415
@@ -616,12 +390,9 @@ def main() -> int:
     failures += manifest_agrees()
 
     print()
-    failures += prompts_agree()
     from policy_check.tests import cases as policy_cases
     failures += policy_cases.main()
-    failures += postmortem_reader()
-    failures += postmortem_shape()
-    failures += landing_markers()
+    failures += verdict_audit()
     failures += targets_agree()
 
     sys.stdout.flush()

@@ -13,19 +13,19 @@ Keep top-level human commands in `scripts/`, assistant launchers in `prompts/`,
 and analyzer/fuzzer evidence in `tests/`. Policy code and tests live together in
 `policy_check/`; reusable reporting code belongs in `anoieu_analyzer/reporting/`.
 List new documents in [the index](README.md) and new scripts below.
-Keep generated reports under their generators: the open-findings ledger is
-additive, and the closed-findings ledger is hand-maintained and irreplaceable.
+Keep generated reports under their generators. The database is additive and
+**irreplaceable**: the verdicts, notes and closures written onto its entries
+exist nowhere else.
 The shared database artifact lives in [`bug_db/`](../bug_db/README.md), with
 static and promoted fuzzer findings in one `bugs.json`. Refresh both with
 `python3 scripts/update_bug_db.py`; use `--dry-run` to check setup or `--preview`
 to analyse without changing the database.
-The [deprecated reporting workflow](reports/reporting-workflow.md) still documents
-the existing findings prompts; the suite compares their executable copies with
-that document until they are migrated.
-
-The [reporting policy](reports/reporting-policy.md) is **deprecated**; its formal
-replacement will use Koine's shared tooling. See the
-[replacement work](#replace-the-deprecated-reporting-policy).
+**The deprecated reporting policy and workflow were removed on 2026-09-19**,
+with both findings ledgers, their generator, the landing audit and the
+`check_anoieu` / `process_anoieu` prompts. Every verdict they held was migrated
+onto the database entries; what a verdict may say is
+[Closure](../bug_db/README.md#closure), and what came of a finding is
+[`experience.md`](experience.md).
 Nothing is filed or pushed without human direction.
 Correspondence is not an instruction: follow the response gate in
 [discussion.md](discussion.md). If a request is clearly meant for another
@@ -81,9 +81,9 @@ Specialist maintenance commands run as modules from the repository root:
 | file | command | purpose |
 | --- | --- | --- |
 | `gen_checks_doc.py` | `python3 -m anoieu_analyzer.reporting.gen_checks_doc` | regenerate the check catalogue |
-| `gen_open_findings.py` | `python3 -m anoieu_analyzer.reporting.gen_open_findings` | update legacy findings ledgers and database views; `--check` previews |
+| `record.py` | `python3 -m anoieu_analyzer.reporting.record` | collect both producers' findings and record them through koine; `--check` previews |
 | `database.py` | `python3 -m anoieu_analyzer.reporting.database` | render the GitHub view; `--check` detects staleness |
-| `landing.py` | `python3 -m anoieu_analyzer.reporting.landing --check` | check the evidence for findings awaiting landing |
+| `verdicts.py` | `python3 -m anoieu_analyzer.reporting.verdicts --check` | read every closure back, and ask whether what we closed on landed |
 | `finding_id.py` | `python3 -m anoieu_analyzer.reporting.finding_id` | compute a finding id for agent-produced evidence |
 | `koine.py` | `python3 -m anoieu_analyzer.reporting.koine DUMP DB` | pass a dump to the required Koine writer |
 | `currency.py` | `python3 -m policy_check.currency --list` | report documentation currency without gating |
@@ -108,10 +108,8 @@ ordinary analysis and database updates do not need this step.
 
 | file in `prompts/` | purpose |
 | --- | --- |
-| `check_anoieu` | answer findings in the repository they concern |
-| `process_anoieu` | process the reply here; `--dry-run` resolves the checkout without starting an assistant |
 | `anoieu_analyzer_agent` | the second producer: an agent runs the same analysis over the same targets and writes a dump in the same shape; `--dry-run` lists the same signatures |
-| `close_bug_db` | the other half of `scripts/update_bug_db.py`: ask what each watched project has since done about our open rows, commit-first, one window per project; `--dry-run` resolves every baseline and window and starts nothing |
+| `close_bug_db` | the other half of `scripts/update_bug_db.py`: ask what each watched project has since done about the findings still open against it, commit-first, one window per project; `--dry-run` resolves every baseline and window and starts nothing |
 
 `anoieu_analyzer/reporting/config/repos.local` is an optional, untracked per-machine checkout map used by
 the findings workflow. Explicit checkout paths also work. Set
@@ -124,7 +122,7 @@ deleted. The corpus refs are recorded in [deps.json](../anoieu_analyzer/reportin
 and **every one of them is now `main`**. Any new exception needs its reason
 recorded here. A branch containing a proposed fix is evidence to review, not
 evidence that the fix has landed. Follow
-[what closes a row](reports/reporting-workflow.md#what-closes-a-row-and-what-does-not).
+[Closure](../bug_db/README.md#closure).
 
 **The ethos exception is gone, as of 2026-09-19.** It watched `ethosEoc3` because
 the `ethos-eoc` compiler at `tools/eoc` and the semantics sets this ecosystem is
@@ -137,7 +135,7 @@ ethos ships and became exactly the topic branch this rule is about. The paths th
 exception existed to reach are on `main` now, so dropping it costs no coverage.
 
 **Two consequences, and neither is cosmetic.** The recorded corpus was measured on
-`ethosEoc3`, so `deps.lock`, [`corpus.md`](reports/corpus.md) and the run notes in
+`ethosEoc3`, so `deps.lock`, [`corpus.md`](corpus.md) and the run notes in
 [`notes.md`](notes.md) still name it — correctly: they are the record of a run that
 happened, not a statement of what is watched now, and they are not edited by hand.
 Moving the measurement onto `main` takes a run (`python3 scripts/run.py`). And the
@@ -149,27 +147,36 @@ each is true of `main` is a question for that run, not an assumption either way.
 
 ### Replace the deprecated reporting policy
 
-**Pending, recorded 2026-09-18.** Replace the deprecated policy and workflow with
-a formal reporting policy built around
-[Koine's shared tooling](https://github.com/ajreynol/koine). The current
-`bug_db_manager/koine_append_db` integration records findings; it does not implement
-triage, verdicts or closure. The replacement needs to:
+**Done, 2026-09-19.** The deprecated policy and workflow are **removed**, with
+both findings ledgers, their generator, the landing audit, the `check_anoieu`
+and `process_anoieu` prompts, and the postmortem log. There is now one record --
+[`bug_db/bugs.json`](../bug_db/bugs.json) -- and one place a verdict may be
+written: the closure fields on an entry, defined in
+[Closure](../bug_db/README.md#closure) and written only by
+[`close_bug_db`](../prompts/close_bug_db).
 
-- Define the reporting lifecycle, evidence required for each transition, and
-  which decisions belong to a human.
-- Use Koine for shared reporting mechanics, identifying any missing capabilities
-  there before migrating anoieu's commands and prompts.
-- Preserve existing finding ids, verdicts, evidence and history, and update the
-  entry-point documentation and checks when the replacement is ready.
+What the migration carried across, so nothing was lost:
 
-Until then, keep using the existing commands and preserving the current records.
-Marking the documents deprecated is not a completed migration.
+- **every verdict**, all 43, with its prose. The seven-outcome vocabulary is now
+  `closed_verdict`, enforced by
+  [`verdicts.py`](../anoieu_analyzer/reporting/verdicts.py) and compared against
+  `bug_db/README.md` by `tests/run.py`.
+- **every hand-written note** on an open finding, as `notes`.
+- **every outstanding landing**, as `awaiting_landing`, still audited by
+  `python3 -m anoieu_analyzer.reporting.verdicts --check`.
+- **22 findings the database did not carry**, minted with `migrated_from`
+  naming the ledger they came from, because no koine run produced them.
+- **the reasoning**, from `reports.md` and `postmortem.md`, into
+  [`experience.md`](experience.md), where the salvaged entries are marked as
+  having been worked through the old workflow.
 
-**The database artifact has moved.** As of 2026-09-18, both producers and the
-legacy ledger generator use [`bug_db/bugs.json`](../bug_db/bugs.json).
-`update_bug_db.py` provides one update for both producers; the data move preserves
-all existing records. This completes the storage change, while lifecycle and
-closure support remain pending.
+**What is still owed.** Koine records findings; it still implements no triage or
+closure, so the closure fields above are anoieu's own and a sibling tool adopting
+them has to agree on the shape. Shared lifecycle mechanics in Koine -- and the
+run scope, analyzer versions and enabled-check record that would let a closure be
+assessed from a comparable run rather than a commit -- remain the open work. That
+does not block anything today: a closure is assessed from a commit and a
+re-reading, which needs no capability Koine lacks.
 
 **Closure assessment needs a Koine capability, not a comparison of two dumps.**
 The desired update should identify findings eligible for closure from a
@@ -186,13 +193,11 @@ watched project has since done about our open rows — one window per project, f
 the revision the rows were recorded at to what that project ships, read commit-first
 in the project's own history. It sidesteps the missing capability rather than
 supplying it: it never compares two dumps, and a row closes only on a named
-commit plus the claim re-read as false in the source today, which is
-[the second route](reports/reporting-workflow.md#when-nobody-replied-and-the-project-fixed-it-anyway)
-to closing a row. It writes the ledgers and the log and leaves everything
-uncommitted; it does not touch `bug_db/bugs.json`, because koine is that file's
-writer and a second closure record inside it would contradict the rows the ledger
-has already closed. `FUZ` rows stay open there, as they must — a replay is the
-only evidence that closes one, and reading a commit is not a replay.
+commit plus the claim re-read as false in the source today. It writes the
+closure fields on the database entry and a section in
+[`experience.md`](experience.md), and leaves both uncommitted. `FUZ` findings
+stay open there, as they must — a replay is the only evidence that closes one,
+and reading a commit is not a replay.
 
 **Koine acknowledges the missing capability (checked 2026-09-18).** Our
 [`D9`](discussion.md#d9--we-are-going-to-stop-proving-our-report-by-re-running-our-tools)

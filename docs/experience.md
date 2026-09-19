@@ -47,9 +47,8 @@ hand, and none is written for a closure the database does not carry.
 which is about the check that produced the observation. A window turns up facts
 about our own tooling that belong to no pull request and so fit in no entry
 below. They go here, newest first, one line each, and an empty section is the
-honest state when a run turned up nothing. This is not
-[`reports/postmortem.md`](reports/postmortem.md), which is one section per
-*reply* worked through `prompts/process_anoieu` and has its own enforced shape.
+honest state when a run turned up nothing. It succeeds the retired
+`docs/reports/postmortem.md`, whose entries are salvaged below.
 
 **2026-09-19 — windows `aee874240419..dbf176dfb71b` (cvc5), `6beeb8e6..04a9b4d41508` (ethos), `7ff136bb..c8165b2afd32` (logos).**
 
@@ -83,6 +82,87 @@ honest state when a run turned up nothing. This is not
   fixed, because nobody re-read the tree; three `EO0064` rows sat *closed* for
   three months on a fix that never landed, for the same reason in the other
   direction. One commit-first pass settled both.
+
+### Salvaged from the retired `docs/reports/postmortem.md`
+
+> [!NOTE]
+> **The two rounds below were worked through the old reporting workflow**, which
+> was deprecated on 2026-09-18 and removed on 2026-09-19 along with everything
+> they name: the `open-findings.md` / `closed-findings.md` ledgers, the
+> `TRIAGE:` / `HUMAN RESPONSE:` reply shape, the `awaiting landing:` marker and
+> the audit that read it, and the `check_anoieu` and `process_anoieu` prompts.
+> They were a round of *correspondence* — rows sent to a project, a reply worked
+> back here — which is not what a closure run does now. They are kept because
+> the lessons outlived the machinery, and several of them are why the current
+> arrangement is what it is. **Read them for what was learned, not for how
+> anything works today.**
+
+**2026-08-31 — ethos: nineteen rows, seven fixes, and a decline nobody signed.**
+Seven were real and fixed on one commit, two were our own error, eight were
+declined and two left undecided.
+
+- **A check that resolves a name must resolve it in the scope that binds it**,
+  and a flat symbol table makes the wrong answer the easy one. Two rows read a
+  program's own `cons` *parameter* against a `:right-assoc-nil` `cons` declared
+  by the file that includes it. `_walk_pattern` had the parameter list in hand
+  and never asked it. Narrowing one call site did not fix the class: every other
+  check that resolves a head through `resolve_decl` still has the hole.
+- **The two triage outcomes are not symmetric, and the process was built as
+  though they were.** Ten declined rows were all correct on the merits and none
+  had been put to the maintainer in a way he could disagree with. A proposed
+  *fix* cannot fail this way — somebody reads a diff. A proposed *decline* asks
+  for nothing and gets it.
+- **Read the branch, not the sentence.** The reply's header said its changes
+  were uncommitted; the branch carried a commit and the tree was clean. It cost
+  nothing that time because the error ran in the safe direction. It will not
+  always.
+- **The sentence that decides what *fixed* means belongs on the page a reader
+  lands on**, not one link further in. That ethos aborts on ordinary errors too
+  — so how a checker exits is not the finding — was load-bearing for three `FUZ`
+  verdicts and was two hops from the report.
+- **A finding can be true of the file and false about what the file is**, and
+  the second half is the one a maintainer reads first. Four of the nineteen rows
+  told an include fragment it was a signature. The judgement was right; the noun
+  was not.
+- **A shortcut traded for tempo is fine to take and not fine to forget**, and
+  the difference is whether something mechanical is left behind that will
+  notice. Closing before a change landed was the *fixed upstream* mistake
+  adopted deliberately, so it got a marker, an audit and a test. That machinery
+  is gone; the debt it tracked is now `awaiting_landing` on the database entry.
+
+**2026-08-31 — logos: the first full sweep.** Two of twenty were real defects,
+two were correctly declined, and sixteen were misfiled against a file logos only
+vendors.
+
+- **We shipped a hypothesis inside the same record as a measurement, with
+  nothing marking which was which.** A promoted reproducer carried a note
+  blaming a missing `_`; ethos had been refusing two lines earlier the whole
+  time, on the file's own unmutated text, and our shrinker had made the cut the
+  note described. Their agent disbelieved the note and was right. Bucketing also
+  strips line numbers — correct for deciding whether two findings are one, wrong
+  for what a reader is shown.
+- **A closed row's *reason* is a claim about the world that nothing rechecks.**
+  Re-measuring re-derives open rows only, so a wrong verdict and a live finding
+  can coexist indefinitely with nothing going red. Three rows recorded as *fixed
+  upstream* had never been fixed, and it was the assistant at the far end that
+  caught it. A verdict this repository can settle by itself should never be
+  recorded without doing so.
+- **The cross-reference field was the highest-value one and was empty.** Twelve
+  of sixteen rows were already ruled on against cvc5, twenty lines down the same
+  document, and the far end found that only after fetching cvc5 three times and
+  matching premise text by hand. It was computable here. Rows may share a cause,
+  and saying so is most of the value.
+- **"Fixed on branch X" is worth nothing until somebody looks at X**, and the
+  looking takes ten seconds. The branch named in that reply was `main` with no
+  commits of its own, and the fix was an uncommitted edit in one working tree.
+  This is the case the commit-first rule exists for.
+
+**The standing rules that log produced.** Four still bind and are why closure
+works the way it does: *read the branch, not the reply*; *absence closes
+nothing*; *a decline needs an explicit signature*; *a shortcut leaves something
+mechanical behind that will notice*. The rest governed a correspondence loop
+that no longer runs — the outbound prompt's feedback field, the reply shape, and
+the rule that a person approves every prompt change — and went with it.
 
 ## The shape of an entry
 

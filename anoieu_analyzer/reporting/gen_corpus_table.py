@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Count what the checks report on the signatures we can find.
 
-A library rather than a command: `scripts/run.py` writes `docs/reports/corpus.md` from
+A library rather than a command: `scripts/run.py` writes `docs/corpus.md` from
 `measure_all()` and `render()` here, together with the versions those counts are
 relative to, because a count without a version is a number that was true once.
 
-    python3 scripts/run.py            # rewrite docs/reports/corpus.md
+    python3 scripts/run.py            # rewrite docs/corpus.md
     python3 scripts/run.py --check    # exit 1 if it is stale
 
 A staleness failure means one of two things, and both are worth a look: upstream
@@ -167,7 +167,7 @@ default.
 **This is not a score, and not a comparison between repositories.** These
 numbers say which of our checks tripped, not how much of a subject is sound, so
 a corpus with fewer findings has not been shown to be better. See *measure the
-subject, never our own coverage* in [`reporting-policy.md`](reporting-policy.md).
+subject, never our own coverage* in the [README](../README.md#findings-and-reports).
 
 """]
     out.append("| corpus | files | errors | warnings | hints |")

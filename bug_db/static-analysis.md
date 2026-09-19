@@ -1,25 +1,26 @@
 # Static analysis
 
 Every static finding the checks have found on the standard targets, rendered from
-[`bug_db/bugs.json`](../../bug_db/bugs.json) -- which is the database itself, and the file to read if
-you want the data rather than the table. The analyzer and ledger generator
-render this static subset. The database also records
-[promoted fuzzer findings](../fuzzing.md#recording-through-koine); it
-is maintained exclusively by [koine](https://github.com/ajreynol/koine)'s `koine_append_db`,
-which adds what is new and never edits or removes what is already there.
+[`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
+you want the data rather than the table. This page is the static subset; the
+whole of it, both producers together, is [`bugs.md`](bugs.md). The database also
+records [promoted fuzzer findings](../docs/fuzzing.md#recording-through-koine),
+and is maintained exclusively by
+[koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds what
+is new and never edits or removes what is already there.
 
-**This page is the new workflow and it is not yet the report.** The report is
-[`open-findings.md`](open-findings.md), generated the way it always was. Nothing
-here closes a bug and no verdict reached this file: a bug that has been fixed is
-still in the database, with the date it was last seen. What a finding is and what
-settles one stay ours -- see [`reporting-workflow.md`](reporting-workflow.md).
+**A row here is a claim, not a verdict.** Recording is additive, so a finding
+that has since been fixed still has its entry and its dates. What was decided
+about one is the `closed_verdict` on its database entry, put there by
+[`prompts/close_bug_db`](../prompts/close_bug_db) against a named commit and
+written up in [`experience.md`](../docs/experience.md).
 
 A second producer, an agent driven by
-[`prompts/anoieu_analyzer_agent`](../../prompts/anoieu_analyzer_agent), writes
+[`prompts/anoieu_analyzer_agent`](../prompts/anoieu_analyzer_agent), writes
 a dump in the same shape and appends to the same database.
 
 
-## Every static finding recorded (54)
+## Every static finding recorded (74)
 
 | bug | owner | code | where | description | first seen | last seen |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -77,3 +78,23 @@ a dump in the same shape and appends to the same database.
 | `EO0071-right-assoc-variants.eo-62` | ethos | EO0071 | `tests/right-assoc-variants.eo:62` | `""` is a <string> literal, and this signature has no `declare-consts <string>` | 2026-09-16 | 2026-09-16 |
 | `EO0071-right-assoc-variants.eo-48` | ethos | EO0071 | `tests/right-assoc-variants.eo:48` | `0` is a <numeral> literal, and this signature has no `declare-consts <numeral>` | 2026-09-16 | 2026-09-16 |
 | `EO0077-sorry.eo-4` | ethos | EO0077 | `tests/sorry.eo:4` | rule `trust` is admitted: it is marked `:sorry` | 2026-09-16 | 2026-09-16 |
+| `EO0064-Cpc.cached.eo-2252` | logos | EO0064 | `install/defs/Cpc.cached.eo:2252` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | 2026-08-31 | 2026-08-31 |
+| `EO0064-Cpc.cached.eo-2253` | logos | EO0064 | `install/defs/Cpc.cached.eo:2253` | this case of `$is_seq_const_rec` returns Bool, and the program declares Int | 2026-08-31 | 2026-08-31 |
+| `EO0064-Cpc.cached.eo-2259` | logos | EO0064 | `install/defs/Cpc.cached.eo:2259` | this case of `$is_seq_const` returns Bool, and the program declares Int | 2026-08-31 | 2026-08-31 |
+| `EO0083-Cpc.cached.eo-4444` | logos | EO0083 | `install/defs/Cpc.cached.eo:4444` | rule `arith-eq-elim-int` matches exactly what `arith-eq-elim-real` matches | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-3102` | logos | EO0054 | `install/defs/Cpc.cached.eo:3102` | this pattern matches an `*` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-3492` | logos | EO0054 | `install/defs/Cpc.cached.eo:3492` | this pattern matches an `str.++` of exactly 3 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-4749` | logos | EO0054 | `install/defs/Cpc.cached.eo:4749` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-4890` | logos | EO0054 | `install/defs/Cpc.cached.eo:4890` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-5082` | logos | EO0054 | `install/defs/Cpc.cached.eo:5082` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-5293` | logos | EO0054 | `install/defs/Cpc.cached.eo:5293` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-5298` | logos | EO0054 | `install/defs/Cpc.cached.eo:5298` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-5516` | logos | EO0054 | `install/defs/Cpc.cached.eo:5516` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-5595` | logos | EO0054 | `install/defs/Cpc.cached.eo:5595` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-5600` | logos | EO0054 | `install/defs/Cpc.cached.eo:5600` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-5605` | logos | EO0054 | `install/defs/Cpc.cached.eo:5605` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Cpc.cached.eo-6096` | logos | EO0054 | `install/defs/Cpc.cached.eo:6096` | this pattern matches an `+` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0077-Cpc.cached.eo-6636` | logos | EO0077 | `install/defs/Cpc.cached.eo:6636` | rule `trust` is admitted: it is marked `:sorry` | 2026-08-31 | 2026-08-31 |
+| `TRI0002-Cpc.eos-542` | logos | TRI0002 | `install/defs/Cpc.eos:542` | the semantics has an entry for `str.indexof_re_split`, which the signature does not declare | 2026-08-31 | 2026-08-31 |
+| `EO0054-Nary.eo-157` | ethos | EO0054 | `tests/Nary.eo:157` | this pattern matches an `cons` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |
+| `EO0054-Nary.eo-90` | ethos | EO0054 | `tests/Nary.eo:90` | this pattern matches an `cons` of exactly 2 element(s) | 2026-08-31 | 2026-08-31 |

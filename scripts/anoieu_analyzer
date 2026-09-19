@@ -55,7 +55,7 @@ sys.path.insert(0, ROOT)
 
 from anoieu_analyzer.reporting import koine  # noqa: E402
 from anoieu_analyzer.reporting import targets as config  # noqa: E402
-from anoieu_analyzer.reporting.gen_open_findings import collect, static_bug, render_static  # noqa: E402
+from anoieu_analyzer.reporting.record import collect, static_bug, render_static  # noqa: E402
 from anoieu_analyzer.reporting.database import render as render_database
 
 DB = os.path.join(ROOT, "bug_db", "bugs.json")

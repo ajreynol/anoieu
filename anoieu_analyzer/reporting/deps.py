@@ -160,7 +160,7 @@ def sync_all(
 def read_lock(path: str = LOCK) -> dict[str, str]:
     """The exact commits a report was measured against, by project.
 
-    `docs/reports/corpus.md` shows these to a reader in twelve characters, which is
+    `docs/corpus.md` shows these to a reader in twelve characters, which is
     plenty to recognise a commit and not enough to fetch one. This file is the
     same fact written for a machine, and is what `--pinned` restores.
     """
@@ -172,7 +172,7 @@ def read_lock(path: str = LOCK) -> dict[str, str]:
 
 def render_lock(deps: list[Dep]) -> str:
     body = {
-        "_comment": "Written by scripts/run.py. The commits docs/reports/corpus.md reports "
+        "_comment": "Written by scripts/run.py. The commits docs/corpus.md reports "
         "on, in full, so `scripts/run.py --pinned` can fetch exactly them. Edited by "
         "a run, not by hand.",
     }

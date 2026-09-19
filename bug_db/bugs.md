@@ -7,12 +7,12 @@ This is the history of recorded findings, including resolved ones; it does
 not assign open/closed status. Dates record ingestion, not fresh reproduction.
 Static evidence links use the originally recorded source commit. Fuzzer links
 open the committed reproducers. Verdicts remain in the
-[findings ledgers](../docs/reports/open-findings.md).
+[database itself](bugs.json).
 
 | Producer | Recorded findings |
 | --- | ---: |
-| [Static analyzer](#static-analyzer) | 54 |
-| [Fuzzer](#fuzzer) | 6 |
+| [Static analyzer](#static-analyzer) | 74 |
+| [Fuzzer](#fuzzer) | 8 |
 
 ## Static analyzer
 
@@ -72,6 +72,26 @@ open the committed reproducers. Verdicts remain in the
 | 584eda1d79a64b2c | [EO0071](../docs/checks.md#eo0071) | ethos | \`""\` is a &lt;string&gt; literal, and this signature has no \`declare-consts &lt;string&gt;\` | [tests/right-assoc-variants.eo:62](https://github.com/cvc5/ethos/blob/6beeb8e6/tests/right-assoc-variants.eo#L62) | 2026-09-16 | 2026-09-16 |
 | 59e8abdd4478092d | [EO0071](../docs/checks.md#eo0071) | ethos | \`0\` is a &lt;numeral&gt; literal, and this signature has no \`declare-consts &lt;numeral&gt;\` | [tests/right-assoc-variants.eo:48](https://github.com/cvc5/ethos/blob/6beeb8e6/tests/right-assoc-variants.eo#L48) | 2026-09-16 | 2026-09-16 |
 | a3e3ef689c03095f | [EO0077](../docs/checks.md#eo0077) | ethos | rule \`trust\` is admitted: it is marked \`:sorry\` | [tests/sorry.eo:4](https://github.com/cvc5/ethos/blob/6beeb8e6/tests/sorry.eo#L4) | 2026-09-16 | 2026-09-16 |
+| dd90590c7cc85916 | [EO0064](../docs/checks.md#eo0064) | logos | this case of \`$is\_seq\_const\_rec\` returns Bool, and the program declares Int | install/defs/Cpc.cached.eo:2252 | 2026-08-31 | 2026-08-31 |
+| af3e2426c03378f8 | [EO0064](../docs/checks.md#eo0064) | logos | this case of \`$is\_seq\_const\_rec\` returns Bool, and the program declares Int | install/defs/Cpc.cached.eo:2253 | 2026-08-31 | 2026-08-31 |
+| db3bebb3d118f2bd | [EO0064](../docs/checks.md#eo0064) | logos | this case of \`$is\_seq\_const\` returns Bool, and the program declares Int | install/defs/Cpc.cached.eo:2259 | 2026-08-31 | 2026-08-31 |
+| 2e32230f53cd937e | [EO0083](../docs/checks.md#eo0083) | logos | rule \`arith-eq-elim-int\` matches exactly what \`arith-eq-elim-real\` matches | install/defs/Cpc.cached.eo:4444 | 2026-08-31 | 2026-08-31 |
+| 5ae3d0404b0f5258 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`\*\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:3102 | 2026-08-31 | 2026-08-31 |
+| 2df8343d1a4b70b5 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`str.++\` of exactly 3 element(s) | install/defs/Cpc.cached.eo:3492 | 2026-08-31 | 2026-08-31 |
+| b27d3def22beb16e | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:4749 | 2026-08-31 | 2026-08-31 |
+| 2074c9351e4496a1 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:4890 | 2026-08-31 | 2026-08-31 |
+| 4309c49e54760e9c | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:5082 | 2026-08-31 | 2026-08-31 |
+| 9b576113aedf61f4 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:5293 | 2026-08-31 | 2026-08-31 |
+| e621f59502bd9c65 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:5298 | 2026-08-31 | 2026-08-31 |
+| b2ccb7c697fadccf | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:5516 | 2026-08-31 | 2026-08-31 |
+| 5e085563326ca740 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:5595 | 2026-08-31 | 2026-08-31 |
+| 80da672a81fa0705 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:5600 | 2026-08-31 | 2026-08-31 |
+| 890491ff8a770b03 | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:5605 | 2026-08-31 | 2026-08-31 |
+| 9210e4d67854e3dd | [EO0054](../docs/checks.md#eo0054) | logos | this pattern matches an \`+\` of exactly 2 element(s) | install/defs/Cpc.cached.eo:6096 | 2026-08-31 | 2026-08-31 |
+| befab5e954ae823b | [EO0077](../docs/checks.md#eo0077) | logos | rule \`trust\` is admitted: it is marked \`:sorry\` | install/defs/Cpc.cached.eo:6636 | 2026-08-31 | 2026-08-31 |
+| eac7ccd4d5fb0953 | [TRI0002](../docs/checks.md#tri0002) | logos | the semantics has an entry for \`str.indexof\_re\_split\`, which the signature does not declare | install/defs/Cpc.eos:542 | 2026-08-31 | 2026-08-31 |
+| dcfaf1e214126aa3 | [EO0054](../docs/checks.md#eo0054) | ethos | this pattern matches an \`cons\` of exactly 2 element(s) | tests/Nary.eo:157 | 2026-08-31 | 2026-08-31 |
+| f52484ca50c98a65 | [EO0054](../docs/checks.md#eo0054) | ethos | this pattern matches an \`cons\` of exactly 2 element(s) | tests/Nary.eo:90 | 2026-08-31 | 2026-08-31 |
 
 ## Fuzzer
 
@@ -83,3 +103,5 @@ open the committed reproducers. Verdicts remain in the
 | 9315026a26d2c2d0 | [FUZ0001](../docs/fuzzing.md#the-codes) | ethos+logos | logos accepted what ethos refused: Error: &lt;path&gt;:N.N: Expected Eunoia command, got \`\_\` (LPAREN). | [tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc:2](../tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc#L2) | 2026-09-17 | 2026-09-17 |
 | 918dbdb5f068f46c | [FUZ0003](../docs/fuzzing.md#the-codes) | ethos | ethos unexplained: Fatal failure within bool ethos::State::includeFile(const std::string&amp;, bool, bool, const ethos::Expr&amp;) at &lt;path&gt;:N | [tests/fuzz/unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f/case.eo:2](../tests/fuzz/unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f/case.eo#L2) | 2026-09-17 | 2026-09-17 |
 | f419f6265e79b94b | [FUZ0003](../docs/fuzzing.md#the-codes) | ethos | ethos unexplained: Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&amp;) at &lt;path&gt;:N | [tests/fuzz/unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94/case.eo:2](../tests/fuzz/unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94/case.eo#L2) | 2026-09-17 | 2026-09-17 |
+| 2a7b67b48b4b3bd6 | [FUZ0001](../docs/fuzzing.md#the-codes) | ethos+logos | ethos accepted what logos refused: Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ "\\u{a}" "\\u{6f}rd")) N))) | [tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2](../tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc#L2) | 2026-08-31 | 2026-08-31 |
+| 3e271ee47343e758 | [FUZ0001](../docs/fuzzing.md#the-codes) | ethos+logos | logos accepted what ethos refused: Error: &lt;path&gt;:N.N: Type checking failed: | tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ty-bbdf0a/case.cpc:2 | 2026-08-31 | 2026-08-31 |

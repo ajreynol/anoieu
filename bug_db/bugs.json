@@ -14,7 +14,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit relabelled not_implies_elim2's docstring heading from '; args:' to '; premises:', which is what its one item always described; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Booleans.eo:363 has :premises ((not (=> F1 F2))) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree."
+      "closed_why": "The commit relabelled not_implies_elim2's docstring heading from '; args:' to '; premises:', which is what its one item always described; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Booleans.eo:363 has :premises ((not (=> F1 F2))) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "52912b691212cf81",
@@ -30,7 +31,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit relabelled ite_elim2's docstring heading from '; args:' to '; premises:', which is what its one item always described; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Booleans.eo:463 has :premises ((ite C F1 F2)) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree."
+      "closed_why": "The commit relabelled ite_elim2's docstring heading from '; args:' to '; premises:', which is what its one item always described; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Booleans.eo:463 has :premises ((ite C F1 F2)) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "abb6c825566b9322",
@@ -46,7 +48,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit relabelled symm's docstring heading from '; args:' to '; premises:', the same one-word change ethos made independently to its own copy of the rule; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Uf.eo:31 has :premises (F) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree."
+      "closed_why": "The commit relabelled symm's docstring heading from '; args:' to '; premises:', the same one-word change ethos made independently to its own copy of the rule; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Uf.eo:31 has :premises (F) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "749c0a9f4fcfa766",
@@ -62,7 +65,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit replaced arith_poly_norm's two a/b docstring items with the single '- eq Bool:' the rule takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Arith.eo:509 lists one arg and :args ((= a b)) takes one, so the documented count and the declared one now agree."
+      "closed_why": "The commit replaced arith_poly_norm's two a/b docstring items with the single '- eq Bool:' the rule takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Arith.eo:509 lists one arg and :args ((= a b)) takes one, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "734366e4de4d1648",
@@ -78,7 +82,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit replaced bv_poly_norm's two a/b docstring items with the single '- eq Bool:' the rule takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/BitVectors.eo:240 lists one arg and :args ((= a b)) takes one, so the documented count and the declared one now agree."
+      "closed_why": "The commit replaced bv_poly_norm's two a/b docstring items with the single '- eq Bool:' the rule takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/BitVectors.eo:240 lists one arg and :args ((= a b)) takes one, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "5b163f93e5077b90",
@@ -94,7 +99,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit split string_decompose's single '- a:' docstring item into the two premises the rule declares; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Strings.eo:191 lists two premises and :premises ((>= n 0) (>= (str.len s) n)) takes two, so the documented count and the declared one now agree."
+      "closed_why": "The commit split string_decompose's single '- a:' docstring item into the two premises the rule declares; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Strings.eo:191 lists two premises and :premises ((>= n 0) (>= (str.len s) n)) takes two, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "f7d30b3481235f49",
@@ -110,7 +116,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit deleted quant_var_reordering's '; premises:' section and restated its args, requirement and conclusion around the equality the rule actually takes; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Quantifiers.eo:148 has no :premises and its docstring documents none, so the documented count and the declared one now agree."
+      "closed_why": "The commit deleted quant_var_reordering's '; premises:' section and restated its args, requirement and conclusion around the equality the rule actually takes; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Quantifiers.eo:148 has no :premises and its docstring documents none, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "15dd9f5611325be2",
@@ -126,7 +133,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit added the missing '- bvs @List:' item to $substitute_simul_rec's docstring; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/programs/Quantifiers.eo:95 lists five args and :signature (Bool S @List @List @List) S takes five, so the documented count and the declared one now agree."
+      "closed_why": "The commit added the missing '- bvs @List:' item to $substitute_simul_rec's docstring; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/programs/Quantifiers.eo:95 lists five args and :signature (Bool S @List @List @List) S takes five, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "97e03d281eade336",
@@ -142,7 +150,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit folded $re_ac_merge's four r1/rr1/r2/rr2 docstring items into the two arguments its signature actually takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/programs/Strings.eo:202 lists three args and :signature ((-> RegLan RegLan RegLan) RegLan RegLan) RegLan takes three, so the documented count and the declared one now agree."
+      "closed_why": "The commit folded $re_ac_merge's four r1/rr1/r2/rr2 docstring items into the two arguments its signature actually takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/programs/Strings.eo:202 lists three args and :signature ((-> RegLan RegLan RegLan) RegLan RegLan) RegLan takes three, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "dcd58a15ade5a630",
@@ -158,7 +167,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit folded $re_concat_merge's four documented items into the two its signature takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:222, lists two args and :signature (RegLan RegLan) RegLan takes two, so the documented count and the declared one now agree."
+      "closed_why": "The commit folded $re_concat_merge's four documented items into the two its signature takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:222, lists two args and :signature (RegLan RegLan) RegLan takes two, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "49f2e4bd2c23568d",
@@ -174,7 +184,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit removed the s1, s2 and rr items from $derivative's docstring, which are pattern variables rather than arguments; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:240, lists two args and :signature (String RegLan) RegLan takes two, so the documented count and the declared one now agree."
+      "closed_why": "The commit removed the s1, s2 and rr items from $derivative's docstring, which are pattern variables rather than arguments; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:240, lists two args and :signature (String RegLan) RegLan takes two, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "946705a0916b7d39",
@@ -190,7 +201,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit added the missing '- acc RegLan:' item to $re_rev_map_rev's docstring and rewrote its return description around it; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:1226, lists two args and :signature (RegLan RegLan) RegLan takes two, so the documented count and the declared one now agree."
+      "closed_why": "The commit added the missing '- acc RegLan:' item to $re_rev_map_rev's docstring and rewrote its return description around it; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:1226, lists two args and :signature (RegLan RegLan) RegLan takes two, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "6d8e3eb5cafc93d4",
@@ -206,7 +218,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit dropped the '- i Int:' item from $abconv_ubv_to_int_elim's docstring, which is a pattern variable rather than an argument; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/ArithBvConv.eo:9 lists three args and :signature ((BitVec n) (@TList Int) Int) Int takes three, so the documented count and the declared one now agree."
+      "closed_why": "The commit dropped the '- i Int:' item from $abconv_ubv_to_int_elim's docstring, which is a pattern variable rather than an argument; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/ArithBvConv.eo:9 lists three args and :signature ((BitVec n) (@TList Int) Int) Int takes three, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "9810bf3bebb29000",
@@ -222,7 +235,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit added the missing '- c U:' item to $mk_dt_updater_elim_rhs's docstring and renamed the other two to match the signature; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Datatypes.eo:360 lists three args and :signature (D U eo::List) D takes three, so the documented count and the declared one now agree."
+      "closed_why": "The commit added the missing '- c U:' item to $mk_dt_updater_elim_rhs's docstring and renamed the other two to match the signature; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Datatypes.eo:360 lists three args and :signature (D U eo::List) D takes three, so the documented count and the declared one now agree.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "981948de279f158b",
@@ -238,7 +252,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit relabelled not_implies_elim2's docstring heading from '; args:' to '; premises:' -- the same change that closes fbc033a960a2aaa5, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Booleans.eo:363 heads its single item '; premises:', so it no longer documents an arg the rule does not have."
+      "closed_why": "The commit relabelled not_implies_elim2's docstring heading from '; args:' to '; premises:' -- the same change that closes fbc033a960a2aaa5, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Booleans.eo:363 heads its single item '; premises:', so it no longer documents an arg the rule does not have.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "97999aad8798ca45",
@@ -254,7 +269,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit relabelled ite_elim2's docstring heading from '; args:' to '; premises:' -- the same change that closes 52912b691212cf81, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Booleans.eo:463 heads its single item '; premises:', so it no longer documents an arg the rule does not have."
+      "closed_why": "The commit relabelled ite_elim2's docstring heading from '; args:' to '; premises:' -- the same change that closes 52912b691212cf81, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Booleans.eo:463 heads its single item '; premises:', so it no longer documents an arg the rule does not have.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "639aa3c1ad36dd73",
@@ -270,7 +286,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit relabelled symm's docstring heading from '; args:' to '; premises:' -- the same change that closes abb6c825566b9322, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Uf.eo:31 heads its single item '; premises:', so it no longer documents an arg the rule does not have."
+      "closed_why": "The commit relabelled symm's docstring heading from '; args:' to '; premises:' -- the same change that closes abb6c825566b9322, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Uf.eo:31 heads its single item '; premises:', so it no longer documents an arg the rule does not have.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "a1918d88fa051f11",
@@ -286,7 +303,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit deleted quant_var_reordering's '; premises:' section -- the same change that closes f7d30b3481235f49, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Quantifiers.eo:148 has no '; premises:' section, so it no longer documents a premise the rule does not have."
+      "closed_why": "The commit deleted quant_var_reordering's '; premises:' section -- the same change that closes f7d30b3481235f49, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Quantifiers.eo:148 has no '; premises:' section, so it no longer documents a premise the rule does not have.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "ece08559e3edd79c",
@@ -298,7 +316,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:1749"
+      "where": "proofs/eo/cpc/programs/Strings.eo:1749",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "3061a2d9ac0d7ab8",
@@ -310,7 +331,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Strings.eo:306"
+      "where": "proofs/eo/cpc/rules/Strings.eo:306",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "c9887e6df81fcdb6",
@@ -322,7 +346,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:399"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:399",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "0a12b85457baceb9",
@@ -334,7 +361,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:540"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:540",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "b450c58122dec907",
@@ -346,7 +376,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:732"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:732",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "92bcba9c5a9aff47",
@@ -358,7 +391,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:943"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:943",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "246cda4bed0fcdf4",
@@ -370,7 +406,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:948"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:948",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "cab3113f257de9c1",
@@ -382,7 +421,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:1166"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:1166",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "129a0fcb766be9f6",
@@ -394,7 +436,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:1245"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:1245",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "9913cf82395ba38e",
@@ -406,7 +451,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:1250"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:1250",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "abcbd61aac94dc78",
@@ -418,7 +466,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:1255"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:1255",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "90a380b8bdf7cb18",
@@ -430,7 +481,10 @@
       "code": "EO0054",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Rewrites.eo:1746"
+      "where": "proofs/eo/cpc/rules/Rewrites.eo:1746",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: the reported CPC occurrences are deliberate",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "bf7a06476186d7c5",
@@ -442,7 +496,10 @@
       "code": "EO0077",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/Cpc.eo:555"
+      "where": "proofs/eo/cpc/Cpc.eo:555",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "7ca5c014646b8984",
@@ -470,7 +527,9 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type."
+      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type.",
+      "closed_verdict": "fixed and landed",
+      "notes": "reopened — the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos"
     },
     {
       "id": "878038145dca690c",
@@ -486,7 +545,9 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type."
+      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type.",
+      "closed_verdict": "fixed and landed",
+      "notes": "reopened — the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos"
     },
     {
       "id": "6cc91770c5491971",
@@ -502,7 +563,9 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type."
+      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type.",
+      "closed_verdict": "fixed and landed",
+      "notes": "reopened — the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos"
     },
     {
       "id": "deb8a1dbc6c6f079",
@@ -518,7 +581,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "79166e01d3bec111",
@@ -534,7 +598,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "2c740cb62dfc51b3",
@@ -550,7 +615,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "852ee57154bcf6c4",
@@ -566,7 +632,8 @@
       "closed_on": "2026-09-19",
       "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
       "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
-      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists.",
+      "closed_verdict": "fixed and landed"
     },
     {
       "id": "52b5ae926f12d4c9",
@@ -578,7 +645,8 @@
       "code": "EO0084",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/Builtin-rules.eo:61"
+      "where": "tests/Builtin-rules.eo:61",
+      "notes": "declined by ethos as deliberate: `identity` is a no-op rule in a test signature, and re-labelling a step is what it is for. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
     },
     {
       "id": "b742c6d3a4fa9d74",
@@ -590,7 +658,15 @@
       "code": "DOC0011",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/Uf-rules.eo:25"
+      "where": "tests/Uf-rules.eo:25",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "ethos: the docstring headed a premise `; args:`, changed to `; premises:`. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-findings",
+        "commit": "292201c2"
+      }
     },
     {
       "id": "d0b325c24c13892a",
@@ -602,7 +678,15 @@
       "code": "DOC0012",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/Uf-rules.eo:25"
+      "where": "tests/Uf-rules.eo:25",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "ethos: settled by the same one-line change as `b742c6d3a4fa9d74`, which is why both rows close together. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-findings",
+        "commit": "292201c2"
+      }
     },
     {
       "id": "7f3eb81581c1f0a1",
@@ -614,7 +698,8 @@
       "code": "EO0084",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/binder-ex.eo:10"
+      "where": "tests/binder-ex.eo:10",
+      "notes": "declined by ethos as deliberate: `id` is how the file asserts that two terms are the same term. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
     },
     {
       "id": "74c6f064da7c2464",
@@ -626,7 +711,8 @@
       "code": "EO0084",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/binder-subterm-share.eo:8"
+      "where": "tests/binder-subterm-share.eo:8",
+      "notes": "declined by ethos as deliberate: `id` is how the file asserts that two terms are the same term, as in `7f3eb81581c1f0a1`. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
     },
     {
       "id": "516184abdc82d1df",
@@ -638,7 +724,8 @@
       "code": "EO0054",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/conclusion-spec.eo:8"
+      "where": "tests/conclusion-spec.eo:8",
+      "notes": "declined by ethos as deliberate: a split clause has exactly two disjuncts, so the pattern means what it says. `or` really is `:right-assoc-nil` here, so unlike the `Nary.eo` rows the check read the file correctly. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
     },
     {
       "id": "42d486abefc2fc62",
@@ -650,7 +737,8 @@
       "code": "EO0071",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/eo-definitions.eo:190"
+      "where": "tests/eo-definitions.eo:190",
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
     },
     {
       "id": "70fa22c05a9635d8",
@@ -662,7 +750,8 @@
       "code": "EO0071",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/eo-definitions.eo:229"
+      "where": "tests/eo-definitions.eo:229",
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
     },
     {
       "id": "8dbf440aca48da0c",
@@ -674,7 +763,8 @@
       "code": "EO0071",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/eo-definitions.eo:252"
+      "where": "tests/eo-definitions.eo:252",
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
     },
     {
       "id": "6b2263f824b28bd0",
@@ -686,7 +776,8 @@
       "code": "EO0071",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/eo-definitions.eo:263"
+      "where": "tests/eo-definitions.eo:263",
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
     },
     {
       "id": "b4b49bbcd0bffd3a",
@@ -698,7 +789,15 @@
       "code": "EO0040",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/match-simple.eo:11"
+      "where": "tests/match-simple.eo:11",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "ethos: `:right-assoc` cannot fold on a relation typed `(-> Int Int Bool)`, and the attribute is removed. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-findings",
+        "commit": "292201c2"
+      }
     },
     {
       "id": "5c38f46b13406872",
@@ -710,7 +809,15 @@
       "code": "EO0052",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/naive-nary.eo:182"
+      "where": "tests/naive-nary.eo:182",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "ethos: the case is shadowed by the one above it and is deleted. Verified here at the pinned commits: the fix clears the row and the unfixed file still reports it. awaiting landing: ethos anoieu-findings 292201c2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-findings",
+        "commit": "292201c2"
+      }
     },
     {
       "id": "584eda1d79a64b2c",
@@ -722,7 +829,8 @@
       "code": "EO0071",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/right-assoc-variants.eo:62"
+      "where": "tests/right-assoc-variants.eo:62",
+      "notes": "ethos could not tell and accepted no fix: the trial `declare-consts` edit was made and reverted, and is not on `292201c2`. Genuinely undecided -- nothing includes this file, it applies no operator, and it checks `correct` either way, so the missing declaration has no reachable consequence. Left open. Same question as `59e8abdd4478092d`; ethos also observed that if `str.++` could be applied here its nil terminator would not carry the tail type, which the missing declaration currently hides"
     },
     {
       "id": "59e8abdd4478092d",
@@ -734,7 +842,8 @@
       "code": "EO0071",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/right-assoc-variants.eo:48"
+      "where": "tests/right-assoc-variants.eo:48",
+      "notes": "ethos could not tell and accepted no fix: the trial `declare-consts` edit was made and reverted, and is not on `292201c2`. Genuinely undecided -- nothing includes this file, it applies no operator, and it checks `correct` either way, so the missing declaration has no reachable consequence. Left open"
     },
     {
       "id": "a3e3ef689c03095f",
@@ -746,7 +855,10 @@
       "code": "EO0077",
       "found_at": "6beeb8e6",
       "owner": "ethos",
-      "where": "tests/sorry.eo:4"
+      "where": "tests/sorry.eo:4",
+      "closed_verdict": "intentional",
+      "closed_why": "cvc5: `trust` is deliberately `:sorry` and documented as making a proof incomplete",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "147433b3e48ae9d6",
@@ -774,7 +886,15 @@
       "owner": "ethos",
       "seed": "big:1568",
       "source": "mutated:seed:reference-query-commands.eo",
-      "where": "tests/fuzz/crash-ethos-terminate-called-after-throwing-an-instance--fd1900/case.eo:2"
+      "where": "tests/fuzz/crash-ethos-terminate-called-after-throwing-an-instance--fd1900/case.eo:2",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "ethos: `(->)` is refused in the parser before a term is built, so the message carries a position; regression added. `anoieu_fuzz verify` moves the reproducer from `abnormal` to `reject`, and the positioned `Error:` it now prints is introduced by that commit and absent from `main` -- so it stopped reproducing for the reason on the row. awaiting landing: ethos anoieu-findings 292201c2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-findings",
+        "commit": "292201c2"
+      }
     },
     {
       "id": "4de9bb965fa0c04b",
@@ -810,7 +930,10 @@
       "owner": "ethos+logos",
       "seed": "final:715",
       "source": "mutated:seed:test-string-escape.cpc",
-      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2"
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2",
+      "closed_verdict": "declined",
+      "closed_why": "logos: a proof is read as an assumption set plus the steps that refute it, which is what its correctness theorem is stated over, so the refusal is the input format and not a parser gap; `docs/parser.md` now records it. Still reproduces, by design",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "adc98aa79b4861bb",
@@ -846,7 +969,10 @@
       "owner": "ethos+logos",
       "seed": "logos/test/regress/sexp/test-define.cpc",
       "source": "seed:test-define.cpc",
-      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf/case.cpc:2"
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-49a2cf/case.cpc:2",
+      "closed_verdict": "declined",
+      "closed_why": "logos: `declare-fun` in a proof file is deliberate and documented, because logos ignores `include` and `reference` and a proof must carry its own declarations; the symbol gets the type ethos would give it from a reference file, and cvc5's `eo` printer emits `declare-const`, so the divergence cannot arise on real output. Still reproduces, by design",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19"
     },
     {
       "id": "9315026a26d2c2d0",
@@ -910,7 +1036,15 @@
       "owner": "ethos",
       "seed": "big:377",
       "source": "mutated:seed:segfault-98.eo",
-      "where": "tests/fuzz/unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f/case.eo:2"
+      "where": "tests/fuzz/unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f/case.eo:2",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "ethos: the unclosed `assume-push` now reports through the lexer's `parseError` with a position; regression added. `anoieu_fuzz verify` moves the reproducer from `abnormal` to `reject`, and the positioned `Error:` it now prints is introduced by that commit and absent from `main` -- so it stopped reproducing for the reason on the row. awaiting landing: ethos anoieu-findings 292201c2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-findings",
+        "commit": "292201c2"
+      }
     },
     {
       "id": "f419f6265e79b94b",
@@ -938,7 +1072,323 @@
       "owner": "ethos",
       "seed": "big:288",
       "source": "generated",
-      "where": "tests/fuzz/unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94/case.eo:2"
+      "where": "tests/fuzz/unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94/case.eo:2",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "ethos: a repeated `declare-consts` now returns a failure through `CmdParser` with a position, instead of `EO_FATAL`; regression added. `anoieu_fuzz verify` moves the reproducer from `abnormal` to `reject`, and the positioned `Error:` it now prints is introduced by that commit and absent from `main` -- so it stopped reproducing for the reason on the row. awaiting landing: ethos anoieu-findings 292201c2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-findings",
+        "commit": "292201c2"
+      }
+    },
+    {
+      "id": "dd90590c7cc85916",
+      "bug": "EO0064-Cpc.cached.eo-2252",
+      "tool": "anoieu",
+      "description": "this case of `$is_seq_const_rec` returns Bool, and the program declares Int",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0064",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:2252",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "af3e2426c03378f8",
+      "bug": "EO0064-Cpc.cached.eo-2253",
+      "tool": "anoieu",
+      "description": "this case of `$is_seq_const_rec` returns Bool, and the program declares Int",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0064",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:2253",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "db3bebb3d118f2bd",
+      "bug": "EO0064-Cpc.cached.eo-2259",
+      "tool": "anoieu",
+      "description": "this case of `$is_seq_const` returns Bool, and the program declares Int",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0064",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:2259",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "2e32230f53cd937e",
+      "bug": "EO0083-Cpc.cached.eo-4444",
+      "tool": "anoieu",
+      "description": "rule `arith-eq-elim-int` matches exactly what `arith-eq-elim-real` matches",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0083",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:4444",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "5ae3d0404b0f5258",
+      "bug": "EO0054-Cpc.cached.eo-3102",
+      "tool": "anoieu",
+      "description": "this pattern matches an `*` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:3102",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "2df8343d1a4b70b5",
+      "bug": "EO0054-Cpc.cached.eo-3492",
+      "tool": "anoieu",
+      "description": "this pattern matches an `str.++` of exactly 3 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:3492",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "b27d3def22beb16e",
+      "bug": "EO0054-Cpc.cached.eo-4749",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:4749",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "2074c9351e4496a1",
+      "bug": "EO0054-Cpc.cached.eo-4890",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:4890",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "4309c49e54760e9c",
+      "bug": "EO0054-Cpc.cached.eo-5082",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:5082",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "9b576113aedf61f4",
+      "bug": "EO0054-Cpc.cached.eo-5293",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:5293",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "e621f59502bd9c65",
+      "bug": "EO0054-Cpc.cached.eo-5298",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:5298",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "b2ccb7c697fadccf",
+      "bug": "EO0054-Cpc.cached.eo-5516",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:5516",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "5e085563326ca740",
+      "bug": "EO0054-Cpc.cached.eo-5595",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:5595",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "80da672a81fa0705",
+      "bug": "EO0054-Cpc.cached.eo-5600",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:5600",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "890491ff8a770b03",
+      "bug": "EO0054-Cpc.cached.eo-5605",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:5605",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "9210e4d67854e3dd",
+      "bug": "EO0054-Cpc.cached.eo-6096",
+      "tool": "anoieu",
+      "description": "this pattern matches an `+` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:6096",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "2a7b67b48b4b3bd6",
+      "bug": "FUZ0001-disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094",
+      "tool": "anoieu-fuzz",
+      "description": "ethos accepted what logos refused: Error parsing proof: Error: assumption after the first proof step: (assume @p0 (not (= (str.len (str.++ \"\\u{a}\" \"\\u{6f}rd\")) N)))",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094",
+      "code": "FUZ0001",
+      "owner": "ethos+logos",
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094/case.cpc:2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "re-coded",
+      "closed_why": "`FUZ0005` — the fuzzer now separates the two directions of a disagreement; the same reproducer is `4de9bb965fa0c04b`"
+    },
+    {
+      "id": "befab5e954ae823b",
+      "bug": "EO0077-Cpc.cached.eo-6636",
+      "tool": "anoieu",
+      "description": "rule `trust` is admitted: it is marked `:sorry`",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0077",
+      "owner": "logos",
+      "where": "install/defs/Cpc.cached.eo:6636",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "not audited",
+      "closed_why": "`install/defs/Cpc.cached.eo` is a copy of cvc5's `Cpc.eo`, which is the ground truth; keeping the two in step is a sync check (planned, in cvc5's CI) rather than a finding here"
+    },
+    {
+      "id": "3e271ee47343e758",
+      "bug": "FUZ0001-disagreement-ethos-reject-logos-accept-error-path-n-n-ty-bbdf0a",
+      "tool": "anoieu-fuzz",
+      "description": "logos accepted what ethos refused: Error: <path>:N.N: Type checking failed:",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ty-bbdf0a",
+      "code": "FUZ0001",
+      "owner": "ethos+logos",
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ty-bbdf0a/case.cpc:2",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "withdrawn",
+      "closed_why": "our error: the reproducer was an artefact of the shrinker, which deleted the `_` from line 4 of a committed seed while ethos's refusal was decided on line 3. Reproducer removed from `tests/fuzz/`"
+    },
+    {
+      "id": "eac7ccd4d5fb0953",
+      "bug": "TRI0002-Cpc.eos-542",
+      "tool": "anoieu",
+      "description": "the semantics has an entry for `str.indexof_re_split`, which the signature does not declare",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "TRI0002",
+      "owner": "logos",
+      "where": "install/defs/Cpc.eos:542",
+      "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
+      "closed_verdict": "fixed and landed",
+      "closed_why": "the entry is gone from `install/defs/Cpc.eos` on logos `main`, checked at `6cb59db5` (2026-08-31), and the run of 2026-08-31 reports no `TRI0002` on the triple. It had been held open against `updateCompiler`, a branch that has since been deleted; logos is now measured on `main`, which is what the finding was always about"
+    },
+    {
+      "id": "dcfaf1e214126aa3",
+      "bug": "EO0054-Nary.eo-157",
+      "tool": "anoieu",
+      "description": "this pattern matches an `cons` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "ethos",
+      "where": "tests/Nary.eo:157",
+      "migrated_from": "docs/reports/open-findings.md, migrated 2026-09-19",
+      "notes": "not a defect, and our error rather than a judgement call: `cons` is a parameter of the enclosing program, while EO0054 resolved the head through `resolve_decl`'s flat symbol table and picked up the `:right-assoc-nil` `cons` that the *including* `tests/examples-nary.eo` declares after the include. Check narrowed to skip a head the parameter list binds; witness `tests/witnesses/EO0054-shadowed-good.eo`. No longer derived. Left open rather than withdrawn, pending the maintainer's confirmation. Same cause as `f52484ca50c98a65`"
+    },
+    {
+      "id": "f52484ca50c98a65",
+      "bug": "EO0054-Nary.eo-90",
+      "tool": "anoieu",
+      "description": "this pattern matches an `cons` of exactly 2 element(s)",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "code": "EO0054",
+      "owner": "ethos",
+      "where": "tests/Nary.eo:90",
+      "migrated_from": "docs/reports/open-findings.md, migrated 2026-09-19",
+      "notes": "not a defect, and our error rather than a judgement call: `cons` is a parameter of the enclosing program, while EO0054 resolved the head through `resolve_decl`'s flat symbol table and picked up the `:right-assoc-nil` `cons` that the *including* `tests/examples-nary.eo` declares after the include. Check narrowed to skip a head the parameter list binds; witness `tests/witnesses/EO0054-shadowed-good.eo`. No longer derived. Left open rather than withdrawn, pending the maintainer's confirmation. Same cause as `dcfaf1e214126aa3`"
     }
   ]
 }

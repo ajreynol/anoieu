@@ -17,7 +17,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from anoieu_analyzer.reporting import gen_open_findings as findings
+from anoieu_analyzer.reporting import record as findings
 from anoieu_analyzer.reporting import koine
 from anoieu_analyzer.reporting import targets
 

@@ -27,7 +27,7 @@ python3 scripts/update_bug_db.py            # record both sources in bug_db/bugs
 configured targets, combines their findings with the promoted fuzzer corpus in
 [`tests/fuzz/`](../tests/fuzz), and gives one combined dump to Koine. It also
 refreshes the [GitHub view](bugs.md) and the
-[static table](../docs/reports/static-analysis.md). It succeeds
+[static table](static-analysis.md). It succeeds
 only if recording succeeds. Repeating it adds no duplicate findings.
 
 `--preview` writes the disposable dump `scratch/new-report-bugs.json` and asks
@@ -95,18 +95,16 @@ the original measured commit and still records the new ingestion date.
 they do not mean a fresh reproduction. Commit `bugs.json` with the supporting
 reproducers and any regenerated static table. Runtime `*.lock` files are ignored.
 
-## Closure and the reporting transition
+## Closure
 
-**Database recording is ready; automatic closure assessment is not implemented.**
-A finding absent from a later dump may have disappeared because an input was
-skipped, a check changed, or its fingerprint changed. The updater never closes a
-finding based on absence. Fuzzer closure requires replay evidence, not another
-export of its stored outcomes.
+**A finding closes on a commit, not on a dump.** A finding absent from a later
+export may have gone because an input was skipped, a check changed, or its
+fingerprint moved; the updater never closes anything on absence, and a `FUZ`
+finding closes only on replay evidence.
 
-**What a closure is assessed from is a commit, not a dump.**
-[`prompts/close_bug_db`](../prompts/close_bug_db) asks an assistant what each
-watched project has since done about the rows still open against it — one window
-per project, from the revision those rows were recorded at to what the project
+[`prompts/close_bug_db`](../prompts/close_bug_db) asks what each watched project
+has since done about the findings still open against it -- one window per
+project, from the revision those findings were recorded at to what the project
 ships today, read commit-first in that project's own history:
 
 ```bash
@@ -115,17 +113,63 @@ prompts/close_bug_db cvc5 ethos         # only these projects
 prompts/close_bug_db --use-local ethos=/src/ethos
 ```
 
-A row closes only on a named commit plus the claim re-read as false in the source
-today. It **writes the ledgers, not this database**: the verdict goes in
-[`closed-findings.md`](../docs/reports/closed-findings.md) and the reasoning in
-[`reports.md`](../docs/reports/reports.md), and `bugs.json` is left to Koine,
-whose recording neither closes nor promotes a claim. `FUZ` rows stay open — a
-replay is the only evidence that closes one.
+It closes a finding on exactly two conditions: **a named commit** somebody can
+fetch, and **the claim re-read as false in the source today**. It writes two
+things and nothing else -- the closure fields on the entry here, and a section
+in [`docs/experience.md`](../docs/experience.md) saying what the change meant.
 
-Verdicts and their evidence remain in the existing
-[open](../docs/reports/open-findings.md) and
-[closed](../docs/reports/closed-findings.md) ledgers. The old
-[reporting policy](../docs/reports/reporting-policy.md) is deprecated; the
-[replacement work](../docs/maintenance.md#replace-the-deprecated-reporting-policy)
-tracks the formal policy and the Koine capabilities needed to assess closure
-from complete, comparable runs while retaining history.
+### What a closure puts on an entry
+
+| field | what it holds |
+| --- | --- |
+| `closed_verdict` | one of the seven words below, and nothing else |
+| `closed_why` | why the claim no longer holds, and what was re-read to establish it |
+| `closed_on` | the date the closure was recorded |
+| `closed_commit`, `closed_pr` | the change it closed on, where that applies |
+| `awaiting_landing` | `{project, branch, commit}` -- required by `accepted and fixed`, forbidden on anything else |
+
+**A verdict is one of seven words, and the list is the whole of it.** This is the
+definition; [`anoieu_analyzer/reporting/verdicts.py`](../anoieu_analyzer/reporting/verdicts.py)
+holds the copy that runs, and `tests/run.py` compares the two.
+
+| a verdict is | what it means | what else the entry must carry |
+| --- | --- | --- |
+| `accepted and fixed` | a maintainer accepted it and the change is a commit on a named branch | `awaiting_landing` -- the debt below |
+| `fixed and landed` | the change has reached the project's default branch | what landed it, and no `awaiting_landing` |
+| `declined` | a maintainer read it and said no | nothing |
+| `intentional` | the behaviour is deliberate and the finding was ours to withdraw | nothing |
+| `not audited` | the finding is against a file whose ground truth is elsewhere | nothing |
+| `withdrawn` | our error: the finding was not one | nothing |
+| `re-coded` | the finding survives under a different code, which carries it | nothing |
+
+**The vocabulary is closed because the debt has to stay checkable.** Closing on
+`accepted and fixed` closes a finding before its change reaches the project's
+default branch, which is exactly the mistake this repository made once and had
+for three months -- three cvc5 findings recorded as *fixed upstream* on a fix
+that never landed, unnoticed because a closed entry is one nothing re-derives.
+A marker written in prose can be reworded out of existence; a required *word*
+cannot. So the outcome is required, and `accepted and fixed` is the one that has
+to say where the change is:
+
+```bash
+python3 -m anoieu_analyzer.reporting.verdicts          # what is outstanding
+python3 -m anoieu_analyzer.reporting.verdicts --check  # ... and ask each checkout
+```
+
+That is a **separate pass with its own question** -- *did what we closed actually
+land* -- asked on its own schedule against checkouts, deliberately not part of
+recording a closure. The two get confused exactly when somebody is in a hurry,
+which is when the wrong one is skipped. When a change lands, a person replaces
+`awaiting_landing` with the commit that landed it.
+
+### Where the old ledgers went
+
+Until 2026-09-19 verdicts lived in `docs/reports/open-findings.md` and
+`docs/reports/closed-findings.md`, under a reporting policy and workflow
+deprecated on 2026-09-18. Both files, both generators, the landing audit that
+read them and the `check_anoieu` / `process_anoieu` prompts are **removed**.
+Every verdict, every hand-written note and every outstanding landing they held
+was migrated onto the entries here and carries `migrated_from` saying so; the
+reasoning that was in `reports.md` and `postmortem.md` is in
+[`docs/experience.md`](../docs/experience.md). Nothing was dropped, and nothing
+outside this database records a verdict any more.

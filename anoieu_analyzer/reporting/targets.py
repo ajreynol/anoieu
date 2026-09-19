@@ -44,7 +44,7 @@ def select(spec: list[dict], want: list[str]) -> list[dict]:
 
 
 def as_tuples(spec: list[dict]) -> list[tuple]:
-    """A target in the shape `gen_open_findings.collect` takes.
+    """A target in the shape `record.collect` takes.
 
     That shape is the old workflow's `TARGETS` literal, and `tests/run.py`
     fails if the two descriptions disagree -- the new path reads the JSON and

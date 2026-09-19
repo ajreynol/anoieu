@@ -69,11 +69,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      # The counts must be current and every finding must be listed. The report
-      # is *additive*: this fails when the checks report something the file does
-      # not list, and never when the file lists something they no longer report.
-      # Closing a finding is a judgement made by a review step, not by a diff —
-      # see "How this file is maintained" in docs/reports/open-findings.md.
+      # The counts must be current and every finding must reach the database.
+      # Recording is *additive*: koine adds what is new and never removes what is
+      # there, so this never goes red because a check stopped reporting something.
+      # Closing a finding is a judgement made against a named commit, not by a
+      # diff — see "Closure" in bug_db/README.md.
       # --pinned restores the commits anoieu_analyzer/reporting/config/deps.lock records rather than each
       # branch tip, so this job depends on nothing but this repository: it goes
       # red when a check changes what it reports, never because somebody
@@ -153,7 +153,7 @@ jobs:
           ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle
 
       # The promoted reproducers still do what the record beside them says. This
-      # is the fuzzer's half of "re-measuring" (docs/reports/reporting-workflow.md), and
+      # is the fuzzer's half of "re-measuring" (bug_db/README.md), and
       # it is a hard failure for the same reason the desugaring battery above is
       # one: a verdict that moves without a reproducer moving is ethos having
       # changed under us, and somebody should look. logos is not built here, so
@@ -165,7 +165,7 @@ jobs:
       # And, since a build of ethos is already here, point the fuzzer at it.
       # On a schedule only, and never failing: a fuzzer that fails a build finds
       # a new bug and turns somebody's unrelated pull request red, which is the
-      # one thing docs/reports/reporting-policy.md is most careful about. What it finds is
+      # one thing docs/README.md is most careful about. What it finds is
       # uploaded and warned about; triage is a human step, as it is for every
       # other finding here. Only the signature mode runs — the differential mode
       # needs a second checker, and building logos is a Lean toolchain away.
@@ -212,10 +212,8 @@ jobs:
           path: |
             bug_db/bugs.json
             bug_db/bugs.md
-            docs/reports/static-analysis.md
-            docs/reports/corpus.md
-            docs/reports/open-findings.md
-            docs/reports/closed-findings.md
+            bug_db/static-analysis.md
+            docs/corpus.md
             anoieu_analyzer/reporting/config/deps.lock
       - name: say whether upstream moved
         run: |
@@ -223,5 +221,5 @@ jobs:
             echo "the tips report exactly what the recorded versions do"
           else
             echo "::warning::upstream moved; run scripts/run.py and commit the result"
-            git --no-pager diff -- docs/reports/open-findings.md | head -60
+            git --no-pager diff -- bug_db/bugs.json | head -60
           fi

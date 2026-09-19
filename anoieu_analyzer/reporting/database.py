@@ -33,8 +33,10 @@ def evidence(bug: dict, repositories: dict[str, str]) -> str:
         path, line = location, ""
     anchor = f"#L{line}" if line else ""
     if bug.get("tool") == "anoieu-fuzz" and path.startswith("tests/fuzz/"):
-        # Only repository-relative, committed reproducer locations are links.
-        if ".." not in path.split("/"):
+        # Only repository-relative, committed reproducer locations are links. A
+        # withdrawn finding keeps its recorded location and loses its
+        # reproducer, and a link to a file nobody can open is worse than none.
+        if ".." not in path.split("/") and os.path.exists(os.path.join(ROOT, path)):
             return f"[{cell(location)}](../{quote(path)}{anchor})"
     repo = repositories.get(bug.get("owner", ""), "")
     commit = bug.get("found_at", "")
@@ -63,7 +65,7 @@ def markdown(db: str) -> str:
         "not assign open/closed status. Dates record ingestion, not fresh reproduction.",
         "Static evidence links use the originally recorded source commit. Fuzzer links",
         "open the committed reproducers. Verdicts remain in the",
-        "[findings ledgers](../docs/reports/open-findings.md).", "",
+        "[database itself](bugs.json).", "",
         "| Producer | Recorded findings |", "| --- | ---: |",
     ]
     for title, entries in groups:

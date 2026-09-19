@@ -44,15 +44,15 @@ used**, which includes topics that have been removed.
 
 **This is not where findings live.** A defect in somebody's file — with a path
 and a line number — is a finding, and it goes through
-[`reporting-workflow.md`](reports/reporting-workflow.md) into
-[`reports.md`](reports/reports.md) with an id, a state and a settling artifact. What is
+the reporting workflow into
+[`experience.md`](experience.md) with an id, a state and a settling artifact. What is
 here is everything else: what we want from another tool, what we think would
 improve one, what we do not understand about somebody's intent, and what is
 about to move under them.
 
 **Nothing here is delivered by machine.** A person carries a topic to whoever
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
-automatically* in [`reporting-policy.md`](reports/reporting-policy.md).
+automatically* in the [README](../README.md#findings-and-reports).
 
 **This is the only channel, in both directions, and there is no second file for
 replies.** A reply to a topic *we* opened is appended to that topic below. A
@@ -133,7 +133,7 @@ the merits to either of them beyond that.
 **Settles when:** dokimasia has read it, and either signs it or says which part it
 could not sign
 
-**`reporting-policy.md` has gained two positions and a heading**, and you co-sign
+**the reporting policy gained two positions and a heading**, and you co-sign
 that page, so this is the notice rather than a fait accompli discovered later. The
 section is *What we take*, and it extends the page's subject from what may be
 **said** about somebody else's code to what may be **taken** from it.

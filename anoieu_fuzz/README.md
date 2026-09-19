@@ -48,9 +48,9 @@ against a real build on every push.
 error paths that reached no `Error: <file>:<line>` — on ethos's `anoieu-findings`
 branch at `292201c2`, read 2026-09-17. They are closed here **before the change
 has landed**, which is a debt rather than a result:
-[`landing.py`](../anoieu_analyzer/reporting/landing.py) is the audit that reads it back, and it
+[`verdicts.py`](../anoieu_analyzer/reporting/verdicts.py) is the audit that reads it back, and it
 answers *not yet* for all three. What closes a row is in
-[the reporting workflow](../docs/reports/reporting-workflow.md#what-closes-a-row-and-what-does-not).
+[Closure](../bug_db/README.md#closure).
 
 ## Running it
 

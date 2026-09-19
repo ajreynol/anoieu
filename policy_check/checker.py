@@ -112,9 +112,9 @@ UNCHECKED = [
      "grade, and an associate owes this ecosystem nothing either way"),
 ]
 
-# Written by a run. `closed-findings.md` is deliberately absent: it is written by
+# Written by a run. `bugs.json` is deliberately absent: it is written by
 # the review step and *read* by the generator, so it is a hand-maintained file.
-GENERATED = ["reports/open-findings.md", "reports/corpus.md", "checks.md"]
+GENERATED = ["corpus.md", "checks.md"]
 #: Extensions read as bytes rather than text; the path check skips them.
 #: An absolute path out of somebody's home directory.
 HOME_PATH = r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/"
@@ -231,7 +231,7 @@ def check_no_vendor() -> list[str]:
 #: charge a filename change as a defect.
 NUMBERED = {"rule": ("policy.md",),
             "tenet": ("vision.md", "report-card.md"),
-            "position": ("reporting-policy.md",)}
+            "position": ("README.md",)}
 
 
 def check_citations() -> list[str]:
@@ -855,7 +855,7 @@ def check_links() -> list[str]:
     moved is worse than one that sends them nowhere.
     """
     bad = []
-    for rel in tracked("*.md") + ["prompts/check_anoieu", "prompts/process_anoieu",
+    for rel in tracked("*.md") + ["prompts/close_bug_db",
                                     "prompts/join_eo", "prompts/check_join_eo",
                                     "prompts/process_discussion", "prompts/init_eo",
                                     "prompts/global_audit", "prompts/welcome_eo"]:
@@ -868,7 +868,7 @@ def check_links() -> list[str]:
         # somebody is being shown how to type, and reporting it as a dead link
         # fires on something that is not a problem -- twice, for a page whose
         # whole job is to show a reader what to copy. `check_anchors` below and
-        # `postmortem_shape()` in tests/run.py already read this way; this is
+        # the retired postmortem check in tests/run.py read this way; this is
         # the same argument, made in the same file, arriving late.
         text = prose(read(rel))
         # A markdown link resolves from the file that carries it, always -- a

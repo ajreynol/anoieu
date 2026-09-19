@@ -554,13 +554,13 @@ earlier contents remain in git. `docs/misc/` no longer holds any files.
 | `anoieu/`, `anoieu_fuzz/`, and their tests | the analyzer, the fuzzer, and the evidence they rest on. Ecosystem-specific tests belong with the moving machinery |
 | [`../scripts/deps.json`](../anoieu_analyzer/reporting/config/deps.json), `deps.lock`, [`../scripts/deps.py`](../anoieu_analyzer/reporting/deps.py) | the corpus the analyzer is measured on, fetched and pinned |
 | [`../scripts/run.py`](../scripts/run.py), [`../scripts/sweep.py`](../tests/sweep.py), [`../scripts/oracle_desugar.py`](../tests/oracle_desugar.py) | the run: refresh the sources, measure them, record what came back |
-| `scripts/gen_checks_doc.py`, `gen_corpus_table.py`, `gen_open_findings.py` | the generators of the documents a run writes |
-| [`../scripts/landing.py`](../anoieu_analyzer/reporting/landing.py) | the landing audit — whether a finding closed as *fixed upstream* actually landed. It is about the ledger, so it stays with the ledger |
+| `scripts/gen_checks_doc.py`, `gen_corpus_table.py`, `record.py` | the generators of the documents a run writes |
+| [`../scripts/verdicts.py`](../anoieu_analyzer/reporting/verdicts.py) | the verdict audit — whether a finding closed as *fixed upstream* actually landed. It is about the database, so it stays with the database |
 | [`../scripts/policy_check.py`](../scripts/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
-| [`../prompts/check_anoieu`](../prompts/check_anoieu), [`../prompts/process_anoieu`](../prompts/process_anoieu) | findings out, and answers back |
+| [`../prompts/close_bug_db`](../prompts/close_bug_db) | what each watched project has since done about what we found. The `check_anoieu` / `process_anoieu` pair that carried findings out and answers back was removed on 2026-09-19 with the workflow it served |
 | [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |
 | [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
-| [`reports/`](reports/reports.md) | findings against other people's code, and the position governing what may be published about it |
+| [`../bug_db/`](../bug_db/README.md), [`experience.md`](experience.md) | findings against other people's code, what came of them, and the position governing what may be published about it |
 | `report-card.md` | **the assessment of Arete**, as the plan read on 2026-09-15: it stayed because the assessor must not be the governor. **Superseded 2026-09-17** — the role moved with stathmos and the page has followed it. [stathmos's edition](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/report-card.md) is the live one; the copy here, last graded 2026-09-02, is removed |
 | [tekmerion](../tools/tekmerion/README.md) | **anoieu's route to a verified answer to *is the documentation up to date*.** The central policy says a stale document is a defect; this is the only thing here aimed at checking that mechanically |
 | [`history.md`](history.md) | anoieu's own development record. It stays here, including earlier stretch entries, under LAW 4 |
@@ -892,7 +892,7 @@ four are fixed.**
 | what | how it failed | what it is now |
 | --- | --- | --- |
 | `check_links` | read fenced code, so a quoted path in an example was a dead link | reads `prose()`, like `check_anchors` beside it; every adoption fixture carries a fenced example |
-| `postmortem_shape()` | a wrapped `**Summary:**` matched nothing and was skipped in silence | `postmortem_summary()`, and no readable summary is a failure |
+| `postmortem_shape()` | a wrapped `**Summary:**` matched nothing and was skipped in silence | `postmortem_summary()`, and no readable summary is a failure. Both retired on 2026-09-19 with the postmortem log |
 | the 250-character limit | ended the field at a blank line, so pressing return evaded it | reads on to the next field, which is dokimasia's reading and koine's |
 | `landing.malformed()` | needed the words *awaiting landing* before it would complain | **a closed verdict opens with one of seven words**, and `accepted and fixed` owes a marker |
 
@@ -928,7 +928,7 @@ postmortem summary, which was right where ours was wrong. dokimasia's `SIG` face
 cited in [`notes.md`](notes.md) as the emitter half of the `src/proof/eo/` seam —
 which closes the question of who builds that check with the answer *they did*.
 eudaimonia's two positions on what may be taken from work a tool does not own,
-appended to [`reporting-policy.md`](reports/reporting-policy.md) as *What we
+appended to the reporting policy as *What we
 take*. **None of it was ours and all of it was offered.**
 
 **Ten topics were removed from [`discussion.md`](discussion.md)** — `D1`, `D3`,

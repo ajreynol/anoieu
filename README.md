@@ -38,7 +38,7 @@ standard targets from `anoieu_analyzer/reporting/config/targets.json`, finds eac
 whatever is new to [`bug_db/bugs.json`](bug_db/bugs.json) — the
 database of every bug anoieu has found, appended to by
 [koine](https://github.com/ajreynol/koine) and rendered as a table in
-[`static-analysis.md`](docs/reports/static-analysis.md). `--dry-run` runs no
+[`static-analysis.md`](bug_db/static-analysis.md). `--dry-run` runs no
 checks: it prints the signature files a run would read, which is what tells a
 run that found nothing apart from a run that read nothing.
 
@@ -127,30 +127,19 @@ and what the ingestion dates mean.
 with links to source locations and reproducers. Recording commands refresh it
 alongside the JSON.
 
-> [!WARNING]
-> **The [reporting policy](docs/reports/reporting-policy.md) and
-> [workflow](docs/reports/reporting-workflow.md) are DEPRECATED (2026-09-18).**
-> A formal replacement using Koine's shared tooling is planned; migration is
-> pending. Existing commands and findings records remain in use. See the
-> [replacement work](docs/maintenance.md#replace-the-deprecated-reporting-policy).
+The [bug database](bug_db/bugs.json) is the persistent record, and the only
+one: static findings and promoted fuzzer findings, recorded exclusively through
+koine, with the date each was first and last ingested, and — on an entry
+somebody has ruled on — the verdict, the reasoning, and the commit it closed
+against. Fuzzer records carry recorded outcomes; recording does not replay them.
+Existing content is preserved on append. The
+[corpus report](docs/corpus.md) identifies the source commits measured.
 
-The [report register](docs/reports/reports.md) records what anoieu is asking of
-each project, the evidence, and the response. The
-[open findings](docs/reports/open-findings.md) list current reports; the
-[corpus report](docs/reports/corpus.md) identifies the source commits measured.
-
-The [bug database](bug_db/bugs.json) is the persistent record:
-static findings and promoted fuzzer findings, recorded exclusively through
-koine, with the date each was first and last ingested. Fuzzer records carry
-recorded outcomes; recording does not replay them. Existing bug content is
-preserved on append. The database carries no verdicts — a bug
-somebody has ruled on is still in it — so the open findings remain the report,
-and the database remains the record of what was found.
-
-A reply is triage. A finding closes when the relevant artifact establishes what
-happened. The [legacy reporting workflow](docs/reports/reporting-workflow.md) explains
-how to reproduce, answer and resolve findings, and how to run the analyzer in
-another project's CI.
+**A finding closes on a commit, not on a dump**, and never on absence. What each
+project has since done about what we found is
+[`experience.md`](docs/experience.md); what a verdict may say, and the audit
+that reads the outstanding ones back, is
+[Closure](bug_db/README.md#closure).
 
 ## Optional ecosystem CI check
 
@@ -228,6 +217,5 @@ entered the public history of this repository except by a person executing it,
 so a human intention stands behind every one — which is the fact anything
 reading this history needs in order to interpret it, and it is stated here
 because it will not stay true by accident. **If that changes, this paragraph
-changes with it**, and the change is announced rather than discovered. The
-[deprecated reporting policy](docs/reports/reporting-policy.md) preserves the
-historical discussion of that scope and the intended expert audience.
+changes with it**, and the change is announced rather than discovered. The discussion of that
+scope and the intended expert audience is in [`docs/notes.md`](docs/notes.md).

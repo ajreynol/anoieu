@@ -193,11 +193,11 @@ def local_policy_inputs() -> int:
     from policy_check import checker as policy_check  # noqa: PLC0415
 
     owner = "**Owner:** `example` — Example Maintainer.\n"
-    catalogue = "`policy_check.py`, `check_anoieu`, `deps.json`\n"
+    catalogue = "`policy_check.py`, `close_bug_db`, `deps.json`\n"
     files = {
         "docs/maintenance.md": owner + catalogue,
         "scripts/policy_check.py": "",
-        "prompts/check_anoieu": "",
+        "prompts/close_bug_db": "",
         "config/deps.json": "{}",
         "README.md": "## How this repository is maintained\n\n" + DECLARATION,
     }

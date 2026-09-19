@@ -50,8 +50,8 @@ ROOT = os.path.dirname(HERE)
 
 #: Rewritten whole by a generator on every run, so staleness is not a property
 #: they can have. Counting them would flatter the number.
-GENERATED = {"docs/checks.md", "docs/reports/corpus.md",
-             "docs/reports/open-findings.md", "docs/reports/closed-findings.md",
+GENERATED = {"docs/checks.md", "docs/corpus.md",
+             "bug_db/bugs.md", "bug_db/static-analysis.md",
              "bug_db/bugs.md"}
 
 #: The other repositories this ecosystem talks about. A claim naming one of

@@ -287,7 +287,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     # that *that file* disagrees. The bucket does not say where a checker
     # refused, so an edit the verdict does not depend on holds it and survives --
     # which is how a promoted reproducer came to carry a cut the reference had
-    # never looked at. See shrink()'s docstring and docs/reports/reports.md.
+    # never looked at. See shrink()'s docstring and docs/experience.md.
     seeded = Case(["(keep (a (b c)) d)", "(cmd7)"], source="seed:committed.cpc")
     untouched, spent_seed = shrink(seeded, probe, "B")
     case("a seed run as it stands is not shrunk",
@@ -454,19 +454,17 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     ownerless = [r["bucket"] for r in promoted if reporting.owner_of(r) == "—"]
     case("and an owner", not ownerless, str(ownerless))
 
-    # The generator in tools/ needs deps/ to run the checks, and CI's fast job
-    # has none; this half of what it checks needs nothing but this repository.
-    # Both files, because a promoted finding that has been ruled on has its row
-    # in the closed half and is accounted for there.
-    text = ""
-    for name in ("open-findings.md", "closed-findings.md"):
-        path = os.path.join(ROOT, "docs", "reports", name)
-        text += open(path).read() if os.path.isfile(path) else ""
-    unlisted = [k for k in reporting.rows() if f"`{k}`" not in text]
+    # The recorder needs deps/ to run the checks, and CI's fast job has none;
+    # this half of what it checks needs nothing but this repository. A promoted
+    # finding that has since been ruled on keeps its entry, so one file answers
+    # for both.
+    path = os.path.join(ROOT, "bug_db", "bugs.json")
+    text = open(path).read() if os.path.isfile(path) else ""
+    unlisted = [k for k in reporting.rows() if f'"{k}"' not in text]
     case(
-        "every promoted finding has a row in the ledger",
+        "every promoted finding has an entry in the database",
         not unlisted,
-        f"{len(unlisted)} unlisted; run python3 -m anoieu_analyzer.reporting.gen_open_findings",
+        f"{len(unlisted)} unrecorded; run python3 -m anoieu_analyzer.reporting.record",
     )
 
     if promoted:
@@ -593,10 +591,9 @@ script, directory = sys.argv[1:3]
 main = (runpy.run_path(script) if script.startswith('scripts/') else runpy.run_module(script))['main']
 g = main.__globals__
 for key, name in [('DB', 'static-bugs.json'), ('DUMP', 'static-dump.json'),
-                  ('OUT', 'open.md'), ('LEDGER', 'closed.md'),
                   ('PAGE', 'static.md'), ('STATIC_PAGE', 'static.md')]:
     g[key] = os.path.join(directory, name)
-if 'gen_open_findings' in script:
+if 'reporting.record' in script:
     g['collect'] = lambda roots: {'0123456789abcdef': {
         'owner': 'ethos', 'code': 'EO0040', 'where': 'case.eo:1', 'what': 'test finding'}}
     g['load_fuzz'] = lambda: []
@@ -605,28 +602,26 @@ else:
 sys.argv = [script, *sys.argv[3:]]
 raise SystemExit(main())
 """
-    for script in ("anoieu_analyzer.reporting.gen_open_findings", "scripts/anoieu_analyzer"):
-        with open(os.path.join(d, "open.md"), "w") as fh:
-            fh.write("unchanged ledger\n")
+    for script in ("anoieu_analyzer.reporting.record", "scripts/anoieu_analyzer"):
         env = dict(os.environ, KOINE=failing)
         p = subprocess.run([sys.executable, "-c", program, script, d],
                            capture_output=True, text=True, cwd=ROOT, env=env)
         case(f"{script} fails before writing reports when koine refuses",
              p.returncode == 17 and "koine refused" in p.stderr
-             and open(os.path.join(d, "open.md")).read() == "unchanged ledger\n"
              and not os.path.exists(os.path.join(d, "static.md")), p.stderr)
     p = subprocess.run([sys.executable, "-c", program,
-                        "anoieu_analyzer.reporting.gen_open_findings", d],
+                        "anoieu_analyzer.reporting.record", d],
                        capture_output=True, text=True, cwd=ROOT)
-    case("ledger generation records through koine and refreshes the static table",
+    case("recording goes through koine and refreshes the static table",
          p.returncode == 0 and "1 new bug(s)" in p.stdout
          and 'EO0040' in open(os.path.join(d, "static.md")).read()
-         and '0123456789abcdef' in open(os.path.join(d, "open.md")).read(), p.stderr)
+         and '0123456789abcdef' in open(os.path.join(d, "static-bugs.json")).read(),
+         p.stderr)
     static_db = open(os.path.join(d, "static-bugs.json")).read()
     p = subprocess.run([sys.executable, "-c", program,
-                        "anoieu_analyzer.reporting.gen_open_findings", d, "--check"],
+                        "anoieu_analyzer.reporting.record", d, "--check"],
                        capture_output=True, text=True, cwd=ROOT)
-    case("ledger checking previews through koine without writing the database",
+    case("--check previews through koine without writing the database",
          p.returncode == 0 and "dry run" in p.stdout
          and open(os.path.join(d, "static-bugs.json")).read() == static_db, p.stderr)
     p = subprocess.run([sys.executable, "-c", program,

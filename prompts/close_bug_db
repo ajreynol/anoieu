@@ -25,8 +25,8 @@ evidence of a fix -- `docs/maintenance.md` says so in as many words, twice.
 Asking "what did this commit change, and does it close anything we have open?"
 starts from something that actually happened, names it, and leaves a commit
 attached to every closure. That is also what makes a closure checkable later:
-`landing.py` reads verdicts back and asks the project whether the change landed,
-and it can only do that for a verdict that names a commit.
+`verdicts.py` reads closures back and asks the project whether the change
+landed, and it can only do that for a closure that names a commit.
 
 **No project is a dependency of this command.** The histories it asks about are
 public, so the prompt points at them -- `compare/<baseline>...<ref>` -- and the
@@ -38,13 +38,19 @@ reporting an empty one.
 **The launcher makes no network call**, so `--show-prompt` prints the same text
 anywhere. The reading is the assistant's, in a session a person is driving.
 
-**It does not write `bug_db/bugs.json`.** Koine is that file's only writer and
-implements no closure; the closure record here is the ledger, and a good third
-of the observations in the database are already closed in it. A second closure
-record inside the database would contradict those on the day it was added. What this
-run changes is `docs/reports/closed-findings.md`, `docs/reports/open-findings.md`
-and the log in `docs/reports/reports.md`, and it leaves all of it uncommitted:
-no verdict here is final until somebody reads the diff.
+**It writes two things: the closure fields on a database entry, and a section
+in `docs/experience.md`.** koine is still the only thing that *adds* an entry to
+`bug_db/bugs.json` -- this never creates one, never edits a claim, and never
+touches an entry it did not close. What it adds is the verdict, the reasoning,
+the commit and the date, on entries that were open when the run began. Both
+files are left uncommitted: no verdict here is final until somebody reads the
+diff.
+
+**The deprecated ledgers are gone.** Until 2026-09-19 a closure went into
+`docs/reports/closed-findings.md` with the reasoning in `reports.md`. Both
+files, their generator and the landing audit that read them were removed, and
+every verdict they held was migrated onto the database entries. There is one
+record now, and this writes to it.
 """
 import argparse
 from datetime import date
@@ -59,7 +65,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
 from anoieu_analyzer.reporting import CONFIG_DIR  # noqa: E402
-from anoieu_analyzer.reporting import landing  # noqa: E402
+from anoieu_analyzer.reporting import verdicts  # noqa: E402
 
 #: How many commits one project's window lists before the prompt stops and says
 #: how many it left out. A prompt is not a substitute for `git log`, and a silent
@@ -69,9 +75,7 @@ LISTED = 30
 DEPS = os.path.join(CONFIG_DIR, "deps.json")
 LOCK = os.path.join(CONFIG_DIR, "deps.lock")
 DB = os.path.join(ROOT, "bug_db", "bugs.json")
-OPEN = os.path.join(ROOT, "docs", "reports", "open-findings.md")
-LEDGER = os.path.join(ROOT, "docs", "reports", "closed-findings.md")
-LOG = os.path.join(ROOT, "docs", "reports", "reports.md")
+EXPERIENCE = os.path.join(ROOT, "docs", "experience.md")
 
 _ROW = re.compile(r"^\|\s*`([0-9a-f]{16})`\s*\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|")
 
@@ -110,34 +114,23 @@ def database():
 
 
 def ruled_on():
-    """Ids the ledger has a verdict against. Those are nobody's question here."""
-    with open(LEDGER) as f:
-        return {m.group(1) for line in f if (m := _ROW.match(line))}
+    """Ids the database already has a verdict against. Nobody's question here."""
+    return {fid for fid, b in database().items() if "closed_verdict" in b}
 
 
 def open_rows():
-    """The rows still open, enriched from the database where it knows them.
+    """Every observation still open, from the database.
 
-    The report is the authority on what is open -- the ledger is what closes a
-    row, and the generator skips any id listed there -- so this reads the report
-    and drops anything already ruled on. The database supplies the revision each
-    claim was recorded against, which is the whole baseline question, and the two
-    disagree about two ethos rows that the database does not carry: those are
-    listed with no baseline of their own rather than quietly given somebody
-    else's.
+    One record, so one reading. An entry carrying a `closed_verdict` has been
+    ruled on and is skipped; everything else is a claim somebody could still
+    falsify. `found_at` is the revision the claim was recorded against, which is
+    the whole baseline question -- an entry that carries none is listed with no
+    baseline of its own rather than quietly given somebody else's.
     """
-    seen, bugs, rows = ruled_on(), database(), []
-    with open(OPEN) as f:
-        for line in f:
-            m = _ROW.match(line)
-            if not m or m.group(1) in seen:
-                continue
-            fid, owner, code, where, what = (g.strip().strip("`") for g in m.groups())
-            bug = bugs.get(fid, {})
-            rows.append({"id": fid, "owner": owner, "code": code, "where": where,
-                         "what": what, "tool": bug.get("tool", ""),
-                         "found_at": bug.get("found_at", "")})
-    return rows
+    return [{"id": fid, "owner": b.get("owner", ""), "code": b.get("code", ""),
+             "where": b.get("where", ""), "what": b.get("description", ""),
+             "tool": b.get("tool", ""), "found_at": b.get("found_at", "")}
+            for fid, b in database().items() if "closed_verdict" not in b]
 
 
 def by_project(rows, known):
@@ -341,7 +334,7 @@ def scope(name, entry, rows, base, source, local):
 
 def quiet(name):
     return (f"## {name} -- nothing open\n\n"
-            f"  No row in docs/reports/open-findings.md is owned by {name}, so there is\n"
+            f"  No open entry in bug_db/bugs.json is owned by {name}, so there is\n"
             f"  nothing for a commit of its to close and no window to read. That is a\n"
             f"  complete result for {name}: do not go looking for work there.")
 
@@ -385,7 +378,7 @@ def prompt(plan, quiet_names, when):
     # Read from the copy that runs, so the list in the prompt cannot drift out
     # of the vocabulary `tests/run.py` enforces.
     ours = ("fixed and landed", "accepted and fixed")
-    theirs = ", ".join(f"`{w}`" for w in landing.OUTCOMES if w not in ours)
+    theirs = ", ".join(f"`{w}`" for w in verdicts.OUTCOMES if w not in ours)
     theirs = theirs + "."
     settled = len(ruled_on() & set(database()))
     sections = "\n\n".join(
@@ -398,9 +391,10 @@ def prompt(plan, quiet_names, when):
     return f"""\
 You are assessing closure for **anoieu**, at {ROOT}. Anoieu is a static analyzer
 and differential fuzzer for Eunoia signatures, and it reports findings against
-four projects it does not own. `docs/reports/open-findings.md` holds {total}
-rows that nobody has ruled on. Read `docs/reports/reporting-workflow.md` for what
-a row is and what closes one, and `docs/checks.md` for what each code claims.
+four projects it does not own. `bug_db/bugs.json` holds {total} open
+observation(s) that nobody has ruled on. Read `bug_db/README.md` for what an
+observation is and what closes one, and `docs/checks.md` for what each code
+claims.
 
 **Your question is what each of those projects has since done about them.** Not
 whether a check still fires: what a commit of theirs changed, and whether it
@@ -408,10 +402,10 @@ makes one of our claims false.
 
 {sections}
 
-The rows are in `docs/reports/open-findings.md`, by id, with the owner, the code,
-the file and line in *that project*, and the claim. `bug_db/bugs.json` carries
-the same ids with the revision each was recorded at. Neither is a file you
-rewrite; see what to write, below.
+The observations are in `bug_db/bugs.json`, by id, with the owner, the code,
+the file and line in *that project*, the claim, and the revision each was
+recorded at. You add fields to an entry you close and change nothing else about
+it; see what to write, below.
 
 **Work one project at a time, commit-first, one commit at a time.**
 
@@ -452,23 +446,28 @@ rewrite; see what to write, below.
 
 **Then write two things, and nothing else.**
 
-(a) **The ledger.** Move each row you closed out of the `## Open` table in
-    `docs/reports/open-findings.md` and into the table in
-    `docs/reports/closed-findings.md`, keeping its `id`, `owner`, `code`, `where`
-    and `what` cells exactly as they stand and replacing the `notes` cell with a
-    verdict. A row is moved, never deleted, and the diff that moves it is the
-    record of the judgement.
+(a) **The closure, on the entry.** For each observation you closed, add these
+    fields to its object in `bug_db/bugs.json` and change nothing else about it:
 
-    **A verdict opens with one of seven words**, and two of them can apply here:
+      "closed_verdict"  one of the seven words below
+      "closed_why"      why the claim no longer holds, and what you re-read to
+                        establish it -- the file and the line as the project
+                        ships them today, not what the commit message said
+      "closed_on"       "{when}"
+      "closed_commit"   the full sha it closed on
+      "closed_pr"       the pull request, where there is one
+
+    **A verdict is one of seven words**, and two of them can apply here:
 
       `fixed and landed`   -- the change is on that project's default branch.
-                              Name what landed it. No marker.
+                              Name what landed it, and add no `awaiting_landing`.
       `accepted and fixed` -- the change is a commit on a named branch that is
-                              **not** the branch above. It owes the marker
+                              **not** the branch above. It owes
 
-                                awaiting landing: <project> <branch> <commit>
+                                "awaiting_landing": {{"project": ..., "branch": ...,
+                                                     "commit": ...}}
 
-                              which `python3 -m anoieu_analyzer.reporting.landing
+                              which `python3 -m anoieu_analyzer.reporting.verdicts
                               --check` reads back later and asks the project
                               about. Every ref this run reads is a project's
                               default branch, so the ordinary outcome here is
@@ -476,53 +475,56 @@ rewrite; see what to write, below.
                               on a topic branch or in an unmerged pull request,
                               where the debt has to stay checkable.
 
-    The others are verdicts about a row's *merits* and are not yours to record
-    from a commit:
+    The others are verdicts about an observation's *merits* and are not yours to
+    record from a commit:
 
       {theirs}
 
-    The vocabulary and its reason are in *The verdict vocabulary*
-    in `docs/reports/reporting-workflow.md`; `landing.py` holds the copy that
-    runs and `tests/run.py` compares the two, so a verdict worded past the list
-    leaves the vocabulary rather than leaving the audit.
+    The vocabulary and its reason are in *Closure* in `bug_db/README.md`;
+    `verdicts.py` holds the copy that runs and `tests/run.py` compares the two,
+    so a verdict worded past the list leaves the vocabulary rather than leaving
+    the audit.
 
-    **Do not touch `bug_db/bugs.json`.** Koine is its only writer and implements
-    no closure; the ledger is the closure record, and a second one inside the
-    database would contradict the {settled} observation(s) already closed in it. Leave
-    `tests/fuzz/` alone as well -- a promoted reproducer is evidence, not a
-    status -- and edit no generated page by hand: `bug_db/bugs.md`,
-    `docs/reports/static-analysis.md` and `docs/checks.md` come from their
-    generators, and `docs/reports/open-findings.md` is additive apart from the
-    row you are moving out of it. Change no other row's cells and no text above
-    either table.
+    **Add no entry and remove none.** koine is the only thing that creates an
+    entry here, and an observation you could not close keeps its entry exactly as
+    it stands -- {settled} of them already carry a verdict from an earlier run
+    and are nobody's question now. Leave `tests/fuzz/` alone as well -- a
+    promoted reproducer is evidence, not a status -- and edit no generated page
+    by hand: `bug_db/bugs.md`, `bug_db/static-analysis.md` and `docs/checks.md`
+    come from their generators. Re-render the views once you are done:
+    `python3 -m anoieu_analyzer.reporting.database`.
 
-(b) **The log.** One section per closing change in
-    `docs/reports/reports.md`, under *The log: what was reported, and what came
-    back*, newest first, in the shape that file sets out -- at a high level what
-    was actually wrong, what the change did about it, and what that says about
-    the check that found it. `logos-2: accepted, and it landed` is the worked
-    example: a row closed on the evidence of a commit rather than on a reply, and
-    it says which commit and what it re-read. Keep the *Where it stands* table at
-    the top of that section consistent with what you added.
+(b) **The log.** One section per closing change in `docs/experience.md`, under
+    *The log*, newest first, in the shape that file sets out under *The shape of
+    an entry* -- `Commit:`, `Closed:`, `Summary:`, `What the change did:`,
+    `Attribution:` and `Learned:`. One section per pull request, whatever number
+    of observations it closed, because the unit is the change and not the row.
 
-    Record whether the change cites us, and do not argue for it -- attribution is
-    secondary, and a fix a project found on its own still closed a row of ours
-    and is still evidence the check was pointing at something real.
+    `Summary:` is two sentences and 250 characters at most, written for somebody
+    who works on neither project: no identities, no check codes, no procedure.
+    `Learned:` is the field that makes this a post-mortem rather than a
+    changelog, and the one a thin window drops first.
 
-    **No `postmortem.md` entry.** That file is one section per reply worked
-    through `prompts/process_anoieu`, and this is not that; `tests/run.py`
-    enforces its shape and an entry here would not fit it.
+    Record whether the change cites us under `Attribution:`, and do not argue
+    for it -- attribution is secondary, and a fix a project found on its own
+    still closed an observation of ours and is still evidence the check was
+    pointing at something real.
+
+    **Anything a window taught you about *our* tooling** -- a stale baseline, a
+    check that failed open, a rename that will read as a disappearance -- goes
+    under *What a run learned about itself* in the same file, one line each, and
+    an empty section is the honest result when a run turned up nothing.
 
 Record the date as {when} where a date is called for.
 
 **Then check what you wrote:**
 
-  python3 -m anoieu_analyzer.reporting.landing        # every marker you added, read back
+  python3 -m anoieu_analyzer.reporting.verdicts       # every closure, read back
   python3 -m anoieu_analyzer.reporting.database --check
   python3 tests/run.py
 
-`tests/run.py` is the one that fails on a reworded marker or a verdict outside
-the vocabulary. Fix what it says before you report.
+`tests/run.py` is the one that fails on a verdict outside the vocabulary or a
+promise with nothing to watch. Fix what it says before you report.
 
 **Finish with a report to the terminal**: per project, what you closed and under
 which commit, what you assessed and left open with the reason, which `FUZ` rows
@@ -579,13 +581,13 @@ def main():
         since, locks = pairs(args.since, known, "--since"), pinned()
 
         # Which checkouts to read, if any. `repos.local` is the same mapping
-        # `landing.py` and `process_anoieu` use, and it deliberately does not
+        # `verdicts.py` uses, and it deliberately does not
         # fall back to deps/: those clones are shallow, so an empty window from
         # one would be a fact about the clone and not about the project.
         local = {}
         if args.use_local is not None:
             given = pairs([v for v in args.use_local if "=" in v], known, "--use-local")
-            configured = landing.checkouts([])
+            configured = verdicts._checkouts([])
             named = [v for v in args.use_local if "=" not in v] or wanted
             for name in list(given) + [n for n in named if n not in given]:
                 path = given.get(name) or configured.get(name, "")
@@ -638,7 +640,7 @@ def main():
         if args.show_prompt:
             print(text)
             return 0
-        for path in (LEDGER, LOG):
+        for path in (DB, EXPERIENCE):
             if not os.path.isfile(path):
                 raise ValueError(f"{os.path.relpath(path, ROOT)} is missing; it defines "
                                  "the shape of what this run writes")
@@ -651,8 +653,8 @@ def main():
                   file=sys.stderr)
         for name in quiet_names:
             print(f"--   {name}: nothing open", file=sys.stderr)
-        print("--   writing docs/reports/closed-findings.md, open-findings.md and "
-              "reports.md here", file=sys.stderr)
+        print("--   writing bug_db/bugs.json and docs/experience.md here",
+              file=sys.stderr)
         command = (["codex", "exec"] if args.noninteractive else ["codex"]) if args.codex else (
                    ["claude", "-p"] if args.noninteractive else ["claude"])
         return subprocess.run(command + [text], cwd=ROOT).returncode

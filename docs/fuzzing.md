@@ -60,7 +60,7 @@ instrumentation, no corpus feedback loop and no attempt at one. And a run that
 finds nothing means the cases it wrote did not provoke anything —
 
 > **A quiet run is not a clean bill of health.** The same caution
-> [`reporting-policy.md`](reports/reporting-policy.md) states for the analyzer holds here and holds
+> the [README](../README.md#findings-and-reports) states for the analyzer holds here and holds
 > harder: a fuzzer's silence is a fact about the inputs it happened to write.
 > We publish reproducers and never assurances.
 
@@ -300,14 +300,14 @@ artefact — a mutated `include` pointing at a file that had never existed.
 ```bash
 python3 -m anoieu_fuzz replay  fuzz-findings/<bucket>/case.eo    # read it, confirm it
 python3 -m anoieu_fuzz promote fuzz-findings/<bucket> --owner ethos --note "..."
-python3 -m anoieu_analyzer.reporting.gen_open_findings                               # give it a row
+python3 -m anoieu_analyzer.reporting.record                                          # record it
 ```
 
 `promote` copies the reproducer into `tests/fuzz/` and records it through koine
 in `bug_db/bugs.json`. Commit that evidence beside `tests/witnesses/`,
 which is the same idea for the checks. From
-there it is a finding like any other: a code, an owner, a fingerprint, a row in
-[`open-findings.md`](reports/open-findings.md), and it leaves the open table only when
+there it is a finding like any other: a code, an owner, a fingerprint, an entry
+in [`bug_db/bugs.json`](../bug_db/bugs.json), and it gains a verdict only when
 somebody rules on it.
 
 ### Recording through koine
@@ -343,7 +343,7 @@ Use `replay` or `verify` for that. Reporting includes promoted findings already
 ruled on: their decisions remain in the open/closed ledger. Raw candidates in
 `fuzz-findings/` still need review and promotion, and a database append neither
 files a report upstream nor closes a finding. The generated
-[`static-analysis.md`](reports/static-analysis.md) table shows only the static
+[`static-analysis.md`](../bug_db/static-analysis.md) table shows only the static
 subset of this shared database. The ledger generator also calls koine before
 writing its tables; its `--check` mode uses koine's dry run.
 
@@ -405,14 +405,13 @@ us, and both are things somebody should look at rather than let a row go stale.
 
 The obligations that follow — confirm against a pinned build before filing, and
 never let the tool assign an owner to a disagreement — are in
-[`reporting-workflow.md`](reports/reporting-workflow.md#a-finding-from-the-fuzzer).
+[Closure](../bug_db/README.md#closure).
 
 ## What the first runs turned up
 
-Five findings are promoted, and they are in the ledger rather than here:
-[`open-findings.md`](reports/open-findings.md) has the rows, and
-[`reports.md`](reports/reports.md#the-register-what-anoieu-is-asking-and-of-whom) has
-what is being asked of whom — `ethos-8` and `ethos-9`. In short, from the first
+Five findings are promoted, and they are in the database rather than here:
+[`bug_db/bugs.json`](../bug_db/bugs.json) has the entries, and
+[`experience.md`](experience.md) has what came of them. In short, from the first
 few thousand cases:
 
 | kind | reproducer | what happens |
@@ -429,7 +428,7 @@ came from a seed run as it stands, the reference had refused on a line the
 shrinker then went on to edit, and the `_` was gone because `shrink` cut it — the
 bucket held throughout, since it says nothing about *where* a refusal happened.
 The shrinker no longer touches a seed run as it stands, and the write-up is in
-[`reports.md`](reports/reports.md#logos-4-the-indexed-operator-what-we-got-wrong). The
+[`experience.md`](experience.md). The
 `declare-fun` row above came the same way and survived only because the shrinker
 happened to find nothing to cut — which is the point: running a seed as it stands
 is the cheapest thing this fuzzer does, and it is the one place where shrinking
@@ -446,14 +445,14 @@ ledger is for; one per bucket would be filing the same thing three times.
 > was produced against the binaries on the machine the fuzzer was written on —
 > ethos 0.2.3 from a local build, logos from a local `lake build`. Re-run each
 > reproducer against a pinned build before it is carried anywhere; that is what
-> [`reporting-workflow.md`](reports/reporting-workflow.md#a-finding-from-the-fuzzer)
+> [Closure](../bug_db/README.md#closure)
 > requires, and a fuzzer's output has no special standing.
 
 ## Running it in CI
 
 Not on push. A fuzzer that fails a build finds a new bug and turns somebody's
 unrelated pull request red, which is the one thing
-[`reporting-policy.md`](reports/reporting-policy.md) is most careful about. The `oracle` job already
+the [README](../README.md#findings-and-reports) is most careful about. The `oracle` job already
 builds ethos and caches it by commit, so the fuzzing steps hang off that job on
 a schedule, upload what they find as an artifact, and warn rather than fail.
 

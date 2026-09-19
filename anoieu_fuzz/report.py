@@ -9,7 +9,7 @@ binary it was found against may be somebody's working tree.
 reproducer into `tests/fuzz/` and records it through koine's append tool. The
 reproducer is kept for commit, and from there it is
 exactly like a finding from the checks: it has a code, an owner, a fingerprint,
-a row in [`docs/reports/open-findings.md`](../docs/reports/open-findings.md), and it leaves the
+an entry in [`bug_db/bugs.json`](../bug_db/bugs.json), and it leaves the
 open table only when somebody rules on it.
 
 The asymmetry with the checks is worth stating, because it is the reason this
@@ -169,9 +169,9 @@ def owner_of(record: dict) -> str:
 
 
 def rows(corpus: str = "") -> dict[str, dict]:
-    """Every promoted finding as a row for `docs/reports/open-findings.md`.
+    """Every promoted finding as a row for `bug_db/bugs.json`.
 
-    The shape is `anoieu_analyzer/reporting/gen_open_findings.py`'s, keyed by the same fingerprint,
+    The shape is `anoieu_analyzer/reporting/record.py`'s, keyed by the same fingerprint,
     so the generator merges these with what the checks report and neither side
     knows about the other.
     """
@@ -249,7 +249,7 @@ def promote(source: str, corpus: str = "", owner: str = "", note: str = "") -> s
     an artefact of this harness -- a mutated `include` pointing nowhere was the
     first one -- and a fuzzer that filed its own output would be publishing
     faster than anybody could read it, which is the one thing
-    `docs/reports/reporting-policy.md` asks us not to do.
+    the [README](../README.md#findings-and-reports) asks us not to do.
     """
     corpus = corpus or CORPUS
     record_path = os.path.join(source, "finding.json")
