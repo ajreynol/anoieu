@@ -204,14 +204,15 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     # -- every SARIF run GitHub ingested pointed at a repository that does not
     # exist. The ground truths are elsewhere on purpose: `CHECKER_REPO`, which
     # the declaration check already depends on, says which repository this is,
-    # and `docs/checks.md` carries the anchors. A test that read the constant it
+    # and `anoieu_analyzer/checks.md` carries the anchors. A test that read the
+    # constant it
     # is checking would pass on any value.
     try:
         doc = json.loads(o)
         driver = doc["runs"][0]["tool"]["driver"]
         urls = [driver["informationUri"]] + [r["helpUri"] for r in driver["rules"]]
         expected = "https://github.com/" + CHECKER_REPO
-        catalogue = open(os.path.join(ROOT, "docs", "checks.md")).read()
+        catalogue = open(os.path.join(ROOT, "anoieu_analyzer", "checks.md")).read()
         anchors = {h.lower() for h in re.findall(r"^## (\S+)", catalogue, re.M)}
         wrong = [u for u in urls if not u.startswith(expected)]
         missing = [r["helpUri"] for r in driver["rules"]
@@ -219,7 +220,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     except Exception as e:  # noqa: BLE001
         wrong, missing = [str(e)], []
     case("sarif points at the repository this tool is published from", not wrong, str(wrong))
-    case("and every helpUri anchor is one docs/checks.md carries", not missing, str(missing))
+    case("and every helpUri anchor is one anoieu_analyzer/checks.md carries", not missing, str(missing))
 
     rc, o, _ = run("check", bad, "--format", "github")
     case("github annotations are emitted", o.startswith("::error file="), o.splitlines()[:1])

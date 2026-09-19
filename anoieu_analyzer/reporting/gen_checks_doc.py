@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write docs/checks.md from the registry.
+"""Write anoieu_analyzer/checks.md from the registry.
 
 The manual page of a check is written beside the check, so that the two cannot
 drift; this renders them into one document, which is the catalogue a reader
@@ -45,7 +45,7 @@ def main() -> int:
         if not chk.default_on:
             out.append("\n*Off by default; run with `--pedantic` or `--only " + code + "`.*")
         out.append("\n" + (chk.page or "(no manual page yet)") + "\n")
-    path = os.path.join(ROOT, "docs", "checks.md")
+    path = os.path.join(ROOT, "anoieu_analyzer", "checks.md")
     with open(path, "w") as f:
         f.write("\n".join(out).rstrip() + "\n")
     print(f"-- wrote {os.path.relpath(path)} ({len(codes)} checks)")

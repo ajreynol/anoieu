@@ -13,7 +13,7 @@ works on neither project can read. A check whose observations nothing ever close
 is measuring something nobody agrees is wrong, and that shows up here as silence.
 
 **What is the record, and what is the story.** The record is
-[`bug_db/`](../bug_db/README.md): the identity, the claim, the dates, and the
+[`bug_db/`](README.md): the identity, the claim, the dates, and the
 `closed_verdict` / `closed_why` / `closed_commit` fields a closure writes onto an
 entry. The database says *that* a change closed an observation and which change
 it was. This page says what it meant. An entry here without a closed identity
@@ -264,7 +264,7 @@ reference links to `<remote>/commit/<sha>` and a pull request to
 `<remote>/pull/<n>`.
 
 ```text
-## <date> — <project> [#<pr>](<remote>/pull/<pr>) — <what the change was>
+## <date> — <project> [#<pr>](../docs/<remote>/pull/<pr>) — <what the change was>
 
 **Commit:** [`<short sha>`](<remote>/commit/<full sha>) — <the commit subject>
 

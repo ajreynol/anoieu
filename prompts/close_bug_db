@@ -39,7 +39,7 @@ reporting an empty one.
 anywhere. The reading is the assistant's, in a session a person is driving.
 
 **It writes two things: the closure fields on a database entry, and a section
-in `docs/experience.md`.** koine is still the only thing that *adds* an entry to
+in `bug_db/experience.md`.** koine is still the only thing that *adds* an entry to
 `bug_db/bugs.json` -- this never creates one, never edits a claim, and never
 touches an entry it did not close. What it adds is the verdict, the reasoning,
 the commit and the date, on entries that were open when the run began. Both
@@ -75,7 +75,7 @@ LISTED = 30
 DEPS = os.path.join(CONFIG_DIR, "deps.json")
 LOCK = os.path.join(CONFIG_DIR, "deps.lock")
 DB = os.path.join(ROOT, "bug_db", "bugs.json")
-EXPERIENCE = os.path.join(ROOT, "docs", "experience.md")
+EXPERIENCE = os.path.join(ROOT, "bug_db", "experience.md")
 
 _ROW = re.compile(r"^\|\s*`([0-9a-f]{16})`\s*\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|")
 
@@ -393,7 +393,7 @@ You are assessing closure for **anoieu**, at {ROOT}. Anoieu is a static analyzer
 and differential fuzzer for Eunoia signatures, and it reports findings against
 four projects it does not own. `bug_db/bugs.json` holds {total} open
 observation(s) that nobody has ruled on. Read `bug_db/README.md` for what an
-observation is and what closes one, and `docs/checks.md` for what each code
+observation is and what closes one, and `anoieu_analyzer/checks.md` for what each code
 claims.
 
 **Your question is what each of those projects has since done about them.** Not
@@ -490,11 +490,11 @@ it; see what to write, below.
     it stands -- {settled} of them already carry a verdict from an earlier run
     and are nobody's question now. Leave `tests/fuzz/` alone as well -- a
     promoted reproducer is evidence, not a status -- and edit no generated page
-    by hand: `bug_db/bugs.md`, `bug_db/static-analysis.md` and `docs/checks.md`
+    by hand: `bug_db/bugs.md`, `bug_db/static-analysis.md` and `anoieu_analyzer/checks.md`
     come from their generators. Re-render the views once you are done:
     `python3 -m anoieu_analyzer.reporting.database`.
 
-(b) **The log.** One section per closing change in `docs/experience.md`, under
+(b) **The log.** One section per closing change in `bug_db/experience.md`, under
     *The log*, newest first, in the shape that file sets out under *How to
     maintain this page* -- `Commit:`, `Closed:`, `Summary:`, `What the change
     did:`, `Not closed:`, `Attribution:` and `Learned:`, in that order, with
@@ -666,7 +666,7 @@ def main():
                   file=sys.stderr)
         for name in quiet_names:
             print(f"--   {name}: nothing open", file=sys.stderr)
-        print("--   writing bug_db/bugs.json and docs/experience.md here",
+        print("--   writing bug_db/bugs.json and bug_db/experience.md here",
               file=sys.stderr)
         command = (["codex", "exec"] if args.noninteractive else ["codex"]) if args.codex else (
                    ["claude", "-p"] if args.noninteractive else ["claude"])

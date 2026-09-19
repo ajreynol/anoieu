@@ -106,7 +106,7 @@ def markdown(db: str) -> str:
         "links use the originally recorded source commit; fuzzer links open the",
         "committed reproducers. The reasoning behind a verdict is `closed_why` in",
         "the [database itself](bugs.json), and what a change meant is",
-        "[experience.md](../docs/experience.md).", "",
+        "[experience.md](experience.md).", "",
         "| Producer | Recorded findings | Open |", "| --- | ---: | ---: |",
     ]
     for title, entries in groups:
@@ -119,8 +119,8 @@ def markdown(db: str) -> str:
                       "| --- | --- | --- | --- | --- | --- | --- | --- |"])
         for bug in entries:
             code = bug.get("code", "")
-            guide = ("../docs/fuzzing.md#the-codes" if code.startswith("FUZ")
-                     else "../docs/checks.md#" + quote(code.lower()))
+            guide = ("../anoieu_fuzz/fuzzing.md#the-codes" if code.startswith("FUZ")
+                     else "../anoieu_analyzer/checks.md#" + quote(code.lower()))
             fields = [cell(bug.get("id", bug.get("bug", ""))),
                       f"[{cell(code)}]({guide})" if code else "—",
                       cell(bug.get("owner", "")), cell(bug.get("description", "")),

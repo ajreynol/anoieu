@@ -1,7 +1,7 @@
 # Maintaining anoieu
 
 Anoieu owns the analyzer, the fuzzer, the optional ecosystem policy check,
-and the reporting workflow and [reporting policy](reporting-policy.md) the shared
+and the reporting workflow and [reporting policy](../bug_db/reporting-policy.md) the shared
 policy assigns it. Its history, correspondence and findings are also kept here.
 
 **Owner:** [the current list in the shared policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#human-maintainers).
@@ -14,10 +14,34 @@ authorship and supervision, which the README carries.
 Keep top-level human commands in `scripts/`, assistant launchers in `prompts/`,
 and analyzer/fuzzer evidence in `tests/`. Policy code and tests live together in
 `policy_check/`; reusable reporting code belongs in `anoieu_analyzer/reporting/`.
-List new documents in [the index](README.md) and new scripts below.
-Keep generated reports under their generators. The database is additive and
-**irreplaceable**: the verdicts, notes and closures written onto its entries
-exist nowhere else.
+List new scripts below.
+
+### Where a document goes
+
+**Beside the thing it describes, and `docs/` is not the default.** One top-level
+directory per tool, each with a `README.md` as its entry point, and its documents
+in the same directory:
+
+| what it is about | where it goes |
+| --- | --- |
+| the static analyzer — its interface, its checks, what we know about the languages | `anoieu_analyzer/` |
+| the fuzzer — its oracles, its modes, promoting a case | `anoieu_fuzz/` |
+| the policy checker — its contract, its adoption forms, adding a check | `policy_check/` |
+| findings — the database, what may be published about them, what became of them | `bug_db/` |
+| a child project's own pages | `tools/<name>/`, with its own index inside |
+| **the repository's own records**, which belong to no tool | `docs/` |
+
+`docs/` holds four and is meant to: [`history.md`](history.md),
+[`discussion.md`](discussion.md), this page, and the successor letter.
+
+**Every document is named in [the index](../README.md)**, which is a section of
+the front page, and `check_every_document_indexed` fails the build if one is
+not. Two things are deliberately outside it: the successor letter, and anything
+under `tools/`, because an unadvertised child gets no row and no link inward.
+
+Keep generated documents with their generators, and say at the top of each that
+it is generated. The database is additive and **irreplaceable**: the verdicts,
+notes and closures written onto its entries exist nowhere else.
 The shared database artifact lives in [`bug_db/`](../bug_db/README.md), with
 static and promoted fuzzer findings in one `bugs.json`. Refresh both with
 `python3 scripts/update_bug_db.py`; use `--dry-run` to check setup or `--preview`
@@ -25,7 +49,7 @@ to analyse without changing the database.
 **There is one record of a verdict and one place to write it**: the closure
 fields on a database entry, defined by [Closure](../bug_db/README.md#closure)
 and written only by [`close_bug_db`](../prompts/close_bug_db). What came of a
-finding afterwards is [`experience.md`](experience.md). The findings ledgers this
+finding afterwards is [`experience.md`](../bug_db/experience.md). The findings ledgers this
 replaced were removed on 2026-09-19; [`history.md`](history.md) records what the
 migration carried.
 Nothing is filed or pushed without human direction.
@@ -41,7 +65,7 @@ python3 scripts/policy_check.py
 python3 -m policy_check.currency --list
 python3 -m anoieu_analyzer.reporting.gen_checks_doc
 python3 -m anoieu_analyzer.reporting.database --check
-git diff --exit-code docs/checks.md
+git diff --exit-code anoieu_analyzer/checks.md
 ```
 
 The suite exercises the real koine append tool, resolved through `$KOINE`, the
@@ -74,7 +98,7 @@ source configuration and pins in `anoieu_analyzer/reporting/config/`.
 | `anoieu_analyzer` | run static analysis and record findings through Koine |
 | `anoieu_fuzzer` | start a fuzzing campaign; accepts checker names and effort |
 | `update_bug_db.py` | refresh the shared database and GitHub view from both producers |
-| `run.py` | restore or refresh corpus sources, re-measure them into `docs/corpus.md`, and append what is new to the database |
+| `run.py` | restore or refresh corpus sources, re-measure them into `bug_db/corpus.md`, and append what is new to the database |
 | `policy_check.py` | check repository policy; stable launcher for `policy_check/` |
 | `harvest_cpc_proofs` | collect proof seeds for fuzzing from cvc5 benchmarks |
 
@@ -135,8 +159,8 @@ ethos ships and became exactly the topic branch this rule is about. The paths th
 exception existed to reach are on `main` now, so dropping it costs no coverage.
 
 **Two consequences, and neither is cosmetic.** The recorded corpus was measured
-on `ethosEoc3`, so `deps.lock`, [`corpus.md`](corpus.md) and the run notes in
-[`notes.md`](notes.md) still name it — correctly: they are the record of a run
+on `ethosEoc3`, so `deps.lock`, [`corpus.md`](../bug_db/corpus.md) and the run notes in
+[`notes.md`](../anoieu_analyzer/notes.md) still name it — correctly: they are the record of a run
 that happened, not a statement of what is watched now. Moving the measurement
 onto `main` takes a run (`python3 scripts/run.py`). And the open ethos rows were
 measured at `6beeb8e6`, which is not on `main`, so until that run happens they
@@ -182,7 +206,7 @@ in the project's own history. It sidesteps the missing capability rather than
 supplying it: it never compares two dumps, and a row closes only on a named
 commit plus the claim re-read as false in the source today. It writes the
 closure fields on the database entry and a section in
-[`experience.md`](experience.md), and leaves both uncommitted. `FUZ` findings
+[`experience.md`](../bug_db/experience.md), and leaves both uncommitted. `FUZ` findings
 stay open there, as they must — a replay is the only evidence that closes one,
 and reading a commit is not a replay.
 
@@ -253,7 +277,7 @@ a competing database path here.
 **For now we answer coverage on our own side.** `anoieu_analyzer/reporting/config/targets.json` says what
 a full static run reads. `python3 -m anoieu_fuzz report` records the promoted
 reproducer corpus, with recorded outcomes and the same ids as the database;
-[the fuzzer guide](fuzzing.md#recording-through-koine) explains the command.
+[the fuzzer guide](../anoieu_fuzz/fuzzing.md#recording-through-koine) explains the command.
 Recording performs no replay, so its ingestion dates do not establish that a
 bug still reproduces. Neither producer's dump determines closure.
 

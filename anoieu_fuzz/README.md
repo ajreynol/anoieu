@@ -57,5 +57,5 @@ answers *not yet* for all three. What closes a row is in
     python3 -m anoieu_fuzz run --mode proof        # ethos against a second checker
     python3 -m anoieu_fuzz run --mode signature    # arbitrary signatures, at ethos alone
 
-[`../../docs/fuzzing.md`](../docs/fuzzing.md) is the manual: the oracle, how a
+[`fuzzing.md`](fuzzing.md) is the manual: the oracle, how a
 case is shrunk and promoted, and what a third checker has to do to join in.

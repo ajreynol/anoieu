@@ -70,7 +70,11 @@ for people; it is not a stable machine-readable schema. The chosen contract's
 coverage is available with `--policy-version 1 --coverage`.
 
 [`policy_check/tests/policy-v1.json`](tests/policy-v1.json) records the blocking and
-advisory checks. The adoption fixtures in [`tests/cases.py`](tests/cases.py)
+advisory checks. **Some of them never run on a member's tree**: a check whose
+applicability is *home-only* is one this repository holds itself to, it reports
+`skip` everywhere else, and adding one is not an added obligation on anybody. The
+registry lists it all the same, because a reader comparing two contracts should
+see every check the implementation carries rather than a filtered view. The adoption fixtures in [`tests/cases.py`](tests/cases.py)
 exercise compliant and noncompliant members, associates, discussion gates,
 and child projects with both the default and explicit version 1. A new version
 must have its own registry entry and fixtures while these continue to pass.
@@ -144,12 +148,14 @@ pins nothing: an unpinned cross-repository check would turn every member red on
 one rename here, with no commit anywhere near them. Whatever form this takes is
 likelier to be advisory than blocking.
 
-**A written document outside `docs/` is outside the layout.** The layout says every
-written document lives in `docs/` and is named in the index; the index check
-enumerates `docs/` and nothing else, so a committed Markdown file at the repository
-root is invisible to it. Found in anoieu's own tree on 2026-09-17. Widening the
-index check to the root is a new obligation on everybody who keeps one, which is
-why it waits.
+**Every written document is named in the index, wherever it lives.** The index
+check enumerates `docs/` and nothing else, so a document anywhere else is
+invisible to it — a committed Markdown file at the repository root, or, since
+2026-09-19, this repository's own documents, which deliberately sit beside the
+thing they describe. Widening the enumeration to a whole tree is a new obligation
+on everybody who keeps an index, which is why it waits. **Anoieu holds itself to
+it meanwhile**, in the home-only `check_every_document_indexed`, so the shape is
+worked out on our own tree before it is proposed to anybody.
 
 ## The shared CI workflow
 

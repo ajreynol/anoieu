@@ -126,7 +126,7 @@ to do; without it, a generated signature mostly exercises the front end.
 `--metamorphic` adds the one differential question a *single* checker can be
 asked: the same file, laid out differently — whitespace and comments, nothing
 else — must get the same answer. The rewrite is deliberately timid, and
-[`anoieu_fuzz/gen.py`](../anoieu_fuzz/gen.py) says exactly what it will not touch.
+[`anoieu_fuzz/gen.py`](gen.py) says exactly what it will not touch.
 
 ## Where cases come from
 
@@ -361,7 +361,7 @@ provoked**, which is the marker that says where a row came from.
 | `FUZ0005` | warning | a checker refused what the reference accepted |
 
 `python3 -m anoieu_fuzz explain FUZ0002` is the page behind one, written beside
-the code in [`../anoieu_fuzz/codes.py`](../anoieu_fuzz/codes.py) so the two
+the code in [`../anoieu_fuzz/codes.py`](codes.py) so the two
 cannot drift. `list-codes` is the inventory.
 
 **One thing to know before judging any of these fixed: how a checker exits is
@@ -411,7 +411,7 @@ never let the tool assign an owner to a disagreement — are in
 
 Five findings are promoted, and they are in the database rather than here:
 [`bug_db/bugs.json`](../bug_db/bugs.json) has the entries, and
-[`experience.md`](experience.md) has what came of them. In short, from the first
+[`experience.md`](../bug_db/experience.md) has what came of them. In short, from the first
 few thousand cases:
 
 | kind | reproducer | what happens |
@@ -428,7 +428,7 @@ came from a seed run as it stands, the reference had refused on a line the
 shrinker then went on to edit, and the `_` was gone because `shrink` cut it — the
 bucket held throughout, since it says nothing about *where* a refusal happened.
 The shrinker no longer touches a seed run as it stands, and the write-up is in
-[`experience.md`](experience.md). The
+[`experience.md`](../bug_db/experience.md). The
 `declare-fun` row above came the same way and survived only because the shrinker
 happened to find nothing to cut — which is the point: running a seed as it stands
 is the cheapest thing this fuzzer does, and it is the one place where shrinking
@@ -500,9 +500,9 @@ path is untested here.
 
 | file | its job |
 | --- | --- |
-| [`anoieu_fuzz/vocab.py`](../anoieu_fuzz/vocab.py) | what a fixed signature offers the generator: operators, their argument shapes, rules and their arities, literal categories. The only place the fuzzer touches anoieu |
-| [`anoieu_fuzz/gen.py`](../anoieu_fuzz/gen.py) | writing a case, damaging a case, splitting a file back into commands, and the one metamorphic rewrite |
-| [`anoieu_fuzz/checkers.py`](../anoieu_fuzz/checkers.py) | running a checker and reducing what it said to `accept` / `reject` / `abnormal` |
-| [`anoieu_fuzz/triage.py`](../anoieu_fuzz/triage.py) | the oracle, the buckets, the shrinker and the corpus |
-| [`anoieu_fuzz/cli.py`](../anoieu_fuzz/cli.py) | `run`, `one`, `replay`, `shrink`, `checkers` |
+| [`anoieu_fuzz/vocab.py`](vocab.py) | what a fixed signature offers the generator: operators, their argument shapes, rules and their arities, literal categories. The only place the fuzzer touches anoieu |
+| [`anoieu_fuzz/gen.py`](gen.py) | writing a case, damaging a case, splitting a file back into commands, and the one metamorphic rewrite |
+| [`anoieu_fuzz/checkers.py`](checkers.py) | running a checker and reducing what it said to `accept` / `reject` / `abnormal` |
+| [`anoieu_fuzz/triage.py`](triage.py) | the oracle, the buckets, the shrinker and the corpus |
+| [`anoieu_fuzz/cli.py`](cli.py) | `run`, `one`, `replay`, `shrink`, `checkers` |
 | [`tests/fuzz_cases.py`](../tests/fuzz_cases.py) | the harness, against checkers written in the suite so that neither ethos nor logos has to be on the machine |

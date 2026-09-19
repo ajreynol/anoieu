@@ -9,8 +9,8 @@ be taken as material in the first place. It binds what *we* publish; it does not
 restrict who runs these tools or what they do with the output.
 
 It is **not** the mechanics. How a finding is recorded is
-[`bug_db/README.md`](../bug_db/README.md), how one is closed is
-[Closure](../bug_db/README.md#closure), and what a project did with one is
+[`bug_db/README.md`](README.md), how one is closed is
+[Closure](README.md#closure), and what a project did with one is
 [`experience.md`](experience.md). Those change with the tooling; this changes
 when a position changes.
 
@@ -120,7 +120,7 @@ down. A finding that is merely no longer reported has not thereby been fixed.
 
 What makes this enforced rather than structural is that a verdict is now a
 **required word from a closed vocabulary** —
-[Closure](../bug_db/README.md#closure) defines the seven,
+[Closure](README.md#closure) defines the seven,
 `anoieu_analyzer/reporting/verdicts.py` holds the copy that runs, and
 `tests/run.py` compares the two, so a verdict reworded past the list leaves the
 vocabulary rather than leaving the audit. `accepted and fixed` additionally

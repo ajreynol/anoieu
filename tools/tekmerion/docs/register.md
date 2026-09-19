@@ -30,7 +30,7 @@ said what they say.**
 
 | # | where | the claim | what was true instead |
 | --- | --- | --- | --- |
-| 1 | `docs/README.md` | the report card is at `kanon/tools/stathmos/report-card.md` | `kanon/tools/stathmos/docs/report-card.md` — kanon moved its children's documents on 2026-09-18 |
+| 1 | the documentation index | the report card is at `kanon/tools/stathmos/report-card.md` | `kanon/tools/stathmos/docs/report-card.md` — kanon moved its children's documents on 2026-09-18 |
 | 2 | `docs/history.md` | sapheneia is at `kanon/tools/sapheneia/README.md` | it is a child of **eunoia**, at `eunoia/tools/sapheneia/` |
 | 3 | `docs/history.md` | `kanon/scripts/ecosystem/ecosystem.py` is the program that reads the inventory | no such file; that directory holds JSON only |
 | 4 | `anoieu_fuzz/README.md`, `docs/discussion.md` (×3) | ynoia's registers are at `kanon/tools/ynoia/{papers,tools,why-eunoia}.md` | all three are under `tools/ynoia/docs/` |
@@ -38,13 +38,13 @@ said what they say.**
 | 6 | `policy_check/checker.py` | two skipped rules are "checked elsewhere: `prompts_agree` in tests/run.py" | `tests/run.py` had no such function. Printed on every run, in every member repository |
 | 7 | `policy_check/checker.py` | the policy asks a repository with a result to write it up in `report/` | neither `policy.md` nor `vision.md` mentions it. Reported by dokimasia twice before it was removed |
 | 8 | `docs/maintenance.md` | ownership is recorded as `**Owner:** handle — Name, affiliation.` | the shared policy asks for a link to its own list *instead of* the name, handle or affiliation — and the parent's own check required the forbidden form |
-| 9 | `config/deps.lock` | the lock records the commits `docs/reports/corpus.md` reports on | that page is `docs/corpus.md`; the generator already said so and the committed file had not been regenerated |
+| 9 | `config/deps.lock` | the lock records the commits `docs/reports/corpus.md` reports on | that page is `bug_db/corpus.md`; the generator already said so and the committed file had not been regenerated |
 | 10 | `bug_db/bugs.md`, `bug_db/static-analysis.md` | 74 static findings, with no status | 61 of them had been ruled on. The generated views rendered no `closed_*` field, and both were *current* by their own `--check` |
-| 11 | `bug_db/README.md` | `run.py --pinned` "regenerates the legacy reports too" | there are no legacy reports; it re-measures into `docs/corpus.md` |
-| 12 | `docs/README.md` | "anything that does not belong in the six above belongs here", on the sixth row | five rows precede it |
+| 11 | `bug_db/README.md` | `run.py --pinned` "regenerates the legacy reports too" | there are no legacy reports; it re-measures into `bug_db/corpus.md` |
+| 12 | the documentation index | "anything that does not belong in the six above belongs here", on the sixth row | five rows precede it. The index has since moved to the front page and the sentence went with the row |
 | 13 | the tree as a whole | the shared policy says anoieu keeps the reporting policy | no such page existed for a day: it was deleted with the workflow it was filed beside, and the only statement of it left was a summary inside a live discussion topic |
 | 14 | `docs/discussion.md`, a live standing invitation | two child projects "exist here", and a report against this repository is recorded in `tools/martyria/reports.md` | both left with epikrisis on 2026-09-14; `tools/` here holds one child and that path does not exist. The invitation had been telling other tools for five weeks where to send something, and the place was not there |
-| 15 | `docs/corpus.md` | ethos was measured on ref `ethosEoc3` at `fe74fe40e7f1` | the generator reads the ref from `config/deps.json`, which had been changed to `main` — so regenerating the page made it say `main` beside a commit that is not on `main`. **The parent's CI was red on this**, and the only repair its own error message offered was to commit the false version |
+| 15 | `bug_db/corpus.md` | ethos was measured on ref `ethosEoc3` at `fe74fe40e7f1` | the generator reads the ref from `config/deps.json`, which had been changed to `main` — so regenerating the page made it say `main` beside a commit that is not on `main`. **The parent's CI was red on this**, and the only repair its own error message offered was to commit the false version |
 
 **Re-derive any row** by resolving the path it names against the tree it names,
 at the commit this entry was written. Rows 5 through 15 are settled by reading

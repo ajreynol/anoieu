@@ -5,6 +5,7 @@
     "check_front_page",
     "check_maintenance_note",
     "check_docs_index",
+    "check_every_document_indexed",
     "check_generated_labelled",
     "check_dependencies",
     "check_working_space",

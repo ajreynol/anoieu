@@ -25,7 +25,7 @@ REPOSITORY = "https://github.com/ajreynol/anoieu"
 #: one `## <CODE>` heading per check, so GitHub's anchor is the code lowercased.
 #: `anoieu_analyzer/reporting/gen_checks_doc.py` writes it and the same test
 #: checks every anchor emitted here is one that page carries.
-CHECK_CATALOGUE = REPOSITORY + "/blob/main/docs/checks.md"
+CHECK_CATALOGUE = REPOSITORY + "/blob/main/anoieu_analyzer/checks.md"
 
 
 class Severity(str, Enum):

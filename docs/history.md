@@ -559,8 +559,8 @@ earlier contents remain in git. `docs/misc/` no longer holds any files.
 | [`../scripts/policy_check.py`](../scripts/policy_check.py) | **the policy checker, and it stays.** `R31`. The rules are governance and go; deciding whether a tree complies is checking, which is what this repository is for. It also means no member's workflow changes when the rules move |
 | [`../prompts/close_bug_db`](../prompts/close_bug_db) | what each watched project has since done about what we found. The `check_anoieu` / `process_anoieu` pair that carried findings out and answers back was removed on 2026-09-19 with the workflow it served |
 | [`../scripts/harvest_cpc_proofs`](../scripts/harvest_cpc_proofs) | corpus input for the analyzer |
-| [`usage.md`](usage.md), [`fuzzing.md`](fuzzing.md), [`checks.md`](checks.md), [`notes.md`](notes.md) | how to run them, and what they do and do not check |
-| [`../bug_db/`](../bug_db/README.md), [`experience.md`](experience.md) | findings against other people's code, what came of them, and the position governing what may be published about it |
+| [`usage.md`](../anoieu_analyzer/usage.md), [`fuzzing.md`](../anoieu_fuzz/fuzzing.md), [`checks.md`](../anoieu_analyzer/checks.md), [`notes.md`](../anoieu_analyzer/notes.md) | how to run them, and what they do and do not check |
+| [`../bug_db/`](../bug_db/README.md), [`experience.md`](../bug_db/experience.md) | findings against other people's code, what came of them, and the position governing what may be published about it |
 | `report-card.md` | **the assessment of Arete**, as the plan read on 2026-09-15: it stayed because the assessor must not be the governor. **Superseded 2026-09-17** — the role moved with stathmos and the page has followed it. [stathmos's edition](https://github.com/ajreynol/kanon/blob/main/tools/stathmos/docs/report-card.md) is the live one; the copy here, last graded 2026-09-02, is removed |
 | [tekmerion](../tools/tekmerion/README.md) | **anoieu's route to a verified answer to *is the documentation up to date*.** The central policy says a stale document is a defect; this is the only thing here aimed at checking that mechanically |
 | [`history.md`](history.md) | anoieu's own development record. It stays here, including earlier stretch entries, under LAW 4 |
@@ -576,16 +576,18 @@ are about the governance handoff, not the removed essays.
   `R6` is also outside B15's suggested first step. Neither scope is settled by
   listing a file here. Stathmos's proposed destination likewise needs to be
   reconciled with `R30` and its charter before it moves.
-- **Each tree needs its own `docs/README.md`.** An index describes the documents
-  that tree holds; it is not an artifact to move wholesale.
+- **Each tree needs its own documentation index.** An index describes the
+  documents that tree holds; it is not an artifact to move wholesale. Where the
+  index sits is the tree's own business — anoieu's is a section of its front
+  page.
 - **`tools/kanon/`** remains a stub, to be removed only when its replacement
   is accepted under `PROTO-20`.
 - **[`../scripts/doc_currency.py`](../policy_check/currency.py)** measures how much
   evidence there is that *the tree it is run in* has current documentation. It
   is the mechanical half of the central policy rule, so it argues for kanon;
-  tekmerion owns that question here and stays, which argues for staying. **Like
-  `docs/README.md` it is most likely a thing each side needs its own of**, and
-  nobody has decided.
+  tekmerion owns that question here and stays, which argues for staying. **Like the documentation
+  index it is most likely a thing each side needs its own of**, and nobody has
+  decided.
 - **Each tree needs its own `.github/workflows/`**, just as it needs its own
   index. The **`anoieu / policy` job stays pointed
   here**, because the checker stays. The ecosystem checks and tests need to
@@ -934,7 +936,7 @@ change the answer.**
 **What was taken from other trees.** kanon's *Adding a check*, offered in their
 `D10` and now in [`maintenance.md`](maintenance.md). dokimasia's reading of a
 postmortem summary, which was right where ours was wrong. dokimasia's `SIG` facet,
-cited in [`notes.md`](notes.md) as the emitter half of the `src/proof/eo/` seam —
+cited in [`notes.md`](../anoieu_analyzer/notes.md) as the emitter half of the `src/proof/eo/` seam —
 which closes the question of who builds that check with the answer *they did*.
 eudaimonia's two positions on what may be taken from work a tool does not own,
 appended to the reporting policy as *What we

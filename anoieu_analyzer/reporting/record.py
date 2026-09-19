@@ -139,7 +139,7 @@ Every static finding the checks have found on the standard targets, rendered fro
 [`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
 you want the data rather than the table. This page is the static subset; the
 whole of it, both producers together, is [`bugs.md`](bugs.md). The database also
-records [promoted fuzzer findings](../docs/fuzzing.md#recording-through-koine),
+records [promoted fuzzer findings](../anoieu_fuzz/fuzzing.md#recording-through-koine),
 and is maintained exclusively by
 [koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds what
 is new and never edits or removes what is already there.
@@ -150,7 +150,7 @@ its dates -- the status is the `closed_verdict` on the database entry, put there
 by [`prompts/close_bug_db`](../prompts/close_bug_db) against a named commit, and
 `open` means nobody has ruled rather than that a check was re-run. The reasoning
 behind a verdict is `closed_why` in the database; what the change meant is
-[`experience.md`](../docs/experience.md).
+[`experience.md`](experience.md).
 
 A second producer, an agent driven by
 [`prompts/anoieu_analyzer_agent`](../prompts/anoieu_analyzer_agent), writes

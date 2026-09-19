@@ -8,7 +8,7 @@ that is will be lost on the next run.
 Every project below is a clone this repository manages under `deps/`,
 restored to the commit named before the run that produced this file — not
 a checkout on anyone's machine. A finding is only ever true of a version,
-and the entries in [`bugs.json`](../bug_db/bugs.json) carry none of their
+and the entries in [`bugs.json`](bugs.json) carry none of their
 own, so these are what they are relative to.
 
 | project | ref | commit | dated | what is read |
@@ -32,8 +32,9 @@ default.
 
 **This is not a score, and not a comparison between repositories.** These
 numbers say which of our checks tripped, not how much of a subject is sound, so
-a corpus with fewer findings has not been shown to be better. See *measure the
-subject, never our own coverage* in the [README](../README.md#findings-and-reports).
+a corpus with fewer findings has not been shown to be better. See *Measure the
+subject, never our own coverage* in the
+[reporting policy](reporting-policy.md#what-we-publish).
 
 
 | corpus | files | errors | warnings | hints |

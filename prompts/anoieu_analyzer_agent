@@ -96,7 +96,7 @@ The targets, and where each project is on this machine:
 
 $TARGETS
 
-What the checks look for is documented, one page per code, in docs/checks.md.
+What the checks look for is documented, one page per code, in anoieu_analyzer/checks.md.
 **Read it first and work only from codes that exist there.** A bug under a code
 you invented cannot be compared with anything. Do not run
 scripts/anoieu_analyzer, scripts/update_bug_db.py, tests/sweep.py or the anoieu
@@ -136,7 +136,7 @@ Four things to get right:
 3. **Do not report the same bug twice.** Two entries with one id are refused by
    the database, and nothing is written -- a dump with one bad entry applies
    none of itself.
-4. Report only what a code in docs/checks.md covers. If you notice something
+4. Report only what a code in anoieu_analyzer/checks.md covers. If you notice something
    real that no code covers, put it in your reply to me as prose -- **not** in
    the dump. That is a finding about the checks, which is a different
    conversation.

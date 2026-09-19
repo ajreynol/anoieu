@@ -67,8 +67,8 @@ Ethos checks some properties only when a proof exercises them — read against
 ethos on 2026-09-17. Anoieu reads the signature ahead of that use, so it can
 report errors in unexercised cases.
 
-See [usage](docs/usage.md) for inputs, output formats, configuration, suppression
-and baselines, and the [check catalogue](docs/checks.md) for each check's scope
+See [usage](anoieu_analyzer/usage.md) for inputs, output formats, configuration, suppression
+and baselines, and the [check catalogue](anoieu_analyzer/checks.md) for each check's scope
 and limitations.
 
 ## Run the fuzzer
@@ -102,13 +102,13 @@ and deduplicates the results. It is a baseline fuzzer, without coverage guidance
 or a soundness oracle.
 
 Findings use the same reporting workflow as the analyzer. See the
-[fuzzer guide](docs/fuzzing.md) for setup, modes, oracles and adding a checker.
+[fuzzer guide](anoieu_fuzz/fuzzing.md) for setup, modes, oracles and adding a checker.
 Committed [reproducers](tests/fuzz) show what it has found.
 
 Promotion automatically records findings through koine in the same bug database
 as the analyzer. `python3 -m anoieu_fuzz report` records the promoted corpus and
 displays it; `--preview` calls koine's dry run. Koine is required, and a failed
-append fails the command. See [recording through koine](docs/fuzzing.md#recording-through-koine).
+append fails the command. See [recording through koine](anoieu_fuzz/fuzzing.md#recording-through-koine).
 
 ## Findings and reports
 
@@ -135,17 +135,17 @@ koine, with the date each was first and last ingested, and — on an entry
 somebody has ruled on — the verdict, the reasoning, and the commit it closed
 against. Fuzzer records carry recorded outcomes; recording does not replay them.
 Existing content is preserved on append. The
-[corpus report](docs/corpus.md) identifies the source commits measured.
+[corpus report](bug_db/corpus.md) identifies the source commits measured.
 
 **A finding closes on a commit, not on a dump**, and never on absence. What each
 project has since done about what we found is
-[`experience.md`](docs/experience.md); what a verdict may say, and the audit
+[`experience.md`](bug_db/experience.md); what a verdict may say, and the audit
 that reads the outstanding ones back, is
 [Closure](bug_db/README.md#closure).
 
 What may be said about code we do not own — what separates a candidate published
 under our own name from a finding carried to its owner, and what may be taken as
-material at all — is the [reporting policy](docs/reporting-policy.md).
+material at all — is the [reporting policy](bug_db/reporting-policy.md).
 
 ## Optional ecosystem CI check
 
@@ -177,21 +177,65 @@ repository moves it. The [contract page](policy_check/README.md) is the authorit
 on what each form fixes; kanon's joining instructions carry both, read
 2026-09-17.
 
-## Documentation and development
+## The documentation index
 
-| Document | Contents |
+**Every document in this repository is named here, and this is the only index.**
+A document lives with the thing it describes: the analyzer's documents are in
+`anoieu_analyzer/`, the fuzzer's in `anoieu_fuzz/`, the checker's in
+`policy_check/`, and everything about findings in `bug_db/`. What is left in
+`docs/` is the four records that are the repository's rather than any tool's.
+
+### Written
+
+| document | its job |
 | --- | --- |
-| [Usage](docs/usage.md) | analyzer commands, options and configuration |
-| [Fuzzing](docs/fuzzing.md) | running the fuzzer and interpreting its findings |
-| [Checks](docs/checks.md) | every diagnostic and its limitations |
-| [Design notes](docs/notes.md) | language behavior, implementation and open work |
-| [Maintenance](docs/maintenance.md) | development commands and required checks |
-| [Bug database](bug_db/README.md) | the shared artifact, setup and one-command updates |
-| [Documentation index](docs/README.md) | reports, records and remaining documentation |
+| [`anoieu_analyzer/README.md`](anoieu_analyzer/README.md) | **the analyzer's entry point**: what it is, how it is run, and what is in its directory |
+| [`anoieu_analyzer/usage.md`](anoieu_analyzer/usage.md) | **the analyzer's interface.** What the tool takes, what every command and option means, and how configuration, baselines and suppression fit together |
+| [`anoieu_analyzer/notes.md`](anoieu_analyzer/notes.md) | **the miscellany**: what ethos misses and why, what we have established about `.eo` and `.eos`, and the design — what is built, what was rejected, what is open |
+| [`anoieu_fuzz/README.md`](anoieu_fuzz/README.md) | **the fuzzer's entry point**: what it asks, what it is deliberately not, and how it came to be shipped rather than researched |
+| [`anoieu_fuzz/fuzzing.md`](anoieu_fuzz/fuzzing.md) | **the fuzzer's manual**: its oracles, how a case is shrunk, bucketed and promoted into a finding, how to point it at a third checker |
+| [`policy_check/README.md`](policy_check/README.md) | **the policy checker's contract**: versioned requirements and severities, the two adoption forms, focused tests, and the shared CI workflow |
+| [`policy_check/maintenance.md`](policy_check/maintenance.md) | **how a check is added or changed**, and which shapes of check are the expensive kind |
+| [`bug_db/README.md`](bug_db/README.md) | **the shared findings artifact**: setup, one-command updates from both producers, and what a closure may write onto an entry |
+| [`bug_db/reporting-policy.md`](bug_db/reporting-policy.md) | **what may be said about code we do not own**: what separates a candidate published under our own name from a finding carried to its owner, what may be taken as material, and what tier each position is enforced at |
+| [`bug_db/experience.md`](bug_db/experience.md) | **what the projects we watch did with what we found**: one section per upstream change that closed an observation, and what each run taught us about our own tooling |
+| [`docs/maintenance.md`](docs/maintenance.md) | **the maintainer's entry point**: responsibilities, the command catalogue, the checks before handing off a change, and the open technical work |
+| [`docs/discussion.md`](docs/discussion.md) | **correspondence with the other tools**: live questions, proposals, notices and replies. A defect with a path and a line number is not here; it is a finding |
+| [`docs/history.md`](docs/history.md) | **how things came to be**, and the only page that may carry an account of it |
+
+**Two things here are deliberately outside this index.**
+`docs/letter-to-kanon.md`, because a letter from one office-holder to the next is
+an account rather than documentation and the law that requires it says so. And
+any child project under `tools/`, because a child this repository does not
+advertise gets no row here and no link inward — it keeps its own index inside its
+own directory, and listing `tools/` is how it is meant to be found.
+
+### Generated
+
+Written by a run, and the only documents a tool may edit.
+
+| document | its job |
+| --- | --- |
+| [`anoieu_analyzer/checks.md`](anoieu_analyzer/checks.md) | **one page per check** — what it reports, what it assumes, and what it deliberately does not. Rendered from the registry, so a page cannot drift from the code beside it. *Rewritten whole* |
+| [`bug_db/corpus.md`](bug_db/corpus.md) | **what was measured, and what the checks reported on it**: the commits each project was restored to, and the counts taken from them. *Rewritten whole* |
+| [`bug_db/bugs.json`](bug_db/bugs.json) | **the database, and the only record of a verdict** — static findings and promoted fuzzer findings, one JSON object each. Every recording command calls [koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds entries and updates ingestion dates while preserving existing content. **Not reconstructible**: the verdicts and hand-written notes on it exist nowhere else |
+| [`bug_db/bugs.md`](bug_db/bugs.md) | **the GitHub browsing view**, rendered from the JSON for both producers with each finding's status and evidence links; refreshed by recording commands and checked by CI |
+| [`bug_db/static-analysis.md`](bug_db/static-analysis.md) | **the static subset rendered from the database**, with the verdict recorded against each row. *Rewritten whole, from the database* |
+| [`bug_db/cpc-audit.html`](bug_db/cpc-audit.html) | **a rendered report for a reader who will not clone this tree.** It restates findings from the sources above and adds none |
+
+> **The database is not like the others.** Everything else above is rewritten
+> whole, so anything typed into one is lost on the next run. `bugs.json` is
+> *additive*: koine adds entries and never removes or rewrites one, so every
+> verdict, note and closure written onto an entry survives. The asymmetry is
+> deliberate — a writer that could delete could quietly delete a regression.
+
+## Development
 
 Run the local suite with `python3 tests/run.py`. Tests cover minimal witnesses,
 CLI behavior and reporting; CI also checks the pinned corpus against committed
 baselines. Oracle tests additionally require an ethos build.
+[`docs/maintenance.md`](docs/maintenance.md) is where the work starts, and it
+carries the command catalogue and the checks to run before handing off a change.
 
 Documentation can lag behind the code. Generated reports identify their inputs;
 handwritten claims are only as current as their last review.
@@ -226,4 +270,5 @@ so a human intention stands behind every one — which is the fact anything
 reading this history needs in order to interpret it, and it is stated here
 because it will not stay true by accident. **If that changes, this paragraph
 changes with it**, and the change is announced rather than discovered. The discussion of that
-scope and the intended expert audience is in [`docs/notes.md`](docs/notes.md).
+scope and the intended expert audience is in
+[`anoieu_analyzer/notes.md`](anoieu_analyzer/notes.md).

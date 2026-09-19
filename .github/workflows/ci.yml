@@ -33,7 +33,7 @@ jobs:
       - name: the check catalogue is current
         run: |
           python3 -m anoieu_analyzer.reporting.gen_checks_doc
-          git diff --exit-code docs/checks.md
+          git diff --exit-code anoieu_analyzer/checks.md
       - name: the bug database browsing view is current
         run: python3 -m anoieu_analyzer.reporting.database --check
 
@@ -165,7 +165,7 @@ jobs:
       # And, since a build of ethos is already here, point the fuzzer at it.
       # On a schedule only, and never failing: a fuzzer that fails a build finds
       # a new bug and turns somebody's unrelated pull request red, which is the
-      # one thing docs/README.md is most careful about. What it finds is
+      # one thing this workflow is most careful about. What it finds is
       # uploaded and warned about; triage is a human step, as it is for every
       # other finding here. Only the signature mode runs — the differential mode
       # needs a second checker, and building logos is a Lean toolchain away.
@@ -178,7 +178,7 @@ jobs:
           buckets=$(find fuzz-findings -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)
           echo "anoieu-fuzz: $buckets bucket(s)"
           if [ "$buckets" -gt 0 ]; then
-            echo "::warning::anoieu-fuzz found $buckets bucket(s); see the artifact, and docs/fuzzing.md for what to do with one"
+            echo "::warning::anoieu-fuzz found $buckets bucket(s); see the artifact, and anoieu_fuzz/fuzzing.md for what to do with one"
           fi
       - name: what the fuzzer found
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -213,7 +213,7 @@ jobs:
             bug_db/bugs.json
             bug_db/bugs.md
             bug_db/static-analysis.md
-            docs/corpus.md
+            bug_db/corpus.md
             anoieu_analyzer/reporting/config/deps.lock
       - name: say whether upstream moved
         run: |

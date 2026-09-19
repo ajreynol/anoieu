@@ -235,7 +235,7 @@ def cmd_run(args) -> int:
         print("   note       fewer than two checkers are on this machine, so nothing "
               "can be\n              compared: this run can only report a crash or a "
               "timeout. Set\n              $ETHOS and $LOGOS, or name your own in "
-              "--config -- see docs/fuzzing.md")
+              "--config -- see anoieu_fuzz/fuzzing.md")
     if session.seeds:
         print(f"   seeds      {len(session.seeds)} file(s), {len(session.pool)} commands"
               f"; the first {min(len(session.seeds), args.cases)} case(s) are those files "

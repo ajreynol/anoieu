@@ -216,7 +216,7 @@ positives on CPC in its first form, and each fix narrowed it: a dependent return
 type agrees with its argument at the *constructor*, `eo::requires` wraps a type
 without changing it, a guarded recursive call is not a walk, a `define` alias and
 the term behind it are one term. Those narrowings are recorded in
-[`experience.md`](experience.md), because each is a statement about what the language
+[`experience.md`](../bug_db/experience.md), because each is a statement about what the language
 means.
 
 ### The classes, and where each stands
@@ -481,7 +481,7 @@ because the reader has no reason to trust us; the record of what a check gets
 *wrong* has to be public, because that is what makes what it gets right
 believable; and every ask has to live in one place with a state on it, or it
 becomes an argument repeated monthly. That place is
-[`experience.md`](experience.md) -- the register of what anoieu is asking of whom.
+[`experience.md`](../bug_db/experience.md) -- the register of what anoieu is asking of whom.
 
 ---
 
@@ -908,7 +908,7 @@ questions become `anoieu query` rather than a code change, and the reports in
 | | milestone | delivers |
 | --- | --- | --- |
 | **M0** ✅ | parser + CST + include graph, `check` with Tier-0 findings only | reads every `.eo` in ethos, cvc5, logos and eudaimonia without falling over; the corpus is established |
-| **M1** ✅ | resolution, attribute contracts, dead code, docstring lint, `stats` | 30 checks, a witness apiece, and real findings on CPC and on `ethos/tests` -- see [`experience.md`](experience.md) |
+| **M1** ✅ | resolution, attribute contracts, dead code, docstring lint, `stats` | 30 checks, a witness apiece, and real findings on CPC and on `ethos/tests` -- see [`experience.md`](../bug_db/experience.md) |
 | **M2** ✅ | desugaring + `desugar`/`symbol` commands, validated against ethos | the surface↔core map, and the conformance harness: 34 cases, one per policy, agreeing with ethos term for term |
 | **M3** ◐ | type checker → rule conclusions, program cases, `define` bodies, overload ambiguity | the flagship checks; the reason the tool exists. The *shallow* half is written -- the type of a term where its head settles it, with a callee's type parameters bound from the arguments (`anoieu_analyzer/typing.py`) -- which is what found the CPC return-type bug. What it still cannot do: type a term whose head is a parameter, follow `eo::` evaluation, or check a `define` body against a use site |
 | **M4** ✅ | `.eos` front end + triple checks, baselines, JSON/SARIF | the CI plumbing (see [`usage.md`](usage.md)) and the `.eos` reader, which is vocabulary-agnostic by design because the language is moving: five checks over the triple, including the `is-list-nil` diff and exclusion closure the compiler's own documentation asks for. The first run over the real CPC triple -- cvc5's signature, logos's semantics, ethos's SMT semantics -- reported one dead entry and nothing else |
@@ -920,7 +920,7 @@ statement about the language rather than about the code -- that a dependent
 return type agrees with its argument at the constructor, that `eo::requires`
 wraps a type without changing it, that a guarded recursive call is not a walk,
 that a `define` alias and the term behind it are one term. The table at the end
-of [`experience.md`](experience.md) is that record, and it is the part of M1 that
+of [`experience.md`](../bug_db/experience.md) is that record, and it is the part of M1 that
 was specification work.
 
 Running alongside all of it, not after it: `docs/eo-spec.md` and
@@ -932,7 +932,7 @@ with its witness pair in the corpus.
 ### 7a. Maintenance coherence — moved
 
 What must remain true of the record after any edit, whoever made it, and which
-of those a machine can check, is now [`maintenance.md`](maintenance.md#the-open-technical-work)
+of those a machine can check, is now [`maintenance.md`](../docs/maintenance.md#the-open-technical-work)
 — together with this repository's responsibilities, commands and required
 checks. It is the entry point for maintenance work.
 
@@ -963,7 +963,7 @@ They meet at exactly one seam: `src/proof/eo/`, where cvc5 turns an internal
 proof into Eunoia. A rule that cvc5 emits but CPC does not declare, or declares
 with different arguments, is invisible to both halves in isolation and visible
 from either side of that seam — which is what
-[`cvc5`](experience.md)
+[`cvc5`](../bug_db/experience.md)
 asks for. That check may well belong there rather than here: dokimasia already
 reads the emitter, and we only read the signature. Worth settling before either
 of us builds it twice.

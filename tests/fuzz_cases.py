@@ -287,7 +287,7 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     # that *that file* disagrees. The bucket does not say where a checker
     # refused, so an edit the verdict does not depend on holds it and survives --
     # which is how a promoted reproducer came to carry a cut the reference had
-    # never looked at. See shrink()'s docstring and docs/experience.md.
+    # never looked at. See shrink()'s docstring and bug_db/experience.md.
     seeded = Case(["(keep (a (b c)) d)", "(cmd7)"], source="seed:committed.cpc")
     untouched, spent_seed = shrink(seeded, probe, "B")
     case("a seed run as it stands is not shrunk",

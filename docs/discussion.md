@@ -46,7 +46,7 @@ used**, which includes topics that have been removed.
 and a line number — is a finding, and it is recorded in
 [`bug_db/`](../bug_db/README.md) with an identity, the version it was measured
 at, and whatever verdict somebody has since written against it. What may be said
-about code we do not own is the [reporting policy](reporting-policy.md). What is
+about code we do not own is the [reporting policy](../bug_db/reporting-policy.md). What is
 here is everything else: what we want from another tool, what we think would
 improve one, what we do not understand about somebody's intent, and what is
 about to move under them.
@@ -54,7 +54,7 @@ about to move under them.
 **Nothing here is delivered by machine.** A person carries a topic to whoever
 owns it, exactly as with a finding — see *Nothing crosses a repository boundary
 automatically* in the
-[reporting policy](reporting-policy.md#how-the-record-moves).
+[reporting policy](../bug_db/reporting-policy.md#how-the-record-moves).
 
 **This is the only channel, in both directions, and there is no second file for
 replies.** A reply to a topic *we* opened is appended to that topic below. A
@@ -64,6 +64,59 @@ person; if it needs room of its own it is raised here as a topic of
 `**Kind:** answer`, which is what that kind is for. A draft awaiting a person is
 scratch and belongs in the untracked `discussion-response.local.md` that koine's
 `eo_respond` writes — **never in a tracked document.**
+
+## D41 — every document here moved, and this is the was-to-is table
+
+**To:** dokimasia, epikrisis, eschaton, eudaimonia, eunoia, kanon, koine, tachyon
+**Kind:** notice
+**Opened:** 2026-09-19
+**Settles when:** nothing waits on this. Repair a link or do not; a link you have
+already pinned to a commit needs nothing
+
+**Every document in this repository now lives beside the thing it describes**,
+and `docs/` keeps only the four records that are the repository's rather than any
+tool's: `history.md`, `discussion.md`, `maintenance.md` and the successor letter.
+The documentation index is a section of the front page. Nothing was deleted
+except one pointer page, and no content changed in the move.
+
+**We are publishing the table because we have just asked kanon to**, in `D40`,
+and a request we would not meet ourselves is not a request worth making. Eight
+repositories link into paths that moved; none of you is asked for anything.
+
+| was | is |
+| --- | --- |
+| `docs/README.md` | the **Documentation index** section of [`README.md`](../README.md) |
+| `docs/checks.md` | [`anoieu_analyzer/checks.md`](../anoieu_analyzer/checks.md) |
+| `docs/usage.md` | [`anoieu_analyzer/usage.md`](../anoieu_analyzer/usage.md) |
+| `docs/notes.md` | [`anoieu_analyzer/notes.md`](../anoieu_analyzer/notes.md) |
+| `docs/fuzzing.md` | [`anoieu_fuzz/fuzzing.md`](../anoieu_fuzz/fuzzing.md) |
+| `docs/experience.md` | [`bug_db/experience.md`](../bug_db/experience.md) |
+| `docs/corpus.md` | [`bug_db/corpus.md`](../bug_db/corpus.md) |
+| `docs/cpc-audit.html` | [`bug_db/cpc-audit.html`](../bug_db/cpc-audit.html) |
+| `docs/policy-checker.md` | **deleted.** It held nothing but a pointer; the checker's contract is [`policy_check/README.md`](../policy_check/README.md) |
+| `docs/reporting-policy.md` | [`bug_db/reporting-policy.md`](../bug_db/reporting-policy.md), created and moved the same day |
+
+**Two rows are worth reading twice.** `docs/policy-checker.md` is the one that
+cannot be repaired by rewriting a path — four of you link to it, and what it
+pointed at is the row below it. And the reporting policy is not in this table so
+much as returned to it: it was deleted on 2026-09-19 with the workflow it sat
+beside, which is dokimasia's `D17`, and it is a page again at the path above.
+
+**Also still broken from the retirement before this one**, listed because
+nobody published a table for that either and several of you are carrying dead
+links because of it: `docs/reports/reporting-policy.md`,
+`docs/reports/reporting-workflow.md`, `docs/reports/reports.md` and
+`docs/reports/postmortem.md` are **removed**, with the positions in the first now
+at `bug_db/reporting-policy.md` and the reasoning from the last two at
+`bug_db/experience.md`; `scripts/doc_currency.py` is `policy_check/currency.py`;
+and `docs/epoch-analogy.md` went with the planning draft that was withdrawn on
+2026-09-15 and has no successor.
+
+**What we are not claiming.** That any of this was avoidable from your side. A
+link into another repository is the one link neither end resolves, which is
+`dokimasia-D3` and is on our contract page as a contract 2 candidate. **The
+mover writing the table down is the cheap half, and it is the half we owed
+you.**
 
 ## D40 — when a page moves, the old-to-new table is the only thing a consumer can act on
 
@@ -338,7 +391,7 @@ than a decision.**
 
 ### Where the shared position lives: here, in one page, again
 
-[`docs/reporting-policy.md`](reporting-policy.md). It carries all fourteen
+[`bug_db/reporting-policy.md`](../bug_db/reporting-policy.md). It carries all fourteen
 positions, the three tiers, and the two of *What we take*. **Reference it rather
 than restating it**, which is the answer to the question you asked twice: the
 point of one page is that a change of position is one argument in one place.

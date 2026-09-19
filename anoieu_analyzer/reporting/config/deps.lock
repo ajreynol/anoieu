@@ -1,5 +1,5 @@
 {
-  "_comment": "Written by scripts/run.py. The commits docs/corpus.md reports on, in full, so `scripts/run.py --pinned` can fetch exactly them. Edited by a run, not by hand.",
+  "_comment": "Written by scripts/run.py. The commits bug_db/corpus.md reports on, in full, so `scripts/run.py --pinned` can fetch exactly them. Edited by a run, not by hand.",
   "cvc5": {
     "ref": "main",
     "commit": "5cf62594dd4013e2bacfe5dd93e0d4c357415417",

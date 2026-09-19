@@ -22,13 +22,13 @@ Both spellings are the same program; the examples below use the first.
 Point the analyzer at your own Eunoia signatures and semantic configuration
 files. For the projects included in anoieu's reports, the corpus runner fetches
 and pins the source files it measures using
-[`anoieu_analyzer/reporting/config/deps.json`](../anoieu_analyzer/reporting/config/deps.json) and
-[`anoieu_analyzer/reporting/config/deps.lock`](../anoieu_analyzer/reporting/config/deps.lock). See
+[`anoieu_analyzer/reporting/config/deps.json`](reporting/config/deps.json) and
+[`anoieu_analyzer/reporting/config/deps.lock`](reporting/config/deps.lock). See
 [updating the database](../bug_db/README.md#update-it)
-and [a finding is about `main`](maintenance.md#a-finding-is-about-main).
+and [a finding is about `main`](../docs/maintenance.md#a-finding-is-about-main).
 
 The findings workflow accepts explicit checkout paths. Its optional local
-checkout map is described in [maintenance](maintenance.md#the-scripts).
+checkout map is described in [maintenance](../docs/maintenance.md#the-scripts).
 
 ## The input
 
@@ -127,7 +127,7 @@ python3 -m anoieu_analyzer explain EO0041
 
 Prints what the check says, why it is a check, what ethos does with the same
 file, and how to fix it. The page is written beside the check in the source, so
-the two cannot drift, and `docs/checks.md` is the whole set rendered by
+the two cannot drift, and `checks.md` is the whole set rendered by
 `anoieu_analyzer/reporting/gen_checks_doc.py`.
 
 ### `list-checks` — the inventory
@@ -231,7 +231,7 @@ unused-parameter check, the dead-program check. `--pedantic` turns those on.
 ## Configuration, baselines and suppression
 
 A repository writes down what it checks and what it has agreed to live with, so
-that its CI job is one line. See [`maintenance.md`](maintenance.md) for the whole arrangement; the
+that its CI job is one line. See [`maintenance.md`](../docs/maintenance.md) for the whole arrangement; the
 short version:
 
 ```json
@@ -306,7 +306,7 @@ ETHOS=<ethos>/build/src/ethos \
 ETHOS=<ethos>/build/src/ethos \
   python3 tests/run.py --oracle --record   # ... and re-record it after a change
 python3 tests/sweep.py <dir>...            # run over a corpus: crashes and counts
-python3 -m anoieu_analyzer.reporting.gen_checks_doc            # rewrite docs/checks.md from the registry
+python3 -m anoieu_analyzer.reporting.gen_checks_doc      # rewrite checks.md from the registry
 python3 -m anoieu_analyzer.reporting.verdicts --check          # did what we closed on a promise land?
 ETHOS=<ethos>/build/src/ethos \
   python3 tests/oracle_desugar.py          # the desugarer against ethos, case by case

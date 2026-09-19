@@ -129,9 +129,11 @@ UNCHECKED = [
      "grade, and an associate owes this ecosystem nothing either way"),
 ]
 
-# Written by a run. `bugs.json` is deliberately absent: it is written by
-# the review step and *read* by the generator, so it is a hand-maintained file.
-GENERATED = ["corpus.md", "checks.md"]
+# Written by a run, by path, because a document lives with the thing it
+# describes rather than in `docs/`. `bugs.json` is deliberately absent: it is
+# written by the review step and *read* by the generator, so it is a
+# hand-maintained file.
+GENERATED = ["bug_db/corpus.md", "anoieu_analyzer/checks.md"]
 #: Extensions read as bytes rather than text; the path check skips them.
 #: An absolute path out of somebody's home directory.
 HOME_PATH = r"(?<![\w/])(/home/[\w.-]+|/Users/[\w.-]+)/"
@@ -749,11 +751,28 @@ def check_maintenance_note() -> list[str]:
     return []
 
 
-def check_docs_index() -> list[str]:
-    """*`docs/` has an index* — and every document it carries is named in it."""
+def index_page() -> tuple[str, str]:
+    """Where the index is, and what is in it.
+
+    **The policy offers two shapes and this decides both.** `docs/README.md` is
+    the usual one. The other is *a section of the front page*, which the policy
+    allows a repository that is small enough or is itself an inventory -- and
+    which was reported unchecked while only the first shape was understood.
+
+    Reading the front page when there is no `docs/README.md` can only turn a
+    failure into a pass: a tree without one failed outright before, whatever its
+    front page said. So it is a correction rather than an added obligation.
+    """
     index = read("docs/README.md")
+    return ("docs/README.md", index) if index else ("README.md", read("README.md"))
+
+
+def check_docs_index() -> list[str]:
+    """*There is an index* — and every document `docs/` carries is named in it."""
+    where, index = index_page()
     if not index:
-        return ["docs/README.md, the documentation index, does not exist"]
+        return ["there is no documentation index: neither docs/README.md nor a "
+                "README.md to carry one"]
     bad = []
     for path in tracked("docs"):
         if not path.endswith(".md"):
@@ -762,19 +781,50 @@ def check_docs_index() -> list[str]:
         if base in INDEX_EXEMPT or re.match(INDEX_EXEMPT_RE, base):
             continue
         if base not in index:
-            bad.append(f"{path} is not named in docs/README.md")
+            bad.append(f"{path} is not named in {where}")
+    return bad
+
+
+def check_every_document_indexed() -> list[str]:
+    """*Every written document is named in the index*, wherever it lives.
+
+    Home-only, and it is the half `check_docs_index` cannot have: that one
+    enumerates `docs/`, because widening it to a whole tree is an added
+    obligation on every member rather than a correction, and it is recorded as a
+    contract 2 candidate in `policy_check/README.md`.
+
+    **This repository holds itself to the whole of it**, because its documents
+    deliberately live with the thing they describe -- the analyzer's in
+    `anoieu_analyzer/`, the fuzzer's in `anoieu_fuzz/`, everything about
+    findings in `bug_db/` -- and an index that enumerated one directory would be
+    an index of a fraction of the tree.
+
+    **A child project's documents are exempt, and that is the policy rather than
+    a gap**: a child the parent does not advertise gets no row in the index and
+    no link inward, so requiring one here would make two rules contradict.
+    """
+    where, index = index_page()
+    bad = []
+    for rel in tracked("*.md"):
+        base = os.path.basename(rel)
+        if rel in {where, "README.md"} or base in INDEX_EXEMPT:
+            continue
+        if re.match(INDEX_EXEMPT_RE, base) or rel.startswith("tools/"):
+            continue
+        if rel not in index and f"]({base})" not in index:
+            bad.append(f"{rel} is a document and is named in no index")
     return bad
 
 
 def check_generated_labelled() -> list[str]:
     """*Written and generated documents are separated and labelled*."""
     bad = []
-    for base in GENERATED:
-        text = read(f"docs/{base}")
+    for rel in GENERATED:
+        text = read(rel)
         if not text:
-            bad.append(f"docs/{base} is missing")
+            bad.append(f"{rel} is missing")
         elif not re.search(r"generated|rendered (from|by)|written by|rewritten", text[:2000], re.I):
-            bad.append(f"docs/{base} does not say it is generated")
+            bad.append(f"{rel} does not say it is generated")
     return bad
 
 
@@ -1280,6 +1330,7 @@ CHECKS_V1 = (
     ("the front page is the only entry point", check_front_page, None),
     ("the README ends with the maintenance note", check_maintenance_note, None),
     ("every document is named in the documentation index", check_docs_index, has("docs")),
+    ("every document in this tree is named in the index", check_every_document_indexed, is_home),
     ("every generated document says it is generated", check_generated_labelled, is_home),
     ("dependencies are fetched and pinned, never vendored", check_dependencies,
      has("deps", *(f"{directory}/deps.json" for directory in DEPENDENCY_CONFIG_DIRS))),

@@ -83,7 +83,7 @@ def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "",
     reports it instead of the manifest's.** The two are the same until somebody
     changes a ref in `deps.json`, and then they are not: the manifest says what
     is *watched now* while the lock says what was *measured*. Printing the first
-    beside the second put `docs/corpus.md` in the position of asserting that a
+    beside the second put `bug_db/corpus.md` in the position of asserting that a
     commit on one branch was the tip of another -- which happened the day the
     ethos exception was dropped, and made a generated page state something
     false while passing its own `--check`.
@@ -188,7 +188,7 @@ def sync_all(
 def read_lock(path: str = LOCK) -> dict[str, str]:
     """The exact commits a report was measured against, by project.
 
-    `docs/corpus.md` shows these to a reader in twelve characters, which is
+    `bug_db/corpus.md` shows these to a reader in twelve characters, which is
     plenty to recognise a commit and not enough to fetch one. This file is the
     same fact written for a machine, and is what `--pinned` restores.
     """
@@ -214,7 +214,7 @@ def read_lock_entries(path: str = LOCK) -> dict[str, dict]:
 
 def render_lock(deps: list[Dep]) -> str:
     body = {
-        "_comment": "Written by scripts/run.py. The commits docs/corpus.md reports "
+        "_comment": "Written by scripts/run.py. The commits bug_db/corpus.md reports "
         "on, in full, so `scripts/run.py --pinned` can fetch exactly them. Edited by "
         "a run, not by hand.",
     }

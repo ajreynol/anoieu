@@ -41,7 +41,7 @@ start a fuzzing campaign, or replay the recorded fuzzer cases.
   targets. Set their checkout paths in the gitignored `anoieu_analyzer/reporting/config/repos.local`
   (one `project /path/to/checkout` per line), or use the managed `deps/` clones.
   `python3 scripts/run.py --pinned` prepares those clones at the recorded
-  commits and re-measures them into [`docs/corpus.md`](../docs/corpus.md). The
+  commits and re-measures them into [`corpus.md`](corpus.md). The
   update command refuses missing configured input paths instead of silently
   recording a partial refresh.
 - **Koine:** [`anoieu_analyzer/reporting/koine.py`](../anoieu_analyzer/reporting/koine.py) finds `$KOINE`, then
@@ -51,7 +51,7 @@ start a fuzzing campaign, or replay the recorded fuzzer cases.
   needed. An existing checkout is used as-is, and the update prints its version.
 - **Fuzzer evidence:** reporting the promoted corpus needs no checker binaries.
   Discovering new findings requires the checkers you want to compare, as
-  described in the [fuzzer guide](../docs/fuzzing.md).
+  described in the [fuzzer guide](../anoieu_fuzz/fuzzing.md).
 
 ## Add new fuzzer findings
 
@@ -117,7 +117,7 @@ prompts/close_bug_db --use-local ethos=/src/ethos
 It closes a finding on exactly two conditions: **a named commit** somebody can
 fetch, and **the claim re-read as false in the source today**. It writes two
 things and nothing else -- the closure fields on the entry here, and a section
-in [`docs/experience.md`](../docs/experience.md) saying what the change meant.
+in [`experience.md`](experience.md) saying what the change meant.
 
 ### What a closure puts on an entry
 
@@ -172,5 +172,5 @@ read them and the `check_anoieu` / `process_anoieu` prompts are **removed**.
 Every verdict, every hand-written note and every outstanding landing they held
 was migrated onto the entries here and carries `migrated_from` saying so; the
 reasoning that was in `reports.md` and `postmortem.md` is in
-[`docs/experience.md`](../docs/experience.md). Nothing was dropped, and nothing
+[`experience.md`](experience.md). Nothing was dropped, and nothing
 outside this database records a verdict any more.

@@ -191,7 +191,7 @@ def manifest_agrees() -> int:
     if skipped:
         print(f"     {skipped} checkout(s) not on disk, so not compared")
 
-    # And the fifth: the ref `docs/corpus.md` reports beside each commit.
+    # And the fifth: the ref `bug_db/corpus.md` reports beside each commit.
     #
     # **A generated page can be current against its generator and false about
     # the world**, and this is the shape that took. The table's ref came from
@@ -210,11 +210,11 @@ def manifest_agrees() -> int:
         for name, entry in sorted(deps.read_lock_entries().items()):
             want, got = entry.get("ref", ""), rows.get(name)
             if got is None:
-                print(f"FAIL docs/corpus.md has no row for {name}, which the "
+                print(f"FAIL bug_db/corpus.md has no row for {name}, which the "
                       "lock records a commit for")
                 failures += 1
             elif want and got != want:
-                print(f"FAIL docs/corpus.md says {name} was measured on "
+                print(f"FAIL bug_db/corpus.md says {name} was measured on "
                       f"{got!r}; the lock records the commit as {want!r}")
                 print("     the ref reported has to describe the commit "
                       "reported -- see `sync` in anoieu_analyzer/reporting/deps.py")
@@ -354,7 +354,7 @@ def targets_agree() -> int:
 
 
 def prompts_agree() -> int:
-    """The closure prompt's entry shape and `docs/experience.md`'s template agree.
+    """The closure prompt's entry shape and `bug_db/experience.md`'s template agree.
 
     **Two descriptions of one thing, and the prompt is a copy.** The page is the
     register: it sets out the fields an entry carries, in order, under *How to
@@ -375,18 +375,18 @@ def prompts_agree() -> int:
         return re.sub(r"\s+", " ", text)
 
     root = os.path.dirname(HERE)
-    page = os.path.join(root, "docs", "experience.md")
+    page = os.path.join(root, "bug_db", "experience.md")
     prompt = os.path.join(root, "prompts", "close_bug_db")
     with open(page, encoding="utf-8") as fh:
         text = fh.read()
     _, sep, tail = text.partition("## How to maintain this page")
     if not sep:
-        print("FAIL docs/experience.md has no 'How to maintain this page' section, "
+        print("FAIL bug_db/experience.md has no 'How to maintain this page' section, "
               "so the entry template is not where prompts/close_bug_db says it is")
         return 1
     block = re.search(r"```text\n(.*?)```", tail, re.S)
     if not block:
-        print("FAIL docs/experience.md's maintenance section carries no template block")
+        print("FAIL bug_db/experience.md's maintenance section carries no template block")
         return 1
     template = re.findall(r"\*\*([^*]+?):\*\*", flat(block.group(1)))
     with open(prompt, encoding="utf-8") as fh:
@@ -399,13 +399,13 @@ def prompts_agree() -> int:
     for field in template:
         if field not in at:
             print(f"FAIL prompts/close_bug_db does not name the `{field}:` field "
-                  "that docs/experience.md's template requires")
+                  "that bug_db/experience.md's template requires")
             failures += 1
     #: And the other direction: the prompt names these fields and no others, so a
     #: field the register dropped cannot go on being asked for.
     for field in sorted(set(listed) - set(template)):
         print(f"FAIL prompts/close_bug_db names a `{field}:` field that "
-              "docs/experience.md's template does not have")
+              "bug_db/experience.md's template does not have")
         failures += 1
     named = [f for f in template if f in at]
     if len(named) == len(template) and sorted(named, key=at.get) != named:
