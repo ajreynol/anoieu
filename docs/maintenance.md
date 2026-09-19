@@ -202,56 +202,34 @@ this is a note rather than a diff — see [Closure](../bug_db/README.md#closure)
 
 ### What the closure fields still owe
 
-Koine records findings; it still implements no triage or
-closure, so the closure fields above are anoieu's own and a sibling tool adopting
-them has to agree on the shape. Shared lifecycle mechanics in Koine -- and the
-run scope, analyzer versions and enabled-check record that would let a closure be
-assessed from a comparable run rather than a commit -- remain the open work. That
-does not block anything today: a closure is assessed from a commit and a
-re-reading, which needs no capability Koine lacks.
+Koine now supplies the closure launcher, history windows and preservation
+check, pinned at `e4e4e2e` after both upstream CI jobs passed on 2026-09-19.
+[`prompts/close_bug_db`](../prompts/close_bug_db) supplies Anoieu's projects from
+`deps.json`, baselines from open findings' `found_at` (with `deps.lock` as the
+fallback), evidence rules, verdict vocabulary and episode format. The Koine
+checkout must already be available; closure previews never fetch it.
 
-**Closure assessment needs a Koine capability, not a comparison of two dumps.**
-The desired update should identify findings eligible for closure from a
-successful, comparable run that actually covered the relevant input and check.
-It needs recorded run scope, source and analyzer versions, enabled checks and
-skips, plus an explicit outcome when a finding's identity can no longer be
-matched. Fuzzer evidence must come from a replay. Assessments and eventual
-close/reopen decisions must preserve the original finding and their supporting
-evidence.
+`koine_close_db` assembles the prompt and starts the assistant. `koine_window`
+resolves remote or local histories, refuses shallow clones and reports
+divergence. Anoieu still declines to launch when all requested local windows
+are empty. `koine_check_db --also awaiting_landing` checks the closure edits
+against the committed database: no changed claims, added or removed records,
+reordering or rewritten earlier closures. The launcher includes that check in
+the assistant's instructions alongside our verdict audit and report checks.
 
-**What exists meanwhile is a question, not a mechanism.**
-[`prompts/close_bug_db`](../prompts/close_bug_db) asks an assistant what each
-watched project has since done about our open rows — one window per project, from
-the revision the rows were recorded at to what that project ships, read commit-first
-in the project's own history. It sidesteps the missing capability rather than
-supplying it: it never compares two dumps, and a row closes only on a named
-commit plus the claim re-read as false in the source today. It writes the
-closure fields on the database entry and a section in
-[`experience.md`](experience.md), and leaves both uncommitted. `FUZ` findings
-stay open there, as they must — a replay is the only evidence that closes one,
-and reading a commit is not a replay.
+**Closure decisions and evidence remain Anoieu's.** A static observation closes
+on a named commit and a claim re-read as false in the current source. `FUZ`
+findings remain open until a separate replay supplies evidence. An assistant
+adds closure fields, writes qualifying episodes to
+[`experience.md`](experience.md), regenerates both open reports and leaves the
+work uncommitted for review.
 
-**Koine acknowledges the missing capability, and prices it as *not yet* rather
-than *coming*.** Read 2026-09-19. A check that a reporting record is well-formed
-should exist once rather than inside each tool that keeps one; koine agrees, has
-nothing to build, and says so for a reason worth keeping — what a record must
-contain is what nobody has evidence about yet, and the repository that would have
-hosted such a check was the reporting-loop library deleted on 2026-09-16. **The
-honest state is: wanted, specified, unbuilt, and waiting on a person rather than
-on anybody finding time.**
-
-What koine does host is this database, and the four invariants it has evidence
-for are worth naming because they are backed by a test suite rather than an
-opinion: an entry is added once, never edited, never removed, and nothing is
-written unless the whole dump is readable — held across a lock, so the first
-survives two tools running at once. Its
-[closure capability assessment](https://github.com/ajreynol/koine/blob/8efe59ca20b5d684d8d00fce330b6a6968444493/bug_db_manager/README.md#cleanup-and-closure-tooling)
-records the requirements and the limits. It leaves the evidence and the decision
-rules to the database owner; shared storage and assessment support are
-unimplemented, and that is a capability assessment rather than an interface. The
-concrete form of the ask — the per-run evidence we can supply, and the one
-question we want answerable — is a request open with koine in
-[`discussion.md`](discussion.md).
+**Comparable-run closure assessment remains unbuilt.** It needs recorded run
+scope, source and analyzer versions, enabled checks and skips, explicit handling
+of unmatched identities, and fresh replay evidence for fuzzer findings. Neither
+a missing finding in a dump nor an ingestion date supplies that evidence.
+Koine's [remaining work](https://github.com/ajreynol/koine/blob/e4e4e2e760197429ff182826ed9b7a90fea11633/bug_db_manager/README.md#what-is-still-not-built)
+and our request in [`discussion.md`](discussion.md) describe that separate gap.
 
 ### Preserve the findings record
 

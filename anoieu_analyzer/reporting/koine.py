@@ -1,15 +1,13 @@
 """Where koine is on this machine, and which commit of it we are using.
 
-[koine](https://github.com/ajreynol/koine) keeps bug databases: its
-`bug_db_manager/koine_append_db` takes a run's dump of bugs and adds the new ones to a
-database of every bug the tool has ever found. It never edits or removes what is
-already there. There is no package and no install step -- a customer pins a
-commit and clones it -- so this is the whole of the integration on our side.
+[koine](https://github.com/ajreynol/koine) supplies append, closure assessment
+and database preservation tools under `bug_db_manager/`. There is no package
+or install step: consumers select a checkout and invoke its programs.
 
     python3 -m anoieu_analyzer.reporting.koine DUMP DB --dry-run  # preview any producer's dump
     python3 -m anoieu_analyzer.reporting.koine DUMP DB            # append through koine
 
-Three places are tried, in order, and the first that has the script wins:
+Three places are tried, in order; the first with the required programs wins:
 
 1. `$KOINE`, if it is set. What CI uses, and what a bisect uses.
 2. `../koine` beside this repository, which is where it sits on a machine that
@@ -17,7 +15,8 @@ Three places are tried, in order, and the first that has the script wins:
 3. `deps/koine`, a clone this script makes at the commit in `koine.lock`.
 
 `koine.lock` is the pin and it is a choice rather than a fact: moving it changes
-what our record is checked by. The ecosystem's rule is that a pin only moves to
+what our record is checked by. Closure previews require an existing checkout
+and never clone one. The ecosystem's rule is that a pin only moves to
 a commit where the other project's CI is green.
 
 **The implementation moved to `bug_db_manager/` on 2026-09-18.** Koine removed
@@ -81,13 +80,14 @@ def _clone() -> str:
     return CLONE
 
 
-def find(clone: bool = True) -> str:
-    """The checkout of koine to use."""
+def find(clone: bool = True, programs: tuple[str, ...] = ()) -> str:
+    """The checkout to use, requiring any additional programs the caller needs."""
     candidates = (os.environ.get("KOINE", ""),
                   os.path.join(os.path.dirname(ROOT), "koine"),
                   CLONE)
     for candidate in candidates:
-        if _is_koine(candidate):
+        if _is_koine(candidate) and all(os.path.isfile(script_in(candidate, name))
+                                        for name in programs):
             return candidate
     for candidate in candidates:
         if _is_before_move(candidate):
@@ -97,16 +97,17 @@ def find(clone: bool = True) -> str:
                   "anoieu_analyzer/reporting/config/koine.lock.", file=sys.stderr)
     if not clone:
         raise SystemExit(
-            "koine is not on this machine. Set $KOINE, put a checkout at "
+            f"koine with {', '.join(programs) or 'koine_append_db'} is not on this machine. "
+            "Set $KOINE to the commit in koine.lock, put a checkout at "
             f"{os.path.join(os.path.dirname(ROOT), 'koine')}, or let "
             "anoieu_analyzer/reporting/koine.py clone it into deps/koine"
         )
     return _clone()
 
 
-def script_in(root: str) -> str:
-    """The path to `koine_append_db` in that checkout."""
-    return os.path.join(root, MODULES[0])
+def script_in(root: str, name: str = "koine_append_db") -> str:
+    """The path to a bug database program in that checkout."""
+    return os.path.join(root, "bug_db_manager", name)
 
 
 def append_db(clone: bool = True) -> str:

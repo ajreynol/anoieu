@@ -516,6 +516,10 @@ def main() -> int:
 
     failures += database_cases.main()
 
+    import closure_cases  # noqa: PLC0415
+
+    failures += closure_cases.main()
+
     if args.oracle:
         print()
         sys.stdout.flush()

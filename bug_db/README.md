@@ -118,6 +118,16 @@ prompts/close_bug_db cvc5 ethos         # only these projects
 prompts/close_bug_db --use-local ethos=/src/ethos
 ```
 
+The launcher uses Koine's `koine_close_db` and `koine_window`, selected from
+`$KOINE`, `../koine` or `deps/koine`. That checkout must contain the programs at
+our [Koine pin](../anoieu_analyzer/reporting/config/koine.lock); this command
+never fetches. Anoieu supplies its baselines and evidence rules to Koine. The
+prompt includes `koine_check_db bug_db/bugs.json --also awaiting_landing`, which
+checks that the diff against the committed database only adds closure fields to
+previously open records. Invoke that checkout's program from Anoieu's root after
+an assessment;
+existing uncommitted ingestion or claim edits will also appear in that diff.
+
 It closes a finding on exactly two conditions: **a named commit** somebody can
 fetch, and **the claim re-read as false in the source today**. It writes two
 authored records -- the closure fields on the entry here, and a section

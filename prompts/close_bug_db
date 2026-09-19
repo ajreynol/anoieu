@@ -1,90 +1,153 @@
 #!/usr/bin/env python3
-"""Assess what each watched project has since done about the findings we have open on it.
+"""Assess closure through Koine, with Anoieu's baselines and evidence rules.
 
-**The other half of `scripts/update_bug_db.py`, and not a variant of it.** That
-command runs the producers and records what they see; this one asks what became
-of it. One appends observations, the other closes them, and neither does any part
-of the other's job: nothing here runs a check, and nothing there closes a row.
+Projects and refs come from reporting/config/deps.json; baselines come from
+open findings' found_at, falling back to deps.lock. --use-local accepts paths
+or names from repos.local. Koine supplies the windows, assessment procedure,
+assistant launcher and database preservation check. Nothing here fetches: the
+checkout selected through $KOINE, ../koine or deps/koine must already contain
+koine_close_db, koine_window and koine_check_db.
 
-The report says what a check saw and when. It has never said what became of it,
-except where somebody replied to us -- and a reply is the narrow case. This
-launcher starts an assistant on the wider one, in this repository, against a
-window of each project's own history: from the revision our open rows were
-recorded at to what that project ships today.
-
-**It asks about every tool the analyzer is pointed at, not one of them.**
-`config/deps.json` names four -- cvc5, ethos, logos, eudaimonia -- and the
-windows are separate because the projects are: each has its own remote, its own
-ref, its own baseline, and its own rows. A project with nothing open is named
-and skipped, out loud; a run that looked at one project and a run that found
-nothing in four have to be told apart, and nothing else here tells them apart.
-
-**It is commit-first, and that is the point.** Asking "which of these rows is
-fixed?" invites a re-analysis, and a re-analysis that finds nothing is not
-evidence of a fix -- `docs/maintenance.md` says so in as many words, twice.
-Asking "what did this commit change, and does it close anything we have open?"
-starts from something that actually happened, names it, and leaves a commit
-attached to every closure. That is also what makes a closure checkable later:
-`verdicts.py` reads closures back and asks the project whether the change
-landed, and it can only do that for a closure that names a commit.
-
-**No project is a dependency of this command.** The histories it asks about are
-public, so the prompt points at them -- `compare/<baseline>...<ref>` -- and the
-assistant reads them there. `--use-local` takes a checkout when there is one
-worth using, and `deps/` is never it: those clones are shallow and single-commit
-by design, so they carry no window at all and this refuses them rather than
-reporting an empty one.
-
-**The launcher makes no network call**, so `--show-prompt` prints the same text
-anywhere. The reading is the assistant's, in a session a person is driving.
-
-**It authors two things: the closure fields on a database entry, and a section
-in `docs/experience.md`.** koine is still the only thing that *adds* an entry to
-`bug_db/bugs.json` -- this never creates one, never edits a claim, and never
-touches an entry it did not close. What it adds is the verdict, the reasoning,
-the commit and the date, on entries that were open when the run began. Both
-records are left uncommitted, along with the two regenerated open bug reports:
-no verdict here is final until somebody reads the diff.
-
-**The deprecated ledgers are gone.** Until 2026-09-19 a closure went into
-`docs/reports/closed-findings.md` with the reasoning in `reports.md`. Both
-files, their generator and the landing audit that read them were removed, and
-every verdict they held was migrated onto the database entries. There is one
-record now, and this writes to it.
+    prompts/close_bug_db --dry-run
+    prompts/close_bug_db cvc5 ethos --show-prompt
+    prompts/close_bug_db --use-local ethos=/src/ethos
 """
 import argparse
-from datetime import date
 import json
 import os
-import re
 import subprocess
 import sys
+import tempfile
 
 sys.dont_write_bytecode = True
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from anoieu_analyzer.reporting import CONFIG_DIR  # noqa: E402
-from anoieu_analyzer.reporting import verdicts  # noqa: E402
-
-#: How many commits one project's window lists before the prompt stops and says
-#: how many it left out. A prompt is not a substitute for `git log`, and a silent
-#: cut would read as a complete window.
-LISTED = 30
+from anoieu_analyzer.reporting import CONFIG_DIR, koine, verdicts  # noqa: E402
 
 DEPS = os.path.join(CONFIG_DIR, "deps.json")
 LOCK = os.path.join(CONFIG_DIR, "deps.lock")
 DB = os.path.join(ROOT, "bug_db", "bugs.json")
 EXPERIENCE = os.path.join(ROOT, "docs", "experience.md")
+SCRIPT = os.path.abspath(__file__)
 
-_ROW = re.compile(r"^\|\s*`([0-9a-f]{16})`\s*\|([^|]*)\|([^|]*)\|([^|]*)\|([^|]*)\|")
+ABOUT = """Anoieu is a static analyzer and differential fuzzer for Eunoia signatures.
+Read `bug_db/README.md` for what an observation is and what closes one, and
+`anoieu_analyzer/checks.md` for what each code claims."""
 
+EVIDENCE = """**Two kinds of row need different evidence, and the code says which.**
 
-def git(root, *args):
-    p = subprocess.run(["git", "-C", root, *args], capture_output=True, text=True)
-    if p.returncode:
-        raise ValueError(f"git {' '.join(args)} failed in {root}: {p.stderr.strip()}")
-    return p.stdout.strip()
+- `EO`, `DOC` and `TRI` rows are claims about a file, confirmed by reading that
+  file as the project ships it. That is the work above.
+- `FUZ` rows are claims about a *program's behaviour*, and this run cannot close
+  one. Closure there takes a replay -- `python3 -m anoieu_fuzz replay
+  tests/fuzz/<bucket>/case.eo` against a build of the checker -- which is a
+  separate pass with its own binary, and reading a commit is not a substitute.
+  If a commit looks like it fixed one, say so as a **candidate for replay**
+  in your report, name the commit, and leave the row open.
+- A row owned by two projects, written `a+b`, is a disagreement *between* them.
+  Either side's change can resolve it. Say which project's commit did, and
+  re-read both sides before you call it closed.
+
+Name any `FUZ` candidates for replay in the final report, with their commits."""
+
+WRITES = """(a) **The closure, on the entry.** For each observation you closed, add these
+    fields to its object in `bug_db/bugs.json` and change nothing else about it:
+
+      "closed_verdict"  one of the seven words below
+      "closed_why"      why the claim no longer holds, and what you re-read to
+                        establish it -- the file and the line as the project
+                        ships them today, not what the commit message said
+      "closed_on"       "{when}"
+      "closed_commit"   the full sha it closed on
+      "closed_pr"       the pull request, where there is one
+
+    **A verdict is one of seven words**, and two of them can apply here:
+
+      `fixed and landed`   -- the change is on that project's default branch.
+                              Name what landed it, and add no `awaiting_landing`.
+      `accepted and fixed` -- the change is a commit on a named branch that is
+                              **not** the branch above. It owes
+
+                                "awaiting_landing": {"project": ..., "branch": ...,
+                                                     "commit": ...}
+
+                              which `python3 -m anoieu_analyzer.reporting.verdicts
+                              --check` reads back later and asks the project
+                              about. Every ref this run reads is a project's
+                              default branch, so the ordinary outcome here is
+                              `fixed and landed`; this one is for a fix you found
+                              on a topic branch or in an unmerged pull request,
+                              where the debt has to stay checkable.
+
+    The others are verdicts about an observation's *merits* and are not yours to
+    record from a commit:
+
+      {theirs}
+
+    The vocabulary and its reason are in *Closure* in `bug_db/README.md`;
+    `verdicts.py` holds the copy that runs and `tests/run.py` compares the two,
+    so a verdict worded past the list leaves the vocabulary rather than leaving
+    the audit.
+
+    **Add no entry and remove none.** koine is the only thing that creates an
+    entry here, and an observation you could not close keeps its entry exactly as
+    it stands. Entries already carrying a ruling are nobody's question now.
+    Leave `tests/fuzz/` alone as well -- a
+    promoted reproducer is evidence, not a status -- and edit no generated page
+    by hand: `bug_db/bugs.md`, `bug_db/static-analysis.md` and `anoieu_analyzer/checks.md`
+    come from their generators. Re-render both open reports once you are done:
+    `python3 -m anoieu_analyzer.reporting.database`, then run
+    `python3 -m anoieu_analyzer.reporting.database --check`.
+    Every entry carrying a `closed_verdict` must disappear from `bugs.md` and
+    `static-analysis.md`, including declined and intentional (won't fix) entries.
+    Keep the entries and landing debt in `bugs.json`; leave the regenerated
+    reports with the closure edits for review.
+
+(b) **The log.** `docs/experience.md` is a log of **episodes**, oldest first,
+    numbered `E<n>`. An episode is something that passed between this repository
+    and a project it reports on, and the bar is that **a maintainer of that
+    project spent attention on it** -- they merged, rejected or acted on
+    something of ours, or put a correction to us. A window that closed nothing
+    earns no entry, and neither does a mistake of ours that nobody there saw.
+
+    Use the shape that file sets out under *How this page is maintained* --
+    `When`, `Kind`, `Ours`, `Theirs` and `Outcome` in the table, then
+    `What happened`, then `Not closed` where there is something to put in it,
+    then `What we learned`. `tests/run.py` compares that field list with this
+    prompt, so changing one means changing both.
+
+    **One entry per episode, not per observation and not per window.** A change
+    that closed twenty-five rows is one entry naming all of them. The next id is
+    one above the highest ever used, ids are never reused, and an entry is never
+    rewritten to say something else -- a later entry corrects it by id.
+
+    **Link every commit and pull request to the project it belongs to**, taking
+    the remote from `anoieu_analyzer/reporting/config/deps.json`. A commit's link
+    text is its short sha and its target is the remote followed by `/commit/`
+    and the full sha; a pull
+    request's link text is `#` and the number, and its target is the remote
+    followed by `/pull/` and the number. A reader checking a claim here against
+    the diff should not need a checkout.
+
+    `What happened` is written for somebody who works on neither project: no
+    check codes in the first sentence, and enough of the mechanism that a reader
+    could go and check it. `Not closed` names any observation the change was
+    expected to close and did not, with what was re-read to establish that --
+    the field exists because a change that closes eleven rows and quietly leaves
+    a twelfth reads as complete. `What we learned` is the field that makes this a
+    post-mortem rather than a changelog, and the one a thin window drops first.
+
+    Record whether the change cites us in `Kind` or `Outcome`, and do not argue
+    for it -- attribution is secondary, and a fix a project found on its own
+    still closed an observation of ours and is still evidence the check was
+    pointing at something real.
+
+    **Anything a window taught you about *our* tooling** goes under *What a run
+    learned about itself* in `docs/history.md` instead -- a stale baseline, a
+    check that failed open, a rename that will read as a disappearance. One line
+    each, newest first, and an empty section is the honest result when a run
+    turned up nothing about us."""
 
 
 def projects():
@@ -113,24 +176,17 @@ def database():
         return {b["id"]: b for b in json.load(f)["bugs"]}
 
 
-def ruled_on():
-    """Ids the database already has a verdict against. Nobody's question here."""
-    return {fid for fid, b in database().items() if "closed_verdict" in b}
-
-
 def open_rows():
     """Every observation still open, from the database.
 
-    One record, so one reading. An entry carrying a `closed_verdict` has been
+    One record, so one reading. An entry carrying closure fields has been
     ruled on and is skipped; everything else is a claim somebody could still
     falsify. `found_at` is the revision the claim was recorded against, which is
     the whole baseline question -- an entry that carries none is listed with no
     baseline of its own rather than quietly given somebody else's.
     """
-    return [{"id": fid, "owner": b.get("owner", ""), "code": b.get("code", ""),
-             "where": b.get("where", ""), "what": b.get("description", ""),
-             "tool": b.get("tool", ""), "found_at": b.get("found_at", "")}
-            for fid, b in database().items() if "closed_verdict" not in b]
+    return [b for b in database().values()
+            if not any(k.startswith("closed_") or k == "awaiting_landing" for k in b)]
 
 
 def by_project(rows, known):
@@ -163,408 +219,26 @@ def baseline(name, rows, explicit, locks, root=""):
     """
     if explicit:
         return explicit, "--since"
-    revs = sorted({r["found_at"] for r in rows if r["found_at"]})
-    silent = sum(1 for r in rows if not r["found_at"])
+    revs = sorted({r["found_at"] for r in rows if r.get("found_at")})
+    silent = sum(1 for r in rows if not r.get("found_at"))
     unrecorded = (f"; {silent} row(s) record no revision and may predate it"
                   if silent else "")
     if len(revs) == 1:
-        n = sum(1 for r in rows if r["found_at"] == revs[0])
+        n = sum(1 for r in rows if r.get("found_at") == revs[0])
         return revs[0], f"the {n} open row(s) recorded at it{unrecorded}"
     if len(revs) > 1:
         if root:
-            oldest = revs[0]
-            for rev in revs[1:]:
-                if subprocess.run(["git", "-C", root, "merge-base", "--is-ancestor",
-                                   rev, oldest], capture_output=True).returncode == 0:
-                    oldest = rev
-            return oldest, (f"the oldest of {len(revs)} recorded revisions, "
-                            f"per {root}{unrecorded}")
+            for oldest in revs:
+                if all(subprocess.run(
+                        ["git", "-C", root, "merge-base", "--is-ancestor", oldest, rev],
+                        capture_output=True).returncode == 0 for rev in revs):
+                    return oldest, (f"the oldest of {len(revs)} recorded revisions, "
+                                    f"per {root}{unrecorded}")
         raise ValueError(
             f"{name}'s open rows were recorded against {len(revs)} revisions "
-            f"({', '.join(revs)}) and ordering them needs a history: give "
-            f"--since {name}=<rev>, or name a checkout with --use-local")
+            f"({', '.join(revs)}) and no oldest revision could be established: give "
+            f"--since {name}=<rev>, or name a full checkout with --use-local")
     return locks[name], "config/deps.lock; no open row records a revision"  # noqa: E501
-
-
-def slug(url):
-    """`cvc5/ethos`, from the remote `deps.json` names."""
-    return url.rstrip("/").removesuffix(".git").split("github.com/", 1)[-1]
-
-
-def window(root, base):
-    """The commits a checkout can already answer for, newest first."""
-    if git(root, "rev-parse", "--is-shallow-repository") == "true":
-        raise ValueError(f"{root} is a shallow clone and carries no history to read. "
-                         "The clones under deps/ are shallow and single-commit by "
-                         "design; name a full checkout, or drop --use-local.")
-    if subprocess.run(["git", "-C", root, "cat-file", "-e", base + "^{commit}"],
-                      capture_output=True).returncode:
-        raise ValueError(f"{root} does not contain {base}. Fetch it yourself, or drop "
-                         "--use-local and read the history on github; this never fetches.")
-    head = git(root, "rev-parse", "HEAD")
-    commits = [line.split("\t", 1) for line in
-               git(root, "log", "--no-merges", "--format=%H\t%s", f"{base}..HEAD").splitlines()]
-    behind = int(git(root, "rev-list", "--count", f"{head}..{base}") or 0)
-    # Whether the baseline is on this branch at all. When it is not, `base..HEAD`
-    # is what HEAD has since the merge-base rather than what happened after the
-    # baseline, and the difference is the whole meaning of the window.
-    diverged = subprocess.run(["git", "-C", root, "merge-base", "--is-ancestor", base, head],
-                              capture_output=True).returncode != 0
-    return head, commits, behind, diverged
-
-
-def ahead_of(root, head):
-    """Refs in this checkout that carry commits after HEAD.
-
-    The usual reason a local window is empty is not that the project has done
-    nothing: it is that the newer history is fetched and parked on a ref nobody
-    checked out.
-    """
-    refs = git(root, "for-each-ref", "--format=%(refname:short)", "--contains", head,
-               "refs/remotes", "refs/heads").splitlines()
-    counted = [(int(git(root, "rev-list", "--count", f"{head}..{ref}")), ref) for ref in refs]
-    return sorted((n, ref) for n, ref in counted if n)[::-1][:3]
-
-
-def elsewhere(root, head):
-    """What to do about an empty local window, given what that checkout holds."""
-    return [f"{ref} in this checkout is {n} commit(s) ahead of HEAD"
-            for n, ref in ahead_of(root, head)] + [
-        "a checkout parked at the baseline has an empty window by construction:",
-        "name one whose HEAD has moved, or let this read github instead."]
-
-
-def codes(rows):
-    """What is on the table for one project, by check code."""
-    counts = {}
-    for row in rows:
-        counts[row["code"]] = counts.get(row["code"], 0) + 1
-    return ", ".join(f"{code} {n}" for code, n in sorted(counts.items()))
-
-
-def local_scope(name, root, via, base, head, commits, diverged):
-    """How the prompt describes a window somebody has already got on disk."""
-    listed = "\n".join(f"  {sha} {subject}" for sha, subject in commits[:LISTED])
-    if len(commits) > LISTED:
-        listed += (f"\n  ... and {len(commits) - LISTED} more. The list above is cut; "
-                   "the commands below are not, and the window is all of them.")
-    divergence = "" if not diverged else f"""\
-**The baseline is not on this branch, so the window is not a history.** {base} is
-not an ancestor of {head[:12]}: the commits above are what this branch has done
-since the *merge-base*, not what happened after our rows were recorded. It may
-miss a fix that exists only on the branch the rows were measured on, and a row
-may name a file or a line this branch never had -- in which case the claim was
-never about this branch, and saying so and leaving it open is the result.
-**Re-measuring is a run, not a reading**: `python3 scripts/run.py` is what does
-it. Do not close a row because this branch looks different from the one it was
-measured on.
-
-"""
-    return f"""\
-A checkout of {name} is on this machine at {root} (from {via}), at {head}, and
-these {len(commits)} commit(s) landed between the baseline and it:
-
-{listed}
-
-  # the window, in full
-  git -C {root} log --no-merges --format='%h %s' {base}..HEAD
-  # what one commit touched
-  git -C {root} show --stat <commit>
-
-{divergence}**Read that checkout; never write it.** No fetch, no pull, no checkout, no
-branch, no build inside it: it is somebody's working tree and it is on loan.
-Where it cannot answer something -- a commit it does not carry, a pull request
-and its discussion, anything newer than its HEAD -- fall back to the remote and
-say in your report which answers came from where."""
-
-
-def github_scope(name, entry, base):
-    """How the prompt describes a window nobody has fetched. This is the default."""
-    url, ref = entry["url"].removesuffix(".git"), entry["ref"]
-    where = slug(entry["url"])
-    return f"""\
-{name} is at {url} and nothing of it is checked out here: read its history
-there. What landed after the baseline is
-
-  {url}/compare/{base}...{ref}
-
-If `gh` is on your PATH it is the cheaper route:
-
-  # the window's size, the revision of {ref} you are about to read, and
-  # whether the baseline is on {ref} at all
-  gh api "repos/{where}/compare/{base}...{ref}" \\
-     --jq '"\\(.status); \\(.total_commits) commit(s); {ref} at \\(.commits[-1].sha[0:12]); merge-base \\(.merge_base_commit.sha[0:12])"'
-  # what landed
-  gh api "repos/{where}/compare/{base}...{ref}" \\
-     --jq '.commits[] | "\\(.sha) \\(.commit.message | split("\\n")[0])"'
-  # what one commit touched
-  gh api repos/{where}/commits/<sha> --jq '.files[].filename'
-  # a file as it stands now
-  gh api "repos/{where}/contents/<path>?ref={ref}" --jq '.content' | base64 -d
-
-The web pages say the same things: a commit is `/commit/<sha>`, a file as it
-stands now is `/blob/{ref}/<path>`. **That compare view pages at 250 commits.**
-If the window is larger, walk it in pieces and say in your report that you did
-and how far you got -- a silent truncation reads as a window you covered. Do not
-clone {name} into this repository.
-
-**Say which revision of `{ref}` you read** -- the first command above names it.
-Every *still true today* below means true at that revision and at no later one.
-
-**If that first command says `diverged`, the window is not a history.** The
-baseline is on a branch `{ref}` does not contain, so the commits listed are what
-`{ref}` has done since the *merge-base* -- not what happened after our rows were
-recorded. Two things follow, and both belong in your report. The window may
-**miss** a fix that exists only on the abandoned branch, which closes nothing
-here because we no longer watch that branch. And a row may name a file or a line
-that `{ref}` never had, in which case the claim was never about `{ref}` at all:
-say so and leave it open, because **re-measuring against `{ref}` is a run and not
-a reading**, and `python3 scripts/run.py` is what does it. Do not close a row on
-the grounds that `{ref}` looks different from the branch it was measured on."""
-
-
-def scope(name, entry, rows, base, source, local):
-    body = (local_scope(name, local[0], local[1], base, local[2], local[3], local[5])
-            if local else github_scope(name, entry, base))
-    return (f"## {name} -- {len(rows)} open row(s)\n\n"
-            f"  rows:     {codes(rows)}\n"
-            f"  baseline: {base} -- {source}\n"
-            f"  ref:      {entry['ref']}; {entry['reads']}\n\n{body}")
-
-
-def quiet(name):
-    return (f"## {name} -- nothing open\n\n"
-            f"  No open entry in bug_db/bugs.json is owned by {name}, so there is\n"
-            f"  nothing for a commit of its to close and no window to read. That is a\n"
-            f"  complete result for {name}: do not go looking for work there.")
-
-
-def describe(plan, quiet_names):
-    """The scope, resolved, with nothing started."""
-    out = []
-    for name, entry, rows, base, source, local in plan:
-        out.append(f"{name}: {len(rows)} open row(s) -- {codes(rows)}")
-        out.append(f"  ref:      {entry['ref']}  ({slug(entry['url'])})")
-        out.append(f"  baseline: {base} (from {source})")
-        if local:
-            root, via, head, commits, behind, diverged = local
-            out.append(f"  local:    {root} (from {via}) at {head[:10]}")
-            out.append(f"  window:   {len(commits)} commit(s) to assess"
-                       + (f"; that checkout is {behind} commit(s) behind the baseline"
-                          if behind else "")
-                       + ("; DIVERGED -- the baseline is not on this branch"
-                          if diverged else ""))
-            out += [f"    {sha[:10]} {subject}" for sha, subject in commits[:LISTED]]
-            if len(commits) > LISTED:
-                out.append(f"    ... and {len(commits) - LISTED} more, not listed")
-            if not commits:
-                out += [f"    {line}" for line in elsewhere(root, head)]
-        else:
-            out.append(f"  window:   {entry['url'].removesuffix('.git')}"
-                       f"/compare/{base}...{entry['ref']}")
-            out.append("            read by the assistant; this command makes no network call")
-    for name in quiet_names:
-        out.append(f"{name}: nothing open; no window to read")
-    distinct = {r["id"] for _, _, rows, _, _, _ in plan for r in rows}
-    shared = sum(1 for _, _, rows, _, _, _ in plan for r in rows) - len(distinct)
-    out.append(f"{len(distinct)} open row(s) across {len(plan)} project(s) with work, "
-               f"{len(quiet_names)} without"
-               + (f"; {shared} of them owned by two projects and in both windows"
-                  if shared else ""))
-    return "\n".join(out)
-
-
-def prompt(plan, quiet_names, when):
-    # Read from the copy that runs, so the list in the prompt cannot drift out
-    # of the vocabulary `tests/run.py` enforces.
-    ours = ("fixed and landed", "accepted and fixed")
-    theirs = ", ".join(f"`{w}`" for w in verdicts.OUTCOMES if w not in ours)
-    theirs = theirs + "."
-    settled = len(ruled_on() & set(database()))
-    sections = "\n\n".join(
-        [scope(name, entry, rows, base, source, local)
-         for name, entry, rows, base, source, local in plan]
-        + [quiet(name) for name in quiet_names])
-    total = len({r["id"] for _, _, rows, _, _, _ in plan for r in rows})
-    fuzz = len({r["id"] for _, _, rows, _, _, _ in plan for r in rows
-                if r["tool"] == "anoieu-fuzz"})
-    return f"""\
-You are assessing closure for **anoieu**, at {ROOT}. Anoieu is a static analyzer
-and differential fuzzer for Eunoia signatures, and it reports findings against
-four projects it does not own. `bug_db/bugs.json` holds {total} open
-observation(s) that nobody has ruled on. Read `bug_db/README.md` for what an
-observation is and what closes one, and `anoieu_analyzer/checks.md` for what each code
-claims.
-
-**Your question is what each of those projects has since done about them.** Not
-whether a check still fires: what a commit of theirs changed, and whether it
-makes one of our claims false.
-
-{sections}
-
-The observations are in `bug_db/bugs.json`, by id, with the owner, the code,
-the file and line in *that project*, the claim, and the revision each was
-recorded at. You add fields to an entry you close and change nothing else about
-it; see what to write, below.
-
-**Work one project at a time, commit-first, one commit at a time.**
-
-1. Read what the commit changed. Its files say which of our rows it could bear
-   on at all; most commits in any window bear on none, and saying so is a
-   complete result for that commit.
-2. Name the rows it could close, by id, and only rows that project owns -- a
-   commit in one project does not close a row against another's file.
-3. **Confirm the closure in the current source, not in the commit message.**
-   Re-read the file and line the row names, as that project ships it today, and
-   establish that the claim is no longer true of it. A commit that looks related
-   and a claim that is now false are two different findings, and only the second
-   one closes anything.
-4. **Absence closes nothing.** Not finding an entity, not reproducing a claim,
-   and a check that would now report less are none of them evidence of a fix. If
-   what a row names is gone -- a rule renamed, a file deleted, a signature moved
-   -- say which of those happened and what it means for the claim; that is an
-   explicit assessment, and it is the only way such a row closes.
-5. If you cannot tell, leave it open and say what would settle it. An open row
-   costs nothing; a wrong closure is a claim that somebody fixed something they
-   did not, and this repository has already made that mistake once -- three cvc5
-   rows sat closed for three months on a fix that never landed.
-
-**Two kinds of row need different evidence, and the code says which.**
-
-- `EO`, `DOC` and `TRI` rows are claims about a file, confirmed by reading that
-  file as the project ships it. That is the work above.
-- `FUZ` rows are claims about a *program's behaviour*, and this run cannot close
-  one. Closure there takes a replay -- `python3 -m anoieu_fuzz replay
-  tests/fuzz/<bucket>/case.eo` against a build of the checker -- which is a
-  separate pass with its own binary, and reading a commit is not a substitute.
-  There {'is 1 such row' if fuzz == 1 else f'are {fuzz} such rows'} here.
-  If a commit looks like it fixed one, say so as a **candidate for replay**
-  in your report, name the commit, and leave the row open.
-- A row owned by two projects, written `a+b`, is a disagreement *between* them.
-  Either side's change can resolve it. Say which project's commit did, and
-  re-read both sides before you call it closed.
-
-**Then write the closure and log, and regenerate the reports.**
-
-(a) **The closure, on the entry.** For each observation you closed, add these
-    fields to its object in `bug_db/bugs.json` and change nothing else about it:
-
-      "closed_verdict"  one of the seven words below
-      "closed_why"      why the claim no longer holds, and what you re-read to
-                        establish it -- the file and the line as the project
-                        ships them today, not what the commit message said
-      "closed_on"       "{when}"
-      "closed_commit"   the full sha it closed on
-      "closed_pr"       the pull request, where there is one
-
-    **A verdict is one of seven words**, and two of them can apply here:
-
-      `fixed and landed`   -- the change is on that project's default branch.
-                              Name what landed it, and add no `awaiting_landing`.
-      `accepted and fixed` -- the change is a commit on a named branch that is
-                              **not** the branch above. It owes
-
-                                "awaiting_landing": {{"project": ..., "branch": ...,
-                                                     "commit": ...}}
-
-                              which `python3 -m anoieu_analyzer.reporting.verdicts
-                              --check` reads back later and asks the project
-                              about. Every ref this run reads is a project's
-                              default branch, so the ordinary outcome here is
-                              `fixed and landed`; this one is for a fix you found
-                              on a topic branch or in an unmerged pull request,
-                              where the debt has to stay checkable.
-
-    The others are verdicts about an observation's *merits* and are not yours to
-    record from a commit:
-
-      {theirs}
-
-    The vocabulary and its reason are in *Closure* in `bug_db/README.md`;
-    `verdicts.py` holds the copy that runs and `tests/run.py` compares the two,
-    so a verdict worded past the list leaves the vocabulary rather than leaving
-    the audit.
-
-    **Add no entry and remove none.** koine is the only thing that creates an
-    entry here, and an observation you could not close keeps its entry exactly as
-    it stands -- {settled} of them already carry a verdict from an earlier run
-    and are nobody's question now. Leave `tests/fuzz/` alone as well -- a
-    promoted reproducer is evidence, not a status -- and edit no generated page
-    by hand: `bug_db/bugs.md`, `bug_db/static-analysis.md` and `anoieu_analyzer/checks.md`
-    come from their generators. Re-render both open reports once you are done:
-    `python3 -m anoieu_analyzer.reporting.database`, then run
-    `python3 -m anoieu_analyzer.reporting.database --check`.
-    Every entry carrying a `closed_verdict` must disappear from `bugs.md` and
-    `static-analysis.md`, including declined and intentional (won't fix) entries.
-    Keep the entries and landing debt in `bugs.json`; leave the regenerated
-    reports with the closure edits for review.
-
-(b) **The log.** `docs/experience.md` is a log of **episodes**, oldest first,
-    numbered `E<n>`. An episode is something that passed between this repository
-    and a project it reports on, and the bar is that **a maintainer of that
-    project spent attention on it** -- they merged, rejected or acted on
-    something of ours, or put a correction to us. A window that closed nothing
-    earns no entry, and neither does a mistake of ours that nobody there saw.
-
-    Use the shape that file sets out under *How this page is maintained* --
-    `When`, `Kind`, `Ours`, `Theirs` and `Outcome` in the table, then
-    `What happened`, then `Not closed` where there is something to put in it,
-    then `What we learned`. `tests/run.py` compares that field list with this
-    prompt, so changing one means changing both.
-
-    **One entry per episode, not per observation and not per window.** A change
-    that closed twenty-five rows is one entry naming all of them. The next id is
-    one above the highest ever used, ids are never reused, and an entry is never
-    rewritten to say something else -- a later entry corrects it by id.
-
-    **Link every commit and pull request to the project it belongs to**, taking
-    the remote from `config/deps.json`. A commit's link text is its short sha and
-    its target is the remote followed by `/commit/` and the full sha; a pull
-    request's link text is `#` and the number, and its target is the remote
-    followed by `/pull/` and the number. A reader checking a claim here against
-    the diff should not need a checkout.
-
-    `What happened` is written for somebody who works on neither project: no
-    check codes in the first sentence, and enough of the mechanism that a reader
-    could go and check it. `Not closed` names any observation the change was
-    expected to close and did not, with what was re-read to establish that --
-    the field exists because a change that closes eleven rows and quietly leaves
-    a twelfth reads as complete. `What we learned` is the field that makes this a
-    post-mortem rather than a changelog, and the one a thin window drops first.
-
-    Record whether the change cites us in `Kind` or `Outcome`, and do not argue
-    for it -- attribution is secondary, and a fix a project found on its own
-    still closed an observation of ours and is still evidence the check was
-    pointing at something real.
-
-    **Anything a window taught you about *our* tooling** goes under *What a run
-    learned about itself* in `docs/history.md` instead -- a stale baseline, a
-    check that failed open, a rename that will read as a disappearance. One line
-    each, newest first, and an empty section is the honest result when a run
-    turned up nothing about us.
-
-Record the date as {when} where a date is called for.
-
-**Then check what you wrote:**
-
-  python3 -m anoieu_analyzer.reporting.verdicts       # every closure, read back
-  python3 -m anoieu_analyzer.reporting.database --check
-  python3 tests/run.py
-
-`tests/run.py` is the one that fails on a verdict outside the vocabulary or a
-promise with nothing to watch. Fix what it says before you report.
-
-**Finish with a report to the terminal**: per project, what you closed and under
-which commit, what you assessed and left open with the reason, which `FUZ` rows
-are candidates for replay, and how much of each window you actually read. Say
-plainly where it was too thin to conclude anything -- a project you did not get
-to is a result, and a project you skimmed and called clean is not.
-
-**Commit nothing and push nothing.** Leave the changes in the working tree for a
-maintainer to read as a diff. Open no pull request, file no issue, post no
-comment, and touch no tracker -- not cvc5's, not ethos's, not anybody's. Nothing
-here reaches a person who did not ask for it.
-"""
 
 
 def pairs(values, known, flag):
@@ -579,7 +253,7 @@ def pairs(values, known, flag):
     return out
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(
         description="Assess what each watched project has done about our open findings.")
     ap.add_argument("project", nargs="*", help="a project from config/deps.json; "
@@ -597,27 +271,33 @@ def main():
     ap.add_argument("--codex", action="store_true", help="run codex instead of claude")
     ap.add_argument("--print", action="store_true", dest="noninteractive",
                     help="run non-interactively and print the result")
-    args = ap.parse_args()
+    ap.add_argument("--section", choices=("about", "evidence", "writes"),
+                    help=argparse.SUPPRESS)
+    ap.add_argument("--baselines", action="store_true", help=argparse.SUPPRESS)
+    argv = list(sys.argv[1:] if argv is None else argv)
+    args = ap.parse_args(argv)
+    if args.section:
+        theirs = ", ".join(f"`{w}`" for w in verdicts.OUTCOMES
+                           if w not in ("fixed and landed", "accepted and fixed")) + "."
+        print({"about": ABOUT, "evidence": EVIDENCE,
+               "writes": WRITES.replace("{theirs}", theirs)}[args.section])
+        return 0
     try:
         known = projects()
         unknown = set(args.project) - set(known)
         if unknown:
-            raise ValueError(f"not a project in config/deps.json: {', '.join(sorted(unknown))}; "
-                             f"it names {', '.join(known)}")
+            raise ValueError(f"not a project in config/deps.json: {', '.join(sorted(unknown))}")
         wanted = [n for n in known if not args.project or n in args.project]
         rows = by_project(open_rows(), known)
         since, locks = pairs(args.since, known, "--since"), pinned()
-
-        # Which checkouts to read, if any. `repos.local` is the same mapping
-        # `verdicts.py` uses, and it deliberately does not
-        # fall back to deps/: those clones are shallow, so an empty window from
-        # one would be a fact about the clone and not about the project.
         local = {}
         if args.use_local is not None:
             given = pairs([v for v in args.use_local if "=" in v], known, "--use-local")
             configured = verdicts._checkouts([])
-            named = [v for v in args.use_local if "=" not in v] or wanted
+            named = [v for v in args.use_local if "=" not in v] or ([] if given else wanted)
             for name in list(given) + [n for n in named if n not in given]:
+                if name not in known:
+                    raise ValueError(f"unknown project in --use-local: {name}")
                 path = given.get(name) or configured.get(name, "")
                 via = "--use-local" if name in given else "config/repos.local"
                 if not path:
@@ -625,69 +305,71 @@ def main():
                                      f"give --use-local {name}=<path>")
                 if not os.path.isdir(path):
                     raise ValueError(f"no {name} checkout at {path} (from {via})")
-                local[name] = (path, via)
+                local[name] = (os.path.abspath(path), via)
 
-        plan, quiet_names = [], []
-        for name in wanted:
-            if not rows[name]:
-                quiet_names.append(name)
-                continue
-            root = local.get(name, ("", ""))[0]
-            base, source = baseline(name, rows[name], since.get(name), locks, root)
-            here = None
-            if name in local:
-                path, via = local[name]
-                here = (path, via, *window(path, base))
-            plan.append((name, known[name], rows[name], base, source, here))
-
-        if args.dry_run:
-            print(describe(plan, quiet_names))
-            return 0
-        if not plan:
-            print("-- close_bug_db: no open row is owned by "
-                  f"{', '.join(wanted)}; nothing to assess", file=sys.stderr)
+        busy = [n for n in wanted if rows[n]]
+        if args.baselines:
+            for name in busy:
+                rev, why = baseline(name, rows[name], since.get(name), locks,
+                                    local.get(name, ("", ""))[0])
+                print(name, rev, why)
             return 0
 
-        # A checkout was named and carries nothing new. Reading github would
-        # answer the question, but quietly doing that is not what was asked for,
-        # and spending a turn on an empty window produces a report that says
-        # nothing and a file that claims it was checked.
-        empty = [(name, here[0], here[2], here[4])
-                 for name, _, _, _, _, here in plan if here and not here[3]]
-        if empty and len(empty) == len(plan):
-            for name, root, head, behind in empty:
-                print(f"-- close_bug_db: no commit after the baseline in {root} ({name})"
-                      + (f"; it is {behind} commit(s) behind it" if behind else ""),
-                      file=sys.stderr)
-                for line in elsewhere(root, head):
-                    print(f"--   {line}", file=sys.stderr)
-            return 0
+        tool = koine.find(clone=False, programs=("koine_close_db", "koine_window", "koine_check_db"))
+        # Koine describes empty windows; Anoieu declines to start an assessment
+        # when every requested window is local and empty, as before.
+        if busy and all(n in local for n in busy) and not args.dry_run:
+            windows = []
+            for name in busy:
+                rev, _ = baseline(name, rows[name], since.get(name), locks, local[name][0])
+                result = subprocess.run(
+                    [sys.executable, koine.script_in(tool, "koine_window"),
+                     "--baseline", rev, "--local", local[name][0], "--json"],
+                    capture_output=True, text=True)
+                if result.returncode:
+                    raise ValueError(result.stderr.strip())
+                windows.append((name, json.loads(result.stdout)))
+            if all(w["count"] == 0 for _, w in windows):
+                for name, w in windows:
+                    print(f"-- {name}: no commit after the baseline in {w['root']}", file=sys.stderr)
+                    for ref in w["elsewhere"]:
+                        print(f"--   {ref['ref']} is {ref['ahead']} commit(s) ahead of HEAD", file=sys.stderr)
+                return 0
 
-        when = args.date or date.today().isoformat()
-        text = prompt(plan, quiet_names, when)
-        if args.show_prompt:
-            print(text)
-            return 0
-        for path in (DB, EXPERIENCE):
-            if not os.path.isfile(path):
-                raise ValueError(f"{os.path.relpath(path, ROOT)} is missing; it defines "
-                                 "the shape of what this run writes")
-        print("-- close_bug_db: what each project did after our open rows were recorded",
-              file=sys.stderr)
-        for name, entry, rows_, base, source, here in plan:
-            where = (f"{here[0]} at {here[2][:10]}" if here
-                     else f"{slug(entry['url'])} at {entry['ref']}")
-            print(f"--   {name}: {len(rows_)} row(s) from {base[:10]}, reading {where}",
-                  file=sys.stderr)
-        for name in quiet_names:
-            print(f"--   {name}: nothing open", file=sys.stderr)
-        print("--   writing bug_db/bugs.json and docs/experience.md here",
-              file=sys.stderr)
-        command = (["codex", "exec"] if args.noninteractive else ["codex"]) if args.codex else (
-                   ["claude", "-p"] if args.noninteractive else ["claude"])
-        return subprocess.run(command + [text], cwd=ROOT).returncode
-    except (OSError, ValueError, KeyError) as e:
-        print(f"close_bug_db: {e}", file=sys.stderr)
+        cfg = {
+            "root": ROOT, "tool": "anoieu", "database": DB, "projects": known,
+            "records": {"one": "observation", "many": "observations",
+                        "collective": "bug database"},
+            "group": "code", "also": ["awaiting_landing"],
+            "remeasure": "python3 scripts/run.py",
+            "prompt": {name: {"command": [sys.executable, SCRIPT, "--section", name]}
+                       for name in ("about", "evidence", "writes")},
+            "checks": ["python3 -m anoieu_analyzer.reporting.verdicts",
+                       "python3 -m anoieu_analyzer.reporting.database --check",
+                       "python3 tests/run.py"],
+        }
+        forwarded = list(wanted)
+        if local:
+            forwarded += ["--use-local", *(f"{n}={p}" for n, (p, _) in local.items())]
+        for value in args.since or []:
+            forwarded += ["--since", value]
+        if args.date:
+            forwarded += ["--date", args.date]
+        forwarded += [flag for flag, enabled in (
+            ("--dry-run", args.dry_run), ("--show-prompt", args.show_prompt),
+            ("--codex", args.codex), ("--print", args.noninteractive)) if enabled]
+        cfg["baseline"] = {"command": [sys.executable, SCRIPT, "--baselines", *forwarded]}
+        if not args.dry_run and not args.show_prompt and busy and not os.path.isfile(EXPERIENCE):
+            raise ValueError("docs/experience.md is missing; it defines the episode format")
+        with tempfile.TemporaryDirectory(prefix="anoieu-closure-") as directory:
+            config = os.path.join(directory, "closure.json")
+            with open(config, "w", encoding="utf-8") as fh:
+                json.dump(cfg, fh)
+            return subprocess.run(
+                [sys.executable, koine.script_in(tool, "koine_close_db"),
+                 "--config", config, *forwarded], cwd=ROOT).returncode
+    except (OSError, ValueError, KeyError) as exc:
+        print(f"close_bug_db: {exc}", file=sys.stderr)
         return 2
 
 
