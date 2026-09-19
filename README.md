@@ -123,11 +123,11 @@ python3 scripts/update_bug_db.py            # analyse and record both sources
 Use `--preview` to analyse without changing the database. The
 [database README](bug_db/README.md) covers setup, adding new fuzzer findings,
 and what the ingestion dates mean.
-**[Browse all recorded bugs on GitHub](bug_db/bugs.md)** in the generated
-table, which carries each finding's status beside its claim — the verdict
-recorded against it, or `open` where nobody has ruled — with links to source
-locations, reproducers and the change a finding closed on. Recording commands
-refresh it alongside the JSON.
+**[Browse open bugs on GitHub](bug_db/bugs.md)** in the generated table, with
+links to source locations and reproducers. Closed findings, including declined
+and intentional (won't fix) issues, stay in the JSON history and are excluded
+from both Markdown reports. Recording commands refresh both reports; after a
+closure, run `python3 -m anoieu_analyzer.reporting.database`.
 
 The [bug database](bug_db/bugs.json) is the persistent record, and the only
 one: static findings and promoted fuzzer findings, recorded exclusively through
@@ -219,8 +219,8 @@ Written by a run, and the only documents a tool may edit.
 | [`anoieu_analyzer/checks.md`](anoieu_analyzer/checks.md) | **one page per check** — what it reports, what it assumes, and what it deliberately does not. Rendered from the registry, so a page cannot drift from the code beside it. *Rewritten whole* |
 | [`bug_db/corpus.md`](bug_db/corpus.md) | **what was measured, and what the checks reported on it**: the commits each project was restored to, and the counts taken from them. *Rewritten whole* |
 | [`bug_db/bugs.json`](bug_db/bugs.json) | **the database, and the only record of a verdict** — static findings and promoted fuzzer findings, one JSON object each. Every recording command calls [koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds entries and updates ingestion dates while preserving existing content. **Not reconstructible**: the verdicts and hand-written notes on it exist nowhere else |
-| [`bug_db/bugs.md`](bug_db/bugs.md) | **the GitHub browsing view**, rendered from the JSON for both producers with each finding's status and evidence links; refreshed by recording commands and checked by CI |
-| [`bug_db/static-analysis.md`](bug_db/static-analysis.md) | **the static subset rendered from the database**, with the verdict recorded against each row. *Rewritten whole, from the database* |
+| [`bug_db/bugs.md`](bug_db/bugs.md) | **open findings from both producers**, rendered from the JSON with evidence links; closed and won't fix findings are excluded; refreshed by recording commands and checked by CI |
+| [`bug_db/static-analysis.md`](bug_db/static-analysis.md) | **the open static subset**, regenerated and checked alongside `bugs.md`. *Rewritten whole, from the database* |
 | [`bug_db/cpc-audit.html`](bug_db/cpc-audit.html) | **a rendered report for a reader who will not clone this tree.** It restates findings from the sources above and adds none |
 
 > **The database is not like the others.** Everything else above is rewritten

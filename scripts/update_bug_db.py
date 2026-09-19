@@ -73,8 +73,6 @@ def main(argv: list[str] | None = None) -> int:
         code = findings.record(found, roots, preview=args.preview)
         if code:
             return code
-        if not args.preview:
-            findings.render_static(findings.DB, findings.STATIC_PAGE)
         return 0
     except (OSError, ValueError) as exc:
         print(f"-- cannot refresh bug database: {exc}", file=sys.stderr)

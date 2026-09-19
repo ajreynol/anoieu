@@ -38,13 +38,13 @@ reporting an empty one.
 **The launcher makes no network call**, so `--show-prompt` prints the same text
 anywhere. The reading is the assistant's, in a session a person is driving.
 
-**It writes two things: the closure fields on a database entry, and a section
+**It authors two things: the closure fields on a database entry, and a section
 in `docs/experience.md`.** koine is still the only thing that *adds* an entry to
 `bug_db/bugs.json` -- this never creates one, never edits a claim, and never
 touches an entry it did not close. What it adds is the verdict, the reasoning,
 the commit and the date, on entries that were open when the run began. Both
-files are left uncommitted: no verdict here is final until somebody reads the
-diff.
+records are left uncommitted, along with the two regenerated open bug reports:
+no verdict here is final until somebody reads the diff.
 
 **The deprecated ledgers are gone.** Until 2026-09-19 a closure went into
 `docs/reports/closed-findings.md` with the reasoning in `reports.md`. Both
@@ -444,7 +444,7 @@ it; see what to write, below.
   Either side's change can resolve it. Say which project's commit did, and
   re-read both sides before you call it closed.
 
-**Then write two things, and nothing else.**
+**Then write the closure and log, and regenerate the reports.**
 
 (a) **The closure, on the entry.** For each observation you closed, add these
     fields to its object in `bug_db/bugs.json` and change nothing else about it:
@@ -491,8 +491,13 @@ it; see what to write, below.
     and are nobody's question now. Leave `tests/fuzz/` alone as well -- a
     promoted reproducer is evidence, not a status -- and edit no generated page
     by hand: `bug_db/bugs.md`, `bug_db/static-analysis.md` and `anoieu_analyzer/checks.md`
-    come from their generators. Re-render the views once you are done:
-    `python3 -m anoieu_analyzer.reporting.database`.
+    come from their generators. Re-render both open reports once you are done:
+    `python3 -m anoieu_analyzer.reporting.database`, then run
+    `python3 -m anoieu_analyzer.reporting.database --check`.
+    Every entry carrying a `closed_verdict` must disappear from `bugs.md` and
+    `static-analysis.md`, including declined and intentional (won't fix) entries.
+    Keep the entries and landing debt in `bugs.json`; leave the regenerated
+    reports with the closure edits for review.
 
 (b) **The log.** `docs/experience.md` is a log of **episodes**, oldest first,
     numbered `E<n>`. An episode is something that passed between this repository

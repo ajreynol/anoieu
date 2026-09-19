@@ -1,21 +1,34 @@
-"""The GitHub view must preserve data and link to the evidence it actually names."""
+"""Open reports exclude closures while preserving their database history."""
 from __future__ import annotations
 
 import json
+import contextlib
+import io
 import os
 from pathlib import Path
 import sys
 import tempfile
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from anoieu_analyzer.reporting import database
+from anoieu_analyzer.reporting import database, verdicts
 
 
 def main() -> int:
     with tempfile.TemporaryDirectory() as directory:
         db = Path(directory) / "bugs.json"
-        db.write_text(json.dumps({"bugs": [
+        closed = [
+            {"id": f"closed-{tool}-{i}", "bug": f"closed-{tool}-{i}",
+             "tool": tool, "code": "FUZ0002" if tool == "anoieu-fuzz" else "EO0031",
+             "description": f"settled {tool} finding {i}", "closed_verdict": verdict,
+             **({"awaiting_landing": {"project": "ethos", "branch": "topic",
+                                      "commit": "89abcde"}}
+                if verdict == "accepted and fixed" else {})}
+            for tool in ("anoieu", "anoieu-fuzz", "another-producer")
+            for i, verdict in enumerate(verdicts.OUTCOMES)
+        ]
+        bugs = [
             {"id": "static", "tool": "anoieu", "code": "EO0031", "owner": "cvc5",
              "where": "proofs/eo/a b.eo:7", "found_at": "abcdef1",
              "description": "x | y\n[link](evil) <script>",
@@ -27,34 +40,27 @@ def main() -> int:
              "description": "reproducer removed when the finding was withdrawn"},
             {"id": "old", "tool": "anoieu", "code": "EO0031", "owner": "cvc5",
              "where": "old.eo:1", "description": "record without a measured commit"},
-            # A closure the view has to show, and the debt it must not hide.
-            {"id": "landed", "tool": "anoieu", "code": "EO0031", "owner": "cvc5",
-             "where": "landed.eo:1", "description": "ruled on and landed",
-             "closed_verdict": "fixed and landed", "closed_on": "2026-09-19",
-             "closed_commit": "0123456789abcdef0123456789abcdef01234567"},
-            {"id": "pending", "tool": "anoieu", "code": "EO0031", "owner": "ethos",
-             "where": "pending.eo:1", "description": "accepted, change not on main",
-             "closed_verdict": "accepted and fixed", "closed_on": "2026-09-19",
-             "awaiting_landing": {"project": "ethos", "branch": "topic",
-                                  "commit": "89abcde"}},
-        ]}), encoding="utf-8")
+        ] + closed
+        db.write_text(json.dumps({"bugs": bugs}), encoding="utf-8")
         before = db.read_bytes()
         database.render(str(db))
         view = (Path(directory) / "bugs.md").read_text(encoding="utf-8")
+        static = (Path(directory) / "static-analysis.md").read_text(encoding="utf-8")
         cases = [
             ("rendering preserves the database byte for byte", db.read_bytes() == before),
-            ("both producers appear with their recorded and open counts",
-             "[Static analyzer](#static-analyzer) | 4 | 2 |" in view
-             and "[Fuzzer](#fuzzer) | 2 | 2 |" in view),
-            # The view used to render no closure at all, so every ruled-on
-            # finding read as a live defect in somebody else's code.
-            ("a ruled-on finding shows its verdict and links the closing commit",
-             "fixed and landed ([`0123456`](https://github.com/cvc5/cvc5/commit/"
-             "0123456789abcdef0123456789abcdef01234567))" in view),
+            ("both producers count only open findings",
+             "[Static analyzer](#static-analyzer) | 2 |" in view
+             and "[Fuzzer](#fuzzer) | 2 |" in view),
+            ("every verdict, including won't fix, is excluded for every producer",
+             all(b["id"] not in view and b["bug"] not in static for b in closed)
+             and "Other producers" not in view),
+            ("the static report counts only open static findings",
+             "## Open static findings (2)" in static
+             and "record without a measured commit" in static and "FUZ0002" not in static),
             ("a finding nobody has ruled on reads as open",
              "| record without a measured commit | open |" in view),
-            ("a closure whose change has not landed says so",
-             "accepted and fixed<br>not landed: ethos topic" in view),
+            ("hidden closures still retain their landing debt for the audit",
+             len(verdicts.outstanding(str(db))) == 3),
             ("static evidence links to the measured commit and encoded source path",
              "https://github.com/cvc5/cvc5/blob/abcdef1/proofs/eo/a%20b.eo#L7" in view),
             ("fuzzer evidence links to the committed reproducer",
@@ -63,10 +69,51 @@ def main() -> int:
              "tests/fuzz/withdrawn-and-removed/case.cpc:2" in view
              and "(../tests/fuzz/withdrawn-and-removed/case.cpc" not in view),
             ("descriptions cannot break tables or introduce HTML and links",
-             "x &#124; y<br>\\[link\\](evil) &lt;script&gt;" in view),
+             all("x &#124; y<br>\\[link\\](evil) &lt;script&gt;" in page
+                 for page in (view, static))),
             ("unknown provenance is not replaced with a link to main",
              "| old.eo:1 |" in view and "/blob/main/" not in view),
         ]
+        with patch.object(database, "DB", str(db)), contextlib.redirect_stdout(io.StringIO()):
+            cases.append(("fresh reports pass the CI check", database.main(["--check"]) == 0))
+            for name in ("bugs.md", "static-analysis.md"):
+                page = Path(directory) / name
+                page.write_text("stale report\n", encoding="utf-8")
+                cases.append((f"CI detects a stale {name} without rewriting it",
+                              database.main(["--check"]) == 1
+                              and page.read_text(encoding="utf-8") == "stale report\n"))
+                page.unlink()
+                cases.append((f"CI detects a missing {name} without creating it",
+                              database.main(["--check"]) == 1 and not page.exists()))
+                database.main([])
+
+            # A closure must immediately stale the existing reports, then the
+            # documented command must remove it from both without a producer.
+            bugs[0]["closed_verdict"] = "declined"
+            bugs[1]["closed_verdict"] = "intentional"
+            db.write_text(json.dumps({"bugs": bugs}), encoding="utf-8")
+            after_closure = db.read_bytes()
+            cases.append(("a closure makes the reports stale", database.main(["--check"]) == 1))
+            database.main([])
+            view = (Path(directory) / "bugs.md").read_text(encoding="utf-8")
+            static = (Path(directory) / "static-analysis.md").read_text(encoding="utf-8")
+            cases.append(("the closure command removes static and fuzzer rows and preserves history",
+                          "| static |" not in view and "| fuzz |" not in view
+                          and "proofs/eo/a b.eo" not in static
+                          and "[Static analyzer](#static-analyzer) | 1 |" in view
+                          and "[Fuzzer](#fuzzer) | 1 |" in view
+                          and database.main(["--check"]) == 0 and db.read_bytes() == after_closure))
+
+        for label, entries in (("all findings closed", closed), ("empty database", [])):
+            db.write_text(json.dumps({"bugs": entries}), encoding="utf-8")
+            database.render(str(db))
+            view = (Path(directory) / "bugs.md").read_text(encoding="utf-8")
+            static = (Path(directory) / "static-analysis.md").read_text(encoding="utf-8")
+            cases.append((f"{label} renders explicit empty reports",
+                          view.count("No open findings.") == 2
+                          and "[Static analyzer](#static-analyzer) | 0 |" in view
+                          and "[Fuzzer](#fuzzer) | 0 |" in view
+                          and "No open findings." in static))
     failures = 0
     for label, passed in cases:
         print(("ok   " if passed else "FAIL ") + label)

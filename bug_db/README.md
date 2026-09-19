@@ -5,10 +5,14 @@ analyzer and the fuzzer**. It contains every recorded finding, including ones
 that have since been resolved. Koine's `bug_db_manager/koine_append_db` is its only
 writer; Koine provides the tooling, and this directory holds anoieu's data.
 
-**[Browse the bug database](bugs.md)** directly on GitHub. The generated page
-shows both producers, each finding's description and status, ingestion dates, and
+**[Browse open bugs](bugs.md)** directly on GitHub. The generated page
+shows open findings from both producers, their descriptions, ingestion dates, and
 links to source locations or committed reproducers. Open the **Preview** tab if
 GitHub shows the Markdown source. No server or local setup is needed to read it.
+Both this page and [static-analysis.md](static-analysis.md) exclude every entry
+carrying a `closed_verdict`, including declined and intentional (won't fix)
+findings. Closed entries remain in `bugs.json`, preserving their evidence and
+preventing a later import from making them appear open again.
 
 The database moved here from `docs/reports/bugs.json` on 2026-09-18, preserving
 every record and date.
@@ -72,11 +76,11 @@ For just one producer, `scripts/anoieu_analyzer` updates the static findings and
 `--preview` and write to this same database.
 
 The updater, the analyzer, and fuzzer reporting and promotion each refresh
-`bugs.md` after a successful append. To render existing data without
+`bugs.md` and `static-analysis.md` after a successful append. To render existing data without
 running either producer, use `python3 -m anoieu_analyzer.reporting.database`. Its
-`--check` mode detects a stale view, and CI runs that check. A direct append with
-the low-level Koine command needs this render step. Commit `bugs.md` alongside
-the JSON so GitHub displays the matching view.
+`--check` mode detects either stale or missing report, and CI runs that check.
+A direct append with the low-level Koine command, or any closure edit, needs
+this render step. Commit both reports alongside the JSON.
 
 ## Read the artifact
 
@@ -116,8 +120,18 @@ prompts/close_bug_db --use-local ethos=/src/ethos
 
 It closes a finding on exactly two conditions: **a named commit** somebody can
 fetch, and **the claim re-read as false in the source today**. It writes two
-things and nothing else -- the closure fields on the entry here, and a section
-in [`experience.md`](../docs/experience.md) saying what the change meant.
+authored records -- the closure fields on the entry here, and a section
+in [`experience.md`](../docs/experience.md) saying what the change meant. Then
+regenerate and check both reports so the closed rows disappear:
+
+```bash
+python3 -m anoieu_analyzer.reporting.database
+python3 -m anoieu_analyzer.reporting.database --check
+```
+
+For a won't fix decision, use the existing `declined` or `intentional` verdict
+as appropriate. All closure verdicts remove the finding from both open reports;
+`accepted and fixed` still owes a landing, tracked by the separate audit below.
 
 ### What a closure puts on an entry
 

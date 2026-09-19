@@ -81,8 +81,9 @@ answer quoted.
 **This was structural while the two lived in separate files with separate
 headers**, so publishing a candidate as a finding took a deliberate act. One
 database replaced the two ledgers on 2026-09-19 and that separation went with
-them; what is left is a status column, which distinguishes *ruled on* from *open*
-and does not distinguish *carried* from *published*. **What would move it back
+them; the database's closure fields distinguish *ruled on* from *open*, and
+the generated reports show only open entries. Neither distinguishes *carried*
+from *published*. **What would move it back
 up** is a field on an entry recording that it was carried, to whom and on what
 date — which is also what `experience.md` needs in order to say whether the
 reporting works or only the checks do. *Nothing crosses a repository boundary

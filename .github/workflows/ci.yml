@@ -34,7 +34,7 @@ jobs:
         run: |
           python3 -m anoieu_analyzer.reporting.gen_checks_doc
           git diff --exit-code anoieu_analyzer/checks.md
-      - name: the bug database browsing view is current
+      - name: both open bug reports are current
         run: python3 -m anoieu_analyzer.reporting.database --check
 
   # Report documentation currency without turning editorial judgement into a gate.

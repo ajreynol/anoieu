@@ -709,6 +709,22 @@ raise SystemExit(main(sys.argv[3:]))
     case("a finding no longer reported remains in the database without an inferred closure",
          p.returncode == 0 and json.load(open(combined_db))["bugs"] == combined, p.stderr)
 
+    # Old inputs still reproduce a finding after it is closed. Re-ingestion
+    # must preserve the verdict and keep it out of both open reports.
+    write(update_dir, "case.eo", open(os.path.join(
+        ROOT, "tests", "witnesses", "EO0031-bad.eo")).read())
+    for bug in combined:
+        bug["closed_verdict"] = "declined"
+        bug["closed_why"] = "reviewed; won't fix"
+    with open(combined_db, "w") as fh:
+        json.dump({"bugs": combined}, fh)
+    p = update()
+    case("re-ingesting closed static and fuzzer findings preserves their verdicts",
+         p.returncode == 0 and json.load(open(combined_db))["bugs"] == combined, p.stderr)
+    case("re-ingesting won't fix findings does not restore either report's rows",
+         all(b["id"] not in open(combined_view).read() for b in combined)
+         and "No open findings." in open(combined_page).read())
+
     # verify, against checkers whose answers are known: one agreeing with what
     # was recorded, one that has changed its mind since
     vdir = os.path.join(d, "vcorpus", "b-verify")

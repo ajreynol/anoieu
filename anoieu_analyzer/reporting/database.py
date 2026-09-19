@@ -1,7 +1,7 @@
-"""Render the shared bug database as Markdown for GitHub browsing.
+"""Render open findings from the shared bug database as Markdown.
 
-    python3 -m anoieu_analyzer.reporting.database          # refresh the view
-    python3 -m anoieu_analyzer.reporting.database --check  # fail if the view is stale
+    python3 -m anoieu_analyzer.reporting.database          # refresh both reports
+    python3 -m anoieu_analyzer.reporting.database --check  # fail if either is stale
 """
 from __future__ import annotations
 
@@ -26,40 +26,15 @@ def cell(value: object) -> str:
     return text.replace("|", "&#124;").replace("\r", "").replace("\n", "<br>")
 
 
-def status(bug: dict, repositories: dict[str, str]) -> str:
-    """What has been decided about a finding, and what backs the decision.
+def open_bugs(db: str) -> list[dict]:
+    """Use the same closure boundary as the closure prompt and verdict audit.
 
-    **A view that shows only the claim overstates what is outstanding.** This
-    page is what `README.md` points a reader at, and until 2026-09-19 it rendered
-    no closure at all: 68 of 82 findings had been ruled on and every row read
-    like a live defect in somebody else's code. The verdict is the column that
-    makes the count honest.
-
-    The verdict itself is the whole of the status -- `bug_db/README.md` defines
-    the seven words -- and what is added here is the evidence: the pull request
-    or commit it closed on, and, for `accepted and fixed`, that the change has
-    not reached the project's default branch yet. That last one is the debt
-    `awaiting_landing` records and `verdicts.py` audits; a row that hid it would
-    read as finished.
+    Any recorded verdict removes the row from the open reports, including
+    declined/intentional (won't fix) and fixes still awaiting landing. Keep
+    those entries in the database so importing them again cannot reopen them.
     """
-    verdict = bug.get("closed_verdict", "")
-    if not verdict:
-        return "open"
-    text = cell(verdict)
-    pr = bug.get("closed_pr", "")
-    commit = bug.get("closed_commit", "")
-    repo = repositories.get(bug.get("owner", ""), "")
-    if pr.startswith("https://"):
-        text += f" ([pull request]({pr}))"
-    elif repo and re.fullmatch(r"[0-9a-f]{7,40}", commit):
-        text += f" ([`{commit[:7]}`]({repo}/commit/{commit}))"
-    elif commit:
-        text += f" (`{cell(commit[:7])}`)"
-    landing = bug.get("awaiting_landing") or {}
-    if landing:
-        where = " ".join(str(landing.get(k, "")) for k in ("project", "branch") if landing.get(k))
-        text += f"<br>not landed: {cell(where)}" if where else "<br>not landed"
-    return text
+    with open(db, encoding="utf-8") as fh:
+        return [b for b in json.load(fh)["bugs"] if "closed_verdict" not in b]
 
 
 def evidence(bug: dict, repositories: dict[str, str]) -> str:
@@ -83,8 +58,7 @@ def evidence(bug: dict, repositories: dict[str, str]) -> str:
 
 
 def markdown(db: str) -> str:
-    with open(db, encoding="utf-8") as fh:
-        bugs = json.load(fh)["bugs"]
+    bugs = open_bugs(db)
     repositories = {d.name: d.url.removesuffix(".git") for d in manifest()}
     groups = [
         ("Static analyzer", [b for b in bugs if b.get("tool") == "anoieu"]),
@@ -94,27 +68,28 @@ def markdown(db: str) -> str:
     if other:
         groups.append(("Other producers", other))
     lines = [
-        "# Bug database", "",
+        "# Open bugs", "",
         "Generated from [bugs.json](bugs.json) by `anoieu_analyzer.reporting.database`.",
         "Do not edit this view by hand. [Update instructions](README.md).", "",
-        "This is the history of recorded findings, including the ones that have been",
-        "ruled on. **Status** is the verdict written onto the entry, or `open` where",
-        "there is none; the seven verdicts and what each requires are defined under",
-        "[Closure](README.md#closure). A verdict is a judgement recorded against a",
-        "named commit, so `open` means nobody has ruled, never that a check was",
-        "re-run. Dates record ingestion, not fresh reproduction. Static evidence",
+        "Only open findings appear here. Entries carrying a `closed_verdict`,",
+        "including declined and intentional (won't fix) findings, are omitted.",
+        "The complete history and closure reasoning remain in [bugs.json](bugs.json).",
+        "See [Closure](README.md#closure) for the verdicts and the separate audit",
+        "of fixes awaiting landing. Open means nobody has ruled, not that a check",
+        "was re-run. Dates record ingestion, not fresh reproduction. Static evidence",
         "links use the originally recorded source commit; fuzzer links open the",
-        "committed reproducers. The reasoning behind a verdict is `closed_why` in",
-        "the [database itself](bugs.json), and what a change meant is",
-        "[experience.md](../docs/experience.md).", "",
-        "| Producer | Recorded findings | Open |", "| --- | ---: | ---: |",
+        "committed reproducers.", "",
+        "| Producer | Open findings |", "| --- | ---: |",
     ]
     for title, entries in groups:
         anchor = title.lower().replace(" ", "-")
-        open_count = sum(1 for b in entries if not b.get("closed_verdict"))
-        lines.append(f"| [{title}](#{anchor}) | {len(entries)} | {open_count} |")
+        lines.append(f"| [{title}](#{anchor}) | {len(entries)} |")
     for title, entries in groups:
-        lines.extend(["", f"## {title}", "",
+        lines.extend(["", f"## {title}", ""])
+        if not entries:
+            lines.append("No open findings.")
+            continue
+        lines.extend([
                       "| ID | Check | Owner | Finding | Status | Evidence | First ingested | Last ingested |",
                       "| --- | --- | --- | --- | --- | --- | --- | --- |"])
         for bug in entries:
@@ -124,35 +99,78 @@ def markdown(db: str) -> str:
             fields = [cell(bug.get("id", bug.get("bug", ""))),
                       f"[{cell(code)}]({guide})" if code else "—",
                       cell(bug.get("owner", "")), cell(bug.get("description", "")),
-                      status(bug, repositories),
+                      "open",
                       evidence(bug, repositories), cell(bug.get("first_seen", "")),
                       cell(bug.get("last_seen", ""))]
             lines.append("| " + " | ".join(fields) + " |")
     return "\n".join(lines) + "\n"
 
 
-def render(db: str) -> None:
-    """Write the browsing view beside the database that was actually updated."""
-    page = os.path.join(os.path.dirname(db), "bugs.md")
-    with open(page, "w", encoding="utf-8") as fh:
-        fh.write(markdown(db))
+def static_markdown(db: str) -> str:
+    """The static subset uses the same open findings as the combined report."""
+    bugs = [b for b in open_bugs(db) if not b.get("code", "").startswith("FUZ")]
+    cols = ("bug", "owner", "code", "where", "description", "status",
+            "first seen", "last seen")
+    lines = [
+        "# Open static analysis findings", "",
+        "Generated from [bugs.json](bugs.json) by `anoieu_analyzer.reporting.database`.",
+        "Do not edit this view by hand. [Update instructions](README.md).", "",
+        "Only static findings without a `closed_verdict` appear here. Closed findings,",
+        "including declined and intentional (won't fix) findings, remain in",
+        "[bugs.json](bugs.json) with their verdicts, evidence and ingestion dates.",
+        "[bugs.md](bugs.md) includes open findings from both the analyzer and fuzzer.",
+        "Open means nobody has ruled; ingestion dates do not imply a fresh reproduction.",
+        "See [Closure](README.md#closure) for the verdicts and the separate audit",
+        "of fixes awaiting landing.", "",
+        f"## Open static findings ({len(bugs)})", "",
+    ]
+    if not bugs:
+        return "\n".join(lines + ["No open findings."]) + "\n"
+    lines.extend(["| " + " | ".join(cols) + " |",
+                  "| " + " | ".join("---" for _ in cols) + " |"])
+    for b in bugs:
+        fields = [b.get("bug", ""), b.get("owner", ""), b.get("code", ""),
+                  b.get("where", ""), b.get("description", ""), "open",
+                  b.get("first_seen", ""), b.get("last_seen", "")]
+        lines.append("| " + " | ".join(cell(value) for value in fields) + " |")
+    return "\n".join(lines) + "\n"
 
 
-def main() -> int:
+def reports(db: str, static_page: str | None = None) -> dict[str, str]:
+    directory = os.path.dirname(db)
+    return {os.path.join(directory, "bugs.md"): markdown(db),
+            static_page or os.path.join(directory, "static-analysis.md"): static_markdown(db)}
+
+
+def render(db: str, static_page: str | None = None) -> None:
+    """Refresh both reports without running producers or changing the database."""
+    for page, text in reports(db, static_page).items():
+        with open(page, "w", encoding="utf-8") as fh:
+            fh.write(text)
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="check without rewriting")
-    args = parser.parse_args()
-    if args.check:
-        page = os.path.join(os.path.dirname(DB), "bugs.md")
-        current = open(page, encoding="utf-8").read() if os.path.isfile(page) else ""
-        if current != markdown(DB):
-            print("bug_db/bugs.md is stale; run python3 -m anoieu_analyzer.reporting.database")
-            return 1
-        print("bug_db/bugs.md is current")
-    else:
-        render(DB)
-        print("wrote bug_db/bugs.md")
-    return 0
+    args = parser.parse_args(argv)
+    stale = False
+    for page, text in reports(DB).items():
+        label = os.path.relpath(page, ROOT)
+        if args.check:
+            current = ""
+            if os.path.isfile(page):
+                with open(page, encoding="utf-8") as fh:
+                    current = fh.read()
+            if current != text:
+                print(f"{label} is stale; run python3 -m anoieu_analyzer.reporting.database")
+                stale = True
+            else:
+                print(f"{label} is current")
+        else:
+            with open(page, "w", encoding="utf-8") as fh:
+                fh.write(text)
+            print(f"wrote {label}")
+    return int(stale)
 
 
 if __name__ == "__main__":

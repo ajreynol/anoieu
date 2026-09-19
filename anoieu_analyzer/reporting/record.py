@@ -15,8 +15,8 @@ findings come from `tests/fuzz/`, the reproducers a person promoted, and are
 told apart by their `FUZ` code.
 
 A koine failure fails the run. `--check` uses koine's dry run and writes
-nothing. A normal run also refreshes `bug_db/static-analysis.md` from the
-database.
+nothing. A normal run also refreshes `bug_db/bugs.md` and
+`bug_db/static-analysis.md` with the findings still open in the database.
 
 **Recording is additive and closure is not its business.** koine adds what is
 new and never removes what is there, so a finding that has stopped being
@@ -133,61 +133,6 @@ def collect(roots: dict, targets: list | None = None, fuzz: bool = True) -> dict
 
 
 
-STATIC_HEADER = """# Static analysis
-
-Every static finding the checks have found on the standard targets, rendered from
-[`bugs.json`](bugs.json) -- which is the database itself, and the file to read if
-you want the data rather than the table. This page is the static subset; the
-whole of it, both producers together, is [`bugs.md`](bugs.md). The database also
-records [promoted fuzzer findings](../anoieu_fuzz/fuzzing.md#recording-through-koine),
-and is maintained exclusively by
-[koine](https://github.com/ajreynol/koine)'s `koine_append_db`, which adds what
-is new and never edits or removes what is already there.
-
-**A row is a claim; the status column is what was decided about it.**
-Recording is additive, so a finding that has since been fixed keeps its entry and
-its dates -- the status is the `closed_verdict` on the database entry, put there
-by [`prompts/close_bug_db`](../prompts/close_bug_db) against a named commit, and
-`open` means nobody has ruled rather than that a check was re-run. The reasoning
-behind a verdict is `closed_why` in the database; what the change meant is
-[`experience.md`](../docs/experience.md).
-
-A second producer, an agent driven by
-[`prompts/anoieu_analyzer_agent`](../prompts/anoieu_analyzer_agent), writes
-a dump in the same shape and appends to the same database.
-"""
-
-
-def render_static(db: str, page: str) -> None:
-    """The table, from the database. Our page, our columns."""
-    with open(db, encoding="utf-8") as fh:
-        bugs = [b for b in json.load(fh)["bugs"]
-                if not b.get("code", "").startswith("FUZ")]
-    cols = ("bug", "owner", "code", "where", "description", "status",
-            "first seen", "last seen")
-    # A table with no status column reads as a list of live defects in somebody
-    # else's code, whatever the prose above it says. The count says how many are
-    # still open beside how many were ever recorded.
-    still_open = sum(1 for b in bugs if not b.get("closed_verdict"))
-    lines = [STATIC_HEADER, "",
-             f"## Every static finding recorded ({len(bugs)}, of which {still_open} open)",
-             "",
-             "| " + " | ".join(cols) + " |",
-             "| " + " | ".join("---" for _ in cols) + " |"]
-    for b in bugs:
-        lines.append("| " + " | ".join([
-            f"`{b.get('bug', '')}`",
-            b.get("owner", ""),
-            b.get("code", ""),
-            f"`{b.get('where', '')}`" if b.get("where") else "",
-            b.get("description", "").replace("|", "\\|"),
-            b.get("closed_verdict", "") or "open",
-            b.get("first_seen", ""),
-            b.get("last_seen", ""),
-        ]) + " |")
-    open(page, "w", encoding="utf-8").write("\n".join(lines) + "\n")
-    print(f"-- {os.path.relpath(page, ROOT)}: {len(bugs)} row(s)")
-
 def static_bug(fid: str, row: dict, commit: str) -> dict:
     """A static row in the input shape koine consumes, shared by both runners."""
     path, _, line = row["where"].rpartition(":")
@@ -214,7 +159,7 @@ def record(found: dict, roots: dict, preview: bool = False) -> int:
         fh.write("\n")
     code = koine.main([DUMP, DB] + (["--dry-run"] if preview else []))
     if code == 0 and not preview:
-        render_database(DB)
+        render_database(DB, STATIC_PAGE)
     return code
 
 
@@ -238,7 +183,6 @@ def main() -> int:
         print(f"-- {len(found)} finding(s) collected; koine accepted the dry run")
         return 0
 
-    render_static(DB, STATIC_PAGE)
     return 0
 
 

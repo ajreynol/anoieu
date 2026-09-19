@@ -55,12 +55,12 @@ sys.path.insert(0, ROOT)
 
 from anoieu_analyzer.reporting import koine  # noqa: E402
 from anoieu_analyzer.reporting import targets as config  # noqa: E402
-from anoieu_analyzer.reporting.record import collect, static_bug, render_static  # noqa: E402
+from anoieu_analyzer.reporting.record import collect, static_bug  # noqa: E402
 from anoieu_analyzer.reporting.database import render as render_database
 
 DB = os.path.join(ROOT, "bug_db", "bugs.json")
 DUMP = os.path.join(ROOT, "scratch", "new-bugs.json")
-PAGE = os.path.join(ROOT, "docs", "reports", "static-analysis.md")
+PAGE = os.path.join(ROOT, "bug_db", "static-analysis.md")
 
 
 # -- step 1: what the checks found -------------------------------------------
@@ -141,8 +141,7 @@ def main() -> int:
 
     code = append(args.dump, preview=args.preview)
     if code == 0 and not args.preview:
-        render_database(DB)
-        render_static(DB, PAGE)
+        render_database(DB, PAGE)
     return code
 
 
