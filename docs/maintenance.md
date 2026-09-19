@@ -111,6 +111,7 @@ ordinary analysis and database updates do not need this step.
 | `check_anoieu` | answer findings in the repository they concern |
 | `process_anoieu` | process the reply here; `--dry-run` resolves the checkout without starting an assistant |
 | `anoieu_analyzer_agent` | the second producer: an agent runs the same analysis over the same targets and writes a dump in the same shape; `--dry-run` lists the same signatures |
+| `close_bug_db` | the other half of `scripts/update_bug_db.py`: ask what each watched project has since done about our open rows, commit-first, one window per project; `--dry-run` resolves every baseline and window and starts nothing |
 
 `anoieu_analyzer/reporting/config/repos.local` is an optional, untracked per-machine checkout map used by
 the findings workflow. Explicit checkout paths also work. Set
@@ -119,12 +120,30 @@ the findings workflow. Explicit checkout paths also work. Set
 ## A finding is about `main`
 
 Report defects against what a project ships, not a topic branch that can be
-deleted. The corpus refs are recorded in [deps.json](../anoieu_analyzer/reporting/config/deps.json).
-Its existing ethos exception uses `ethosEoc3` for the compiler and semantics
-developed there; remove that exception when the shipped branch changes. Any
-new exception needs its reason recorded here. A branch containing a proposed
-fix is evidence to review, not evidence that the fix has landed. Follow
+deleted. The corpus refs are recorded in [deps.json](../anoieu_analyzer/reporting/config/deps.json),
+and **every one of them is now `main`**. Any new exception needs its reason
+recorded here. A branch containing a proposed fix is evidence to review, not
+evidence that the fix has landed. Follow
 [what closes a row](reports/reporting-workflow.md#what-closes-a-row-and-what-does-not).
+
+**The ethos exception is gone, as of 2026-09-19.** It watched `ethosEoc3` because
+the `ethos-eoc` compiler at `tools/eoc` and the semantics sets this ecosystem is
+built on were developed there, and it was defensible only because that branch
+contained `main` in full: measuring it measured `main` plus the compiler work on
+top. **The containment was the whole argument, and it lapsed** — the two branches
+diverged instead of merging, leaving `ethosEoc3` ahead by a thousand-odd commits
+and one commit *behind* `main`, at which point it stopped being a superset of what
+ethos ships and became exactly the topic branch this rule is about. The paths the
+exception existed to reach are on `main` now, so dropping it costs no coverage.
+
+**Two consequences, and neither is cosmetic.** The recorded corpus was measured on
+`ethosEoc3`, so `deps.lock`, [`corpus.md`](reports/corpus.md) and the run notes in
+[`notes.md`](notes.md) still name it — correctly: they are the record of a run that
+happened, not a statement of what is watched now, and they are not edited by hand.
+Moving the measurement onto `main` takes a run (`python3 scripts/run.py`). And the
+open ethos rows were measured at `6beeb8e6`, which is not on `main`, so until that
+run happens they are claims about a branch nobody here watches any more; whether
+each is true of `main` is a question for that run, not an assumption either way.
 
 ## The open technical work
 
@@ -160,6 +179,20 @@ skips, plus an explicit outcome when a finding's identity can no longer be
 matched. Fuzzer evidence must come from a replay. Assessments and eventual
 close/reopen decisions must preserve the original finding and their supporting
 evidence.
+
+**What exists meanwhile is a question, not a mechanism.**
+[`prompts/close_bug_db`](../prompts/close_bug_db) asks an assistant what each
+watched project has since done about our open rows — one window per project, from
+the revision the rows were recorded at to what that project ships, read commit-first
+in the project's own history. It sidesteps the missing capability rather than
+supplying it: it never compares two dumps, and a row closes only on a named
+commit plus the claim re-read as false in the source today, which is
+[the second route](reports/reporting-workflow.md#when-nobody-replied-and-the-project-fixed-it-anyway)
+to closing a row. It writes the ledgers and the log and leaves everything
+uncommitted; it does not touch `bug_db/bugs.json`, because koine is that file's
+writer and a second closure record inside it would contradict the rows the ledger
+has already closed. `FUZ` rows stay open there, as they must — a replay is the
+only evidence that closes one, and reading a commit is not a replay.
 
 **Koine acknowledges the missing capability (checked 2026-09-18).** Our
 [`D9`](discussion.md#d9--we-are-going-to-stop-proving-our-report-by-re-running-our-tools)

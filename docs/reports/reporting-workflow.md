@@ -198,6 +198,42 @@ deliberately not part of processing a reply — the two get confused precisely
 when somebody is in a hurry, which is when the wrong one gets skipped. When a
 change lands, the marker is replaced by what landed it.
 
+#### When nobody replied, and the project fixed it anyway
+
+The two conditions above are about a round of correspondence: we sent rows, a
+maintainer answered, and their answer plus a commit closes them. **Most of what
+these projects do to our findings is not that.** They fix things for their own
+reasons, on their own schedule, and never see the row — and the row then sits
+open here describing a file that no longer says what we claimed.
+
+So there is a second route, and it carries the same weight because it rests on
+the stronger half of the same evidence: **a commit in the project's own history
+that makes the claim false, re-read in the source as it stands.** The reply is
+what is missing, and what the reply was ever for was pointing us at a commit. A
+maintainer who committed the fix has said more than a reply could.
+
+It closes a row on exactly two conditions, and the second one does the work:
+
+1. **A commit in that project**, named, that a person can fetch and read.
+2. **The claim is false in the source today.** Not *a commit mentions this file*,
+   not *the check no longer fires*, and never *we could not find the entity* —
+   absence is not evidence, and the whole reason this route is commit-first is
+   that a re-analysis finding nothing is indistinguishable from a re-analysis
+   that did not look. The verdict says which commit, and what was re-read.
+
+[`prompts/close_bug_db`](../../prompts/close_bug_db) is what asks the
+question, one project at a time, against a window of each project's history from
+the revision our open rows were recorded at. `logos-2` in
+[`reports.md`](reports.md#the-log-what-was-reported-and-what-came-back) is the
+worked example, and it predates the command: the row was closed at logos
+`6cb59db5` **on the evidence rather than on the reply**, after a reply had failed
+to close it for four days.
+
+**A `FUZ` row is not in this route at all.** It is a claim about a program's
+behaviour, and reading a commit cannot falsify it; only a replay against a build
+can. A commit that looks like the fix is a candidate for that replay and closes
+nothing on its own.
+
 #### The verdict vocabulary, and why it is closed
 
 **A verdict opens with one of seven words, and the list is the whole of it.**
@@ -1073,7 +1109,7 @@ What is read, and what is deliberately not, is [`anoieu_analyzer/reporting/confi
 | project | ref | what we read | what we do not |
 | --- | --- | --- | --- |
 | **cvc5** | `main` | `proofs/eo` — the CPC signature and the expert extension | the solver, its build system, its proof-production code: whether cvc5 can *justify* what it decides is [dokimasia](https://github.com/ajreynol/dokimasia)'s question |
-| **ethos** | `ethosEoc3` | the test signatures, `tools/eoc/semantics`, and the deep embedding | the C++ of the checker and the compiler |
+| **ethos** | `main` | the test signatures, `tools/eoc/semantics`, and the deep embedding | the C++ of the checker and the compiler |
 | **logos** | `main` | `install/defs` — the installed signature and the CPC semantics | the Lean development |
 | **eudaimonia** | `main` | `examples/hello`, its own example calculus | `examples/cpc`, a vendored copy of cvc5's signature: reading it would report cvc5's findings under eudaimonia's name |
 
@@ -1081,10 +1117,11 @@ A ref in that file is a choice rather than a fact — it says which branch the
 findings are about, and changing one changes what the report is a report of. The
 choice is made once, and it is `main`: we report against what a project ships,
 and a finding measured on a topic branch is one its owner can close by deleting
-the branch. `ethosEoc3` is the single exception, because ethos's `ethos-eoc`
-child project — the compiler, at `tools/eoc` — and the semantics sets are there
-and not on ethos's `main`. The reason, and what a second
-exception would have to show, is [a finding is about
+the branch. **There are no exceptions left.** ethos was the one, on `ethosEoc3`,
+for as long as that branch contained `main` in full; it has since diverged from
+`main` rather than merged into it, which made it the topic branch this rule is
+about, and `tools/eoc` and the semantics sets are on ethos's `main` now anyway.
+The reason, and what a new exception would have to show, is [a finding is about
 `main`](../maintenance.md#a-finding-is-about-main).
 
 ### Maintaining the report

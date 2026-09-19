@@ -103,6 +103,25 @@ skipped, a check changed, or its fingerprint changed. The updater never closes a
 finding based on absence. Fuzzer closure requires replay evidence, not another
 export of its stored outcomes.
 
+**What a closure is assessed from is a commit, not a dump.**
+[`prompts/close_bug_db`](../prompts/close_bug_db) asks an assistant what each
+watched project has since done about the rows still open against it — one window
+per project, from the revision those rows were recorded at to what the project
+ships today, read commit-first in that project's own history:
+
+```bash
+prompts/close_bug_db --dry-run          # every baseline and window, resolved; nothing started
+prompts/close_bug_db cvc5 ethos         # only these projects
+prompts/close_bug_db --use-local ethos=/src/ethos
+```
+
+A row closes only on a named commit plus the claim re-read as false in the source
+today. It **writes the ledgers, not this database**: the verdict goes in
+[`closed-findings.md`](../docs/reports/closed-findings.md) and the reasoning in
+[`reports.md`](../docs/reports/reports.md), and `bugs.json` is left to Koine,
+whose recording neither closes nor promotes a claim. `FUZ` rows stay open — a
+replay is the only evidence that closes one.
+
 Verdicts and their evidence remain in the existing
 [open](../docs/reports/open-findings.md) and
 [closed](../docs/reports/closed-findings.md) ledgers. The old
