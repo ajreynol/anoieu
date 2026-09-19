@@ -10,7 +10,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Booleans.eo:363"
+      "where": "proofs/eo/cpc/rules/Booleans.eo:363",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit relabelled not_implies_elim2's docstring heading from '; args:' to '; premises:', which is what its one item always described; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Booleans.eo:363 has :premises ((not (=> F1 F2))) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree."
     },
     {
       "id": "52912b691212cf81",
@@ -22,7 +26,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Booleans.eo:463"
+      "where": "proofs/eo/cpc/rules/Booleans.eo:463",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit relabelled ite_elim2's docstring heading from '; args:' to '; premises:', which is what its one item always described; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Booleans.eo:463 has :premises ((ite C F1 F2)) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree."
     },
     {
       "id": "abb6c825566b9322",
@@ -34,7 +42,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Uf.eo:31"
+      "where": "proofs/eo/cpc/rules/Uf.eo:31",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit relabelled symm's docstring heading from '; args:' to '; premises:', the same one-word change ethos made independently to its own copy of the rule; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Uf.eo:31 has :premises (F) and no :args, and its docstring documents one premise and no args, so the documented count and the declared one now agree."
     },
     {
       "id": "749c0a9f4fcfa766",
@@ -46,7 +58,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Arith.eo:509"
+      "where": "proofs/eo/cpc/rules/Arith.eo:509",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit replaced arith_poly_norm's two a/b docstring items with the single '- eq Bool:' the rule takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Arith.eo:509 lists one arg and :args ((= a b)) takes one, so the documented count and the declared one now agree."
     },
     {
       "id": "734366e4de4d1648",
@@ -58,7 +74,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/BitVectors.eo:240"
+      "where": "proofs/eo/cpc/rules/BitVectors.eo:240",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit replaced bv_poly_norm's two a/b docstring items with the single '- eq Bool:' the rule takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/BitVectors.eo:240 lists one arg and :args ((= a b)) takes one, so the documented count and the declared one now agree."
     },
     {
       "id": "5b163f93e5077b90",
@@ -70,7 +90,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Strings.eo:191"
+      "where": "proofs/eo/cpc/rules/Strings.eo:191",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit split string_decompose's single '- a:' docstring item into the two premises the rule declares; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Strings.eo:191 lists two premises and :premises ((>= n 0) (>= (str.len s) n)) takes two, so the documented count and the declared one now agree."
     },
     {
       "id": "f7d30b3481235f49",
@@ -82,7 +106,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Quantifiers.eo:148"
+      "where": "proofs/eo/cpc/rules/Quantifiers.eo:148",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit deleted quant_var_reordering's '; premises:' section and restated its args, requirement and conclusion around the equality the rule actually takes; re-reading it on cvc5 main at dbf176dfb71b, the rule at proofs/eo/cpc/rules/Quantifiers.eo:148 has no :premises and its docstring documents none, so the documented count and the declared one now agree."
     },
     {
       "id": "15dd9f5611325be2",
@@ -94,7 +122,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Quantifiers.eo:95"
+      "where": "proofs/eo/cpc/programs/Quantifiers.eo:95",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit added the missing '- bvs @List:' item to $substitute_simul_rec's docstring; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/programs/Quantifiers.eo:95 lists five args and :signature (Bool S @List @List @List) S takes five, so the documented count and the declared one now agree."
     },
     {
       "id": "97e03d281eade336",
@@ -106,7 +138,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:202"
+      "where": "proofs/eo/cpc/programs/Strings.eo:202",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit folded $re_ac_merge's four r1/rr1/r2/rr2 docstring items into the two arguments its signature actually takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/programs/Strings.eo:202 lists three args and :signature ((-> RegLan RegLan RegLan) RegLan RegLan) RegLan takes three, so the documented count and the declared one now agree."
     },
     {
       "id": "dcd58a15ade5a630",
@@ -118,7 +154,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:224"
+      "where": "proofs/eo/cpc/programs/Strings.eo:224",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit folded $re_concat_merge's four documented items into the two its signature takes; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:222, lists two args and :signature (RegLan RegLan) RegLan takes two, so the documented count and the declared one now agree."
     },
     {
       "id": "49f2e4bd2c23568d",
@@ -130,7 +170,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:244"
+      "where": "proofs/eo/cpc/programs/Strings.eo:244",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit removed the s1, s2 and rr items from $derivative's docstring, which are pattern variables rather than arguments; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:240, lists two args and :signature (String RegLan) RegLan takes two, so the documented count and the declared one now agree."
     },
     {
       "id": "946705a0916b7d39",
@@ -142,7 +186,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:1233"
+      "where": "proofs/eo/cpc/programs/Strings.eo:1233",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit added the missing '- acc RegLan:' item to $re_rev_map_rev's docstring and rewrote its return description around it; re-reading it on cvc5 main at dbf176dfb71b, the docstring, now at proofs/eo/cpc/programs/Strings.eo:1226, lists two args and :signature (RegLan RegLan) RegLan takes two, so the documented count and the declared one now agree."
     },
     {
       "id": "6d8e3eb5cafc93d4",
@@ -154,7 +202,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/ArithBvConv.eo:9"
+      "where": "proofs/eo/cpc/rules/ArithBvConv.eo:9",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit dropped the '- i Int:' item from $abconv_ubv_to_int_elim's docstring, which is a pattern variable rather than an argument; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/ArithBvConv.eo:9 lists three args and :signature ((BitVec n) (@TList Int) Int) Int takes three, so the documented count and the declared one now agree."
     },
     {
       "id": "9810bf3bebb29000",
@@ -166,7 +218,11 @@
       "code": "DOC0011",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Datatypes.eo:360"
+      "where": "proofs/eo/cpc/rules/Datatypes.eo:360",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit added the missing '- c U:' item to $mk_dt_updater_elim_rhs's docstring and renamed the other two to match the signature; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Datatypes.eo:360 lists three args and :signature (D U eo::List) D takes three, so the documented count and the declared one now agree."
     },
     {
       "id": "981948de279f158b",
@@ -178,7 +234,11 @@
       "code": "DOC0012",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Booleans.eo:363"
+      "where": "proofs/eo/cpc/rules/Booleans.eo:363",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit relabelled not_implies_elim2's docstring heading from '; args:' to '; premises:' -- the same change that closes fbc033a960a2aaa5, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Booleans.eo:363 heads its single item '; premises:', so it no longer documents an arg the rule does not have."
     },
     {
       "id": "97999aad8798ca45",
@@ -190,7 +250,11 @@
       "code": "DOC0012",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Booleans.eo:463"
+      "where": "proofs/eo/cpc/rules/Booleans.eo:463",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit relabelled ite_elim2's docstring heading from '; args:' to '; premises:' -- the same change that closes 52912b691212cf81, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Booleans.eo:463 heads its single item '; premises:', so it no longer documents an arg the rule does not have."
     },
     {
       "id": "639aa3c1ad36dd73",
@@ -202,7 +266,11 @@
       "code": "DOC0012",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Uf.eo:31"
+      "where": "proofs/eo/cpc/rules/Uf.eo:31",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit relabelled symm's docstring heading from '; args:' to '; premises:' -- the same change that closes abb6c825566b9322, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Uf.eo:31 heads its single item '; premises:', so it no longer documents an arg the rule does not have."
     },
     {
       "id": "a1918d88fa051f11",
@@ -214,7 +282,11 @@
       "code": "DOC0012",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/rules/Quantifiers.eo:148"
+      "where": "proofs/eo/cpc/rules/Quantifiers.eo:148",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit deleted quant_var_reordering's '; premises:' section -- the same change that closes f7d30b3481235f49, which is why both close together; re-reading it on cvc5 main at dbf176dfb71b, the docstring at proofs/eo/cpc/rules/Quantifiers.eo:148 has no '; premises:' section, so it no longer documents a premise the rule does not have."
     },
     {
       "id": "ece08559e3edd79c",
@@ -394,7 +466,11 @@
       "code": "EO0064",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:46"
+      "where": "proofs/eo/cpc/programs/Strings.eo:46",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type."
     },
     {
       "id": "878038145dca690c",
@@ -406,7 +482,11 @@
       "code": "EO0064",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:47"
+      "where": "proofs/eo/cpc/programs/Strings.eo:47",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type."
     },
     {
       "id": "6cc91770c5491971",
@@ -418,7 +498,11 @@
       "code": "EO0064",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/programs/Strings.eo:58"
+      "where": "proofs/eo/cpc/programs/Strings.eo:58",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type."
     },
     {
       "id": "deb8a1dbc6c6f079",
@@ -430,7 +514,11 @@
       "code": "EO0031",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:17"
+      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:17",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
     },
     {
       "id": "79166e01d3bec111",
@@ -442,7 +530,11 @@
       "code": "EO0031",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:18"
+      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:18",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
     },
     {
       "id": "2c740cb62dfc51b3",
@@ -454,7 +546,11 @@
       "code": "EO0031",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:19"
+      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:19",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
     },
     {
       "id": "852ee57154bcf6c4",
@@ -466,7 +562,11 @@
       "code": "EO0031",
       "found_at": "aee8742",
       "owner": "cvc5",
-      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:20"
+      "where": "proofs/eo/cpc/expert/theories/ArithExt.eo:20",
+      "closed_on": "2026-09-19",
+      "closed_commit": "e69f77df20279026da20218831a6c7b4703d731d",
+      "closed_pr": "https://github.com/cvc5/cvc5/pull/12954",
+      "closed_why": "The commit deleted the second, verbatim copy of the virtual-term-substitution skolem block from the end of proofs/eo/cpc/expert/theories/ArithExt.eo; re-reading it on cvc5 main at dbf176dfb71b, the symbol is declared exactly once, at the line this observation names, and no other file under proofs/eo/ declares it, so the recorded duplicate no longer exists."
     },
     {
       "id": "52b5ae926f12d4c9",
