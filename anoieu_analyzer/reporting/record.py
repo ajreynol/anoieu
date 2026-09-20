@@ -14,6 +14,12 @@ means running somebody else's binary, which this job does not have -- so its
 findings come from `tests/fuzz/`, the reproducers a person promoted, and are
 told apart by their `FUZ` code.
 
+**Errors and warnings only.** A hint does not allege that anything is wrong --
+`EO0054` reports what a pattern matches, `EO0077` inventories the rules a
+calculus admits -- so recording one asks an owner to rule on a claim nobody
+made. `bug_db/corpus.md` still counts them, because what the checks report and
+what is wrong with a source are different questions.
+
 A koine failure fails the run. `--check` uses koine's dry run and writes
 nothing. A normal run also refreshes `bug_db/bugs.md` and
 `bug_db/static-analysis.md` with the findings still open in the database.
@@ -39,6 +45,7 @@ import sys
 
 from anoieu_analyzer.checks import Context, load_checks, run_all  # noqa: E402
 from anoieu_analyzer.cli import _embedding_vocabulary  # noqa: E402
+from anoieu_analyzer.diagnostics import Severity  # noqa: E402
 from anoieu_analyzer.fingerprint import fingerprint  # noqa: E402
 from anoieu_analyzer.loader import load  # noqa: E402
 from anoieu_analyzer.semantics import load_set  # noqa: E402
@@ -111,6 +118,18 @@ def collect(roots: dict, targets: list | None = None, fuzz: bool = True) -> dict
                 if excluded(d, roots, rules):
                     continue
                 if d.code.startswith("ANO"):
+                    continue
+                # A hint is not a claim that anything is wrong, so it is not a
+                # defect and does not belong in the defect record. EO0054 says
+                # what a pattern matches and leaves the intention to the reader;
+                # EO0077 inventories the rules a calculus admits, which ethos
+                # already answers `incomplete` for. Recording either asked an
+                # owner to rule on something nobody alleged, and the ruling --
+                # *deliberate* -- then reproduced on every run as a contradiction
+                # between a closed entry and a finding still being re-derived.
+                # The corpus table still counts hints: measuring what the checks
+                # say is a different question from what is wrong with a source.
+                if d.severity is Severity.HINT:
                     continue
                 if os.path.abspath(d.span.path) in skip:
                     continue  # see NOT_AUDITED in anoieu_analyzer/reporting/gen_corpus_table.py

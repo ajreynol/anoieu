@@ -674,6 +674,28 @@ raise SystemExit(main())
                        capture_output=True, text=True, cwd=ROOT)
     case("the analyzer has no dump-only bypass", p.returncode == 2, p.stderr)
 
+    # What reaches the defect record. A hint alleges nothing, so recording one
+    # asks an owner to rule on a claim nobody made -- and the ruling then
+    # contradicts a finding the checks still re-derive on every later run.
+    from anoieu_analyzer.reporting.record import collect  # noqa: E402
+    severities = os.path.join(d, "severities")
+    os.makedirs(severities)
+    write(severities, "sig.eo",
+          "(declare-const Int Type)\n"
+          "(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))\n"
+          "(declare-const or (-> Bool Bool Bool) :right-assoc-nil false)\n"
+          "(declare-rule assumed ((x Int) (y Int))\n"
+          "  :args (x y) :conclusion (= x y) :sorry)\n"
+          "(program $contains ((l Bool) (x Bool) (xs Bool)) :signature (Bool Bool) Bool\n"
+          "  ((($contains false l) false) (($contains (or l xs) l) true)))\n"
+          "(define zero () 0)\n")
+    rows = collect({"fixture": severities},
+                   targets=[("severities", "fixture", ["sig.eo"], None)], fuzz=False)
+    got = sorted(row["code"] for row in rows.values())
+    case("an error is recorded as a defect", got == ["EO0071"], str(got))
+    case("the EO0054 and EO0077 hints are not recorded as defects",
+         "EO0054" not in got and "EO0077" not in got, str(got))
+
     # The one-command update must combine both real producers into one real
     # Koine append, and refuse unavailable inputs before changing the artifact.
     update_dir = os.path.join(d, "combined")
