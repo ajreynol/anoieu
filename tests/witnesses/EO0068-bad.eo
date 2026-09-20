@@ -1,0 +1,7 @@
+; expect: EO0068
+; The result is Bool as declared, but not cannot take the Int argument.
+(declare-const Int Type)
+(declare-const not (-> Bool Bool))
+(define negate () not)
+(program $bad ((x Int)) :signature (Int) Bool
+  ((($bad x) (negate x))))

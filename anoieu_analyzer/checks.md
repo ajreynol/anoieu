@@ -49,6 +49,7 @@ written, and `--pedantic` turns them on.
 | [EO0065](#eo0065) | a symbol is applied to more arguments than it takes | on |
 | [EO0066](#eo0066) | a program is applied to the wrong number of arguments | on |
 | [EO0067](#eo0067) | a requirement that can never hold | on |
+| [EO0068](#eo0068) | an argument has a different type constructor from the one an operator requires | on |
 | [EO0069](#eo0069) | a premise list gathered by an operator that is not variadic | on |
 | [EO0070](#eo0070) | a program case that calls itself with the arguments it just matched | on |
 | [EO0071](#eo0071) | a literal category without an explicit type declaration | on |
@@ -495,6 +496,24 @@ nothing says so until someone tries.
 
 The same holds for an `eo::requires` written into a conclusion by hand, which
 is what the attribute is sugar for.
+
+## EO0068
+
+**an argument has a different type constructor from the one an operator requires**
+
+A well-shaped application can still supply an argument of the wrong sort:
+`(not x)` requires a Bool even when it is hidden in a program whose `x` is Int.
+Checking only the application's return type misses this, since `not` still
+declares a Bool result. Program bodies and rule conclusions can retain such
+applications until a proof asks for their type.
+
+This check compares known type constructors in program results, rule conclusions
+and definition bodies. It checks ordinary fixed-arity declarations, including
+aliases, and reports only when both constructors are known and different.
+It does not compare dependent indices or infer a polymorphic argument's expected
+type. Overloads, variadic operators, parameter-bound heads, patterns, computational
+tests, binder bodies and local `eo::define` scopes are left to the checker. An unknown type is
+not a mismatch.
 
 ## EO0069
 

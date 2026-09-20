@@ -21,10 +21,10 @@ committed reproducers.
 
 | ID | Check | Owner | Finding | Status | Evidence | First ingested | Last ingested |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 7ca5c014646b8984 | [EO0083](../anoieu_analyzer/checks.md#eo0083) | cvc5 | rule \`arith-eq-elim-int\` matches exactly what \`arith-eq-elim-real\` matches | open | [proofs/eo/cpc/rules/Rewrites.eo:94](https://github.com/cvc5/cvc5/blob/aee8742/proofs/eo/cpc/rules/Rewrites.eo#L94) | 2026-09-16 | 2026-09-16 |
+| 7ca5c014646b8984 | [EO0083](../anoieu_analyzer/checks.md#eo0083) | cvc5 | rule \`arith-eq-elim-int\` matches exactly what \`arith-eq-elim-real\` matches | open | [proofs/eo/cpc/rules/Rewrites.eo:94](https://github.com/cvc5/cvc5/blob/aee8742/proofs/eo/cpc/rules/Rewrites.eo#L94) | 2026-09-16 | 2026-09-19 |
 
 ## Fuzzer
 
 | ID | Check | Owner | Finding | Status | Evidence | First ingested | Last ingested |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 9315026a26d2c2d0 | [FUZ0001](../anoieu_fuzz/fuzzing.md#the-codes) | logos | logos accepted what ethos refused: Error: &lt;path&gt;:N.N: Expected Eunoia command, got \`\_\` (LPAREN). | open | [tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc:2](../tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc#L2) | 2026-09-17 | 2026-09-17 |
+| 9315026a26d2c2d0 | [FUZ0001](../anoieu_fuzz/fuzzing.md#the-codes) | logos | logos accepted what ethos refused: Error: &lt;path&gt;:N.N: Expected Eunoia command, got \`\_\` (LPAREN). | open | [tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc:2](../tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc#L2) | 2026-09-17 | 2026-09-19 |

@@ -29,6 +29,8 @@ import random
 import re
 from dataclasses import dataclass, field
 
+from anoieu_analyzer.syntax.parser import Node, parse
+
 from .vocab import LITERAL_VALUES, WILDCARD, Op, Rule, Vocabulary, fallback
 
 # Every attribute ethos parses, and a few it does not. The point of the last
@@ -423,12 +425,12 @@ class Generator:
         )[0]
         return getattr(self, "_cmd_" + what.replace("-", "_"))()
 
-    def _fun_type(self, arity: int) -> tuple[str, list[str]]:
+    def _fun_type(self, arity: int) -> tuple[str, list[str], str]:
         args = [self.sort() for _ in range(arity)]
         ret = self.sort()
         if not args:
-            return ret, []
-        return f"(-> {' '.join(args)} {ret})", args
+            return ret, [], ret
+        return f"(-> {' '.join(args)} {ret})", args, ret
 
     def _attrs(self) -> str:
         out = []
@@ -443,8 +445,8 @@ class Generator:
     def _cmd_const(self) -> str:
         name = self.fresh("f")
         arity = self.rng.choice((0, 0, 1, 2, 2, 3))
-        typ, args = self._fun_type(arity)
-        op = Op(name, tuple(args), self.sorts[-1] if self.sorts else "Bool")
+        typ, args, ret = self._fun_type(arity)
+        op = Op(name, tuple(args), ret)
         self.voc.ops.append(op)
         self.voc.index()
         if not args:
@@ -585,7 +587,84 @@ def generate(
 _ATOM = re.compile(r"[^\s()]+")
 
 
-def mutate(seed: str, base: Case, pool: list[str], rounds: int = 3) -> Case:
+def _term_roots(form: Node) -> list[Node]:
+    """Value positions, leaving command names, bindings and file paths intact."""
+    roots: list[Node] = []
+    if form.head in {"assume", "assume-push", "step", "step-pop"}:
+        conclusion = form.at(2)
+        if conclusion is not None and not conclusion.is_keyword:
+            roots.append(conclusion)
+        for i, child in enumerate(form.children[:-1]):
+            if child.text == ":args":
+                roots.extend(form.children[i + 1].children)
+    elif form.head == "define" and form.at(3) is not None:
+        roots.append(form.children[3])
+    elif form.head == "declare-rule":
+        for i, child in enumerate(form.children[:-1]):
+            if child.text in {":conclusion", ":conclusion-explicit"}:
+                roots.append(form.children[i + 1])
+    elif form.head == "program":
+        name = form.at(1)
+        for group in form.children:
+            for pair in group.children:
+                if (len(pair.children) == 2 and name is not None
+                        and pair.children[0].head == name.text):
+                    roots.append(pair.children[1])
+    return roots
+
+
+def mutate_term(rng: random.Random, commands: list[str]) -> list[str]:
+    """Edit one parsed value without damaging the surrounding command syntax.
+
+    No parser recovery is used as evidence of a valid mutation. Strings and
+    quoted symbols are indivisible tokens; replacements use whole node spans.
+    Types and proof validity can change, which is what the checkers are asked.
+    """
+    choices: list[tuple[int, Node, list[Node]]] = []
+
+    def values(node: Node):
+        if not node.is_keyword:
+            yield node
+        for child in node.children[1:]:
+            yield from values(child)
+
+    for i, command in enumerate(commands):
+        parsed = parse("<mutation>", command)
+        if parsed.diagnostics or len(parsed.forms) != 1:
+            continue
+        roots = _term_roots(parsed.forms[0])
+        nodes = [node for root in roots for node in values(root)]
+        choices.extend((i, node, nodes) for node in nodes)
+    if not choices:
+        return list(commands)
+    i, node, nodes = rng.choice(choices)
+    if node.literal_category in LITERAL_VALUES:
+        replacements = [v for v in LITERAL_VALUES[node.literal_category] if v != str(node)]
+    elif node.is_list and len(node.children) > 1:
+        args = [str(n) for n in node.children[1:]]
+        j = rng.randrange(len(args))
+        replacements = [args[j]]
+        replacements.append(f"({node.children[0]} {' '.join(args[:j] + args[j + 1:])})")
+        replacements.append(f"({node.children[0]} {' '.join(args[:j] + [args[j]] + args[j:])})")
+        if len(args) > 1:
+            args[j], args[(j + 1) % len(args)] = args[(j + 1) % len(args)], args[j]
+            replacements.append(f"({node.children[0]} {' '.join(args)})")
+    else:
+        replacements = [str(n) for n in nodes if n.is_atom and str(n) != str(node)]
+        replacements.extend(["true", "false"])
+    replacements = [text for text in replacements if text != str(node)]
+    if not replacements:
+        return list(commands)
+    lines = commands[i].splitlines(keepends=True)
+    start = sum(map(len, lines[:node.line - 1])) + node.col - 1
+    end = sum(map(len, lines[:node.end_line - 1])) + node.end_col - 1
+    out = list(commands)
+    out[i] = commands[i][:start] + rng.choice(replacements) + commands[i][end:]
+    return out
+
+
+def mutate(seed: str, base: Case, pool: list[str], rounds: int = 3,
+           mode: str = "mixed") -> Case:
     """Damage a case that already exists.
 
     Generation from a grammar reaches the parser; mutation of something that
@@ -602,11 +681,13 @@ def mutate(seed: str, base: Case, pool: list[str], rounds: int = 3) -> Case:
     for _ in range(rng.randint(1, rounds)):
         if not cmds:
             break
-        what = rng.choice(
-            ("drop", "dup", "swap", "splice", "rename", "truncate", "paren", "atom")
-        )
+        what = "term" if mode == "terms" else rng.choice(
+            ("drop", "dup", "swap", "splice", "rename", "truncate", "paren", "atom",
+             "term", "term", "term", "term"))
         i = rng.randrange(len(cmds))
-        if what == "drop":
+        if what == "term":
+            cmds = mutate_term(rng, cmds)
+        elif what == "drop":
             cmds.pop(i)
         elif what == "dup":
             cmds.insert(i, cmds[i])

@@ -90,6 +90,11 @@ def sync(dep: Dep, deps_dir: str = DEPS, offline: bool = False, pin: str = "",
     """
     dep.path = os.path.join(deps_dir, dep.name)
     exists = os.path.isdir(os.path.join(dep.path, ".git"))
+    if exists and not offline:
+        code, msg = _git("remote", "set-url", "origin", dep.url, cwd=dep.path)
+        if code:
+            dep.status = f"could not set the configured remote: {msg[:80]}"
+            return dep
 
     if pin and not offline:
         if not exists:

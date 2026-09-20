@@ -29,9 +29,11 @@ from anoieu_analyzer.checks import Context, load_checks, run_all  # noqa: E402
 from anoieu_analyzer.cli import _embedding_vocabulary  # noqa: E402
 from anoieu_analyzer.diagnostics import Severity  # noqa: E402
 from anoieu_analyzer.loader import load  # noqa: E402
+from anoieu_analyzer.profiles import profiles  # noqa: E402
 from anoieu_analyzer.semantics import load_set  # noqa: E402
 
 from . import ROOT
+from .targets import exclusions, excluded
 
 # Each target: a label, the signatures of one profile, and optionally the other
 # legs of a triple. Paths are relative to a repository root named below.
@@ -45,9 +47,10 @@ TARGETS = [
     ),
     ("ethos test signatures", "ethos", ["tests"], None),
     ("logos installed definitions", "logos", ["install/defs"], None),
-    # `examples/hello` only: `examples/cpc` is a vendored copy of cvc5's
+    # Own examples only: `new_checker/examples/cpc` is a vendored copy of cvc5's
     # signature, so checking it reports cvc5's findings under eudaimonia's name.
-    ("eudaimonia examples", "eudaimonia", ["examples/hello"], None),
+    ("eudaimonia examples", "eudaimonia",
+     ["new_checker/examples/hello", "new_checker/examples/scoped"], None),
     (
         "the CPC triple",
         "cvc5",
@@ -95,25 +98,8 @@ def roots_for(deps_dir: str) -> dict:
 
 
 def signatures(paths: list[str], skip: set | None = None) -> list[list[str]]:
-    """A directory is one profile per file; files together are one profile.
-
-    `skip` is `not_audited`: a file in it is never an entry point, and any
-    finding that lands in it is dropped by the caller as well, in case it was
-    reached through an include rather than named directly.
-    """
-    skip = skip or set()
-    out: list[list[str]] = []
-    files: list[str] = []
-    for p in paths:
-        if os.path.isdir(p):
-            for root, _dirs, names in os.walk(p):
-                for n in sorted(names):
-                    full = os.path.join(root, n)
-                    if n.endswith(".eo") and os.path.abspath(full) not in skip:
-                        out.append([full])
-        elif os.path.abspath(p) not in skip:
-            files.append(p)
-    return ([files] if files else []) + out
+    """Shared entry-point selection; callers also filter excluded diagnostics."""
+    return profiles(paths, skip)
 
 
 def measure(paths: list[str], triple: dict | None, roots: dict,
@@ -130,6 +116,7 @@ def measure(paths: list[str], triple: dict | None, roots: dict,
         embed = _embedding_vocabulary(os.path.join(roots[r], rel))
 
     codes: collections.Counter = collections.Counter()
+    rules = exclusions()
     files: set[str] = set()
     # the same dedupe the command line does: a finding in a file two profiles
     # both read is one finding, not two
@@ -148,6 +135,8 @@ def measure(paths: list[str], triple: dict | None, roots: dict,
         )
         files |= set(result.files)
         for d in list(result.diagnostics) + run_all(ctx):
+            if excluded(d, roots, rules):
+                continue
             if skip and os.path.abspath(d.span.path) in skip:
                 continue
             key = (d.span.path, d.span.line, d.span.col, d.code, d.message)

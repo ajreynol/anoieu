@@ -45,7 +45,7 @@ from anoieu_analyzer.semantics import load_set  # noqa: E402
 
 from .gen_corpus_table import DEFAULT_ROOTS, TARGETS, not_audited, signatures  # noqa: E402
 from . import koine  # noqa: E402
-from .targets import commit_of  # noqa: E402
+from .targets import commit_of, exclusions, excluded  # noqa: E402
 from .database import render as render_database
 
 from anoieu_fuzz.report import rows as fuzz_rows  # noqa: E402
@@ -77,6 +77,7 @@ def collect(roots: dict, targets: list | None = None, fuzz: bool = True) -> dict
     """
     load_checks()
     out: dict[str, dict] = {}
+    rules = exclusions()
     for _label, repo, rels, triple in (TARGETS if targets is None else targets):
         paths = [os.path.join(roots[repo], r) for r in rels]
         needed = list(paths) + (
@@ -107,6 +108,8 @@ def collect(roots: dict, targets: list | None = None, fuzz: bool = True) -> dict
                 embedding_names=embed,
             )
             for d in list(result.diagnostics) + run_all(ctx):
+                if excluded(d, roots, rules):
+                    continue
                 if d.code.startswith("ANO"):
                     continue
                 if os.path.abspath(d.span.path) in skip:

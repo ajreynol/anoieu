@@ -17,6 +17,20 @@
     "the new one reads this file, and two descriptions of the same targets that",
     "nothing compares is the drift this ecosystem keeps finding."
   ],
+  "exclusions": [
+    {
+      "project": "ethos",
+      "path": "tests/**",
+      "checks": ["EO0054", "EO0084"],
+      "reason": "Ethos's 2026-09-19 response: fixed patterns and identity rules are deliberate test instruments, not signature-quality defects. Other checks still run."
+    },
+    {
+      "project": "ethos",
+      "path": "tests/declare-consts-twice.eo",
+      "checks": ["EO0086"],
+      "reason": "Registered with ethos_fail_test in tests/CMakeLists.txt: duplicate literal declarations are the expected rejection being tested."
+    }
+  ],
   "targets": [
     {
       "id": "cpc",
@@ -46,7 +60,7 @@
       "id": "eudaimonia-examples",
       "label": "eudaimonia examples",
       "project": "eudaimonia",
-      "paths": ["examples/hello"]
+      "paths": ["new_checker/examples/hello", "new_checker/examples/scoped"]
     },
     {
       "id": "cpc-triple",

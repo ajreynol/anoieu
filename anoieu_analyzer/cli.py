@@ -29,6 +29,7 @@ from .diagnostics import (
 from .limits import DEFAULT_PER_CHECK, DEFAULT_TOTAL, Limits
 from .limits import apply as apply_limits
 from .loader import _params_from, load
+from .profiles import profiles
 from .semantics import load_set
 from .model import NIL_ATTRS
 from .resolve import resolve_decl
@@ -50,24 +51,8 @@ def _sorted(diags: list[Diagnostic]) -> list[Diagnostic]:
 
 
 def _expand(paths: list[str]) -> list[list[str]]:
-    """What a run was pointed at, as profiles.
-
-    A *directory* names many signatures that have nothing to do with each other,
-    so each becomes a profile of its own. *Files* named together are one ordered
-    profile, because naming two files is how a caller says "these are loaded in
-    this order", which is what cvc5 does with its base and expert signatures.
-    """
-    out: list[list[str]] = []
-    files: list[str] = []
-    for path in paths:
-        if os.path.isdir(path):
-            for root, _dirs, names in os.walk(path):
-                out += [
-                    [os.path.join(root, n)] for n in sorted(names) if n.endswith(".eo")
-                ]
-        else:
-            files.append(path)
-    return ([files] if files else []) + out
+    """Use the same include-aware entry points as corpus reporting."""
+    return profiles(paths)
 
 
 def _profiles(args, cfg) -> list[tuple[str, list[str]]]:

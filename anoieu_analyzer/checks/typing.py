@@ -16,11 +16,12 @@ from typing import Iterator
 
 from ..diagnostics import Diagnostic, Severity
 from ..model import Param
-from ..resolve import canonical_type_head, is_type_constructor, resolve_decl
+from ..resolve import canonical_type_head, is_type_constructor, resolve_decl, resolve_name
 from ..shape import strip_requires, type_head
 from ..syntax.parser import Node
 from ..typing import full_arity, infer, is_variadic, type_is, type_params_of
 from . import Context, check
+from .terms import _typed_positions
 
 
 def _params(ps: list[Param]) -> dict[str, Param]:
@@ -269,3 +270,78 @@ def program_call_arity(ctx: Context) -> Iterator[Diagnostic]:
     for d in sig.defines:
         if d.body is not None:
             yield from scan(d.body, f"definition `{d.name}`", _params(d.params))
+
+
+@check(
+    "EO0068",
+    "an argument has a different type constructor from the one an operator requires",
+    page="""
+A well-shaped application can still supply an argument of the wrong sort:
+`(not x)` requires a Bool even when it is hidden in a program whose `x` is Int.
+Checking only the application's return type misses this, since `not` still
+declares a Bool result. Program bodies and rule conclusions can retain such
+applications until a proof asks for their type.
+
+This check compares known type constructors in program results, rule conclusions
+and definition bodies. It checks ordinary fixed-arity declarations, including
+aliases, and reports only when both constructors are known and different.
+It does not compare dependent indices or infer a polymorphic argument's expected
+type. Overloads, variadic operators, parameter-bound heads, patterns, computational
+tests, binder bodies and local `eo::define` scopes are left to the checker. An unknown type is
+not a mismatch.
+""",
+)
+def argument_type(ctx: Context) -> Iterator[Diagnostic]:
+    sig = ctx.signature
+
+    def scan(term: Node, params: dict[str, Param], where: str) -> Iterator[Diagnostic]:
+        # Local computational bindings need their own environment; do not read
+        # a same-named outer parameter or global declaration through one.
+        scoped: set[int] = set()
+        for node in term.walk():
+            decl = resolve_decl(node.head, sig)
+            if (node.head == "eo::define" or
+                    (decl is not None and any(a.key in {":binder", ":let-binder"}
+                                              for a in decl.attrs))):
+                scoped.update(id(child) for child in node.walk())
+        caller_types = type_params_of(params)
+        for node in _typed_positions(term):
+            head = node.head
+            if (id(node) in scoped or not node.is_list or not head or head in params
+                    or head.startswith("eo::") or head == "_"):
+                continue
+            name = resolve_name(head, sig)
+            if len(sig.by_name.get(name, [])) > 1:
+                continue
+            decl = resolve_decl(head, sig)
+            if decl is None or is_variadic(decl):
+                continue
+            arity = full_arity(decl)
+            if arity is None or len(arity[0]) != len(node.children) - 1:
+                continue
+            callee_types = type_params_of(_params(decl.params))
+            for index, (formal, actual) in enumerate(zip(arity[0], node.children[1:]), 1):
+                want = canonical_type_head(formal, sig)
+                got_type = infer(actual, params, sig)
+                got = canonical_type_head(got_type, sig)
+                if (want in callee_types or got in caller_types or want == got
+                        or not is_type_constructor(want, sig)
+                        or not is_type_constructor(got, sig)):
+                    continue
+                yield Diagnostic(
+                    code="EO0068", severity=Severity.ERROR,
+                    message=f"argument {index} of `{head}` has type {strip_requires(got_type)}, "
+                            f"but the operator requires {strip_requires(formal)}",
+                    span=actual.span, label=f"expected {want}, got {got}",
+                    notes=[f"in {where}", "distinct type constructors; no dependent indices compared"],
+                )
+
+    for prog in sig.programs:
+        for _lhs, rhs in prog.cases:
+            yield from scan(rhs, _params(prog.params), f"program `{prog.name}`")
+    for rule in sig.rules:
+        if rule.conclusion is not None:
+            yield from scan(rule.conclusion, _params(rule.params), f"rule `{rule.name}`")
+    for define in sig.defines:
+        if define.body is not None:
+            yield from scan(define.body, _params(define.params), f"definition `{define.name}`")

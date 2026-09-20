@@ -13,10 +13,10 @@ own, so these are what they are relative to.
 
 | project | ref | commit | dated | what is read |
 | --- | --- | --- | --- | --- |
-| **cvc5** | `main` | `5cf62594dd40` | 2026-09-01 | the CPC signature and the expert extension; the solver's own proof machinery is dokimasia's subject, not ours |
-| **ethos** | `ethosEoc3` | `fe74fe40e7f1` | 2026-09-01 | the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool |
-| **logos** | `main` | `7ff136bb6174` | 2026-09-01 | the installed signature and the CPC semantics logos owns |
-| **eudaimonia** | `main` | `07cd88534e98` | 2026-09-01 | its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read |
+| **cvc5** | `main` | `dbf176dfb71b` | 2026-09-19 | the CPC signature and the expert extension; the solver's own proof machinery is dokimasia's subject, not ours |
+| **ethos** | `main` | `04a9b4d41508` | 2026-09-19 | the test signatures, the semantics sets the compiler ships, and the deep embedding. The manual that defines Eunoia lives here too, and is read by people rather than by this tool |
+| **logos** | `main` | `c8165b2afd32` | 2026-09-18 | the installed signature and the CPC semantics logos owns |
+| **eudaimonia** | `main` | `b465b9d954bb` | 2026-09-19 | its hello and scoped example calculi; new_checker/examples/cpc is a vendored copy of cvc5's signature and is deliberately not read |
 
 Produced by anoieu `0.2.0`. Which commit of anoieu produced it is
 the commit this file is committed in, and is deliberately not written here:
@@ -39,12 +39,12 @@ subject, never our own coverage* in the
 
 | corpus | files | errors | warnings | hints |
 | --- | ---: | ---: | ---: | ---: |
-| CPC | 35 | 3 | 19 | 15 |
-| CPC with the expert signature | 51 | 3 | 23 | 15 |
-| ethos test signatures | 202 | 7 | 6 | 2 |
+| CPC | 35 | 0 | 1 | 15 |
+| CPC with the expert signature | 51 | 0 | 1 | 15 |
+| ethos test signatures | 205 | 2 | 0 | 1 |
 | logos installed definitions | 0 | 0 | 0 | 0 |
-| eudaimonia examples | 1 | 0 | 0 | 0 |
-| the CPC triple | 35 | 3 | 19 | 15 |
+| eudaimonia examples | 2 | 0 | 0 | 0 |
+| the CPC triple | 35 | 0 | 1 | 15 |
 
 ## By check
 
@@ -52,10 +52,7 @@ subject, never our own coverage* in the
 
 | code | severity | count |
 | --- | --- | ---: |
-| DOC0011 | warning | 14 |
 | EO0054 | hint | 14 |
-| DOC0012 | warning | 4 |
-| EO0064 | error | 3 |
 | EO0077 | hint | 1 |
 | EO0083 | warning | 1 |
 
@@ -63,11 +60,7 @@ subject, never our own coverage* in the
 
 | code | severity | count |
 | --- | --- | ---: |
-| DOC0011 | warning | 14 |
 | EO0054 | hint | 14 |
-| DOC0012 | warning | 4 |
-| EO0031 | warning | 4 |
-| EO0064 | error | 3 |
 | EO0077 | hint | 1 |
 | EO0083 | warning | 1 |
 
@@ -75,13 +68,7 @@ subject, never our own coverage* in the
 
 | code | severity | count |
 | --- | --- | ---: |
-| EO0071 | error | 6 |
-| EO0084 | warning | 3 |
-| DOC0011 | warning | 1 |
-| DOC0012 | warning | 1 |
-| EO0040 | error | 1 |
-| EO0052 | warning | 1 |
-| EO0054 | hint | 1 |
+| EO0071 | error | 2 |
 | EO0077 | hint | 1 |
 
 **logos installed definitions**
@@ -96,9 +83,6 @@ Nothing reported by the checks that are on by default.
 
 | code | severity | count |
 | --- | --- | ---: |
-| DOC0011 | warning | 14 |
 | EO0054 | hint | 14 |
-| DOC0012 | warning | 4 |
-| EO0064 | error | 3 |
 | EO0077 | hint | 1 |
 | EO0083 | warning | 1 |

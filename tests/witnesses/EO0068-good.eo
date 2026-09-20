@@ -1,0 +1,22 @@
+; expect:
+(declare-const Int Type)
+(declare-const not (-> Bool Bool))
+(declare-parameterized-const poly ((T Type :implicit)) (-> T Bool))
+(program $ok ((x Int)) :signature (Int) Bool
+  ((($ok x) (poly x))))
+; A locally bound head does not name the Bool operator above.
+(program $local ((not (-> Int Bool)) (x Int)) :signature ((-> Int Bool) Int) Bool
+  ((($local not x) (not x))))
+; A computation probing a term is not a request to type it.
+(program $probe ((x Int)) :signature (Int) Bool
+  ((($probe x) (eo::is_ok (not x)))))
+; Binder-local overloads must not be resolved through the global declaration.
+(declare-const Real Type)
+(declare-consts <decimal> Real)
+(declare-const f (-> Int Int))
+(declare-const @List Type)
+(declare-const @nil @List)
+(declare-parameterized-const @cons ((T Type :implicit)) (-> T @List @List) :right-assoc-nil @nil)
+(declare-const forall (-> @List Bool Bool) :binder @cons)
+(declare-parameterized-const = ((T Type :implicit)) (-> T T Bool))
+(define quantified () (forall ((f (-> Real Real))) (= (f 1.0) 1.0)) :type Bool)

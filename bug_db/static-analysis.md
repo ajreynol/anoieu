@@ -15,4 +15,4 @@ of fixes awaiting landing.
 
 | bug | owner | code | where | description | status | first seen | last seen |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| EO0083-Rewrites.eo-94 | cvc5 | EO0083 | proofs/eo/cpc/rules/Rewrites.eo:94 | rule \`arith-eq-elim-int\` matches exactly what \`arith-eq-elim-real\` matches | open | 2026-09-16 | 2026-09-16 |
+| EO0083-Rewrites.eo-94 | cvc5 | EO0083 | proofs/eo/cpc/rules/Rewrites.eo:94 | rule \`arith-eq-elim-int\` matches exactly what \`arith-eq-elim-real\` matches | open | 2026-09-16 | 2026-09-19 |

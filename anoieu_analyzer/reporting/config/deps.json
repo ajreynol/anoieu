@@ -56,7 +56,7 @@
   "eudaimonia": {
     "url": "https://github.com/ajreynol/eudaimonia.git",
     "ref": "main",
-    "paths": ["examples/hello"],
-    "reads": "its own example calculus; examples/cpc is a vendored copy of cvc5's signature and is deliberately not read"
+    "paths": ["new_checker/examples/hello", "new_checker/examples/scoped"],
+    "reads": "its hello and scoped example calculi; new_checker/examples/cpc is a vendored copy of cvc5's signature and is deliberately not read"
   }
 }

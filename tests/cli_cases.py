@@ -231,6 +231,34 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     rc, _, err = run("check", os.path.join(d, "absent.eo"))
     case("a missing file is refused", rc == 2 and "no such file" in err, f"exit {rc}")
 
+    entry = os.path.join(d, "entry-points")
+    os.makedirs(entry)
+    fragment = write(entry, "fragment.eo", "(define zero () 0)\n")
+    write(entry, "consumer.eo", '(declare-const Int Type)\n'
+          '(declare-consts <numeral> Int)\n(include "fragment.eo")\n')
+    rc, o, _ = run("check", entry, "--only", "EO0071", "--format", "json")
+    case("directory checks a fragment in its consumer's literal context", rc == 0 and not codes(o), o)
+    rc, o, _ = run("check", fragment, "--only", "EO0071", "--format", "json")
+    case("explicitly naming a fragment still checks it standalone", codes(o) == ["EO0071"], o)
+    write(entry, "other.eo", '(include "fragment.eo")\n')
+    rc, o, _ = run("check", entry, "--only", "EO0071", "--format", "json")
+    case("a second consumer without the declaration is still checked", codes(o) == ["EO0071"], o)
+    write(entry, "cycle-a.eo", '(include "cycle-b.eo")\n')
+    write(entry, "cycle-b.eo", '(include "cycle-a.eo")\n')
+    rc, o, _ = run("check", entry, "--only", "EO0011", "--format", "json")
+    case("a directory with a rootless include cycle retains its diagnostic", "EO0011" in codes(o), o)
+    from anoieu_analyzer.profiles import profiles
+    from anoieu_analyzer.reporting.gen_corpus_table import signatures
+    case("CLI and reporting select the same profiles", profiles([entry]) == signatures([entry]))
+
+    from anoieu_analyzer.loader import load
+    from anoieu_analyzer.syntax.parser import parse
+    from anoieu_analyzer.typing import infer
+    cycle = write(d, "alias-cycle.eo", '(define a () b)\n(define b () a)\n')
+    sig = load(cycle).signature
+    term = parse("probe", "(a true)").forms[0]
+    case("type inference terminates on an alias cycle", infer(term, {}, sig) is None)
+
     return out
 
 

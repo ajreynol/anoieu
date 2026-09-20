@@ -334,6 +334,34 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
         str(twin.commands),
     )
 
+    from anoieu_analyzer.syntax.parser import parse
+    from anoieu_fuzz.gen import mutate, Generator
+    import random
+    structured = Case([
+        '(include "untouched.eo")',
+        '(declare-const |a ) b| Bool)',
+        '(assume @p0 (= "a""b ; ()" "c"))',
+        '(step @p1 false :rule eq_resolve :premises (@p0) :args ((f |a ) b| 0)))',
+    ])
+    # Balanced command syntax is independent of validity as a proof.
+    variants = [mutate(str(i), structured, [], mode="terms") for i in range(80)]
+    case("term mutation preserves parseable command syntax including quoted tokens",
+         all(not parse("test", c).diagnostics for v in variants for c in v.commands))
+    case("term mutation preserves declarations, paths, rule names and premise ids",
+         all(v.commands[:2] == structured.commands[:2] and
+             ':rule eq_resolve :premises (@p0)' in v.commands[-1] for v in variants))
+    case("term mutation changes values and is reproducible",
+         any(v.commands != structured.commands for v in variants) and
+         variants[0].text() == mutate("0", structured, [], mode="terms").text())
+    typed = []
+    for i in range(30):
+        gen = Generator(random.Random(i))
+        form = parse("constant", gen._cmd_const()).forms[0]
+        typ = form.children[2]
+        result = str(typ.children[-1]) if typ.head == "->" else str(typ)
+        typed.append(gen.voc.ops[-1].ret == result)
+    case("generated constants enter the vocabulary with their declared result sort", all(typed))
+
     # -- end to end, against checkers whose answers are known
 
     cfg = config(d, "pair", lenient=LENIENT, strict=STRICT)
@@ -357,6 +385,18 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     case("and is reported as one", "disagreement" in o, o[-300:])
     found = os.path.isfile(os.path.join(out_dir, "findings.jsonl"))
     case("and written to the corpus", found, str(os.listdir(out_dir)) if found else "-")
+    evidence = json.load(open(os.path.join(out_dir, "run.json")))
+    case("campaign evidence records counts, configuration and executable hashes",
+         evidence["cases"] == 4 and sum(evidence["sources"].values()) == 4 and
+         evidence["settings"]["seed_corpus"] == [seed] and
+         all(len(c["sha256"]) == 64 for c in evidence["checkers"]))
+
+    if os.name == "posix":
+        no_core = config(d, "no-core", limit='import resource\n'
+                         'assert resource.getrlimit(resource.RLIMIT_CORE)[0] == 0\n'
+                         'print("correct")\n')
+        rc, o, e = run("replay", "--config", no_core, seed)
+        case("checker subprocesses inherit a zero core-dump limit", rc == 0 and "correct" in o, o + e)
 
     cfg2 = config(d, "fragile", fragile=FRAGILE)
     out2 = os.path.join(d, "out2")

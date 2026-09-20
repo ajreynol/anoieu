@@ -2,22 +2,22 @@
   "_comment": "Written by scripts/run.py. The commits bug_db/corpus.md reports on, in full, so `scripts/run.py --pinned` can fetch exactly them. Edited by a run, not by hand.",
   "cvc5": {
     "ref": "main",
-    "commit": "5cf62594dd4013e2bacfe5dd93e0d4c357415417",
-    "date": "2026-09-01"
+    "commit": "dbf176dfb71b272ffbfdee06888dace73fee5aa8",
+    "date": "2026-09-19"
   },
   "ethos": {
-    "ref": "ethosEoc3",
-    "commit": "fe74fe40e7f1508454101b88df3bfde1205d51fa",
-    "date": "2026-09-01"
+    "ref": "main",
+    "commit": "04a9b4d41508fb0282567c5ad47b35f67afd48f7",
+    "date": "2026-09-19"
   },
   "logos": {
     "ref": "main",
-    "commit": "7ff136bb6174f28a66bf3fd940573cc407e96ca9",
-    "date": "2026-09-01"
+    "commit": "c8165b2afd321ce8d4b168c270b1fb53388e16da",
+    "date": "2026-09-18"
   },
   "eudaimonia": {
     "ref": "main",
-    "commit": "07cd88534e9830abc957047b0f6910b64afd2e0f",
-    "date": "2026-09-01"
+    "commit": "b465b9d954bb021992ff4ac6c28c9d72975f9894",
+    "date": "2026-09-19"
   }
 }

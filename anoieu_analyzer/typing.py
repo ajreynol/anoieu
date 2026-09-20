@@ -105,6 +105,8 @@ def infer(
             return Node(node.path, node.line, node.col, node.line, node.col, text="Bool")
         if cat is not None:
             return sig.literal_type.get(cat)
+        if len(sig.by_name.get(node.text or "", [])) > 1:
+            return None
         decl = resolve_decl(node.text, sig)
         if decl is None:
             return None
@@ -117,12 +119,16 @@ def infer(
         tvars = type_params_of({p.name: p for p in decl.params})
         return None if any(nd.is_atom and nd.text in tvars for nd in ret.walk()) else ret
     head = node.head
-    if head is None:
+    if head is None or head in params:
         return None
     # a nullary definition is another name for what it names: `seq.indexof` is
     # `str.indexof`, and an application of one is an application of the other
     alias = sig.defines_by_name.get(head)
+    visited: set[str] = set()
     while alias is not None and not alias.params and alias.body is not None and alias.body.is_atom:
+        if head in visited:
+            return None
+        visited.add(head)
         head = alias.body.text or head
         alias = sig.defines_by_name.get(head)
     if head in _PASSTHROUGH:
@@ -147,12 +153,12 @@ def infer(
         return _instantiate(
             prog.sig_ret, prog.sig_args, node.children[1:], tvars, params, sig, depth
         )
-    if head in params:
-        return None
     define = sig.defines_by_name.get(head)
     if define is not None and define.body is not None:
         inner = {p.name: p for p in define.params}
         return infer(define.body, inner, sig, depth - 1)
+    if len(sig.by_name.get(head, [])) > 1:
+        return None
     decl = resolve_decl(head, sig)
     if decl is None:
         return None

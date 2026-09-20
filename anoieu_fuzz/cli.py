@@ -24,6 +24,8 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import hashlib
+import json
 import os
 import random
 import sys
@@ -83,6 +85,7 @@ class Session:
         self.timeout = args.timeout
         self.wild = args.wild
         self.depth = args.depth
+        self.mutation_mode = getattr(args, "mutation_mode", "mixed")
         self.metamorphic = getattr(args, "metamorphic", False)
         self.reference = getattr(args, "reference", "") or cfg.get("reference", "")
         self.learn_cap = 0 if getattr(args, "no_learn", False) else getattr(args, "learn_cap", 400)
@@ -138,7 +141,7 @@ class Session:
         rng = random.Random("choose:" + seed)
         stock = self.mutable + self.learned
         if stock and rng.random() < mutate_p:
-            return mutate(seed, rng.choice(stock), self.pool)
+            return mutate(seed, rng.choice(stock), self.pool, mode=self.mutation_mode)
         voc = self.voc if (self.mode == "proof" or self.extend) else fallback()
         return generate(seed, self.mode, voc, wild=self.wild, depth=self.depth,
                         include=self.signature if self.extend else "")
@@ -245,6 +248,7 @@ def cmd_run(args) -> int:
     os.makedirs(args.out, exist_ok=True)
     lock = threading.Lock()
     tally: dict[str, dict[str, int]] = {}
+    sources: dict[str, int] = {}
     started = time.monotonic()
     stop = threading.Event()
     done = 0
@@ -262,6 +266,8 @@ def cmd_run(args) -> int:
         finding = judge(case, outcomes, session.reference)
         with lock:
             done += 1
+            source = case.source.split(":", 1)[0]
+            sources[source] = sources.get(source, 0) + 1
             session.learn(case, outcomes)
             for o in outcomes:
                 tally.setdefault(o.checker, {})
@@ -320,6 +326,29 @@ def cmd_run(args) -> int:
         keep = {f.bucket for f in corpus.new}
         records = [r for r in reporting.load(args.out) if r["bucket"] in keep]
         print(reporting.render(records, args.format))
+    binaries = []
+    for checker in live:
+        path = checker.resolve(session.mode)
+        digest = ""
+        if path:
+            with open(path, "rb") as fh:
+                digest = hashlib.sha256(fh.read()).hexdigest()
+        binaries.append({"name": checker.name, "path": path, "sha256": digest,
+                         "argv": checker.argv(session.mode, "<case>", session.signature)})
+    summary = {
+        "schema_version": 1,
+        "settings": {key: value for key, value in vars(args).items() if key != "fn"},
+        "signature": session.signature,
+        "checkers": binaries,
+        "cases": done, "seconds": round(elapsed, 3), "sources": sources,
+        "outcomes": tally, "buckets": corpus.counts,
+        "new_buckets": sorted({finding.bucket for finding in corpus.new}),
+        "distinct_diagnostics": len(session.details),
+    }
+    with open(os.path.join(args.out, "run.json"), "w", encoding="utf-8") as fh:
+        json.dump(summary, fh, indent=2)
+        fh.write("\n")
+    print(f"-- run evidence: {os.path.join(args.out, 'run.json')}")
     return 1 if corpus.new else 0
 
 
@@ -554,11 +583,22 @@ def _common(p: argparse.ArgumentParser) -> None:
                    help="a file or directory of real cases to mutate; repeatable")
     p.add_argument("--mutate", type=float, default=0.5,
                    help="how often to mutate a seed rather than generate (default 0.5)")
+    p.add_argument("--mutation-mode", choices=("mixed", "terms"), default="mixed",
+                   help="mix structural damage with term edits (default), or edit only "
+                        "parsed values while preserving command structure")
     p.add_argument("--shrink-budget", type=int, default=120,
                    help="how many runs one shrink may spend (default 120)")
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Set the inherited soft limit before creating worker threads. A preexec_fn
+    # in each subprocess would be unsafe in the threaded campaign runner.
+    try:
+        import resource
+        _soft, hard = resource.getrlimit(resource.RLIMIT_CORE)
+        resource.setrlimit(resource.RLIMIT_CORE, (0, hard))
+    except (ImportError, OSError, ValueError):
+        pass  # platforms without POSIX resource limits still run the checkers
     ap = argparse.ArgumentParser(prog="anoieu_fuzz",
                                  description="a fuzzer for Eunoia-based proof checkers")
     ap.add_argument("--version", action="version", version=f"anoieu-fuzz {__version__}")

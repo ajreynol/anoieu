@@ -19,6 +19,7 @@ question.
 from __future__ import annotations
 
 import json
+import fnmatch
 import os
 import subprocess
 import sys
@@ -31,6 +32,23 @@ LOCAL = os.path.join(CONFIG_DIR, "repos.local")
 def load(path: str = CONFIG) -> list[dict]:
     """Every standard target, in the order the file lists them."""
     return json.load(open(path))["targets"]
+
+
+def exclusions(path: str = CONFIG) -> list[dict]:
+    """Owner decisions about particular checks, without dropping source files."""
+    with open(path, encoding="utf-8") as fh:
+        return json.load(fh).get("exclusions", [])
+
+
+def excluded(diagnostic, roots: dict[str, str], rules: list[dict]) -> bool:
+    for rule in rules:
+        root = roots.get(rule["project"])
+        if not root or diagnostic.code not in rule["checks"]:
+            continue
+        relative = os.path.relpath(diagnostic.span.path, root).replace(os.sep, "/")
+        if relative != ".." and not relative.startswith("../") and fnmatch.fnmatchcase(relative, rule["path"]):
+            return True
+    return False
 
 
 def select(spec: list[dict], want: list[str]) -> list[dict]:
@@ -100,11 +118,15 @@ def describe(spec: list[dict]) -> list[str]:
 
     where, said = roots()
     out = [f"paths from {said}"]
+    rules = exclusions()
     total = 0
     for t in spec:
         root = where.get(t["project"], "")
         commit = commit_of(root)
         out.append(f"{t['id']}  ({t['project']} at {commit or 'NOT A REPOSITORY'})")
+        for rule in rules:
+            if rule["project"] == t["project"]:
+                out.append(f"  {rule['path']}   EXCLUDES {', '.join(rule['checks'])} -- {rule['reason']}")
         if not root or not os.path.isdir(root):
             out.append(f"  {root or '?'}   NO CHECKOUT -- this target is skipped")
             continue
