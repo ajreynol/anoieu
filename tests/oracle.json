@@ -79,6 +79,10 @@
   "detail": "",
   "verdict": "accepted"
  },
+ "EO0054-shadowed-good.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
  "EO0055-bad.eo": {
   "detail": "Error: EO0055-bad.eo:11.3: Cannot match on evaluatable subterm (eo::list_concat or x xs)",
   "verdict": "refused"
@@ -120,6 +124,14 @@
   "verdict": "accepted"
  },
  "EO0067-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0068-bad.eo": {
+  "detail": "",
+  "verdict": "accepted"
+ },
+ "EO0068-good.eo": {
   "detail": "",
   "verdict": "accepted"
  },
@@ -200,7 +212,7 @@
   "verdict": "accepted"
  },
  "EO0086-bad.eo": {
-  "detail": "Fatal failure within void ethos::TypeChecker::setLiteralTypeRule(ethos::Kind, const ethos::Expr&)",
+  "detail": "Error: EO0086-bad.eo:5.27: Cannot set type rule for kind NUMERAL to Real, since its type was already set to Int",
   "verdict": "refused"
  },
  "EO0087-bad.eo": {

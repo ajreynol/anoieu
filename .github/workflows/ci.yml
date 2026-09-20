@@ -152,15 +152,17 @@ jobs:
         run: |
           ETHOS=corpus/ethos/build/src/ethos python3 tests/run.py --oracle
 
-      # The promoted reproducers still do what the record beside them says. This
+      # The promoted reproducers still match their reviewed expectations. This
       # is the fuzzer's half of "re-measuring" (bug_db/README.md), and
       # it is a hard failure for the same reason the desugaring battery above is
-      # one: a verdict that moves without a reproducer moving is ethos having
-      # changed under us, and somebody should look. logos is not built here, so
-      # only ethos's half of a disagreement is compared.
-      - name: the promoted reproducers still reproduce
+      # one: an unexpected verdict change needs review. The baseline records
+      # fixes already present in the pinned ethos; the original finding records
+      # retain their historical outcomes. logos is not built here, so only
+      # ethos's half of a disagreement is compared.
+      - name: the promoted reproducers match the pinned expectations
         run: |
-          ETHOS=corpus/ethos/build/src/ethos python3 -m anoieu_fuzz verify
+          ETHOS=corpus/ethos/build/src/ethos python3 -m anoieu_fuzz verify \
+            --baseline tests/fuzz-baseline.json
 
       # And, since a build of ethos is already here, point the fuzzer at it.
       # On a schedule only, and never failing: a fuzzer that fails a build finds

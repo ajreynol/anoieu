@@ -398,10 +398,28 @@ python3 -m anoieu_fuzz verify                    # re-run every one against the 
 compares what each checker says now against what was recorded when it was
 promoted; a checker that is not on the machine is skipped and said to be
 skipped, and a run that compared nothing says so rather than passing quietly.
-CI runs it in the job that builds ethos, and a verdict that has moved fails
-that job — for the same reason the desugaring battery does. A finding that
+An unexpected verdict change fails CI — for the same reason the desugaring
+battery does. A finding that
 stops reproducing is either fixed upstream or a checker having changed under
 us, and both are things somebody should look at rather than let a row go stale.
+
+After a fix has been reviewed, CI uses a separate expectation file:
+
+```bash
+python3 -m anoieu_fuzz verify --baseline tests/fuzz-baseline.json
+```
+
+The JSON `outcomes` object maps reproducer buckets to checker names and expected
+verdicts (`accept`, `reject` or `abnormal`). Only listed verdicts are overridden;
+the rest still use the promoted record. The original `finding.json` files and
+bug database retain the evidence of the bugs. A crash returning after a reviewed
+fix still fails this check. Without `--baseline`, `verify` continues to compare
+against the original findings.
+
+The baseline's `commits` object records which dependency revisions were used to
+measure its overrides; the suite compares these with `deps.lock`. When moving a
+pin, replay and review the affected cases before updating that provenance and
+their expected verdicts. The baseline does not select or build a checker.
 
 The obligations that follow — confirm against a pinned build before filing, and
 never let the tool assign an owner to a disagreement — are in

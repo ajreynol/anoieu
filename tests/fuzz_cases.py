@@ -494,6 +494,16 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
     ownerless = [r["bucket"] for r in promoted if reporting.owner_of(r) == "—"]
     case("and an owner", not ownerless, str(ownerless))
 
+    with open(os.path.join(ROOT, "tests", "fuzz-baseline.json")) as f:
+        baseline = json.load(f)
+    with open(os.path.join(ROOT, "anoieu_analyzer", "reporting", "config", "deps.lock")) as f:
+        locked = json.load(f)
+    case("the reviewed fuzzer baseline names the pinned checker revisions",
+         bool(baseline["commits"]) and all(
+             locked.get(name, {}).get("commit") == commit
+             for name, commit in baseline["commits"].items()),
+         "replay and review the reproducers when changing the dependency pins")
+
     # The recorder needs deps/ to run the checks, and CI's fast job has none;
     # this half of what it checks needs nothing but this repository. A promoted
     # finding that has since been ruled on keeps its entry, so one file answers
@@ -811,6 +821,39 @@ raise SystemExit(main(sys.argv[3:]))
         json.dump(record, f)
     rc, o, _ = run("verify", "--config", cfg, "--corpus", os.path.join(d, "vcorpus"))
     case("and fails when a verdict has moved", rc == 1 and "CHANGED" in o, o[-220:])
+
+    # A reviewed fix changes the CI expectation, while the finding continues to
+    # describe what was observed at promotion. Other checker verdicts still count.
+    before = open(os.path.join(vdir, "finding.json")).read()
+    baseline_path = write(d, "verify-baseline.json", json.dumps({
+        "outcomes": {"b-verify": {"strict": "reject"}},
+    }))
+    rc, o, e = run("verify", "--config", cfg, "--corpus", os.path.join(d, "vcorpus"),
+                   "--baseline", baseline_path)
+    case("a reviewed baseline overrides only the named checker verdict",
+         rc == 0 and o.count(" ok ") == 2 and "2 verdict(s) compared" in o, o + e)
+    case("verification preserves the original finding",
+         open(os.path.join(vdir, "finding.json")).read() == before)
+
+    write(vdir, "case.cpc", "; header\n(declare-const f U)\n")
+    rc, o, _ = run("verify", "--config", cfg, "--corpus", os.path.join(d, "vcorpus"),
+                   "--baseline", baseline_path)
+    case("an unexpected acceptance still fails with a reviewed baseline",
+         rc == 1 and "was reject, is accept" in o, o[-220:])
+    write(vdir, "case.cpc", "(boom)\n")
+    crash_cfg = config(d, "verify-crash", strict=FRAGILE)
+    rc, o, _ = run("verify", "--config", crash_cfg, "--checker", "strict",
+                   "--corpus", os.path.join(d, "vcorpus"), "--baseline", baseline_path)
+    case("a crash returning after a reviewed fix still fails verification",
+         rc == 1 and "was reject, is abnormal" in o, o[-220:])
+
+    for invalid in ({}, {"outcomes": {"missing-bucket": {"strict": "reject"}}},
+                    {"outcomes": {"b-verify": {"strict": "skipped"}}}):
+        write(d, "verify-baseline.json", json.dumps(invalid))
+        rc, _, e = run("verify", "--config", cfg, "--corpus", os.path.join(d, "vcorpus"),
+                       "--baseline", baseline_path)
+        case("an invalid verification baseline fails explicitly",
+             rc == 2 and "invalid baseline" in e, e)
 
     rc, o, _ = run("verify", "--config", cfg4, "--checker", "nobody",
                    "--corpus", os.path.join(d, "vcorpus"))

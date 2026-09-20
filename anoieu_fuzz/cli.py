@@ -447,6 +447,9 @@ def cmd_report(args) -> int:
 def cmd_verify(args) -> int:
     """Re-run every promoted reproducer and compare against what was recorded.
 
+    A reviewed baseline can override individual expected verdicts after a fix,
+    while the promoted record keeps the evidence of the original finding.
+
     This is the fuzzer's half of "re-measuring", the slot
     `bug_db/README.md` says carries the most weight: a follow-up that
     cannot reproduce the original finding is guessing. It is also how a promoted
@@ -458,6 +461,26 @@ def cmd_verify(args) -> int:
     run comparing nothing passes vacuously, so it says how much it compared.
     """
     records = reporting.load(args.corpus)
+    baseline = {}
+    if args.baseline:
+        try:
+            with open(args.baseline) as f:
+                data = json.load(f)
+            if not isinstance(data, dict) or not isinstance(data.get("outcomes"), dict):
+                raise ValueError("expected an outcomes object keyed by bucket")
+            baseline = data["outcomes"]
+            buckets = {r["bucket"] for r in records}
+            for bucket, outcomes in baseline.items():
+                if bucket not in buckets:
+                    raise ValueError(f"unknown reproducer bucket: {bucket}")
+                if not isinstance(outcomes, dict) or not outcomes or any(
+                    not checker or verdict not in ("accept", "reject", "abnormal")
+                    for checker, verdict in outcomes.items()
+                ):
+                    raise ValueError(f"{bucket}: expected checker verdicts: accept, reject or abnormal")
+        except (OSError, ValueError) as exc:
+            print(f"-- verify: invalid baseline {args.baseline}: {exc}", file=sys.stderr)
+            return 2
     if not records:
         print("-- nothing is promoted, so there is nothing to verify")
         return 0
@@ -503,6 +526,7 @@ def cmd_verify(args) -> int:
             "verify",
         )
         recorded = {o["checker"]: o["coarse"] for o in record.get("outcomes", [])}
+        recorded.update(baseline.get(record["bucket"], {}))
         print(f"-- {record['bucket']}")
         for got in session.ask(case):
             want = recorded.get(got.checker)
@@ -660,6 +684,8 @@ def main(argv: list[str] | None = None) -> int:
     v = sub.add_parser("verify", help="do the promoted reproducers still do what the record says")
     _common(v)
     v.add_argument("--corpus", default="", help="defaults to tests/fuzz/")
+    v.add_argument("--baseline", default="",
+                   help="reviewed JSON verdicts to compare instead of the original outcomes")
     v.set_defaults(fn=cmd_verify, metamorphic=False)
 
     ex = sub.add_parser("explain", help="what a code means")

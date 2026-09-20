@@ -1,0 +1,17 @@
+{
+  "_comment": "Reviewed fixes from ethos 39f2f90c, replayed against the pinned build. Original promotion outcomes remain in tests/fuzz/*/finding.json; unlisted verdicts still use those records.",
+  "commits": {
+    "ethos": "04a9b4d41508fb0282567c5ad47b35f67afd48f7"
+  },
+  "outcomes": {
+    "crash-ethos-terminate-called-after-throwing-an-instance--fd1900": {
+      "ethos": "reject"
+    },
+    "unexplained-ethos-fatal-failure-within-bool-ethos-state--b5e93f": {
+      "ethos": "reject"
+    },
+    "unexplained-ethos-fatal-failure-within-void-ethos-typech-597a94": {
+      "ethos": "reject"
+    }
+  }
+}
