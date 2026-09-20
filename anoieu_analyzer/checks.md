@@ -51,7 +51,7 @@ written, and `--pedantic` turns them on.
 | [EO0067](#eo0067) | a requirement that can never hold | on |
 | [EO0069](#eo0069) | a premise list gathered by an operator that is not variadic | on |
 | [EO0070](#eo0070) | a program case that calls itself with the arguments it just matched | on |
-| [EO0071](#eo0071) | a literal whose category the signature never gave a type | on |
+| [EO0071](#eo0071) | a literal category without an explicit type declaration | on |
 | [EO0072](#eo0072) | a builtin operator is applied to the wrong number of arguments | on |
 | [EO0073](#eo0073) | an evaluation the language says cannot happen | on |
 | [EO0074](#eo0074) | a list operator applied to something that is not an n-ary operator | on |
@@ -520,14 +520,19 @@ decremented.
 
 ## EO0071
 
-**a literal whose category the signature never gave a type**
+**a literal category without an explicit type declaration**
 
-`declare-consts` is what associates a syntactic category with a type: without
-`(declare-consts <numeral> Int)` a numeral in a term has no type, and the term
-holding it is ill-typed the moment anything asks. Signature files do no
-normalisation, so a hexadecimal literal needs `<hexadecimal>` even where
-`<binary>` is declared -- the normalisation of one into the other applies to
-proof and reference files only.
+`declare-consts` associates a syntactic category with an intended type. Without
+`(declare-consts <numeral> Int)`, ethos gives a numeral its builtin category type,
+`<numeral>`, on first use; it does not leave the literal untyped. That type is
+distinct from a user-declared `Int`, so combining the literal with terms that
+require `Int` can fail type checking. The missing declaration alone does not
+establish that the file is ill-typed: this check flags a possible mismatch with
+the intended sorts or with another checker's literal typing.
+
+Signature files do no normalisation, so assigning a type to `<binary>` does not
+assign it to `<hexadecimal>` -- the normalisation of one into the other applies
+to proof and reference files only.
 
 `<boolean>` is exempt: `true` and `false` are builtin, and so is a literal that
 stands only under a computational operator: ethos distinguishes a numeral value

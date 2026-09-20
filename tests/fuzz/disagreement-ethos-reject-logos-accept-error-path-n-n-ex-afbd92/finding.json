@@ -4,7 +4,7 @@
  "commands": 1,
  "kind": "overaccept",
  "mode": "proof",
- "note": "unmodified output of 'cvc5 --dump-proofs --proof-format=cpc' with the leading 'unsat' removed: the proof is wrapped in one outer ( ... ). ethos refuses it at the first paren; logos unwraps it and checks it. 12 of 14 proofs harvested from cvc5's own regressions behave this way",
+ "note": "unmodified output of 'cvc5 --dump-proofs --proof-format=cpc' with the leading 'unsat' removed: the proof is wrapped in one outer ( ... ). ethos refuses it at the first paren; logos unwraps it and checks it. 12 of 14 proofs harvested from cvc5's own regressions behave this way. Owner reassigned from ethos+logos to logos on 2026-09-19 after Ethos's response: the outer parentheses are not a Eunoia command, so ethos correctly rejects the file. The FUZ0001 disagreement stays open against logos; this is an ownership ruling, not a replay or a fix. The reproducer and recorded checker outcomes are unchanged.",
  "outcomes": [
   {
    "checker": "ethos",
@@ -23,7 +23,7 @@
    "status": "correct"
   }
  ],
- "owner": "ethos+logos",
+ "owner": "logos",
  "seed": "p19.cpc",
  "source": "seed:p19.cpc",
  "summary": "logos accepted what ethos refused: Error: <path>:N.N: Expected Eunoia command, got `_` (LPAREN)."

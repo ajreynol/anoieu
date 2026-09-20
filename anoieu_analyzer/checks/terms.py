@@ -106,14 +106,19 @@ def builtin_arity(ctx: Context) -> Iterator[Diagnostic]:
 
 @check(
     "EO0071",
-    "a literal whose category the signature never gave a type",
+    "a literal category without an explicit type declaration",
     page="""
-`declare-consts` is what associates a syntactic category with a type: without
-`(declare-consts <numeral> Int)` a numeral in a term has no type, and the term
-holding it is ill-typed the moment anything asks. Signature files do no
-normalisation, so a hexadecimal literal needs `<hexadecimal>` even where
-`<binary>` is declared -- the normalisation of one into the other applies to
-proof and reference files only.
+`declare-consts` associates a syntactic category with an intended type. Without
+`(declare-consts <numeral> Int)`, ethos gives a numeral its builtin category type,
+`<numeral>`, on first use; it does not leave the literal untyped. That type is
+distinct from a user-declared `Int`, so combining the literal with terms that
+require `Int` can fail type checking. The missing declaration alone does not
+establish that the file is ill-typed: this check flags a possible mismatch with
+the intended sorts or with another checker's literal typing.
+
+Signature files do no normalisation, so assigning a type to `<binary>` does not
+assign it to `<hexadecimal>` -- the normalisation of one into the other applies
+to proof and reference files only.
 
 `<boolean>` is exempt: `true` and `false` are builtin, and so is a literal that
 stands only under a computational operator: ethos distinguishes a numeral value
@@ -142,7 +147,7 @@ def literal_without_type(ctx: Context) -> Iterator[Diagnostic]:
                 message=f"`{nd.text}` is a {cat} literal, and this signature has no "
                 f"`declare-consts {cat}`",
                 span=nd.span,
-                label="no type for this literal",
+                label="literal defaults to its builtin category type",
                 notes=[f"in {where}"],
                 help=f"declare the category, e.g. (declare-consts {cat} Int)",
             )

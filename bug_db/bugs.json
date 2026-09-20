@@ -646,7 +646,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/Builtin-rules.eo:61",
-      "notes": "declined by ethos as deliberate: `identity` is a no-op rule in a test signature, and re-labelling a step is what it is for. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
+      "notes": "declined by ethos as deliberate: `identity` is a no-op rule in a test signature, and re-labelling a step is what it is for. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation",
+      "closed_verdict": "intentional",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/Builtin-rules.eo:59-62 deliberately models the identity rule in cvc5's builtin calculus; removing it would make the test signature less faithful.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "b742c6d3a4fa9d74",
@@ -699,7 +702,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/binder-ex.eo:10",
-      "notes": "declined by ethos as deliberate: `id` is how the file asserts that two terms are the same term. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
+      "notes": "declined by ethos as deliberate: `id` is how the file asserts that two terms are the same term. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation",
+      "closed_verdict": "intentional",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/binder-ex.eo:10 uses the identity rule to make equality of binder representations observable through a proof step; the commented renamed-variable case is its negative test.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "74c6f064da7c2464",
@@ -712,7 +718,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/binder-subterm-share.eo:8",
-      "notes": "declined by ethos as deliberate: `id` is how the file asserts that two terms are the same term, as in `7f3eb81581c1f0a1`. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
+      "notes": "declined by ethos as deliberate: `id` is how the file asserts that two terms are the same term, as in `7f3eb81581c1f0a1`. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation",
+      "closed_verdict": "intentional",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/binder-subterm-share.eo:8 uses the identity rule to test subterm sharing under binders: the premise mentions Q and the step mentions (P x).",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "516184abdc82d1df",
@@ -725,7 +734,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/conclusion-spec.eo:8",
-      "notes": "declined by ethos as deliberate: a split clause has exactly two disjuncts, so the pattern means what it says. `or` really is `:right-assoc-nil` here, so unlike the `Nary.eo` rows the check read the file correctly. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation"
+      "notes": "declined by ethos as deliberate: a split clause has exactly two disjuncts, so the pattern means what it says. `or` really is `:right-assoc-nil` here, so unlike the `Nary.eo` rows the check read the file correctly. Not closed: the reply's won't-fix was not confirmed with the maintainer, who has since asked that a declined finding be closed only on an explicit confirmation",
+      "closed_verdict": "intentional",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/conclusion-spec.eo:8 recognizes a split tautology with exactly two disjuncts. A :list tail would change that specification; the commented negative case at line 20 depends on it.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "42d486abefc2fc62",
@@ -738,7 +750,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/eo-definitions.eo:190",
-      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer",
+      "closed_verdict": "declined",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/eo-definitions.eo:190 belongs to an include fragment. Its registered entry point, tests/eo-definitions-test.eo, declares <numeral> as Int at line 3 before including the fragment at line 31; tests/CMakeLists.txt registers the entry point, not the fragment. The analyzer follows includes, but the corpus runner also checked this fragment independently. Rechecking the actual entry point produces no EO0071 finding.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "70fa22c05a9635d8",
@@ -751,7 +766,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/eo-definitions.eo:229",
-      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer",
+      "closed_verdict": "declined",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/eo-definitions.eo:229 belongs to an include fragment. Its registered entry point, tests/eo-definitions-test.eo, declares <numeral> as Int at line 3 before including the fragment at line 31; tests/CMakeLists.txt registers the entry point, not the fragment. The analyzer follows includes, but the corpus runner also checked this fragment independently. Rechecking the actual entry point produces no EO0071 finding.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "8dbf440aca48da0c",
@@ -764,7 +782,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/eo-definitions.eo:252",
-      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer",
+      "closed_verdict": "declined",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/eo-definitions.eo:252 belongs to an include fragment. Its registered entry point, tests/eo-definitions-test.eo, declares <numeral> as Int at line 3 before including the fragment at line 31; tests/CMakeLists.txt registers the entry point, not the fragment. The analyzer follows includes, but the corpus runner also checked this fragment independently. Rechecking the actual entry point produces no EO0071 finding.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "6b2263f824b28bd0",
@@ -777,7 +798,10 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/eo-definitions.eo:263",
-      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer"
+      "notes": "declined by ethos as deliberate: `tests/eo-definitions.eo` is an include fragment, not a signature -- it is checked standalone only because a corpus directory is one profile per file, and ethos itself refuses it standalone at line 148. The literal and the missing `declare-consts` are real; the word *signature* in the message is not. Suppressing this needs a reverse include edge across the corpus, which no check has today -- see `reports.md`. Not closed: the won't-fix was not confirmed with the maintainer",
+      "closed_verdict": "declined",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/eo-definitions.eo:263 belongs to an include fragment. Its registered entry point, tests/eo-definitions-test.eo, declares <numeral> as Int at line 3 before including the fragment at line 31; tests/CMakeLists.txt registers the entry point, not the fragment. The analyzer follows includes, but the corpus runner also checked this fragment independently. Rechecking the actual entry point produces no EO0071 finding.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "b4b49bbcd0bffd3a",
@@ -830,7 +854,16 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/right-assoc-variants.eo:62",
-      "notes": "ethos could not tell and accepted no fix: the trial `declare-consts` edit was made and reverted, and is not on `292201c2`. Genuinely undecided -- nothing includes this file, it applies no operator, and it checks `correct` either way, so the missing declaration has no reachable consequence. Left open. Same question as `59e8abdd4478092d`; ethos also observed that if `str.++` could be applied here its nil terminator would not carry the tail type, which the missing declaration currently hides"
+      "notes": "ethos could not tell and accepted no fix: the trial `declare-consts` edit was made and reverted, and is not on `292201c2`. Genuinely undecided -- nothing includes this file, it applies no operator, and it checks `correct` either way, so the missing declaration has no reachable consequence. Left open. Same question as `59e8abdd4478092d`; ethos also observed that if `str.++` could be applied here its nil terminator would not carry the tail type, which the missing declaration currently hides",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "Ethos accepted the finding in its 2026-09-19 response, superseding the earlier undecided note. Commit 8d8e0288792da76a5ee66af11a4529c86386fc5b on anoieu-0919 adds (declare-consts <string> String) in tests/right-assoc-variants.eo. Re-read the declaration and the unchanged reported construct, now at line 64; the analyzer no longer reports EO0071 and the available ethos binary reports correct. Both remote refs were checked: main remains 04a9b4d41508fb0282567c5ad47b35f67afd48f7, so this is not yet landed. Undeclared literals have builtin category types, not no type; the fix gives this literal its intended SMT sort.",
+      "closed_on": "2026-09-19",
+      "closed_commit": "8d8e0288792da76a5ee66af11a4529c86386fc5b",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-0919",
+        "commit": "8d8e0288792da76a5ee66af11a4529c86386fc5b"
+      }
     },
     {
       "id": "59e8abdd4478092d",
@@ -843,7 +876,16 @@
       "found_at": "6beeb8e6",
       "owner": "ethos",
       "where": "tests/right-assoc-variants.eo:48",
-      "notes": "ethos could not tell and accepted no fix: the trial `declare-consts` edit was made and reverted, and is not on `292201c2`. Genuinely undecided -- nothing includes this file, it applies no operator, and it checks `correct` either way, so the missing declaration has no reachable consequence. Left open"
+      "notes": "ethos could not tell and accepted no fix: the trial `declare-consts` edit was made and reverted, and is not on `292201c2`. Genuinely undecided -- nothing includes this file, it applies no operator, and it checks `correct` either way, so the missing declaration has no reachable consequence. Left open",
+      "closed_verdict": "accepted and fixed",
+      "closed_why": "Ethos accepted the finding in its 2026-09-19 response, superseding the earlier undecided note. Commit 8d8e0288792da76a5ee66af11a4529c86386fc5b on anoieu-0919 adds (declare-consts <numeral> Int) in tests/right-assoc-variants.eo. Re-read the declaration and the unchanged reported construct, now at line 50; the analyzer no longer reports EO0071 and the available ethos binary reports correct. Both remote refs were checked: main remains 04a9b4d41508fb0282567c5ad47b35f67afd48f7, so this is not yet landed. Undeclared literals have builtin category types, not no type; the fix gives this literal its intended SMT sort.",
+      "closed_on": "2026-09-19",
+      "closed_commit": "8d8e0288792da76a5ee66af11a4529c86386fc5b",
+      "awaiting_landing": {
+        "project": "ethos",
+        "branch": "anoieu-0919",
+        "commit": "8d8e0288792da76a5ee66af11a4529c86386fc5b"
+      }
     },
     {
       "id": "a3e3ef689c03095f",
@@ -986,7 +1028,7 @@
       "evidence": "recorded reproducer; not replayed by this export",
       "kind": "overaccept",
       "mode": "proof",
-      "note": "unmodified output of 'cvc5 --dump-proofs --proof-format=cpc' with the leading 'unsat' removed: the proof is wrapped in one outer ( ... ). ethos refuses it at the first paren; logos unwraps it and checks it. 12 of 14 proofs harvested from cvc5's own regressions behave this way",
+      "note": "unmodified output of 'cvc5 --dump-proofs --proof-format=cpc' with the leading 'unsat' removed: the proof is wrapped in one outer ( ... ). ethos refuses it at the first paren; logos unwraps it and checks it. 12 of 14 proofs harvested from cvc5's own regressions behave this way. Owner reassigned from ethos+logos to logos on 2026-09-19 after Ethos's response: the outer parentheses are not a Eunoia command, so ethos correctly rejects the file. The FUZ0001 disagreement stays open against logos; this is an ownership ruling, not a replay or a fix. The reproducer and recorded checker outcomes are unchanged.",
       "outcomes": [
         {
           "checker": "ethos",
@@ -1005,7 +1047,7 @@
           "status": "correct"
         }
       ],
-      "owner": "ethos+logos",
+      "owner": "logos",
       "seed": "p19.cpc",
       "source": "seed:p19.cpc",
       "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc:2"
@@ -1375,7 +1417,10 @@
       "owner": "ethos",
       "where": "tests/Nary.eo:157",
       "migrated_from": "docs/reports/open-findings.md, migrated 2026-09-19",
-      "notes": "not a defect, and our error rather than a judgement call: `cons` is a parameter of the enclosing program, while EO0054 resolved the head through `resolve_decl`'s flat symbol table and picked up the `:right-assoc-nil` `cons` that the *including* `tests/examples-nary.eo` declares after the include. Check narrowed to skip a head the parameter list binds; witness `tests/witnesses/EO0054-shadowed-good.eo`. No longer derived. Left open rather than withdrawn, pending the maintainer's confirmation. Same cause as `f52484ca50c98a65`"
+      "notes": "not a defect, and our error rather than a judgement call: `cons` is a parameter of the enclosing program, while EO0054 resolved the head through `resolve_decl`'s flat symbol table and picked up the `:right-assoc-nil` `cons` that the *including* `tests/examples-nary.eo` declares after the include. Check narrowed to skip a head the parameter list binds; witness `tests/witnesses/EO0054-shadowed-good.eo`. No longer derived. Left open rather than withdrawn, pending the maintainer's confirmation. Same cause as `f52484ca50c98a65`",
+      "closed_verdict": "intentional",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/Nary.eo:153-158 binds cons and nil as program parameters; (cons x nil) at line 157 is the deliberate singleton case, followed by a case with a :list tail. No nil-terminator declaration applies to this locally bound head. Our parameter-shadowing fix already prevents this false positive.",
+      "closed_on": "2026-09-19"
     },
     {
       "id": "f52484ca50c98a65",
@@ -1388,7 +1433,10 @@
       "owner": "ethos",
       "where": "tests/Nary.eo:90",
       "migrated_from": "docs/reports/open-findings.md, migrated 2026-09-19",
-      "notes": "not a defect, and our error rather than a judgement call: `cons` is a parameter of the enclosing program, while EO0054 resolved the head through `resolve_decl`'s flat symbol table and picked up the `:right-assoc-nil` `cons` that the *including* `tests/examples-nary.eo` declares after the include. Check narrowed to skip a head the parameter list binds; witness `tests/witnesses/EO0054-shadowed-good.eo`. No longer derived. Left open rather than withdrawn, pending the maintainer's confirmation. Same cause as `dcfaf1e214126aa3`"
+      "notes": "not a defect, and our error rather than a judgement call: `cons` is a parameter of the enclosing program, while EO0054 resolved the head through `resolve_decl`'s flat symbol table and picked up the `:right-assoc-nil` `cons` that the *including* `tests/examples-nary.eo` declares after the include. Check narrowed to skip a head the parameter list binds; witness `tests/witnesses/EO0054-shadowed-good.eo`. No longer derived. Left open rather than withdrawn, pending the maintainer's confirmation. Same cause as `dcfaf1e214126aa3`",
+      "closed_verdict": "intentional",
+      "closed_why": "Ethos's 2026-09-19 response explicitly confirms this ruling, superseding the earlier pending note. Re-read at ethos 04a9b4d41508fb0282567c5ad47b35f67afd48f7: tests/Nary.eo:86-92 binds cons and nil as program parameters; (cons x nil) at line 90 is the deliberate singleton case, followed by a case with a :list tail. No nil-terminator declaration applies to this locally bound head. Our parameter-shadowing fix already prevents this false positive.",
+      "closed_on": "2026-09-19"
     }
   ]
 }

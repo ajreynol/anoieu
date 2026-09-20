@@ -29,13 +29,14 @@ This is not the record of an observation — that is
 `closed_*` fields a closure adds. What may be said about any of it is the
 [reporting policy](../bug_db/reporting-policy.md).
 
-**4 episodes so far, and 3 of 4 are positive.** Three projects have merged
-something on the strength of what these tools reported, and all three named us —
-two in the commit body, one in the pull request's title. The fourth episode is
-logos telling us that most of our first sweep was aimed at a file it only
-vendors. **33 observations have been closed by a change somebody made
-upstream**: 25 by cvc5, 7 by ethos, 1 by logos. That is the honest summary of
-what this repository has cost these projects and returned to them to date.
+**5 episodes so far: three led to landed fixes, and two exposed reporting
+mistakes.** Three projects have merged something on the strength of what these
+tools reported, and all three named us — two in the commit body, one in the pull
+request's title. The other episodes are logos correcting our ownership claims
+and ethos explaining why ten reports did not warrant changes. **33 observations
+have been closed by a change that landed upstream**: 25 by cvc5, 7 by ethos,
+1 by logos. Ethos accepted two more fixes in `E5`; those are committed on a
+topic branch and are not included in that landed count.
 
 ## E1: logos removed a semantics entry for a rule it does not declare, and tightened its parser against a disagreement the fuzzer found
 
@@ -197,6 +198,83 @@ argument for a docstring check that no single row makes.
 while our own record had it closed as *fixed upstream* on a change that never
 landed, and what corrected that is the rule this page now runs on: **close on a
 named commit, then re-read the source.**
+
+## E5: ethos accepted two literal declarations, rejected ten reports and assigned the parser disagreement to logos
+
+| | |
+| --- | --- |
+| **When** | 2026-09-19 |
+| **Kind** | negative — ten reports did not warrant changes to ethos; two fixes were accepted in direct response to our report and await landing |
+| **Ours** | Analyzer: `52b5ae926f12d4c9`, `7f3eb81581c1f0a1`, `74c6f064da7c2464` (`EO0084`); `516184abdc82d1df`, `dcfaf1e214126aa3`, `f52484ca50c98a65` (`EO0054`); `42d486abefc2fc62`, `70fa22c05a9635d8`, `8dbf440aca48da0c`, `6b2263f824b28bd0`, `59e8abdd4478092d`, `584eda1d79a64b2c` (`EO0071`). Fuzzer: `9315026a26d2c2d0` (`FUZ0001`) |
+| **Theirs** | Ethos's supplied `ethos-response-to-anoieu.md`, reviewed against main at [`04a9b4d4`](https://github.com/cvc5/ethos/commit/04a9b4d41508fb0282567c5ad47b35f67afd48f7); fix [`8d8e0288`](https://github.com/cvc5/ethos/commit/8d8e0288792da76a5ee66af11a4529c86386fc5b) on `anoieu-0919`, titled *Anoieu response* |
+| **Outcome** | 12 static rows closed: 6 `intentional`, 4 `declined`, 2 `accepted and fixed` with landing debt. The fuzzer row stays open, reassigned from `ethos+logos` to `logos` |
+
+**What happened.** Ethos reviewed all thirteen open observations addressed to
+it and explained what the flagged files were meant to test. Three identity
+rules are deliberate: one models cvc5's builtin calculus, and two let binder
+tests observe whether the checker considers terms identical. The split test
+deliberately recognizes exactly two disjuncts. Two singleton cases in
+`Nary.eo` are also deliberate, and our check had additionally mistaken a local
+`cons` parameter for an operator declared by an includer. These six carry the
+owner's `intentional` verdict. The four `declined` rows belong to an include
+fragment: [`eo-definitions-test.eo`](https://github.com/cvc5/ethos/blob/04a9b4d41508fb0282567c5ad47b35f67afd48f7/tests/eo-definitions-test.eo#L3)
+declares the numeral category before including `eo-definitions.eo` at line 31.
+Checking that entry point produces none of the four literal findings.
+
+The two accepted rows concern a standalone test. The fix adds numeral and
+string declarations to [`right-assoc-variants.eo`](https://github.com/cvc5/ethos/blob/8d8e0288792da76a5ee66af11a4529c86386fc5b/tests/right-assoc-variants.eo#L3),
+giving its `0` and empty string their intended `Int` and `String` sorts.
+Re-reading the committed file confirms both declarations; our analyzer no
+longer reports either row, and the available ethos binary reports `correct`.
+Ethos reports a 190/190 test pass; we did not rerun its full suite.
+
+The response's summary says seven intentional findings, but its individual
+rulings name six: **6 + 4 + 2 + 1 = 13**. We recorded those individual rulings.
+Its fix section also leaves the commit blank and names `main`; the actual remote
+refs put the fix on `anoieu-0919`, with `main` still at the reviewed revision.
+The two database entries name that branch and full commit in `awaiting_landing`.
+The earlier pending notes remain as history, superseded by these dated rulings.
+
+**Not closed.** `9315026a26d2c2d0`: the
+[reproducer](../tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc#L2)
+wraps a command sequence in an extra pair of parentheses. Ethos explains that
+the wrapper is not a Eunoia command, so its rejection is correct. The finding
+remains `FUZ0001` under `logos`, with the same identity, reproducer and recorded
+outcomes. The response calls this `re-coded`, but our vocabulary uses that
+verdict to close a row carried under another code; no code changed here. We
+updated ownership in both the database and the promoted case's metadata. This
+was an ownership ruling, not a replay or evidence of a Logos fix.
+
+**What we learned.** A test input's purpose is part of the claim. An identity
+rule can be the instrument that tests equality, and a two-element pattern can be
+the specification. Excluding every test would also hide the useful literal
+findings in this same response; owners need a way to exclude paths from selected
+signature-quality checks while retaining other checks. That remains follow-up
+work, along with selecting actual entry points for directory sweeps. Our loader
+already follows includes; the error was also treating the included fragment as
+an independent signature. Suppressing every file with an unresolved symbol
+would conceal real unresolved-symbol errors and is not a substitute for knowing
+the entry points.
+
+The literal check overstated its conclusion. In
+[`TypeChecker::getLiteralTypeRuleMaybeInit`](https://github.com/cvc5/ethos/blob/04a9b4d41508fb0282567c5ad47b35f67afd48f7/src/type_checker.cpp#L63),
+an undeclared category receives its builtin type. A numeral is therefore typed
+as `<numeral>`, which can conflict with `Int`; it is not untyped. We corrected
+the check's explanation and diagnostic label. The accepted change improves the
+test's intended sorts, but does not establish that the old file was ill-typed.
+
+Several requested repairs need a more precise diagnosis. `EO0054` already
+requires a nil-terminator declaration, skips parameter-bound heads and chooses
+its article; its shadowing witness covers the old `Nary.eo` error. The difference
+between `conclusion-spec.eo:7` and `:8` is visible before report deduplication:
+the check only flags a bare parameter in the tail position, which is `F` on
+line 8 but the compound `(not F)` on line 7. Coverage of compound fixed tails
+remains a question for the check. Our fuzzer already treats an `Error:`
+diagnostic followed by `SIGABRT` as rejection; preventing core dumps remains
+separate harness work. Finally, the configured ethos target is now `main`, but
+the old observations retain their original `found_at` on `ethosEoc3`. Future
+evidence should record the branch alongside the commit, rather than asking a
+recipient to reconstruct that context.
 
 ## How this page is maintained
 

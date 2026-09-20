@@ -226,7 +226,7 @@ means.
 | attribute contracts | §2, declarations unvalidated | live: EO0040, EO0041, EO0042, EO0046 |
 | dead, unreachable, stuck | §4, untyped first-match | live: EO0052, EO0053, EO0056, EO0057, EO0060 |
 | silently ignored input | §3 | live: EO0020 |
-| the builtin layer — arity, impossible evaluations, untyped literals, list operators over non-n-ary symbols | §1, nothing asks for the value | live: EO0071–EO0074 |
+| the builtin layer — arity, impossible evaluations, literal categories without explicit type declarations, list operators over non-n-ary symbols | §1, nothing asks for the value | live: EO0071–EO0074 |
 | documentation drift | §6 | live: DOC0010, DOC0011, DOC0012 |
 | better location, whole-file reports | §5 | live, in every check |
 | compiler-namespace collisions | §6 | live: EO0030 |
