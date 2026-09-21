@@ -15,7 +15,7 @@ committed reproducers.
 | Producer | Open findings |
 | --- | ---: |
 | [Static analyzer](#static-analyzer) | 1 |
-| [Fuzzer](#fuzzer) | 1 |
+| [Fuzzer](#fuzzer) | 0 |
 
 ## Static analyzer
 
@@ -25,6 +25,4 @@ committed reproducers.
 
 ## Fuzzer
 
-| ID | Check | Owner | Finding | Status | Evidence | First ingested | Last ingested |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 9315026a26d2c2d0 | [FUZ0001](../anoieu_fuzz/fuzzing.md#the-codes) | logos | logos accepted what ethos refused: Error: &lt;path&gt;:N.N: Expected Eunoia command, got \`\_\` (LPAREN). | open | [tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc:2](../tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc#L2) | 2026-09-17 | 2026-09-19 |
+No open findings.

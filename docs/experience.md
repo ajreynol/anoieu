@@ -29,13 +29,13 @@ This is not the record of an observation — that is
 `closed_*` fields a closure adds. What may be said about any of it is the
 [reporting policy](../bug_db/reporting-policy.md).
 
-**5 episodes so far: three led to landed fixes, and two exposed reporting
+**6 episodes so far: four led to landed fixes, and two exposed reporting
 mistakes.** Three projects have merged something on the strength of what these
-tools reported, and all three named us — two in the commit body, one in the pull
-request's title. The other episodes are logos correcting our ownership claims
-and ethos explaining why ten reports did not warrant changes. **33 observations
-have been closed by a change that landed upstream**: 25 by cvc5, 7 by ethos,
-1 by logos. Ethos accepted two more fixes in `E5`; those are committed on a
+tools reported, and every one of those changes named us — two in the commit
+body, one in a pull request's title and one in a pull request's body. The other
+episodes are logos correcting our ownership claims and ethos explaining why ten
+reports did not warrant changes. **34 observations have been closed by a change
+that landed upstream**: 25 by cvc5, 7 by ethos, 2 by logos. Ethos accepted two more fixes in `E5`; those are committed on a
 topic branch and are not included in that landed count.
 
 ## E1: logos removed a semantics entry for a rule it does not declare, and tightened its parser against a disagreement the fuzzer found
@@ -275,6 +275,63 @@ separate harness work. Finally, the configured ethos target is now `main`, but
 the old observations retain their original `found_at` on `ethosEoc3`. Future
 evidence should record the branch alongside the commit, rather than asking a
 recipient to reconstruct that context.
+
+## E6: logos stopped unwrapping a proof, and closed the disagreement ethos had handed it
+
+| | |
+| --- | --- |
+| **When** | 2026-09-21 |
+| **Kind** | positive — one observation closed, citing us; it is the row `E5` had to leave open |
+| **Ours** | `9315026a26d2c2d0` (`FUZ0001`, differential fuzzer) |
+| **Theirs** | logos [#467](https://github.com/cvc5/logos/pull/467), [`3acc3b90`](https://github.com/cvc5/logos/commit/3acc3b90c4be6229c432e24edf875dde0566621d), titled *Don't unwrap proof*, whose body reads in full *"Found by anoieu."* |
+| **Outcome** | closed, `fixed and landed` on logos `main`, confirmed by replay against checkers built the same day |
+
+**What happened.** `cvc5 --dump-proofs --proof-format=cpc` does not print a bare
+proof. It prints the answer to `get-proof`: the word `unsat` on one line, and
+then the proof's commands inside one further pair of parentheses. Both have to
+come off before what is left is a Eunoia file. logos used to take the second one
+off on the caller's behalf — `unwrapProof` in `Logos/Parser.lean` turned a lone
+parenthesized list of lists back into a command sequence — so a file that ethos
+refused at its very first token went through logos and checked clean. Twelve of
+the fourteen proofs we had harvested from cvc5's own regressions have that
+shape, which made this the ordinary case rather than a corner of the grammar.
+
+logos deleted the unwrapping in
+[`3acc3b90`](https://github.com/cvc5/logos/commit/3acc3b90c4be6229c432e24edf875dde0566621d).
+`parseCommands` recognizes the shape now only in order to refuse it, with a
+message naming which parentheses to remove, and the two callers in
+`Cpc/Parser.lean` and `Cpc/Diagnostics.lean` pass the command list straight
+through. `docs/parser.md` gained a paragraph saying that a proof file is a bare
+sequence of commands and that logos refuses the wrapper exactly as ethos does,
+and `test/Parser.lean` gained the four cases that pin the shape down — including
+the one that decides it, that a file holding a single command is that command
+and not a wrapper around one.
+
+We then replayed the committed
+[reproducer](../tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-afbd92/case.cpc#L2)
+against ethos and logos built on the day the change landed. Both reject it,
+logos with the new message where the record has it accepting, and the replay
+reports that every checker agreed. The disagreement does not reproduce.
+
+**What we learned.** **The thing that made this fixable was not the reproducer.**
+A shrunk case says two checkers disagree about a bracket; what says the bracket
+matters is the sentence we carried beside it in the row's `note` — that this is
+what cvc5's proof dumper actually emits, and that twelve of fourteen harvested
+proofs hit it. logos's new paragraph in `docs/parser.md` says that back to us in
+its own words. Reduction is the enemy of that sentence: it deliberately throws
+away the context that shows the shape is on the ecosystem's main path, so the
+better the shrinker works the less important the finding looks. The provenance
+of the unreduced seed belongs next to the reproducer, and here it survived only
+because somebody wrote it into a note by hand.
+
+**And a recorded outcome does not say which binary produced it.** `outcomes`
+names the checker and what it printed, never the revision that printed it, and
+closing this row needed a checker built after the fix. The `logos` on this
+machine's `PATH` when the window was read had been built on 2026-08-21 — a month
+before the fix, and ten days before the commit in `E1`. Replaying against it
+would have reproduced the original accept and read as a fix that did not work,
+and nothing in the database would have contradicted that. A `FUZ` row closes on
+evidence from a binary, so the evidence has to name the binary.
 
 ## How this page is maintained
 

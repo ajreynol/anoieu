@@ -1035,6 +1035,30 @@ about our own tooling that belong to no pull request and fit in no episode there
 Newest first, one line each; an empty section is the honest state when a run
 turned up nothing.
 
+**2026-09-21 — windows
+[cvc5 `aee874240419..c2cc3caf7841`](https://github.com/cvc5/cvc5/compare/aee874240419...c2cc3caf7841),
+[logos `c8165b2afd32..3acc3b90c4be`](https://github.com/cvc5/logos/compare/c8165b2afd32...3acc3b90c4be).**
+
+- **Thirty-five of the cvc5 window's forty commits had already been measured.**
+  The baseline is the open row's `found_at`, `aee874240419` of 2026-08-29, but
+  `config/deps.lock` records cvc5 measured at `dbf176dfb71b` on 2026-09-19 —
+  the thirty-fifth commit of this window, and the run that set `last_seen` on
+  that row. The check fired there, so nothing up to it can have made the claim
+  false, and both of the window's two `proofs/eo` commits stand before it. The
+  five commits actually unread touch no signature at all. A baseline taken from
+  a row's first sighting is right about what it is a window of and is not the
+  narrowest one available; `last_seen` and the lock together name that.
+- **The pass that found the fix could not close it, and nearly could not close
+  it at all.** logos merged [#467](https://github.com/cvc5/logos/pull/467) — its
+  whole body is *"Found by anoieu."* — inside this window, but `FUZ0001` is a
+  claim about what a binary does, so reading the diff settled nothing and the row
+  closed only once the checkers were rebuilt mid-run. The `logos` on `PATH` when
+  the window was read had been built on 2026-08-21, a month before the fix and
+  ten days before the commit of `E1`; a replay against it would have reproduced
+  the original accept and read as a fix that did not work. A recorded `outcomes`
+  entry names the checker and what it printed and not the revision that printed
+  it, so nothing in the database would have caught the stale binary.
+
 **2026-09-19 — windows
 [cvc5 `aee874240419..dbf176dfb71b`](https://github.com/cvc5/cvc5/compare/aee874240419...dbf176dfb71b),
 [ethos `6beeb8e6..04a9b4d41508`](https://github.com/cvc5/ethos/compare/6beeb8e6...04a9b4d41508),
