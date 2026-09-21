@@ -2,8 +2,13 @@
 
 A second tool shipped from this repository, beside the analyzer. It began as a
 child project under [`docs/policy.md`](https://github.com/ajreynol/kanon/blob/main/docs/policy.md) and was **folded into
-the parent** once it had earned its keep: the island rules it had to break in
-order to be useful were the sign that it had stopped being research.
+the parent** once it had earned its keep: it was emitting into the report that
+already existed, running in the parent's CI and being called by the parent's
+commands, which is what *shipping* looks like rather than research. The reasoning
+at the time leaned on an isolation rule the shared policy has since retired —
+a child may now share all three of those — so the fold is recorded here as what
+happened and not as what any rule required. See
+[`docs/history.md`](../docs/history.md).
 
 ## The name
 

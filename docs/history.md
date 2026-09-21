@@ -487,8 +487,11 @@ in anoieu, along with its history, correspondence, findings and report card.
 **Planning record, preserved from before the transfer.** The tables below
 record the intended destinations and unresolved questions at that time;
 `B15` limited the scope of the next move as it read then; kanon has since
-closed the item and keeps what is unresolved in [how a role is handed
-off](https://github.com/ajreynol/kanon/blob/main/docs/board.md#a-handoff-of-a-role-is-an-ordinary-item-here).
+closed the item and keeps the procedure in [how a role is handed
+off](https://github.com/ajreynol/kanon/blob/main/docs/roles.md#how-a-role-is-handed-off),
+read 2026-09-21. **That link was dead until then** — it named a board heading
+kanon no longer has, and nothing on either side could see it: our checker skips
+every `http` target by design.
 **Pages and commands kanon has since removed are named below and not linked.**
 Kanon's `main` is the authority on everything it holds, so a link here goes to
 `main` or nowhere: pinning one would hand a reader a superseded copy of somebody
@@ -696,14 +699,27 @@ the rule that a child project states whether there is a paper in it; `join_eo
 arrives in; and the concept of a global announcement itself. One thing was owed
 — a publishing stance — and everything else was notice.
 
-**What did not survive the handoff, recorded because it was announced to every
+**What is no longer the policy's, recorded because it was announced to every
 member as a rule.** The `report/` convention is in neither `policy.md` nor
 `vision.md` under kanon, read 2026-09-19. Dokimasia reported that twice; the only
 place in the shared machinery still naming it was this repository's own checker
 coverage list, which is where a reader would take it for kanon's rule, and it was
 removed from that list on 2026-09-19. All three addressees of the announcement
-stated a publishing stance, so the announcement itself is settled and removed;
-whether the convention should exist at all is a question addressed to kanon.
+stated a publishing stance, so the announcement itself is settled and removed.
+
+**Corrected 2026-09-21, because the earlier account was the more flattering one.**
+This page said the convention *did not survive the handoff*, and kanon's answer to
+our `D38` establishes that it did: their `policy.md` carried the whole section from
+the handoff commit `7eb9973` — the layout row, the eight-to-twenty pages, and the
+child-project rule about a paper — and it was removed the next morning in
+`d892fa6`, a simplification pass that took it out with a great deal else. **Nobody
+dropped it in transit; the office that then held the policy deleted it.** Kanon's
+answer also settles the open question: the convention is not the policy's, it is
+not being put back on an agent's reading, and **the announcement's first section is
+withdrawn for good** — if a person wants it back we will be told rather than left
+to notice. One cost of it was found in kanon's own tree while answering: a child
+project there had been attributing the convention to `vision.md` on its front page
+since 2026-09-18, resting a page of per-tool verdicts on it.
 
 **The covering note**, as recommended on 2026-09-01. Whether it was ever sent,
 to whom, or what came back is the topic's business and a person's, not this
@@ -838,7 +854,7 @@ the reasoning behind the handoff.
 
 **Why hand the office on at all:** three reasons, argued from measurements
 rather than principle, in
-`S4` of [martyria's stances](https://github.com/ajreynol/epikrisis/blob/main/tools/martyria/stances.md). The short form —
+`S4` of [martyria's stances](https://github.com/ajreynol/epikrisis/blob/main/tools/martyria/docs/stances.md). The short form —
 **15 of the ecosystem's 28 roles sit in this tree, 21 of 22 board items name
 this repository, and everything that judges is inside the thing being judged.**
 
@@ -955,6 +971,60 @@ files on this machine were edited between the first read and the last; one
 repository's was untracked at the moment it was answered. Every reply says what
 it was read against and on what date, which is the remedy koine asked for, applied
 by hand because the rule that would have asked for it is with the maintainer.
+
+### Two checks were grading members against rules the shared policy had removed — 2026-09-21
+
+**The same defect twice more, and the shared policy's own coverage page had named
+one of them before we did.** Both are the shape `D38` identified in the `report/`
+convention: our checker publishing, on every member's tree, a requirement that is
+in no shared page.
+
+| what it demanded | where the policy stands now | what it is |
+| --- | --- | --- |
+| a child project that runs in the parent's CI, is named by the parent's code, or appears on its front page had to claim an **exception** in its charter | isolation is optional, advertising is the **default**, and integration with the parent requires "neither an exception nor promotion" | **retired in place.** A blocking check, so this could have failed a compliant tree |
+| every discussion file had to carry *a prompt may not be for this repository* | kanon removed it on 2026-09-20 as an internal operational instruction, abandoned making it fatal, and said the implementation was ours | **narrowed to this tree.** Advisory, so it published a finding rather than a failure |
+
+**The cost of the first is countable and is the reason this is written down.**
+Eight children across this ecosystem — in dokimasia, eudaimonia, eunoia, kanon
+and tachyon — carry a sentence claiming an exception, and **not one of them needed
+to**: they wrote it because a check asked, and the check was reading a rule that
+had been replaced. A requirement the policy no longer states cannot be an
+obligation of contract 1 either, so removing it is a fix rather than a relaxation;
+the regression case is a child that does all three things with a charter
+mentioning none of them.
+
+**The second was narrowed rather than deleted, because the rule earned its keep.**
+It has fired twice in opposite directions, so this repository still holds itself to
+it — and grades nobody else. Ten members carry the paragraph today and none was
+obliged to; none loses it by our stopping.
+
+**And `contract 1` promises three things, of which the snapshot compared two.**
+Requirements, severity and **applicability** are what the contract fixes; the
+registry recorded the blocking and advisory lists and nothing about where a check
+runs, so narrowing one to this tree — or the widening the contract actually
+forbids — was invisible to the suite. Applicability is recorded per check now, and
+a change to it is a test failure. Found by making the change above and asking what
+would have caught it.
+
+**One more surface now says only true things.** The list of rules with no
+automated check is printed on every run in every member repository, which makes it
+the most widely published prose here; two of its lines named a test function that
+did not exist, and three named a child-project rule by wording the policy had
+since replaced. Every path and `snake_case` name in it is compared with the tree
+now. **A coverage reason is a claim about this tree like any other**, and this one
+carries the authority of something that executes.
+
+**Four topics were removed from [`discussion.md`](discussion.md)** — `D37`, `D38`,
+`D39`, `D40` — each answered rather than gone quiet, with the lasting part written
+where it belongs first: the two contract decisions on the
+[contract page](../policy_check/README.md), and koine's price for the coverage
+query in [`maintenance.md`](maintenance.md). `D33` went with them: it existed as
+the evidence for a decision a person had to make, and kanon made it — the rule was
+withdrawn and the proposal abandoned, which is an answer and not a silence.
+**`D38`'s answer carried a correction of ours worth keeping**: the `report/`
+convention did *not* fail to survive the handoff, as we said it had. It survived
+intact and kanon deleted it the next morning in a simplification pass. Ours was
+the more flattering account of the two and it was wrong.
 
 ## What a run learned about itself
 

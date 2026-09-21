@@ -169,13 +169,15 @@ arrangement is advertised for a reader to find.
 **A repository picks one of two forms and says which.** It pins a checker
 commit, or it names a contract and follows the latest implementation through
 [a shared CI workflow](.github/workflows/policy.yml). Within version 1 the
-requirements, their applicability and the blocking/advisory split stay fixed;
-checker bug fixes continue to arrive, so a contract consumer's build can go red
-with nothing committed — which means a violation already in the tree has started
-being reported, never a new requirement arriving. A pin moves only when its
-repository moves it. The [contract page](policy_check/README.md) is the authority
-on what each form fixes; kanon's joining instructions carry both, read
-2026-09-17.
+requirements, their applicability and the blocking/advisory split stay fixed —
+all three are recorded in the contract snapshot and compared on every run, as of
+2026-09-21. Checker bug fixes continue to arrive, so a contract consumer's build
+can go red with nothing committed — which means a violation already in the tree
+has started being reported, never a new requirement arriving. A requirement the
+shared policy has **stopped** stating is removed the same way, since it was never
+part of the contract either. A pin moves only when its repository moves it. The
+[contract page](policy_check/README.md) is the authority on what each form fixes;
+kanon's joining instructions carry both, read 2026-09-21.
 
 ## The documentation index
 
@@ -251,7 +253,8 @@ goodwill at the error you would rather discover before running a proof.
 This repository is part of the **Eunoia ecosystem** and follows its shared
 [repository policy](https://github.com/ajreynol/kanon/blob/main/docs/policy.md).
 This README is checked against that policy on every push, by the same command
-any other repository would run.
+any other repository would run, at **policy contract 1** — the contract this
+repository selects for itself, like any other member.
 
 **Human maintainers:** [the current list in policy.md](https://github.com/ajreynol/kanon/blob/main/docs/policy.md#human-maintainers).
 

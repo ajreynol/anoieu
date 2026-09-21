@@ -30,5 +30,34 @@
     "check_name_explained",
     "check_local_paths_data",
     "check_prompt_gate"
-  ]
+  ],
+  "applicability": {
+    "check_declaration": "unless the tree records `associate`",
+    "check_front_page": "every tree",
+    "check_maintenance_note": "every tree",
+    "check_docs_index": "when docs exists",
+    "check_every_document_indexed": "home-only",
+    "check_generated_labelled": "home-only",
+    "check_dependencies": "when deps or scripts/deps.json or config/deps.json or anoieu_analyzer/reporting/config/deps.json exists",
+    "check_working_space": "when .gitignore exists",
+    "check_children": "when tools exists",
+    "check_response_gate": "when docs/discussion.md exists",
+    "check_links": "every tree",
+    "check_no_vendor": "every tree",
+    "check_citations": "every tree",
+    "check_anchors": "every tree",
+    "check_local_paths": "every tree",
+    "check_declaration_first": "unless the tree records `associate`",
+    "check_scripts_listed": "home-only",
+    "check_owner_unadvertised": "home-only",
+    "check_footing_marker": "when docs/maintenance.md exists",
+    "check_footing_consistent": "when docs/maintenance.md exists",
+    "check_associate_floor": "an associate's tree only",
+    "check_child_unadvertised": "when tools exists",
+    "check_declaration_links": "unless the tree records `associate`",
+    "check_discussion": "when docs/discussion.md exists",
+    "check_name_explained": "every tree",
+    "check_local_paths_data": "every tree",
+    "check_prompt_gate": "home-only and when docs/discussion.md exists"
+  }
 }

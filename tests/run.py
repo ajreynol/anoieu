@@ -353,6 +353,60 @@ def targets_agree() -> int:
     return failures
 
 
+def coverage_names_real_things() -> int:
+    """Every function and file the checker's coverage list names actually exists.
+
+    **The checker's list of what it cannot check is printed on every run in every
+    member repository**, which makes it the most widely read prose this repository
+    publishes and the one nobody reads twice. Two of its lines said a rule was
+    *checked elsewhere: `prompts_agree` in tests/run.py* while `tests/run.py` had
+    no such function -- a claim carrying the authority of something that executes,
+    wrong in every tree that ran it. The register keeps that as row 6 and records
+    that nothing mechanical would have caught it.
+
+    This is the mechanical form. A backticked `snake_case` token in a coverage
+    reason is read as a function this repository defines, and any path in one --
+    backticked or written plainly, which is how row 6's was written -- has to be
+    in the tree. It is the same *keep a copy aligned with its source* comparison
+    as `prompts_agree` and `targets_agree`, applied to the one surface of ours
+    that is published to everybody else.
+    """
+    from policy_check import checker as policy_check  # noqa: PLC0415
+
+    root = os.path.dirname(HERE)
+    #: Where a name in a coverage reason may be defined. The checker names its
+    #: own readers and the tests that stand in for a check it does not carry.
+    sources = ["tests/run.py", "tests/cli_cases.py", "policy_check/checker.py",
+               "policy_check/tests/cases.py", "policy_check/currency.py"]
+    defined: set[str] = set()
+    for rel in sources:
+        with open(os.path.join(root, rel), encoding="utf-8") as fh:
+            defined |= set(re.findall(r"^def ([a-z_][a-z0-9_]*)", fh.read(), re.M))
+
+    failures = 0
+    for rule, reason in policy_check.UNCHECKED:
+        text = f"{rule} {reason}"
+        paths = set(re.findall(r"`([^`]*/[^`]*)`", text))
+        paths |= set(re.findall(r"\b((?:[a-z_]+/)+[a-z_]+\.(?:py|json|md|yml))\b", text))
+        for rel in sorted(paths):
+            if not os.path.exists(os.path.join(root, rel)):
+                print(f"FAIL the coverage list names the path {rel!r}, and no such "
+                      f"path is in this tree — under {rule!r}")
+                failures += 1
+        # A backticked token with an underscore and no dot is a name this
+        # repository defines. `http` is a literal a reason quotes and is not one,
+        # which is why the rule is snake_case rather than any bare word.
+        for token in sorted(set(re.findall(r"`([a-z_][a-z0-9_]*)`", text))):
+            if "_" in token and token not in defined:
+                print(f"FAIL the coverage list names {token!r} as something that "
+                      f"stands in for a check, and nothing defines it — "
+                      f"under {rule!r}")
+                failures += 1
+    print(f"-- the coverage list names {len(policy_check.UNCHECKED)} unchecked "
+          f"rule(s): {failures} failure(s)")
+    return failures
+
+
 def prompts_agree() -> int:
     """The closure prompt's entry shape and `docs/experience.md`'s template agree.
 
@@ -499,6 +553,7 @@ def main() -> int:
     failures += verdict_audit()
     failures += targets_agree()
     failures += prompts_agree()
+    failures += coverage_names_real_things()
 
     sys.stdout.flush()
     print()

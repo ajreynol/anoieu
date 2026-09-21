@@ -51,7 +51,7 @@ silently** — no test fails when a page starts describing a tree that changed.
 **It is not hypothetical.** One working session on 2026-09-02 turned up six
 claims in these documents that had quietly become false, and every one was
 found by somebody reading rather than by anything that runs. That is recorded
-as `F5` in [zetesis's `findings.md`](https://github.com/ajreynol/epikrisis/blob/main/tools/zetesis/findings.md), which is where
+as `F5` in [zetesis's `findings.md`](https://github.com/ajreynol/epikrisis/blob/main/tools/zetesis/docs/findings.md), which is where
 the general finding lives; **what is kept here is the evidence, claim by
 claim.**
 
@@ -84,21 +84,47 @@ not, and it does not.
 **Started 2026-09-02**, by the maintainer, in an explicit instruction. It holds
 no role and certifies nothing.
 
-**The register has its first entries**, from one working session in the parent's
-tree on 2026-09-19: seventeen claims that had gone false, every one conclusive,
-and exactly one of them found by anything that runs. They are in
+**The register has two passes**, from working sessions in the parent's tree on
+2026-09-19 and 2026-09-21: **twenty-nine claims that had gone false**, every one
+conclusive, and exactly one of them found by anything that runs. They are in
 [`docs/register.md`](docs/register.md) with what would have caught each — and
-seven of the seventeen have no mechanical form at all.
+**eleven of the twenty-nine have no mechanical form at all**.
 
-**The honest position is still the uncomfortable one.** Seventeen is how many one
-session found, not how many there are, and the evidence that this ecosystem's
+**The honest position is still the uncomfortable one.** Twenty-nine is how many
+two sessions found, not how many there are, and the evidence that this ecosystem's
 documentation is accurate remains *somebody read it* — now for a named set of
-claims on a named date, which is the difference between this page and the last
+claims on named dates, which is the difference between this page and the last
 one. Until far more is recorded claim by claim, the parent's front-page caveat
 is the truthful summary and this project's own existence is the admission.
 
-**What the first pass turned up that the parent has to decide**, rather than
-this project: four of the seventeen are links into another repository, which the
-parent's checker skips by design and deliberately. A child asks for nothing on
-its own behalf, so the ask sits in the parent's discussion file, in the parent's
-voice.
+**The second pass found the shape the first one had not**, and it is the reason
+the unmechanised share went up rather than down. Three of its eleven entries are
+the parent's own **checker** describing the shared policy wrongly, in every member
+repository's build — and one of those had recruited: eight child projects in five
+trees carry a sentence about a rule that no longer exists, because a check asked
+them for it. **A stale claim in a document is disbelieved; a stale claim in a check
+is obeyed.** What no checker in this tree can reach is a *paraphrase* of another
+repository's rule drifting while every name in it stays valid, and saying so is
+more use than a check that would look like an answer.
+
+**What the passes turned up that the parent has to decide**, rather than this
+project. **Thirteen of the twenty-nine cannot be settled from the parent's tree
+alone** — rows 1 to 4, 16, 17 and 26 to 29 name a path in another repository, and
+rows 18, 20 and 21 paraphrase another repository's rule — and that is the whole
+direction the parent's checker skips, by design and deliberately. A child asks for
+nothing on its own behalf, so the ask sat in the parent's discussion file, in the
+parent's voice. **Both halves of it have since moved, in opposite ways.**
+
+- **The paths half is answered, and then the parent built the rest itself.** Kanon
+  accepted the ask on 2026-09-19 and now carries an old-to-new table in every move
+  notice, which repaired six of the parent's dead links and fourteen of its own.
+  The parent then wrote `python3 -m policy_check.outbound`, which resolves its
+  outbound links against local checkouts and found rows 26 to 29 on its first run.
+  **Neither is a check and neither should be**: a gate that fails for somebody
+  else's rename is exactly what was declined.
+- **The paraphrase half is open, and is the harder one.** A move notice cannot help
+  with a rule being *reworded* while every name in it stays valid English, which is
+  what rows 18, 20 and 21 are. The parent has asked kanon for the one thing it
+  cannot derive — a machine-readable list of the rule names the policy carries —
+  and a decline is a complete answer there too, in which case the honest repair is
+  for the parent to stop quoting a document it does not hold.

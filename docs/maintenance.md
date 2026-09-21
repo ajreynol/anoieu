@@ -73,6 +73,17 @@ python3 -m anoieu_analyzer.reporting.database --check
 git diff --exit-code anoieu_analyzer/checks.md
 ```
 
+**And when a change touches a link into another repository**, or after one of
+them announces a move:
+
+```bash
+python3 -m policy_check.outbound          # needs sibling checkouts of the trees we link into
+```
+
+It is out of the block above because it reads other people's trees and cannot
+speak for a tree it has no checkout of — it says how many links it could not ask
+about rather than counting them as passing.
+
 The suite exercises the real koine append tool, resolved through `$KOINE`, the
 sibling checkout, or the pinned `deps/koine` clone. CI checks out the pin; a
 machine without koine must fetch it. No database implementation is mocked as a
@@ -118,6 +129,7 @@ Specialist maintenance commands run as modules from the repository root:
 | `finding_id.py` | `python3 -m anoieu_analyzer.reporting.finding_id` | compute a finding id for agent-produced evidence |
 | `koine.py` | `python3 -m anoieu_analyzer.reporting.koine DUMP DB` | pass a dump to the required Koine writer |
 | `currency.py` | `python3 -m policy_check.currency --list` | report documentation currency without gating |
+| `outbound.py` | `python3 -m policy_check.outbound` | resolve every link into another ecosystem tree against a local checkout of it. **Never a CI gate**: it fails for a rename in a tree nobody here touched |
 | `sweep.py` | `python3 tests/sweep.py PATH...` | exercise the analyzer on a tree of signatures |
 | `oracle_desugar.py` | `python3 tests/oracle_desugar.py` | compare desugaring with an ethos build |
 
@@ -229,7 +241,37 @@ scope, source and analyzer versions, enabled checks and skips, explicit handling
 of unmatched identities, and fresh replay evidence for fuzzer findings. Neither
 a missing finding in a dump nor an ingestion date supplies that evidence.
 Koine's [remaining work](https://github.com/ajreynol/koine/blob/e4e4e2e760197429ff182826ed9b7a90fea11633/bug_db_manager/README.md#what-is-still-not-built)
-and our request in [`discussion.md`](discussion.md) describe that separate gap.
+describes the same gap from their side.
+
+**It is priced, and the run record is ours to keep.** We asked koine for the
+coverage query on 2026-09-19 and they answered on the same terms we offered: the
+query is an afternoon given two run records in an agreed shape, and **the shape
+is the obligation** — keeping it current as two producers' notions of coverage
+diverge, and being the place a third arrives at, is a standing maintenance
+commitment a person accepts rather than an agent. So it is **priced and not
+taken**, and nothing here waits on it.
+
+Three things from that answer bind the work whenever it is done:
+
+- **The run record goes beside the database, never inside it.** All four of
+  koine's programs find the records by taking the one list in the object and
+  **refuse a file with two**, so adding a `runs` key to `bug_db/bugs.json` would
+  break every one of them at once. Recorded in
+  [their guide](https://github.com/ajreynol/koine/blob/main/bug_db_manager/README.md#what-is-still-not-built)
+  so that nobody discovers it by building on it.
+- **`complete` and *breadth* are different claims**, and a shared reader that
+  conflates them manufactures *covered and not reported* out of a run of one
+  check. Our field list keeps them apart as `checks_enabled` and `checks_skipped`;
+  dokimasia's sidecar keeps them apart as `analyses` and `complete`. That the two
+  producers reached the distinction independently is the evidence koine asked for,
+  and it is the `D42` answer in [`discussion.md`](discussion.md).
+- **Two things of dokimasia's we do not have and should**, found by making that
+  comparison rather than by being asked: a content digest of the declared input,
+  which is what lets two runs be shown to have read the same bytes, and a split
+  between the input scope *declared* and the files actually *read*. Without the
+  first, two of our own runs cannot be compared at all; without the second, *not
+  covered* cannot distinguish *the input was not read* from *the check was off*,
+  which is the whole question. Neither needs koine.
 
 ### Preserve the findings record
 

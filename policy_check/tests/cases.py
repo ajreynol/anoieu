@@ -317,6 +317,20 @@ def policy_contract() -> int:
            [fn.__name__ for _, fn, _ in blocking] == contract["blocking"])
     expect("policy contract 1 keeps its advisory checks advisory",
            [fn.__name__ for _, fn, _ in advisory] == contract["advisory"])
+    # **Applicability is the third thing contract 1 fixes, and it was the one
+    # nothing compared.** A check quietly widened from this tree to every member
+    # is exactly the new obligation the contract forbids, and the snapshot could
+    # not see it: it recorded the names and the severities and stopped there.
+    got_where = {fn.__name__: policy_check.applicability_of(gate)
+                 for _, fn, gate in list(blocking) + list(advisory)}
+    want_where = contract["applicability"]
+    drift = sorted(set(got_where) ^ set(want_where)) + \
+        sorted(k for k in set(got_where) & set(want_where)
+               if got_where[k] != want_where[k])
+    expect("policy contract 1 keeps every check's applicability",
+           not drift,
+           "; ".join(f"{k}: {want_where.get(k, 'not in the contract')!r} -> "
+                     f"{got_where.get(k, 'no longer a check')!r}" for k in drift))
     expect("the default remains policy contract 1", policy_check.DEFAULT_POLICY_VERSION == "1")
     checker = os.path.join(ROOT, "scripts", "policy_check.py")
     for args in (("--policy-version", "999"), ("--policy-version", "latest"),
@@ -415,6 +429,18 @@ def adoption_interface() -> int:
          "passes", True, "gated", 0, None, "quiet", None),
         ("named-child", "an unadvertised child project the front page names fails",
          True, "gated", 1, None, "named", None),
+        # **The regression for the retired island exception.** This tree does
+        # every one of the three things the old check called a rule break --
+        # advertised on the front page, named by code outside its own directory,
+        # and running in the parent's CI -- and its charter says nothing about
+        # any of them. Rule 2 makes isolation optional, rule 3 makes advertising
+        # the default, and rule 10 says integration with the parent needs
+        # "neither an exception nor promotion", so this tree is compliant and
+        # the old implementation failed it. Before the fix: exit 1, *not an
+        # island and no rule 10 statement*.
+        ("integrated-child", "a child that is advertised, imported by the parent "
+         "and run in its CI passes with no exception statement",
+         True, "gated", 0, None, "integrated", None),
         # The floor an associate keeps. Not a debt: it is what the footing
         # needs to mean anything, since the front page is all a reader gets.
         # It is the maintenance note and nothing else.
@@ -443,7 +469,8 @@ def adoption_interface() -> int:
             # reason none of them is about.
             open(os.path.join(root, "README.md"), "w").write(
                 "# faketool\n\nA thing.\n"
-                + ("\nIt carries kalon, a child project.\n" if child == "named" else "")
+                + ("\nIt carries kalon, a child project.\n"
+                   if child in ("named", "integrated") else "")
                 + ("" if floor == "no name" else
                    "\n## The name\n\nfaketool, because it is fake.\n")
                 + "\n## How this repository is maintained\n\n"
@@ -487,13 +514,22 @@ def adoption_interface() -> int:
             # every `docs/...` target to resolve from the repository root, so a
             # correct relative link inside tools/<child>/ was reported dead --
             # a check firing on something that was not a problem, which is ours.
+            if child == "integrated":
+                # The two surfaces rule 2 now permits by name: parent code that
+                # imports the child, and the parent's CI running it.
+                os.makedirs(os.path.join(root, "tests"))
+                open(os.path.join(root, "tests", "test_kalon.py"), "w").write(
+                    "from tools.kalon import check\n")
+                os.makedirs(os.path.join(root, ".github", "workflows"))
+                open(os.path.join(root, ".github", "workflows", "ci.yml"), "w").write(
+                    "name: ci\njobs:\n  kalon:\n    runs-on: ubuntu-latest\n")
             os.makedirs(os.path.join(root, "tools", "kalon", "docs"))
             open(os.path.join(root, "tools", "kalon", "docs", "design.md"), "w").write(
                 "# design\n")
             open(os.path.join(root, "tools", "kalon", "README.md"), "w").write(
                 "# kalon\n\n*\u03ba\u03b1\u03bb\u03cc\u03bd, the fitting thing.*\n\n"
                 "A child project. It does not ship anything.\n\n"
-                + (CHILD_MARKER if child else "")
+                + (CHILD_MARKER if child in ("quiet", "named") else "")
                 + "See [the design](docs/design.md).\n")
             subprocess.run(["git", "-C", root, "add", "-A"], check=True,
                            capture_output=True)

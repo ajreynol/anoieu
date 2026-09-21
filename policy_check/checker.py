@@ -80,9 +80,12 @@ DEFAULT_POLICY_VERSION = "1"
 # cannot check it*, which is a claim about somebody else's document.
 UNCHECKED = [
     ("rule 1, a human starts one", "intent; no artifact records who asked"),
-    ("rule 6, additive never authoritative", "a claim about tone, not about the tree"),
-    ("rule 7, nothing leaves the island by machine", "absence of an action cannot be observed here"),
-    ("rule 8, it cites what it inherited", "whether a citation supports its claim is reading"),
+    ("rule 6, an independent account does not confer authority",
+     "which of two accounts governs is assigned by a person, and no artifact records it"),
+    ("rule 7, cross-repository feedback goes through the parent",
+     "absence of an action cannot be observed here"),
+    ("rule 8, it explains why the parent is its home, citing what it used",
+     "whether a citation supports its claim is reading"),
     ("rule 9, it ends with a verdict", "'has gone quiet' is a judgement about elapsed time"),
     ("the maintenance note carries no technical detail", "what counts as technical is editorial"),
     ("commands and helpers live in `scripts/`, assistant launchers in `prompts/`",
@@ -884,26 +887,45 @@ def child_projects() -> list[str]:
     return out
 
 
-def island_breaks(name: str) -> list[str]:
-    """Rule 2 and rule 3, as far as a grep can see them."""
-    breaks = []
+def shared_surfaces(name: str) -> list[str]:
+    """What a child shares with the tree around it, as far as a grep can see it.
+
+    **This used to be a list of rule breaks, and it is now an observation.** Rule
+    2 once made isolation the default and asked a child that broke it to write
+    down an exception; the rule now reads *its boundaries are explicit; isolation
+    is optional*, and says in as many words that a child may import parent code,
+    provide artifacts to other projects and participate in the parent's tests and
+    CI. Rule 3 makes advertising the **default**. Rule 10 closes it: shared
+    usefulness and integration with the parent "require neither an exception nor
+    promotion to a separate repository".
+
+    So every one of the three things below is now expressly permitted, and
+    `check_children` no longer fails on any of them. They are printed because
+    rule 2 asks a charter to name the shared entry points, dependencies and
+    outputs others rely on, and a reader comparing the charter with the tree
+    wants the list the grep can see. Whether the charter names them is reading.
+    """
+    shared = []
     hits = subprocess.run(
         ["git", "-C", ROOT, "grep", "-l", "-E", rf"\b(tools\.)?{re.escape(name)}\b",
-         "--", ":!tools/" + name, ":!docs/coherence.md", ":!docs/policy.md",
-         ":!docs/vision.md"],
+         "--", ":!tools/" + name, ":!docs/policy.md", ":!docs/vision.md"],
         capture_output=True, text=True).stdout.split()
     code = [h for h in hits if h.endswith((".py", ".yml", ".toml"))]
     if any(h.startswith(".github/") for h in hits):
-        breaks.append("rule 2: it runs in CI")
+        shared.append("it runs in the parent's CI")
     if [h for h in code if not h.startswith(".github/")]:
-        breaks.append(f"rule 2: named by code outside its own directory ({', '.join(sorted(code)[:3])})")
+        shared.append(f"named by code outside its own directory ({', '.join(sorted(code)[:3])})")
     if "README.md" in hits or "docs/README.md" in hits:
-        breaks.append("rule 3: it is advertised on the front page or in the documentation index")
-    return breaks
+        shared.append("advertised on the front page or in the documentation index")
+    return shared
 
 
 def check_children() -> list[str]:
-    """Rules 4, 5 and 10 for every child project under `tools/`."""
+    """Rules 4 and 5 for every child project under `tools/`.
+
+    Rule 10 was enforced here as an *island exception* and is retired in place;
+    `shared_surfaces` says why, and prints what the grep can see instead.
+    """
     bad = []
     for name in child_projects():
         readme = read(f"tools/{name}/README.md")
@@ -912,21 +934,23 @@ def check_children() -> list[str]:
             bad.append(f"tools/{name}: rule 5, the charter never says what it will not do")
         if not re.search(r"[Ͱ-Ͽ]|etymolog|greek", readme, re.I):
             bad.append(f"tools/{name}: rule 4, the README does not explain the name")
-        breaks = island_breaks(name)
-        # Either the number or the thing the number says. The number alone was
-        # the original marker and it put two of our own checks in conflict: a
-        # non-island child had to write "rule 10", and no document outside
-        # `policy.md` may cite a rule by number. Both rules are right and the
-        # marker was wrong -- a reader of a charter should be told what the
-        # exception *is*, not given a lookup. The number still passes, so no
-        # tree that already used it breaks.
-        if breaks and "rule 10" not in low and "not an island" not in low:
-            bad.append(f"tools/{name}: not an island and no rule 10 statement — "
-                       + "; ".join(breaks))
-        elif breaks:
-            print(f"     tools/{name}: rule 10 exception recorded, {len(breaks)} break(s)")
-            for b in breaks:
-                print(f"       - {b}")
+        # **The island exception is retired, in place, and this is the reason.**
+        # This check used to fail a child that ran in CI, was named by code
+        # outside its own directory, or appeared on the front page, unless its
+        # charter said "rule 10" or "not an island". Every one of those three is
+        # now expressly permitted: rule 2 makes isolation optional, rule 3 makes
+        # advertising the default, and rule 10 says integration with the parent
+        # requires "neither an exception nor promotion". So the check was asking
+        # eight children across this ecosystem for a sentence about a rule the
+        # policy had stopped carrying -- and the shared policy's own coverage
+        # table named the mismatch before we did. Retiring a requirement the
+        # policy no longer states is a fix rather than a relaxation; a tree that
+        # kept the old sentence is unaffected, because nothing reads it now.
+        shared = shared_surfaces(name)
+        if shared:
+            print(f"     tools/{name}: rule 2, {len(shared)} shared surface(s) a charter should name")
+            for s in shared:
+                print(f"       - {s}")
     return bad
 
 
@@ -1237,12 +1261,28 @@ def check_discussion() -> list[str]:
 
 
 def check_prompt_gate() -> list[str]:
-    """*A prompt may not be for this repository* -- carried beside the response
-    gate, and reported rather than enforced while it is new.
+    """*A prompt may not be for this repository* -- **home-only since 2026-09-21**,
+    because the shared policy no longer asks for it.
 
-    Beside the gate and never folded into it: the response gate is the one rule
+    Beside the response gate and never folded into it: the gate is the one rule
     here enforced as a build failure, and diluting it is a worse trade than
     repeating a sentence next to it.
+
+    **Why it stopped applying to anybody else.** Kanon removed *A prompt may not
+    be for this repository* from the shared policy on 2026-09-20 as an internal
+    operational instruction, and abandoned the proposal to make this check fatal
+    along with it -- saying in the same record that the implementation decision is
+    ours. A minor finding reported on ten members' trees for a paragraph in no
+    shared page is a claim about somebody else's document that their document does
+    not make: the same defect as the `report/` convention, which we published the
+    same way and withdrew for good in our `D38`.
+
+    **It is narrowed rather than deleted, because the rule earned its keep.** It
+    has fired twice in opposite directions -- a prompt of ours arriving in koine's
+    tree, and a request to draft an ecosystem-wide announcement worked on in a tree
+    that holds no such office -- so this repository keeps holding itself to it. A
+    member that adopted the paragraph on our asking loses nothing by our no longer
+    grading it; ten of them carry it today and none was told to.
     """
     low = prose(read("docs/discussion.md")).lower()
     if not low:
@@ -1289,11 +1329,47 @@ def has(*rel):
                 return None
         return ("nothing at " + " or ".join(rel)
                 + " — this check turns on if you add one")
+    applies.applicability = "when " + " or ".join(rel) + " exists"
     return applies
 
 
 def is_home():
     return None if os.path.abspath(ROOT) == REPO_ROOT else "specific to anoieu's own files"
+
+
+is_home.applicability = "home-only"
+
+
+def both(*gates):
+    """Applicability: every gate has to let the check through.
+
+    The first reason wins, so order them from the widest to the narrowest -- a
+    reader told *specific to anoieu's own files* learns more than one told the
+    path it would have looked for does not exist.
+    """
+    def applies():
+        for gate in gates:
+            reason = gate()
+            if reason:
+                return reason
+        return None
+    applies.applicability = " and ".join(applicability_of(g) for g in gates)
+    return applies
+
+
+def applicability_of(gate) -> str:
+    """The one-line description of when a check runs, for the contract registry.
+
+    **Contract 1 promises that applicability is stable, and nothing compared it.**
+    The registry recorded which checks are blocking and which advisory, so a
+    severity change was caught and a check quietly narrowed to this tree or
+    widened to everybody was not -- and widening one is the exact thing the
+    contract forbids. A gate carries its own description so that the snapshot can
+    hold it.
+    """
+    if gate is None:
+        return "every tree"
+    return getattr(gate, "applicability", gate.__name__)
 
 
 def not_associate():
@@ -1304,6 +1380,9 @@ def not_associate():
     did not apply to them.
     """
     return None if is_associate() else "this tree carries no `associate` marker"
+
+
+not_associate.applicability = "an associate's tree only"
 
 
 def is_advertised():
@@ -1320,10 +1399,16 @@ def is_advertised():
             "declaration, and what it holds itself to is written there")
 
 
+is_advertised.applicability = "unless the tree records `associate`"
+
+
 # (title, check, applies). A check that does not apply is skipped and named:
 # passing must never read as more coverage than it was. Contract 1 keeps these
-# requirements and severities: add new obligations in a new contract, with
-# separate implementations where semantics differ. policy_check/tests/policy-v1.json and
+# requirements, their severities **and the third column**: add new obligations in
+# a new contract, with separate implementations where semantics differ. A gate
+# carries an `applicability` string so the snapshot can compare that column too --
+# widening one is the obligation the contract forbids, and for a while nothing
+# looked. policy_check/tests/policy-v1.json and
 # the adoption fixtures protect this contract as the implementation advances.
 CHECKS_V1 = (
     ("the README declares membership of the ecosystem", check_declaration, is_advertised),
@@ -1335,7 +1420,7 @@ CHECKS_V1 = (
     ("dependencies are fetched and pinned, never vendored", check_dependencies,
      has("deps", *(f"{directory}/deps.json" for directory in DEPENDENCY_CONFIG_DIRS))),
     ("working space is untracked", check_working_space, has(".gitignore")),
-    ("child projects carry a charter, and name what they break", check_children, has("tools")),
+    ("child projects carry a charter, and name what they will not do", check_children, has("tools")),
     ("the discussion file carries the response gate, at the top",
      check_response_gate, has("docs/discussion.md")),
     ("every link in a document or an outbound prompt resolves", check_links, None),
@@ -1367,7 +1452,7 @@ MINOR_V1 = (
     ("the README explains the repository's name", check_name_explained, None),
     ("committed data carries no path out of a home directory", check_local_paths_data, None),
     ("the discussion file says a prompt may be misaddressed",
-     check_prompt_gate, has("docs/discussion.md")),
+     check_prompt_gate, both(is_home, has("docs/discussion.md"))),
 )
 
 POLICY_VERSIONS = {"1": (CHECKS_V1, MINOR_V1)}

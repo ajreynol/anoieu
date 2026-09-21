@@ -22,7 +22,7 @@ has not been checked.
 
 **Seventeen claims, every one τεκμήριον, and one of them found by a job going
 red — the only one.** This is
-[zetesis's `F5`](https://github.com/ajreynol/epikrisis/blob/main/tools/zetesis/findings.md)
+[zetesis's `F5`](https://github.com/ajreynol/epikrisis/blob/main/tools/zetesis/docs/findings.md)
 with instances attached: the parent's CI was green throughout, its policy checker
 reported zero failures, and its documentation-currency job reported 16 of 16
 documents carrying a date. **Every claim below was false while all three of those
@@ -96,7 +96,7 @@ forbids turning that into a coverage number.
 
 | row | what would have caught it | exists? |
 | --- | --- | --- |
-| 1–4 | resolving a cross-repository link against a checkout of the named repository | no — contract 2 candidate |
+| 1–4 | resolving a cross-repository link against a checkout of the named repository | **now yes, as a command**: `python3 -m policy_check.outbound`, added 2026-09-21, which found four more of these on its first run. Still no — as a *check*: it is a contract 2 candidate, and a gate that fails for somebody else's rename is the thing being avoided |
 | 5 | comparing the SARIF surface with the register it restates | **now yes**, in `tests/cli_cases.py` |
 | 6 | asserting that a named test function exists | no |
 | 7 | comparing the checker's coverage list with the policy it claims to be listing | no, and it would need the policy's text |
@@ -121,3 +121,82 @@ every backticked path would fire on every illustrative path in every document �
 which is the parent's own standard for what not to build. Whether a narrower form
 exists is a question for the parent; this register's job is to have the instance
 rather than the answer.
+
+## 2026-09-21 — the second pass, and the sharpest entries yet are in executing code
+
+**Eleven claims, every one τεκμήριον, and three of them were printed on every
+member repository's build.** The first pass found that the worst shape a stale
+claim takes is *a document describing the tree it sits in*; this pass sharpens it.
+**The worst shape is a claim about somebody else's document, made by a program, in
+their build.** Rows 20 to 22 are that, and one of them had been named on the
+shared policy's own coverage page before anybody here looked.
+
+| # | where | the claim | what was true instead |
+| --- | --- | --- | --- |
+| 18 | `policy_check/checker.py`, `check_children` | a child project that runs in the parent's CI, is named by parent code, or appears on its front page must claim an exception in its charter, or the build **fails** | all three are expressly permitted: isolation is optional, advertising is the default, and integration with the parent requires "neither an exception nor promotion". The shared policy's own coverage table had named the mismatch |
+| 19 | the same check, in effect | — | **eight children** in five repositories carry a sentence claiming that exception. Every one wrote it to satisfy this check; none of them needed to |
+| 20 | `policy_check/checker.py`, the coverage list | three child-project rules, described by wording the shared policy had replaced — *nothing leaves the island by machine*, *additive never authoritative*, *it cites what it inherited* | the rules read *cross-repository feedback goes through the parent*, *an independent account does not confer authority*, and *it explains why the parent is its home*. Printed on every run in every member repository |
+| 21 | `policy_check/checker.py`, `check_prompt_gate` | every discussion file should carry *a prompt may not be for this repository*, reported as a minor finding on ten members' trees | the shared policy removed it on 2026-09-20 and abandoned making it fatal, saying the implementation decision was the parent's |
+| 22 | `policy_check/tests/policy-v1.json` | the snapshot holds what contract 1 fixes | it held the requirements and the severities and **not the applicability**, which the contract fixes equally — so a check widened from the parent's tree to every member, the one thing the contract forbids, was invisible to the suite |
+| 23 | `anoieu_fuzz/README.md` | the fuzzer was folded into the parent because of "the island rules it had to break in order to be useful" | there are no island rules; a child may share all three of the things it broke. A retired rule cited in the present tense as the reason for a past decision |
+| 24 | `docs/history.md` | the `report/` convention *did not survive the handoff* to kanon | it survived intact in the handoff commit and was deleted the next morning in a simplification pass. Established by kanon, in their own tree, at the parent's asking |
+| 25 | `docs/maintenance.md` | *our request in `discussion.md`* describes the coverage gap | the request had been answered and the topic removed. A live pointer into a file whose contents move by design |
+| 26 | `docs/history.md` | kanon keeps what is unresolved about role handoffs at `board.md#a-handoff-of-a-role-is-an-ordinary-item-here` | no such heading; the procedure is `roles.md#how-a-role-is-handed-off`. **The path resolved and the section did not**, which is the half a careless repair leaves behind |
+| 27 | `docs/history.md` | martyria's stances are at `epikrisis/tools/martyria/stances.md` | `tools/martyria/docs/stances.md` — epikrisis put its children's documents under `docs/` |
+| 28–29 | `tools/tekmerion/README.md`, `docs/register.md` | zetesis's findings are at `epikrisis/tools/zetesis/findings.md` | `tools/zetesis/docs/findings.md`, same move. **Two of these were this project's own pages**, citing the finding this project rests on |
+
+**Re-derive rows 18 and 21** by checking out the parent at `2e32912` and running
+its own checker against any repository in this ecosystem holding a child project;
+rows 20, 22, 23 and 25 by reading one file in the parent's tree at that commit.
+Row 19 is a count over five trees and is the one row here that needs them.
+Row 24 is settled by reading kanon's `7eb9973` and `d892fa6`. Rows 26 to 29 are
+settled by `python3 -m policy_check.outbound`, which is the command the parent
+wrote in order to find them and did not have when the pass began.
+
+### What the second pass says that the first did not
+
+**A check is a claim, and it is the one kind that recruits.** Row 19 is what makes
+this pass worse than the first. A stale sentence in a document is read and
+disbelieved; a stale sentence in a *check* is obeyed. Eight children wrote a
+statement about a rule that no longer existed because a program asked them to, and
+every one of those statements is now a small stale claim in somebody else's tree,
+put there by this one. **The parent's checker is the only document here that can
+propagate its own errors into repositories that never read it.**
+
+**And a contract can promise something no test compares.** Row 22 is the quietest
+entry in this register and possibly the most useful: the parent published a
+stability promise in three parts, wrote a snapshot test, and the snapshot covered
+two of them. Nothing was wrong in the tree — the gap was between a promise and its
+instrument, and no reading of either alone would find it. It took asking *what
+would have caught this* about a change already made.
+
+### What would have caught each
+
+| row | what would have caught it | exists? |
+| --- | --- | --- |
+| 18, 20, 21 | comparing the checker's rule descriptions with the policy text they claim to describe | **no**, and it needs the other repository's prose — the rows 1–4 problem in its hardest form. Nothing compares a *paraphrase* to its source |
+| 19 | nothing. The cost of a wrong check is in other people's trees and no run here can see it | no |
+| 22 | recording applicability in the contract snapshot, so a narrowing or widening is a test failure | **now yes**, in `policy_check/tests/cases.py` |
+| 23, 24, 25 | nothing mechanical. All three are prose that was true when written | no |
+| — | asserting that every path and function name in the checker's coverage list exists | **now yes**, in `tests/run.py`. This is row 6's missing form, built for row 6 and it would not have caught any row above: the coverage list's *names* were real, and its *descriptions* were stale |
+
+**The last line is the honest one.** Row 6 asked for a check that a named test
+function exists, that check now exists, and it catches nothing in this pass.
+**What went wrong here was never a name; it was a paraphrase of somebody else's
+rule, drifting while the name stayed valid.** A checker that quotes a policy it
+does not hold has no mechanical defence against the policy changing, and saying so
+is more use than a check that would have looked like one.
+
+**Eleven of twenty-nine now have no mechanical form**, up from seven of seventeen,
+and the ratio moving the wrong way is the result rather than a disappointment: the
+first pass found what a link checker misses, and this one found what no checker in
+this tree can reach.
+
+**Rows 26 to 29 are the encouraging half, and they are encouraging for an
+uncomfortable reason.** They were found because the parent stopped treating the
+cross-repository gap as somebody else's to close and wrote the command — and the
+command immediately found four more instances, two of them on this project's own
+pages, one of them a citation of the finding this whole project rests on. **A
+register that cites a moved file is the failure it exists to record**, and the
+only reason it is here rather than unnoticed is that somebody built the instrument
+rather than waiting for the contract.
