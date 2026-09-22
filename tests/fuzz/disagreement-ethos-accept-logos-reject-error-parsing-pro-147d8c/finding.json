@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-147d8c",
+ "code": "FUZ0005",
+ "commands": 12,
+ "kind": "underaccept",
+ "mode": "proof",
+ "note": "a parametric datatype, on a proof cvc5 wrote; 5 of 448 harvested cvc5 proofs carry a par block, so this is reachable from ordinary output rather than only from generated input",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.029,
+   "status": "correct"
+  },
+  {
+   "checker": "logos",
+   "coarse": "reject",
+   "detail": "Error parsing proof: Error: parametric datatype List (...) is not supported",
+   "exit": 1,
+   "seconds": 0.004,
+   "status": "rejected"
+  }
+ ],
+ "seed": "final:11746",
+ "source": "mutated:seed:local_ajreynol_cvc5-ai-3_test_regress_cli_regress0_datatypes_dt-param-simple-unsat.cpc",
+ "summary": "ethos accepted what logos refused: Error parsing proof: Error: parametric datatype List (...) is not supported"
+}

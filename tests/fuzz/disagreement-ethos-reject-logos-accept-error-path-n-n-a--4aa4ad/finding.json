@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-a--4aa4ad",
+ "code": "FUZ0001",
+ "commands": 5,
+ "kind": "overaccept",
+ "mode": "proof",
+ "note": "the same define macro declared twice; ethos resolves its two uses to different terms and contra then fails, logos keeps one and accepts. 2 of 448 harvested cvc5 proofs repeat a define name",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "reject",
+   "detail": "Error: <path>:N.N: A step of rule contra failed to check.",
+   "exit": -6,
+   "seconds": 0.107,
+   "status": "rejected"
+  },
+  {
+   "checker": "logos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.004,
+   "status": "correct"
+  }
+ ],
+ "seed": "final:1425",
+ "source": "mutated:feature",
+ "summary": "logos accepted what ethos refused: Error: <path>:N.N: A step of rule contra failed to check."
+}

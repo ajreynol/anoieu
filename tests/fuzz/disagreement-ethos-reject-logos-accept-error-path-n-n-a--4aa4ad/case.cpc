@@ -1,0 +1,6 @@
+; anoieu-fuzz proof case, seed final:1425 (mutated:feature)
+(define dprm ((x Bool)) (= x x))
+(define dprm ((x Bool)) (= x x))
+(assume @a1 (dprm true))
+(assume @b2 (not (dprm true)))
+(step @c3 false :rule contra :premises (@a1 @b2))

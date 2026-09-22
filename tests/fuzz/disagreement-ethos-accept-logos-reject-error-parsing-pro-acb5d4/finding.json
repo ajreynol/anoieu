@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-acb5d4",
+ "code": "FUZ0005",
+ "commands": 3,
+ "kind": "underaccept",
+ "mode": "proof",
+ "note": "a chainable operator applied to one argument, which ethos evaluates; not seen in 448 harvested cvc5 proofs, so this is a question about the language rather than about cvc5 output",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.032,
+   "status": "correct"
+  },
+  {
+   "checker": "logos",
+   "coarse": "reject",
+   "detail": "Error parsing proof: Error: no declaration of <= takes N indices and N arguments",
+   "exit": 1,
+   "seconds": 0.004,
+   "status": "rejected"
+  }
+ ],
+ "seed": "final:5101",
+ "source": "feature",
+ "summary": "ethos accepted what logos refused: Error parsing proof: Error: no declaration of <= takes N indices and N arguments"
+}

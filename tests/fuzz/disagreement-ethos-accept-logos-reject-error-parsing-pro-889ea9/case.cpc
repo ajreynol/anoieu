@@ -1,0 +1,5 @@
+; anoieu-fuzz proof case, seed final:609 (feature)
+(declare-datatype Dsng ((csng (ssng Int)) (esng)))
+(assume @a1 (= esng esng))
+(assume @b2 (not (= esng esng)))
+(step @c3 false :rule contra :premises (@a1 @b2))

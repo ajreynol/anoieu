@@ -1,0 +1,5 @@
+; anoieu-fuzz proof case, seed final:619 (feature)
+(declare-const Plam (-> (-> Int Int) Bool))
+(assume @a1 (Plam (lambda ((xlam Int)) xlam)))
+(assume @b2 (not (Plam (lambda ((xlam Int)) xlam))))
+(step @c3 false :rule contra :premises (@a1 @b2))

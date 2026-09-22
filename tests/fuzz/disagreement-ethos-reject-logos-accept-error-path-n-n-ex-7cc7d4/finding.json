@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ex-7cc7d4",
+ "code": "FUZ0001",
+ "commands": 6,
+ "kind": "overaccept",
+ "mode": "proof",
+ "note": "a binary literal where a constructor name belongs; logos's declare-datatypes reads #b1 as a nullary constructor, ethos refuses the token",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "reject",
+   "detail": "Error: <path>:N.N: Expected SMT-LIBv2 symbol, got `_` (BINARY_LITERAL).",
+   "exit": -6,
+   "seconds": 0.105,
+   "status": "rejected"
+  },
+  {
+   "checker": "logos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.003,
+   "status": "correct"
+  }
+ ],
+ "seed": "final:7487",
+ "source": "mutated:feature",
+ "summary": "logos accepted what ethos refused: Error: <path>:N.N: Expected SMT-LIBv2 symbol, got `_` (BINARY_LITERAL)."
+}

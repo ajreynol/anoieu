@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8",
+ "code": "FUZ0001",
+ "commands": 3,
+ "kind": "overaccept",
+ "mode": "proof",
+ "note": "a step stating a conclusion the rule does not derive; logos reads the annotation no further, and takes an undeclared symbol there just as readily",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "reject",
+   "detail": "Error: <path>:N.N: Unexpected conclusion for rule contra:",
+   "exit": -6,
+   "seconds": 0.528,
+   "status": "rejected"
+  },
+  {
+   "checker": "logos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.008,
+   "status": "correct"
+  }
+ ],
+ "seed": "conclusion:124",
+ "source": "feature",
+ "summary": "logos accepted what ethos refused: Error: <path>:N.N: Unexpected conclusion for rule contra:"
+}

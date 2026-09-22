@@ -1,0 +1,7 @@
+; anoieu-fuzz proof case, seed final:7487 (mutated:feature)
+(declare-sort Ssrt 0)
+(declare-const ssrt Ssrt)
+(declare-datatypes ((Dupd 0)) (((cupd (supd Int)) (#b1))))
+(assume @a1 (and (= ssrt ssrt) (= ((_ update supd) (cupd 1) 2) (cupd 2))))
+(assume @b2 (not (and (= ssrt ssrt) (= ((_ update supd) (cupd 1) 2) (cupd 2)))))
+(step @c3 false :rule contra :premises (@a1 @b2))

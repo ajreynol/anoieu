@@ -1,0 +1,2 @@
+; anoieu-fuzz proof case, seed campaign-b:5753 (mutated:seed:local_ajreynol_cvc5-ai-3_test_regress_cli_regress0_bv_bv_to_int1.cpc)
+(declare-const y (_ ))

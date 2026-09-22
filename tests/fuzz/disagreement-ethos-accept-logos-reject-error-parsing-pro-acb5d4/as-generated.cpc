@@ -1,0 +1,5 @@
+; anoieu-fuzz proof case, seed final:5101 (feature)
+(declare-const vidx (BitVec 4))
+(assume @a1 (<= 7))
+(assume @b2 (not (<= 7)))
+(step @c3 :rule contra :premises (@a1 @b2))

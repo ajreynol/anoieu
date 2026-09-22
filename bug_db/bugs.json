@@ -1442,6 +1442,294 @@
       "notes": "not a defect, and our error rather than a judgement call: `cons` is a parameter of the enclosing program, while EO0054 resolved the head through `resolve_decl`'s flat symbol table and picked up the `:right-assoc-nil` `cons` that the *including* `tests/examples-nary.eo` declares after the include. Check narrowed to skip a head the parameter list binds; witness `tests/witnesses/EO0054-shadowed-good.eo`. No longer derived. Left open rather than withdrawn, pending the maintainer's confirmation. Same cause as `dcfaf1e214126aa3`",
       "owner": "ethos",
       "where": "tests/Nary.eo:90"
+    },
+    {
+      "id": "7836f9530ce4994c",
+      "bug": "FUZ0002-crash-ethos-af49e1",
+      "tool": "anoieu-fuzz",
+      "description": "ethos crash, with nothing on either stream",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "crash-ethos-af49e1",
+      "code": "FUZ0002",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "crash",
+      "mode": "proof",
+      "note": "(declare-const y (_)): an empty indexed operator segfaults ethos with nothing on either stream; no signature needed",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "abnormal",
+          "detail": "",
+          "exit": -11,
+          "seconds": 0.099,
+          "status": "crash"
+        },
+        {
+          "checker": "logos",
+          "coarse": "reject",
+          "detail": "Error parsing proof: Error: expected an operator name or a term after _",
+          "exit": 1,
+          "seconds": 0.006,
+          "status": "rejected"
+        }
+      ],
+      "owner": "ethos",
+      "seed": "campaign-b:5753",
+      "source": "mutated:seed:local_ajreynol_cvc5-ai-3_test_regress_cli_regress0_bv_bv_to_int1.cpc",
+      "where": "tests/fuzz/crash-ethos-af49e1/case.cpc:2"
+    },
+    {
+      "id": "d88112e31fcc646e",
+      "bug": "FUZ0001-disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8",
+      "tool": "anoieu-fuzz",
+      "description": "logos accepted what ethos refused: Error: <path>:N.N: Unexpected conclusion for rule contra:",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8",
+      "code": "FUZ0001",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "overaccept",
+      "mode": "proof",
+      "note": "a step stating a conclusion the rule does not derive; logos reads the annotation no further, and takes an undeclared symbol there just as readily",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "reject",
+          "detail": "Error: <path>:N.N: Unexpected conclusion for rule contra:",
+          "exit": -6,
+          "seconds": 0.528,
+          "status": "rejected"
+        },
+        {
+          "checker": "logos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.008,
+          "status": "correct"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "conclusion:124",
+      "source": "feature",
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8/case.cpc:2"
+    },
+    {
+      "id": "1cc815407beb3759",
+      "bug": "FUZ0001-disagreement-ethos-reject-logos-accept-error-path-n-n-ex-7cc7d4",
+      "tool": "anoieu-fuzz",
+      "description": "logos accepted what ethos refused: Error: <path>:N.N: Expected SMT-LIBv2 symbol, got `_` (BINARY_LITERAL).",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-ex-7cc7d4",
+      "code": "FUZ0001",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "overaccept",
+      "mode": "proof",
+      "note": "a binary literal where a constructor name belongs; logos's declare-datatypes reads #b1 as a nullary constructor, ethos refuses the token",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "reject",
+          "detail": "Error: <path>:N.N: Expected SMT-LIBv2 symbol, got `_` (BINARY_LITERAL).",
+          "exit": -6,
+          "seconds": 0.105,
+          "status": "rejected"
+        },
+        {
+          "checker": "logos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.003,
+          "status": "correct"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "final:7487",
+      "source": "mutated:feature",
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-7cc7d4/case.cpc:2"
+    },
+    {
+      "id": "4a419fe0339d88b6",
+      "bug": "FUZ0001-disagreement-ethos-reject-logos-accept-error-path-n-n-a--4aa4ad",
+      "tool": "anoieu-fuzz",
+      "description": "logos accepted what ethos refused: Error: <path>:N.N: A step of rule contra failed to check.",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "disagreement-ethos-reject-logos-accept-error-path-n-n-a--4aa4ad",
+      "code": "FUZ0001",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "overaccept",
+      "mode": "proof",
+      "note": "the same define macro declared twice; ethos resolves its two uses to different terms and contra then fails, logos keeps one and accepts. 2 of 448 harvested cvc5 proofs repeat a define name",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "reject",
+          "detail": "Error: <path>:N.N: A step of rule contra failed to check.",
+          "exit": -6,
+          "seconds": 0.107,
+          "status": "rejected"
+        },
+        {
+          "checker": "logos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.004,
+          "status": "correct"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "final:1425",
+      "source": "mutated:feature",
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-a--4aa4ad/case.cpc:2"
+    },
+    {
+      "id": "48d0d19946863a67",
+      "bug": "FUZ0005-disagreement-ethos-accept-logos-reject-error-parsing-pro-147d8c",
+      "tool": "anoieu-fuzz",
+      "description": "ethos accepted what logos refused: Error parsing proof: Error: parametric datatype List (...) is not supported",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-147d8c",
+      "code": "FUZ0005",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "underaccept",
+      "mode": "proof",
+      "note": "a parametric datatype, on a proof cvc5 wrote; 5 of 448 harvested cvc5 proofs carry a par block, so this is reachable from ordinary output rather than only from generated input",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.029,
+          "status": "correct"
+        },
+        {
+          "checker": "logos",
+          "coarse": "reject",
+          "detail": "Error parsing proof: Error: parametric datatype List (...) is not supported",
+          "exit": 1,
+          "seconds": 0.004,
+          "status": "rejected"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "final:11746",
+      "source": "mutated:seed:local_ajreynol_cvc5-ai-3_test_regress_cli_regress0_datatypes_dt-param-simple-unsat.cpc",
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-147d8c/case.cpc:2"
+    },
+    {
+      "id": "4bdbda42c0bc7861",
+      "bug": "FUZ0005-disagreement-ethos-accept-logos-reject-error-parsing-pro-0e9250",
+      "tool": "anoieu-fuzz",
+      "description": "ethos accepted what logos refused: Error parsing proof: Error: expected a symbol, an indexed symbol or a type ascription as the head of an application, got (...)",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-0e9250",
+      "code": "FUZ0005",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "underaccept",
+      "mode": "proof",
+      "note": "a lambda in an assumption; forall and exists fail on the same path, and 4, 8 and 2 of 448 harvested cvc5 proofs carry one",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.039,
+          "status": "correct"
+        },
+        {
+          "checker": "logos",
+          "coarse": "reject",
+          "detail": "Error parsing proof: Error: expected a symbol, an indexed symbol or a type ascription as the head of an application, got (...)",
+          "exit": 1,
+          "seconds": 0.004,
+          "status": "rejected"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "final:619",
+      "source": "feature",
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-0e9250/case.cpc:2"
+    },
+    {
+      "id": "893a71805a2c431d",
+      "bug": "FUZ0005-disagreement-ethos-accept-logos-reject-error-parsing-pro-acb5d4",
+      "tool": "anoieu-fuzz",
+      "description": "ethos accepted what logos refused: Error parsing proof: Error: no declaration of <= takes N indices and N arguments",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-acb5d4",
+      "code": "FUZ0005",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "underaccept",
+      "mode": "proof",
+      "note": "a chainable operator applied to one argument, which ethos evaluates; not seen in 448 harvested cvc5 proofs, so this is a question about the language rather than about cvc5 output",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.032,
+          "status": "correct"
+        },
+        {
+          "checker": "logos",
+          "coarse": "reject",
+          "detail": "Error parsing proof: Error: no declaration of <= takes N indices and N arguments",
+          "exit": 1,
+          "seconds": 0.004,
+          "status": "rejected"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "final:5101",
+      "source": "feature",
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-acb5d4/case.cpc:2"
+    },
+    {
+      "id": "26af98b965618686",
+      "bug": "FUZ0005-disagreement-ethos-accept-logos-reject-error-parsing-pro-889ea9",
+      "tool": "anoieu-fuzz",
+      "description": "ethos accepted what logos refused: Error parsing proof: Error: unrecognized command (declare-datatype Dsng ((...) (esng))), expected one of declare-const, declare-fun, declare-sort, declare-datat",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-889ea9",
+      "code": "FUZ0005",
+      "evidence": "recorded reproducer; not replayed by this export",
+      "kind": "underaccept",
+      "mode": "proof",
+      "note": "declare-datatype, the singular spelling of a command logos implements in the plural; not seen in 448 harvested cvc5 proofs, which all use declare-datatypes",
+      "outcomes": [
+        {
+          "checker": "ethos",
+          "coarse": "accept",
+          "detail": "correct",
+          "exit": 0,
+          "seconds": 0.029,
+          "status": "correct"
+        },
+        {
+          "checker": "logos",
+          "coarse": "reject",
+          "detail": "Error parsing proof: Error: unrecognized command (declare-datatype Dsng ((...) (esng))), expected one of declare-const, declare-fun, declare-sort, declare-datat",
+          "exit": 1,
+          "seconds": 0.004,
+          "status": "rejected"
+        }
+      ],
+      "owner": "ethos+logos",
+      "seed": "final:609",
+      "source": "feature",
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-889ea9/case.cpc:2"
     }
   ]
 }

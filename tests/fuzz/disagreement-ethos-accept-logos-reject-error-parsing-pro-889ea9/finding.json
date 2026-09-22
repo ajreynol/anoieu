@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-889ea9",
+ "code": "FUZ0005",
+ "commands": 4,
+ "kind": "underaccept",
+ "mode": "proof",
+ "note": "declare-datatype, the singular spelling of a command logos implements in the plural; not seen in 448 harvested cvc5 proofs, which all use declare-datatypes",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.029,
+   "status": "correct"
+  },
+  {
+   "checker": "logos",
+   "coarse": "reject",
+   "detail": "Error parsing proof: Error: unrecognized command (declare-datatype Dsng ((...) (esng))), expected one of declare-const, declare-fun, declare-sort, declare-datat",
+   "exit": 1,
+   "seconds": 0.004,
+   "status": "rejected"
+  }
+ ],
+ "seed": "final:609",
+ "source": "feature",
+ "summary": "ethos accepted what logos refused: Error parsing proof: Error: unrecognized command (declare-datatype Dsng ((...) (esng))), expected one of declare-const, declare-fun, declare-sort, declare-datat"
+}

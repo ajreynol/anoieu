@@ -1,0 +1,29 @@
+{
+ "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-0e9250",
+ "code": "FUZ0005",
+ "commands": 4,
+ "kind": "underaccept",
+ "mode": "proof",
+ "note": "a lambda in an assumption; forall and exists fail on the same path, and 4, 8 and 2 of 448 harvested cvc5 proofs carry one",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "accept",
+   "detail": "correct",
+   "exit": 0,
+   "seconds": 0.039,
+   "status": "correct"
+  },
+  {
+   "checker": "logos",
+   "coarse": "reject",
+   "detail": "Error parsing proof: Error: expected a symbol, an indexed symbol or a type ascription as the head of an application, got (...)",
+   "exit": 1,
+   "seconds": 0.004,
+   "status": "rejected"
+  }
+ ],
+ "seed": "final:619",
+ "source": "feature",
+ "summary": "ethos accepted what logos refused: Error parsing proof: Error: expected a symbol, an indexed symbol or a type ascription as the head of an application, got (...)"
+}

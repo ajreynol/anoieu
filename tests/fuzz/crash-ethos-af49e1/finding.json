@@ -1,0 +1,29 @@
+{
+ "bucket": "crash-ethos-af49e1",
+ "code": "FUZ0002",
+ "commands": 1,
+ "kind": "crash",
+ "mode": "proof",
+ "note": "(declare-const y (_)): an empty indexed operator segfaults ethos with nothing on either stream; no signature needed",
+ "outcomes": [
+  {
+   "checker": "ethos",
+   "coarse": "abnormal",
+   "detail": "",
+   "exit": -11,
+   "seconds": 0.099,
+   "status": "crash"
+  },
+  {
+   "checker": "logos",
+   "coarse": "reject",
+   "detail": "Error parsing proof: Error: expected an operator name or a term after _",
+   "exit": 1,
+   "seconds": 0.006,
+   "status": "rejected"
+  }
+ ],
+ "seed": "campaign-b:5753",
+ "source": "mutated:seed:local_ajreynol_cvc5-ai-3_test_regress_cli_regress0_bv_bv_to_int1.cpc",
+ "summary": "ethos crash, with nothing on either stream"
+}

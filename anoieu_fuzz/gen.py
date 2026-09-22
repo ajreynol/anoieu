@@ -587,9 +587,25 @@ class Generator:
             # whose every command matters is a file that exercises no path for
             # ignoring one.
             body.append(f"(step {self.fresh('@r')} :rule refl :args ({terms[0]}))")
-        conclusion = "" if self.chance(0.3) else " false"
-        body.append(f"(step {c}{conclusion} :rule contra :premises ({a} {b}))")
+        body.append(f"(step {c}{self._conclusion()} :rule contra :premises ({a} {b}))")
         return head + body + tail
+
+    def _conclusion(self) -> str:
+        """What the closing step says it proves -- which it need not say at all.
+
+        `contra` derives `false` from a formula and its negation, so `false` is
+        the conclusion this frame is built to have, and leaving it out is the
+        other way the same proof is written. `wild` is how often the case states
+        a *third* thing: a conclusion the rule does not derive, or one naming a
+        symbol nothing declared. A checker that reads the annotation has to
+        refuse such a file; one that ignores it cannot tell the difference. The
+        frame is otherwise too well-behaved to ask.
+        """
+        if self.chance(self.wild):
+            return " " + self.rng.choice(
+                ("true", "(= 1 2)", "nosuchsymbol", "(not false)")
+            )
+        return "" if self.chance(0.3) else " false"
 
     def _pick_features(self, k: int) -> list[Feature]:
         """`k` distinct features, by weight.

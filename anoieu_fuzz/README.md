@@ -45,9 +45,20 @@ either of them ought to prove.
 
 An uncaught C++ exception in ethos on `(declare-const f (->))`, an error path
 that skips ethos's own `Error:` convention, and three proofs ethos and logos
-answer differently — one of them now a committed regression test. Six
-reproducers are under [`../tests/fuzz/`](../tests/fuzz), and each is verified
-against a real build on every push.
+answer differently — one of them now a committed regression test. Then, once
+proof cases were assembled around one construct at a time rather than written
+from the grammar alone: a **segfault** in ethos on `(declare-const y (_))`;
+logos accepting a step whose stated conclusion the rule does not derive, and a
+binary literal where a constructor name belongs; and logos refusing parametric
+datatypes and binders, both of which cvc5 emits. Fourteen reproducers are under
+[`../tests/fuzz/`](../tests/fuzz), and each is verified against a real build on
+every push.
+
+The counts are of *our* rows and calibrate nothing about either checker — see
+[what may be said](../bug_db/reporting-policy.md#what-we-publish). Where a
+construct was found in cvc5's own output, the entry says how often, because
+"logos does not parse this" and "logos does not parse this and cvc5 prints it"
+are different claims and only the second is worth somebody's afternoon.
 
 **Three of them have been carried, accepted and fixed** — the crash and two
 error paths that reached no `Error: <file>:<line>` — on ethos's `anoieu-findings`

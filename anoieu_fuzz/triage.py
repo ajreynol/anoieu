@@ -106,7 +106,13 @@ def judge(case: Case, outcomes: list[Outcome], reference: str = "") -> Finding |
     if dead:
         first = dead[0]
         kind = first.status if first.status in ("timeout", "unexplained") else "crash"
-        summary = f"{first.checker} {first.status}: {first.detail}"
+        # A checker that died with *nothing to say* is the whole of `FUZ0002`,
+        # and it is the one case where there is no detail to put after the
+        # colon. Saying so beats trailing off, because the summary is what a
+        # published row shows and a row reading "ethos crash: " tells its
+        # reader nothing the code did not already.
+        summary = (f"{first.checker} {first.status}: {first.detail}" if first.detail
+                   else f"{first.checker} {first.status}, with nothing on either stream")
         return Finding(kind, _bucket(kind, first.checker, first.detail), summary, case, ran)
 
     verdicts = {o.coarse for o in ran}
