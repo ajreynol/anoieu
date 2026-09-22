@@ -263,7 +263,10 @@ def promote(source: str, corpus: str = "", owner: str = "", note: str = "") -> s
         raise FileExistsError(f"{os.path.relpath(where, ROOT)} is already promoted")
     os.makedirs(where, exist_ok=True)
     for name in sorted(os.listdir(source)):
-        if name.startswith("case."):
+        # `as-generated.*` is the case before the shrinker cut it, kept when the
+        # two differ so a reader can check the reproducer still shows what the
+        # row says it shows.
+        if name.startswith(("case.", "as-generated.")):
             shutil.copy2(os.path.join(source, name), os.path.join(where, name))
     record["bucket"] = bucket
     if owner:

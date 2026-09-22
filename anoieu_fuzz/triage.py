@@ -52,6 +52,13 @@ class Finding:
     summary: str
     case: Case
     outcomes: list[Outcome] = field(default_factory=list)
+    #: The case as the run produced it, before `shrink` cut it down, when the
+    #: two differ. A shrinker keeps the *bucket*, which is coarse, and this
+    #: repository has already withdrawn one finding whose reproducer held its
+    #: bucket while no longer demonstrating the thing it was filed for. Keeping
+    #: both files is what lets the next reader check that for themselves
+    #: instead of taking the shrinker's word for it.
+    origin: Case | None = None
 
     @property
     def code(self) -> str:
@@ -207,14 +214,35 @@ def shrink(case: Case, probe: Probe, bucket: str, budget: int = 120) -> tuple[Ca
             i += 1
 
     # and then inside each surviving command, because "one command" is still
-    # a whole `declare-rule` and the defect is usually one subterm of it
-    for i in range(len(commands)):
-        if spent >= budget:
-            break
-        commands[i] = _shrink_terms(
-            commands[i], lambda c, i=i: holds(commands[:i] + [c] + commands[i + 1 :])
-        )
+    # a whole `declare-rule` and the defect is usually one subterm of it.
+    #
+    # **Not for a case written around a feature.** `gen.feature_case` assembles
+    # a file out of `FEATURES`, and every command in one is already the
+    # smallest way to write the construct it is there for -- so this pass has
+    # nothing to win and one thing to lose. It cut `(declare-datatypes ((D 1))
+    # (...))` down to `(declare-datatypes ((D 1)) ())`, which holds the bucket,
+    # because logos refuses the *arity* before it reads the constructors; the
+    # reproducer then no longer showed a parametric datatype at all. That is
+    # how a finding was withdrawn from this corpus once already.
+    if not _is_assembled(case):
+        for i in range(len(commands)):
+            if spent >= budget:
+                break
+            commands[i] = _shrink_terms(
+                commands[i], lambda c, i=i: holds(commands[:i] + [c] + commands[i + 1 :])
+            )
     return best.replace(commands), spent
+
+
+def _is_assembled(case: Case) -> bool:
+    """Was this case built out of whole, already-minimal commands?
+
+    `gen.feature_case` writes one, and a mutation of one keeps the commands it
+    did not touch. Either way what a reader has to be able to see in the
+    reproducer is the construct the case was assembled around, and cutting
+    inside a command is how that gets lost.
+    """
+    return "feature" in case.source
 
 
 def _spans(text: str) -> tuple[list[tuple[int, int]], list[tuple[int, int]]]:
@@ -362,6 +390,9 @@ class Corpus:
         os.makedirs(where, exist_ok=True)
         with open(os.path.join(where, "case" + finding.case.suffix), "w") as f:
             f.write(finding.case.text())
+        if finding.origin is not None and finding.origin.text() != finding.case.text():
+            with open(os.path.join(where, "as-generated" + finding.origin.suffix), "w") as f:
+                f.write(finding.origin.text())
         with open(os.path.join(where, "finding.json"), "w") as f:
             json.dump(finding.as_json(), f, indent=1)
         with open(os.path.join(self.root, "findings.jsonl"), "a") as f:

@@ -202,6 +202,159 @@ def unwrap(commands: list[str]) -> list[str]:
     return inner if len(inner) > 1 else commands
 
 
+# -- the surface the two checkers may differ on -------------------------------
+
+
+@dataclass(frozen=True)
+class Feature:
+    """One thing a proof may do, with the declarations that let it do it.
+
+    `decls` are commands and `terms` are Bool terms written against them.
+    Everything a feature needs beyond CPC it declares itself, which is what
+    lets a case be assembled out of several of them without any of them
+    knowing about the others.
+
+    **The names are fixed rather than generated**, and each feature's are its
+    own, so no two features collide and no two cases of one feature differ.
+    That is not tidiness: a checker quotes the offending symbol back in its
+    diagnostic, `checkers._portable` reduces a diagnostic to the string a
+    bucket is named from, and a bare `D1` against a bare `D2` is a word
+    boundary short of being normalized away. Generated indices would put one
+    defect in a new directory every time it was found, which is the thing
+    bucketing exists to prevent. The cost is that a case draws each feature at
+    most once; the mutator's splicing is what still writes a file with two.
+
+    `weight` is how often it is drawn. The ones that cost a case -- a feature
+    that aborts a checker before it has read anything else -- are drawn rarely,
+    because a case spent re-finding a bucket the corpus already has is a case
+    not spent anywhere else.
+    """
+
+    name: str
+    decls: tuple[str, ...] = ()
+    terms: tuple[str, ...] = ("true",)
+    weight: int = 2
+
+
+#: Every construct a proof file may contain, as of a reading of ethos's
+#: `CmdParser` and logos's `parseCommand` on 2026-09-22 and a measurement of
+#: both binaries against each entry here.
+#:
+#: The two checkers' command tables are not the same table. Ethos takes
+#: `declare-parameterized-const`, `declare-consts`, `declare-rule`, `program`,
+#: `declare-datatype`, `set-option`, `echo`, `reset` and `exit` in a proof file
+#: and logos takes none of them; logos takes `declare-fun`, which ethos admits
+#: only in a reference file. Neither takes `define-fun`, `define-const` or
+#: `define-sort` there. Which of these divergences are defects is not for this
+#: table to say: it writes them down, the oracle reports what the two checkers
+#: did, and a person rules.
+#:
+#: The entries that *agree* are not filler. A case both checkers accept is the
+#: only case a mutation can push across the boundary, and the boundary is where
+#: a disagreement lives -- so the agreeing shapes are what makes the disagreeing
+#: ones reachable by anything other than luck.
+FEATURES: tuple[Feature, ...] = (
+    # -- how a symbol comes into scope
+    Feature("declare-const", ("(declare-const cbool Bool)",), ("cbool",), 4),
+    Feature("declare-fun", ("(declare-fun ffun (Int Int) Int)",),
+            ("(= (ffun 1 1) (ffun 1 1))",)),
+    Feature("declare-sort", ("(declare-sort Ssrt 0)", "(declare-const ssrt Ssrt)"),
+            ("(= ssrt ssrt)",), 3),
+    Feature("declare-sort-nullary-plus",
+            ("(declare-sort Sone 1)", "(declare-const sone (Sone Int))"),
+            ("(= sone sone)",)),
+    Feature("declare-consts", ("(declare-sort Slit 0)", "(declare-consts <numeral> Slit)"),
+            ("(= 1 1)",), 1),
+    Feature("declare-parameterized-const",
+            ("(declare-parameterized-const gpar ((T Type :implicit)) (-> T T))",),
+            ("(= (gpar 1) (gpar 1))",)),
+    Feature("const-attribute",
+            ("(declare-const aassoc (-> Bool Bool Bool) :right-assoc-nil true)",),
+            ("(aassoc true true)",)),
+    Feature("overload", ("(declare-const oover Int)", "(declare-const oover Bool)"),
+            ("oover", "(= oover oover)")),
+    Feature("quoted-symbol", ("(declare-const |q sym| Bool)",), ("|q sym|",)),
+
+    # -- datatypes, which is where the two most nearly agree and do not
+    Feature("datatype-ground",
+            ("(declare-datatypes ((Dgrd 0)) (((cgrd (sgrd Int)) (egrd))))",),
+            ("(= egrd egrd)", "(= (sgrd (cgrd 1)) 1)", "((_ is cgrd) egrd)"), 3),
+    Feature("datatype-parametric",
+            ("(declare-datatypes ((Dpar 1)) ((par (T) ((cpar (spar T)) (epar)))))",
+             "(declare-const dpar (Dpar Int))"),
+            ("(= dpar dpar)", "((_ is cpar) dpar)"), 3),
+    Feature("datatype-parametric-binary",
+            ("(declare-datatypes ((Dprb 2)) ((par (A B) ((cprb (fprb A) (gprb B))))))",),
+            ("(= 1 1)",)),
+    Feature("datatype-mutual",
+            ("(declare-datatypes ((Amut 0) (Bmut 0))"
+             " (((camut (sbmut Bmut))) ((cbmut (samut Amut)) (ebmut))))",),
+            ("(= ebmut ebmut)", "(= (samut (cbmut (camut ebmut))) (camut ebmut))")),
+    Feature("datatype-singular",
+            ("(declare-datatype Dsng ((csng (ssng Int)) (esng)))",),
+            ("(= esng esng)",)),
+    Feature("datatype-updater",
+            ("(declare-datatypes ((Dupd 0)) (((cupd (supd Int)) (eupd))))",),
+            ("(= ((_ update supd) (cupd 1) 2) (cupd 2))",)),
+
+    # -- definitions and programs
+    Feature("define-nullary", ("(define dnil () (= 1 1))",), ("dnil",), 3),
+    Feature("define-params", ("(define dprm ((x Bool)) (= x x))",), ("(dprm true)",), 3),
+    Feature("declare-rule",
+            ("(declare-rule rrule ((x Bool)) :args (x) :conclusion (= x x))",),
+            ("(= 1 1)",)),
+    Feature("program",
+            ("(declare-sort Sprg 0)", "(declare-const sprg Sprg)",
+             "(program $pprg ((x Sprg)) :signature (Sprg) Sprg ((($pprg x) x)))"),
+            ("(= ($pprg sprg) sprg)",)),
+    Feature("smt2-define-fun", ("(define-fun dfun ((x Int)) Int x)",), ("(= 1 1)",), 1),
+    Feature("smt2-define-const", ("(define-const dcon Int 1)",), ("(= dcon 1)",), 1),
+    Feature("smt2-define-sort", ("(define-sort Dsrt () Int)",), ("(= 1 1)",), 1),
+
+    # -- how a term is written
+    Feature("partial-application", ("(declare-const fpap (-> Int Int Int))",),
+            ("(= (fpap 1) (fpap 1))", "(= (fpap 1 1) (fpap 1 1))"), 3),
+    Feature("higher-order-argument",
+            ("(declare-const fhoa (-> Int Int Int))",
+             "(declare-const Phoa (-> (-> Int Int) Bool))"),
+            ("(Phoa (fhoa 1))",), 3),
+    Feature("apply-marker", ("(declare-const fmrk (-> Int Int Int))",),
+            ("(= (_ (_ fmrk 1) 1) (fmrk 1 1))",), 3),
+    Feature("function-equality",
+            ("(declare-const feqa (-> Int Int Int))",
+             "(declare-const feqb (-> Int Int Int))"),
+            ("(= feqa feqb)", "(= feqa feqa)")),
+    Feature("indexed-operator", ("(declare-const vidx (BitVec 4))",),
+            ("(= ((_ extract 1 0) vidx) #b00)", "(= (_ (_ extract 1 0) vidx) #b00)")),
+    Feature("type-ascription", ("(declare-sort Sasc 0)", "(declare-const sasc Sasc)"),
+            ("(= (as sasc Sasc) sasc)",), 1),
+    Feature("binder", (), ("(forall ((xbnd Int)) (= xbnd xbnd))",
+                           "(exists ((xbnd Int)) (= xbnd xbnd))")),
+    Feature("lambda", ("(declare-const Plam (-> (-> Int Int) Bool))",),
+            ("(Plam (lambda ((xlam Int)) xlam))",)),
+    Feature("eo-builtin", (), ("(= (eo::add 1 1) 2)", "(= (eo::define ((xeo 1)) xeo) 1)",
+                               "(= (eo::list_len and (and true true)) 2)")),
+
+    # -- the theory sorts a case may name
+    Feature("sequence-sort", ("(declare-const sqseq (Seq Int))",), ("(= sqseq sqseq)",)),
+    Feature("array-sort", ("(declare-const ararr (Array Int Int))",),
+            ("(= (select ararr 1) (select ararr 1))",)),
+    Feature("set-sort", ("(declare-const stset (Set Int))",), ("(= stset stset)",)),
+    Feature("literal", (), ('(= (str.len "\\u{61}b") 2)', "(= 1.5 1.5)", "(= #x1f #x1f)",
+                            "(= 100000000000000000000000 100000000000000000000000)",
+                            "(= (- 1) (- 1))"), 3),
+
+    # -- commands that are not about a symbol at all
+    Feature("set-option", ("(set-option :normalize-num true)",), ("(= 1 1)",), 1),
+    Feature("echo", ('(echo "anoieu-fuzz")',), ("(= 1 1)",), 1),
+    Feature("exit", (), ("(= 1 1)",), 1),
+    Feature("reset", ("(reset)",), ("(= 1 1)",), 1),
+)
+
+#: Emitted after the refutation rather than before it.
+TRAILING = {"exit"}
+
+
 # -- the generator ------------------------------------------------------------
 
 
@@ -373,6 +526,86 @@ class Generator:
             parts.append(f":args ({' '.join(args)})")
         self.proofs.append(pid)
         return "(" + " ".join(parts) + ")"
+
+    # -- feature cases
+
+    def feature_case(self) -> list[str]:
+        """A proof both checkers should check, built around one thing they may not.
+
+        The proof generator above writes files that die at their first command.
+        Against ethos and logos on CPC it is refused by both about ninety-nine
+        times in a hundred, and two checkers that both refuse a file agree about
+        it: a run of it reports crashes and nothing else. A differential oracle
+        only says something at the *boundary* -- a file one checker takes and the
+        other does not -- and nothing arrives at the boundary by accident.
+
+        So this writes the boundary on purpose. The frame is a refutation both
+        checkers check without complaint,
+
+            (assume @a F) (assume @b (not F))
+            (step @c false :rule contra :premises (@a @b))
+
+        and `F`, together with the declarations under it, is drawn from
+        `FEATURES`. What the two checkers then say about the file is what they
+        say about the features in it, because the frame around them is one they
+        have both already agreed about.
+
+        It is still a fuzzer rather than a fixture, and `wild` is how much:
+        how often the formula is replaced by a generated term instead, whether
+        the declarations are left in the order they were written, whether the
+        closing step states its conclusion, and whether something harmless is
+        in the way. What a case of this shape is really for is the mutator --
+        a case both checkers accepted is the only case a single edit can push
+        *across* the boundary, and `Session.learn` keeps it for exactly that.
+        """
+        picked = self._pick_features(self.rng.choice((1, 1, 2, 2, 3)))
+        head: list[str] = []
+        tail: list[str] = []
+        terms: list[str] = []
+        for feat in picked:
+            (tail if feat.name in TRAILING else head).extend(feat.decls)
+            terms.append(self.rng.choice(feat.terms))
+
+        if self.chance(self.wild) or not terms:
+            formula = self.term("Bool")
+        elif len(terms) == 1:
+            formula = terms[0]
+        else:
+            formula = "(and " + " ".join(terms) + ")"
+
+        if self.chance(self.wild):
+            # Declaration order is a question in its own right -- a datatype
+            # used before the block that declares it, a definition read before
+            # the symbol it names -- and it is one neither checker has to
+            # answer the same way.
+            self.rng.shuffle(head)
+
+        a, b, c = self.fresh("@a"), self.fresh("@b"), self.fresh("@c")
+        body = [f"(assume {a} {formula})", f"(assume {b} (not {formula}))"]
+        if self.chance(0.15):
+            # A step that checks and is never used. It is here because a file
+            # whose every command matters is a file that exercises no path for
+            # ignoring one.
+            body.append(f"(step {self.fresh('@r')} :rule refl :args ({terms[0]}))")
+        conclusion = "" if self.chance(0.3) else " false"
+        body.append(f"(step {c}{conclusion} :rule contra :premises ({a} {b}))")
+        return head + body + tail
+
+    def _pick_features(self, k: int) -> list[Feature]:
+        """`k` distinct features, by weight.
+
+        Distinct because a feature's symbols are its own and fixed, so drawing
+        one twice would write the same declaration twice -- which is a question
+        worth asking a checker, but the mutator's splicing asks it already and
+        this would spend a case on it every time.
+        """
+        pool = [f for f in FEATURES for _ in range(f.weight)]
+        picked: list[Feature] = []
+        while pool and len(picked) < k:
+            feat = self.rng.choice(pool)
+            picked.append(feat)
+            pool = [f for f in pool if f.name != feat.name]
+        return picked
 
     # -- signature cases
 
@@ -571,6 +804,7 @@ def generate(
     wild: float = 0.1,
     depth: int = 3,
     include: str = "",
+    features: float = 0.5,
 ) -> Case:
     rng = random.Random(seed)
     standalone = voc is None or voc.name == "builtin"
@@ -579,7 +813,27 @@ def generate(
         gen = Generator(rng, (voc or fallback()).copy(), wild=wild, depth=depth)
         return Case(gen.signature_case(include), mode, ".eo", seed, "generated")
     gen = Generator(rng, voc, wild=wild, depth=depth)
+    # `FEATURES` is written against CPC -- `BitVec`, `Seq`, `str.len`, `extract`
+    # -- so a run with no signature loaded, which is what the test suite and
+    # `--signature ""` are, gets the generator that carries its own prelude.
+    if not standalone and rng.random() < features:
+        return Case(gen.feature_case(), mode, ".cpc", seed, "feature")
     return Case(gen.proof_case(prelude=standalone), mode, ".cpc", seed, "generated")
+
+
+def feature_commands() -> list[str]:
+    """Every declaration `FEATURES` can write, once.
+
+    The mutator splices a command from one case into another, and what it has
+    to splice is whatever the seed corpus happened to contain. These are worth
+    adding to that pool on their own: a real cvc5 proof with a parametric
+    datatype block dropped into the middle of it is a file nobody would write
+    and both checkers have an opinion about.
+    """
+    out: list[str] = []
+    for feat in FEATURES:
+        out.extend(feat.decls)
+    return out
 
 
 # -- mutation -----------------------------------------------------------------

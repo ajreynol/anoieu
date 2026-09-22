@@ -79,6 +79,11 @@ ETHOS=<ethos>/build/src/ethos LOGOS=<logos>/.lake/build/bin/logos \
     --seed-corpus <logos>/test/regress/sexp
 ```
 
+Half of the generated cases are written around one construct the two checkers
+may read differently, inside a refutation they both check — `--features` is how
+often, and [**Where cases come from**](#where-cases-come-from) is what that
+means and why a run without it reports almost nothing but crashes.
+
 The vocabulary — which operators exist, what sorts they take, which rules take
 how many premises — is read out of the signature by anoieu's own loader
 (`anoieu_fuzz/vocab.py`). That is the only place the fuzzer touches the analyzer,
@@ -135,6 +140,43 @@ Two sources, and the run mixes them.
 **Generated**, from the grammar in the manual's [full syntax
 section](https://github.com/cvc5/ethos/blob/main/user_manual.md#full-syntax),
 using the vocabulary above. This reaches the parser and the first layer past it.
+
+**Assembled**, around one construct at a time. A file written from the grammar
+is refused by ethos and by logos about ninety-nine times in a hundred, and two
+checkers that both refuse a file agree about it: a run of nothing but grammar
+cases reports crashes and nothing else. A disagreement lives at the *boundary* —
+a file one checker takes and the other does not — and nothing arrives at the
+boundary by accident, so `--features` writes the boundary on purpose. The frame
+is a refutation both checkers check without complaint,
+
+```text
+(assume @a F) (assume @b (not F))
+(step @c false :rule contra :premises (@a @b))
+```
+
+and `F`, with the declarations under it, is drawn from `FEATURES` in
+[`gen.py`](gen.py): every construct a proof file may contain, *including the
+ones only one of the two parses*. What the checkers then say about the file is
+what they say about the construct, because the frame around it is one they have
+already agreed about. `--features 0` turns it off; the default is half the
+generated cases.
+
+> **The two command tables are not the same table**, which is most of why this
+> pays. Ethos takes `declare-parameterized-const`, `declare-consts`,
+> `declare-rule`, `program`, `declare-datatype`, `set-option`, `echo`, `reset`
+> and `exit` in a proof file and logos takes none of them; logos takes
+> `declare-fun`, which ethos admits only in a reference file; neither takes
+> `define-fun`, `define-const` or `define-sort` there. Below the commands the
+> same holds of terms — parametric datatypes, binders, `eo::` builtins, the `_`
+> application marker. `FEATURES` writes them all down and takes no position on
+> which divergences are defects; the oracle reports what the two checkers did,
+> and a person rules.
+
+The entries that *agree* are the ones that make the rest reachable. A case both
+checkers accept is the only case a single edit can push across the boundary, so
+`Session.learn` keeps accepted cases as material for the mutator and their
+commands for the splicer — alongside the ones it keeps for reaching a new
+diagnostic.
 
 **Mutated**, from a seed corpus of real files: drop a command, duplicate one,
 swap two, splice a command out of another file, rename a symbol to another
@@ -211,8 +253,19 @@ fuzz-findings/
   findings.jsonl                       one line per finding, appended
   crash-ethos-terminate-called-.../
     case.eo                            the shrunk reproducer, with its seed in a comment
+    as-generated.eo                    the case before shrinking, when the two differ
     finding.json                       what each checker said, and how long it took
 ```
+
+**An assembled case is not cut into.** Its commands are already the smallest
+way to write the constructs it was built from, so the pass inside a command has
+nothing to win and one thing to lose: it took
+`(declare-datatypes ((Dpar 1)) (…))` down to `(declare-datatypes ((Dpar 1)) ())`,
+which holds the bucket — logos refuses the *arity* before it reads the
+constructors — while no longer showing a parametric datatype at all. That is how
+a finding was withdrawn from this corpus once already, so where the shrinker did
+change a case, `as-generated.cpc` is kept beside `case.cpc` and nobody has to
+take the shrinker's word for it.
 
 The directory is **append-only**, and across processes rather than only within
 one: a bucket that already has a case on disk keeps the one it has, so

@@ -96,10 +96,15 @@ ETHOS=/path/to/ethos \
   python3 -m anoieu_fuzz run --mode signature
 ```
 
-The fuzzer uses grammar-based generation and seed mutation. It detects crashes,
-timeouts, malformed diagnostics and disagreements between checkers, then shrinks
-and deduplicates the results. It is a baseline fuzzer, without coverage guidance
-or a soundness oracle.
+The fuzzer uses grammar-based generation, seed mutation, and — in proof mode —
+cases assembled around one construct the two checkers may read differently,
+inside a refutation they both check. That last one is what reaches a
+disagreement rather than a crash: a file written from the grammar alone is
+refused by both checkers about ninety-nine times in a hundred, and two checkers
+that both refuse a file agree about it. It detects crashes, timeouts, malformed
+diagnostics and disagreements between checkers, then shrinks and deduplicates
+the results. It is a baseline fuzzer, without coverage guidance or a soundness
+oracle.
 
 Findings use the same reporting workflow as the analyzer. See the
 [fuzzer guide](anoieu_fuzz/fuzzing.md) for setup, modes, oracles and adding a checker.

@@ -37,7 +37,8 @@ from . import __version__
 from . import report as reporting
 from .checkers import Checker, Outcome, from_config, load_config
 from .codes import CODES
-from .gen import Case, absolutize, generate, mutate, reformat, split_commands, unwrap
+from .gen import (Case, absolutize, feature_commands, generate, mutate, reformat,
+                  split_commands, unwrap)
 from .triage import Corpus, Finding, judge, shrink
 from .vocab import Vocabulary, fallback
 
@@ -89,6 +90,13 @@ class Session:
         self.metamorphic = getattr(args, "metamorphic", False)
         self.reference = getattr(args, "reference", "") or cfg.get("reference", "")
         self.learn_cap = 0 if getattr(args, "no_learn", False) else getattr(args, "learn_cap", 400)
+        self.features = getattr(args, "features", 0.5)
+        #: How many cases every checker accepted to keep as material to mutate.
+        #: They are the expensive ones to come by and the valuable ones to
+        #: damage, so they get a reservation of their own rather than competing
+        #: with the novel-diagnostic cases for `learn_cap`.
+        self.accept_cap = self.learn_cap // 4
+        self.accepted = 0
         self.note = ""
 
         self.extend = getattr(args, "extend", False) and bool(self.signature)
@@ -123,6 +131,8 @@ class Session:
             body = unwrap(commands)
             self.mutable.append(Case(body, self.mode, suffix, path, name))
             self.pool += body
+        if self.mode == "proof" and self.features:
+            self.pool += feature_commands()
 
     # -- one case, start to finish
 
@@ -144,7 +154,8 @@ class Session:
             return mutate(seed, rng.choice(stock), self.pool, mode=self.mutation_mode)
         voc = self.voc if (self.mode == "proof" or self.extend) else fallback()
         return generate(seed, self.mode, voc, wild=self.wild, depth=self.depth,
-                        include=self.signature if self.extend else "")
+                        include=self.signature if self.extend else "",
+                        features=self.features)
 
     def ask(self, case: Case) -> list[Outcome]:
         """Every checker's answer to one case, plus -- under `--metamorphic` --
@@ -204,6 +215,20 @@ class Session:
                 fresh = True
         if fresh and len(self.learned) < self.learn_cap:
             self.learned.append(case.replace(unwrap(case.commands)))
+        # A case *everybody* took is the other thing worth keeping, and the
+        # docstring above does not cover it: it produced no diagnostic at all,
+        # so nothing here would have kept it. It is the material a
+        # disagreement is made of. Every file in this corpus sits on one side
+        # of the acceptance boundary or the other, and an accepted one is the
+        # only kind a single edit can push *across* -- so the mutator is given
+        # them to damage, and the splicer the commands they are made of.
+        ran = [got for got in outcomes if got.coarse != "skipped"]
+        if ran and all(got.coarse == "accept" for got in ran):
+            if self.accepted < self.accept_cap:
+                self.accepted += 1
+                body = unwrap(case.commands)
+                self.learned.append(case.replace(body))
+                self.pool += body
         return fresh
 
     def probe(self, case: Case) -> Finding | None:
@@ -248,13 +273,22 @@ def cmd_run(args) -> int:
     os.makedirs(args.out, exist_ok=True)
     lock = threading.Lock()
     tally: dict[str, dict[str, int]] = {}
+    # Cases every checker accepted but not in the same words. The oracle is
+    # deliberately coarse and counts `incomplete` as an acceptance -- a checker
+    # saying it does not cover a file has refused nobody and guaranteed nothing
+    # false -- so a completeness gap like logos's "outside the fragment the
+    # correctness theorem covers" is invisible to it by design. It is still the
+    # thing somebody wants a number for, and counting it changes no finding's
+    # direction and restates no row.
+    fine: dict[str, int] = {}
+    accepted = 0
     sources: dict[str, int] = {}
     started = time.monotonic()
     stop = threading.Event()
     done = 0
 
     def one(i: int) -> None:
-        nonlocal done
+        nonlocal done, accepted
         if stop.is_set():
             return
         if args.time_limit and time.monotonic() - started > args.time_limit:
@@ -272,6 +306,13 @@ def cmd_run(args) -> int:
             for o in outcomes:
                 tally.setdefault(o.checker, {})
                 tally[o.checker][o.status] = tally[o.checker].get(o.status, 0) + 1
+            ran = [o for o in outcomes if o.coarse != "skipped"]
+            if len(ran) > 1 and all(o.coarse == "accept" for o in ran):
+                accepted += 1
+                if len({o.status for o in ran}) > 1:
+                    key = " ".join(f"{o.checker}={o.status}"
+                                   for o in sorted(ran, key=lambda o: o.checker))
+                    fine[key] = fine.get(key, 0) + 1
             if finding is None:
                 if args.verbose:
                     print(f"[{done:5}] ok")
@@ -284,11 +325,13 @@ def cmd_run(args) -> int:
         was = len(finding.case.commands)
         spent = 0
         if not args.no_shrink:
+            generated = finding.case
             small, spent = shrink(finding.case, session.probe, finding.bucket,
                                   args.shrink_budget)
             again = session.probe(small)
             if again is not None and again.bucket == finding.bucket:
                 finding = again
+                finding.origin = generated
         with lock:
             if corpus.add(finding):
                 now = len(finding.case.commands)
@@ -318,6 +361,11 @@ def cmd_run(args) -> int:
     for name in sorted(tally):
         counts = ", ".join(f"{k} {v}" for k, v in sorted(tally[name].items()))
         print(f"   {name:22} {counts}")
+    if len(live) > 1:
+        print(f"   {'every checker took':22} {accepted} case(s)"
+              + (f", {sum(fine.values())} of them in different words" if fine else ""))
+        for key, count in sorted(fine.items(), key=lambda kv: -kv[1])[:5]:
+            print(f"   {'':22} {count:6}  {key}")
     if corpus.counts:
         print(f"-- cases are under {args.out}/; re-run one with "
               f"`python3 -m anoieu_fuzz replay <file>`, and keep one with "
@@ -342,6 +390,7 @@ def cmd_run(args) -> int:
         "checkers": binaries,
         "cases": done, "seconds": round(elapsed, 3), "sources": sources,
         "outcomes": tally, "buckets": corpus.counts,
+        "accepted_by_all": accepted, "accepted_in_different_words": fine,
         "new_buckets": sorted({finding.bucket for finding in corpus.new}),
         "distinct_diagnostics": len(session.details),
     }
@@ -612,6 +661,11 @@ def _common(p: argparse.ArgumentParser) -> None:
                         "parsed values while preserving command structure")
     p.add_argument("--shrink-budget", type=int, default=120,
                    help="how many runs one shrink may spend (default 120)")
+    p.add_argument("--features", type=float, default=0.5,
+                   help="proof mode: how often to write a case around a construct "
+                        "the two checkers may read differently, inside a refutation "
+                        "they both check, rather than writing a proof from the "
+                        "grammar (0..1, default 0.5)")
 
 
 def main(argv: list[str] | None = None) -> int:
