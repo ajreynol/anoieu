@@ -1035,6 +1035,16 @@ about our own tooling that belong to no pull request and fit in no episode there
 Newest first, one line each; an empty section is the honest state when a run
 turned up nothing.
 
+**2026-09-23 — windows
+[cvc5 `aee874240419..d7d5b948c11d`](https://github.com/cvc5/cvc5/compare/aee874240419...d7d5b948c11d),
+[ethos `04a9b4d41508..087854695143`](https://github.com/cvc5/ethos/compare/04a9b4d41508...087854695143),
+[logos `c8165b2afd32..49f4fd1f256f`](https://github.com/cvc5/logos/compare/c8165b2afd32...49f4fd1f256f).**
+
+- **The `FUZ` baselines come from the wrong thing.** For ethos and logos the window starts at `config/deps.lock` (2026-09-18/19), which is what the *static* run measured, while every open `FUZ` row was first seen on 2026-09-22 from binaries whose revision nothing records. So the window includes commits (logos [#467](https://github.com/cvc5/logos/pull/467), ethos [#244](https://github.com/cvc5/ethos/pull/244)) that the campaign's checkers may or may not already have contained.
+- **A bucket's reproducer is narrower than its note, and a replay will only test the reproducer.** `0e9250` holds a `lambda` reproducer, but its note says `forall` and `exists` fail on the same path. logos [#471](https://github.com/cvc5/logos/pull/471) fixed those two and says in `docs/parser.md` that it deliberately does not read `lambda`. A replay will therefore still report the disagreement, and nothing on the row will show that part of what the note describes is fixed.
+- **cvc5's window was again mostly already measured.** The lock pins cvc5 at `dbf176dfb71b`, and `EO0083` fired there. Still, the window was read from the row's `found_at`. This time the file the row names turned out to be byte-identical from end to end, so the width of the window did not matter.
+- **This machine has no `gh`, and unauthenticated API calls are capped at 60 an hour.** A single `commits?path=proofs/eo` query replaced 53 per-commit lookups. Diffs came from `github.com/.../commit/<sha>.diff`, which is not rate-limited the same way.
+
 **2026-09-21 — windows
 [cvc5 `aee874240419..c2cc3caf7841`](https://github.com/cvc5/cvc5/compare/aee874240419...c2cc3caf7841),
 [logos `c8165b2afd32..3acc3b90c4be`](https://github.com/cvc5/logos/compare/c8165b2afd32...3acc3b90c4be).**

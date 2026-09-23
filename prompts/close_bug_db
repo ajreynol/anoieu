@@ -44,15 +44,22 @@ EVIDENCE = """**Two kinds of row need different evidence, and the code says whic
   tests/fuzz/<bucket>/case.eo` against a build of the checker -- which is a
   separate pass with its own binary, and reading a commit is not a substitute.
   If a commit looks like it fixed one, say so as a **candidate for replay**
-  in your report, name the commit, and leave the row open.
+  in your report, name the commit, and leave the row open. A fix like that
+  still belongs in `docs/experience.md` (see (b) below): the row is open, but
+  the maintainer's work happened, and the log records it now.
 - A row owned by two projects, written `a+b`, is a disagreement *between* them.
-  Either side's change can resolve it. Say which project's commit did, and
-  re-read both sides before you call it closed.
+  Either side's change can resolve it. Say which project's commit did, record
+  that project as `closed_by` when you close it, and re-read both sides before
+  you call it closed.
 
 Name any `FUZ` candidates for replay in the final report, with their commits."""
 
-WRITES = """(a) **The closure, on the entry.** For each observation you closed, add these
-    fields to its object in `bug_db/bugs.json` and change nothing else about it:
+WRITES = """(a) **The closure, on the entry.** Close every observation whose claim you
+    have re-read as false in the source today. Being cautious is right when you
+    are unsure, but a row you confirmed and left open is also a mistake: the
+    open reports and the tally keep counting it against a project that fixed it.
+    For each observation you closed, add these fields to its object in
+    `bug_db/bugs.json` and change nothing else about it:
 
       "closed_verdict"  one of the seven words below
       "closed_why"      why the claim no longer holds, and what you re-read to
@@ -61,6 +68,13 @@ WRITES = """(a) **The closure, on the entry.** For each observation you closed, 
       "closed_on"       "{when}"
       "closed_commit"   the full sha it closed on
       "closed_pr"       the pull request, where there is one
+      "closed_by"       for a row owned by two projects (`a+b`) only: the one
+                        project whose change closed it. A disagreement counts
+                        as a bug of exactly one side, and the tally in
+                        `docs/experience.md` charges it to this project
+
+    One change often closes several observations. Give each of them the same
+    `closed_commit`, and claim all of them in a single experience entry.
 
     **A verdict is one of seven words**, and two of them can apply here:
 
@@ -96,7 +110,8 @@ WRITES = """(a) **The closure, on the entry.** For each observation you closed, 
     Leave `tests/fuzz/` alone as well -- a
     promoted reproducer is evidence, not a status -- and edit no generated page
     by hand: `bug_db/bugs.md`, `bug_db/static-analysis.md` and `anoieu_analyzer/checks.md`
-    come from their generators. Re-render both open reports once you are done:
+    come from their generators, and so does the tally in `docs/experience.md`.
+    Re-render the open reports and the tally once you are done:
     `python3 -m anoieu_analyzer.reporting.database`, then run
     `python3 -m anoieu_analyzer.reporting.database --check`.
     Every entry carrying a `closed_verdict` must disappear from `bugs.md` and
@@ -104,12 +119,34 @@ WRITES = """(a) **The closure, on the entry.** For each observation you closed, 
     Keep the entries and landing debt in `bugs.json`; leave the regenerated
     reports with the closure edits for review.
 
-(b) **The log.** `docs/experience.md` is a log of **episodes**, oldest first,
-    numbered `E<n>`. An episode is something that passed between this repository
-    and a project it reports on, and the bar is that **a maintainer of that
-    project spent attention on it** -- they merged, rejected or acted on
-    something of ours, or put a correction to us. A window that closed nothing
-    earns no entry, and neither does a mistake of ours that nobody there saw.
+(b) **The log. It is half of this job, not an afterthought to (a).**
+    `docs/experience.md` is a log of **episodes**, oldest first, numbered
+    `E<n>`. An episode is something that passed between this repository and a
+    project it reports on, and the bar is that **a maintainer of that project
+    spent attention on it** -- they merged, rejected or acted on something of
+    ours, or put a correction to us.
+
+    **An entry is decided by what the maintainer did, not by what you could
+    close.** Go through every window for changes that answer us. Look for
+    commits and pull requests that cite anoieu, that add a regression test built
+    from one of our reproducers, or that touch exactly what an open row names.
+    Each of those is an episode, and it gets its entry in this run. That holds
+    even when nothing closes: a fuzzer fix that needs a replay is the ordinary
+    case. The entry's outcome then says what is still owed, for example *"open: FUZ rows X
+    and Y are candidates for replay"*, and whichever pass closes them later
+    writes a new entry naming this one by id. Before you write, check whether an
+    existing entry already covers the change: an episode is recorded once.
+
+    What earns **no** entry: a window in which nobody there did anything with
+    what we sent, and a mistake of ours that nobody there saw. Those go to
+    `docs/history.md` or nowhere, as below.
+
+    **The page also has a running tally**: for each project, the bugs that
+    have been closed against it and how they were closed. A disagreement is
+    charged to its `closed_by` side, and open rows are not counted. It sits between the `tally:begin` and `tally:end` markers,
+    and `python3 -m anoieu_analyzer.reporting.database` generates it along with
+    the open reports. Never edit it by hand. Re-rendering after your closures is
+    what updates it, and `--check` fails while it is stale.
 
     Use the shape that file sets out under *How this page is maintained* --
     `When`, `Kind`, `Ours`, `Theirs` and `Outcome` in the table, then

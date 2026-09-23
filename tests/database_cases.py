@@ -114,6 +114,46 @@ def main() -> int:
                           and "[Static analyzer](#static-analyzer) | 0 |" in view
                           and "[Fuzzer](#fuzzer) | 0 |" in view
                           and "No open findings." in static))
+
+    # The experience log's tally is spliced in only beside a database laid out
+    # as ours is, and counts per owner with withdrawn rows left out.
+    with tempfile.TemporaryDirectory() as directory:
+        (Path(directory) / "bug_db").mkdir()
+        (Path(directory) / "docs").mkdir()
+        db = Path(directory) / "bug_db" / "bugs.json"
+        page = Path(directory) / "docs" / "experience.md"
+        db.write_text(json.dumps({"bugs": [
+            {"id": "a", "owner": "cvc5"},
+            {"id": "b", "owner": "cvc5", "closed_verdict": "fixed and landed"},
+            {"id": "c", "owner": "ethos", "closed_verdict": "withdrawn"},
+            {"id": "d", "owner": "ethos+logos"},
+            {"id": "e", "owner": "ethos+logos", "closed_verdict": "fixed and landed",
+             "closed_by": "ethos"},
+            {"id": "f", "owner": "ethos+logos", "closed_verdict": "declined",
+             "closed_why": "logos: deliberate"},
+        ]}), encoding="utf-8")
+        page.write_text(f"# Log\n\n{database.TALLY_BEGIN}\nstale\n{database.TALLY_END}\n\n## E1\n",
+                        encoding="utf-8")
+        database.render(str(db))
+        text = page.read_text(encoding="utf-8")
+        cases.extend([
+            ("the tally counts closed bugs only, per project",
+             "| cvc5 | 1 | 1 |" in text and "stale" not in text),
+            ("a closed disagreement counts against the side that closed it",
+             "| ethos | 1 | 1 |" in text and "| logos | 1 | 0 | 0 | 1 |" in text
+             and "+" not in text.split(database.TALLY_BEGIN)[1]),
+            ("a withdrawn observation is not a bug found", "1 withdrawn" in text),
+            ("the rest of the log is left alone", text.startswith("# Log\n") and text.endswith("## E1\n")),
+        ])
+        bugs = json.loads(db.read_text(encoding="utf-8"))["bugs"]
+        bugs.append({"id": "g", "owner": "ethos+logos", "closed_verdict": "declined"})
+        db.write_text(json.dumps({"bugs": bugs}), encoding="utf-8")
+        try:
+            database.render(str(db))
+            refused = False
+        except ValueError:
+            refused = True
+        cases.append(("a closed disagreement naming neither side is refused, not guessed", refused))
     failures = 0
     for label, passed in cases:
         print(("ok   " if passed else "FAIL ") + label)

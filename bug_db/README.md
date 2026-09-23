@@ -132,7 +132,7 @@ It closes a finding on exactly two conditions: **a named commit** somebody can
 fetch, and **the claim re-read as false in the source today**. It writes two
 authored records -- the closure fields on the entry here, and a section
 in [`experience.md`](../docs/experience.md) saying what the change meant. Then
-regenerate and check both reports so the closed rows disappear:
+regenerate and check both reports, and the running tally in `experience.md`, so the closed rows disappear and the counts move:
 
 ```bash
 python3 -m anoieu_analyzer.reporting.database
@@ -150,7 +150,8 @@ as appropriate. All closure verdicts remove the finding from both open reports;
 | `closed_verdict` | one of the seven words below, and nothing else |
 | `closed_why` | why the claim no longer holds, and what was re-read to establish it |
 | `closed_on` | the date the closure was recorded |
-| `closed_commit`, `closed_pr` | the change it closed on, where that applies |
+| `closed_commit`, `closed_pr` | the change it closed on, where that applies. One change may close several findings |
+| `closed_by` | on a finding owned by two projects (`a+b`), the one whose change or ruling closed it; the running tally in `experience.md` counts it against that project alone |
 | `awaiting_landing` | `{project, branch, commit}` -- required by `accepted and fixed`, forbidden on anything else |
 
 **A verdict is one of seven words, and the list is the whole of it.** This is the
