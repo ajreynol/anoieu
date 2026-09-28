@@ -91,6 +91,7 @@ class Session:
         self.reference = getattr(args, "reference", "") or cfg.get("reference", "")
         self.learn_cap = 0 if getattr(args, "no_learn", False) else getattr(args, "learn_cap", 400)
         self.features = getattr(args, "features", 0.5)
+        self.probe_rate = getattr(args, "probes", 0.35)
         #: How many cases every checker accepted to keep as material to mutate.
         #: They are the expensive ones to come by and the valuable ones to
         #: damage, so they get a reservation of their own rather than competing
@@ -155,7 +156,7 @@ class Session:
         voc = self.voc if (self.mode == "proof" or self.extend) else fallback()
         return generate(seed, self.mode, voc, wild=self.wild, depth=self.depth,
                         include=self.signature if self.extend else "",
-                        features=self.features)
+                        features=self.features, probes=self.probe_rate)
 
     def ask(self, case: Case) -> list[Outcome]:
         """Every checker's answer to one case, plus -- under `--metamorphic` --
@@ -666,6 +667,11 @@ def _common(p: argparse.ArgumentParser) -> None:
                         "the two checkers may read differently, inside a refutation "
                         "they both check, rather than writing a proof from the "
                         "grammar (0..1, default 0.5)")
+    p.add_argument("--probes", type=float, default=0.35,
+                   help="proof mode: how often such a case also carries one term of "
+                        "the Eunoia surface -- a list, a pair, an eo:: computation -- "
+                        "through a step that asks only whether it is a term "
+                        "(0..1, default 0.35)")
 
 
 def main(argv: list[str] | None = None) -> int:

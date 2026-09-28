@@ -218,6 +218,15 @@ def _portable(line: str) -> str:
     line = re.sub(r"\b\d+\.\d+\b", "N.N", line)
     line = re.sub(r"\b\d+\b", "N", line)
     line = re.sub(r"`[^`]*`", "`_`", line)
+    # The same for an `eo::` name quoted bare. Eunoia's builtin namespace is a
+    # fixed vocabulary rather than anything a case invents, and a checker that
+    # has none of it says the same sentence about every member: logos's
+    # "unknown identifier eo::list_len" is its "unknown identifier eo::add",
+    # and eighteen directories for one absent namespace is what bucketing is
+    # for. `ethos::` and `std::` in a C++ diagnostic do not begin with `eo::`
+    # and are left alone, which is what keeps the two `Fatal failure within
+    # ethos::...` buckets in the ledger the buckets they already are.
+    line = re.sub(r"\beo::[\w:.]+", "eo::_", line)
     # A checker that quotes the offending *term* back at you says something
     # different about every instance of one defect, and a bucket per instance is
     # the thing bucketing exists to prevent: logos's "assumption after the first

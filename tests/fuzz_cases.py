@@ -362,6 +362,66 @@ def cases(d: str) -> list[tuple[str, bool, str]]:
         typed.append(gen.voc.ops[-1].ret == result)
     case("generated constants enter the vocabulary with their declared result sort", all(typed))
 
+    # -- the Eunoia probes
+
+    from anoieu_fuzz.gen import FEATURES, PROBES, PROBE_RULES, feature_commands
+
+    unbalanced = [p.name for p in PROBES
+                  if not _balanced(p.term) or not _balanced("\n".join(p.decls))]
+    case("every probe is a balanced s-expression", not unbalanced, str(unbalanced))
+    names = [p.name for p in PROBES]
+    case("no probe is named twice", len(set(names)) == len(names),
+         str([n for n in names if names.count(n) > 1]))
+    # A probe's symbols are its own, like a feature's, because a checker quotes
+    # the offending symbol back and `_portable` reduces a diagnostic to the
+    # string a bucket is named from. Two probes sharing `c1` would share a
+    # bucket; a probe sharing one with a feature would be worse, because then
+    # the bucket depends on which of them a case happened to draw.
+    declared: dict[str, str] = {}
+    clash = []
+    for owner, decls in ([(p.name, p.decls) for p in PROBES]
+                         + [(f.name, f.decls) for f in FEATURES]):
+        for decl in decls:
+            symbol = decl.split()[1] if len(decl.split()) > 1 else decl
+            if declared.setdefault(symbol, owner) != owner:
+                clash.append(f"{symbol}: {declared[symbol]} and {owner}")
+    case("a probe's declared symbols are its own", not clash, str(clash))
+    case("a probe's declarations reach the splicing pool",
+         all(decl in feature_commands() for p in PROBES for decl in p.decls), "")
+
+    from anoieu_fuzz.vocab import Vocabulary
+    signed = Vocabulary(name="cpc").index()  # not `builtin`: the feature path
+    with_probe = [generate(f"pr{i}", "proof", signed, features=1.0, probes=1.0)
+                  for i in range(20)]
+    rules = {r for r, _ in PROBE_RULES}
+    case("every feature case carries a probe when asked for one",
+         all(any(f":rule {r}" in c for c in case_.commands for r in rules)
+             for case_ in with_probe), "")
+    without = [generate(f"pr{i}", "proof", signed, features=1.0, probes=0.0)
+               for i in range(20)]
+    # By the declarations rather than the terms: a probe's symbols are its own,
+    # where `Bool` and `(or)` are nobody's.
+    decls = {d for p in PROBES for d in p.decls}
+    case("and none when asked for none",
+         not any(c in decls for case_ in without for c in case_.commands), "")
+    case("a probe brings its own declarations with it",
+         all(all(d in case_.commands for p in PROBES if p.term in " ".join(case_.commands)
+                 for d in p.decls) for case_ in with_probe), "")
+
+    # `eo::` is a fixed namespace rather than anything a case invents, so a
+    # checker that has none of it says one thing about every member of it.
+    def detail(name: str) -> str:
+        return classify("c", 1, "", f"Error: unknown identifier {name}\n", 0.0).detail
+
+    case("two absent eo:: names are one diagnostic",
+         detail("eo::add") == detail("eo::list_len"), f"{detail('eo::add')}")
+    case("and a C++ symbol in an ethos message is not touched",
+         "ethos::State" in classify(
+             "c", -6, "",
+             "Fatal failure within bool ethos::State::f() at /b/s.cpp:9\n", 0.0).detail,
+         classify("c", -6, "",
+                  "Fatal failure within bool ethos::State::f() at /b/s.cpp:9\n", 0.0).detail)
+
     # -- end to end, against checkers whose answers are known
 
     cfg = config(d, "pair", lenient=LENIENT, strict=STRICT)

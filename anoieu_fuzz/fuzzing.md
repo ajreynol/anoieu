@@ -82,7 +82,10 @@ ETHOS=<ethos>/build/src/ethos LOGOS=<logos>/.lake/build/bin/logos \
 Half of the generated cases are written around one construct the two checkers
 may read differently, inside a refutation they both check — `--features` is how
 often, and [**Where cases come from**](#where-cases-come-from) is what that
-means and why a run without it reports almost nothing but crashes.
+means and why a run without it reports almost nothing but crashes. A third of
+*those* also carry one term of the Eunoia surface — a list, a pair, an `eo::`
+computation — through a step that asks only whether it is a term; `--probes` is
+how often, and the same section has the table of what each answer means.
 
 The vocabulary — which operators exist, what sorts they take, which rules take
 how many premises — is read out of the signature by anoieu's own loader
@@ -177,6 +180,59 @@ checkers accept is the only case a single edit can push across the boundary, so
 `Session.learn` keeps accepted cases as material for the mutator and their
 commands for the splicer — alongside the ones it keeps for reaching a new
 diagnostic.
+
+**Probed**, with one term of the Eunoia surface carried in on its own. The
+frame above is made of *formulas*, and most of Eunoia is not a formula: a list,
+a pair, a type, an `eo::` computation. `refl` is what reaches them anyway — it
+takes a term of any type and concludes that it equals itself, so ethos accepts
+a step of it for anything that is a term at all. One such step, unused, inside
+a frame the two checkers already agree on, is therefore the smallest question
+there is:
+
+```text
+(step @r :rule refl :args (<term>))
+```
+
+`PROBES` in [`gen.py`](gen.py) is the table of terms, and `--probes` is how
+often a feature case carries one (default 0.35; `--probes 0` turns it off).
+Three answers come back rather than two, and which one a term draws is the
+fact worth having:
+
+| the term | ethos | logos |
+| --- | --- | --- |
+| `(@list t)`, `@list.nil`, `(@pair t u)`, `(@tlist.nil T)`, `@List`, `Bool` | `correct` | `incomplete` |
+| `(eo::List::cons t eo::List::nil)`, `(eo::add 1 1)`, `(eo::list_len …)`, `($compare_geq 1 2)` | `correct` | `rejected` |
+| `(and t)`, `(or)`, `(and t true)` | `correct` | `correct` |
+| `seq.empty`, `set.empty` bare | `correct` | `rejected` |
+| `(as seq.empty (Seq Int))` | `correct` | `correct` |
+
+The first row is the one to understand, because it is **not** a finding and is
+the reason the table is here. Logos is a *verified* checker whose correctness
+theorem is stated about SMT-LIB terms; ethos is an interpreter for Eunoia,
+which is the larger language. A list has no SMT-LIB reading, so logos answers
+`incomplete` — it refused nobody and guaranteed nothing false — and the oracle
+counts that as an acceptance. `refl` with `@list` is allowed in ethos and not
+in logos, and the two checkers agree about the file all the same.
+
+The second row is the same terms under their other spelling: `@list` is CPC's
+abbreviation for `eo::List::cons`, introduced, in CPC's own words, "as it
+avoids the usage of `eo::` in proofs". Logos's parser has no `eo::` namespace,
+so the abbreviation parses and the thing it abbreviates does not.
+`checkers._portable` collapses an `eo::` name to `eo::_`, which is what keeps
+one absent namespace in one bucket instead of one per member.
+
+The third row is the n-ary shapes those list operators are *about* — the
+singleton, the empty application, the nil argument — written in SMT-LIB, where
+both checkers have to decide the same thing and do.
+
+The last two rows are one term under two spellings. `seq.empty` is declared
+`(declare-parameterized-const seq.empty ((T Type :implicit)) (Seq T))`: its one
+parameter is implicit and it takes no arguments, so nothing in a bare use fixes
+`T`. Ethos leaves it open and checks the file; logos's surface syntax for such
+a constant is the SMT-LIB ascription, which supplies the parameter as an index,
+and it has no reading of the bare name. Both spellings are in the table,
+because "these two spellings are not answered the same way" is the finding and
+neither one alone says it.
 
 **Mutated**, from a seed corpus of real files: drop a command, duplicate one,
 swap two, splice a command out of another file, rename a symbol to another

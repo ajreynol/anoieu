@@ -355,6 +355,151 @@ FEATURES: tuple[Feature, ...] = (
 TRAILING = {"exit"}
 
 
+@dataclass(frozen=True)
+class Probe:
+    """One term handed to a checker on its own, through `refl`.
+
+    A `Feature` contributes a *Bool* formula, because that is what the
+    refutation frame can hold. Most of Eunoia is not Bool: a list, a pair, a
+    type, an `eo::` computation. `refl` is what reaches them anyway -- it takes
+    a term of any type and concludes that it equals itself, so ethos accepts a
+    step of it for anything that is a term at all. One `refl` step is therefore
+    the smallest question there is: *is this a term, and do you agree about it*.
+
+    A probe is emitted as an unused step inside a frame the two checkers
+    already agree on, so what either of them says about the file is what it
+    says about the probe.
+
+    `decls` and the names in `term` follow `Feature`'s rule and for the same
+    reason: fixed, and its own, so one defect lands in one bucket.
+    """
+
+    name: str
+    term: str
+    decls: tuple[str, ...] = ()
+    weight: int = 2
+
+
+#: Every probe, measured against ethos and logos on CPC on 2026-09-28.
+#:
+#: This table is the Eunoia surface a proof may name but SMT-LIB has no word
+#: for, and it is where the two checkers are furthest apart by construction.
+#: Logos is a *verified* checker for CPC, and its correctness theorem is stated
+#: about SMT-LIB terms; ethos is an interpreter for Eunoia, which is a larger
+#: language. So there are three answers here rather than two, and which one a
+#: probe draws is the fact worth writing down:
+#:
+#: - the `@`-spelled list, pair and typed-list terms -- `(@list t)`,
+#:   `@list.nil`, `(@pair t u)`, `(@tlist.nil T)` -- and the types themselves,
+#:   which ethos checks and logos answers `incomplete` to. Nobody is wrong: one
+#:   checked the file and the other said the file is outside what its theorem
+#:   covers. The oracle counts `incomplete` as an acceptance for exactly this
+#:   reason, so these report nothing and are still worth generating -- a case
+#:   the run does not report is the case the mutator can push across the
+#:   boundary, and `Session.learn` keeps the ones both checkers took.
+#: - the `eo::`-spelled *same terms* -- `eo::List::cons` is what `@list`
+#:   abbreviates -- which logos's parser has no namespace for and refuses. The
+#:   difference between an accepted `(@list t)` and a refused
+#:   `(eo::List::cons t eo::List::nil)` is spelling alone, and CPC's own note
+#:   on `@list` says the abbreviation exists "as it avoids the usage of eo:: in
+#:   proofs". Every one of these is the same defect, and `checkers._portable`
+#:   is what puts them in one bucket.
+#: - the ones both checkers refuse, which are here because a probe that only
+#:   ever drew an accepted term would never exercise a rejection path at all.
+PROBES: tuple[Probe, ...] = (
+    # -- lists, which is what `@list` abbreviates and where the two differ most
+    Probe("list-cons", "(@list clst)", ("(declare-const clst Bool)",), 4),
+    Probe("list-nil", "@list.nil", (), 3),
+    Probe("list-two", "(@list cltw cltw)", ("(declare-const cltw Bool)",), 3),
+    Probe("list-nested", "(@list (@list clnd))", ("(declare-const clnd Bool)",)),
+    Probe("list-marker", "(_ @list clmk @list.nil)", ("(declare-const clmk Bool)",)),
+    Probe("list-mixed", '(@list clmx 1 "s")', ("(declare-const clmx Bool)",)),
+    Probe("list-type", "@List", (), 1),
+    Probe("list-raw", "(eo::List::cons clrw eo::List::nil)",
+          ("(declare-const clrw Bool)",), 3),
+    Probe("list-type-raw", "eo::List", (), 1),
+
+    # -- pairs and the homogeneous list, which are CPC's own and not builtin
+    Probe("pair", "(@pair cpar 1)", ("(declare-const cpar Bool)",), 3),
+    Probe("pair-type", "(@Pair Bool Int)", (), 1),
+    Probe("pair-program", "($pair_first (@pair cppr 1))", ("(declare-const cppr Bool)",)),
+    Probe("tlist-nil", "(@tlist.nil Bool)", (), 1),
+    Probe("tlist", "(@tlist ctls (@tlist.nil Bool))", ("(declare-const ctls Bool)",), 1),
+
+    # -- the `eo::` computations a signature is written with, in a proof
+    Probe("eo-add", "(eo::add 1 1)", (), 3),
+    Probe("eo-eq", "(eo::eq ceoq ceoq)", ("(declare-const ceoq Bool)",)),
+    Probe("eo-ite", "(eo::ite true ceoi ceoi)", ("(declare-const ceoi Bool)",)),
+    Probe("eo-typeof", "(eo::typeof ceot)", ("(declare-const ceot Bool)",)),
+    Probe("eo-var", '(eo::var "veo" Bool)', ()),
+    Probe("eo-nil", "(eo::nil and Bool)", ()),
+    Probe("eo-define", "(eo::define ((veod ceod)) veod)", ("(declare-const ceod Bool)",)),
+    Probe("eo-requires", "(eo::requires 1 1 ceor)", ("(declare-const ceor Bool)",)),
+    Probe("eo-quote", "(eo::quote ceoqt)", ("(declare-const ceoqt Bool)",), 1),
+
+    # -- the list operators, which take an n-ary operator and read its arguments
+    #    as a list: the one place Eunoia's lists and SMT-LIB's terms are the
+    #    same objects, and so the one place a disagreement could be about more
+    #    than spelling.
+    Probe("eo-list-len", "(eo::list_len and (and ceol ceol))",
+          ("(declare-const ceol Bool)",), 3),
+    Probe("eo-list-concat", "(eo::list_concat and (and ceoa) (and ceoa))",
+          ("(declare-const ceoa Bool)",)),
+    Probe("eo-list-nth", "(eo::list_nth and (and ceon) 0)",
+          ("(declare-const ceon Bool)",)),
+    Probe("eo-list-rev", "(eo::list_rev and (and ceov))", ("(declare-const ceov Bool)",)),
+    Probe("eo-list-setof", "(eo::list_setof and (and ceos ceos))",
+          ("(declare-const ceos Bool)",)),
+    Probe("eo-list-find", "(eo::list_find and (and ceof) ceof)",
+          ("(declare-const ceof Bool)",)),
+    Probe("eo-list-diff", "(eo::list_diff and (and ceoe) (and ceoe))",
+          ("(declare-const ceoe Bool)",)),
+
+    # -- a program of the signature, called from the proof
+    Probe("program-call", "($compare_geq 1 2)", (), 1),
+
+    # -- the n-ary shapes the list operators are about, written as SMT-LIB. The
+    #    singleton and the empty application are the two an implementation has
+    #    to decide something about, and both checkers take all three.
+    Probe("nary-singleton", "(and cnsg)", ("(declare-const cnsg Bool)",), 3),
+    Probe("nary-empty", "(or)", (), 3),
+    Probe("nary-nil-arg", "(and cnna true)", ("(declare-const cnna Bool)",)),
+
+    # -- a parameterized constant whose one parameter is implicit and which
+    #    takes no arguments, so nothing in a bare use fixes it. Ethos leaves it
+    #    open and checks the file; logos, whose surface syntax for such a
+    #    constant is the SMT-LIB ascription, has no reading of the bare name at
+    #    all. The ascribed spelling is here beside it because "these two
+    #    spellings of one term are not answered the same way" is the finding,
+    #    and one of the two on its own does not say it.
+    Probe("implicit-seq-empty", "seq.empty", (), 2),
+    Probe("implicit-set-empty", "set.empty", (), 2),
+    Probe("implicit-ascribed", "(as seq.empty (Seq Int))", (), 1),
+
+    # -- a type, which is a term in Eunoia and nothing in SMT-LIB
+    Probe("arrow-type", "(-> Bool Bool)", (), 1),
+    Probe("sort-name", "Bool", (), 1),
+
+    # -- a binder, whose variable list *is* a list: `forall` is declared
+    #    `:binder @list`, so `((x Int))` is surface syntax for one of the terms
+    #    above and this asks each checker about the sugar rather than the list.
+    Probe("quant-sugar", "(forall ((xqnt Int)) (Pqnt xqnt))",
+          ("(declare-const Pqnt (-> Int Bool))",), 1),
+    Probe("quant-raw", '(forall (@list (eo::var "xqrl" Int)) (Pqrl 0))',
+          ("(declare-const Pqrl (-> Int Bool))",), 1),
+    Probe("skolem-term", "(@quantifiers_skolemize (forall ((xskl Int)) (Pskl xskl)) 0)",
+          ("(declare-const Pskl (-> Int Bool))",), 1),
+)
+
+#: The rules a probe term may be carried by. `refl` concludes that the term
+#: equals itself and so asks only whether it is a term; `evaluate` concludes
+#: that it equals what the signature's `eo::` machinery computes it to, and so
+#: asks what it *means*. The second is where a disagreement would be about
+#: list semantics rather than list syntax, and it is drawn rarely because most
+#: terms are already values and both checkers then refuse the step together.
+PROBE_RULES = (("refl", 9), ("evaluate", 1))
+
+
 # -- the generator ------------------------------------------------------------
 
 
@@ -372,11 +517,13 @@ class Generator:
         voc: Vocabulary | None = None,
         wild: float = 0.1,
         depth: int = 3,
+        probes: float = 0.35,
     ) -> None:
         self.rng = rng
         self.voc = voc or fallback()
         self.wild = wild
         self.max_depth = depth
+        self.probes = probes
         self.consts: dict[str, list[str]] = {}
         self.sorts: list[str] = list(self.voc.sorts)
         self.proofs: list[str] = []
@@ -582,7 +729,16 @@ class Generator:
 
         a, b, c = self.fresh("@a"), self.fresh("@b"), self.fresh("@c")
         body = [f"(assume {a} {formula})", f"(assume {b} (not {formula}))"]
-        if self.chance(0.15):
+        if self.chance(self.probes):
+            # One term of the Eunoia surface, carried in on its own. See
+            # `PROBES`: this is the part of the language the frame above cannot
+            # reach, because the frame is made of formulas and most of Eunoia
+            # is not a formula.
+            probe = self._pick_probe()
+            head.extend(probe.decls)
+            rule = self._probe_rule()
+            body.append(f"(step {self.fresh('@r')} :rule {rule} :args ({probe.term}))")
+        elif self.chance(0.15):
             # A step that checks and is never used. It is here because a file
             # whose every command matters is a file that exercises no path for
             # ignoring one.
@@ -622,6 +778,14 @@ class Generator:
             picked.append(feat)
             pool = [f for f in pool if f.name != feat.name]
         return picked
+
+    def _pick_probe(self) -> Probe:
+        pool = [p for p in PROBES for _ in range(p.weight)]
+        return self.rng.choice(pool)
+
+    def _probe_rule(self) -> str:
+        pool = [name for name, weight in PROBE_RULES for _ in range(weight)]
+        return self.rng.choice(pool)
 
     # -- signature cases
 
@@ -821,6 +985,7 @@ def generate(
     depth: int = 3,
     include: str = "",
     features: float = 0.5,
+    probes: float = 0.35,
 ) -> Case:
     rng = random.Random(seed)
     standalone = voc is None or voc.name == "builtin"
@@ -828,7 +993,7 @@ def generate(
         # a copy: a signature case writes into its vocabulary as it declares
         gen = Generator(rng, (voc or fallback()).copy(), wild=wild, depth=depth)
         return Case(gen.signature_case(include), mode, ".eo", seed, "generated")
-    gen = Generator(rng, voc, wild=wild, depth=depth)
+    gen = Generator(rng, voc, wild=wild, depth=depth, probes=probes)
     # `FEATURES` is written against CPC -- `BitVec`, `Seq`, `str.len`, `extract`
     # -- so a run with no signature loaded, which is what the test suite and
     # `--signature ""` are, gets the generator that carries its own prelude.
@@ -849,6 +1014,8 @@ def feature_commands() -> list[str]:
     out: list[str] = []
     for feat in FEATURES:
         out.extend(feat.decls)
+    for probe in PROBES:
+        out.extend(probe.decls)
     return out
 
 
