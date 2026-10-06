@@ -527,7 +527,7 @@
       "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type.",
       "code": "EO0064",
       "found_at": "aee8742",
-      "notes": "reopened — the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos",
+      "notes": "reopened \u2014 the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos",
       "owner": "cvc5",
       "where": "proofs/eo/cpc/programs/Strings.eo:46"
     },
@@ -545,7 +545,7 @@
       "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type.",
       "code": "EO0064",
       "found_at": "aee8742",
-      "notes": "reopened — the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos",
+      "notes": "reopened \u2014 the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos",
       "owner": "cvc5",
       "where": "proofs/eo/cpc/programs/Strings.eo:47"
     },
@@ -563,7 +563,7 @@
       "closed_why": "The commit changed both programs from :signature ((Seq T)) Int to :signature ((Seq T)) Bool in proofs/eo/cpc/programs/Strings.eo; re-reading it on cvc5 main at dbf176dfb71b, $is_seq_const_rec declares Bool at line 43 and $is_seq_const at line 56, so the Bool-returning case this observation names no longer disagrees with its program's declared return type.",
       "code": "EO0064",
       "found_at": "aee8742",
-      "notes": "reopened — the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos",
+      "notes": "reopened \u2014 the *fixed upstream* verdict was wrong: the program still declares `Int` at `622a50a3`, the commit it was reported against, and at the pinned `aee874240419`. Caught by logos",
       "owner": "cvc5",
       "where": "proofs/eo/cpc/programs/Strings.eo:58"
     },
@@ -1362,7 +1362,7 @@
       "last_seen": "2026-08-31",
       "bucket": "disagreement-ethos-accept-logos-reject-error-parsing-pro-78c094",
       "closed_verdict": "re-coded",
-      "closed_why": "`FUZ0005` — the fuzzer now separates the two directions of a disagreement; the same reproducer is `4de9bb965fa0c04b`",
+      "closed_why": "`FUZ0005` \u2014 the fuzzer now separates the two directions of a disagreement; the same reproducer is `4de9bb965fa0c04b`",
       "code": "FUZ0001",
       "migrated_from": "docs/reports/closed-findings.md, migrated 2026-09-19",
       "owner": "ethos+logos",
@@ -1477,7 +1477,12 @@
       "owner": "ethos",
       "seed": "campaign-b:5753",
       "source": "mutated:seed:local_ajreynol_cvc5-ai-3_test_regress_cli_regress0_bv_bv_to_int1.cpc",
-      "where": "tests/fuzz/crash-ethos-af49e1/case.cpc:2"
+      "where": "tests/fuzz/crash-ethos-af49e1/case.cpc:2",
+      "closed_verdict": "fixed and landed",
+      "closed_why": "`(declare-const y (_))` no longer crashes ethos: `src/expr_parser.cpp` line 339 on ethos `main` raises the parse error \"Expected an operator for _\", and `tests/apply-no-operator.eo` is this reproducer as ethos's regression test. On replay ethos rejects the file (exit -6) with that message, logos rejects it as it did, and the replay reports that every checker agreed and none fell over. The crash no longer reproduces. Replayed with `python3 -m anoieu_fuzz replay` against ethos built at `main` 30775b24b00aaf1f361e943f00b9ea124c857e35 and logos built at `main` a1871ba20d880cf0089e05ddecdf570027c82dee, both exported and built on 2026-10-06, with logos's flattened `install/defs/Cpc.cached.eo` at that commit as the signature for ethos. As a control, the same signature with the 2026-09-21 builds on this machine's `PATH` still reproduces the recorded outcome, so the change is in the checkers.",
+      "closed_on": "2026-10-06",
+      "closed_commit": "087854695143b3cb085415f1c642b8763419668e",
+      "closed_pr": "https://github.com/cvc5/ethos/pull/245"
     },
     {
       "id": "d88112e31fcc646e",
@@ -1549,7 +1554,13 @@
       "owner": "ethos+logos",
       "seed": "final:7487",
       "source": "mutated:feature",
-      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-7cc7d4/case.cpc:2"
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-ex-7cc7d4/case.cpc:2",
+      "closed_verdict": "fixed and landed",
+      "closed_why": "logos's parser now requires every declared name, including a datatype constructor, to be a symbol: `parseSymbol` in `Logos/Parser.lean` refuses a literal, so `#b1` is no longer read as a nullary constructor. logos moved; ethos still refuses the token as it did. On replay ethos rejects with \"Expected SMT-LIBv2 symbol, got `_` (BINARY_LITERAL)\" and logos with \"expected a symbol, got #b1\", and the replay reports that every checker agreed. The overaccept no longer reproduces. Replayed with `python3 -m anoieu_fuzz replay` against ethos built at `main` 30775b24b00aaf1f361e943f00b9ea124c857e35 and logos built at `main` a1871ba20d880cf0089e05ddecdf570027c82dee, both exported and built on 2026-10-06, with logos's flattened `install/defs/Cpc.cached.eo` at that commit as the signature for ethos. As a control, the same signature with the 2026-09-21 builds on this machine's `PATH` still reproduces the recorded outcome, so the change is in the checkers.",
+      "closed_on": "2026-10-06",
+      "closed_commit": "2afc6986c91dd60f1fecfbec7d35d300671db8ff",
+      "closed_pr": "https://github.com/cvc5/logos/pull/471",
+      "closed_by": "logos"
     },
     {
       "id": "4a419fe0339d88b6",
@@ -1585,7 +1596,13 @@
       "owner": "ethos+logos",
       "seed": "final:1425",
       "source": "mutated:feature",
-      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-a--4aa4ad/case.cpc:2"
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-a--4aa4ad/case.cpc:2",
+      "closed_verdict": "fixed and landed",
+      "closed_why": "ethos now beta-reduces an application of an overloaded `define`: `State::getOverloadInternal` in `src/state.cpp` on ethos `main` calls `mkBetaReduceInternal` (line 1879), so the two uses of the twice-declared macro resolve to the same term and `contra` checks. ethos moved; logos already accepted. On replay both checkers answer `correct`, and the replay reports that every checker agreed. The disagreement no longer reproduces. Replayed with `python3 -m anoieu_fuzz replay` against ethos built at `main` 30775b24b00aaf1f361e943f00b9ea124c857e35 and logos built at `main` a1871ba20d880cf0089e05ddecdf570027c82dee, both exported and built on 2026-10-06, with logos's flattened `install/defs/Cpc.cached.eo` at that commit as the signature for ethos. As a control, the same signature with the 2026-09-21 builds on this machine's `PATH` still reproduces the recorded outcome, so the change is in the checkers.",
+      "closed_on": "2026-10-06",
+      "closed_commit": "087854695143b3cb085415f1c642b8763419668e",
+      "closed_pr": "https://github.com/cvc5/ethos/pull/245",
+      "closed_by": "ethos"
     },
     {
       "id": "48d0d19946863a67",
@@ -1729,7 +1746,13 @@
       "owner": "ethos+logos",
       "seed": "final:609",
       "source": "feature",
-      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-889ea9/case.cpc:2"
+      "where": "tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-889ea9/case.cpc:2",
+      "closed_verdict": "fixed and landed",
+      "closed_why": "logos now reads the singular `declare-datatype` as a one-datatype `declare-datatypes` block in `Logos/Parser.lean`. logos moved; ethos accepted the file before and still does. On replay both checkers answer `correct`, and the replay reports that every checker agreed. The underaccept no longer reproduces. Replayed with `python3 -m anoieu_fuzz replay` against ethos built at `main` 30775b24b00aaf1f361e943f00b9ea124c857e35 and logos built at `main` a1871ba20d880cf0089e05ddecdf570027c82dee, both exported and built on 2026-10-06, with logos's flattened `install/defs/Cpc.cached.eo` at that commit as the signature for ethos. As a control, the same signature with the 2026-09-21 builds on this machine's `PATH` still reproduces the recorded outcome, so the change is in the checkers.",
+      "closed_on": "2026-10-06",
+      "closed_commit": "2afc6986c91dd60f1fecfbec7d35d300671db8ff",
+      "closed_pr": "https://github.com/cvc5/logos/pull/471",
+      "closed_by": "logos"
     }
   ]
 }

@@ -39,14 +39,23 @@ EVIDENCE = """**Two kinds of row need different evidence, and the code says whic
 
 - `EO`, `DOC` and `TRI` rows are claims about a file, confirmed by reading that
   file as the project ships it. That is the work above.
-- `FUZ` rows are claims about a *program's behaviour*, and this run cannot close
-  one. Closure there takes a replay -- `python3 -m anoieu_fuzz replay
-  tests/fuzz/<bucket>/case.eo` against a build of the checker -- which is a
-  separate pass with its own binary, and reading a commit is not a substitute.
-  If a commit looks like it fixed one, say so as a **candidate for replay**
-  in your report, name the commit, and leave the row open. A fix like that
-  still belongs in `docs/experience.md` (see (b) below): the row is open, but
-  the maintainer's work happened, and the log records it now.
+- `FUZ` rows are claims about a *program's behaviour*, and reading a commit
+  never closes one. Closure there takes a replay -- `python3 -m anoieu_fuzz
+  replay tests/fuzz/<bucket>/case.cpc` -- **against ethos and logos built from
+  the revision of `main` this run reads**: the sha the window names as `main
+  at`. Never replay against a binary already on `PATH` or in somebody's build
+  directory. Nothing records which revision such a binary was built from, and
+  one built before the fix reproduces the original outcome, which reads as a
+  fix that did not work. Export each project at that sha into your scratch
+  directory, outside this repository (for example with `git archive` from a
+  local checkout), build it there, and pass the binaries as `ETHOS=` and
+  `LOGOS=`. If the replay no longer shows what the row records, close the row
+  `fixed and landed` on the commit that fixed it. Its `closed_why` names the
+  sha each binary was built from and what the replay printed. If you cannot
+  build both checkers at today's `main`, say so as a **candidate for replay**
+  in your report, name the commit, and leave the row open. Either way the fix
+  belongs in `docs/experience.md` (see (b) below): the maintainer's work
+  happened, and the log records it now.
 - A row owned by two projects, written `a+b`, is a disagreement *between* them.
   Either side's change can resolve it. Say which project's commit did, record
   that project as `closed_by` when you close it, and re-read both sides before

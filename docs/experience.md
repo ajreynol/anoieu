@@ -29,7 +29,7 @@ This is not the record of an observation — that is
 `closed_*` fields a closure adds. What may be said about any of it is the
 [reporting policy](../bug_db/reporting-policy.md).
 
-**9 episodes so far, and of the first six: four led to landed fixes, and two exposed reporting
+**10 episodes so far, and of the first six: four led to landed fixes, and two exposed reporting
 mistakes.** Three projects have merged something on the strength of what these
 tools reported, and every one of those changes named us — two in the commit
 body, one in a pull request's title and one in a pull request's body. The other
@@ -37,7 +37,8 @@ episodes are logos correcting our ownership claims and ethos explaining why ten
 reports did not warrant changes. `E7` and `E8` are ethos and logos
 each landing fixes titled after us whose rows still wait on a replay, so
 neither is counted in those groups until that replay closes them. `E9` is ethos
-landing, on `main` and citing us, the fix `E5` had accepted on a branch.
+landing, on `main` and citing us, the fix `E5` had accepted on a branch. `E10` is the
+replay that closed four of the rows `E7` and `E8` left waiting.
 
 The running tally below counts the bugs that have been **closed** against each
 watched project, and how each was closed. A disagreement between ethos and logos
@@ -54,9 +55,9 @@ fails when it is stale, so no closure has to remember to update it.
 | project | bugs found | landed upstream | fixed, awaiting landing | declined | intentional | not audited |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | cvc5 | 38 | 25 | 0 | 0 | 13 | 0 |
-| ethos | 20 | 0 | 9 | 4 | 7 | 0 |
-| logos | 21 | 2 | 0 | 2 | 0 | 17 |
-| **total** | **79** | **27** | **9** | **6** | **20** | **17** |
+| ethos | 22 | 2 | 9 | 4 | 7 | 0 |
+| logos | 23 | 4 | 0 | 2 | 0 | 17 |
+| **total** | **83** | **31** | **9** | **6** | **20** | **17** |
 
 Closed observations only, counted from [`bug_db/bugs.json`](../bug_db/bugs.json); do not edit by hand. A disagreement between two checkers counts against the one whose change or ruling closed it. *Bugs found* leaves out 1 withdrawn observation(s), which were our error, and 1 re-coded one(s), which another entry carries.
 
@@ -519,6 +520,71 @@ to `parseCommands`.
   baseline concern. No open row pointed at it, so it got no entry. The bar is
   whether a maintainer spent attention on our reports, not whether a row moved,
   and the commit's own body says they did.
+
+## E10: ethos and logos's fixes for four fuzzer findings hold on replay, closing the rows `E7` and `E8` left waiting
+
+| | |
+| --- | --- |
+| **When** | 2026-10-06 |
+| **Kind** | positive. All four fixes came from pull requests titled *Address more issues from anoieu*, and every row they were expected to close now closes |
+| **Ours** | `7836f9530ce4994c` (`FUZ0002`), `4a419fe0339d88b6` and `1cc815407beb3759` (`FUZ0001`), and `26af98b965618686` (`FUZ0005`), all from the differential fuzzer |
+| **Theirs** | ethos [#245](https://github.com/cvc5/ethos/pull/245), [`08785469`](https://github.com/cvc5/ethos/commit/087854695143b3cb085415f1c642b8763419668e) (`E7`); logos [#471](https://github.com/cvc5/logos/pull/471), [`2afc6986`](https://github.com/cvc5/logos/commit/2afc6986c91dd60f1fecfbec7d35d300671db8ff) (`E8`) |
+| **Outcome** | 4 rows closed `fixed and landed`: two on ethos's commit, one of them charged to ethos as a disagreement, and two on logos's commit, charged to logos. Four rows from the same campaign stay open, as `E8` predicted |
+
+**What happened.** Our fuzzer runs the same proof file through ethos and logos,
+two independent checkers for the Eunoia language, and keeps every file on which
+they disagree or one of them crashes. `E7` and `E8` recorded fixes that both
+projects landed the day after the 2026-09-22 campaign. Those rows describe what
+a program does, so they could close only once a replay showed the program
+behaving differently.
+
+We exported both projects at the `main` this run read, ethos
+[`30775b24`](https://github.com/cvc5/ethos/commit/30775b24b00aaf1f361e943f00b9ea124c857e35)
+and logos
+[`a1871ba2`](https://github.com/cvc5/logos/commit/a1871ba20d880cf0089e05ddecdf570027c82dee),
+and built them. We then replayed every open reproducer, using logos's flattened
+CPC signature at that commit for both checkers:
+
+- **The empty application `(_)`.** ethos now refuses it with *"Expected an
+  operator for _"* instead of segfaulting, and logos refuses it as it did.
+- **A macro declared twice.** ethos now resolves both uses to the same term and
+  accepts, which logos already did.
+- **`#b1` as a datatype constructor.** logos now refuses a literal there, which
+  ethos already did.
+- **The singular `declare-datatype`.** logos now reads it, which ethos already
+  did.
+
+In all four the replay reports that every checker agreed. As a control we ran
+the same four files with the same signature against the checkers on this
+machine's `PATH`, which were built on 2026-09-21. All four still reproduce
+there, so the difference is in the checkers and not in the signature.
+
+**Not closed.** The same replay still shows the other four rows from that
+campaign:
+
+- `1e92c8`: logos accepts a `contra` step whose stated conclusion the rule does
+  not derive, which ethos refuses.
+- `147d8c`: logos still answers *"parametric datatype List (...) is not
+  supported"*.
+- `0e9250`: logos still refuses a `lambda` in an assumption.
+- `acb5d4`: logos still has no declaration of `<=` with one argument.
+
+These are the four that `E8` said no change in the window addressed, and none
+has a fix in either window yet.
+
+**What we learned.**
+
+- **The replay had to name its binaries, and this time it did.** `E6` warned
+  that an older checker would reproduce a fixed bug. The checkers on `PATH`
+  here were built two days before both fixes, and they would have kept all
+  four rows open. The closure prompt now says to build both checkers from the
+  `main` the run reads, and to record those shas in `closed_why`.
+- **"Candidate for replay" was the right status.** All four candidates `E7` and
+  `E8` named closed, and none of the rows they said would stay open did. The
+  reading of the diffs predicted the replay exactly. The replay is still what
+  closed the rows, because a prediction is not a measurement.
+
+## How this page is maintained
 
 **Who writes it.** [`prompts/close_bug_db`](../prompts/close_bug_db), which reads
 a window of each project's history from the revision its open observations were
