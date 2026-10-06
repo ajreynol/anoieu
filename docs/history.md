@@ -1035,6 +1035,15 @@ about our own tooling that belong to no pull request and fit in no episode there
 Newest first, one line each; an empty section is the honest state when a run
 turned up nothing.
 
+**2026-10-06 — windows
+[cvc5 `aee874240419..553db22e0ed4`](https://github.com/cvc5/cvc5/compare/aee874240419...553db22e0ed4),
+[ethos `04a9b4d41508..30775b24b00a`](https://github.com/cvc5/ethos/compare/04a9b4d41508...30775b24b00a),
+[logos `c8165b2afd32..a1871ba20d88`](https://github.com/cvc5/logos/compare/c8165b2afd32...a1871ba20d88).**
+
+- **`EO0071`'s explanation in `checks.md` describes ethos behaviour that no longer exists.** It says that an undeclared `<numeral>` gets its builtin category type. Before ethos [#244](https://github.com/cvc5/ethos/pull/244) the fallback was actually the "any" type, and since #244 there is no fallback at all, only a type error. The text has to be fixed in the check's docstring, because `checks.md` is generated from it.
+- **A landing can happen without any closure pass seeing it.** The `E5` debt on `anoieu-0919@8d8e0288` was paid by a byte-identical change in ethos [`8844c19d`](https://github.com/cvc5/ethos/commit/8844c19d3d56182f9c2adfbe7bab6c300a33afab) on 2026-09-21. The 2026-09-23 run read that commit and did not connect the two, and `verdicts.py` still lists the debt as `unknown`, because only `--check` against a checkout asks the question.
+- **A formatter run moves every line number without changing any finding.** cvc5 [#13034](https://github.com/cvc5/cvc5/pull/13034) moved `arith-eq-elim-int` from `Rewrites.eo:94` to `:114`. The finding id hashes the line's text, so `7ca5c014646b8984` still matches today. But the row's `where` and `bug` label keep `:94`, and that line is now a different rule.
+
 **2026-09-23 — windows
 [cvc5 `aee874240419..d7d5b948c11d`](https://github.com/cvc5/cvc5/compare/aee874240419...d7d5b948c11d),
 [ethos `04a9b4d41508..087854695143`](https://github.com/cvc5/ethos/compare/04a9b4d41508...087854695143),

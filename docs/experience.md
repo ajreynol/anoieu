@@ -29,14 +29,15 @@ This is not the record of an observation — that is
 `closed_*` fields a closure adds. What may be said about any of it is the
 [reporting policy](../bug_db/reporting-policy.md).
 
-**8 episodes so far, and of the first six: four led to landed fixes, and two exposed reporting
+**9 episodes so far, and of the first six: four led to landed fixes, and two exposed reporting
 mistakes.** Three projects have merged something on the strength of what these
 tools reported, and every one of those changes named us — two in the commit
 body, one in a pull request's title and one in a pull request's body. The other
 episodes are logos correcting our ownership claims and ethos explaining why ten
 reports did not warrant changes. `E7` and `E8` are ethos and logos
 each landing fixes titled after us whose rows still wait on a replay, so
-neither is counted in those groups until that replay closes them.
+neither is counted in those groups until that replay closes them. `E9` is ethos
+landing, on `main` and citing us, the fix `E5` had accepted on a branch.
 
 The running tally below counts the bugs that have been **closed** against each
 watched project, and how each was closed. A disagreement between ethos and logos
@@ -460,7 +461,64 @@ line 994 (`declare-datatype`).
   either becomes `declined` or `intentional`, that ruling is logos's to make
   and not ours to infer from its docs.
 
-## How this page is maintained
+## E9: ethos landed its literal-declaration fix on main and made an undeclared literal category a type error
+
+| | |
+| --- | --- |
+| **When** | 2026-09-21 |
+| **Kind** | positive. The commit body reads *"Both issues found by anoieu (https://github.com/ajreynol/anoieu)"* |
+| **Ours** | `584eda1d79a64b2c` and `59e8abdd4478092d` (`EO0071`, analyzer), already closed `accepted and fixed` in `E5`; and, on the fuzzer side, the proof-wrapper disagreement `9315026a26d2c2d0` that `E6` closed against logos |
+| **Theirs** | ethos [#244](https://github.com/cvc5/ethos/pull/244), [`8844c19d`](https://github.com/cvc5/ethos/commit/8844c19d3d56182f9c2adfbe7bab6c300a33afab), titled *Improve type rule initialization and compiled logos parsing* |
+| **Outcome** | nothing closed in this run, because no open row is touched. The landing debt `E5` recorded for the two `EO0071` rows looks paid: the fix it names is on ethos `main` now. Clearing it is `verdicts.py --check`'s job and was not done here |
+
+**What happened.** In a Eunoia signature, `declare-consts` says which type a
+category of literal has. For example, `(declare-consts <numeral> Int)` makes
+`0`, `1` and `2` integers. Until this change ethos quietly gave a literal whose
+category had no such declaration a placeholder type: `State::mkBuiltinType`
+returned the "any" type, under a comment reading *"for now, just use any type"*.
+[`8844c19d`](https://github.com/cvc5/ethos/commit/8844c19d3d56182f9c2adfbe7bab6c300a33afab)
+deletes that fallback. `TypeChecker::getLiteralTypeRule` in
+`src/type_checker.cpp` now fails with *"No type rule declared for literal kind
+…; use declare-consts to declare its type before use"*. `true` and `false` are
+the one exception, because `Bool` is built in: they keep that type, and
+`declare-consts <boolean>` is now refused. The change also covers the builtin
+operators that return a literal category, such as `eo::len` and `eo::nameof`.
+`user_manual.md` gains a paragraph saying so. Twenty test signatures that relied
+on the fallback gain the declarations they were missing.
+
+One of those tests is `tests/right-assoc-variants.eo`, and its two added lines
+are byte-identical (blob `b4160c23..37422dc3`) to
+[`8d8e0288`](https://github.com/cvc5/ethos/commit/8d8e0288792da76a5ee66af11a4529c86386fc5b),
+the fix on `anoieu-0919` that `E5` closed two rows on. The second change in the
+commit is ethos's copy of logos's proof parser, in
+`plugins/lean_meta/lean_meta_parser.lean`. It stops calling
+`Logos.Parser.unwrapProof`, which keeps it in step with logos
+[#467](https://github.com/cvc5/logos/pull/467) (`E6`). That pull request deleted
+the function, because it let logos accept a proof wrapped in one extra pair of
+parentheses that ethos refuses.
+
+We re-read all of it on ethos `main` at `30775b24b00a`.
+`tests/right-assoc-variants.eo` declares `<numeral>` at line 3 and `<string>` at
+line 7. `src/type_checker.cpp` has `getLiteralTypeRule` at line 75, the
+`<boolean>` refusal at line 51 and the new error at line 93.
+`plugins/lean_meta/lean_meta_parser.lean` line 117 passes the commands straight
+to `parseCommands`.
+
+**What we learned.**
+
+- **This change contradicts what `E5` taught us.** `E5` softened the
+  literal check's wording because ethos then typed an undeclared numeral rather
+  than leaving it untyped. Two days later ethos made the same input a type
+  error. What our check reported as a likely mistake is now one ethos rejects.
+  The explanation of `EO0071` in `checks.md` still describes the old fallback,
+  and in fact misdescribes it: the fallback was the "any" type, not
+  `<numeral>`. A check's explanation of another project's behaviour goes stale
+  whenever that project changes, and nothing re-reads it when that happens.
+- **A citing commit can be overlooked when everything it touches is already
+  closed.** The 2026-09-23 run read this window and named #244 only as a
+  baseline concern. No open row pointed at it, so it got no entry. The bar is
+  whether a maintainer spent attention on our reports, not whether a row moved,
+  and the commit's own body says they did.
 
 **Who writes it.** [`prompts/close_bug_db`](../prompts/close_bug_db), which reads
 a window of each project's history from the revision its open observations were
