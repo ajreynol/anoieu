@@ -29,7 +29,7 @@ This is not the record of an observation — that is
 `closed_*` fields a closure adds. What may be said about any of it is the
 [reporting policy](../bug_db/reporting-policy.md).
 
-**10 episodes so far, and of the first six: four led to landed fixes, and two exposed reporting
+**11 episodes so far, and of the first six: four led to landed fixes, and two exposed reporting
 mistakes.** Three projects have merged something on the strength of what these
 tools reported, and every one of those changes named us — two in the commit
 body, one in a pull request's title and one in a pull request's body. The other
@@ -38,7 +38,9 @@ reports did not warrant changes. `E7` and `E8` are ethos and logos
 each landing fixes titled after us whose rows still wait on a replay, so
 neither is counted in those groups until that replay closes them. `E9` is ethos
 landing, on `main` and citing us, the fix `E5` had accepted on a branch. `E10` is the
-replay that closed four of the rows `E7` and `E8` left waiting.
+replay that closed four of the rows `E7` and `E8` left waiting. `E11` is logos
+checking the conclusion a step states, which closed one more fuzzer row on
+replay, and its parametric datatype support moving a second without closing it.
 
 The running tally below counts the bugs that have been **closed** against each
 watched project, and how each was closed. A disagreement between ethos and logos
@@ -56,8 +58,8 @@ fails when it is stale, so no closure has to remember to update it.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | cvc5 | 38 | 25 | 0 | 0 | 13 | 0 |
 | ethos | 22 | 2 | 9 | 4 | 7 | 0 |
-| logos | 23 | 4 | 0 | 2 | 0 | 17 |
-| **total** | **83** | **31** | **9** | **6** | **20** | **17** |
+| logos | 24 | 5 | 0 | 2 | 0 | 17 |
+| **total** | **84** | **32** | **9** | **6** | **20** | **17** |
 
 Closed observations only, counted from [`bug_db/bugs.json`](../bug_db/bugs.json); do not edit by hand. A disagreement between two checkers counts against the one whose change or ruling closed it. *Bugs found* leaves out 1 withdrawn observation(s), which were our error, and 1 re-coded one(s), which another entry carries.
 
@@ -583,6 +585,74 @@ has a fix in either window yet.
   `E8` named closed, and none of the rows they said would stay open did. The
   reading of the diffs predicted the replay exactly. The replay is still what
   closed the rows, because a prediction is not a measurement.
+
+## E11: logos began checking the conclusion a step states, closing one fuzzer row on replay, and its parametric datatype support moved a second without closing it
+
+| | |
+| --- | --- |
+| **When** | 2026-11-17 (replay); the changes landed 2026-10-10 and 2026-10-28 |
+| **Kind** | positive. One disagreement row closes on a logos fix. Neither pull request cites anoieu |
+| **Ours** | `d88112e31fcc646e` (`FUZ0001`, bucket `1e92c8`) closed; `48d0d19946863a67` (`FUZ0005`, bucket `147d8c`) moved but open; both from the differential fuzzer |
+| **Theirs** | logos [#481](https://github.com/cvc5/logos/pull/481), [`4cd3a10e`](https://github.com/cvc5/logos/commit/4cd3a10e302a9f794f29eac5f0abd6a9a885242e); logos [#484](https://github.com/cvc5/logos/pull/484), [`3e388ea0`](https://github.com/cvc5/logos/commit/3e388ea01d1528343715aa4771b9b9151c3d7cc3) |
+| **Outcome** | 1 row closed `fixed and landed` on logos's commit, charged to logos as a disagreement. Three ethos-vs-logos rows stay open (see *Not closed*) |
+
+**What happened.** A proof step in the s-expression format both checkers read
+may state the formula it concludes, as in
+`(step @c3 (= 1 2) :rule contra :premises (@a1 @b2))`. ethos checks that the
+stated formula is what the rule derives. logos dropped it, because it
+recomputes conclusions anyway. So logos accepted a step that claims something
+false as long as the rule application itself is sound, and accepted a symbol
+that was never declared in that position too. Logos #481 replaced
+`dropConclusion` in `Logos/Parser.lean` with `splitConclusion`. The parser now
+parses the stated conclusion as a term and emits the calculus's `check_proven`
+command after the step, which leaves the checker stuck unless the two terms are
+the same. `docs/parser.md` now says this is "as in Ethos".
+
+We exported both projects at today's `main`, ethos
+[`c7d3db90`](https://github.com/cvc5/ethos/commit/c7d3db902bee86b8ef61c3cd7695b0b0ba8d838b)
+and logos
+[`cf187429`](https://github.com/cvc5/logos/commit/cf18742973861b3718d04c5f25775448098ff474),
+and built both. We replayed every promoted ethos-vs-logos reproducer, using
+logos's flattened `install/defs/Cpc.cached.eo` at that commit as ethos's
+signature. On `1e92c8` ethos still answers *"Unexpected conclusion for rule
+contra"*, and logos now answers `incorrect`, stuck at the conclusion of `@c3`.
+The replay reports that every checker agreed. The same step with an undeclared
+symbol in its conclusion is now refused at parse, and with the true conclusion
+`false` it is still `correct`. As a control, the 2026-09-21 logos on this
+machine's `PATH` still answers `correct` on the reproducer. Every row closed
+earlier as fixed still replays as agreement, and the two closed `declined` still
+disagree as recorded.
+
+**Not closed.**
+
+- `147d8c`, a parametric datatype from a cvc5 proof. Logos #484 added
+  parse-only support for parametric datatypes, so logos no longer answers
+  *"parametric datatype List (...) is not supported"*. It now parses the file
+  and answers `incorrect`: *"the checker became stuck while loading assumption
+  N"*. ethos still accepts, so the row's claim, that ethos accepted what logos
+  refused, still holds and the row stays open. Its recorded message is now
+  stale, and a fresh fuzzer run would file this reproducer under a new bucket,
+  `f34088`.
+- `0e9250`, a `lambda` in an assumption: logos's message is unchanged.
+  `docs/parser.md` still says it deliberately does not read `lambda`.
+- `acb5d4`, `<=` applied to one argument: logos still has no such declaration.
+  The ethos window's [#272](https://github.com/cvc5/ethos/pull/272) changed how
+  ethos reads `:right-assoc` and `:left-assoc` operators applied to one
+  argument. `<=` is chainable, ethos still accepts the file, and the
+  disagreement is unchanged.
+
+**What we learned.**
+
+- **A fix can move a row without closing it.** #484 is plainly work on what
+  `147d8c` names, yet logos still refuses the file. The refusal has moved from
+  the parser to the checker. A closure pass that only asked whether the recorded
+  message still appears would have closed a disagreement that is still there.
+  The replay's question is the direction of the disagreement, not its text.
+- **The note can be tested as well as the reproducer.** `1e92c8`'s note made a
+  second claim, about undeclared symbols, that the reproducer does not exercise.
+  A two-line variant checked it in seconds. That is cheap enough to do
+  whenever a note reaches past its case. `history.md` already records the
+  opposite case, `0e9250`, whose note covers more than its reproducer tests.
 
 ## How this page is maintained
 

@@ -1035,6 +1035,13 @@ about our own tooling that belong to no pull request and fit in no episode there
 Newest first, one line each; an empty section is the honest state when a run
 turned up nothing.
 
+**2026-11-17 — replay only, ethos-vs-logos rows, windows
+[ethos `30775b24b00a..c7d3db902bee`](https://github.com/cvc5/ethos/compare/30775b24b00a...c7d3db902bee),
+[logos `a1871ba20d88..cf18742973861`](https://github.com/cvc5/logos/compare/a1871ba20d88...cf18742973861).**
+
+- **A `FUZ` row's recorded message can go stale while its claim stays true.** `147d8c` still disagrees in the same direction, but logos's message changed, so the replay files it under a different bucket (`f34088`). The row stays open with its original description. A future fuzzer import would add a second row for the same reproducer unless somebody reconciles the two.
+- **The machine-local `repos.local` that `close_bug_db --use-local` reads lives in `scripts/`, not in `anoieu_analyzer/reporting/config/`.** `--baselines --use-local ethos logos` therefore fails with "names no ethos checkout". This run worked around it by building from `git archive` directly.
+
 **2026-10-06 — windows
 [cvc5 `aee874240419..553db22e0ed4`](https://github.com/cvc5/cvc5/compare/aee874240419...553db22e0ed4),
 [ethos `04a9b4d41508..30775b24b00a`](https://github.com/cvc5/ethos/compare/04a9b4d41508...30775b24b00a),

@@ -1518,7 +1518,13 @@
       "owner": "ethos+logos",
       "seed": "conclusion:124",
       "source": "feature",
-      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8/case.cpc:2"
+      "where": "tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8/case.cpc:2",
+      "closed_verdict": "fixed and landed",
+      "closed_why": "logos now reads the conclusion a `step` or `step-pop` states and checks it against the one the rule derives, by emitting the calculus's `check_proven` command after the step (`annots` and `splitConclusion` in `Logos/Parser.lean`, documented in `docs/parser.md`); before, `dropConclusion` discarded it. logos moved; ethos refused the file before and still does. On replay ethos answers \"Unexpected conclusion for rule contra\" and logos answers `incorrect` (\"the checker became stuck at the conclusion of step @c3\"), and the replay reports that every checker agreed. The overaccept no longer reproduces. The note's second half holds too: the same step with an undeclared symbol in its conclusion is now refused at parse (\"unknown identifier zzz\"), and with the correct conclusion `false` it is still `correct`. Replayed with `python3 -m anoieu_fuzz replay` against ethos built at `main` c7d3db902bee86b8ef61c3cd7695b0b0ba8d838b and logos built at `main` cf18742973861b3718d04c5f25775448098ff474, both exported and built on 2026-11-17, with logos's flattened `install/defs/Cpc.cached.eo` at that commit as the signature for ethos. As a control, the 2026-09-21 logos on this machine's `PATH` still answers `correct` on the reproducer, so the change is in the checker.",
+      "closed_on": "2026-11-17",
+      "closed_commit": "4cd3a10e302a9f794f29eac5f0abd6a9a885242e",
+      "closed_pr": "https://github.com/cvc5/logos/pull/481",
+      "closed_by": "logos"
     },
     {
       "id": "1cc815407beb3759",

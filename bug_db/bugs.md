@@ -15,7 +15,7 @@ committed reproducers.
 | Producer | Open findings |
 | --- | ---: |
 | [Static analyzer](#static-analyzer) | 1 |
-| [Fuzzer](#fuzzer) | 4 |
+| [Fuzzer](#fuzzer) | 3 |
 
 ## Static analyzer
 
@@ -27,7 +27,6 @@ committed reproducers.
 
 | ID | Check | Owner | Finding | Status | Evidence | First ingested | Last ingested |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| d88112e31fcc646e | [FUZ0001](../anoieu_fuzz/fuzzing.md#the-codes) | ethos+logos | logos accepted what ethos refused: Error: &lt;path&gt;:N.N: Unexpected conclusion for rule contra: | open | [tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8/case.cpc:2](../tests/fuzz/disagreement-ethos-reject-logos-accept-error-path-n-n-un-1e92c8/case.cpc#L2) | 2026-09-22 | 2026-09-22 |
 | 48d0d19946863a67 | [FUZ0005](../anoieu_fuzz/fuzzing.md#the-codes) | ethos+logos | ethos accepted what logos refused: Error parsing proof: Error: parametric datatype List (...) is not supported | open | [tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-147d8c/case.cpc:2](../tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-147d8c/case.cpc#L2) | 2026-09-22 | 2026-09-22 |
 | 4bdbda42c0bc7861 | [FUZ0005](../anoieu_fuzz/fuzzing.md#the-codes) | ethos+logos | ethos accepted what logos refused: Error parsing proof: Error: expected a symbol, an indexed symbol or a type ascription as the head of an application, got (...) | open | [tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-0e9250/case.cpc:2](../tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-0e9250/case.cpc#L2) | 2026-09-22 | 2026-09-22 |
 | 893a71805a2c431d | [FUZ0005](../anoieu_fuzz/fuzzing.md#the-codes) | ethos+logos | ethos accepted what logos refused: Error parsing proof: Error: no declaration of &lt;= takes N indices and N arguments | open | [tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-acb5d4/case.cpc:2](../tests/fuzz/disagreement-ethos-accept-logos-reject-error-parsing-pro-acb5d4/case.cpc#L2) | 2026-09-22 | 2026-09-22 |
